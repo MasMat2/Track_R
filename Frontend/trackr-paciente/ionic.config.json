@@ -1,0 +1,7 @@
+{
+  "name": "trackr-paciente",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

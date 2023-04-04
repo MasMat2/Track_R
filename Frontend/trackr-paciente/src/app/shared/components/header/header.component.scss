@@ -1,0 +1,22 @@
+@import "../../../../theme/variables.scss";
+
+ion-toolbar {
+    --background: var(--color-secundario);
+}
+
+ion-toolbar.seccion-titulo {
+    --min-height: 45px;
+    padding-top: 20px;
+}
+
+ion-toolbar.navegacion {
+    --min-height: 25px;
+}
+
+#titulo {
+    font-weight: bold;
+}
+
+.white {
+    color: #ffff;
+}

@@ -1,0 +1,26 @@
+@import "variables";
+
+// Secciones
+.contenedor {
+    margin-top: 0;
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+}
+
+.titulo-contenedor {
+    color: var(--color-fuente-secundario);
+    padding: 0.8rem 0 0.5rem 0;
+    font-weight: 600;
+    text-align: center;
+}
+
+.cuerpo-contenedor {
+    background-color: #ffffff;
+    padding: 0 0.5rem 1rem 0.5rem;
+}
+
+.form-group {
+    margin-bottom: 0.5rem;
+}

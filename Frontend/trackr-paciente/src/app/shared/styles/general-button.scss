@@ -1,0 +1,9 @@
+@import "../../../theme/variables.scss";
+
+ion-button {
+    --border-radius: 64px;
+    display: block;
+    min-height: 40px;
+    text-transform: none;
+    font-weight: 550;
+}
