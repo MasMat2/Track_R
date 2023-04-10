@@ -1,0 +1,14 @@
+{
+  "LOGIN": {
+    "TITULO": "Log In"
+  },
+  "HOME": {
+    "TITLE": "Hello Angular with ngx-translate!",
+    "SELECT": "Change language"
+  },
+  "GENERAL": {},
+  "ESTADO": {
+    "AGREGAR": "El estado ha sido agregado",
+    "EDITAR": "El estado ha sido modificado"
+  }
+}

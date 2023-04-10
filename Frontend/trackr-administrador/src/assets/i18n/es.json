@@ -1,0 +1,17 @@
+{
+  "LOGIN": {
+    "TITULO": "<strong>Inicio</strong> de Sesión"
+  },
+  "HOME": {
+    "TITLE": "Hello Angular with ngx-translate!",
+    "SELECT": "Change language"
+  },
+  "GENERAL": {},
+  "ESTADO": {
+    "AGREGAR": "El estado ha sido agregado",
+    "EDITAR": "El estado ha sido modificado"
+  },
+  "INICIO_HUESPED": {
+    "CANCELAR_RESERVA": "¿Desea confirmar la cancelación para el Núm. de Reservación: <strong> {{numeroReservacion}}</strong>, realizada el día {{fechaAlta}} ?"
+  }
+}
