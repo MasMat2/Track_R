@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -8,6 +8,9 @@
 
   <ItemGroup>
 	  <None Remove="GenerarModelos.bat" />
+	  <Folder Include="Log\" />
+	  <Folder Include="Services\" />
+	  <Folder Include="Repositorys\" />
   </ItemGroup>
 
   <ItemGroup>

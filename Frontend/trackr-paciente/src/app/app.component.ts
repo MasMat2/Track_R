@@ -9,7 +9,8 @@ import { ComponentsModule } from 'src/app/shared/components/components.module'
   standalone: true,
   imports: [
     IonicModule,
-    ComponentsModule],
+    ComponentsModule
+  ]
 })
 export class AppComponent {
   constructor() {}
