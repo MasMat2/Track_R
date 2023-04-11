@@ -7,7 +7,9 @@ import { ComponentsModule } from 'src/app/shared/components/components.module'
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   standalone: true,
-  imports: [IonicModule, ComponentsModule],
+  imports: [
+    IonicModule,
+    ComponentsModule],
 })
 export class AppComponent {
   constructor() {}
