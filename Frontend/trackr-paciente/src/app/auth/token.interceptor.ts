@@ -1,14 +1,13 @@
+import { AlertController } from '@ionic/angular';
+import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { environment } from './../../environments/environment';
-
 import { Observable, from, lastValueFrom, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { StorageService } from '../services/seguridad/storage.service';
 
-const TOKEN_KEY = 'token-paciente';
+import { environment } from './../../environments/environment';
+import { GeneralConstant } from '@shared/general-constant';
+import { StorageService } from '../services/seguridad/storage.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -95,9 +94,9 @@ export class TokenInterceptor implements HttpInterceptor {
    * Obtener el token paciente almacenado en el storage
    */
   private async obtenerToken(): Promise<void> {
-    await this.storage.read(TOKEN_KEY).then((data) => {
-      if (data.value) {
-        this.token = data.value;
+    await this.storage.read(GeneralConstant.TOKEN_KEY).then((token) => {
+      if (token) {
+        this.token = token;
       }
     })
   }

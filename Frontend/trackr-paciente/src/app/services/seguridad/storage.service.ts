@@ -10,7 +10,7 @@ export class StorageService {
 
     public async read(key: string) {
         return (
-            await Preferences.get({key})
+            (await Preferences.get({key})).value
         );
     }
 
