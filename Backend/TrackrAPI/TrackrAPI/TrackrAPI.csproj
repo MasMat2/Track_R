@@ -9,8 +9,6 @@
   <ItemGroup>
 	  <None Remove="GenerarModelos.bat" />
 	  <Folder Include="Log\" />
-	  <Folder Include="Services\" />
-	  <Folder Include="Repositorys\" />
   </ItemGroup>
 
   <ItemGroup>

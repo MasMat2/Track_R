@@ -29,6 +29,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(opt =>
 builder.Services.AddCors();
 builder.Services.AddSignalR();
 builder.Services.AddScoped<SimpleAES>();
+builder.Services.AddHttpContextAccessor();
 
 // IoC  - Inyeccion de dependencias para los Repositorys y Services
 builder.Services.Scan(scan => scan
@@ -36,7 +37,7 @@ builder.Services.Scan(scan => scan
 );
 
 builder.Services.Scan(scan => scan
-    .FromAssemblyOf<Program>().AddClasses(c => c.InNamespaces("TrackrAPI.Services")).AsImplementedInterfaces().WithTransientLifetime()
+    .FromAssemblyOf<Program>().AddClasses(c => c.InNamespaces("TrackrAPI.Services")).AsSelf().WithTransientLifetime()
 );
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
