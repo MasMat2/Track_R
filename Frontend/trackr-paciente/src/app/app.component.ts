@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { ComponentsModule } from 'src/app/shared/components/components.module'
 
 @Component({
   selector: 'app-root',
@@ -8,8 +7,7 @@ import { ComponentsModule } from 'src/app/shared/components/components.module'
   styleUrls: ['app.component.scss'],
   standalone: true,
   imports: [
-    IonicModule,
-    ComponentsModule
+    IonicModule
   ]
 })
 export class AppComponent {
