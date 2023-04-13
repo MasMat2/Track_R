@@ -1,0 +1,61 @@
+h4{
+  text-align: center;
+}
+
+.contenedor-principal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width:100%;
+}
+
+.logos{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 20px
+
+}
+
+.sub-contenedor-login {
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.contenedor-form {
+  background-color: rgba(16, 42, 62, 0.4);
+
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  width: 400px;
+  border: 3px white solid ;
+  padding: 15px ;
+  border-radius: 15px;
+// margin-left: 150px;
+}
+
+ion-input{
+  --color: white;
+  --highlight-color-focused: white;
+  --border-width:0px;
+  background-color:  rgba(255,255,255,0.2);
+  border-radius: 20px;
+}
+
+a:link {
+  color: white;
+  background-color: transparent;
+}
+
+@media(min-width: 500px){
+  .logos{
+    width: 500px;
+  }
+}
+
+

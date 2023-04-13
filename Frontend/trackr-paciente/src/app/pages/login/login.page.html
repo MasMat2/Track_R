@@ -1,0 +1,110 @@
+<div class="bgImageContainer"></div>
+<div class="contenedor-principal">
+  <main>
+    <div class="main">
+      <!-- Logo Christus -->
+      <div class="logos">
+        <img
+          src="../../../assets/img/png-Logo-H_C_CEIC.png"
+          alt="logo"
+          class="logo"
+        />
+      </div>
+      <!-- Logo Track R -->
+      <div class="logos">
+        <img
+          src="../../../assets/img/svg/svg-Logo-02-Trackr.svg"
+          alt="logo"
+          class="logo"
+        />
+      </div>
+      <!-- Formulario de Login -->
+      <div class="justify-content-center">
+        <form #formulario="ngForm" novalidate="novalidate">
+          <div class="sub-contenedor-login">
+
+            <!-- Input Usuario -->
+            <div class="row">
+              <div class="form-group">
+                <div class="col-md-12">
+                  <ion-input
+                    #nombre="ngModel"
+                    [(ngModel)]="loginRequest.correo"
+                    id="nombre"
+                    name="nombre"
+                    type="text"
+                    maxlength="50"
+                    required="required"
+                    autocomplete="off"
+                    placeholder="Usuario"
+                    label="Usuario"
+                    label-placement="floating"
+                    fill="outline"
+                  ></ion-input>
+                  <div
+                    *ngIf="nombre.errors?.['required'] && (nombre.dirty || nombre.touched)"
+                    class="error"
+                  >
+                    El usuario es requerido
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br />
+
+            <!-- Input Contraseña -->
+            <div class="row">
+              <div class="form-group">
+                <div class="col-md-12">
+                  <ion-input
+                    #contrasena="ngModel"
+                    [(ngModel)]="loginRequest.contrasena"
+                    id="contrasena"
+                    name="contrasena"
+                    type="password"
+                    autocomplete="off"
+                    required="required"
+                    maxlength="50"
+                    label="Contraseña"
+                    label-placement="floating"
+                    fill="outline"
+                    placeholder="Contraseña"
+                  ></ion-input>
+                  <div
+                    *ngIf="contrasena.errors?.['required'] && (contrasena.dirty || contrasena.touched)"
+                    class="error"
+                  >
+                    La contraseña es requerida
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botón enviar formulario -->
+          </div>
+          <div class="row">
+            <div class="justify-content-center">
+              <div class="col-md-12">
+                <ion-button
+                  class="btn-login"
+                  type="submit"
+                  [disabled]="formulario.invalid"
+                  (click)="autenticar()"
+                >
+                  Entrar
+                </ion-button>
+              </div>
+            </div>
+          </div>
+          <br />
+            <!-- Botón/link para registrarse -->
+          <div class="row">
+            <div class="d-flex justify-content-center">
+              <a routerLink="/register">Registrarme</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>

@@ -15,8 +15,8 @@ namespace TrackrAPI.Models
         public string ApellidoPaterno { get; set; } = null!;
         public string? ApellidoMaterno { get; set; }
         public string? TelefonoMovil { get; set; }
-        public string? Correo { get; set; }
-        public string? Contrasena { get; set; }
+        public string Correo { get; set; } = null!;
+        public string Contrasena { get; set; } = null!;
         public bool Habilitado { get; set; }
         public string? ImagenTipoMime { get; set; }
         public int IdTipoUsuario { get; set; }

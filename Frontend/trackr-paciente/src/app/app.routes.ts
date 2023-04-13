@@ -3,13 +3,22 @@ import { LayoutPacientePage } from './pages/paciente/layout-paciente/layout-paci
 
 export const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'paciente',
-    pathMatch: 'full',
-  },
-  {
     path: 'paciente',
     component: LayoutPacientePage,
     loadChildren: () => import('./pages/paciente/paciente-routes')
-  }
+  },
+  {
+    path: 'home-slide',
+    loadComponent: () => import('./pages/home-slide/home-slide.page').then( m => m.HomeSlidePage)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
+  },
+  {
+    path: '**',
+    redirectTo: 'home-slide',
+    pathMatch: 'full',
+  },
+
 ];

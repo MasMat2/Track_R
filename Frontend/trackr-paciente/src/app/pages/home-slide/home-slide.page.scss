@@ -1,0 +1,28 @@
+@use '../../../theme/custom.scss';
+
+.logos{
+  display: flex;
+  margin-top: 10%;
+  padding: 40px;
+}
+
+.contenedor-principal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+}
+
+.btn-register {
+  --border-color: var(--ion-color-secondary);
+  --color: white;
+  --box-shadow: 0;
+}
+
+@media(min-width: 400px){
+  .logos{
+    width: 400px;
+  }
+}

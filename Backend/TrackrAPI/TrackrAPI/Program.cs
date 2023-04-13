@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Net;
@@ -12,7 +14,8 @@ using TrackrAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
-var token = builder.Configuration.GetSection("AppSettings:Token").Value;
+// JwtSettings jwtSettings = new JwtSettings();
+// builder.Configuration.GetSection(JwtSettings.SectionName).Bind(jwtSettings);
 
 builder.Services.AddDbContext<TrackrContext>(options =>
 {
@@ -40,16 +43,27 @@ builder.Services.Scan(scan => scan
     .FromAssemblyOf<Program>().AddClasses(c => c.InNamespaces("TrackrAPI.Services")).AsSelf().WithTransientLifetime()
 );
 
+// Crea una nueva instancia de JwtSettings y la configura con los valores del appsettings.json
+var jwtSettings = new JwtSettings();
+builder.Configuration.Bind(JwtSettings.SectionName, jwtSettings);
+
+// Registra la instancia de JwtSettings como un servicio Singleton en el contenedor de inyección de dependencias.
+// Crea una única instancia de JwtSettings que se comparte entre todos los objetos que lo soliciten a través de inyección de dependencias.
+builder.Services.AddSingleton(Options.Create(jwtSettings));
+
+// Habilita la autenticación y establece el esquema de autenticación predeterminado como JWT Bearer.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
+            ValidateIssuer = true,
+            ValidateAudience = false,
+            ValidateLifetime= true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
-                .GetBytes(token)),
-            ValidateIssuer = false,
-            ValidateAudience = false
+            ValidIssuer = jwtSettings.Issuer,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                .GetBytes(jwtSettings.Secret)),
         };
     });
 

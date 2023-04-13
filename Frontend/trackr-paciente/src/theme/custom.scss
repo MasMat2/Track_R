@@ -24,3 +24,30 @@
 .form-group {
     margin-bottom: 0.5rem;
 }
+
+
+.bgImageContainer {
+  z-index: -1;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(
+      235deg,
+      var(--background-primario) 0%,
+      var(--background-secundario) 50%,
+      var(--background-terceario) 86%);
+  background-size: 100% 100%;
+}
+
+.btn-login{
+  --background: var(--ion-color-primary);
+  --color: black;
+  --box-shadow: 0;
+}
+
+.error {
+  color: rgba(255, 0, 0, 0.74) !important;
+  font-size: 0.86em;
+}
+
