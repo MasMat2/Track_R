@@ -20,9 +20,12 @@
       </div>
       <!-- Formulario de Login -->
       <div class="justify-content-center">
-        <form #formulario="ngForm" novalidate="novalidate">
+        <form
+          #formulario="ngForm"
+          novalidate="novalidate"
+          (ngSubmit)="enviarFormulario(formulario)"
+        >
           <div class="sub-contenedor-login">
-
             <!-- Input Usuario -->
             <div class="row">
               <div class="form-group">
@@ -34,12 +37,13 @@
                     name="nombre"
                     type="text"
                     maxlength="50"
-                    required="required"
+                    required="true"
                     autocomplete="off"
                     placeholder="Usuario"
                     label="Usuario"
                     label-placement="floating"
                     fill="outline"
+                    shape="round"
                   ></ion-input>
                   <div
                     *ngIf="nombre.errors?.['required'] && (nombre.dirty || nombre.touched)"
@@ -63,12 +67,13 @@
                     name="contrasena"
                     type="password"
                     autocomplete="off"
-                    required="required"
+                    required="true"
                     maxlength="50"
                     label="Contraseña"
                     label-placement="floating"
                     fill="outline"
                     placeholder="Contraseña"
+                    shape="round"
                   ></ion-input>
                   <div
                     *ngIf="contrasena.errors?.['required'] && (contrasena.dirty || contrasena.touched)"
@@ -82,28 +87,27 @@
 
             <!-- Botón enviar formulario -->
           </div>
-          <div class="row">
-            <div class="justify-content-center">
-              <div class="col-md-12">
-                <ion-button
-                  class="btn-login"
-                  type="submit"
-                  [disabled]="formulario.invalid"
-                  (click)="autenticar()"
-                >
-                  Entrar
-                </ion-button>
-              </div>
-            </div>
-          </div>
-          <br />
-            <!-- Botón/link para registrarse -->
-          <div class="row">
-            <div class="d-flex justify-content-center">
-              <a routerLink="/register">Registrarme</a>
-            </div>
-          </div>
         </form>
+      </div>
+      <div class="justify-content-center">
+        <div class="contenedor-botones">
+          <div class="row">
+            <ion-button
+              class="btn-login"
+              type="submit"
+              [disabled]="btnSubmit"
+            >
+              Entrar
+            </ion-button>
+          </div>
+
+          <br />
+          <!-- Botón/link para registrarse -->
+
+          <div class="d-flex justify-content-center">
+            <a routerLink="/register">Registrarme</a>
+          </div>
+        </div>
       </div>
     </div>
   </main>

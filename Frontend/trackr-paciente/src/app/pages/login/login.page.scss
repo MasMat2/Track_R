@@ -50,9 +50,18 @@ a:link {
   color: white;
   background-color: transparent;
 }
+.contenedor-botones{
+  padding:20px;
+  justify-content: center;
+  align-content: center;
+}
 
 @media(min-width: 500px){
   .logos{
+    width: 500px;
+  }
+
+  .contenedor-botones{
     width: 500px;
   }
 }
