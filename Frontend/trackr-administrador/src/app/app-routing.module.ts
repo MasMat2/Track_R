@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LayoutAdministradorComponent } from './views/administrador/layout-administrador/layout-administrador.component';
 
 const routes: Routes = [
   {
@@ -9,6 +10,7 @@ const routes: Routes = [
   },
   {
     path: 'administrador',
+    component: LayoutAdministradorComponent,
     loadChildren: () => 
     import('./views/administrador/layout-administrador/layout-administrador.module')
     .then((m) => m.LayoutAdminsitradorModule)

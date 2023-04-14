@@ -4,7 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [],
-  declarations: [],
+  declarations: [
+  ],
   exports: [
     FormsModule,
     ReactiveFormsModule,
