@@ -31,10 +31,10 @@
               <div class="form-group">
                 <div class="col-md-12">
                   <ion-input
-                    #nombre="ngModel"
+                    #correo="ngModel"
                     [(ngModel)]="loginRequest.correo"
-                    id="nombre"
-                    name="nombre"
+                    id="correo"
+                    name="correo"
                     type="text"
                     maxlength="50"
                     required="true"
@@ -46,10 +46,10 @@
                     shape="round"
                   ></ion-input>
                   <div
-                    *ngIf="nombre.errors?.['required'] && (nombre.dirty || nombre.touched)"
+                    *ngIf="correo.errors?.['required'] && (correo.dirty || correo.touched)"
                     class="error"
                   >
-                    El usuario es requerido
+                    El correo es requerido
                   </div>
                 </div>
               </div>

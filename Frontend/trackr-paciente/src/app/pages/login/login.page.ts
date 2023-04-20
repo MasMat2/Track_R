@@ -1,5 +1,5 @@
 import { LoginResponse } from './../../models/seguridad/login-response';
-import { LoginRequest } from 'src/app/models/seguridad/login-request';
+import { LoginRequest } from './../../models/seguridad/login-request';
 import { LoginService } from './../../services/seguridad/login.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';

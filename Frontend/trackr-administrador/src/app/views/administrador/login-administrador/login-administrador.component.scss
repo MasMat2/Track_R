@@ -1,0 +1,194 @@
+$color-primario: #ff6c00;
+$color-primario-hover: #ffffff;
+$color-primario-alt: #ffffff;
+
+$color-secundario: #ffffff !default;
+$color-secundario-hover: #999999 !default;
+
+$color-font: #ffffff;
+
+.bgImageContainer {
+  z-index: -1;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgb(46,117,182);
+  background: linear-gradient(90deg, rgba(46,117,182,1) 10%, rgba(16,42,62,0.9486169467787114) 50%, rgba(46,117,182,1) 90%);
+  background-size: 100% 100%;
+}
+
+h3 {
+  font-weight: normal;
+  padding: 15px;
+}
+
+.contenedor-login {
+  background-color: none;
+}
+
+input {
+  border: 1px white solid !important;
+  border-radius: 8px !important;
+  color: white;
+
+}
+
+.btn-ingresar{
+  background: #2E75B6;
+  color: white;
+  transition: 200ms;
+    width: auto;
+    min-height: 40px;
+    border: 1px #f2f2f2 solid;
+    color: #fff;
+    font-size: 14px;
+    -webkit-box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
+    box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
+    width: 243px !important;
+    max-width: 100%;
+}
+
+.btn-ingresar:hover{
+  background: #6CA5DA;
+}
+
+#acceso {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #475462;
+  margin-bottom: 15px;
+}
+
+.contenedor-form {
+  background-color: rgb(16,42,62, .4);
+
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  width: 400px;
+  border: 3px white solid ;
+  padding: 15px ;
+  border-radius: 15px;
+// margin-left: 150px;
+}
+
+.input-group > .form-control:not(:first-child),
+.input-group > .custom-select:not(:first-child) {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+#contenedor-principal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.imgFondo{
+  position: absolute;
+  z-index: -1;
+  left: 0px;
+  top: 15%;
+  width: 100%;
+}
+
+.conenedor-main{
+  display: flex;
+  justify-content: center;
+}
+
+.app-body {
+  width: 100%;
+  overflow-x: unset;
+
+}
+
+.fondo-form {
+  width: 100%;
+  z-index: 9;
+}
+
+
+.logos{
+  display: flex;
+  align-content: space-between;
+  justify-content: space-between;
+}
+
+button {
+  width: 80%;
+  border-radius: 8px !important;
+}
+
+#contenedor-cdis {
+  z-index: 9;
+  display: flex;
+  justify-content: center;
+}
+
+.contenedor-titulo-sistema {
+  z-index: 9;
+  font-size: 40px;
+  text-align: right;
+  margin-right: 50px;
+  width: 100%;
+}
+
+.col-form-label {
+  color: white !important;
+}
+
+.col-form-label:hover{
+  color: gray !important;
+}
+
+.sub-contenedor-login {
+  padding: 20px;
+  background: none;
+
+  display: flex;
+  justify-content: center;
+}
+
+.sub-header-login {
+  background-color: $color-primario;
+  width: 100%;
+  z-index: 99;
+  height: 31px;
+  display: flex;
+  align-items: center;
+}
+
+.header-login {
+  z-index: 99;
+  width: 100%;
+  display: flex;
+  margin-left: 20px;
+  max-height: 73px;
+  height: 73px;
+}
+
+.sub-header-login div {
+  display: inline;
+  color: #ffffff;
+  margin-left: 20px;
+  cursor: pointer;
+  height: 100%;
+  padding: 5px;
+}
+
+.sub-header-login-active {
+  border-bottom: 1px #ffffff solid;
+}
+
+.fondoInput{
+  background: none;
+  border: 10px gray solid;
+  color: white;
+}
+
+input::placeholder {
+  color: rgb(228, 228, 228);
+}

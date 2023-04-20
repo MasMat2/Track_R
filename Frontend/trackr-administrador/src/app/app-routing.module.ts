@@ -4,7 +4,7 @@ import { LayoutAdministradorComponent } from './views/administrador/layout-admin
 
 const routes: Routes = [
   {
-    path: '',
+    path: '**',
     pathMatch: 'full',
     redirectTo: 'login'
   },
