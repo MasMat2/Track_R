@@ -1,38 +1,24 @@
-import { LoginResponse } from './../../models/seguridad/login-response';
-import { LoginRequest } from 'src/app/models/seguridad/login-request';
-import { LoginService } from './../../services/seguridad/login.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
-import * as Utileria from '@shared/utileria';
-import { IonicModule } from '@ionic/angular';
-import { Router, RouterLink } from '@angular/router';
-import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
-import { GeneralConstant } from '@shared/general-constant';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  selector: 'app-login-administrador',
   standalone: true,
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    RouterLink
-    ]
+  imports: [CommonModule],
+  templateUrl: './login-administrador.component.html',
+  styleUrls: ['./login-administrador.component.scss']
 })
-export class LoginPage implements OnInit {
+export class LoginAdministradorComponent implements OnInit {
   loginRequest: LoginRequest = new LoginRequest();
   loginResponse: LoginResponse = new LoginResponse();
   btnSubmit: boolean = false;
   constructor(
     private loginService: LoginService,
     private router: Router
-    ) { }
+  ) { }
 
-  ngOnInit() {
-    this.loginRequest = new LoginRequest();
+  ngOnInit(): void {
+
   }
 
   /**

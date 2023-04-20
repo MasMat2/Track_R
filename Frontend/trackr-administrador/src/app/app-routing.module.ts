@@ -6,14 +6,20 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'administrador'
+    redirectTo: 'login'
   },
   {
     path: 'administrador',
     component: LayoutAdministradorComponent,
-    loadChildren: () => 
+    loadChildren: () =>
     import('./views/administrador/layout-administrador/layout-administrador.module')
     .then((m) => m.LayoutAdminsitradorModule)
+  },
+  {
+    path: 'login',
+    loadComponent: () =>
+    import('./views/administrador/login-administrador/login-administrador.component')
+    .then((m) => m.LoginAdministradorComponent)
   }
 ];
 

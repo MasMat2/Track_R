@@ -14,6 +14,7 @@ export class FooterComponent implements OnInit {
       text: 'Cerrar Sesión',
       role: 'destructive',
       icon:'log-out',
+      color:'danger',
       cssClass: 'rojo',
       data: {
         action: 'logout'

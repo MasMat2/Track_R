@@ -1,8 +1,7 @@
 export class LoginRequest {
   public correo: string;
   public contrasena: string;
-  // public Clave: string;
+  public claveTipoUsuario: string;
 
-  // public idUsuario: number;
   constructor() {}
 }
