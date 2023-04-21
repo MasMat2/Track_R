@@ -32,7 +32,6 @@ export class LoginPage implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.loginRequest = new LoginRequest();
   }
 
   /**

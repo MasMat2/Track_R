@@ -1,13 +1,13 @@
 <div class="bgImageContainer"></div>
 <div id="contenedor-principal">
-  <main class="main">
+  <main>
     <div class="logos mt-5">
-      <!-- <img style="margin: 20px; width: 35%" src="assets/img/svg/Logo-Christus.svg"/>
-        <img style="margin: 20px; width: 35%" src="assets/img/Logo-LAFON-Bco.png"/> -->
+      <img style="margin: 20px; width: 35%" src="assets/img/logo-trackr.png"/>
+        <img style="margin: 20px; width: 35%" src="assets/img/logo-trackr.png"/>
     </div>
     <div>
       <div class="row text-center">
-        <!-- <img height="50%" class="imgFondo" src="assets/img/L-elemntos_background.png"/> -->
+        <img height="50%" class="imgFondo" src="assets/img/logo-trackr.png"/>
       </div>
 
       <form
@@ -17,14 +17,6 @@
       >
         <div class="sub-contenedor-login">
           <div class="contenedor-form">
-            <div class="row">
-              <!-- <img style="margin: 5px auto;" height="25px" src="assets/img/L_Logo_SGP.png"/>  -->
-              <div class="col-md-12">
-                <div>
-                  <h4 style="color: white; text-align: center">TRACKR</h4>
-                </div>
-              </div>
-            </div>
 
             <div class="row">
               <div id="acceso" class="col-md-12">
@@ -38,11 +30,11 @@
                 <div class="form-group">
                   <div>
                     <input
-                      #correo="ngModel"
+                      #usuario="ngModel"
                       [(ngModel)]="loginRequest.correo"
-                      id="correo"
-                      name="correo"
-                      class="form-control fondoInput"
+                      id="usuario"
+                      name="usuario"
+                      class="form-control"
                       type="text"
                       maxlength="50"
                       required="true"
@@ -50,15 +42,17 @@
                       placeholder="Usuario"
                     />
                     <div
-                      *ngIf="correo.errors?.['required'] && correo.dirty"
+                      *ngIf="usuario.errors?.['required'] && usuario.dirty"
                       class="error"
                     >
-                      El correo es requerido
+                      El usuario es requerido
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            <br/>
 
             <!-- Contraseña -->
             <div class="row">

@@ -12,14 +12,14 @@ namespace TrackrAPI.Repositorys.Seguridad
             base.context = context;
         }
 
-        public Usuario Login(string username, string pasword, string clave)
+        public Usuario Login(string username, string pasword, string claveTipoUsuario)
         {
             return context.Usuario
                 .Include(u => u.IdTipoUsuarioNavigation)
                 .Where(u => 
                     u.Correo == username && 
                     u.Contrasena == pasword &&
-                    u.IdTipoUsuarioNavigation.Clave == clave)
+                    u.IdTipoUsuarioNavigation.Clave == claveTipoUsuario)
                 .FirstOrDefault();
         }
     }
