@@ -1,0 +1,116 @@
+<div class="bgImageContainer"></div>
+<div id="contenedor-principal">
+  <main>
+    <div class="logos mt-5">
+      <img style="margin: 20px; width: 35%" src="assets/img/logo-trackr.png"/>
+        <img style="margin: 20px; width: 35%" src="assets/img/logo-trackr.png"/>
+    </div>
+    <div>
+      <div class="row text-center">
+        <img height="50%" class="imgFondo" src="assets/img/logo-trackr.png"/>
+      </div>
+
+      <form
+        #formulario="ngForm"
+        (ngSubmit)="enviarFormulario(formulario)"
+        novalidate="novalidate"
+      >
+        <div class="sub-contenedor-login">
+          <div class="contenedor-form">
+
+            <div class="row">
+              <div id="acceso" class="col-md-12">
+                <h1 style="color: white">Login</h1>
+              </div>
+            </div>
+
+            <!-- Usuario -->
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <div>
+                    <input
+                      #usuario="ngModel"
+                      [(ngModel)]="loginRequest.correo"
+                      id="usuario"
+                      name="usuario"
+                      class="form-control"
+                      type="text"
+                      maxlength="50"
+                      required="true"
+                      autocomplete="off"
+                      placeholder="Usuario"
+                    />
+                    <div
+                      *ngIf="usuario.errors?.['required'] && usuario.dirty"
+                      class="error"
+                    >
+                      El usuario es requerido
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br/>
+
+            <!-- Contraseña -->
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <div>
+                    <input
+                      #contrasena="ngModel"
+                      [(ngModel)]="loginRequest.contrasena"
+                      id="contrasena"
+                      name="contrasena"
+                      class="form-control fondoInput"
+                      type="password"
+                      maxlength="50"
+                      required="true"
+                      autocomplete="off"
+                      placeholder="Contraseña"
+                    />
+                    <div
+                      *ngIf="contrasena.errors?.['required'] && contrasena.dirty"
+                      class="error"
+                    >
+                      La contraseña es requerida
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-12 text-center">
+                <button
+                  [disabled]="btnSubmit"
+                  type="submit"
+                  class="btn-ingresar"
+                >
+                  Ingresar
+                </button>
+              </div>
+
+              <div class="col-12 text-center mt-4">
+                <span class="mt-3" style="color: white"
+                  >¿Olvidaste tu contraseña?&nbsp;</span
+                >
+                <!-- <span class="mt-3 url-link" class="col-form-label cursor-pointer" [routerLink]="['/peticion-restablecer-contrasena']">Haz clic aquí.</span> -->
+              </div>
+
+              <div
+                style="font-size: 11px; display: none"
+                class="col-12 text-center"
+              >
+                <span class="mb-0">Todos los Derechos Reservados.</span><br />
+                <span>Copyright 2021.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>

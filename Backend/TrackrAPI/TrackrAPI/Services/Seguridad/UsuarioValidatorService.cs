@@ -32,7 +32,7 @@ namespace TrackrAPI.Services.Seguridad
         public Usuario ValidateUserExists(LoginRequest loginRequest)
         {
             string encryptedPassword = simpleAES.EncryptToString(loginRequest.Contrasena);
-            Usuario userFromRepo = usuarioRepository.Login(loginRequest.Correo, encryptedPassword);
+            Usuario userFromRepo = usuarioRepository.Login(loginRequest.Correo, encryptedPassword, loginRequest.ClaveTipoUsuario);
 
             if (userFromRepo == null)
             {

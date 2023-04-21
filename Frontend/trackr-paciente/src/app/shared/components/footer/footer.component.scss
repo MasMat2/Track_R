@@ -6,11 +6,8 @@ ion-icon {
     color: #BFBFBF;
 }
 
-.rojo {
-  accent-color: red;
-   --button-color:red;
-    background-color: red;
-    color:red;
+ion-action-sheet.rojo .action-sheet-group {
+  background: red;
 }
 
 // Establecer el color de fondo de la hoja de acción
@@ -35,3 +32,4 @@ ion-action-sheet {
   --destructive-background-hover: #ff3b30;
   --destructive-background-activated: #ff3b30;
 }
+
