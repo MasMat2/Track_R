@@ -1,76 +1,68 @@
-$color-primario: #ff6c00;
-$color-primario-hover: #ffffff;
-$color-primario-alt: #ffffff;
-
-$color-secundario: #ffffff !default;
-$color-secundario-hover: #999999 !default;
-
-$color-font: #ffffff;
-
 input {
-  border: 1px white solid !important; // Cambiar el color del borde
+  padding: 10px;
+  border: 1px #eccdf3 solid !important; // Cambiar el color del borde
   border-radius: 25px !important;
   color: black;
-  background: none;
+  background: white;
   border: 10px gray solid;
 }
 input::placeholder {
-  color: black
+  color: black;
+  padding: 10px;
 }
 
 
 .btn-ingresar{
-  margin-top: 20px;
+  margin-top: 40px;
   border-radius: 25px !important;
-
-
+  inline-size: max-content;
   transition: 200ms;
-    width: auto;
+    width: 100%;
     min-height: 40px;
-    border: 1px --color-primario solid; //Cambiar color borde
-    color: black;
+    border: 4px #deebf7 solid; //Cambiar color borde
     font-size: 14px;
-    -webkit-box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
-    -moz-box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
-    box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
-    width: 243px !important;
     max-width: 100%;
 }
 
 .btn-ingresar:hover{
-  background: #6CA5DA;
+  background: #deebf7;
 }
 
-#acceso {
+.acceso {
+  display: flex;
+  justify-content: center;
   text-align: center;
   color: #475462;
   margin-bottom: 15px;
+
+}
+
+.imgLogin{
+  height: 60px;
+  text-align: center;
+  justify-content: center;
 }
 
 .contenedor-form {
-  background-color: rgb(16,42,62, .2);
-  display: flex;
+  background-color: rgb(16,42,62, .1);
   flex-direction: column;
-  align-content: center;
-  width: 400px;
-  padding: 15px ;
+  width: 600px;
+  height: 350px;
+  padding: 30px ;
   border-radius: 15px;
   box-shadow: 0 0 20px rgb(0,0,0, .5);
-// margin-left: 150px;
 }
 
-#contenedor-principal {
+.contenedor-principal {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  align-items: stretch;
+  align-items: center;
 }
 
 .imgFondo{
   position: absolute;
   z-index: -1;
-  left: 0px;
-  top: 15%;
+  left: 0%;
   width: 100%;
 }
 
@@ -84,7 +76,15 @@ input::placeholder {
 .sub-contenedor-login {
   padding: 20px;
   background: none;
-
   display: flex;
   justify-content: center;
+  margin-top: 100px;
+}
+
+.contenedor-footer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
