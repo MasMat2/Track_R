@@ -25,7 +25,7 @@ export class LoginAdministradorComponent implements OnInit {
   btnSubmit: boolean = false;
   constructor(
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -64,7 +64,7 @@ export class LoginAdministradorComponent implements OnInit {
     await lastValueFrom(this.loginService.authenticate(this.loginRequest))
           .then((loginResponse: LoginResponse) => {
             localStorage.setItem(GeneralConstant.TOKEN_KEY, loginResponse.token);
-            this.router.navigate(['/inicio']);
+            this.router.navigate(['/administrador']);
           })
           .catch(error => {
             localStorage.removeItem(GeneralConstant.TOKEN_KEY);

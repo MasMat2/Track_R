@@ -9,6 +9,7 @@ import { IonicModule } from '@ionic/angular';
 import { Router, RouterLink } from '@angular/router';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { GeneralConstant } from '@shared/general-constant';
+import { StorageService } from 'src/app/services/seguridad/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ import { GeneralConstant } from '@shared/general-constant';
     IonicModule,
     CommonModule,
     FormsModule,
-    RouterLink
+    RouterLink,
     ]
 })
 export class LoginPage implements OnInit {
@@ -28,7 +29,8 @@ export class LoginPage implements OnInit {
   btnSubmit: boolean = false;
   constructor(
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    private storageService: StorageService
     ) { }
 
   ngOnInit() {
@@ -65,11 +67,11 @@ export class LoginPage implements OnInit {
     this.loginRequest.claveTipoUsuario = GeneralConstant.CLAVE_USUARIO_PACIENTE;
     await lastValueFrom(this.loginService.authenticate(this.loginRequest))
           .then((loginResponse: LoginResponse) => {
-            localStorage.setItem(GeneralConstant.TOKEN_KEY, loginResponse.token);
+            this.storageService.set(GeneralConstant.TOKEN_KEY, loginResponse.token);
             this.router.navigate(['/paciente']);
           })
           .catch(error => {
-            localStorage.removeItem(GeneralConstant.TOKEN_KEY);
+            this.storageService.remove(GeneralConstant.TOKEN_KEY);
             this.btnSubmit = false;
           });
   }

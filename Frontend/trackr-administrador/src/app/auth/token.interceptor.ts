@@ -5,6 +5,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { AdministradorAuthGuard } from './administrador-auth-guard.service';
 import { environment } from './../../environments/environment';
+import { GeneralConstant } from '../shared/general-constant';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -17,9 +18,8 @@ export class TokenInterceptor implements HttpInterceptor {
   private mensajeError = 'Ocurrió un error inesperado, favor de contactar al administrador del sistema.';
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let token = localStorage.getItem('token-administrador');
+    let token = localStorage.getItem(GeneralConstant.TOKEN_KEY);
     let newRequest = null;
-
     if (request.url.includes('i18n') || request.url.includes('hooks.slack.com')) {
       newRequest = request.clone({
         url: request.url
@@ -50,7 +50,7 @@ export class TokenInterceptor implements HttpInterceptor {
               if (reader.result){
                 this.modalService.modalError(reader.result.toString());
               }
- 
+
             }
             reader.readAsText(error.error);
           } else {
@@ -62,7 +62,7 @@ export class TokenInterceptor implements HttpInterceptor {
         } else if (error.status === 401 || error.status === 0) {
           // Cuando el token enviado en la peticion es invalido, el servidor retorna un error 401
           if (this.router.url.includes('administrador')) {
-            localStorage.removeItem('token-administrador');
+            localStorage.removeItem(GeneralConstant.TOKEN_KEY);
             this.router.navigate(['/login-administrador']);
           }
         } else {

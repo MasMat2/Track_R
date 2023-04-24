@@ -13,7 +13,6 @@ import { CommonModule } from '@angular/common';
     MatSidenavModule,
   ],
   declarations: [
-    InicioComponent,
     LayoutAdministradorComponent
   ],
   entryComponents: [],
