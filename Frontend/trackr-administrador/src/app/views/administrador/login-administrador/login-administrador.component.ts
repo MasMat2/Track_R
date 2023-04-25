@@ -1,39 +1,35 @@
-import { LoginResponse } from './../../models/seguridad/login-response';
-import { LoginRequest } from './../../models/seguridad/login-request';
-import { LoginService } from './../../services/seguridad/login.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LoginRequest } from 'src/app/models/seguridad/login-request';
+import { LoginResponse } from 'src/app/models/seguridad/login-response';
+import { LoginService } from 'src/app/shared/services/seguridad/login.service';
+import { Router } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
-import * as Utileria from '@shared/utileria';
-import { IonicModule } from '@ionic/angular';
-import { Router, RouterLink } from '@angular/router';
-import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
-import { GeneralConstant } from '@shared/general-constant';
-import { StorageService } from 'src/app/services/seguridad/storage.service';
+import * as Utileria from 'src/app/shared/utileria';
+import { GeneralConstant } from 'src/app/shared/general-constant';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  selector: 'app-login-administrador',
   standalone: true,
   imports: [
-    IonicModule,
     CommonModule,
-    FormsModule,
-    RouterLink,
-    ]
+    FormsModule
+  ],
+  templateUrl: './login-administrador.component.html',
+  styleUrls: ['./login-administrador.component.scss']
 })
-export class LoginPage implements OnInit {
+export class LoginAdministradorComponent implements OnInit {
   loginRequest: LoginRequest = new LoginRequest();
   loginResponse: LoginResponse = new LoginResponse();
   btnSubmit: boolean = false;
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private storageService: StorageService
-    ) { }
+  ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+
   }
 
   /**
@@ -64,14 +60,14 @@ export class LoginPage implements OnInit {
    * Llama al método Authenticate de LoginService. Si es exitoso, guarda el LoginResponse Token en el localStorage y redirige a la página de pacientes.
    */
   public async autenticarPaciente() {
-    this.loginRequest.claveTipoUsuario = GeneralConstant.CLAVE_USUARIO_PACIENTE;
+    this.loginRequest.claveTipoUsuario = GeneralConstant.CLAVE_USUARIO_ADMINISTRADOR;
     await lastValueFrom(this.loginService.authenticate(this.loginRequest))
           .then((loginResponse: LoginResponse) => {
-            this.storageService.set(GeneralConstant.TOKEN_KEY, loginResponse.token);
-            this.router.navigate(['/paciente']);
+            localStorage.setItem(GeneralConstant.TOKEN_KEY, loginResponse.token);
+            this.router.navigate(['/administrador']);
           })
           .catch(error => {
-            this.storageService.remove(GeneralConstant.TOKEN_KEY);
+            localStorage.removeItem(GeneralConstant.TOKEN_KEY);
             this.btnSubmit = false;
           });
   }

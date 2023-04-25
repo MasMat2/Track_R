@@ -1,0 +1,134 @@
+<div class="contenedor-principal">
+  <main>
+    <div class="logos mt-5 justify-content-center">
+      <!-- Logo Christus -->
+      <img
+        style="margin: 20px; width: 20%"
+        src="assets/img/svg/Logo_christus_CEI.svg"
+      />
+      <!-- Logo TrackR -->
+      <img
+        style="margin: 20px; width: 20%"
+        src="assets/img/svg/svg-Logo-02-Trackr.svg"
+      />
+    </div>
+
+    <div class="row text-center">
+      <!-- Imagen BackGround Olas rosas -->
+      <img
+        height="60%"
+        class="imgFondo"
+        src="assets/img/svg/svg-Admvo_Login-Olas_Rosas.svg"
+      />
+    </div>
+
+    <!-- Contenedor Transparente -->
+    <div class="sub-contenedor-login">
+      <form
+        #formulario="ngForm"
+        (ngSubmit)="enviarFormulario(formulario)"
+        novalidate="novalidate"
+      >
+        <div class="contenedor-form">
+          <!-- Imagen de Login -->
+          <div class="row justify-content-center">
+            <div class="acceso">
+              <img
+                class="imgLogin"
+                src="assets/img/svg/svg-Admvo_Login-Titulo.svg"
+              />
+            </div>
+          </div>
+
+          <!-- Usuario -->
+          <div class="row justify-content-center">
+            <div class="col-md-10">
+              <div class="form-group">
+                <div>
+                  <input
+                    #usuario="ngModel"
+                    [(ngModel)]="loginRequest.correo"
+                    id="usuario"
+                    name="usuario"
+                    class="form-control"
+                    type="text"
+                    maxlength="50"
+                    required="true"
+                    autocomplete="off"
+                    placeholder="Usuario"
+                  />
+                  <div
+                    *ngIf="usuario.errors?.['required'] && usuario.dirty"
+                    class="error"
+                  >
+                    El usuario es requerido
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          <!-- Contraseña -->
+          <div class="row justify-content-center">
+            <div class="col-md-10">
+              <div class="form-group">
+                <div>
+                  <input
+                    #contrasena="ngModel"
+                    [(ngModel)]="loginRequest.contrasena"
+                    id="contrasena"
+                    name="contrasena"
+                    class="form-control fondoInput"
+                    type="password"
+                    maxlength="50"
+                    required="true"
+                    autocomplete="off"
+                    placeholder="Contraseña"
+                  />
+                  <div
+                    *ngIf="contrasena.errors?.['required'] && contrasena.dirty"
+                    class="error"
+                  >
+                    La contraseña es requerida
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row justify-content-center">
+            <div class="col-md-10 text-center">
+              <button [disabled]="btnSubmit" type="submit" class="btn-ingresar">
+                Entrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="contenedor-footer d-flex mb-5">
+      <div class="row">
+        <div class="col-md-10">
+          <div class="footer">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="footer-texto">
+                  <p>
+                    <strong>Powered by</strong>
+                    <br />
+                    *Imagen CDIS*
+                    <br />
+                    V1.0
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,90 @@
+input {
+  padding: 10px;
+  border: 1px #eccdf3 solid !important; // Cambiar el color del borde
+  border-radius: 25px !important;
+  color: black;
+  background: white;
+  border: 10px gray solid;
+}
+input::placeholder {
+  color: black;
+  padding: 10px;
+}
+
+
+.btn-ingresar{
+  margin-top: 40px;
+  border-radius: 25px !important;
+  inline-size: max-content;
+  transition: 200ms;
+    width: 100%;
+    min-height: 40px;
+    border: 4px #deebf7 solid; //Cambiar color borde
+    font-size: 14px;
+    max-width: 100%;
+}
+
+.btn-ingresar:hover{
+  background: #deebf7;
+}
+
+.acceso {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: #475462;
+  margin-bottom: 15px;
+
+}
+
+.imgLogin{
+  height: 60px;
+  text-align: center;
+  justify-content: center;
+}
+
+.contenedor-form {
+  background-color: rgb(16,42,62, .1);
+  flex-direction: column;
+  width: 600px;
+  height: 350px;
+  padding: 30px ;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgb(0,0,0, .5);
+}
+
+.contenedor-principal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imgFondo{
+  position: absolute;
+  z-index: -1;
+  left: 0%;
+  width: 100%;
+}
+
+.logos{
+  display: flex;
+  align-content: space-between;
+  justify-content: space-between;
+}
+
+
+.sub-contenedor-login {
+  padding: 20px;
+  background: none;
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.contenedor-footer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
