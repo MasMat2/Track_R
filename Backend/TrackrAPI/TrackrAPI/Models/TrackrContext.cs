@@ -29,6 +29,8 @@ namespace TrackrAPI.Models
         public virtual DbSet<TipoUsuario> TipoUsuario { get; set; } = null!;
         public virtual DbSet<Usuario> Usuario { get; set; } = null!;
         public virtual DbSet<UsuarioRol> UsuarioRol { get; set; } = null!;
+        public virtual DbSet<UsuarioWidget> UsuarioWidget { get; set; } = null!;
+        public virtual DbSet<Widget> Widget { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -270,6 +272,34 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdUsuario)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__UsuarioRo__IdUsu__59063A47");
+            });
+
+            modelBuilder.Entity<UsuarioWidget>(entity =>
+            {
+                entity.HasKey(e => e.IdUsuarioWidget)
+                    .HasName("PK__UsuarioW__E3280363ADFCEDB8");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.UsuarioWidget)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UsuarioWi__IdUsu__5FB337D6");
+
+                entity.HasOne(d => d.IdWidgetNavigation)
+                    .WithMany(p => p.UsuarioWidget)
+                    .HasForeignKey(d => d.IdWidget)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UsuarioWi__IdWid__5EBF139D");
+            });
+
+            modelBuilder.Entity<Widget>(entity =>
+            {
+                entity.HasKey(e => e.IdWidget)
+                    .HasName("PK__Widget__F7931B71C3F9EB29");
+
+                entity.Property(e => e.Clave).HasMaxLength(20);
+
+                entity.Property(e => e.Nombre).HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);
