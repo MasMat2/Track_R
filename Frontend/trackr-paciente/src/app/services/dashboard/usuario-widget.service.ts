@@ -12,7 +12,7 @@ export class UsuarioWidgetService {
   ) { }
 
   public consultarPorUsuarioEnSesion(): Observable<WidgetType[]> {
-    return this.http.get<string[]>(this.dataUrl + 'consultarPorUsuarioEnSesion')
+    return this.http.get<string[]>(this.dataUrl + 'usuario')
       .pipe(
         tap(claves => {
           for (const clave of claves) {

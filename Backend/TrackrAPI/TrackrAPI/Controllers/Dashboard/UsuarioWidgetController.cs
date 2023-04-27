@@ -4,25 +4,23 @@ using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Services.Dashboard;
 
-namespace TrackrAPI.Controllers
+namespace TrackrAPI.Controllers.Dashboard;
+
+[Route("api/[controller]")]
+[ApiController]
+public class UsuarioWidgetController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UsuarioWidgetController : ControllerBase
+    private readonly UsuarioWidgetService _usuarioWidgetService;
+
+    public UsuarioWidgetController(UsuarioWidgetService usuarioWidgetService)
     {
-        private readonly UsuarioWidgetService _usuarioWidgetService;
+        _usuarioWidgetService = usuarioWidgetService;
+    }
 
-        public UsuarioWidgetController(UsuarioWidgetService usuarioWidgetService)
-        {
-            _usuarioWidgetService = usuarioWidgetService;
-        }
-
-        [HttpGet("consultarPorUsuarioEnSesion")]
-        [AllowAnonymous]
-        public IEnumerable<string> ConsultarPorUsuarioEnSesion()
-        {
-            int idUsuarioSesion = Utileria.ObtenerIdUsuarioSesion(this);
-            return _usuarioWidgetService.ConsultarPorUsuario(idUsuarioSesion);
-        }
+    [HttpGet("usuario")]
+    public IEnumerable<string> ConsultarPorUsuarioEnSesion()
+    {
+        int idUsuarioSesion = Utileria.ObtenerIdUsuarioSesion(this);
+        return _usuarioWidgetService.ConsultarPorUsuario(idUsuarioSesion);
     }
 }
