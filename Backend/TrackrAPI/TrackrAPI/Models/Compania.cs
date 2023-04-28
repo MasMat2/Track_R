@@ -7,6 +7,8 @@ namespace TrackrAPI.Models
     {
         public Compania()
         {
+            JerarquiaAcceso = new HashSet<JerarquiaAcceso>();
+            Locacion = new HashSet<Locacion>();
             Perfil = new HashSet<Perfil>();
             Usuario = new HashSet<Usuario>();
         }
@@ -26,9 +28,13 @@ namespace TrackrAPI.Models
         public string? Rfc { get; set; }
         public int? IdEstado { get; set; }
         public int? IdLada { get; set; }
+        public int IdTipoCompania { get; set; }
 
         public virtual Estado? IdEstadoNavigation { get; set; }
         public virtual Lada? IdLadaNavigation { get; set; }
+        public virtual TipoCompania IdTipoCompaniaNavigation { get; set; } = null!;
+        public virtual ICollection<JerarquiaAcceso> JerarquiaAcceso { get; set; }
+        public virtual ICollection<Locacion> Locacion { get; set; }
         public virtual ICollection<Perfil> Perfil { get; set; }
         public virtual ICollection<Usuario> Usuario { get; set; }
     }

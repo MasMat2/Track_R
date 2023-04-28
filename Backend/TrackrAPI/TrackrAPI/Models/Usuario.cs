@@ -7,7 +7,9 @@ namespace TrackrAPI.Models
     {
         public Usuario()
         {
+            Locacion = new HashSet<Locacion>();
             UsuarioRol = new HashSet<UsuarioRol>();
+            UsuarioWidget = new HashSet<UsuarioWidget>();
         }
 
         public int IdUsuario { get; set; }
@@ -15,8 +17,8 @@ namespace TrackrAPI.Models
         public string ApellidoPaterno { get; set; } = null!;
         public string? ApellidoMaterno { get; set; }
         public string? TelefonoMovil { get; set; }
-        public string Correo { get; set; } = null!;
-        public string Contrasena { get; set; } = null!;
+        public string? Correo { get; set; }
+        public string? Contrasena { get; set; }
         public bool Habilitado { get; set; }
         public string? ImagenTipoMime { get; set; }
         public int IdTipoUsuario { get; set; }
@@ -26,6 +28,8 @@ namespace TrackrAPI.Models
         public virtual Compania IdCompaniaNavigation { get; set; } = null!;
         public virtual Perfil IdPerfilNavigation { get; set; } = null!;
         public virtual TipoUsuario IdTipoUsuarioNavigation { get; set; } = null!;
+        public virtual ICollection<Locacion> Locacion { get; set; }
         public virtual ICollection<UsuarioRol> UsuarioRol { get; set; }
+        public virtual ICollection<UsuarioWidget> UsuarioWidget { get; set; }
     }
 }
