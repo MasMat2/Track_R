@@ -7,6 +7,7 @@ namespace TrackrAPI.Models
     {
         public Pais()
         {
+            Domicilio = new HashSet<Domicilio>();
             Estado = new HashSet<Estado>();
         }
 
@@ -14,6 +15,7 @@ namespace TrackrAPI.Models
         public string Nombre { get; set; } = null!;
         public string? Clave { get; set; }
 
+        public virtual ICollection<Domicilio> Domicilio { get; set; }
         public virtual ICollection<Estado> Estado { get; set; }
     }
 }

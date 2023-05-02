@@ -9,6 +9,7 @@ namespace TrackrAPI.Models
         {
             Compania = new HashSet<Compania>();
             JerarquiaAccesoTipoCompania = new HashSet<JerarquiaAccesoTipoCompania>();
+            Perfil = new HashSet<Perfil>();
         }
 
         public int IdTipoCompania { get; set; }
@@ -17,5 +18,6 @@ namespace TrackrAPI.Models
 
         public virtual ICollection<Compania> Compania { get; set; }
         public virtual ICollection<JerarquiaAccesoTipoCompania> JerarquiaAccesoTipoCompania { get; set; }
+        public virtual ICollection<Perfil> Perfil { get; set; }
     }
 }

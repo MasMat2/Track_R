@@ -8,7 +8,13 @@ namespace TrackrAPI.Models
         public Municipio()
         {
             CodigoPostal = new HashSet<CodigoPostal>();
-            Locacion = new HashSet<Locacion>();
+            Compania = new HashSet<Compania>();
+            Direccion = new HashSet<Direccion>();
+            Domicilio = new HashSet<Domicilio>();
+            ExpedienteDatoSocial = new HashSet<ExpedienteDatoSocial>();
+            ExpedientePacienteInformacion = new HashSet<ExpedientePacienteInformacion>();
+            Hospital = new HashSet<Hospital>();
+            Usuario = new HashSet<Usuario>();
         }
 
         public int IdMunicipio { get; set; }
@@ -18,6 +24,12 @@ namespace TrackrAPI.Models
 
         public virtual Estado IdEstadoNavigation { get; set; } = null!;
         public virtual ICollection<CodigoPostal> CodigoPostal { get; set; }
-        public virtual ICollection<Locacion> Locacion { get; set; }
+        public virtual ICollection<Compania> Compania { get; set; }
+        public virtual ICollection<Direccion> Direccion { get; set; }
+        public virtual ICollection<Domicilio> Domicilio { get; set; }
+        public virtual ICollection<ExpedienteDatoSocial> ExpedienteDatoSocial { get; set; }
+        public virtual ICollection<ExpedientePacienteInformacion> ExpedientePacienteInformacion { get; set; }
+        public virtual ICollection<Hospital> Hospital { get; set; }
+        public virtual ICollection<Usuario> Usuario { get; set; }
     }
 }

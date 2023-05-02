@@ -8,7 +8,8 @@ namespace TrackrAPI.Models
         public Lada()
         {
             Compania = new HashSet<Compania>();
-            Locacion = new HashSet<Locacion>();
+            CompaniaContacto = new HashSet<CompaniaContacto>();
+            Hospital = new HashSet<Hospital>();
         }
 
         public int IdLada { get; set; }
@@ -16,6 +17,7 @@ namespace TrackrAPI.Models
         public string Numero { get; set; } = null!;
 
         public virtual ICollection<Compania> Compania { get; set; }
-        public virtual ICollection<Locacion> Locacion { get; set; }
+        public virtual ICollection<CompaniaContacto> CompaniaContacto { get; set; }
+        public virtual ICollection<Hospital> Hospital { get; set; }
     }
 }
