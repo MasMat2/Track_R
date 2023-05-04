@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MensajeService } from '../components/mensaje/mensaje.service';
-import { GeneralConstant } from '../general-constant';
+import { GeneralConstant } from '../utils/general-constant';
 
 @Injectable({
   providedIn: 'root',

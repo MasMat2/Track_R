@@ -1,3 +1,5 @@
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
@@ -34,6 +36,9 @@ builder.Services.AddSignalR();
 builder.Services.AddScoped<SimpleAES>();
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddScoped<CorreoHelper>();
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+
 // IoC  - Inyeccion de dependencias para los Repositorys y Services
 builder.Services.Scan(scan => scan
     .FromAssemblyOf<Program>().AddClasses(c => c.InNamespaces("TrackrAPI.Repositorys")).AsImplementedInterfaces().WithTransientLifetime()
@@ -47,11 +52,11 @@ builder.Services.Scan(scan => scan
 var jwtSettings = new JwtSettings();
 builder.Configuration.Bind(JwtSettings.SectionName, jwtSettings);
 
-// Registra la instancia de JwtSettings como un servicio Singleton en el contenedor de inyección de dependencias.
-// Crea una única instancia de JwtSettings que se comparte entre todos los objetos que lo soliciten a través de inyección de dependencias.
+// Registra la instancia de JwtSettings como un servicio Singleton en el contenedor de inyecciï¿½n de dependencias.
+// Crea una ï¿½nica instancia de JwtSettings que se comparte entre todos los objetos que lo soliciten a travï¿½s de inyecciï¿½n de dependencias.
 builder.Services.AddSingleton(Options.Create(jwtSettings));
 
-// Habilita la autenticación y establece el esquema de autenticación predeterminado como JWT Bearer.
+// Habilita la autenticaciï¿½n y establece el esquema de autenticaciï¿½n predeterminado como JWT Bearer.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -103,7 +108,7 @@ app.UseExceptionHandler(builder =>
             }
             else
             {
-                string errorMessageDefault = "Ocurrió un error inesperado, favor de contactar al administrador del sistema";
+                string errorMessageDefault = "Ocurriï¿½ un error inesperado, favor de contactar al administrador del sistema";
                 Logger.WriteError(exceptionHandlerPathFeature.Error, app.Environment);
 
                 context.Response.AddApplicationError(errorMessageDefault);

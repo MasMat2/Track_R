@@ -5,12 +5,19 @@ import { InicioComponent } from '../inicio/inicio.component';
 const routes: Routes = [
   {
     path: '',
-    component: InicioComponent
-  }
+    component: InicioComponent,
+  },
+  {
+    path: 'configuracion-general',
+    loadChildren: () =>
+      import(
+        'src/app/views/configuracion-general/configuracion-general.module'
+      ).then((m) => m.ConfiguracionGeneralModule),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class LayoutAdminitradorRoutingModule {}

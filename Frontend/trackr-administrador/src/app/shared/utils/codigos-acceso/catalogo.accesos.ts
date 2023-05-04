@@ -1,0 +1,7 @@
+export enum AccesosCompania {
+  CONSULTAR = 'APCMPA0000',
+  AGREGAR = 'APCMPA1000',
+  EDITAR = 'APCMPA2000',
+  ELIMINAR = 'APCMPA3000',
+  EDITAR_HORA = 'APCMPA4000',
+};

@@ -10,6 +10,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TokenInterceptor } from './auth/token.interceptor';
 import { AdministradorAuthGuard } from './auth/administrador-auth-guard.service';
 import { BsModalRef, ModalModule } from 'ngx-bootstrap/modal';
+import { MensajeModule } from './shared/components/mensaje/mensaje.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { BsModalRef, ModalModule } from 'ngx-bootstrap/modal';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    MensajeModule,
   ],
   providers: [ LoginService,
     AdministradorAuthService,

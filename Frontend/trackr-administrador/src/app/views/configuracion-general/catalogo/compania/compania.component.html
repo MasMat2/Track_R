@@ -1,0 +1,109 @@
+<div class="contenedor">
+  <div class="titulo-contenedor">Catálogo de Compañías</div>
+  <div class="cuerpo-contenedor">
+    <!-- Panel de Búsqueda -->
+<div [collapse]="isCollapsed" [isAnimated]="true">
+
+
+  <div class="row">
+    <!-- Denominación Social -->
+    <div class="col-md-4">
+      <div class="form-group">
+        <label class="label-input required-label">Nombre</label>
+        <div>
+          <input
+            name="nombre"
+            [required]="false"
+            [(ngModel)]="filtro.nombre"
+            class="form-control"
+            type="text"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- RFC -->
+    <div class="col-md-4">
+      <div class="form-group">
+        <label class="label-input required-label">RFC</label>
+        <div>
+          <input
+            name="rfc"
+            [required]="false"
+            [(ngModel)]="filtro.rfc"
+            class="form-control"
+            type="text"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Tipo de Compañía -->
+    <div class="col-md-4">
+      <div class="form-group">
+        <label class="label-input required-label">Tipo de compañía</label>
+        <div>
+          <ng-select
+            name="tipoCompania"
+            bindLabel="nombre"
+            bindValue="idTipoCompania"
+            [items]="tipoCompaniaList"
+            [required]="false"
+            [(ngModel)]="filtro.idTipoCompania"
+            [placeholder]="placeHolderSelect"
+            [notFoundText]="placeHolderNoOptions"
+          ></ng-select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<!-- Botón Buscar -->
+<div class="row">
+  <div class="col-md-12 d-flex justify-content-center">
+    <div class="form-group" style="max-width: 100%;">
+      <label class="label-input required-label" style="visibility: hidden;">Buscar</label>
+      <button [disabled]="buscando" class="btn-terceario mr-4" type ="button" (click)="buscar(true)">
+        {{ buscando ? 'Buscando...' : 'Buscar' }}
+      </button>
+      <button (click)="limpiar()" type="button" class="btn-secundario limpiar ml-4">
+        Limpiar
+      </button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- Mostrar panel de búsqueda -->
+<div class="form-row panel-busqueda mb-4">
+  <div (click)="isCollapsed = !isCollapsed" class="panel-carga-elementos center-element-vertically">
+      <span class="titulo-panel">Panel de Búsqueda</span>
+      <span class="arow-down-up">
+      <i *ngIf="isCollapsed" class="fa fa-chevron-down"></i>
+      <i *ngIf="!isCollapsed" class="fa fa-chevron-up"></i>
+      </span>
+  </div>
+</div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="contenedor-agregar" (click)="agregar()" *ngIf="tieneAccesoAgregar">
+          <i class="fas fa-plus-circle"></i><span>Agregar</span>
+        </div>
+        <app-grid-general
+          [headerName]="HEADER_GRID"
+          [data]="companiaList"
+          [children]="columns"
+          (event)="onGridClick($event)"
+          [accesoEditar]="accesoEditar"
+          [accesoEliminar]="accesoEliminar">
+        </app-grid-general>
+      </div>
+    </div>
+  </div>
+</div>

@@ -16,6 +16,30 @@ namespace TrackrAPI.Helpers
             return int.Parse(controller.User.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
 
+        public static int TryObtenerIdUsuarioSesion(ControllerBase controller)
+        {
+            if (controller.User.FindFirst(ClaimTypes.NameIdentifier) == null)
+            {
+                return 0;
+            }
+
+            return int.Parse(controller.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        }
+
+        public static string ObtenerToken(ControllerBase controller)
+        {
+            string jwt = controller.HttpContext.Request.Headers["Authorization"];
+            string stream = jwt;
+
+            if (stream != null)
+            {
+                stream = stream.Replace("Bearer ", "");
+                return stream;
+            }
+
+            return null;
+        }
+
         public static DateTime ObtenerFechaActual()
         {
             return DateTime.Now.AddHours(-1);
@@ -42,7 +66,7 @@ namespace TrackrAPI.Helpers
         }
 
         /// <summary>
-        /// Se verifica si el rango de fechas proporcionadas se superponen entre si, en caso de 
+        /// Se verifica si el rango de fechas proporcionadas se superponen entre si, en caso de
         /// un rango de fechas cubra a la otra
         /// </summary>
         /// <param name="inicialA">Fecha inicial del conjunto de rango A</param>
@@ -65,7 +89,12 @@ namespace TrackrAPI.Helpers
             {
                 return numero.ToString();
             }
-              
+
+        }
+
+        public static string FormatearMonto(decimal monto, string currencySymbol)
+        {
+            return string.Format("{0} {1:n}", currencySymbol, monto);
         }
     }
 }

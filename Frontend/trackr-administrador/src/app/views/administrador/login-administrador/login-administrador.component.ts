@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoginRequest } from 'src/app/models/seguridad/login-request';
-import { LoginResponse } from 'src/app/models/seguridad/login-response';
-import { LoginService } from 'src/app/shared/services/seguridad/login.service';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import * as Utileria from 'src/app/shared/utileria';
-import { GeneralConstant } from 'src/app/shared/general-constant';
+import { Router } from '@angular/router';
+import { LoginRequest } from '@models/seguridad/login-request';
+import { LoginResponse } from '@models/seguridad/login-response';
+import { LoginService } from '@services/seguridad/login.service';
+import { GeneralConstant } from '@utils/general-constant';
+import * as Utileria from '@utils/utileria';
 import { lastValueFrom } from 'rxjs';
 
 @Component({

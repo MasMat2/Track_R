@@ -5,7 +5,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { AdministradorAuthGuard } from './administrador-auth-guard.service';
 import { environment } from './../../environments/environment';
-import { GeneralConstant } from '../shared/general-constant';
+import { GeneralConstant } from '../shared/utils/general-constant';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -63,7 +63,7 @@ export class TokenInterceptor implements HttpInterceptor {
           // Cuando el token enviado en la peticion es invalido, el servidor retorna un error 401
           if (this.router.url.includes('administrador')) {
             localStorage.removeItem(GeneralConstant.TOKEN_KEY);
-            this.router.navigate(['/login-administrador']);
+            this.router.navigate(['/login']);
           }
         } else {
           this.modalService.modalError(this.mensajeError);

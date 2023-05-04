@@ -1,0 +1,33 @@
+<!-- Tabs -->
+<div class="row">
+  <div class="col-12">
+    <mat-tab-group
+      class="grid-filtro"
+      [selectedIndex]="selected.value"
+      (selectedIndexChange)="selected.setValue($event)"
+      (selectedTabChange)="onSelectedTabChange($event)"
+    >
+      <mat-tab *ngFor="let tab of gridTabs; let index = index" [label]="tab.title">
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+
+<!-- Grid -->
+<div class="row grid-container">
+  <div class="col-12">
+    <app-grid-general
+      #grid
+      [headerName]="gridConfig.headerName"
+      [data]="filteredData"
+      [gridOptions]="gridConfig.gridOptions"
+      [children]="gridConfig.children"
+      (event)="emit($event)"
+      [disableDelete] = "gridConfig.disableDelete"
+      [disableEdit] = "gridConfig.disableEdit"
+      [accesoEditar]="gridConfig.accesoEditar"
+      [accesoEliminar]="gridConfig.accesoEliminar"
+    >
+    </app-grid-general>
+  </div>
+</div>

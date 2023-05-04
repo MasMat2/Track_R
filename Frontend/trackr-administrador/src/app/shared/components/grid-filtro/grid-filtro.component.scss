@@ -1,0 +1,7 @@
+@import "src/app/shared/styles/variables.scss";
+
+::ng-deep {
+  .grid-filtro .mat-tab-body{
+    padding: 0px !important;
+  }
+}

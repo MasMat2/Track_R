@@ -2,10 +2,11 @@
 
 mat-sidenav-container{
     flex: 1;
-}
+  }
 
-mat-sidenav {
+  mat-sidenav {
     width: 110px;
+    height: 100vh;
     border-right: 0px;
     background-color: var(--color-primario);
 }
