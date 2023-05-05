@@ -1,0 +1,16 @@
+.image-box {
+  display: flex;
+  margin-top: 25px;
+  padding-left: 15px;
+
+  justify-items: center;
+  align-items: center;
+}
+
+.custom-file-label::after {
+  text-align: center;
+}
+
+.pointer {
+  cursor: pointer;
+}

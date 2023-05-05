@@ -28,10 +28,12 @@ export class FormularioService {
     Object.keys(formulario.controls).some((nombre) => {
       const control = formulario.controls[nombre];
 
-      if (control.errors && control.errors.required && control.invalid) {
+      if (control.errors && control.errors['required'] && control.invalid) {
         this.modalMensajeService.modalError(GeneralConstant.MENSAJE_REQUERIDOS);
         return true;
       }
+
+      return false;
     });
   }
 
