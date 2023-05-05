@@ -237,7 +237,6 @@ export class UsuarioComponent implements OnInit {
   }
 
   public onGridClick(gridData: { accion: string; data: Usuario }): void {
-    console.log(gridData);
     if (gridData.accion === GeneralConstant.GRID_ACCION_EDITAR) {
       this.editar(gridData.data.idUsuario);
     } else if (gridData.accion === GeneralConstant.GRID_ACCION_ELIMINAR) {

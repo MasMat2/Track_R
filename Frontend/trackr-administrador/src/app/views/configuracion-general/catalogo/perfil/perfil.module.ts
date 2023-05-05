@@ -1,4 +1,5 @@
 import { NgModule } from "@angular/core";
+import { TreeModule } from "@circlon/angular-tree-component";
 import { CompaniaService } from "@http/catalogo/compania.service";
 import { JerarquiaAccesoEstructuraService } from "@http/seguridad/jerarquia-acceso-estructura.service";
 import { JerarquiaAccesoService } from "@http/seguridad/jerarquiaAcceso.service";
@@ -16,11 +17,9 @@ import { PerfilRoutingModule } from "./perfil.routing.module";
     SharedModule,
     PerfilRoutingModule,
     GridGeneralModule,
-    // TreeModule,
-    // DropDownTreeModule,
+    TreeModule,
     NgSelectModule,
     DirectiveModule,
-    // Daterangepicker,
   ],
   declarations: [PerfilComponent, PerfilFormularioComponent],
   entryComponents: [],

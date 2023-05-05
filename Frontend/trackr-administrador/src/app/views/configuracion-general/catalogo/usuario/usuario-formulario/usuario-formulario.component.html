@@ -555,7 +555,7 @@
                       [(ngModel)]="usuario.idColonia"
                       [placeholder]="placeHolderSelect"
                       [notFoundText]="placeHolderNoOptions"
-                      [disabled]="usuario.codigoPostal.length != 5"
+                      [disabled]="usuario.codigoPostal?.length != 5"
                     ></ng-select>
                   </div>
                 </div>

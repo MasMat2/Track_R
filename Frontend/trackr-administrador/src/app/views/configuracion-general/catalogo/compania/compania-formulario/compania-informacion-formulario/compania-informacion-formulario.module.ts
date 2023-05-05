@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { CompaniaService } from '@http/catalogo/compania.service';
 import { EstadoService } from '@http/catalogo/estado.service';
@@ -13,17 +14,13 @@ import { TipoCompaniaService } from '@http/catalogo/tipo-compania.service';
 import { AgrupadorCuentaContableService } from '@http/contabilidad/agrupador-cuenta-contable.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { CompaniaInformacionFormularioComponent } from './compania-informacion-formulario.component';
 import { CompaniaInformacionFormularioRoutingModule } from './compania-informacion-formulario.routing.module';
-import { FormsModule } from '@angular/forms';
 
 @NgModule({
 	imports: [
-		// SharedModule,
     CommonModule,
     FormsModule,
-		// DirectiveModule,
 		CommonModule,
 		ModalModule.forChild(),
 		NgSelectModule,

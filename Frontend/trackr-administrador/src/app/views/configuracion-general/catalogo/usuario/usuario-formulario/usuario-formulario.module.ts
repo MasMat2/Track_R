@@ -37,7 +37,6 @@ import { GridGeneralModule } from "@sharedComponents/grid-general/grid-general.m
   imports: [
     SharedModule,
     DirectiveModule,
-    // Daterangepicker,
     BsDatepickerModule,
     CollapseModule,
     TabsModule,

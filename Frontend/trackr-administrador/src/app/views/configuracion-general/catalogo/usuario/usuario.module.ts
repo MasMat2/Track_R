@@ -36,7 +36,6 @@ import { UsuarioRolService } from "@http/seguridad/usuario-rol.service";
     SharedModule,
     UsuarioRoutingModule,
     DirectiveModule,
-    // Daterangepicker,
     BsDatepickerModule,
     CollapseModule,
     TabsModule,

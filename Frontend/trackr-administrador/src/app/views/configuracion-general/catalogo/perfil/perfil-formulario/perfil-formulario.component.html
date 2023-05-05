@@ -23,7 +23,7 @@
                 autocomplete="off"
               />
             </div>
-            <div *ngIf="nombre.errors?.required && nombre.touched" class="error">
+            <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
               El nombre es requerido
             </div>
           </div>
@@ -32,17 +32,18 @@
           <div class="form-group">
             <label class="label-input required-label">Jerarquía Acceso</label>
             <div>
-              <ng-selectize
+              <ng-select
                 #jerarquiaAccesoLst="ngModel"
                 name="jerarquiaAccesoName"
                 [required]="false"
-                [config]="configJerarquiaAcceso"
-                [options]="jerarquiaAccesoList"
+                bindLabel="nombre"
+                bindValue="idJerarquiaAcceso"
+                [items]="jerarquiaAccesoList"
                 [(ngModel)]="perfil.idJerarquiaAcceso"
                 (ngModelChange)="consultarJerarquiaArbolEstructura($event)"
                 [placeholder]="placeHolderSelect"
-                [noOptionsPlaceholder]="placeHolderNoOptions"
-              ></ng-selectize>
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
             </div>
           </div>
         </div>
@@ -89,7 +90,7 @@
               </ng-template>
             </tree-root>
 
-            <!-- Arbol de Jerarquía Acceso -->     
+            <!-- Arbol de Jerarquía Acceso -->
             <tree-root
               #tree
               *ngIf="perfil.idJerarquiaAcceso > 0"

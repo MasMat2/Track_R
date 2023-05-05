@@ -64,7 +64,9 @@ namespace TrackrAPI.Services.Seguridad
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()),
-                new Claim(ClaimTypes.Name, usuario.Nombre)
+                new Claim(ClaimTypes.Name, usuario.Nombre),
+                // TODO: 2023-05-05 -> Reivsar si se puede hacer de otra forma
+                new Claim("ic", usuario.IdCompania.ToString())
             };
 
             var securityToken = new JwtSecurityToken(

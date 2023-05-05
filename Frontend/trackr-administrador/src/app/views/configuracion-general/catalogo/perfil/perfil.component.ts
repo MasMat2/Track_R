@@ -135,7 +135,7 @@ export class PerfilComponent implements OnInit, AfterViewInit{
    */
   public editar(idPerfil: number) {
     this.perfilService.consultar(idPerfil).subscribe((data) => {
-      this.router.navigate(['/administrador/configuracion-general/perfil/editar'], {
+      this.router.navigate(['/administrador/configuracion-general/catalogo/perfil/editar'], {
         queryParams: this.encryptionService.generateURL({
           i: idPerfil.toString(),
           ij: data.idJerarquiaAcceso > 0 ? data.idJerarquiaAcceso.toString() : 0
@@ -166,6 +166,6 @@ export class PerfilComponent implements OnInit, AfterViewInit{
    * Muestra la pantalla de agregar un registro.
    */
   public agregar() {
-    this.router.navigate(['/administrador/configuracion-general/perfil/agregar']);
+    this.router.navigate(['/administrador/configuracion-general/catalogo/perfil/agregar']);
   }
 }

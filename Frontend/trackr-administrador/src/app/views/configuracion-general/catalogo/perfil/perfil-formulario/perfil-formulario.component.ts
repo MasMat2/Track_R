@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ITreeOptions, TREE_ACTIONS, TreeComponent, TreeNode } from '@circlon/angular-tree-component';
 import { AccesoService } from '@http/seguridad/acceso.service';
 import { JerarquiaAccesoEstructuraService } from '@http/seguridad/jerarquia-acceso-estructura.service';
 import { JerarquiaAccesoService } from '@http/seguridad/jerarquiaAcceso.service';
@@ -185,7 +186,7 @@ export class PerfilFormularioComponent implements OnInit {
       (data) => {
         this.modalMensajeService.modalExito(this.MENSAJE_EDITAR);
         this.btnSubmit = false;
-        this.router.navigate(['/administrador/configuracion-general/perfil']);
+        this.router.navigate(['/administrador/configuracion-general/catalogo/perfil']);
       },
       (error) => {
         this.btnSubmit = false;
@@ -240,7 +241,7 @@ export class PerfilFormularioComponent implements OnInit {
   }
 
   public cancelar() {
-    this.router.navigate(['/administrador/configuracion-general/perfil']);
+    this.router.navigate(['/administrador/configuracion-general/catalogo/perfil']);
   }
 
   /**

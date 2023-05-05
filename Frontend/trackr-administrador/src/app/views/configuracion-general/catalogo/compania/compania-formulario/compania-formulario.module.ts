@@ -4,18 +4,15 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { CompaniaFormularioComponent } from './compania-formulario.component';
 import { CompaniaFormularioRoutingModule } from './compania-formulario.routing.module';
 import { CompaniaInformacionFormularioModule } from './compania-informacion-formulario/compania-informacion-formulario.module';
-// import { ConfiguracionVigenciaModule } from './configuracion-vigencia/configuracion-vigencia.module';
-import { CommonModule } from '@angular/common';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
-    // SharedModule,
-    CommonModule,
+    SharedModule,
     ModalModule.forChild(),
     TabsModule,
     CompaniaFormularioRoutingModule,
     CompaniaInformacionFormularioModule,
-    // ConfiguracionVigenciaModule
   ],
   declarations: [CompaniaFormularioComponent],
   providers: []

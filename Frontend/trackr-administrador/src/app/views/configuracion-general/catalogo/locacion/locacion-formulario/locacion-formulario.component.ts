@@ -348,54 +348,53 @@ export class HospitalFormularioComponent implements OnInit {
 
   public onChangeCodigoPostal(event: any | null, hijos: NgModel[]): void {
     console.log(event);
-    return;
-    // if (event.length < 4) {
-    //   this.municipioList = [];
-    //   this.codigoPostalList = [];
+    if (event.length < 4) {
+      this.municipioList = [];
+      this.codigoPostalList = [];
 
-    //   this.campoEstado = 0;
-    //   this.campoMunicipio = 0;
-    //   this.campoColonia = '';
-    // } else {
-    //   if (this.codigoPostalList.some((e) => e.codigoPostal1 === event)) {
-    //     const codigoPostal = this.codigoPostalList.find((e) => e.codigoPostal1 === event);
-    //     const idCodigoPostal = codigoPostal?.idCodigoPostal;
+      this.campoEstado = 0;
+      this.campoMunicipio = 0;
+      this.campoColonia = '';
+    } else {
+      if (this.codigoPostalList.some((e) => e.codigoPostal1 === event)) {
+        const codigoPostal = this.codigoPostalList.find((e) => e.codigoPostal1 === event);
+        const idCodigoPostal = codigoPostal?.idCodigoPostal;
 
-    //     if (idCodigoPostal === undefined) {
-    //       return;
-    //     }
+        if (idCodigoPostal === undefined) {
+          return;
+        }
 
-    //     this.codigoPostalService.consultar(idCodigoPostal)
-    //     .subscribe((data) => {
-    //       this.codigoPostalSeleccionado = data;
-    //       this.desactivarOnChange = true;
+        this.codigoPostalService.consultar(idCodigoPostal)
+        .subscribe((data) => {
+          this.codigoPostalSeleccionado = data;
+          this.desactivarOnChange = true;
 
-    //       this.municipioList = [];
-    //       this.codigoPostalList = [];
+          this.municipioList = [];
+          this.codigoPostalList = [];
 
-    //       Object.keys(hijos).forEach((nombre) => {
-    //         console.log(hijos);
-    //         // hijos[nombre].control.reset();
-    //       });
+          Object.keys(hijos).forEach((nombre) => {
+            console.log(hijos);
+            // hijos[nombre].control.reset();
+          });
 
-    //       this.municipioService.consultarPorEstadoParaSelector(data.idEstado).subscribe((municipios) => {
-    //         this.codigoPostalService.consultarPorCodigoPostal(data.codigoPostal1).subscribe((colonias) => {
+          this.municipioService.consultarPorEstadoParaSelector(data.idEstado).subscribe((municipios) => {
+            this.codigoPostalService.consultarPorCodigoPostal(data.codigoPostal1).subscribe((colonias) => {
 
-    //           this.municipioList = municipios;
-    //           this.codigoPostalList = colonias;
+              this.municipioList = municipios;
+              this.codigoPostalList = colonias;
 
-    //           this.campoEstado = data.idEstado;
-    //           this.campoMunicipio = data.idMunicipio;
-    //           this.campoColonia = '';
+              this.campoEstado = data.idEstado;
+              this.campoMunicipio = data.idMunicipio;
+              this.campoColonia = '';
 
-    //           setTimeout(() => {
-    //             this.desactivarOnChange = false;
-    //           }, 2000);
-    //         });
-    //       });
-    //     });
-    //   }
-    // }
+              setTimeout(() => {
+                this.desactivarOnChange = false;
+              }, 2000);
+            });
+          });
+        });
+      }
+    }
   }
 
   public consultarCompaniaPorUsuario(): void {
