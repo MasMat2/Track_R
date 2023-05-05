@@ -1,38 +1,108 @@
 <div class="contenedor">
   <div class="titulo-contenedor">Perfil</div>
   <div class="cuerpo-contenedor">
+    <form
+    (keydown.enter)="$event.preventDefault()"
+    #formulario="ngForm"
+    (ngSubmit)="enviarFormulario(formulario)">
       <ion-grid>
         <ion-row>
             <ion-col>
-              <ion-input placeholder="Nombres"></ion-input>
+              <ion-input
+                #nombre="ngModel"
+                [(ngModel)]="usuario.nombre"
+                name="nombre"
+                class="form-control"
+                type="text"
+                maxlength="200"
+                [required]="true"
+                placeholder="Nombres">
+              </ion-input>
             </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-input class="input" placeholder="Apellido Paterno"></ion-input>
+            <ion-input
+              #apellidoPaterno="ngModel"
+              [(ngModel)]="usuario.apellidoPaterno"
+              name="apellidoPaterno"
+              class="form-control"
+              type="text"
+              maxlength="200"
+              [required]="true"
+              placeholder="Apellido Paterno">
+            </ion-input>
           </ion-col>
           <ion-col>
-            <ion-input class="input" placeholder="Apellido Materno"></ion-input>
+            <ion-input
+              #apellidoMaterno="ngModel"
+              [(ngModel)]="usuario.apellidoMaterno"
+              name="apellidoMaterno"
+              class="form-control"
+              type="text"
+              maxlength="200"
+              [required]="true"
+              placeholder="Apellido Materno">
+            </ion-input>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-input class="input" placeholder="Correo Electrónico" type="email" ></ion-input>
+            <ion-input
+              #correo="ngModel"
+              [(ngModel)]="usuario.correo"
+              name="correo"
+              class="form-control"
+              [required]="true"
+              placeholder="Correo Electrónico"
+              type="email"
+              errorText="Invalid email"
+              ngModel
+              email>
+            </ion-input>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-input class="input" placeholder="Teléfono Móvil" type="tel"></ion-input>
+            <ion-input
+              #telefonoMovil="ngModel"
+              [(ngModel)]="usuario.telefonoMovil"
+              name="telefonoMovil"
+              class="form-control"
+              [required]="true"
+              placeholder="Teléfono Móvil"
+              type="tel">
+            </ion-input>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-input class="input" placeholder="Contraseña" type="password"></ion-input>
+            <ion-input
+              #contrasena="ngModel"
+              [(ngModel)]="usuario.contrasena"
+              name="contrasenaName"
+              class="form-control"
+              placeholder="Contraseña"
+              [required]="true"
+              type="password"
+              appConfirmacionContrasena="confirmacionContrasenaName">
+            </ion-input>
           </ion-col>
           <ion-col>
-            <ion-input class="input" placeholder="Confirmar Contraseña" type="password"></ion-input>
+            <ion-input
+              #confirmacionContrasena="ngModel"
+              [(ngModel)]="confirmarContrasena"
+              name="confirmacionContrasenaName"
+              class="form-control"
+              appConfirmacionContrasena="contrasenaName"
+              [required]="usuario.contrasena !== '' && usuario.contrasena !== null"
+              placeholder="Confirmar Contraseña"
+              type="password">
+            </ion-input>
           </ion-col>
         </ion-row>
+      </ion-grid>
+      <ion-grid>
         <ion-row>
           <ion-col>
             <ion-checkbox labelPlacement="end">Acepto Términos y Condiciones</ion-checkbox>
@@ -40,11 +110,12 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button expand="block" fill="clear" shape="round">
+            <ion-button type="submit" expand="block" fill="clear" shape="round">
               Registrar Perfil
             </ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
+    </form>
   </div>
 </div>
