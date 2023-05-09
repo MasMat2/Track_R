@@ -1,0 +1,575 @@
+@import "variables";
+
+.form-control {
+  border: 1px #d9d9d9 solid !important;
+  color: #000000;
+  border-radius: $border-radius-inputs !important;
+  height: calc(1.5em + 0.75rem + 7px) !important;
+}
+
+input {
+  border-radius: 0 !important;
+}
+
+.inputNumber {
+  border: 2px $color-primario solid !important;
+}
+
+.ag-theme-balham .ag-icon-checkbox-checked {
+  color: $color-primario;
+}
+
+// Calendario - Date
+
+.bs-datepicker-container {
+  padding: 0;
+}
+
+.calendario {
+  position: relative;
+}
+
+.calendario::after {
+  // content: url("~/assets/img/svg/ico-15x15-Calendario.svg");
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: 12px;
+  height: 15px;
+  width: 15px;
+  pointer-events: none;
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+.bs-datepicker-head,
+.bs-datepicker-body table td span.selected,
+.bs-datepicker-body table td.selected span,
+.bs-datepicker-body table td span[class*="select-"]:after,
+.bs-datepicker-body table td[class*="select-"] span:after {
+  background-color: $color-primario !important;
+  color: #ffffff !important;
+}
+
+.bs-datepicker-body table td span.selected,
+.bs-datepicker-body table td.selected span,
+.bs-datepicker-body table td span[class*="select-"]:after,
+.bs-datepicker-body table td[class*="select-"] span:after .selectize-input {
+  color: $color-primario !important;
+}
+
+.bs-datepicker-body table td span.disabled {
+  color: #e6e6e6 !important;
+}
+
+.bs-datepicker-body table td span.is-other-month,
+.bs-datepicker-body table td.is-other-month span {
+  color: #54708b;
+}
+
+.selectize-input {
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  color: #000000;
+}
+
+.selectize-dropdown .active {
+  background-color: $color-terceario;
+}
+
+.selectize-control.single .selectize-input {
+  height: 40px;
+}
+
+.selectize-input {
+  display: flex !important;
+  align-self: center !important;
+}
+
+.form-control:focus,
+.selectize-input.focus,
+.form-control-textarea:focus {
+  border: 2px $color-terceario-hover solid !important;
+  box-shadow: none !important;
+}
+
+textarea {
+  resize: none !important;
+}
+
+.form-control-textarea {
+  border-radius: $border-radius-inputs !important;
+}
+
+app-number-input.ng-invalid.ng-touched.ng-dirty input {
+  border: 1px solid #c00000 !important;
+}
+
+ng-select.ng-invalid.ng-touched.ng-dirty .ng-select-container {
+  border: 1px solid #c00000 !important;
+}
+
+.ng-invalid.ng-touched .wrap-input-seleccionados,
+input[required].ng-touched.ng-invalid,
+input.ng-touched.ng-invalid,
+textarea[required].ng-touched.ng-invalid,
+textarea.ng-touched.ng-invalid {
+  border: 1px solid #c00000 !important;
+}
+
+ng-selectize.ng-touched.ng-invalid div.selectize-control div.selectize-input {
+  border-color: #c00000 !important;
+}
+
+input.ng-touched.ng-invalid ~ div.input-group-addon {
+  border-color: #c00000 !important;
+}
+
+app-number-input.ng-invalid.ng-touched.ng-dirty input {
+  border: 1px solid #c00000 !important;
+}
+
+.error {
+  color: rgba(255, 0, 0, 0.74) !important;
+  font-size: 0.86em;
+}
+
+.selectize-control .selectize-input.disabled,
+.disabled,
+textarea:disabled  {
+  opacity: 1 !important;
+  background-color: #e4e7ea !important;
+}
+
+// Input - Time / Hora
+
+input[type="time"] {
+  position: relative;
+  height: 68px;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  // background: url(~/assets/img/svg/clock-regular.svg);
+}
+
+// Inputs - Archivos
+
+.custom-file,
+.custom-file-input {
+  cursor: pointer !important;
+}
+
+.custom-file-label::after {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-color: $color-terceario;
+  color: #000;
+  min-width: 100px;
+  width: auto;
+  height: 38px;
+  border: 1px #f2f2f2 solid;
+  font-size: 14px;
+  -webkit-box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
+  box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
+  cursor: pointer !important;
+  content: "Buscar" !important;
+  text-align: center;
+}
+
+.custom-file-label {
+  border-radius: 20px;
+  height: calc(1.5em + 0.75rem + 7px);
+}
+
+.custom-file-input:lang(en) ~ .custom-file-label::after {
+  content: "Buscar" !important;
+}
+
+// Input - NgSelect
+
+.ng-select.select-custom {
+  border-radius: 20px !important;
+}
+
+.ng-select.select-custom .ng-select-container {
+  border-radius: 20px !important;
+}
+
+.ng-select .ng-arrow-wrapper .ng-arrow {
+  border-color: $color-border-inputs transparent transparent transparent;
+  border-width: 8px 5px 0 5px;
+}
+
+.ng-select.ng-select-opened>.ng-select-container .ng-arrow {
+  border-color: transparent transparent $color-border-inputs transparent;
+  border-width: 0 5px 8px 5px;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+  background-color: $color-terceario !important;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected,
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked {
+  background-color: $color-terceario !important;
+}
+
+.ng-select.select-custom.ng-select-disabled .ng-select-container {
+  background-color: #e4e7ea;
+}
+
+// Input - Switch
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 70px;
+  height: 30px;
+  margin-bottom: 0;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #aaa;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: $color-primario;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(38px);
+  -ms-transform: translateX(38px);
+  transform: translateX(38px);
+}
+
+.on {
+  display: none;
+  padding-right: 2.5em;
+}
+
+.off {
+  padding-left: 2.5em;
+}
+
+.on,
+.off {
+  color: white;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  font-size: 1.1em;
+  font-family: Verdana, sans-serif;
+}
+
+input:checked + .slider .on {
+  display: block;
+}
+
+input:checked + .slider .off {
+  display: none;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+input[disabled] + .slider {
+  background-color:#e4e7ea;
+}
+
+input[disabled] + .slider span {
+  color:#000;
+}
+
+// Checkbox
+
+/* The container */
+.container-checkbox {
+  display: block;
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.container-checkbox .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #ff6c00;
+  border: 2px $color-primario solid;
+  border-radius: 4px;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container-checkbox input:checked ~ .checkmark {
+  background-color: #ff6c00;
+  border: 2px $color-primario solid;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container-checkbox .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid $color-primario;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.checkbox-input {
+  padding-left: 30px;
+  position: relative;
+}
+
+.checkbox-input:before {
+  content: "";
+  border: solid 1px #ff6c00;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 0px;
+}
+
+input[type="checkbox"]:checked + .checkbox-input:before {
+  padding: 1.2px;
+  background-clip: content-box;
+  background-color: #ff6c00;
+}
+
+input[type="checkbox"].form-check-input {
+  display: none;
+}
+
+input[type=checkbox][disabled]:before {
+  background-color: #e4e7ea;
+}
+
+// Radio Buttons
+
+/* The container */
+.container-radio {
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container-radio input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.container-radio .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  border: 2px #ff6c00 solid;
+}
+
+/* When the radio button is checked, add a blue background */
+.container-radio input:checked ~ .checkmark {
+  border: 2px $color-primario solid;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container-radio input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container-radio .checkmark:after {
+  top: 4px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: $color-primario;
+}
+
+.container-radio input:disabled ~ .checkmark {
+  background-color: #e4e4e4;
+}
+
+
+// Checkbox
+
+input[type=checkbox] {
+  position: relative;
+  cursor: pointer;
+}
+
+input[type=checkbox]:before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  border: 2px solid $color-primario;
+  border-radius: 3px;
+  background-color: white;
+}
+
+input[type=checkbox]:checked:after {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 10px;
+  border: solid $color-primario;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  position: absolute;
+  top: 2px;
+  left: 6px;
+}
+
+input[type=checkbox] + label, label + input[type=checkbox] {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+
+// Selectize - multioption
+
+.selectize-control.multi .selectize-input > div {
+  background: $color-terceario !important;
+  font-weight: 600;
+  border-radius: 20px !important;
+}
+
+.selectize-input > input {
+  opacity: 1 !important;
+  left: 0 !important;
+  position: relative !important;
+}
+
+.selectize-input {
+  border-radius: 20px !important;
+}
+
+.selectize-control.multi .selectize-input::after {
+  pointer-events: none;
+  z-index: 1;
+  content: ' ';
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  margin-top: -3px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: $color-border-inputs transparent transparent transparent;
+  border-width: 8px 5px 0 5px;
+}
+
+.selectize-control.multi .dropdown-active::after {
+  pointer-events: none;
+  z-index: 1;
+  content: ' ';
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  margin-top: -3px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: transparent transparent $color-border-inputs transparent;
+  border-width: 0 5px 8px 5px;
+}
+
+.remove {
+  border-left: none !important;
+}
+
+textarea {
+  border-radius: 20px !important;
+}
+
