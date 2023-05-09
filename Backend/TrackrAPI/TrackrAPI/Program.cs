@@ -3,6 +3,7 @@ using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,13 @@ var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 // JwtSettings jwtSettings = new JwtSettings();
 // builder.Configuration.GetSection(JwtSettings.SectionName).Bind(jwtSettings);
+
+// TODO: 2023-05-09 -> Esta es una configuración temporal para evitar
+// que se validen los modelos en los controladores migrados de ATI.
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+     options.SuppressModelStateInvalidFilter = true;
+});
 
 builder.Services.AddDbContext<TrackrContext>(options =>
 {

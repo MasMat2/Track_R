@@ -1,16 +1,19 @@
-import { AdministradorAuthService } from './auth/administrador-auth.service';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SidebarModule } from '@coreui/angular';
+import { BsModalRef, ModalModule } from 'ngx-bootstrap/modal';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LoginService } from './shared/services/seguridad/login.service';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { TokenInterceptor } from './auth/token.interceptor';
 import { AdministradorAuthGuard } from './auth/administrador-auth-guard.service';
-import { BsModalRef, ModalModule } from 'ngx-bootstrap/modal';
+import { AdministradorAuthService } from './auth/administrador-auth.service';
+import { TokenInterceptor } from './auth/token.interceptor';
 import { MensajeModule } from './shared/components/mensaje/mensaje.module';
+import { LoginService } from './shared/services/seguridad/login.service';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [
@@ -23,12 +26,16 @@ import { MensajeModule } from './shared/components/mensaje/mensaje.module';
     HttpClientModule,
     ModalModule.forRoot(),
     MensajeModule,
+    SidebarModule,
+    OverlayModule,
+    MatMenuModule,
+    MatSidenavModule,
   ],
   providers: [ LoginService,
     AdministradorAuthService,
     AdministradorAuthGuard,
     BsModalRef,
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
   ],
     bootstrap: [AppComponent]
 })

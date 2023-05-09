@@ -76,7 +76,7 @@ export class JerarquiaAccesoFormularioComponent extends CrudFormularioBase<Jerar
   };
 
   // Selector Jerarquía Padre
-  public idJerarquiaPadre: number;
+  public idJerarquiaPadre?: number;
   public jerarquiaSelectorList: JerarquiaEstructuraArbol[] = [];
   public tipoCompaniaList: TipoCompania[] = [];
 
@@ -174,7 +174,7 @@ export class JerarquiaAccesoFormularioComponent extends CrudFormularioBase<Jerar
 
     return Promise.all([p1, p2, p3])
       .then((data) => {
-        this.idJerarquiaPadre = 0;
+        this.idJerarquiaPadre = undefined;
         this.elementosSeleccionados = [];
 
         this.jerarquiaArbol = data[0];

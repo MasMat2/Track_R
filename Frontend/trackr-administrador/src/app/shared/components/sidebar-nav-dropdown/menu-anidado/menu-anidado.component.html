@@ -1,0 +1,20 @@
+<mat-menu #menuHijo="matMenu" class="pop-card" [overlapTrigger]="false">
+    <div *ngFor="let item of items">
+        <!-- Se controlan los items con hijos -->
+        <div *ngIf="item.children && item.children.length > 0">
+            <button mat-menu-item color="primary" [matMenuTriggerFor]="menu.menuHijo">
+                <i class="navpop-icon mr-3 {{item.icon}}"></i>
+                <span>{{item.name}}</span>
+            </button>
+        <!-- Se usa el mismo componente de manera "recursiva" -->
+            <app-menu-anidado #menu [items]="item.children"></app-menu-anidado>
+        </div>
+        <!-- Se controlan los items sin hijos -->
+        <div *ngIf="!item.children || item.children.length === 0">
+            <button mat-menu-item color="primary" [routerLink]="item.url">
+                <i *ngIf="item.icon != null" class="navpop-icon mr-3 {{item.icon}}"></i>
+                <span>{{item.name}}</span>
+            </button>
+        </div>
+    </div>
+</mat-menu>
