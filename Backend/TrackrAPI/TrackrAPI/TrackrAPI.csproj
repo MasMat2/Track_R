@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+		<Content Update="appsettings.json">
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+  <ItemGroup>
 	  <None Remove="GenerarModelos.bat" />
 	  <Folder Include="Log\" />
   </ItemGroup>
