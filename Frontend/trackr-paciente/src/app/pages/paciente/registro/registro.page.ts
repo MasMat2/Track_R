@@ -17,6 +17,7 @@ export class RegistroPage implements OnInit {
   usuario = new Usuario;
   public disableSubmit: boolean = false;
   public confirmarContrasena: string = '';
+  checkedbtn : boolean = true
 
   constructor(
     private usuarioService: UsuarioService,
@@ -38,6 +39,13 @@ export class RegistroPage implements OnInit {
     this.usuario.idCompania = 1;
     this.usuario.idPerfil = 1;
     this.agregar();
+}
+
+changeEvent(event: any) {
+  if (event.target.checked) {
+    this.checkedbtn = false
+  }
+  this.checkedbtn = true;
 }
 
 protected agregar(): Promise<boolean> {

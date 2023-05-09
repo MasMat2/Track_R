@@ -53,6 +53,7 @@
               [(ngModel)]="usuario.correo"
               name="correo"
               class="form-control"
+              maxlength="50"
               [required]="true"
               placeholder="Correo Electrónico"
               type="email"
@@ -101,16 +102,16 @@
             </ion-input>
           </ion-col>
         </ion-row>
-      </ion-grid>
-      <ion-grid>
         <ion-row>
           <ion-col>
-            <ion-checkbox labelPlacement="end">Acepto Términos y Condiciones</ion-checkbox>
+            <ion-item>
+              <ion-checkbox (ionChange)="changeEvent($event)" labelPlacement="end">Acepto Términos y Condiciones</ion-checkbox>
+            </ion-item>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button type="submit" expand="block" fill="clear" shape="round">
+            <ion-button [disabled]="checkedbtn" type="submit">
               Registrar Perfil
             </ion-button>
           </ion-col>
