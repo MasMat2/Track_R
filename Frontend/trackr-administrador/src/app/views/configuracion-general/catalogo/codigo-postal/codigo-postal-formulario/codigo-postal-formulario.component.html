@@ -1,0 +1,108 @@
+<div class="d-flex">
+  <div class="barra-lateral-modal"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div>{{ accion }} Código Postal</div>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
+        <i class="far fa-times-circle"></i>
+      </button>
+    </div>
+    <form
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      novalidate="novalidate"
+    >
+      <div class="cuerpo-contenedor" id="modal">
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="label-input required-label">Código Postal</label>
+              <div>
+                <input
+                  #CodigoPostal="ngModel"
+                  [(ngModel)]="codigoPostal.codigoPostal1"
+                  name="codigoPostal"
+                  class="form-control"
+                  type="text"
+                  pattern="[0-9]+"
+                  maxlength ="5"
+                  minlength="5"
+                  autocomplete="off"
+                  required
+                  autofocus
+                />
+                <div *ngIf="CodigoPostal.errors?.['required'] && CodigoPostal.touched" class="error">
+                  El código postal es requerido
+                </div>
+                <div *ngIf="CodigoPostal.errors?.['minlength'] " class="error">
+                  El código postal es requerido (5 dígitos)
+                 </div>
+                <div *ngIf="CodigoPostal.errors?.['pattern']" class="error">
+                  El código postal tiene un formato inválido
+                 </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="label-input required-label">Colonia</label>
+              <div>
+                <input
+                  #Colonia="ngModel"
+                  [(ngModel)]="codigoPostal.colonia"
+                  name="colonia"
+                  class="form-control"
+                  type="text"
+                  maxlength="200"
+                  autocomplete="off"
+                  required
+                />
+                <div *ngIf="Colonia.errors?.['required'] && Colonia.touched" class="error">
+                  La colonia es requerida
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="label-input required-label">Municipio</label>
+            <div>
+              <ng-select
+                #Municipio="ngModel"
+                name="municipio"
+                bindLabel="nombre"
+                bindValue="idMunicipio"
+                [items]="municipioList"
+                [(ngModel)]="idMunicipio"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+                [required]="true"
+              ></ng-select>
+              <div *ngIf="Municipio.errors?.['required'] && Municipio.touched" class="error">
+               El municipio es requerido
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+      <div class="modal-footer">
+        <div class="text-center">
+          <button type ="button" class="btn-secundario mr-3"(click)="cancelar();">Cancelar</button>
+          <button [disabled]="btnSubmit" type="submit" class="btn-primario btn-margin-left">
+            Guardar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
