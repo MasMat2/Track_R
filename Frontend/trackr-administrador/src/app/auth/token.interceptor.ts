@@ -1,11 +1,11 @@
-import { MensajeService } from './../shared/components/mensaje/mensaje.service';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
+import { GeneralConstant } from '@utils/general-constant';
+import { Observable, catchError, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { AdministradorAuthGuard } from './administrador-auth-guard.service';
-import { environment } from './../../environments/environment';
-import { GeneralConstant } from '../shared/utils/general-constant';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -15,20 +15,18 @@ export class TokenInterceptor implements HttpInterceptor {
     private router: Router
   ) {}
 
-  private mensajeError = 'Ocurrió un error inesperado, favor de contactar al administrador del sistema.';
+  private readonly mensajeError = 'Ocurrió un error inesperado, favor de contactar al administrador del sistema.';
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let token = localStorage.getItem(GeneralConstant.TOKEN_KEY);
     let newRequest = null;
-    if (request.url.includes('i18n') || request.url.includes('hooks.slack.com')) {
-      newRequest = request.clone({
-        url: request.url
-      });
-    } else if (request.url === 'login/authenticate') {
+
+    if (request.url === 'login/authenticate') {
       newRequest = request.clone({
         url: environment.urlBackend + request.url
       });
-    } else {
+    }
+    else {
       newRequest = request.clone({
         url: environment.urlBackend + request.url,
         setHeaders: {
@@ -40,33 +38,41 @@ export class TokenInterceptor implements HttpInterceptor {
 
     return next.handle(newRequest).pipe(
       catchError((error) => {
-        // Estatus 409 son excepciones controladas por el backend.
+        // Excepciones controladas por el backend
         if (error.status === 409) {
-          // Si se regresa una Exception con response Blob, este lo obliga a retornar un string
           if (error.error instanceof Blob) {
             var reader = new FileReader();
-            reader.onload = (params) => {
 
+            reader.onload = (params) => {
               if (reader.result){
                 this.modalService.modalError(reader.result.toString());
               }
-
             }
+
             reader.readAsText(error.error);
-          } else {
+          }
+          else {
             this.modalService.modalError(error.error);
           }
-        } else if (error.status === 503) {
-          // Servidor no disponible por mantenimiento
+        }
+        // Mantenimiento
+        else if (error.status === 503) {
           window.location.reload();
-        } else if (error.status === 401 || error.status === 0) {
-          // Cuando el token enviado en la peticion es invalido, el servidor retorna un error 401
+        }
+        // Unauthorized
+        else if (error.status === 401 || error.status === 0) {
           if (this.router.url.includes('administrador')) {
             localStorage.removeItem(GeneralConstant.TOKEN_KEY);
             this.router.navigate(['/login']);
           }
-        } else {
+        }
+        // Errores inesperados
+        else {
           this.modalService.modalError(this.mensajeError);
+        }
+
+        if (!environment.production) {
+          console.error(error);
         }
 
         return throwError(() => new Error(error));
