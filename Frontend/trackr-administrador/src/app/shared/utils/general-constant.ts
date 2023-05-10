@@ -1,3 +1,5 @@
+import { ColDef } from "ag-grid-community";
+
 export class GeneralConstant {
 
   public static TOKEN_KEY = 'token-administrador';
@@ -406,7 +408,7 @@ export class GeneralConstant {
     locale: { format: 'dd/MM/yyyy' }
   };
 
-  public static CONFIG_COLUMN_ACTION = {
+  public static CONFIG_COLUMN_ACTION: ColDef = {
     headerName: '',
     field: '',
     cellClass: 'center-ag',
@@ -416,7 +418,7 @@ export class GeneralConstant {
     resizable: false,
     filter: false,
     lockPinned: true,
-    // pinned: 'right',
+    pinned: 'right',
     lockPosition: true
   };
 
