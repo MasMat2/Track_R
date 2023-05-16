@@ -80,6 +80,7 @@ export class DominioFormularioComponent implements OnInit {
 
     if (this.accion === GeneralConstant.COMPONENT_ACCION_EDITAR) {
       this.dominio = this.data;
+      this.onDisable();
       this.consultarGrid();
     } else {
       this.dominioDetalle = new DominioDetalle();
