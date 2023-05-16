@@ -1,0 +1,337 @@
+<div class="d-flex">
+  <div class="barra-lateral-modal"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div>{{ accion }} Dominio</div>
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="cancelar()"
+      >
+        <i class="far fa-times-circle"></i>
+      </button>
+    </div>
+    <form
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      novalidate="novalidate"
+    >
+      <div class="cuerpo-contenedor" id="modal">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Nombre</label>
+              <div>
+                <input
+                  #nombre="ngModel"
+                  [(ngModel)]="dominio.nombre"
+                  name="nombre"
+                  class="form-control"
+                  type="text"
+                  maxlength="50"
+                  autocomplete="off"
+                  required
+                />
+                <div
+                  *ngIf="nombre.errors?.['required'] && nombre.touched"
+                  class="error"
+                >
+                  El nombre es requerido
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-8">
+            <div class="form-group">
+              <label class="label-input required-label">Descripción</label>
+              <div>
+                <input
+                  #descp="ngModel"
+                  [(ngModel)]="dominio.descripcion"
+                  name="descpName"
+                  class="form-control"
+                  type="text"
+                  maxlength="500"
+                  autocomplete="off"
+                  required
+                />
+                <div
+                  *ngIf="descp.errors?.['required'] && descp.touched"
+                  class="error"
+                >
+                  La descripción es requerida
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+
+          <div class="form-group col-md-4">
+            <label class="label-input required-label">Tipo de Campo</label>
+            <ng-select
+              #tipoCampoLst="ngModel"
+              name="tipoCampoName"
+              bindLabel="display"
+              bindValue="name"
+              [items]="tipoCampoList"
+              [required]="true"
+              [(ngModel)]="dominio.tipoCampo"
+              [placeholder]="placeHolderSelect"
+              [notFoundText]="placeHolderNoOptions"
+              (ngModelChange)="onDisable()"
+            ></ng-select>
+            <div
+              *ngIf="tipoCampoLst.errors?.['required'] && tipoCampoLst.touched"
+              class="error"
+            >
+              El tipo de campo es requerido
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="label-input required-label">Longitud Mínima</label>
+              <div>
+                <input
+                  #lonMinima="ngModel"
+                  [(ngModel)]="dominio.longitudMinima"
+                  [disabled]="isDisable"
+                  name="longitudMinimaName"
+                  class="form-control"
+                  type="text"
+                  maxlength="10"
+                  autocomplete="off"
+                  appFormatoNumerico
+                />
+                <div
+                  *ngIf="lonMinima.errors?.['required'] && lonMinima.touched"
+                  class="error"
+                >
+                  La longitud mínima es requerida
+                </div>
+                <div
+                *ngIf="lonMinima.errors?.['formatoNumerico']"
+                class="error"
+              >
+                Caracteres no permitidos, ingresar solo números
+              </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="label-input required-label">Longitud Máxima</label>
+              <div>
+                <input
+                  #lonMaxima="ngModel"
+                  [(ngModel)]="dominio.longitudMaxima"
+                  [disabled]="isDisable"
+                  name="longitudMaximaName"
+                  class="form-control"
+                  type="text"
+                  autocomplete="off"
+                  appFormatoNumerico
+                />
+                <div
+                  *ngIf="lonMaxima.errors?.['required'] && lonMaxima.touched"
+                  class="error"
+                >
+                  La longitud máxima es requerida
+                </div>
+                <div
+                *ngIf="lonMaxima.errors?.['formatoNumerico']"
+                class="error"
+                >
+                Caracteres no permitidos, ingresar solo números
+              </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="label-input required-label">Valor Mínimo</label>
+              <div>
+                <input
+                  #valMin="ngModel"
+                  [(ngModel)]="dominio.valorMinimo"
+                  [disabled]="isDisable"
+                  name="valorMinimoName"
+                  class="form-control"
+                  type="text"
+                  autocomplete="off"
+                  appFormatoNumerico
+                />
+                <div
+                  *ngIf="valMin.errors?.['required'] && valMin.touched"
+                  class="error"
+                >
+                  El valor mínimo es requerido
+                </div>
+                <div
+                *ngIf="valMin.errors?.['formatoNumerico']"
+                class="error"
+                >
+                Caracteres no permitidos, ingresar solo números
+              </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="label-input required-label">Valor Máximo</label>
+              <div>
+                <input
+                  #valMax="ngModel"
+                  [(ngModel)]="dominio.valorMaximo"
+                  [disabled]="isDisable"
+                  name="valorMaximoName"
+                  class="form-control"
+                  type="text"
+                  autocomplete="off"
+                  appFormatoNumerico
+                />
+                <div
+                  *ngIf="valMax.errors?.['required'] && valMax.touched"
+                  class="error"
+                >
+                  El valor máximo es requerido
+                </div>
+                <div
+                *ngIf="valMax.errors?.['formatoNumerico']"
+                class="error"
+                >
+                Caracteres no permitidos, ingresar solo números
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Fecha Mínima </label>
+              <div class="calendario">
+                <input
+                  #fechaMinima="ngModel"
+                  [(ngModel)]="dominio.fechaMinima"
+                  id="fechaMinima"
+                  name="fechaMinima"
+                  class="form-control"
+                  type="text"
+                  autocomplete="off"
+                  placement="top"
+                  placeholder="dd/mm/aaaa"
+                  bsDatepicker
+                  [bsConfig]="configDate"
+                  [minDate]="minDate"
+                  (bsValueChange)="onMinimaChange($event)"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Fecha Máxima </label>
+              <div class="calendario">
+                <input
+                  #fechaMaxima="ngModel"
+                  [(ngModel)]="dominio.fechaMaxima"
+                  id="fechaMaxima"
+                  name="fechaMaxima"
+                  class="form-control"
+                  type="text"
+                  autocomplete="off"
+                  placement="top"
+                  placeholder="dd/mm/aaaa"
+                  bsDatepicker
+                  [bsConfig]="configDate"
+                  [minDate]="minDateMaxima"
+                  (bsValueChange)="onMaximaChange($event)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <form
+          (keydown.enter)="$event.preventDefault()"
+          #formularioDetalle="ngForm"
+          (ngSubmit)="enviarFormularioDetalle(formularioDetalle)"
+          novalidate="novalidate"
+          [hidden]="form"
+        >
+          <div class="separador"></div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="label-input required-label">Valor</label>
+                <div>
+                  <input
+                    #valor="ngModel"
+                    [(ngModel)]="dominioDetalle.valor"
+                    name="valorName"
+                    class="form-control"
+                    type="text"
+                    autocomplete="off"
+                  />
+                  <div
+                    *ngIf="valor.errors?.['required'] && valor.touched"
+                    class="error"
+                  >
+                    El valor es requerido
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4" style="display: flex; justify-content: center; align-items: center;">
+              <div class="text-center">
+                <button
+                  type="submit"
+                  class="btn-primario"
+                >
+                <i *ngIf="!(dominioDetalle.idDominioDetalle > 0)" class="fa fa-plus"></i>
+                <i *ngIf="dominioDetalle.idDominioDetalle > 0" class="fas fa-edit"></i>
+
+                  {{ dominioDetalle.idDominioDetalle > 0 ? 'Editar' : 'Agregar' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <app-grid-general
+                [data]="dominioDetalleList"
+                [children]="columns"
+                (event)="onGridClick($event)">
+              </app-grid-general>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <div class="text-right">
+          <button
+            [disabled]="btnSubmit"
+            type="submit"
+            class="btn-primario btn-margin-left"
+          >
+            Guardar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

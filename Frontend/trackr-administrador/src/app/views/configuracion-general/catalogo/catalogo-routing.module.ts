@@ -23,6 +23,18 @@ const routes: Routes = [
     loadChildren: () => import('./usuario/usuario.module').then((m) => m.UsuarioModule)
   },
   {
+    path: 'configuracion-entidades',
+    loadChildren: () => import('./configuracion-entidad/configuracion-entidad.module').then((m) => m.ConfiguracionEntidadModule)
+  },
+  {
+    path: 'configuracion-secciones',
+    loadChildren: () => import('./configuracion-secciones/configuracion-secciones.module').then((m) => m.ConfiguracionSeccionesModule)
+  },
+  {
+    path: 'dominio',
+    loadChildren: () => import('./dominio/dominio.module').then((m) => m.DominioModule)
+  },
+  {
     path: 'colonia',
     loadChildren: () => import('./colonia/colonia.module').then((m) => m.ColoniaModule)
   },

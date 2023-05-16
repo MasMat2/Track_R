@@ -1,0 +1,22 @@
+<div class="contenedor">
+  <div class="titulo-contenedor">Catálogo de Dominios</div>
+  <div class="cuerpo-contenedor">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="contenedor-agregar" (click)="agregar()" *ngIf="tieneAccesoAgregar">
+          <i class="fas fa-plus-circle"></i><span>Agregar</span>
+        </div>
+        <app-grid-general
+          [headerName]="HEADER_GRID"
+          [data]="dominioList"
+          [children]="columns"
+          (event)="onGridClick($event)"
+          [disableDelete]="true"
+          [accesoEditar]="accesoEditar"
+          [accesoEliminar]="accesoEliminar">
+        >
+        </app-grid-general>
+      </div>
+    </div>
+  </div>
+</div>

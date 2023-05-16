@@ -173,23 +173,23 @@ namespace TrackrAPI.Services.Catalogo
                 companiaContactoService.Agregar(companiaContacto);
             }
 
-            AgregarPerfilesDefault(compania);
-            int idLocacion = AgregarLocacionDefault(compania);
-            int idUsuario = AgregarUsuarioDefault(compania, idLocacion, companiaDto.contrasenaUsuario);
-            int idAlmacen = AgregarAlmacenDefault(compania, idUsuario, idLocacion);
-            int idPuntoVenta = AgregarPuntoDeVentaDefault(idAlmacen, idUsuario);
-            AgregarRolesDefaultAdministrador(idUsuario);
-            AgregarCuentasContables(compania);
-            AgregarConceptos(compania);
-            AgregarJerarquiasContabilidad(compania);
-            AgregarImpuestosDefault(compania.IdCompania);
-            AgregarClientePublicoGeneral(compania, idLocacion);
-            AgregarFlujoDefault(idCompania);
+            // AgregarPerfilesDefault(compania);
+            // int idLocacion = AgregarLocacionDefault(compania);
+            // int idUsuario = AgregarUsuarioDefault(compania, idLocacion, companiaDto.contrasenaUsuario);
+            // int idAlmacen = AgregarAlmacenDefault(compania, idUsuario, idLocacion);
+            // int idPuntoVenta = AgregarPuntoDeVentaDefault(idAlmacen, idUsuario);
+            // AgregarRolesDefaultAdministrador(idUsuario);
+            // AgregarCuentasContables(compania);
+            // AgregarConceptos(compania);
+            // AgregarJerarquiasContabilidad(compania);
+            // AgregarImpuestosDefault(compania.IdCompania);
+            // AgregarClientePublicoGeneral(compania, idLocacion);
+            // AgregarFlujoDefault(idCompania);
 
-            if (companiaDto.CompaniaContacto != null)
-            {
-                EnviarCorreo(compania, companiaDto.CompaniaContacto);
-            }
+            // if (companiaDto.CompaniaContacto != null)
+            // {
+            //     EnviarCorreo(compania, companiaDto.CompaniaContacto);
+            // }
 
             scope.Complete();
 
