@@ -14,7 +14,7 @@ namespace TrackrAPI.Helpers
             try
             {
                 DateTime today = DateTime.Now;
-                string filePath = Path.Combine(env.ContentRootPath, "Log/Errores/" + today.Date.Day + "-" + today.Date.Month + "-" + today.Date.Year + ".txt");
+                string filePath = Path.Combine(env.ContentRootPath, "Log/Errores/" + today.Date.Year + "-" + today.Date.Month + "-" + today.Date.Day + ".txt");
                 FileInfo fi = new FileInfo(filePath);
 
                 if (!fi.Directory.Exists)
@@ -38,7 +38,7 @@ namespace TrackrAPI.Helpers
                     }
                 }
             }
-            catch (Exception) { }           
+            catch (Exception) { }
         }
     }
 }
