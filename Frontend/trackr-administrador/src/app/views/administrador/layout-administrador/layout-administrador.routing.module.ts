@@ -10,9 +10,14 @@ const routes: Routes = [
   {
     path: 'configuracion-general',
     loadChildren: () =>
-      import(
-        'src/app/views/configuracion-general/configuracion-general.module'
-      ).then((m) => m.ConfiguracionGeneralModule),
+      import('src/app/views/configuracion-general/configuracion-general.module')
+      .then((m) => m.ConfiguracionGeneralModule),
+  },
+  {
+    path: 'gestion-paciente',
+    loadChildren: () =>
+      import('src/app/views/gestion-paciente/gestion-paciente.module')
+      .then((m) => m.GestionPacienteModule),
   },
 ];
 

@@ -14,6 +14,7 @@ import { MensajeModule } from './shared/components/mensaje/mensaje.module';
 import { LoginService } from './shared/services/seguridad/login.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     OverlayModule,
     MatMenuModule,
     MatSidenavModule,
+    TableModule
   ],
   providers: [ LoginService,
     AdministradorAuthService,
