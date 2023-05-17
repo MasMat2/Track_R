@@ -96,8 +96,7 @@ export class UsuarioFormularioComponent implements OnInit {
   public areaList: Area[];
   public regimenFiscalList: RegimenFiscal[];
 
-  public rolSeleccionados: string[] = [];
-  public rolSeleccionadosAux: string[] = [];
+  public rolSeleccionados: number[] = [];
 
   public tieneRolVendedor: boolean = false;
   public tieneRolMedico: boolean = false;
@@ -159,46 +158,6 @@ export class UsuarioFormularioComponent implements OnInit {
     { headerName: 'Concepto', field: 'concepto', minWidth: 100, },
     { headerName: 'Cuenta Contable', field: 'cuentaContable', minWidth: 100, },
   ];
-
-  public configCompania = Object.assign(
-    { labelField: 'nombre', valueField: 'idCompania', searchField: ['nombre'] },
-    GeneralConstant.CONFIG_DROPDOWN_DEFAULT
-  );
-
-  public configPerfil = Object.assign(
-    { labelField: 'nombre', valueField: 'idPerfil', searchField: ['nombre'] },
-    GeneralConstant.CONFIG_DROPDOWN_DEFAULT
-  );
-
-  public configHotel = Object.assign(
-    { labelField: 'nombre', valueField: 'idHospital', searchField: ['nombre'] },
-    GeneralConstant.CONFIG_DROPDOWN_DEFAULT
-  );
-
-  public configTitulo = Object.assign(
-    { labelField: 'nombre', valueField: 'idTituloAcademico', searchField: ['nombre'] },
-    GeneralConstant.CONFIG_DROPDOWN_DEFAULT
-  );
-
-  public configDepartamento = Object.assign(
-    { labelField: 'nombre', valueField: 'idArea', searchField: ['nombre'] },
-    GeneralConstant.CONFIG_DROPDOWN_DEFAULT
-  );
-
-  public configPuntoVenta = Object.assign(
-    { labelField: 'nombre', valueField: 'idPuntoVenta', searchField: ['nombre'] },
-    GeneralConstant.CONFIG_DROPDOWN_DEFAULT
-  );
-
-  public configTipoUsuario = Object.assign(
-    { labelField: 'nombre', valueField: 'idTipoUsuario', searchField: ['nombre'] },
-    GeneralConstant.CONFIG_DROPDOWN_DEFAULT
-  );
-
-  public configRegimenFiscal = Object.assign(
-    { labelField: 'claveNombre', valueField: 'idRegimenFiscal', searchField: ['nombre'] },
-    GeneralConstant.CONFIG_DROPDOWN_DEFAULT
-  );
 
   public configIdRol = Object.assign(
     {
@@ -381,9 +340,6 @@ export class UsuarioFormularioComponent implements OnInit {
   private consultarRoles(): void {
     this.rolService.consultarTodosParaSelector().subscribe((data) => {
       this.rolList = data;
-
-      if (this.rolSeleccionadosAux.length > 0)
-          this.rolSeleccionados = this.rolSeleccionadosAux;
     });
   }
 
@@ -476,7 +432,7 @@ export class UsuarioFormularioComponent implements OnInit {
   }
 
   private tieneRol(codigoRol: string): boolean {
-    const roles = this.rolList.filter((rol) => { return this.rolSeleccionados.includes(rol.idRol.toString()) });
+    const roles = this.rolList.filter((rol) => { return this.rolSeleccionados.includes(rol.idRol) });
 
     return roles.some((rol) => rol.clave === codigoRol);
   }
@@ -595,7 +551,8 @@ export class UsuarioFormularioComponent implements OnInit {
 
   public consultarUsuarioRol(): void {
     this.usuarioRolService.consultarPorUsuario(this.usuario.idUsuario).subscribe((data) => {
-      this.rolSeleccionados = data.map((usuarioRol) => usuarioRol.idRol.toString());
+      this.rolSeleccionados = data.map((usuarioRol) => usuarioRol.idRol);
+      console.log(this.rolSeleccionados);
     });
   }
 
@@ -705,7 +662,7 @@ export class UsuarioFormularioComponent implements OnInit {
       return;
     }
 
-    this.usuario.idsRol = this.rolSeleccionados.map((rol) => Number.parseInt(rol));
+    this.usuario.idsRol = this.rolSeleccionados;
 
     let exito: boolean = false;
     if (this.accion === GeneralConstant.MODAL_ACCION_AGREGAR) {
