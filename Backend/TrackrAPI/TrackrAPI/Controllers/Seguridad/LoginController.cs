@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TrackrAPI.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using TrackrAPI.Dtos.Seguridad;
+using TrackrAPI.Helpers;
 using TrackrAPI.Services.Seguridad;
 
 namespace TrackrAPI.Controllers.Seguridad
@@ -20,10 +21,24 @@ namespace TrackrAPI.Controllers.Seguridad
         [AllowAnonymous]
         [HttpPost]
         [Route("authenticate")]
-        public Task<LoginResponse> Authenticate(LoginRequest loginRequest)
+        public IActionResult Authenticate(LoginRequest loginRequest)
         {
-            return loginService.Authenticate(loginRequest);
+            try
+            {
+                var loginResult = loginService.Authenticate(loginRequest);
+                return Ok(loginResult);
+            }
+            catch (LoginSinLocacionException ex)
+            {
+                var error = new {
+                    ex.Message,
+                    ex.Locaciones
+                };
+
+                return BadRequest(error);
+            }
         }
+
 
     }
 }

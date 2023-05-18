@@ -67,7 +67,7 @@ export class TokenInterceptor implements HttpInterceptor {
           }
         }
         // Errores inesperados
-        else {
+        else if (error.status === 500) {
           this.modalService.modalError(this.mensajeError);
         }
 
@@ -75,7 +75,7 @@ export class TokenInterceptor implements HttpInterceptor {
           console.error(error);
         }
 
-        return throwError(() => new Error(error));
+        return throwError(() => error);
       })
     );
   }
