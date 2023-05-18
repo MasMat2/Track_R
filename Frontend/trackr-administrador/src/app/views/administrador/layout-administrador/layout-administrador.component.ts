@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Acceso } from '@models/seguridad/acceso';
 import { map } from 'rxjs';
 import { AccesoService } from '../../../shared/http/seguridad/acceso.service';
+import { GeneralConstant } from '@utils/general-constant';
+import { Router } from '@angular/router';
 
 export interface NavItem {
   name: string;
@@ -21,10 +23,16 @@ export class LayoutAdministradorComponent implements OnInit {
 
   constructor(
     private accesoService: AccesoService,
+    private router: Router,
   ) {}
 
   public ngOnInit(): void {
     this.consultarMenu();
+  }
+
+  public logout(): void {
+    localStorage.removeItem(GeneralConstant.TOKEN_KEY);
+    this.router.navigate(['/login']);
   }
 
   private consultarMenu(): void {

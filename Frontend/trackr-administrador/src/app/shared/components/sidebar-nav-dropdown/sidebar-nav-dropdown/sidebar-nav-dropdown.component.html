@@ -10,7 +10,12 @@
           height="85px"
           [src]="imagenUsuario"
           alt="Imagen de Usuario"
+          [matMenuTriggerFor]="menu"
         />
+
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="logout()">Salir</button>
+        </mat-menu>
       </div>
 
       <!-- Items de Navegación -->

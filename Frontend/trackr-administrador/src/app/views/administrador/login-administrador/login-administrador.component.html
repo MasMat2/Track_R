@@ -114,10 +114,10 @@
     </ng-template>
 
     <ng-template #selectorLocacion>
-      <div class="row">
-        <div class="col-md-12">
+      <div class="row justify-content-center">
+        <div class="col-md-10">
           <div class="form-group">
-            <label style="color: white;" class="label-input required-label">Locación</label>
+            <label class="label-input required-label">Locación</label>
             <div>
               <ng-select
                 #locacion="ngModel"
@@ -137,9 +137,13 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-12 text-center">
-          <button [disabled]="false" type="submit" class="btn-ingresar">
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+          <button
+            [disabled]="!loginRequest.idLocacion || btnSubmit"
+            type="submit"
+            class="btn-ingresar"
+          >
             Continuar
           </button>
         </div>

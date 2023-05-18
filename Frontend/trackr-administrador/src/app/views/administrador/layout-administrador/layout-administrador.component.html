@@ -16,6 +16,7 @@
   <app-nav-dropdown
     [navItems]="navItems"
     class="d-none d-sm-block"
+    (logoutRequest)="logout()"
   >
     <router-outlet></router-outlet>
   </app-nav-dropdown>

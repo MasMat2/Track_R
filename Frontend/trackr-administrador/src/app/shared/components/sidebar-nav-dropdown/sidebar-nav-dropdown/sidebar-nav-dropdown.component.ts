@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { NavItem } from '@components/layout-administrador/layout-administrador.component';
 import { GeneralConstant } from '@utils/general-constant';
 
@@ -11,12 +11,18 @@ export class SidebarNavDropdownComponent implements OnInit {
 
   @Input() navItems: NavItem[] = [];
 
+  @Output() logoutRequest = new EventEmitter<void>();
+
   protected readonly imagenUsuario = 'assets/img/pruebas/user-image.png';
   protected readonly imagenLogotipo = 'assets/img/logo-trackr.png';
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  public logout() {
+    this.logoutRequest.emit();
   }
 
 }
