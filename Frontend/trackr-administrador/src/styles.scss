@@ -1,8 +1,7 @@
-/* You can add global styles to this file, and also import other style files */
 @import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
-@import "../node_modules/@coreui/coreui/scss/coreui";
+// @import "../node_modules/@coreui/coreui/scss/coreui";
 
 @import '../node_modules/ag-grid-community/styles/ag-grid.css';
 @import '../node_modules/ag-grid-community/styles/ag-theme-balham.css';
@@ -16,16 +15,18 @@
 
 @import '~@circlon/angular-tree-component/css/angular-tree-component.css';
 
-
 @import '../node_modules/alertifyjs/build/css/alertify.min.css';
-@import '../src/app/shared/styles/variables.scss';
 
-@import '../src/app/shared/styles/switch.scss';
+@import '../src/app/shared/components/grid-general/grid-general.scss';
 @import '../src/app/shared/styles/general-button.scss';
 @import '../src/app/shared/styles/general-input.scss';
 @import '../src/app/shared/styles/general-modal.scss';
-@import '../src/app/shared/styles/sidebar.scss';
 @import '../src/app/shared/styles/panel-busqueda.scss';
+@import '../src/app/shared/styles/scrollbar.scss';
+@import '../src/app/shared/styles/sidebar.scss';
+@import '../src/app/shared/styles/switch.scss';
+@import '../src/app/shared/styles/variables.scss';
+@import '../src/app/custom.scss';
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

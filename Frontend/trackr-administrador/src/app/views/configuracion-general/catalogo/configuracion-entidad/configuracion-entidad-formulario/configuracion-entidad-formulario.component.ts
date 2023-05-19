@@ -86,7 +86,7 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
   };
 
   // Selector Jerarquía Padre
-  public idJerarquiaPadre: number;
+  public idJerarquiaPadre?: number;
   public entidadList: EntidadEstructura[] = [];
 
   public placeholderSelect: string = GeneralConstant.PLACEHOLDER_DROPDOWN;
@@ -160,8 +160,7 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
 
     return Promise.all([p1, p2, p3])
       .then((data) => {
-        // TODO: 2023-05-15 -> Null
-        this.idJerarquiaPadre = 0;
+        this.idJerarquiaPadre = undefined;
         this.elementosSeleccionados = [];
 
         this.jerarquiaArbol = data[0];
@@ -192,7 +191,7 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
   }
 
   public seleccionarCuentaPadre(node: EntidadEstructura): void {
-    if (node.idEntidadEstructuraPadre === null) {
+    if (node.idEntidadEstructuraPadre === undefined) {
       this.idJerarquiaPadre = node.idEntidadEstructura;
     }
   }
@@ -233,7 +232,7 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
 
   public async onAgregarClick(): Promise<void> {
     // Validar que se cuente con una pestaña seleccionada, para agregar secciones
-    if (!this.esNuevaPestana && this.idJerarquiaPadre == null) {
+    if (!this.esNuevaPestana && this.idJerarquiaPadre === undefined) {
       this.mensajeService.modalError("Es necesario seleccionar una pestaña, para asignar sus secciones");
       return;
     }
@@ -280,8 +279,7 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
 
     // Agregar registro
     this.entidadEstructura.idEntidad = this.entidad.idEntidad;
-    // TODO: 2023-05-15 -> Null
-    this.entidadEstructura.idSeccion = 0;
+    this.entidadEstructura.idSeccion = undefined;
     this.entidadEstructura.tabulacion = true;
 
     await this.agregarEntidadEstructura([this.entidadEstructura]);
