@@ -8,6 +8,7 @@
       "@http/*": ["src/app/shared/http/*"],
       "@services/*": ["src/app/shared/services/*"],
       "@models/*": ["src/app/shared/models/*"],
+      "@dtos/*": ["src/app/shared/dtos/*"],
       "@sharedComponents/*": ["src/app/shared/components/*"],
       "@utils/*": ["src/app/shared/utils/*"],
       "@components/*": ["src/app/views/administrador/*"],

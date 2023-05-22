@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: 'paciente',
     loadChildren: () => import('./paciente/paciente.module').then((m) => m.PacienteModule)
-  },
+  }
 ];
 
 @NgModule({

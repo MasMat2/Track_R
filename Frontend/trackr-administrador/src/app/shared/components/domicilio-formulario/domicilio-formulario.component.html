@@ -1,0 +1,215 @@
+<div class="row">
+
+  <!-- Pais -->
+  <div class="col-md-4">
+    <div class="form-group">
+      <label class="label-input required-label">País</label>
+      <div>
+        <ng-select
+          #paisLst="ngModel"
+          name="paisName"
+          class="select-custom"
+          [items]="paisList"
+          bindLabel="nombre"
+          bindValue="idPais"
+          [(ngModel)]="domicilio.idPais"
+          [placeholder]="placeHolderSelect"
+          [notFoundText]="placeHolderNoOptions"
+          (ngModelChange)="onChangePais()"
+        ></ng-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Código Postal -->
+  <div class="col-md-4">
+    <div class="form-group">
+      <label class="label-input required-label">Código Postal</label>
+      <div>
+        <input
+        #codigoPostal="ngModel"
+        [(ngModel)]="domicilio.codigoPostal"
+        name="codigoPostalName"
+        class="form-control"
+        type="text"
+        [typeahead]="sugerenciasCodigoPostal$"
+        [typeaheadAsync]="true"
+        typeaheadOptionField="codigoPostal1"
+        [typeaheadMinLength]="3"
+        [typeaheadScrollable]="true"
+        [typeaheadOptionsInScrollableView]="5"
+        appFormatoCodigoPostal
+        [esExtranjero]="esPaisExtranjero"
+        [maxlength]="esPaisExtranjero ? null : 5"
+        [minlength]="esPaisExtranjero ? null : 5"
+        [required]="true"
+        [disabled]="!domicilio.idPais"
+        (ngModelChange)="onChangeCodigoPostal()"
+        autocomplete="off"
+        />
+        <div *ngIf="codigoPostal.errors?.['lengthError'] && codigoPostal.touched" class="error">
+          El código debe tener 5 dígitos
+        </div>
+        <div *ngIf="codigoPostal.errors?.['required'] && codigoPostal.touched" class="error">
+          El código postal es requerido
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estado -->
+  <div class="col-md-4">
+    <div class="form-group">
+      <label class="label-input required-label">Estado</label>
+      <div>
+        <ng-select
+          #estadoLst="ngModel"
+          name="estadoName"
+          class="select-custom"
+          [items]="estadoList"
+          bindLabel="nombre"
+          bindValue="idEstado"
+          [(ngModel)]="domicilio.idEstado"
+          [placeholder]="placeHolderSelect"
+          [notFoundText]="placeHolderNoOptions"
+          (ngModelChange)="onChangeEstado()"
+          [disabled]="!domicilio.idPais"
+        ></ng-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Municipio -->
+  <div class="col-md-4">
+    <div class="form-group">
+      <label class="label-input required-label">Municipio</label>
+      <div>
+        <ng-select
+          #municipio="ngModel"
+          name="municipioName"
+          class="select-custom"
+          [items]="municipioList"
+          bindLabel="nombre"
+          bindValue="idMunicipio"
+          [(ngModel)]="domicilio.idMunicipio"
+          [placeholder]="placeHolderSelect"
+          [notFoundText]="placeHolderNoOptions"
+          [disabled]="!domicilio.idEstado"
+        ></ng-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Localidad -->
+  <div class="col-md-4">
+    <div class="form-group">
+      <label class="label-input required-label">Localidad</label>
+      <div>
+        <ng-select
+          #localidad="ngModel"
+          name="localidadName"
+          class="select-custom"
+          [items]="localidadList"
+          bindLabel="nombre"
+          bindValue="idLocalidad"
+          [(ngModel)]="domicilio.idLocalidad"
+          [placeholder]="placeHolderSelect"
+          [notFoundText]="placeHolderNoOptions"
+          [disabled]="!domicilio.idEstado"
+        ></ng-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Colonia -->
+  <div class="col-md-4">
+    <div class="form-group">
+      <label class="label-input required-label">Colonia</label>
+      <div>
+        <ng-select
+          #colonia="ngModel"
+          name="coloniaName"
+          class="select-custom"
+          [items]="coloniaList"
+          bindLabel="nombre"
+          bindValue="idColonia"
+          [(ngModel)]="domicilio.idColonia"
+          [placeholder]="placeHolderSelect"
+          [notFoundText]="placeHolderNoOptions"
+          [disabled]="domicilio.codigoPostal?.length != 5"
+        ></ng-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calle -->
+  <div class="col-md-4">
+    <div class="form-group">
+      <label class="label-input required-label">Calle</label>
+      <div>
+        <input
+          #calle="ngModel"
+          [(ngModel)]="domicilio.calle"
+          name="calleName"
+          class="form-control"
+          type="text"
+          maxlength="50"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Número Exterior -->
+  <div class="col-md-2">
+    <div class="form-group">
+      <label class="label-input required-label">Núm. Exterior</label>
+      <div>
+        <input
+          #numeroExterior="ngModel"
+          [(ngModel)]="domicilio.numeroExterior"
+          name="numeroExteriorName"
+          class="form-control"
+          type="text"
+          maxlength="10"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Número Interior -->
+  <div class="col-md-2">
+    <div class="form-group">
+      <label class="label-input required-label">Núm. Interior</label>
+      <div>
+        <input
+          #numeroInterior="ngModel"
+          [(ngModel)]="domicilio.numeroInterior"
+          name="numeroInteriorName"
+          class="form-control"
+          type="text"
+          maxlength="10"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Teléfono -->
+  <div class="col-md-4">
+    <div class="form-group">
+      <label class="label-input required-label">Entrecalles</label>
+      <div>
+        <input
+          #entreCalles="ngModel"
+          [(ngModel)]="domicilio.entreCalles"
+          name="entreCalles"
+          class="form-control"
+          type="text"
+          maxlength="10"
+          appFormatoTelefono
+        />
+      </div>
+      <div *ngIf="entreCalles.errors?.['formatoTelefono'] && entreCalles.touched" class="error">
+        El teléfono tiene un formato inválido
+      </div>
+    </div>
+  </div>

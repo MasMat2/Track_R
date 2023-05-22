@@ -1,15 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-
-interface Paciente {
-  idPaciente: number;
-  nombreCompleto: string;
-  imagenBase64?: string;
-  tipoMime?: string;
-  patologias: string[];
-  glucosa: number;
-  presionSistolica: number;
-  presionAsistolica: number;
-}
+import { Router } from '@angular/router';
+import { Usuario } from '@models/seguridad/usuario';
+import { GeneralConstant } from '@utils/general-constant';
+import { Paciente } from './paciente';
 
 @Component({
   selector: 'app-paciente',
@@ -19,8 +12,43 @@ interface Paciente {
 export class PacienteComponent implements OnInit {
 
   protected pacientes: Paciente[] = [];
+  protected isVistaCuadricula: boolean = true;
 
-  constructor() { }
+  // App Grid View
+  public HEADER_GRID = 'Pacientes';
+  public columnaEditar = Object.assign(
+    {
+      action: GeneralConstant.GRID_ACCION_EDITAR,
+      title: 'Editar',
+      cellRendererSelector: (params: any) => {
+        const component = { component: 'actionButton', params: { disabled: false } };
+        return component;
+      },
+    },
+    GeneralConstant.CONFIG_COLUMN_ACTION
+  );
+
+  public columnaEliminar = Object.assign(
+    {
+      action: GeneralConstant.GRID_ACCION_ELIMINAR,
+      title: 'Eliminar',
+      cellRendererSelector: (params: any) => {
+        const component = { component: 'actionButton', params: { disabled: false } };
+        return component;
+      },
+    },
+    GeneralConstant.CONFIG_COLUMN_ACTION
+  );
+
+
+  public columns = [
+    { headerName: 'Paciente', field: 'nombreCompleto', minWidth: 150 },
+    this.columnaEditar,
+    this.columnaEliminar
+  ];
+  constructor(
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
     this.pacientes = [
@@ -35,13 +63,28 @@ export class PacienteComponent implements OnInit {
   protected descargarExcel(): void {
   }
 
-  protected ver(paciente: Paciente): void {
+  protected ver(event: Paciente): void {
+    console.log(event)
   }
 
-  protected editar(paciente: Paciente): void {
+  protected editar(): void {
+    this.router.navigate(['/administrador/gestion-paciente/paciente/paciente-formulario'], {
+      // queryParams: this.encryptionService.generateURL({
+      //   i: idPerfil.toString(),
+      //   ij: data.idJerarquiaAcceso > 0 ? data.idJerarquiaAcceso.toString() : 0
+      // })
+    });
   }
 
-  protected eliminar(paciente: Paciente): void {
+  /**
+   * Evento que se ejecuta al dar clic en algun boton del grid.
+   */
+  public onGridClick(gridData: { accion: string; data: Paciente }) {
+    if (gridData.accion === GeneralConstant.GRID_ACCION_EDITAR) {
+      this.editar();
+    } else if (gridData.accion === GeneralConstant.GRID_ACCION_ELIMINAR) {
+      // this.eliminar(gridData.data);
+    }
   }
 
 }
