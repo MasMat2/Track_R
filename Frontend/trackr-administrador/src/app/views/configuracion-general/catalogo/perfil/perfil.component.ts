@@ -138,7 +138,7 @@ export class PerfilComponent implements OnInit, AfterViewInit{
       this.router.navigate(['/administrador/configuracion-general/catalogo/perfil/editar'], {
         queryParams: this.encryptionService.generateURL({
           i: idPerfil.toString(),
-          ij: data.idJerarquiaAcceso > 0 ? data.idJerarquiaAcceso.toString() : 0
+          ij: data.idJerarquiaAcceso ? data.idJerarquiaAcceso.toString() : 0
         })
       });
     });

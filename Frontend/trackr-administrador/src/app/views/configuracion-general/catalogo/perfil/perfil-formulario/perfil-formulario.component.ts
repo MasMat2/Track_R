@@ -65,10 +65,7 @@ export class PerfilFormularioComponent implements OnInit {
     }
   };
 
-  public configJerarquiaAcceso = Object.assign(
-    { labelField: 'nombre', valueField: 'idJerarquiaAcceso', searchField: ['nombre'], dropdownParent: 'body' },
-    GeneralConstant.CONFIG_DROPDOWN_DEFAULT
-  );
+  public idJerarquiaAcceso?: number;
 
   constructor(
     private modalMensajeService: MensajeService,
@@ -114,6 +111,8 @@ export class PerfilFormularioComponent implements OnInit {
   }
 
   public async consultarJerarquiaArbolEstructura(idJerarquiaAcceso: number): Promise<void> {
+    this.perfil.idJerarquiaAcceso = idJerarquiaAcceso ?? 0;
+
     this.idsAccesosSeleccionados = [];
     this.jerarquiaArbolList = [];
 

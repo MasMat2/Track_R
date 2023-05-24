@@ -4,7 +4,7 @@ export class Perfil {
   public nombre: string;
   public clave: string;
   public idTipoCompania: number;
-  public idJerarquiaAcceso: number;
+  public idJerarquiaAcceso?: number;
 
   public idsAcceso: number[];
   public nombreJerarquia: string;

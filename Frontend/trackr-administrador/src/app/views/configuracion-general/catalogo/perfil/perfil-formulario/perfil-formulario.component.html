@@ -39,7 +39,7 @@
                 bindLabel="nombre"
                 bindValue="idJerarquiaAcceso"
                 [items]="jerarquiaAccesoList"
-                [(ngModel)]="perfil.idJerarquiaAcceso"
+                [(ngModel)]="idJerarquiaAcceso"
                 (ngModelChange)="consultarJerarquiaArbolEstructura($event)"
                 [placeholder]="placeHolderSelect"
                 [notFoundText]="placeHolderNoOptions"
@@ -63,7 +63,7 @@
             <span style="font-weight: 600;">Accesos</span>
             <tree-root
               #tree
-              *ngIf="!(perfil.idJerarquiaAcceso > 0)"
+              *ngIf="!perfil.idJerarquiaAcceso"
               [nodes]="accesoList"
               [options]="options"
             >
@@ -93,7 +93,7 @@
             <!-- Arbol de Jerarquía Acceso -->
             <tree-root
               #tree
-              *ngIf="perfil.idJerarquiaAcceso > 0"
+              *ngIf="perfil.idJerarquiaAcceso"
               [nodes]="jerarquiaArbolList"
               [options]="optionsJerarquia"
             >
