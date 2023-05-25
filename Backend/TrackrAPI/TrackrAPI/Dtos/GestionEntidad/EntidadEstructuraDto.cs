@@ -6,8 +6,8 @@ namespace TrackrAPI.Dtos.GestionEntidad
     public class EntidadEstructuraDto
     {
         public int IdEntidadEstructura { get; set; }
-        public string Nombre { get; set; }
-        public string Clave { get; set; }
+        public string? Nombre { get; set; }
+        public string? Clave { get; set; }
         public bool? Tabulacion { get; set; }
         public int IdEntidad { get; set; }
         public int? IdSeccion { get; set; }

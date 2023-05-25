@@ -83,4 +83,12 @@ export class ConfiguracionEntidadComponent extends CrudBase<Entidad> implements 
     });
   }
 
+  protected actualizar(): void {
+    this.entidadService.actualizarExpedienteTrackr().subscribe({
+      complete: () => {
+        this.mensajeService.modalExito('Entidad Actualizada');
+      }
+    });
+  }
+
 }

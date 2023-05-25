@@ -91,5 +91,48 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Where(e => e.IdEntidadEstructuraPadre == idEntidadEstructuraPadre)
                 .ToList();
         }
+
+        private static EntidadEstructuraDto ToDto(EntidadEstructura estructura)
+        {
+            return new EntidadEstructuraDto
+            {
+                IdEntidadEstructura = estructura.IdEntidadEstructura,
+                Nombre = estructura.Nombre ?? string.Empty,
+                Clave = estructura.Clave ?? string.Empty,
+                Tabulacion = estructura.Tabulacion,
+                IdEntidad = estructura.IdEntidad,
+                IdSeccion = estructura.IdSeccion,
+                IdEntidadEstructuraPadre = estructura.IdEntidadEstructuraPadre
+            };
+        }
+
+        public IEnumerable<EntidadEstructuraDto> ConsultarArbol(int idEntidad)
+        {
+            var estructuras = context.EntidadEstructura
+                .Where(e => e.IdEntidad == idEntidad)
+                .Include(e => e.IdSeccionNavigation)
+                .ToList();
+
+            var estructurasPadre = estructuras.Where(e => e.Tabulacion == true);
+
+            var arbol = new List<EntidadEstructuraDto>();
+
+            foreach (var estructura in estructurasPadre)
+            {
+                var hijos = estructuras
+                    .Where(e => e.IdEntidadEstructuraPadre == estructura.IdEntidadEstructura)
+                    .ToList();
+
+                hijos.ForEach(e => e.Nombre = e.IdSeccionNavigation!.Clave + " - " + e.IdSeccionNavigation.Nombre);
+
+                var padre = ToDto(estructura);
+                padre.Nombre = padre.Nombre;
+                padre.Hijos = hijos.ConvertAll(h => ToDto(h));
+
+                arbol.Add(padre);
+            }
+
+            return arbol;
+        }
     }
 }

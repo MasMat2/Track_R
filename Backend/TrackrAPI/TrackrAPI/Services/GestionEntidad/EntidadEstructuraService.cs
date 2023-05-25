@@ -36,48 +36,42 @@ namespace TrackrAPI.Services.GestionEntidad
 
         public IEnumerable<EntidadEstructuraDto> ConsultarArbol(int idEntidad)
         {
-            List<EntidadEstructuraDto> estructurasPadre = entidadEstructuraRepository.ConsultarPadres(idEntidad).ToList();
+            var arbol = entidadEstructuraRepository.ConsultarArbol(idEntidad);
 
-            return ConsultarHijos(estructurasPadre).OrderBy(e => e.IdEntidadEstructura);
+            return arbol;
         }
 
-        public IEnumerable<EntidadEstructuraDto> ConsultarHijos(IEnumerable<EntidadEstructuraDto> estructurasPadre)
+        public void Agregar(EntidadEstructuraDto estructuraDto)
         {
-            foreach (EntidadEstructuraDto padre in estructurasPadre)
+            EntidadEstructura entidadEstructura = new()
             {
-                padre.Hijos = entidadEstructuraRepository.ConsultarHijos(padre.IdEntidadEstructura).ToList();
+                Nombre = estructuraDto.Nombre,
+                Clave = estructuraDto.Clave,
+                Tabulacion = estructuraDto.Tabulacion,
+                IdEntidad = estructuraDto.IdEntidad,
+                IdSeccion = estructuraDto.IdSeccion,
+                IdEntidadEstructuraPadre = estructuraDto.IdEntidadEstructuraPadre
+            };
 
-                if (padre.Hijos.Any())
-                {
-                    ConsultarHijos(padre.Hijos);
-                }
-            }
+            entidadEstructuraValidatorService.ValidarAgregar(entidadEstructura);
+            entidadEstructuraRepository.Agregar(entidadEstructura);
 
-            return estructurasPadre;
+            estructuraDto.IdEntidadEstructura = entidadEstructura.IdEntidadEstructura;
         }
 
         public void Agregar(List<EntidadEstructuraDto> estructurasDto)
         {
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+            using var scope = new TransactionScope(
+                TransactionScopeOption.Required,
+                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }
+            );
+
+            foreach (EntidadEstructuraDto estructuraDto in estructurasDto)
             {
-                foreach (EntidadEstructuraDto estructuraDto in estructurasDto)
-                {
-                    EntidadEstructura entidadEstructura = new()
-                    {
-                        Nombre = estructuraDto.Nombre,
-                        Clave = estructuraDto.Clave,
-                        Tabulacion = estructuraDto.Tabulacion,
-                        IdEntidad = estructuraDto.IdEntidad,
-                        IdSeccion = estructuraDto.IdSeccion,
-                        IdEntidadEstructuraPadre = estructuraDto.IdEntidadEstructuraPadre
-                    };
-
-                    entidadEstructuraValidatorService.ValidarAgregar(entidadEstructura);
-                    entidadEstructuraRepository.Agregar(entidadEstructura);
-
-                }
-                scope.Complete();
+                Agregar(estructuraDto);
             }
+
+            scope.Complete();
         }
 
         public void Eliminar(int idEntidadEstructura)

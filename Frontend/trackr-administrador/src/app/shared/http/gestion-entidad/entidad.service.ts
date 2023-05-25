@@ -34,4 +34,9 @@ export class EntidadService {
   eliminar(idEntidad: number) {
     return this.http.delete<void>(this.dataUrl + `eliminar/${idEntidad}`);
   }
+
+  actualizarExpedienteTrackr(): Observable<void> {
+    console.log('actualizarExpedienteTrackr')
+    return this.http.post<void>(this.dataUrl + 'actualizarExpedienteTrackr', null);
+  }
 }

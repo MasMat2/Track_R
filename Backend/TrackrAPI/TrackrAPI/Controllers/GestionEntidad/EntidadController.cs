@@ -58,5 +58,12 @@ namespace TrackrAPI.Controllers.GestionEntidad
         {
             entidadService.Eliminar(idEntidad);
         }
+
+        [HttpPost]
+        [Route("actualizarExpedienteTrackr")]
+        public void ActualizarExpedienteTrackr()
+        {
+            entidadService.ActualizarExpedienteTrackr();
+        }
     }
 }

@@ -20,7 +20,14 @@ namespace TrackrAPI.Controllers.GestionEntidad
         [HttpGet("consultarArbol/{idEntidad}")]
         public IEnumerable<EntidadEstructuraDto> ConsultarArbol(int idEntidad)
         {
-            return entidadEstructuraService.ConsultarArbol(idEntidad);
+            var arbol = entidadEstructuraService.ConsultarArbol(idEntidad);
+
+            foreach (var pestana in arbol)
+            {
+                pestana.Nombre = pestana.Clave + " - " + pestana.Nombre;
+            }
+
+            return arbol;
         }
 
         [HttpGet("consultarPorEntidadParaSelector/{idEntidad}")]

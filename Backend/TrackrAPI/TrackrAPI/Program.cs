@@ -14,6 +14,7 @@ using System.Net;
 using System.Text;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
+using TrackrAPI.Services.GestionEntidad;
 
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -53,7 +54,13 @@ builder.Services.Scan(scan => scan
 );
 
 builder.Services.Scan(scan => scan
-    .FromAssemblyOf<Program>().AddClasses(c => c.InNamespaces("TrackrAPI.Services")).AsSelf().WithTransientLifetime()
+    .FromAssemblyOf<Program>()
+    .AddClasses(c => c.InNamespaces("TrackrAPI.Services")
+        // TODO: 2023-05-25 -> Implementar IService para evitar estas excepciones
+        .Where(type => !typeof(EntidadService.ActualizacionExpedienteParams).IsAssignableFrom(type))
+    )
+    .AsSelf()
+    .WithTransientLifetime()
 );
 
 // Crea una nueva instancia de JwtSettings y la configura con los valores del appsettings.json
