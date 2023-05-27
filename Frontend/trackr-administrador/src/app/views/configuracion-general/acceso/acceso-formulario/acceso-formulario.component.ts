@@ -35,10 +35,10 @@ export class AccesoFormularioComponent implements OnInit {
   public rolAccesoList: RolAcceso[] = [];
   public iconoList: any[] = [];
 
-  public tipoAccesoMenu :boolean = false;
-  public tipoAccesoEvento :boolean = false;
-  public btnSubmit:boolean = false;
-  public esModal:boolean = false;
+  public tipoAccesoMenu: boolean = false;
+  public tipoAccesoEvento: boolean = false;
+  public btnSubmit: boolean = false;
+  public esModal: boolean = false;
   public onClose: any;
 
   public configTipoAcceso = Object.assign(
@@ -179,8 +179,8 @@ export class AccesoFormularioComponent implements OnInit {
     this.router.navigate(['/administrador/configuracion-general/acceso']);
   }
 
-  public onIconoChange(idIcono: number) {
-    const icono = this.iconoList.find((i) => +i.idIcono === +idIcono);
+  public onIconoChange(idIcono?: number) {
+    const icono = this.iconoList.find((i) => i.idIcono === idIcono);
     if (icono !== undefined) {
       this.acceso.claseIcono = icono.clase;
     }
@@ -201,8 +201,8 @@ export class AccesoFormularioComponent implements OnInit {
         this.tipoAccesoMenu = false;
         this.tipoAccesoEvento = true;
         this.acceso.url = '';
-        this.acceso.ordenMenu = 0;
-        this.acceso.idIcono = 0;
+        this.acceso.ordenMenu = undefined;
+        this.acceso.idIcono = undefined;
         break;
 
       default:

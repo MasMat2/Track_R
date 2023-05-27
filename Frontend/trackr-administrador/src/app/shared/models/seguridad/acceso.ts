@@ -3,9 +3,9 @@ export class Acceso {
   public idAcceso: number;
   public clave: string;
   public nombre: string;
-  public ordenMenu: number;
+  public ordenMenu?: number;
   public url: string;
-  public idIcono: number;
+  public idIcono?: number;
   public claseIcono: string;
   public idRolAcceso: number;
   public idTipoAcceso: number;
