@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CodigoAcceso } from '@utils/codigo-acceso';
-import { PacienteFormularioComponent } from './paciente-formulario/paciente-formulario.component';
+import { ExpedienteFormularioComponent } from './expediente-formulario/expediente-formulario.component';
 import { PacienteComponent } from './paciente.component';
 
 const routes: Routes = [
@@ -16,8 +16,8 @@ const routes: Routes = [
     }
   },
   {
-    path: 'paciente-formulario',
-    component: PacienteFormularioComponent
+    path: 'expediente-formulario',
+    component: ExpedienteFormularioComponent
   }
 ];
 

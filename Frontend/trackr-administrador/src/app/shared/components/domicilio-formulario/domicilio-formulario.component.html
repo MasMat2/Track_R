@@ -12,10 +12,10 @@
           [items]="paisList"
           bindLabel="nombre"
           bindValue="idPais"
-          [(ngModel)]="domicilio.idPais"
+          [(ngModel)]="idPais"
           [placeholder]="placeHolderSelect"
           [notFoundText]="placeHolderNoOptions"
-          (ngModelChange)="onChangePais()"
+          (ngModelChange)="onChangePais();"
         ></ng-select>
       </div>
     </div>
@@ -43,8 +43,8 @@
         [maxlength]="esPaisExtranjero ? null : 5"
         [minlength]="esPaisExtranjero ? null : 5"
         [required]="true"
-        [disabled]="!domicilio.idPais"
-        (ngModelChange)="onChangeCodigoPostal()"
+        [disabled]="!idPais"
+        (ngModelChange)="onChangeCodigoPostal() ; enviarDomicilioAlPadre()"
         autocomplete="off"
         />
         <div *ngIf="codigoPostal.errors?.['lengthError'] && codigoPostal.touched" class="error">
@@ -69,11 +69,11 @@
           [items]="estadoList"
           bindLabel="nombre"
           bindValue="idEstado"
-          [(ngModel)]="domicilio.idEstado"
+          [(ngModel)]="idEstado"
           [placeholder]="placeHolderSelect"
           [notFoundText]="placeHolderNoOptions"
-          (ngModelChange)="onChangeEstado()"
-          [disabled]="!domicilio.idPais"
+          (ngModelChange)="onChangeEstado() ; enviarDomicilioAlPadre()"
+          [disabled]="!idPais"
         ></ng-select>
       </div>
     </div>
@@ -94,7 +94,8 @@
           [(ngModel)]="domicilio.idMunicipio"
           [placeholder]="placeHolderSelect"
           [notFoundText]="placeHolderNoOptions"
-          [disabled]="!domicilio.idEstado"
+          [disabled]="!idEstado"
+          (ngModelChange)="enviarDomicilioAlPadre()"
         ></ng-select>
       </div>
     </div>
@@ -115,7 +116,8 @@
           [(ngModel)]="domicilio.idLocalidad"
           [placeholder]="placeHolderSelect"
           [notFoundText]="placeHolderNoOptions"
-          [disabled]="!domicilio.idEstado"
+          [disabled]="!idEstado"
+          (ngModelChange)="enviarDomicilioAlPadre()"
         ></ng-select>
       </div>
     </div>
@@ -137,6 +139,7 @@
           [placeholder]="placeHolderSelect"
           [notFoundText]="placeHolderNoOptions"
           [disabled]="domicilio.codigoPostal?.length != 5"
+          (ngModelChange)="enviarDomicilioAlPadre()"
         ></ng-select>
       </div>
     </div>
@@ -154,6 +157,7 @@
           class="form-control"
           type="text"
           maxlength="50"
+          (ngModelChange)="enviarDomicilioAlPadre()"
         />
       </div>
     </div>
@@ -171,6 +175,7 @@
           class="form-control"
           type="text"
           maxlength="10"
+          (ngModelChange)="enviarDomicilioAlPadre()"
         />
       </div>
     </div>
@@ -188,6 +193,7 @@
           class="form-control"
           type="text"
           maxlength="10"
+          (ngModelChange)="enviarDomicilioAlPadre()"
         />
       </div>
     </div>
@@ -206,6 +212,7 @@
           type="text"
           maxlength="10"
           appFormatoTelefono
+          (ngModelChange)="enviarDomicilioAlPadre()"
         />
       </div>
       <div *ngIf="entreCalles.errors?.['formatoTelefono'] && entreCalles.touched" class="error">

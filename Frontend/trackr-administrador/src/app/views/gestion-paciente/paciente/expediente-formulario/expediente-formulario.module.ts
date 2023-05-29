@@ -1,15 +1,14 @@
 import { SharedModule } from 'src/app/shared/shared.module';
-import { PacienteFormularioComponent } from './paciente-formulario.component';
+import { ExpedienteFormularioComponent as ExpedienteFormularioComponent } from './expediente-formulario.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DomicilioFormularioModule } from "../../../../shared/components/domicilio-formulario/domicilio-formulario.module";
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
-    declarations: [PacienteFormularioComponent],
-    exports: [PacienteFormularioComponent],
-    entryComponents: [PacienteFormularioComponent],
+    declarations: [ExpedienteFormularioComponent],
+    exports: [ExpedienteFormularioComponent],
+    entryComponents: [ExpedienteFormularioComponent],
     providers: [],
     imports: [
         CommonModule,
@@ -18,4 +17,4 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
         BsDatepickerModule
     ]
 })
-export class PacienteFormularioModule {}
+export class ExpedienteFormularioModule {}

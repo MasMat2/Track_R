@@ -248,5 +248,11 @@ namespace TrackrAPI.Controllers.Seguridad
         {
             return usuarioService.ConsultarParaSelector();
         }
+
+        [HttpGet("consultarUsuarioExpedienteGridDTO")]
+        public IEnumerable<UsuarioExpedienteGridDTO> ConsultarUsuarioExpedienteGridDTO()
+        {
+            return usuarioService.ConsultarUsuarioExpedienteGridDTO();
+        }
     }
 }

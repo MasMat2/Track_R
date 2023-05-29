@@ -8,6 +8,7 @@ using System.Text;
 using System.Transactions;
 using TrackrAPI.Services.Inventario;
 using TrackrAPI.Repositorys.Inventario;
+using System.Collections.Generic;
 
 namespace TrackrAPI.Services.Seguridad
 {
@@ -597,6 +598,11 @@ namespace TrackrAPI.Services.Seguridad
                 domicilioValidatorService.ValidarEditar(domicilioNuevo, false);
                 domicilioRepository.Editar(domicilioNuevo);
             }
+        }
+
+        public IEnumerable<UsuarioExpedienteGridDTO> ConsultarUsuarioExpedienteGridDTO()
+        {
+            return usuarioRepository.ConsultarUsuarioExpedienteGridDTO();
         }
     }
 }

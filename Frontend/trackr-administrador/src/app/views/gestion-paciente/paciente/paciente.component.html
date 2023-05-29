@@ -5,7 +5,9 @@
   </div>
 
   <div class="container-fluid">
-
+    <div class="contenedor-agregar" (click)="agregar()">
+      <i class="fas fa-plus-circle"></i><span>Agregar</span>
+    </div>
     <div style="text-align: right">
       <!-- Botón Vista Cuadrícula  -->
       <button
@@ -47,20 +49,17 @@
         <ng-container *ngIf="isVistaCuadricula; else vistaLista">
           <app-paciente-vista-cuadricula
             [pacientes]="pacientes"
-            (ver)="ver($event)"
-            (editar)="editar()"
+            (event)="onGridClick($event)"
             >
           </app-paciente-vista-cuadricula>
         </ng-container>
         <ng-template #vistaLista>
           <app-grid-general
-            #gridPacientes
             [headerName]="HEADER_GRID"
             [data]="pacientes"
             [children]="columns"
             (event)="onGridClick($event)"
           >
-
           </app-grid-general>
         </ng-template>
         

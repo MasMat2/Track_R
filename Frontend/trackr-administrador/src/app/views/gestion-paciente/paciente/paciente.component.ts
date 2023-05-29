@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Usuario } from '@models/seguridad/usuario';
+import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-grid-dto';
+import { UsuarioService } from '@http/seguridad/usuario.service';
+import { EncryptionService } from '@services/encryption.service';
 import { GeneralConstant } from '@utils/general-constant';
-import { Paciente } from './paciente';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-paciente',
@@ -10,8 +12,7 @@ import { Paciente } from './paciente';
   styleUrls: ['./paciente.component.scss']
 })
 export class PacienteComponent implements OnInit {
-
-  protected pacientes: Paciente[] = [];
+  protected pacientes: UsuarioExpedienteGridDTO[] = [];
   protected isVistaCuadricula: boolean = true;
 
   // App Grid View
@@ -48,40 +49,59 @@ export class PacienteComponent implements OnInit {
   ];
   constructor(
     private router: Router,
+    private encryptionService: EncryptionService,
+    private usuarioService: UsuarioService
   ) { }
 
   ngOnInit(): void {
-    this.pacientes = [
-      { idPaciente: 1, nombreCompleto: 'Paciente 1', imagenBase64: undefined, tipoMime: undefined, patologias: ['Patologia 1', 'Patologia 2'], glucosa: 100, presionSistolica: 120, presionAsistolica: 80 },
-      { idPaciente: 2, nombreCompleto: 'Paciente 2', imagenBase64: undefined, tipoMime: undefined, patologias: ['Patologia 1', 'Patologia 2'], glucosa: 100, presionSistolica: 120, presionAsistolica: 80 },
-      { idPaciente: 3, nombreCompleto: 'Paciente 3', imagenBase64: undefined, tipoMime: undefined, patologias: ['Patologia 1', 'Patologia 2'], glucosa: 100, presionSistolica: 120, presionAsistolica: 80 },
-      { idPaciente: 4, nombreCompleto: 'Paciente 4', imagenBase64: undefined, tipoMime: undefined, patologias: ['Patologia 1', 'Patologia 2'], glucosa: 100, presionSistolica: 120, presionAsistolica: 80 },
-      { idPaciente: 5, nombreCompleto: 'Paciente 5', imagenBase64: undefined, tipoMime: undefined, patologias: ['Patologia 1', 'Patologia 2'], glucosa: 100, presionSistolica: 120, presionAsistolica: 80 },
-    ]
+    this.consultarPacientes();
   }
 
   protected descargarExcel(): void {
   }
 
-  protected ver(event: Paciente): void {
-    console.log(event)
+  protected ver(gridData: { accion: string; event: UsuarioExpedienteGridDTO }): void {
+    
   }
 
-  protected editar(): void {
-    this.router.navigate(['/administrador/gestion-paciente/paciente/paciente-formulario'], {
-      // queryParams: this.encryptionService.generateURL({
-      //   i: idPerfil.toString(),
-      //   ij: data.idJerarquiaAcceso > 0 ? data.idJerarquiaAcceso.toString() : 0
-      // })
+  /**
+   * Redirige a la pantalla de Expediente - Formulario en modo Editar
+   * debido a que se pasa un idUsuario como parametro en la URL
+   * @param idUsuario del usuario seleccionado
+   */
+  protected editar(idUsuario: any): void {
+    this.router.navigate(['/administrador/gestion-paciente/paciente/expediente-formulario'], {
+      queryParams: this.encryptionService.generateURL({
+        i: idUsuario.toString(),
+      })
+    });
+  }
+  
+  /**
+   * Redirige a la pantalla de Expediente - Formulario
+   * debido a que no se pasa ningun parametro en la URL
+   */
+  protected agregar(): void {
+    this.router.navigate(['/administrador/gestion-paciente/paciente/expediente-formulario']);
+  }
+
+  /**
+   * Consulta los pacientes para mostrar en el Grid de la tabla Usuarios, 
+   * aquellos con clave de perfil PACIENTE.
+   */
+  protected consultarPacientes(): void {
+    lastValueFrom(this.usuarioService.consultarUsuarioExpedienteGridDTO())
+    .then((pacientes: UsuarioExpedienteGridDTO[]) => {
+      this.pacientes = pacientes;
     });
   }
 
   /**
    * Evento que se ejecuta al dar clic en algun boton del grid.
    */
-  public onGridClick(gridData: { accion: string; data: Paciente }) {
+  protected onGridClick(gridData: { accion: string; data: any }) {
     if (gridData.accion === GeneralConstant.GRID_ACCION_EDITAR) {
-      this.editar();
+      this.editar(gridData.data.idUsuario);
     } else if (gridData.accion === GeneralConstant.GRID_ACCION_ELIMINAR) {
       // this.eliminar(gridData.data);
     }

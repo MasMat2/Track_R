@@ -560,5 +560,17 @@ namespace TrackrAPI.Repositorys.Seguridad
                 .Where(u => u.IdUsuario == idUsuario)
                 .FirstOrDefault();
         }
+
+        public IEnumerable<UsuarioExpedienteGridDTO> ConsultarUsuarioExpedienteGridDTO()
+        {
+            return context.Usuario
+                .Where(u => u.IdPerfilNavigation.Clave == GeneralConstant.ClavePerfilPaciente)
+                .Select(u => new UsuarioExpedienteGridDTO
+                {
+                    IdUsuario= u.IdUsuario,
+                    NombreCompleto = u.ObtenerNombreCompleto()
+                })
+                .ToList();
+        }
     }
 }

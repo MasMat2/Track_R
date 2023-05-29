@@ -1,5 +1,5 @@
-export interface Paciente {
-    idPaciente: number;
+export class UsuarioExpedienteGridDTO {
+    idUsuario: number;
     nombreCompleto: string;
     imagenBase64?: string;
     tipoMime?: string;
@@ -7,5 +7,4 @@ export interface Paciente {
     glucosa: number;
     presionSistolica: number;
     presionAsistolica: number;
-  }
-  
+}    

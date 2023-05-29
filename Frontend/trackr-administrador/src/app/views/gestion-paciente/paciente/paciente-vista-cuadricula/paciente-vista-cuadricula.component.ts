@@ -1,6 +1,6 @@
-import { GeneralConstant } from './../../../../shared/utils/general-constant';
-import { Paciente } from './../paciente';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-grid-dto';
+import { GeneralConstant } from '@utils/general-constant';
 
 @Component({
   selector: 'app-paciente-vista-cuadricula',
@@ -9,8 +9,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class PacienteVistaCuadriculaComponent implements OnInit {
 
-  @Input() pacientes: Paciente[] = [];
-  @Output() ver = new EventEmitter<any>();
+  @Input() pacientes: UsuarioExpedienteGridDTO[] = [];
+  @Output() event = new EventEmitter<{ accion: string; data: any }>();
   constructor() { }
 
   ngOnInit() {
@@ -24,24 +24,18 @@ export class PacienteVistaCuadriculaComponent implements OnInit {
     
   }
 
-  protected onGridClick(event: Event): void {
-    let accion = GeneralConstant.GRID_ACCION_VER;
-    let paciente = event;
-    let vers = {accion, paciente};
-    this.ver.emit(vers);
+  protected onVer(data:UsuarioExpedienteGridDTO): void {
+    const accion = GeneralConstant.GRID_ACCION_VER;
+    this.event.emit({accion, data});
   }
 
-  protected onVer(event: Paciente): void {
-    this.ver.emit(event);
-  }
-
-  protected onEditar(event: Event): void {
-    this.ver.emit(event);
+  protected onEditar(data: UsuarioExpedienteGridDTO): void {
+    const accion = GeneralConstant.GRID_ACCION_EDITAR;
+    this.event.emit({accion, data});
     
   }
 
   protected onEliminar(event: Event): void {
   }
-
 
 }

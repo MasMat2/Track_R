@@ -19,7 +19,7 @@
             <div>
               <input
                 #numeroExpediente="ngModel"
-                [(ngModel)]="paciente.numeroExpediente"
+                [(ngModel)]="expediente.numero"
                 name="numeroExpediente"
                 class="form-control"
                 type="text"
@@ -46,7 +46,7 @@
             <div>
               <input
                 #fechaAlta="ngModel"
-                [(ngModel)]="paciente.fechaAlta"
+                [(ngModel)]="expediente.fechaAlta"
                 name="fechaAlta"
                 class="form-control"
                 type="text"
@@ -68,7 +68,7 @@
             <div>
               <input
                 #genero="ngModel"
-                [(ngModel)]="paciente.genero"
+                [(ngModel)]="expediente.genero"
                 name="genero"
                 class="form-control"
                 type="text"
@@ -142,7 +142,7 @@
                 required
               />
               <div *ngIf="apellidoMaterno.errors?.['required'] && apellidoMaterno.touched" class="error">
-                El apellido paterno es requerido
+                El apellido materno es requerido
               </div>
             </div>
           </div>
@@ -159,7 +159,7 @@
             <div>
               <input
                 #fechaNacimiento="ngModel"
-                [(ngModel)]="paciente.fechaNacimiento"
+                [(ngModel)]="expediente.fechaNacimiento"
                 name="fechaNacimiento"
                 class="form-control"
                 type="text"
@@ -168,7 +168,7 @@
                 required
               />
               <div *ngIf="fechaNacimiento.errors?.['required'] && fechaNacimiento.touched" class="error">
-                El apellido paterno es requerido
+                La fecha de nacimiento es requerida
               </div>
             </div>
           </div>
@@ -180,17 +180,13 @@
             <div>
               <input
                 #edad="ngModel"
-                [(ngModel)]="paciente.edad"
+                [(ngModel)]="expediente.edad"
                 name="edad"
                 class="form-control"
                 type="text"
                 maxlength="50"
                 autocomplete="off"
-                required
               />
-              <div *ngIf="edad.errors?.['required'] && edad.touched" class="error">
-                El apellido paterno es requerido
-              </div>
             </div>
           </div>
         </div>        
@@ -210,7 +206,7 @@
                 required
               />
               <div *ngIf="telefonoMovil.errors?.['required'] && telefonoMovil.touched" class="error">
-                El apellido paterno es requerido
+                El teléfono móvil es requerido
               </div>
             </div>
           </div>
@@ -233,7 +229,7 @@
                 required
               />
               <div *ngIf="correo.errors?.['required'] && correo.touched" class="error">
-                El apellido paterno es requerido
+                El correo es requerido
               </div>
             </div>
           </div>
@@ -245,7 +241,7 @@
             <div>
               <input
                 #peso="ngModel"
-                [(ngModel)]="paciente.peso"
+                [(ngModel)]="expediente.peso"
                 name="peso"
                 class="form-control"
                 type="text"
@@ -254,7 +250,7 @@
                 required
               />
               <div *ngIf="peso.errors?.['required'] && peso.touched" class="error">
-                El apellido paterno es requerido
+                El peso es requerido
               </div>
             </div>
           </div>
@@ -267,7 +263,7 @@
             <div>
               <input
                 #cintura="ngModel"
-                [(ngModel)]="paciente.cintura"
+                [(ngModel)]="expediente.cintura"
                 name="cintura"
                 class="form-control"
                 type="text"
@@ -276,7 +272,7 @@
                 required
               />
               <div *ngIf="cintura.errors?.['required'] && cintura.touched" class="error">
-                El apellido paterno es requerido
+                La cintura es requerida
               </div>
             </div>
           </div>
@@ -289,7 +285,7 @@
             <div>
               <input
                 #estatura="ngModel"
-                [(ngModel)]="paciente.estatura"
+                [(ngModel)]="expediente.estatura"
                 name="estatura"
                 class="form-control"
                 type="text"
@@ -298,7 +294,7 @@
                 required
               />
               <div *ngIf="estatura.errors?.['required'] && estatura.touched" class="error">
-                El apellido paterno es requerido
+                La estatura es requerida
               </div>
             </div>
           </div>
@@ -309,7 +305,10 @@
         Domicilio
       </div>
 
-      <app-domicilio-formulario>
+      <app-domicilio-formulario
+        [idDomicilio]="domicilio.idDomicilio"
+        [(domicilio)]="this.domicilio"
+      >
       </app-domicilio-formulario>
 
       <!-- Padecimientos -->
@@ -326,7 +325,7 @@
         <div
           class="row"
           *ngFor="
-            let padecimientos of paciente.padecimientos;
+            let padecimientos of padecimientos;
             let i = index
           "
         >
@@ -358,7 +357,6 @@
                   placeholder="dd/mm/aaaa"
                   name="fechaDiagnosticoName"
                   [(ngModel)]="padecimientos.fechaDiagnostico"
-                  [required]="true"
                   bsDatepicker
                 />
             </div>
