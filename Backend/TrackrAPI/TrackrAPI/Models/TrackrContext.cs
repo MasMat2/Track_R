@@ -1937,8 +1937,6 @@ namespace TrackrAPI.Models
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
-                entity.Property(e => e.EntidadEstructura1).HasColumnName("EntidadEstructura");
-
                 entity.Property(e => e.Nombre).HasMaxLength(100);
 
                 entity.HasOne(d => d.IdEntidadNavigation)
