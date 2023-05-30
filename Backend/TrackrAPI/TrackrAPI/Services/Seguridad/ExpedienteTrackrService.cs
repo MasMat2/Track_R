@@ -48,14 +48,25 @@ namespace TrackrAPI.Services.Seguridad
             ExpedienteTrackr expedienteTrackr = expedienteWrapper.expediente;
             expedienteTrackrRepository.Agregar(expedienteTrackr);
 
-            Domicilio domicilio =  expedienteWrapper.domicilio;
-            domicilio.IdUsuario = expedienteWrapper.expediente.IdUsuario;
-            domicilioRepository.Agregar(expedienteWrapper.domicilio);
+            // Agregar Padecimientos
+            foreach (var padecimientoDTO in expedienteWrapper.padecimientos)
+            {
+                var padecimiento = new ExpedientePadecimiento();
+                padecimiento.IdPadecimiento = padecimientoDTO.IdPadecimiento;
+                padecimiento.FechaDiagnostico = padecimientoDTO.FechaDiagnostico;
+                padecimiento.IdPadecimiento = padecimientoDTO.IdPadecimiento;
+                padecimiento.IdExpediente = expedienteTrackr.IdExpediente;
 
-            Usuario paciente = expedienteWrapper.paciente;
-            usuarioRepository.Agregar(paciente);
 
-            // TODO: Agregar Padecimientos
+                if (padecimiento.IdPadecimiento == 0)
+                {
+                    expedientePadecimientoRepository.Agregar(padecimiento);
+                }
+                else
+                {
+                    expedientePadecimientoRepository.Editar(padecimiento);
+                }
+            }
         }
 
         /// <summary>
@@ -69,16 +80,7 @@ namespace TrackrAPI.Services.Seguridad
             using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
             {
                 var idUsuario = expedienteWrapper.paciente.IdUsuario;
-                // Agregar Usuario
-                Usuario paciente = expedienteWrapper.paciente;
-                if (paciente.IdUsuario == 0)
-                {
-                    usuarioRepository.Agregar(paciente);
-                }
-                else
-                {
-                    usuarioRepository.Editar(paciente);
-                }
+
                 // Agregar ExpedienteTrackR
                 ExpedienteTrackr expedienteTrackr = expedienteWrapper.expediente;
                 expedienteTrackr.IdUsuario = idUsuario;
@@ -93,17 +95,7 @@ namespace TrackrAPI.Services.Seguridad
                     expedienteTrackr.Numero = expedienteTrackr.IdExpediente.ToString().PadLeft(6, '0');
                     expedienteTrackrRepository.Editar(expedienteTrackr);
                 }
-                // Agregar Domicilio
-                Domicilio domicilio = expedienteWrapper.domicilio;
-                domicilio.IdUsuario = idUsuario;
-                if (domicilio.IdDomicilio == 0)
-                {
-                    domicilioRepository.Agregar(domicilio);
-                }
-                else
-                {
-                    domicilioRepository.Editar(domicilio);
-                }
+
                 // Agregar Padecimientos
                 foreach (var padecimientoDTO in expedienteWrapper.padecimientos)
                 {
@@ -123,7 +115,6 @@ namespace TrackrAPI.Services.Seguridad
                         expedientePadecimientoRepository.Editar(padecimiento);
                     }
                 }
-                // TODO: Agregar Padecimientos
                 scope.Complete();
             }
         }
@@ -139,8 +130,8 @@ namespace TrackrAPI.Services.Seguridad
             ExpedienteWrapper expedienteWrapper = new ExpedienteWrapper
             {
                 expediente = ConsultarPorUsuario(idUsuario),
-                domicilio = domicilioRepository.ConsultarPorUsuario(idUsuario).FirstOrDefault(),
-                paciente = usuarioRepository.Consultar(idUsuario),
+                // domicilio = domicilioRepository.ConsultarPorUsuario(idUsuario).FirstOrDefault(),
+                paciente = usuarioRepository.ConsultarDto(idUsuario),
                 padecimientos = expedientePadecimientoRepository.ConsultarPorUsuario(idUsuario)
             };
             return expedienteWrapper;

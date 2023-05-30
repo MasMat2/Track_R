@@ -4,7 +4,7 @@ namespace TrackrAPI.Dtos.Seguridad
 {
     public class ExpedienteWrapper
     {
-        public Usuario paciente { get; set; }
+        public UsuarioDto paciente { get; set; }
         public ExpedienteTrackr expediente { get; set; }
         public Domicilio domicilio { get; set; }
 

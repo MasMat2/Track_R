@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, AfterViewInit } from '@angular/core';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { ColoniaService } from '@http/catalogo/colonia.service';
 import { EstadoService } from '@http/catalogo/estado.service';
@@ -32,6 +32,8 @@ export class DomicilioFormularioComponent implements OnChanges {
   public placeHolderSelect = GeneralConstant.PLACEHOLDER_DROPDOWN;
   public placeHolderNoOptions = GeneralConstant.PLACEHOLDER_DROPDOWN_NO_OPTIONS;
 
+  @Input() readonly = false;
+
   
   // Listas de Selectores
   public paisList: Pais[] = [];
@@ -41,11 +43,12 @@ export class DomicilioFormularioComponent implements OnChanges {
   public coloniaList: Colonia[] = [];
 
   // Propiedades de selectores
-  public idPais: number | null;
-  public idEstado: number | null;
-  public idMunicipio: number | null;
-  public idLocalidad: number | null;
-  public idColonia: number | null;
+  public idPais: number = 0;
+  public idEstado: number = 0;
+  public idMunicipio: number = 0;
+  public idLocalidad: number = 0;
+  public idColonia: number = 0;
+  public codigoPostal: string = '';
 
   public sugerenciasCodigoPostal$: Observable<CodigoPostal[]>;
 
@@ -65,33 +68,19 @@ export class DomicilioFormularioComponent implements OnChanges {
   ) { }
 
   ngOnChanges(): void {
-    if(this.idDomicilio > 0){
-      this.consultarDomicilio(this.idDomicilio);
+    if(this.domicilio != null){
+      if(this.domicilio.idPais > 0){
+        this.idPais = this.domicilio.idPais
+        this.idEstado = this.domicilio.idEstado
+        this.codigoPostal = this.domicilio.codigoPostal
+      }
+      
       this.consultarEstados(this.domicilio.idPais);
       this.consultarMunicipios(this.domicilio.idEstado);
       this.consultarLocalidades(this.domicilio.idEstado);
       this.consultarColonias(this.domicilio.codigoPostal);
-      
     }
     this.consultarPaises();
-  }
-
-  public enviarDomicilioAlPadre(){
-    if(this.idPais != null){
-      this.domicilio.idPais = this.idPais;
-    }
-  }
-
-  /**
-   * Consulta el domicilio si es que existe uno en la BD
-   * @param idDomicilio a consultar
-   */
-  public consultarDomicilio(idDomicilio: number): void {
-    this.domicilioService.consultar(idDomicilio).subscribe((domicilio: any) => { 
-      this.domicilio = domicilio
-      this.idPais = this.domicilio.idPais || null;
-      this.idEstado = this.domicilio.idEstado || null;
-    });
   }
 
   /**

@@ -17,7 +17,6 @@ namespace TrackrAPI.Repositorys.Seguridad
                 .Select(ep => new ExpedientePadecimientoDTO
                 {
                     IdPadecimiento = ep.IdPadecimiento,
-                    Nombre = ep.IdPadecimientoNavigation.Nombre,
                     FechaDiagnostico = ep.FechaDiagnostico
                 }).ToList();
         }

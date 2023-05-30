@@ -28,6 +28,7 @@
                 required
                 appFormatoSoloAlfanumerico
                 autofocus
+                [disabled]="true"
               />
               <div *ngIf="numeroExpediente.errors?.['required'] && numeroExpediente.touched" class="error">
                 El número de expediente es requerido
@@ -53,6 +54,7 @@
                 maxlength="50"
                 autocomplete="off"
                 required
+                [disabled]="true"
               />
               <div *ngIf="fechaAlta.errors?.['required'] && fechaAlta.touched" class="error">
                 La Fecha Alta Exepediente es requerida
@@ -66,16 +68,17 @@
           <div class="form-group">
             <label class="label-input required-label">Género</label>
             <div>
-              <input
-                #genero="ngModel"
-                [(ngModel)]="expediente.genero"
-                name="genero"
-                class="form-control"
-                type="text"
-                maxlength="50"
-                autocomplete="off"
-                required
-              />
+                <ng-select
+                  #genero="ngModel"
+                  name="generoName"
+                  class="select-custom"
+                  [items]="generoList"
+                  bindLabel="nombre"
+                  bindValue="idGenero"
+                  [(ngModel)]="expediente.genero"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
               <div *ngIf="genero.errors?.['required'] && genero.touched" class="error">
                 El género es requerido
               </div>
@@ -98,6 +101,7 @@
                 maxlength="50"
                 autocomplete="off"
                 required
+                [disabled]="true"
               />
               <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
                 El nombre es requerido
@@ -119,6 +123,7 @@
                 maxlength="50"
                 autocomplete="off"
                 required
+                [disabled]="true"
               />
               <div *ngIf="apellidoPaterno.errors?.['required'] && apellidoPaterno.touched" class="error">
                 El apellido paterno es requerido
@@ -140,6 +145,7 @@
                 maxlength="50"
                 autocomplete="off"
                 required
+                [disabled]="true"
               />
               <div *ngIf="apellidoMaterno.errors?.['required'] && apellidoMaterno.touched" class="error">
                 El apellido materno es requerido
@@ -186,6 +192,7 @@
                 type="text"
                 maxlength="50"
                 autocomplete="off"
+                [disabled]="true"
               />
             </div>
           </div>
@@ -204,6 +211,7 @@
                 maxlength="50"
                 autocomplete="off"
                 required
+                [disabled]="true"
               />
               <div *ngIf="telefonoMovil.errors?.['required'] && telefonoMovil.touched" class="error">
                 El teléfono móvil es requerido
@@ -227,6 +235,7 @@
                 maxlength="50"
                 autocomplete="off"
                 required
+                [disabled]="true"
               />
               <div *ngIf="correo.errors?.['required'] && correo.touched" class="error">
                 El correo es requerido
@@ -306,8 +315,8 @@
       </div>
 
       <app-domicilio-formulario
-        [idDomicilio]="domicilio.idDomicilio"
-        [(domicilio)]="this.domicilio"
+        [domicilio]="domicilio"
+        [readonly]="true"
       >
       </app-domicilio-formulario>
 
@@ -325,7 +334,7 @@
         <div
           class="row"
           *ngFor="
-            let padecimientos of padecimientos;
+            let padecimiento of padecimientos;
             let i = index
           "
         >
@@ -339,7 +348,7 @@
                   [items]="padecimientoList"
                   bindLabel="nombre"
                   bindValue="idPadecimiento"
-                  [(ngModel)]="padecimientos.idPadecimiento"
+                  [(ngModel)]="padecimientos[i].idPadecimiento"
                   [placeholder]="placeHolderSelect"
                   [notFoundText]="placeHolderNoOptions"
               ></ng-select>
@@ -350,14 +359,14 @@
             <div class="form-group">
               <label class="label-input required-label">Fecha Diagnóstico</label>
               <input
-                  #fechaDiagnosticoName="ngModel"
+                  #fechaDiagnostico="ngModel"
                   type="text"
                   class="form-control"
                   autocomplete="off"
                   placeholder="dd/mm/aaaa"
                   name="fechaDiagnosticoName"
-                  [(ngModel)]="padecimientos.fechaDiagnostico"
-                  bsDatepicker
+                  [(ngModel)]="padecimientos[i].fechaDiagnostico"
+                  
                 />
             </div>
           </div>

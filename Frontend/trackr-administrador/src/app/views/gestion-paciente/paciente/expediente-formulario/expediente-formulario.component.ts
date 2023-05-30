@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExpedientePadecimientoDTO } from '@dtos/seguridad/expediente-padecimiento-dto';
@@ -16,6 +16,7 @@ import { GeneralConstant } from '@utils/general-constant';
 import * as Utileria from '@utils/utileria';
 import { lastValueFrom } from 'rxjs';
 import { first } from 'rxjs/operators';
+import { GeneroSelectorDTO } from './genero-selector';
 
 /**
  * Componente de formulario para el manejo de expedientes.
@@ -42,6 +43,7 @@ export class ExpedienteFormularioComponent implements OnInit {
 
   // Selectores
   public padecimientoList: ExpedientePadecimientoSelectorDTO[] = [];
+  public generoList: GeneroSelectorDTO[] = [];
 
   // Mensajes
   public MENSAJE_AGREGAR = 'El expediente ha sido agregado';
@@ -66,8 +68,9 @@ export class ExpedienteFormularioComponent implements OnInit {
    * Si existe un usuario, consulta su expediente.
    */
   public async ngOnInit(): Promise<void> { 
-    this.obtenerParametrosURL();
+    this.consultarGeneros();
     this.consultarPadecimientos();
+    await this.obtenerParametrosURL();
   }
   
   /**
@@ -137,7 +140,11 @@ export class ExpedienteFormularioComponent implements OnInit {
    * Agrega un nuevo padecimiento al expediente.
    */
   protected agregarPadecimiento(){
-    this.padecimientos.push(new ExpedientePadecimientoDTO());
+    let padecimiento = new ExpedientePadecimientoDTO();
+    padecimiento.idPadecimiento = 0;
+    padecimiento.fechaDiagnostico = new Date()
+    this.padecimientos = [...this.padecimientos, padecimiento ];
+    console.log(this.padecimientos)
   }
 
   /**
@@ -156,25 +163,19 @@ export class ExpedienteFormularioComponent implements OnInit {
   }
 
   /**
-   * Actualiza el domicilio cuando se producen cambios.
-   * @param {any} domicilio - El nuevo domicilio.
-   */
-  protected onDomicilioChange(domicilio: any) {
-    this.domicilio = domicilio;
-  }
-
-  /**
    * Consulta y asigna los datos de expediente del usuario actual.
    */
-  protected consultarExpedienteWrapper(): void {
+  private async consultarExpedienteWrapper() {
     lastValueFrom(this.expedienteTrackrService.consultarWrapperPorUsuario(this.idUsuario))
     .then((expedienteWrapper: ExpedienteWrapper) => {
 
       // Asigna el objeto al wrapper
       this.paciente = expedienteWrapper.paciente || new Usuario();
-      this.domicilio = expedienteWrapper.domicilio || new Domicilio();
+      this.domicilio = this.obtenerPacienteDomicilio(this.paciente);
       this.expediente = expedienteWrapper.expediente || new ExpedienteTrackR();
-      this.padecimientos = expedienteWrapper.padecimientos || [];
+      this.padecimientos = expedienteWrapper.padecimientos;
+
+      console.log(this.padecimientos)
 
       // Calcular el campo edad
       let fechaNacimiento = new Date(this.expediente.fechaNacimiento);
@@ -207,6 +208,21 @@ export class ExpedienteFormularioComponent implements OnInit {
     // this.idUsuario > 0 ? this.consultarExpedienteWrapper() : this.agregarPadecimiento();
   }
 
+  private obtenerPacienteDomicilio(paciente: Usuario): Domicilio{
+    let domicilio = new Domicilio();
+    domicilio.idPais = paciente.idPais;
+    domicilio.codigoPostal = paciente.codigoPostal;
+    domicilio.idEstado = paciente.idEstado;
+    domicilio.idMunicipio = paciente.idMunicipio;
+    domicilio.idLocalidad = paciente.idLocalidad;
+    domicilio.idColonia = paciente.idColonia;
+    domicilio.calle = paciente.calle;
+    domicilio.numeroExterior = paciente.numeroExterior;
+    domicilio.numeroInterior = paciente.numeroInterior;
+    // TODO: Implementar EntreCalles
+    return domicilio;
+  }
+
   /**
    * Consulta los padecimientos para el selector. 
    */
@@ -214,6 +230,23 @@ export class ExpedienteFormularioComponent implements OnInit {
     lastValueFrom(this.expedientePadecimientoService.consultarParaSelector())
     .then((padecimientos: ExpedientePadecimientoSelectorDTO[]) => {
       this.padecimientoList = padecimientos;
+      console.log(this.padecimientoList)
     })
+  }
+
+  /**
+   * Consulta los géneros para el selector
+   */
+  private consultarGeneros(){
+    this.generoList = [
+      {
+        idGenero: 1,
+        nombre: "Hombre"
+      },
+      {
+        idGenero: 2,
+        nombre: "Mujer"
+      }
+    ]
   }
 }
