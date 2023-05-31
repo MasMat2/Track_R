@@ -100,6 +100,7 @@ export class PacienteComponent implements OnInit {
     lastValueFrom(this.expedienteTrackrService.consultarParaGrid())
     .then((pacientes: UsuarioExpedienteGridDTO[]) => {
       this.pacientes = pacientes;
+      console.log(pacientes)
     });
   }
 

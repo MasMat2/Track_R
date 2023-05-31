@@ -56,27 +56,15 @@ namespace TrackrAPI.Helpers
 
             return roles;
         }
-        public static string ObtenerPadecimientos(this ICollection<ExpedientePadecimiento> padecimientos)
+        public static List<string> ObtenerPadecimientos(this ICollection<ExpedientePadecimiento> padecimientos)
         {
-            string padecimientoString = "";
+            List<string> padecimientoString = new List<string>();
             if (padecimientos.Any())
             {
-                int i = 1;
-
                 foreach (var padecimiento in padecimientos)
                 {
-                    padecimientoString += padecimiento.IdPadecimientoNavigation.Nombre;
-
-                    if (i < padecimientos.Count())
-                    {
-                        padecimientoString += ", ";
-                    }
-                    i++;
+                    padecimientoString.Add(padecimiento.IdPadecimientoNavigation.Nombre);
                 }
-            }
-            else
-            {
-                padecimientoString = "Ninguno";
             }
 
             return padecimientoString;

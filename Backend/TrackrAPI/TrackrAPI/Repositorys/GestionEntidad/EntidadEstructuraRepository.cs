@@ -134,6 +134,8 @@ namespace TrackrAPI.Repositorys.GestionEntidad
             }
 
             return arbol;
+        }
+
         public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarPadecimientosParaSelector()
         {
             return context.EntidadEstructura
