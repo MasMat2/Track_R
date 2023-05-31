@@ -34,7 +34,7 @@
             [totalItems]="elementos.length"
             previousText="Anterior"
             nextText="Siguiente"
-            
+            [(ngModel)]="currentPage"
             [itemsPerPage]="itemsPerPage"
             (pageChanged)="pageChanged($event)"
             (numPages)="3"
