@@ -44,7 +44,7 @@
         [maxlength]="esPaisExtranjero ? null : 5"
         [minlength]="esPaisExtranjero ? null : 5"
         [required]="true"
-        [disabled]="readonly && idPais > 0"
+        [disabled]="readonly || idPais > 0"
         (ngModelChange)="onChangeCodigoPostal() ; "
         autocomplete="off"
         />
@@ -74,7 +74,7 @@
           [placeholder]="placeHolderSelect"
           [notFoundText]="placeHolderNoOptions"
           (ngModelChange)="onChangeEstado() ; "
-          [disabled]="readonly && idPais > 0"
+          [disabled]="readonly || idPais > 0"
         ></ng-select>
       </div>
     </div>
@@ -95,7 +95,7 @@
           [(ngModel)]="domicilio.idMunicipio"
           [placeholder]="placeHolderSelect"
           [notFoundText]="placeHolderNoOptions"
-          [disabled]="readonly && idEstado > 0"
+          [disabled]="readonly || idEstado > 0"
         ></ng-select>
       </div>
     </div>
@@ -116,7 +116,7 @@
           [(ngModel)]="domicilio.idLocalidad"
           [placeholder]="placeHolderSelect"
           [notFoundText]="placeHolderNoOptions"
-          [disabled]="readonly && idEstado > 0"
+          [disabled]="readonly || idEstado > 0"
         ></ng-select>
       </div>
     </div>
@@ -137,7 +137,7 @@
           [(ngModel)]="domicilio.idColonia"
           [placeholder]="placeHolderSelect"
           [notFoundText]="placeHolderNoOptions"
-          [disabled]="readonly && domicilio.codigoPostal?.length != 5"
+          [disabled]="readonly || domicilio.codigoPostal?.length != 5"
         ></ng-select>
       </div>
     </div>

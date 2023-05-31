@@ -2,7 +2,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ExpedienteFormularioComponent as ExpedienteFormularioComponent } from './expediente-formulario.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
@@ -14,7 +14,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
         CommonModule,
         FormsModule,
         SharedModule,
-        BsDatepickerModule
+        BsDatepickerModule,
+        ReactiveFormsModule,
     ]
 })
 export class ExpedienteFormularioModule {}

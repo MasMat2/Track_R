@@ -9,6 +9,7 @@ using System.Transactions;
 using TrackrAPI.Services.Inventario;
 using TrackrAPI.Repositorys.Inventario;
 using System.Collections.Generic;
+using CanalDistAPI.Dtos.Seguridad;
 
 namespace TrackrAPI.Services.Seguridad
 {
@@ -603,6 +604,11 @@ namespace TrackrAPI.Services.Seguridad
         public IEnumerable<UsuarioExpedienteGridDTO> ConsultarUsuarioExpedienteGridDTO()
         {
             return usuarioRepository.ConsultarUsuarioExpedienteGridDTO();
+        }
+
+        public IEnumerable<UsuarioDto> ConsultarPorNombre(string filtro) 
+        {
+            return usuarioRepository.ConsultarPorNombre(filtro);
         }
     }
 }

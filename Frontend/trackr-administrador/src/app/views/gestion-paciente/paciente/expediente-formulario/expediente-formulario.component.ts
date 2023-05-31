@@ -1,3 +1,5 @@
+import { BusquedaExpedienteComponent } from './../busqueda-expediente/busqueda-expediente.component';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,6 +8,7 @@ import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-pa
 import { ExpedienteWrapper } from '@dtos/seguridad/expediente-wrapper';
 import { ExpedientePadecimientoService } from '@http/seguridad/expediente-padecimiento.service';
 import { ExpedienteTrackrService } from '@http/seguridad/expediente-trackr.service';
+import { UsuarioService } from '@http/seguridad/usuario.service';
 import { Domicilio } from '@models/seguridad/domicilio';
 import { ExpedienteTrackR } from '@models/seguridad/expediente-trackr';
 import { Usuario } from '@models/seguridad/usuario';
@@ -14,7 +17,8 @@ import { FormularioService } from '@services/formulario.service';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { GeneralConstant } from '@utils/general-constant';
 import * as Utileria from '@utils/utileria';
-import { lastValueFrom } from 'rxjs';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { from, lastValueFrom, of } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { GeneroSelectorDTO } from './genero-selector';
 
@@ -53,14 +57,21 @@ export class ExpedienteFormularioComponent implements OnInit {
   public placeHolderSelect = GeneralConstant.PLACEHOLDER_DROPDOWN;
   public placeHolderNoOptions = GeneralConstant.PLACEHOLDER_DROPDOWN_NO_OPTIONS;
 
+  public filtro: string;
+  public btnSubmitBusqueda = false;
+
+
   constructor(
     private expedienteTrackrService: ExpedienteTrackrService,
     private expedientePadecimientoService: ExpedientePadecimientoService,
+    private usuarioService: UsuarioService,
     private route: ActivatedRoute,
     private router: Router,
     private encryptionService: EncryptionService,
     private formularioService: FormularioService,
+    private modalService: BsModalService,
     private modalMensajeService: MensajeService,
+    public bsModalRef: BsModalRef,
   ) { }
   /**
    * Inicializa el componente, configura los parámetros de la URL y 
@@ -68,8 +79,11 @@ export class ExpedienteFormularioComponent implements OnInit {
    * Si existe un usuario, consulta su expediente.
    */
   public async ngOnInit(): Promise<void> { 
-    this.consultarGeneros();
-    this.consultarPadecimientos();
+    await Promise.all([
+      this.consultarGeneros(),
+      this.consultarPadecimientos(),
+    ]);
+
     await this.obtenerParametrosURL();
   }
   
@@ -140,13 +154,17 @@ export class ExpedienteFormularioComponent implements OnInit {
    * Agrega un nuevo padecimiento al expediente.
    */
   protected agregarPadecimiento(){
-    let padecimiento = new ExpedientePadecimientoDTO();
+    const padecimiento = new ExpedientePadecimientoDTO();
     padecimiento.idPadecimiento = 0;
-    padecimiento.fechaDiagnostico = new Date()
+    padecimiento.fechaDiagnostico = new Date();
     this.padecimientos = [...this.padecimientos, padecimiento ];
-    console.log(this.padecimientos)
+    // this.padecimientos.push(padecimiento); NO FUNCIONA
   }
 
+  trackByFunction(index: number, item: ExpedientePadecimientoDTO): number {
+    return index; // o item.id si existe tal propiedad
+  }
+  
   /**
    * Elimina un padecimiento específico del expediente.
    * @param {number} index - El índice del padecimiento a eliminar.
@@ -173,9 +191,16 @@ export class ExpedienteFormularioComponent implements OnInit {
       this.paciente = expedienteWrapper.paciente || new Usuario();
       this.domicilio = this.obtenerPacienteDomicilio(this.paciente);
       this.expediente = expedienteWrapper.expediente || new ExpedienteTrackR();
-      this.padecimientos = expedienteWrapper.padecimientos;
+      this.expediente.fechaNacimiento = new Date(this.expediente.fechaNacimiento);
 
-      console.log(this.padecimientos)
+      this.padecimientos = expedienteWrapper.padecimientos.map(padecimiento => {
+        let padecimientoDTO = new ExpedientePadecimientoDTO();
+        padecimientoDTO.idPadecimiento = padecimiento.idPadecimiento;
+        padecimientoDTO.fechaDiagnostico = new Date(padecimiento.fechaDiagnostico);
+        
+        return padecimientoDTO;
+      });
+
 
       // Calcular el campo edad
       let fechaNacimiento = new Date(this.expediente.fechaNacimiento);
@@ -227,17 +252,84 @@ export class ExpedienteFormularioComponent implements OnInit {
    * Consulta los padecimientos para el selector. 
    */
   private consultarPadecimientos(){
-    lastValueFrom(this.expedientePadecimientoService.consultarParaSelector())
+    return lastValueFrom(this.expedientePadecimientoService.consultarParaSelector())
     .then((padecimientos: ExpedientePadecimientoSelectorDTO[]) => {
       this.padecimientoList = padecimientos;
-      console.log(this.padecimientoList)
+      // console.log(this.padecimientoList)
     })
+  }
+
+  private agregarUsuario(){
+
+  }
+
+  public async buscar(): Promise<void> {
+    let resultadoUsuarios: Usuario[] = [];
+
+    this.btnSubmitBusqueda = true;
+
+    await lastValueFrom(
+    this.usuarioService.consultarPorNombre(this.filtro)).then(
+      (data) => { 
+        resultadoUsuarios = data != null ? data : [];
+        }
+    )
+    .catch(
+      (error) => {
+        this.btnSubmitBusqueda = false;
+      }
+    );
+
+    if (resultadoUsuarios.length == 0) {
+      this.modalMensajeService.modalError("No se encontraron resultados");
+      this.btnSubmitBusqueda = false;
+    }
+    else if (resultadoUsuarios.length == 1) {
+      this.paciente = resultadoUsuarios[0];
+      this.idUsuario = this.paciente.idUsuario;
+      this.btnSubmitBusqueda = false;
+      this.filtro = "";
+    }
+    else {
+      let elementosBusqueda: Usuario[] = resultadoUsuarios.map((elem) => {
+        let item = new Usuario();
+
+        item.idUsuario = elem.idUsuario;
+        item.nombre = elem.nombre;
+
+        return item;
+      });
+
+      const initialState = {
+        accion: GeneralConstant.MODAL_ACCION_EDITAR,
+        elementos: elementosBusqueda,
+      };
+
+      this.bsModalRef = this.modalService.show(
+        BusquedaExpedienteComponent,
+        {
+          initialState,
+          ...GeneralConstant.CONFIG_MODAL_DEFAULT,
+        }
+      );
+
+      this.bsModalRef.content.onClose = (seleccionado: Usuario) => {
+        if (seleccionado) {
+          this.paciente = resultadoUsuarios.find((elem) => elem.idUsuario == seleccionado.idUsuario)!;
+          this.idUsuario = this.paciente.idUsuario;
+          this.filtro = "";
+        }
+
+        this.btnSubmitBusqueda = false;
+        this.bsModalRef.hide();
+      };
+    }
   }
 
   /**
    * Consulta los géneros para el selector
    */
-  private consultarGeneros(){
+  private consultarGeneros() {
     this.generoList = [
       {
         idGenero: 1,
@@ -247,6 +339,9 @@ export class ExpedienteFormularioComponent implements OnInit {
         idGenero: 2,
         nombre: "Mujer"
       }
-    ]
+    ];
+
+    // NOTA: temporal para simular asincronidad mientras se implementa el catálogo
+    return lastValueFrom(of(this.generoList));
   }
 }

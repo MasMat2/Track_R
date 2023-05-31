@@ -40,5 +40,6 @@ namespace TrackrAPI.Repositorys.Seguridad
         public IEnumerable<Usuario> ConsultarParaReporteProductividad(int idCompania);
         public Usuario ConsultarDependencias(int idUsuario);
         public IEnumerable<UsuarioExpedienteGridDTO> ConsultarUsuarioExpedienteGridDTO();
+        public IEnumerable<UsuarioDto> ConsultarPorNombre(string filtro);
     }
 }

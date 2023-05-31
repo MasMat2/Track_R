@@ -134,4 +134,8 @@ export class UsuarioService {
     return this.http.get<UsuarioExpedienteGridDTO[]>(this.url + `consultarUsuarioExpedienteGridDTO`);
   }
 
+  consultarPorNombre(nombre: string) {
+    return this.http.get<Usuario[]>(this.url + `consultarPorNombre/${nombre}`);
+  }
+
 }

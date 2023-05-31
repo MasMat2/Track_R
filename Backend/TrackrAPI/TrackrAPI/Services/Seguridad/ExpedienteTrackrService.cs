@@ -52,10 +52,12 @@ namespace TrackrAPI.Services.Seguridad
             foreach (var padecimientoDTO in expedienteWrapper.padecimientos)
             {
                 var padecimiento = new ExpedientePadecimiento();
-                padecimiento.IdPadecimiento = padecimientoDTO.IdPadecimiento;
-                padecimiento.FechaDiagnostico = padecimientoDTO.FechaDiagnostico;
-                padecimiento.IdPadecimiento = padecimientoDTO.IdPadecimiento;
                 padecimiento.IdExpediente = expedienteTrackr.IdExpediente;
+                if(padecimientoDTO.IdPadecimiento != 0)
+                {
+                    padecimiento.IdPadecimiento = padecimientoDTO.IdPadecimiento;
+                }
+                padecimiento.FechaDiagnostico = padecimientoDTO.FechaDiagnostico;
 
 
                 if (padecimiento.IdPadecimiento == 0)
@@ -102,7 +104,6 @@ namespace TrackrAPI.Services.Seguridad
                     var padecimiento  = new ExpedientePadecimiento();
                     padecimiento.IdPadecimiento = padecimientoDTO.IdPadecimiento;
                     padecimiento.FechaDiagnostico = padecimientoDTO.FechaDiagnostico;
-                    padecimiento.IdPadecimiento = padecimientoDTO.IdPadecimiento;
                     padecimiento.IdExpediente = expedienteTrackr.IdExpediente;
 
 

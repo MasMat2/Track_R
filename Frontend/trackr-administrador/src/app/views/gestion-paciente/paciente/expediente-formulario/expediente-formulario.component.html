@@ -39,6 +39,34 @@
             </div>
           </div>
         </div>
+        <div class="form-group col-md-8">
+          <label class="label-input required-label">Producto/Servicio (SAT)</label>
+          <div class="d-flex">
+            <input
+              class="col-8"
+              #filtroField="ngModel"
+              [(ngModel)]="filtro"
+              id="filtroField"
+              name="filtroName"
+              class="form-control"
+              type="text"
+              maxlength="50"
+              autocomplete="off"
+              placeholder="Clave / Descripción"
+            />
+
+            <button type="button" (click)="buscar()" [disabled]="btnSubmitBusqueda || !filtro" class="col-2 btn-terceario btn-margin-left botonBuscar">
+              <i class="fas fa-search"></i>
+            </button>
+
+            <!-- <div class="contenedor-agregar" (click)="agregarUsuario()">
+              <i class="fas fa-plus-circle"></i><span>Agregar</span>
+            </div> -->
+
+          </div>
+        </div>
+      </div>
+    <div class="row">
 
         <!-- Fecha Alta Expediente -->
         <div class="col-md-4">
@@ -172,6 +200,7 @@
                 maxlength="50"
                 autocomplete="off"
                 required
+                bsDatepicker
               />
               <div *ngIf="fechaNacimiento.errors?.['required'] && fechaNacimiento.touched" class="error">
                 La fecha de nacimiento es requerida
@@ -334,8 +363,8 @@
         <div
           class="row"
           *ngFor="
-            let padecimiento of padecimientos;
-            let i = index
+            let pad of padecimientos;
+            let i = index;
           "
         >
           <div class="col-md-4">
@@ -343,12 +372,12 @@
               <label class="label-input required-label">Tipo de Padecimiento</label>
                 <ng-select
                   #padecimiento="ngModel"
-                  name="padecimientoName"
+                  [name]="'padecimientoName' + i"
                   class="select-custom"
                   [items]="padecimientoList"
                   bindLabel="nombre"
                   bindValue="idPadecimiento"
-                  [(ngModel)]="padecimientos[i].idPadecimiento"
+                  [(ngModel)]="pad.idPadecimiento"
                   [placeholder]="placeHolderSelect"
                   [notFoundText]="placeHolderNoOptions"
               ></ng-select>
@@ -359,14 +388,13 @@
             <div class="form-group">
               <label class="label-input required-label">Fecha Diagnóstico</label>
               <input
-                  #fechaDiagnostico="ngModel"
                   type="text"
                   class="form-control"
                   autocomplete="off"
                   placeholder="dd/mm/aaaa"
-                  name="fechaDiagnosticoName"
-                  [(ngModel)]="padecimientos[i].fechaDiagnostico"
-                  
+                  [name]="'fechaDiagnosticoName' + i"
+                  [(ngModel)]="pad.fechaDiagnostico"
+                  bsDatepicker
                 />
             </div>
           </div>
@@ -390,6 +418,7 @@
         </div>
       </div>
 
+      <!-- Botones -->
       <div class="modal-footer">
         <div class="text-center">
           <button type ="button" class="btn-secundario mr-3"(click)="cancelar();">Cancelar</button>

@@ -254,5 +254,11 @@ namespace TrackrAPI.Controllers.Seguridad
         {
             return usuarioService.ConsultarUsuarioExpedienteGridDTO();
         }
+
+        [HttpGet("consultarPorNombre/{nombre}")]
+        public IEnumerable<UsuarioDto> ConsultarPorNombre(string nombre)
+        {
+            return usuarioService.ConsultarPorNombre(nombre);
+        }
     }
 }
