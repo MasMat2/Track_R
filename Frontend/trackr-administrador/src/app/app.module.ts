@@ -15,6 +15,8 @@ import { LoginService } from './shared/services/seguridad/login.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { TableModule } from 'primeng/table';
+import { FormsModule } from '@angular/forms';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { TableModule } from 'primeng/table';
     OverlayModule,
     MatMenuModule,
     MatSidenavModule,
-    TableModule
+    TableModule,
+    PaginationModule.forRoot(),
+    FormsModule
   ],
   providers: [ LoginService,
     AdministradorAuthService,

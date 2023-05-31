@@ -49,5 +49,11 @@ namespace TrackrAPI.Controllers.GestionEntidad
         {
             entidadEstructuraService.Eliminar(idEntidadEstructura);
         }
+
+        [HttpGet("consultarPadecimientosParaSelector")]
+        public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarPadecimientosParaSelector()
+        {
+            return entidadEstructuraService.ConsultarPadecimientosParaSelector();
+        }
     }
 }

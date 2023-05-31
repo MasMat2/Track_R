@@ -107,5 +107,10 @@ namespace TrackrAPI.Services.GestionEntidad
                 entidadEstructuraRepository.Eliminar(estructura);
             }
         }
+
+        public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarPadecimientosParaSelector()
+        {
+            return entidadEstructuraRepository.ConsultarPadecimientosParaSelector();
+        }
     }
 }

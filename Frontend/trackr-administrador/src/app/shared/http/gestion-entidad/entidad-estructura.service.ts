@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { JerarquiaEstructuraArbol } from '@models/contabilidad/jerarquia-estructura-arbol';
+import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
 import { EntidadEstructura } from '@models/gestion-entidad/entidad-estructura';
 import { Observable } from 'rxjs';
 
@@ -23,6 +23,10 @@ export class EntidadEstructuraService {
 
   public eliminar(idEntidadEstructura: number): Observable<void> {
     return this.http.delete<void>(this.dataUrl + `eliminar/${idEntidadEstructura}`);
+  }
+
+  public consultarPadecimientosParaSelector(): Observable<ExpedientePadecimientoSelectorDTO[]> {
+    return this.http.get<ExpedientePadecimientoSelectorDTO[]>(this.dataUrl + `consultarPadecimientosParaSelector/`);
   }
   
 }

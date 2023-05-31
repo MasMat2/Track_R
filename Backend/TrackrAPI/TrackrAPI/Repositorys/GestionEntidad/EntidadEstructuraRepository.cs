@@ -4,6 +4,7 @@ using TrackrAPI.Dtos.GestionEntidad;
 using TrackrAPI.Models;
 using System.Collections.Generic;
 using System.Linq;
+using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Repositorys.GestionEntidad
 {
@@ -133,6 +134,16 @@ namespace TrackrAPI.Repositorys.GestionEntidad
             }
 
             return arbol;
+        public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarPadecimientosParaSelector()
+        {
+            return context.EntidadEstructura
+                .Where(e => (e.Tabulacion == true) && 
+                            (e.IdEntidadNavigation.Clave == GeneralConstant.ClaveEntidadPadecimiento))
+                .Select(e => new ExpedientePadecimientoSelectorDTO
+                {
+                    IdPadecimiento = e.IdEntidadEstructura,
+                    Nombre = e.Nombre,
+                });
         }
     }
 }

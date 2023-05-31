@@ -17,6 +17,8 @@ namespace TrackrAPI.Models
         public decimal Peso { get; set; }
         public decimal Cintura { get; set; }
         public decimal Estatura { get; set; }
+        public int IdGenero { get; set; }
+        public DateTime FechaAlta { get; set; }
 
         public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
         public virtual ICollection<ExpedientePadecimiento> ExpedientePadecimiento { get; set; }

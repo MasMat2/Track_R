@@ -603,6 +603,13 @@ export class CodigoAcceso {
   public static EDITAR_ENTIDAD = 'APENTI2000';
   public static ELIMINAR_ENTIDAD = 'APENTI3000';
 
+  // Gestión de Pacientes:
+  public static CONSULTAR_EXPEDIENTE_PACIENTE = 'APEXPA0000';
+  public static AGREGAR_EXPEDIENTE_PACIENTE = 'APEXPA1000';
+  public static EDITAR_EXPEDIENTE_PACIENTE = 'APEXPA2000';
+  public static ELIMINAR_EXPEDIENTE_PACIENTE = 'APEXPA3000';
+
+
   //Acceso a proyectos
 
   public static SISTEMA_DISTRIBUCION = 'APSDIT0000';

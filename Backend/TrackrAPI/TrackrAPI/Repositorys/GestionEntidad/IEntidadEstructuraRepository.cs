@@ -14,5 +14,6 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         IEnumerable<EntidadEstructuraDto> ConsultarHijos(int idEntidadEstructuraPadre);
         List<EntidadEstructura> ConsultarHijosDeEstructura(int idEntidadEstructuraPadre);
         IEnumerable<EntidadEstructuraDto> ConsultarArbol(int idEntidad);
+        IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarPadecimientosParaSelector();
     }
 }

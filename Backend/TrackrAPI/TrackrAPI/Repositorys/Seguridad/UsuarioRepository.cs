@@ -560,5 +560,20 @@ namespace TrackrAPI.Repositorys.Seguridad
                 .Where(u => u.IdUsuario == idUsuario)
                 .FirstOrDefault();
         }
+
+        public IEnumerable<UsuarioDto> ConsultarPorNombre(string filtro)
+        {
+            return context.Usuario
+                .Where(u => (u.Nombre +
+                                " " + u.ApellidoPaterno +
+                                " " + u.ApellidoMaterno).ToLower().Contains((filtro ?? "").ToLower()) || string.IsNullOrEmpty(filtro) || filtro == null)
+                .Select(u => new UsuarioDto
+                {
+                    IdUsuario = u.IdUsuario,
+                    NombreCompleto = u.ObtenerNombreCompleto(),
+                    Correo = u.Correo
+                })
+                .ToList();
+        }
     }
 }

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-grid-dto';
 import { Usuario } from '@models/seguridad/usuario';
 import { UsuarioEncabezado } from '@models/seguridad/usuario-encabezado';
 import { Observable } from 'rxjs';
@@ -127,6 +128,11 @@ export class UsuarioService {
 
   consultarParaSelector() {
     return this.http.get<Usuario[]>(this.url + `consultarParaSelector`);
+  }
+
+
+  consultarPorNombre(nombre: string) {
+    return this.http.get<Usuario[]>(this.url + `consultarPorNombre/${nombre}`);
   }
 
 }

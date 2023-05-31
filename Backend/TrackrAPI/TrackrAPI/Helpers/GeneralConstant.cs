@@ -294,6 +294,9 @@
         public static readonly string ClaveUnidadActividad = "ACT";
         public static readonly string ClaveNingunaMoneda = "XXX";
 
+        // ===== Gestión de Entidad Estructura ======= //
+        public static readonly string ClaveEntidadPadecimiento = "003";
+
         // ===== Contabilidad ======= //
         public static readonly string MensajeErrorReferenciaCircular = "La fórmula contiene una referencia circular y no se puede calcular correctamente. "
         + "Las referencias circulares son las referencias incluidas en una fórmula que dependen de los resultados de esa misma fórmula.";

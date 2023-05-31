@@ -248,5 +248,11 @@ namespace TrackrAPI.Controllers.Seguridad
         {
             return usuarioService.ConsultarParaSelector();
         }
+
+        [HttpGet("consultarPorNombre/{nombre}")]
+        public IEnumerable<UsuarioDto> ConsultarPorNombre(string nombre)
+        {
+            return usuarioService.ConsultarPorNombre(nombre);
+        }
     }
 }

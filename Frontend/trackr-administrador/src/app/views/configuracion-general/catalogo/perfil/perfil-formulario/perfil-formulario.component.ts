@@ -85,7 +85,7 @@ export class PerfilFormularioComponent implements OnInit {
     const idPerfil = Number(params.i);
 
     this.perfil.idJerarquiaAcceso = idJerarquiaAcceso > 0 ? idJerarquiaAcceso : 0;
-    this.perfil.idPerfil = idPerfil > 0 ? idPerfil : 0;
+    this.perfil.idPerfil = idPerfil > 0 ? idPerfil : -1;
 
     await Promise.all([
       this.consultarJerarquiaArbolEstructura(idJerarquiaAcceso),

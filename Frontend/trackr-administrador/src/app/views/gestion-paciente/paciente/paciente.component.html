@@ -1,106 +1,69 @@
 <div class="modal-content">
   <div class="modal-header">
     <div>Pacientes</div>
+    
   </div>
 
   <div class="container-fluid">
-
+    <div class="contenedor-agregar" (click)="agregar()">
+      <i class="fas fa-plus-circle"></i><span>Agregar</span>
+    </div>
+    <div style="text-align: right">
+      <!-- Botón Vista Cuadrícula  -->
+      <button
+        type="button"
+        class="btn"
+        [ngClass]="isVistaCuadricula ? 'icono-primario-activo' : 'icono-primario'"
+        (click)="isVistaCuadricula = true"
+      >
+      <i class="fa-solid fa-border-all fa-lg"></i>
+      </button>
+      
+      <!-- Botón Vista de Lista -->
+      <button
+        type="button"
+        class="btn"
+        [ngClass]="isVistaCuadricula ? 'icono-primario' : 'icono-primario-activo'"
+        (click)="isVistaCuadricula = false"
+        title="Vista de Lista"
+      >
+      
+      <i class="fa-solid fa-list"></i>
+      </button>
+      
+      <!-- Botón Descargar Excel -->
+      <button
+        type="button"
+        class="btn"
+        (click)="descargarExcel()"
+      >
+      <img
+        class="grid-download"
+        src="assets/img/svg/ico-15x15-Descargar.svg"
+        title="Descargar Excel"
+      />
+      </button>
+    </div>
     <div class="row">
       <div class="col-12">
-        <p-table
-          class="primeng-table"
-          [value]="pacientes"
-          dataKey="idProyectoElementoTecnica"
-          *ngIf="pacientes"
-          [autoLayout]="true"
-        >
-          <ng-template pTemplate="caption">
-            <div style="text-align: right">
-              <button
-                type="button"
-                class="btn"
-                (click)="descargarExcel()"
-              >
-              <img
-                class="grid-download"
-                src="assets/img/svg/ico-15x15-Descargar.svg"
-                title="Descargar Excel"
-              />
-              </button>
-            </div>
-          </ng-template>
+        <ng-container *ngIf="isVistaCuadricula; else vistaLista">
+          <app-paciente-vista-cuadricula
+            [pacientes]="pacientes"
+            (event)="onGridClick($event)"
+            >
+          </app-paciente-vista-cuadricula>
+        </ng-container>
+        <ng-template #vistaLista>
+          <app-grid-general
+            [headerName]="HEADER_GRID"
+            [data]="pacientes"
+            [children]="columns"
+            (event)="onGridClick($event)"
+          >
+          </app-grid-general>
+        </ng-template>
+        
 
-          <ng-template pTemplate="header">
-            <tr class="table-header">
-              <th class="px-0">Fotografía</th>
-              <th>Paciente</th>
-              <th>Patologías</th>
-              <th>Glucosa</th>
-              <th>Presión</th>
-              <th></th>
-            </tr>
-          </ng-template>
-
-          <ng-template pTemplate="body" let-paciente>
-            <tr>
-              <td class="img-container p-0">
-                <img [src]="
-                  paciente.imagenBase64 != undefined
-                    ? (paciente.imagenBase64 | urlImagen : paciente?.tipoMime)
-                    : 'assets/img/default-user.jpg'
-                  "
-                >
-              </td>
-              <td>
-                <div style="
-                  width: 5px;
-                  aspect-ratio: 1;
-                  background-color: green;
-                ">
-                </div>
-                {{ paciente.nombreCompleto }}
-              </td>
-              <td>
-                <div class="d-flex">
-                  <span *ngFor="let patologia of paciente.patologias"
-                    style="background-color: #ededed;"
-                    class="m-1 p-1"
-                  >
-                    {{ patologia }}
-                  </span>
-                </div>
-              </td>
-              <td>{{ paciente.glucosa }}</td>
-              <td>{{ paciente.presionSistolica }}/{{ paciente?.presionAsistolica }}</td>
-              <td class="text-center px-0">
-                <button
-                  type="button"
-                  class="btn"
-                  (click)="ver(paciente)"
-                  title="Ver"
-                >
-                  <i class="fa fa-lg fa-check-circle icono-primario"></i>
-                </button>
-                <button
-                  type="button"
-                  class="btn"
-                  (click)="editar(paciente)"
-                  title="Editar"
-                >
-                  <i class="fa fa-lg fa-info-circle icono-primario"></i>
-                </button>
-                <button
-                  type="button"
-                  class="btn"
-                  (click)="eliminar(paciente)"
-                  title="Eliminar"
-                >
-                  <i class="fa fa-lg fa-eye icono-primario"></i>
-                </button>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
       </div>
     </div>
   </div>
