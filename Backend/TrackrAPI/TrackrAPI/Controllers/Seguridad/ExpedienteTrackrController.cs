@@ -24,15 +24,15 @@ namespace TrackrAPI.Controllers.Seguridad
         }
 
         [HttpPost("agregarWrapper")]
-        public void AgregarWrapper(ExpedienteWrapper expedienteWrapper)
+        public int AgregarWrapper(ExpedienteWrapper expedienteWrapper)
         {
-            expedienteTrackrService.AgregarWrapper(expedienteWrapper);
+            return expedienteTrackrService.AgregarWrapper(expedienteWrapper);
         }
 
         [HttpPost("editarWrapper")]
-        public void EditarWrapper(ExpedienteWrapper expedienteWrapper)
+        public int EditarWrapper(ExpedienteWrapper expedienteWrapper)
         {
-            expedienteTrackrService.EditarWrapper(expedienteWrapper);
+            return expedienteTrackrService.EditarWrapper(expedienteWrapper);
         }
 
         [HttpGet("consultarParaGrid/")]

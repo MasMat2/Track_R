@@ -2859,8 +2859,6 @@ namespace TrackrAPI.Models
 
                 entity.ToTable("ExpedientePadecimiento", "Trackr");
 
-                entity.Property(e => e.IdExpedientePadecimiento).ValueGeneratedNever();
-
                 entity.Property(e => e.FechaDiagnostico).HasColumnType("date");
 
                 entity.HasOne(d => d.IdExpedienteNavigation)
@@ -2908,6 +2906,8 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.Cintura).HasColumnType("decimal(6, 2)");
 
                 entity.Property(e => e.Estatura).HasColumnType("decimal(6, 2)");
+
+                entity.Property(e => e.FechaAlta).HasColumnType("date");
 
                 entity.Property(e => e.FechaNacimiento).HasColumnType("date");
 

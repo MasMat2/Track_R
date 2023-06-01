@@ -104,7 +104,7 @@ namespace TrackrAPI.Services.Seguridad
             foreach (var padecimientoDTO in padecimientos)
             {
                 var padecimiento = new ExpedientePadecimiento();
-                padecimiento.IdExpedientePadecimiento = padecimientoDTO.IdExpedientePadecimiento;
+
                 padecimiento.IdPadecimiento = padecimientoDTO.IdPadecimiento;
                 padecimiento.FechaDiagnostico = padecimientoDTO.FechaDiagnostico;
                 padecimiento.IdExpediente = idExpediente;
@@ -114,15 +114,8 @@ namespace TrackrAPI.Services.Seguridad
                     continue;
                 }
 
-
-                if (padecimiento.IdExpedientePadecimiento == 0)
-                { 
-                    expedientePadecimientoRepository.Agregar(padecimiento);
-                }
-                else
-                {
-                    expedientePadecimientoRepository.Editar(padecimiento);
-                }
+                expedientePadecimientoRepository.Agregar(padecimiento);
+                
             }
         }
 
