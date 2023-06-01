@@ -138,10 +138,16 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
     this.expedienteWrapper.padecimientos = this.padecimientos;
     this.expedienteWrapper.paciente.idUsuario = this.paciente.idUsuario;
     if (this.accion === GeneralConstant.MODAL_ACCION_AGREGAR) {
-      this.agregar();
+      if(this.expedienteWrapper.expediente.idExpediente > 0){
+        this.editar();
+      }
+      else{
+        this.agregar();
+      }
     } else if (this.accion === GeneralConstant.MODAL_ACCION_EDITAR) {
       this.editar();
     }
+    this.consultarExpedienteWrapper();
   }
 
   /**

@@ -46,8 +46,11 @@ namespace TrackrAPI.Services.Seguridad
         public int AgregarWrapper(ExpedienteWrapper expedienteWrapper)
         {
             ExpedienteTrackr expedienteTrackr = expedienteWrapper.expediente;
+            expedienteTrackr.IdUsuario = expedienteWrapper.paciente.IdUsuario;
 
             expedienteTrackr = expedienteTrackrRepository.Agregar(expedienteTrackr);
+            expedienteTrackr.Numero = expedienteTrackr.IdExpediente.ToString().PadLeft(6, '0');
+            expedienteTrackrRepository.Editar(expedienteTrackr);
 
             AgregarPadecimientos(expedienteWrapper.padecimientos, expedienteTrackr.IdExpediente);
             return expedienteTrackr.IdExpediente;
