@@ -1,0 +1,481 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div>Pacientes</div>
+  </div>
+
+  <form
+    (keydown.enter)="$event.preventDefault()"
+    #formulario="ngForm"
+    (ngSubmit)="enviarFormulario(formulario)"
+    novalidate="novalidate"
+  >
+    <div class="cuerpo-contenedor" id="modal">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <!-- Número de Expediente -->
+            <label class="label-input required-label">Núm. Expediente</label>
+            <div>
+              <input
+                #numeroExpediente="ngModel"
+                [(ngModel)]="expediente.numero"
+                name="numeroExpediente"
+                class="form-control"
+                type="text"
+                maxlength="20"
+                autocomplete="off"
+                required
+                appFormatoSoloAlfanumerico
+                autofocus
+                [disabled]="true"
+              />
+              <div
+                *ngIf="numeroExpediente.errors?.['required'] && numeroExpediente.touched"
+                class="error"
+              >
+                El número de expediente es requerido
+              </div>
+              <div
+                *ngIf="numeroExpediente.errors?.['formatoSoloAlfanumerico']"
+                class="error"
+              >
+                El formato de la clave es inválido
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label class="label-input required-label"
+            >Buscar Usuario</label
+          >
+          <div>
+            <input
+              #filtroField="ngModel"
+              [(ngModel)]="filtro"
+              id="filtroField"
+              name="filtroName"
+              class="form-control"
+              type="text"
+              maxlength="50"
+              autocomplete="off"
+              placeholder="Nombre / RFC"
+            />
+          </div>
+        </div>
+
+          <div class="col-md-2 d-flex align-items-center">
+            <button
+              type="button"
+              (click)="buscar()"
+              [disabled]="btnSubmitBusqueda || !filtro"
+              class="btn-terceario btn-margin-left botonBuscar"
+            >
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+
+          <div class="contenedor-agregar col-md-2 d-flex align-items-center" (click)="agregarUsuario()">
+            <i class="fas fa-plus-circle"></i><span>Agregar</span>
+          </div>
+      </div>
+      <div class="row">
+        <!-- Fecha Alta Expediente -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label"
+              >Fecha Alta Expediente</label
+            >
+            <div>
+              <input
+                #fechaAlta="ngModel"
+                [(ngModel)]="expediente.fechaAlta"
+                name="fechaAlta"
+                class="form-control"
+                type="text"
+                maxlength="50"
+                autocomplete="off"
+                required
+                [disabled]="true"
+                bsDatepicker
+              />
+              <div
+                *ngIf="fechaAlta.errors?.['required'] && fechaAlta.touched"
+                class="error"
+              >
+                La Fecha Alta Exepediente es requerida
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Género -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Género</label>
+            <div>
+              <ng-select
+                #genero="ngModel"
+                name="generoName"
+                class="select-custom"
+                [items]="generoList"
+                bindLabel="nombre"
+                bindValue="idGenero"
+                [(ngModel)]="expediente.idGenero"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+              <div
+                *ngIf="genero.errors?.['required'] && genero.touched"
+                class="error"
+              >
+                El género es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Nombres -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Nombres</label>
+            <div>
+              <input
+                #nombre="ngModel"
+                [(ngModel)]="paciente.nombre"
+                name="nombre"
+                class="form-control"
+                type="text"
+                maxlength="50"
+                autocomplete="off"
+                required
+                [disabled]="true"
+              />
+              <div
+                *ngIf="nombre.errors?.['required'] && nombre.touched"
+                class="error"
+              >
+                El nombre es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Apellido Paterno -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Apellido Paterno</label>
+            <div>
+              <input
+                #apellidoPaterno="ngModel"
+                [(ngModel)]="paciente.apellidoPaterno"
+                name="apellidoPaterno"
+                class="form-control"
+                type="text"
+                maxlength="50"
+                autocomplete="off"
+                required
+                [disabled]="true"
+              />
+              <div
+                *ngIf="apellidoPaterno.errors?.['required'] && apellidoPaterno.touched"
+                class="error"
+              >
+                El apellido paterno es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Apellido Materno -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Apellido Materno</label>
+            <div>
+              <input
+                #apellidoMaterno="ngModel"
+                [(ngModel)]="paciente.apellidoMaterno"
+                name="apellidoMaterno"
+                class="form-control"
+                type="text"
+                maxlength="50"
+                autocomplete="off"
+                required
+                [disabled]="true"
+              />
+              <div
+                *ngIf="apellidoMaterno.errors?.['required'] && apellidoMaterno.touched"
+                class="error"
+              >
+                El apellido materno es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Apellido Paterno -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label"
+              >Fecha de Nacimiento</label
+            >
+            <div>
+              <input
+                #fechaNacimiento="ngModel"
+                [(ngModel)]="expediente.fechaNacimiento"
+                name="fechaNacimiento"
+                class="form-control"
+                type="text"
+                maxlength="50"
+                autocomplete="off"
+                (ngModelChange)="calcularEdad()"
+                required
+                bsDatepicker
+              />
+              <div
+                *ngIf="fechaNacimiento.errors?.['required'] && fechaNacimiento.touched"
+                class="error"
+              >
+                La fecha de nacimiento es requerida
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Edad</label>
+            <div>
+              <input
+                #edad="ngModel"
+                [(ngModel)]="expediente.edad"
+                name="edad"
+                class="form-control"
+                type="text"
+                maxlength="50"
+                autocomplete="off"
+                [disabled]="true"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Teléfono Móvil</label>
+            <div>
+              <input
+                #telefonoMovil="ngModel"
+                [(ngModel)]="paciente.telefonoMovil"
+                name="telefonoMovil"
+                class="form-control"
+                type="text"
+                maxlength="50"
+                autocomplete="off"
+                required
+                [disabled]="true"
+              />
+              <div
+                *ngIf="telefonoMovil.errors?.['required'] && telefonoMovil.touched"
+                class="error"
+              >
+                El teléfono móvil es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Correo</label>
+            <div>
+              <input
+                #correo="ngModel"
+                [(ngModel)]="paciente.correo"
+                name="correo"
+                class="form-control"
+                type="text"
+                maxlength="50"
+                autocomplete="off"
+                required
+                [disabled]="true"
+              />
+              <div
+                *ngIf="correo.errors?.['required'] && correo.touched"
+                class="error"
+              >
+                El correo es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="label-input required-label">Peso kg</label>
+            <div>
+              <input
+                #peso="ngModel"
+                [(ngModel)]="expediente.peso"
+                name="peso"
+                class="form-control"
+                type="text"
+                maxlength="50"
+                autocomplete="off"
+                required
+              />
+              <div
+                *ngIf="peso.errors?.['required'] && peso.touched"
+                class="error"
+              >
+                El peso es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="label-input required-label">Cintura cm</label>
+            <div>
+              <input
+                #cintura="ngModel"
+                [(ngModel)]="expediente.cintura"
+                name="cintura"
+                class="form-control"
+                type="text"
+                maxlength="50"
+                autocomplete="off"
+                required
+              />
+              <div
+                *ngIf="cintura.errors?.['required'] && cintura.touched"
+                class="error"
+              >
+                La cintura es requerida
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Estatura</label>
+            <div>
+              <input
+                #estatura="ngModel"
+                [(ngModel)]="expediente.estatura"
+                name="estatura"
+                class="form-control"
+                type="text"
+                maxlength="50"
+                autocomplete="off"
+                required
+              />
+              <div
+                *ngIf="estatura.errors?.['required'] && estatura.touched"
+                class="error"
+              >
+                La estatura es requerida
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subseccion">Domicilio</div>
+
+      <app-domicilio-formulario [domicilio]="domicilio" [readonly]="true">
+      </app-domicilio-formulario>
+
+      <!-- Padecimientos -->
+
+      <div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="section-title">
+              <label for="">Padecimientos</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngFor="let pad of padecimientos; let i = index">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label"
+                >Tipo de Padecimiento</label
+              >
+              <ng-select
+                #padecimiento="ngModel"
+                [name]="'padecimientoName' + i"
+                class="select-custom"
+                [items]="padecimientoList"
+                bindLabel="nombre"
+                bindValue="idPadecimiento"
+                [(ngModel)]="pad.idPadecimiento"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label"
+                >Fecha Diagnóstico</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                autocomplete="off"
+                placeholder="dd/mm/aaaa"
+                [name]="'fechaDiagnosticoName' + i"
+                [(ngModel)]="pad.fechaDiagnostico"
+                bsDatepicker
+              />
+            </div>
+          </div>
+
+          <div class="col-md-1">
+            <button
+              type="button"
+              class="dynamicButton btn-plus"
+              (click)="agregarPadecimiento()"
+            >
+              <i class="fas fa-plus-circle"></i>
+            </button>
+            <button
+              type="button"
+              class="dynamicButton btn-minus"
+              (click)="eliminarPadecimiento(i)"
+            >
+              <i class="fas fa-minus-circle"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="modal-footer">
+        <div class="text-center">
+          <button
+            type="button"
+            class="btn-secundario mr-3"
+            (click)="cancelar()"
+          >
+            Cancelar
+          </button>
+          <button
+            [disabled]="btnSubmit"
+            type="submit"
+            class="btn-primario btn-margin-left"
+          >
+            Guardar
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

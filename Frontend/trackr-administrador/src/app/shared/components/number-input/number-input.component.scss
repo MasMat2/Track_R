@@ -1,0 +1,35 @@
+@import 'variables';
+
+.flecha-abajo {
+  cursor: pointer;
+
+  content: ' ';
+  display: block;
+  position: absolute;
+
+  right: 15px;
+  bottom: 8px;
+
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: $color-primario transparent transparent transparent;
+  border-width: 8px 5px 0 5px;
+}
+
+.flecha-arriba {
+  cursor: pointer;
+
+  content: ' ';
+  display: block;
+  position: absolute;
+
+  top: 8px;
+  right: 15px;
+
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: transparent transparent $color-primario transparent;
+  border-width: 0 5px 8px 5px;
+}

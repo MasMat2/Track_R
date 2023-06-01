@@ -1,32 +1,21 @@
-import { SharedModule } from 'src/app/shared/shared.module';
-import { ExpedienteFormularioComponent as ExpedienteFormularioComponent } from './expediente-formulario.component';
+import { ExpedienteGeneralFormularioModule } from './../expediente-general-formulario/expediente-general-formulario.module';
+import { DirectiveModule } from 'src/app/shared/directives/directive.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { BusquedaExpedienteModule } from '../busqueda-expediente/busqueda-expediente.module';
-import { BusquedaExpedienteComponent } from '../busqueda-expediente/busqueda-expediente.component';
-import { UsuarioFormularioModule } from 'src/app/views/configuracion-general/catalogo/usuario/usuario-formulario/usuario-formulario.module';
-import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { ExpedienteFormularioComponent } from './expediente-formulario.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TabuladorEntidadModule } from '@sharedComponents/tabulador-entidad/tabulador-entidad.module';
 
 @NgModule({
-    declarations: [ExpedienteFormularioComponent],
-    exports: [ExpedienteFormularioComponent],
-    entryComponents: [
-        ExpedienteFormularioComponent,
-        BusquedaExpedienteComponent
-    ],
-    providers: [
-        EntidadEstructuraService
-    ],
-    imports: [
-        CommonModule,
-        FormsModule,
-        SharedModule,
-        BsDatepickerModule,
-        ReactiveFormsModule,
-        BusquedaExpedienteModule,
-        UsuarioFormularioModule
-    ]
+  imports: [
+    CommonModule,
+    SharedModule,
+    DirectiveModule,
+    ExpedienteGeneralFormularioModule,
+    TabuladorEntidadModule
+  ],
+  declarations: [ExpedienteFormularioComponent]
 })
-export class ExpedienteFormularioModule {}
+export class ExpedienteFormularioModule { }

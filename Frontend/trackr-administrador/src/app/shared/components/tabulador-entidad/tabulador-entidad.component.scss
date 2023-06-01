@@ -1,0 +1,41 @@
+@import "variables";
+
+tab {
+    padding: 0;
+}
+
+.tab-icon {
+    font-size: 1.5em;
+}
+
+.mat-tab-group, .tab-spinner {
+    height: 75vh !important;
+}
+
+.tab-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mat-icon.indicador {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6em;
+    color: green;
+}
+
+.hide-tab {
+    display: none;
+}
+
+.contenedor-submit {
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+    left: 0px;
+    background-color: #fff;
+    border-radius: 7px;
+    z-index: 999;
+}
