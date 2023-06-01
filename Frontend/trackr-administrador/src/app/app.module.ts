@@ -43,6 +43,6 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     BsModalRef,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
   ],
-    bootstrap: [AppComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
