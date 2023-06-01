@@ -43,6 +43,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                 .Select(et => new UsuarioExpedienteGridDTO
                 {
                     IdExpedienteTrackr = et.IdExpediente,
+                    IdUsuario = et.IdUsuario,
                     NombreCompleto = et.IdUsuarioNavigation.ObtenerNombreCompleto(),
                     Patologias = et.ExpedientePadecimiento.ObtenerPadecimientos()
 
