@@ -19,7 +19,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                 .Where(et => et.IdExpediente == idExpediente)
                 .FirstOrDefault();
         }
-        
+
         public ExpedienteTrackr ConsultarPorNumero(string numero)
         {
             return context.ExpedienteTrackr

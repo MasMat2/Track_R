@@ -64,7 +64,7 @@ export class PacienteComponent implements OnInit {
   }
 
   protected ver(gridData: { accion: string; event: UsuarioExpedienteGridDTO }): void {
-    
+
   }
 
   /**
@@ -79,7 +79,7 @@ export class PacienteComponent implements OnInit {
       })
     });
   }
-  
+
   /**
    * Redirige a la pantalla de Expediente - Formulario
    * debido a que no se pasa ningun parametro en la URL
@@ -93,7 +93,7 @@ export class PacienteComponent implements OnInit {
   }
 
   /**
-   * Consulta los pacientes para mostrar en el Grid de la tabla Usuarios, 
+   * Consulta los pacientes para mostrar en el Grid de la tabla Usuarios,
    * aquellos con clave de perfil PACIENTE.
    */
   protected consultarPacientes(): void {

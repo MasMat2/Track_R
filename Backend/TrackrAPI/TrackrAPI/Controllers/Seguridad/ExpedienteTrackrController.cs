@@ -42,7 +42,7 @@ namespace TrackrAPI.Controllers.Seguridad
         }
 
         [HttpDelete("eliminar/{idExpediente}")]
-        public void Eliminar(int idExpediente) 
+        public void Eliminar(int idExpediente)
         {
             expedienteTrackrService.Eliminar(idExpediente);
         }

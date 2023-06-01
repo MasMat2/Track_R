@@ -20,7 +20,7 @@ namespace TrackrAPI.Services.Seguridad
             IDomicilioRepository domicilioRepository,
             IUsuarioRepository usuarioRepository,
             IExpedientePadecimientoRepository expedientePadecimientoRepository
-            ) 
+            )
         {
             this.expedienteTrackrRepository = expedienteTrackrRepository;
             this.domicilioRepository = domicilioRepository;
@@ -118,7 +118,7 @@ namespace TrackrAPI.Services.Seguridad
                 }
 
                 expedientePadecimientoRepository.Agregar(padecimiento);
-                
+
             }
         }
 

@@ -601,7 +601,7 @@ namespace TrackrAPI.Services.Seguridad
             }
         }
 
-        public IEnumerable<UsuarioDto> ConsultarPorNombre(string filtro) 
+        public IEnumerable<UsuarioDto> ConsultarPorNombre(string filtro)
         {
             return usuarioRepository.ConsultarPorNombre(filtro);
         }

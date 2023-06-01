@@ -7,7 +7,7 @@ namespace TrackrAPI.Repositorys.Seguridad
 {
     public class ExpedientePadecimientoRepository : Repository<ExpedientePadecimiento>, IExpedientePadecimientoRepository
     {
-        public ExpedientePadecimientoRepository(TrackrContext context) : base(context) 
+        public ExpedientePadecimientoRepository(TrackrContext context) : base(context)
         {
             base.context = context;
         }

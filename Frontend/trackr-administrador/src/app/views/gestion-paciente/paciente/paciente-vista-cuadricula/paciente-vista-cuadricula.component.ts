@@ -14,14 +14,14 @@ export class PacienteVistaCuadriculaComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    
+
   }
 
   protected descargarExcel(): void {
   }
 
   callParent(): void {
-    
+
   }
 
   protected onVer(data:UsuarioExpedienteGridDTO): void {
@@ -32,7 +32,7 @@ export class PacienteVistaCuadriculaComponent implements OnInit {
   protected onEditar(data: UsuarioExpedienteGridDTO): void {
     const accion = GeneralConstant.GRID_ACCION_EDITAR;
     this.event.emit({accion, data});
-    
+
   }
 
   protected onEliminar(data: UsuarioExpedienteGridDTO): void {

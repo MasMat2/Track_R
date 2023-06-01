@@ -75,7 +75,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    
+
     let informacionGeneral : ExternalTemplate = {
       template : this.informacionGeneralTpl,
       label : 'Información General',

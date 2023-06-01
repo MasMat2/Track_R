@@ -15,7 +15,7 @@
         (click)="seleccionar(item.idUsuario)"
         class="row align-items-center producto seleccionable"
         [ngClass]="i % 2 == 0 ? 'par' : 'impar'">
-        
+
         <div class="col-md-1 text-right textcolor">
           {{ ((currentPage - 1) * itemsPerPage) + (i + 1) }}.-
         </div>
