@@ -5,6 +5,7 @@ using TrackrAPI.Helpers;
 using TrackrAPI.Services.Catalogo;
 using TrackrAPI.Services.Seguridad;
 using System.IO;
+using TrackrAPI.Services.Inventario;
 
 namespace TrackrAPI.Controllers.Catalogo
 {
@@ -106,6 +107,12 @@ namespace TrackrAPI.Controllers.Catalogo
             var imageFileStream = System.IO.File.OpenRead(path);
 
             return File(imageFileStream, tipoMime);
+        }
+        [HttpGet("usuarioEnSesionImagen/")]
+        public IActionResult ObtenerUsuarioEnSesionImagen()
+        {
+            var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
+            return ObtenerUsuarioImagen(usuario.IdUsuario);
         }
 
         [HttpGet("descargarPlantillaArticulos")]
