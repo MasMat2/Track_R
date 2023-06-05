@@ -5,10 +5,11 @@
   color: #000000;
   border-radius: $border-radius-inputs !important;
   height: calc(1.5em + 0.75rem + 7px) !important;
+  
 }
 
 input {
-  border-radius: 0 !important;
+  border-radius: 10px !important;
 }
 
 .inputNumber {
@@ -162,14 +163,14 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 .custom-file-label::after {
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-  background-color: $color-terceario;
-  color: #000;
+  border-radius: 0 !important;
+  background-color: $color-primario;
+  color: #ffffff;
   min-width: 100px;
   width: auto;
   height: 38px;
   border: 1px #f2f2f2 solid;
+  color: #fff;
   font-size: 14px;
   -webkit-box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
   -moz-box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
@@ -180,7 +181,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 .custom-file-label {
-  border-radius: 20px;
+  border-radius: 0 !important;
   height: calc(1.5em + 0.75rem + 7px);
 }
 
@@ -191,11 +192,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 // Input - NgSelect
 
 .ng-select.select-custom {
-  border-radius: 20px !important;
+  border-radius: 10px !important;
 }
 
 .ng-select.select-custom .ng-select-container {
-  border-radius: 20px !important;
+  border-radius: 10px !important;
 }
 
 .ng-select .ng-arrow-wrapper .ng-arrow {
@@ -209,7 +210,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
-  background-color: $color-terceario !important;
+  background-color: $color-terceario  !important;
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected,
@@ -264,7 +265,7 @@ input:checked + .slider {
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196f3;
+  box-shadow: 0 0 1px #e38eee;
 }
 
 input:checked + .slider:before {

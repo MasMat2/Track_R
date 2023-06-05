@@ -1,5 +1,5 @@
-<div class="contenedor">
-  <div class="titulo-contenedor">
+<div class="modal-content">
+  <div class="modal-header">
     {{ titulo }} Acceso
     <button *ngIf="esModal" type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
       <i class="far fa-times-circle"></i>
@@ -12,8 +12,9 @@
       (ngSubmit)="enviarFormulario(formulario)"
       novalidate="novalidate"
     >
-      <div class="row justify-content-center">
-        <div class="col-md-2">
+    <div class="cuerpo-contenedor">
+      <div class="row">
+        <div class="col-md-2"> 
           <div class="form-group">
             <label class="label-input required-label">Clave</label>
             <div>
@@ -188,13 +189,20 @@
           </div>
         </div>
       </div>
+    </div>
+    
       <div class="row">
         <button type="button" class="btn-terceario ml-3" *ngIf="acceso.idAcceso > 0" (click)="agregarAyuda(acceso.idAcceso)">Agregar Ayuda</button>
       </div>
-      <div class="text-center mt-3">
+      <div class="modal-footer">
         <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar</button>
         <button type="submit" class="btn-primario ml-3" [disabled]="btnSubmit">Guardar</button>
       </div>
     </form>
   </div>
+</div>
+
+<div id="loading-cdis" *ngIf="btnSubmit">
+  <img src="assets/img/spinner.gif" alt="Procesando..." />
+  <span>Procesando... por favor espere</span>
 </div>

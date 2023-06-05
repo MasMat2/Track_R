@@ -1,101 +1,122 @@
 <div class="d-flex">
   <div class="barra-lateral-modal"></div>
-  <div class="modal-content">
-    <div class="modal-header">
-      <div>{{ accion }} Rol</div>
-      <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
-        <i class="far fa-times-circle"></i>
-      </button>
-    </div>
-    <form
-      (keydown.enter)="$event.preventDefault()"
-      #formulario="ngForm"
-      (ngSubmit)="enviarFormulario(formulario)"
-      novalidate="novalidate"
-    >
-      <div class="cuerpo-contenedor" id="modal">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label class="label-input required-label">Clave</label>
-              <div>
-                <input
-                  #clave="ngModel"
-                  [(ngModel)]="rol.clave"
-                  name="clave"
-                  class="form-control"
-                  type="text"
-                  maxlength="20"
-                  autocomplete="off"
-                  required
-                  [disabled]= "rol.idRol > 0"
-                  appFormatoSoloAlfanumerico
-                  autofocus
-                />
-                <div *ngIf="clave.errors?.['required'] && clave.touched" class="error">
-                  La clave es requerida
-                </div>
-                <div *ngIf="clave.errors?.['formatoSoloAlfanumerico']" class="error">
-                  El formato de la clave es inválido
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label class="label-input required-label">Rol</label>
-              <div>
-                <input
-                  #nombre="ngModel"
-                  [(ngModel)]="rol.nombre"
-                  name="nombre"
-                  class="form-control"
-                  type="text"
-                  maxlength="50"
-                  autocomplete="off"
-                  required
-                />
-                <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
-                  El rol es requerido
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <div style="display: flex; flex-direction: column">
-                <label class="label-input required-label">Filtrado</label>
-                <label class="switch" for="filtrado">
-                  <input
-                    #filtrado="ngModel"
-                    name="filtradoName"
-                    type="checkbox"
-                    id="filtrado"
-                    [(ngModel)]="rol.filtrado"
-                  />
-                  <div class="slider round">
-                    <span class="on">Sí</span>
-                    <span class="off">No</span>
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>{{ accion }} Rol</div>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
+          <i class="far fa-times-circle"></i>
+        </button>
+      </div>
 
-        <div class="modal-footer">
-          <div class="text-center">
-            <button type ="button" class="btn-secundario mr-3"(click)="cancelar();">Cancelar</button>
-            <button [disabled]="btnSubmit" type="submit" class="btn-primario btn-margin-left">
-              Guardar
-            </button>
+      <form
+        (keydown.enter)="$event.preventDefault()"
+        #formulario="ngForm"
+        (ngSubmit)="enviarFormulario(formulario)"
+        novalidate="novalidate"
+      >
+       <div class="modal-body" id="modal">
+          <div class="row justify-content-md-center">
+          
+          <div class="row">  
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="label-input required-label">Clave</label>
+                <div>
+                    <input
+                      #clave="ngModel"
+                      [(ngModel)]="rol.clave"
+                      name="clave"
+                      class="form-control"
+                      type="text"
+                      maxlength="20"
+                      autocomplete="off"
+                      required
+                      [disabled]= "rol.idRol > 0"
+                      appFormatoSoloAlfanumerico
+                      autofocus
+                    />
+                    <div *ngIf="clave.errors?.['required'] && clave.touched" class="error">
+                      La clave es requerida
+                    </div>
+                    <div *ngIf="clave.errors?.['formatoSoloAlfanumerico']" class="error">
+                      El formato de la clave es inválido
+                    </div>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="label-input required-label">Rol</label>
+                <div>
+                  <input
+                    #nombre="ngModel"
+                    [(ngModel)]="rol.nombre"
+                    name="nombre"
+                    class="form-control"
+                    type="text"
+                    maxlength="50"
+                    autocomplete="off"
+                    required
+                  />
+                  <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
+                    El rol es requerido
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <div style="display: flex; flex-direction: column">
+                  <label class="label-input required-label">Filtrado</label>
+                  <label class="switch" for="filtrado">
+                    <input
+                      #filtrado="ngModel"
+                      name="filtradoName"
+                      type="checkbox"
+                      id="filtrado"
+                      [(ngModel)]="rol.filtrado"
+                    />
+                    <div class="slider round">
+                      <span class="on">Sí</span>
+                      <span class="off">No</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
-    </form>
-  </div>
+
+        <div class="modal-footer">
+            <div class="text-center">
+              <button 
+                type ="button" 
+                class="btn-secundario mr-3"
+                (click)="cancelar();"
+                >Cancelar
+              </button>
+              <button 
+                [disabled]="btnSubmit" 
+                type="submit" 
+                class="btn-primario btn-margin-left"
+                >Guardar
+              </button>
+            </div>
+        </div>
+
+      </form>
+    </div>
+</div>  
+
+<div id="loading-cdis" *ngIf="btnSubmit">
+  <img src="assets/img/spinner.gif" alt="Procesando..." />
+  <span>Procesando... por favor espere</span>
 </div>

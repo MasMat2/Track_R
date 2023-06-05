@@ -1,0 +1,33 @@
+<div class="d-flex">
+    <div class="barra-lateral-modal"></div>
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <div>{{ titulo }}</div>
+            <button
+              type="button"
+              class="close pull-right"
+              aria-label="Close"
+              (click)="cerrar()"
+            >
+              <i class="far fa-times-circle"></i>
+            </button>
+          </div>  
+          
+          <div class="modal-body">
+            <ng-container [ngTemplateOutlet]="modalBody">
+            </ng-container>
+          </div>
+
+          <div class="modal-footer">
+            <div
+              class="d-flex flex-wrap justify-content-center w-100"
+              style="gap: 10px"
+            >
+              <ng-container [ngTemplateOutlet]="modalFooter">
+              </ng-container>
+            </div>
+          </div>
+
+    </div>   
+</div>

@@ -15,7 +15,7 @@ import { CustomLoadingCellRenderer } from './loading-cell-renderer/loading-cell-
     CommonModule,
     NgSelectModule,
     FormsModule,
-    AgGridModule,
+    AgGridModule
   ],
   declarations: [
     GridGeneralComponent,

@@ -64,16 +64,18 @@
 
 
 <!-- Botón Buscar -->
-<div class="row">
-  <div class="col-md-12 d-flex justify-content-center">
-    <div class="form-group" style="max-width: 100%;">
-      <label class="label-input required-label" style="visibility: hidden;">Buscar</label>
-      <button [disabled]="buscando" class="btn-terceario mr-4" type ="button" (click)="buscar(true)">
-        {{ buscando ? 'Buscando...' : 'Buscar' }}
-      </button>
-      <button (click)="limpiar()" type="button" class="btn-secundario limpiar ml-4">
-        Limpiar
-      </button>
+<div class="subtitulo-contenedor">
+  <div class="row">
+    <div class="col-md-12 d-flex justify-content-center">
+      <div class="form-group" style="max-width: 100%;">
+        <label class="label-input required-label" style="visibility: hidden;">Buscar</label>
+        <button [disabled]="buscando" class="btn-primario mr-4" type ="button" (click)="buscar(true)">
+          {{ buscando ? 'Buscando...' : 'Buscar' }}
+        </button>
+        <button (click)="limpiar()" type="button" class="btn-secundario limpiar ml-4">
+          Limpiar
+        </button>
+      </div>
     </div>
   </div>
 </div>

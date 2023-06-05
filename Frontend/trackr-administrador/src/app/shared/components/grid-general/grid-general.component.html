@@ -4,7 +4,7 @@
       *ngIf="!disableXLS"
       class="grid-download"
       (click)="downloadSelection()"
-      src="http://via.placeholder.com/15x15"
+      src="assets/img/svg/ico-15x15-Descargar.svg"
       [title]="downloadActionTitle ? downloadActionTitle : 'Descargar Excel'"
       />
       <!-- TODO: 2023-05-03 -> Agregar icono -->
@@ -46,4 +46,5 @@
     (ngModelChange)="cambiarPaginado($event)"
   >
   </ng-select>
+
 </div>

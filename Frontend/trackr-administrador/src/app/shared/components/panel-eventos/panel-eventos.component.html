@@ -1,0 +1,25 @@
+<div class="panel">
+    <div
+      *ngFor="let evento of eventos"
+      (click)="handleClick(evento)"
+      [class.deshabilitado]="estatusEventos[evento.nombre] === false"
+      class="evento"
+    >
+      <div *ngIf="evento.claseIcono; then icono; else imagen"></div>
+  
+      <ng-template #icono>
+        <i class="icono-evento" [ngClass]="evento.claseIcono"></i>
+      </ng-template>
+  
+      <ng-template #imagen>
+        <img class="imagen-evento" [src]="evento.icono" />
+      </ng-template>
+  
+      <div class="nombre-evento">{{ evento.nombre }}</div>
+    </div>
+  </div>
+  
+  <div id="loading-cdis" *ngIf="cargando">
+    <img src="assets/img/spinner.gif" alt="Cargando..." />
+    <span>Cargando... por favor espere</span>
+  </div>
