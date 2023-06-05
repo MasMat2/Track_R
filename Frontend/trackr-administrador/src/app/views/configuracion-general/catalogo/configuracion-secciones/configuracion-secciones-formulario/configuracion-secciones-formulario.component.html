@@ -70,6 +70,22 @@
               </div>
             </div>
           </div>
+          <div class="col-md-4">
+            <label class="label-input required-label">Tabla</label><br>
+            <label class="switch">
+                <input
+                    #tabla
+                    id="tabla"
+                    name="tablaName"
+                    type="checkbox"
+                    [(ngModel)]="seccion.esTabla"
+                />
+                <span class="slider round">
+                <span class="on">Si</span>
+                <span class="off">No</span>
+                </span>
+            </label>
+        </div>
         </div>
       </form>
       <!-- CAMPOS -->

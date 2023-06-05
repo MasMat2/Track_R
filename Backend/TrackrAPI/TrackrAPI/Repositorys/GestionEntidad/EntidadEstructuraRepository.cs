@@ -82,6 +82,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                     IdEntidad = e.IdEntidad,
                     IdSeccion = e.IdSeccion,
                     IdEntidadEstructuraPadre = e.IdEntidadEstructuraPadre,
+                    EsTabla = e.IdSeccionNavigation.EsTabla ?? false,
                     Campos = e.IdSeccionNavigation.SeccionCampo.ToList()
                 });
         }
@@ -139,7 +140,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarPadecimientosParaSelector()
         {
             return context.EntidadEstructura
-                .Where(e => (e.Tabulacion == true) && 
+                .Where(e => (e.Tabulacion == true) &&
                             (e.IdEntidadNavigation.Clave == GeneralConstant.ClaveEntidadPadecimiento))
                 .Select(e => new ExpedientePadecimientoSelectorDTO
                 {

@@ -1,8 +1,8 @@
 <!-- Grupo de Tabulaciones -->
 <mat-tab-group
     *ngIf="!loading"
-    class="mat-elevation-z1" 
-    animationDuration="0ms" 
+    class="mat-elevation-z1"
+    animationDuration="0ms"
     (selectedIndexChange)="onSelectTabChange($event)"
 >
     <!-- Componentes Externos -->
@@ -22,10 +22,10 @@
 
         <!-- Botón de Guardar -->
         <!-- <div *ngIf="element.externalSubmit" class="contenedor-submit text-center">
-            <button 
-                type="button" 
-                class="btn-primario" 
-                (click)="onEnviarFormularioExterno();" 
+            <button
+                type="button"
+                class="btn-primario"
+                (click)="onEnviarFormularioExterno();"
                 [disabled]="element.submitControl"
             >
                 Guardar
@@ -52,22 +52,34 @@
                     <div class="col-md-12 subseccion">
                         {{seccion.nombre}}
                     </div>
-                    <!-- Campos -->
-                    <div 
-                        *ngFor="let campo of seccion.campos;let i = index"
-                        [ngClass]="'col-md-' + campo.tamanoColumna"
-                    >
-                        <div class="form-group">
-                            <app-campo-expediente
-                                #campoModel = "ngModel"
-                                [(ngModel)]="campo.valor"
-                                [name]="'campos' + i"
-                                [campo]="campo"
-                                [par] = "(i%2==0) ? true : false"
-                            >
-                            </app-campo-expediente>
+
+                    <!-- Seccion estandar -->
+                    <ng-container *ngIf="!seccion.esTabla">
+                        <!-- Campos -->
+                        <div
+                            *ngFor="let campo of seccion.campos;let i = index"
+                            [ngClass]="'col-md-' + campo.tamanoColumna"
+                        >
+                            <div class="form-group">
+                                <app-campo-expediente
+                                    #campoModel = "ngModel"
+                                    [(ngModel)]="campo.valor"
+                                    [name]="'campos' + i"
+                                    [campo]="campo"
+                                    [par] = "(i%2==0) ? true : false"
+                                >
+                                </app-campo-expediente>
+                            </div>
                         </div>
-                    </div>
+                    </ng-container>
+
+                    <!-- Seccion Tabla -->
+                    <ng-container *ngIf="seccion.esTabla">
+                        <app-seccion-tabla
+                            [idTabla]="idTabla"
+                            [entidadEstructuraSeccion]="seccion"
+                        ></app-seccion-tabla>
+                    </ng-container>
                 </div>
 
                 <!-- Botón de Guardar -->
@@ -84,6 +96,6 @@
 <!-- Spinner -->
 <ng-container *ngIf="loading">
     <div class="tab-spinner">
-        <mat-spinner></mat-spinner>  
+        <mat-spinner></mat-spinner>
     </div>
 </ng-container>

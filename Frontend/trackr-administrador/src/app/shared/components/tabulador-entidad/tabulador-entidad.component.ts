@@ -1,17 +1,19 @@
-import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { DominioDetalle } from '@models/expedientes/dominio-detalle';
-import { EntidadEstructura } from '@models/gestion-entidad/entidad-estructura';
-import { EntidadEstructuraValor } from '@models/gestion-entidad/entidad-estructura-valor';
-import { SeccionCampo } from '@models/gestion-entidad/seccion-campo';
+import { EntidadEstructuraTablaValorService } from '@http/gestion-entidad/entidad-estructura-tabla-valor.service';
 import { EntidadEstructuraValorService } from '@http/gestion-entidad/entidad-estructura-valor.service';
 import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
 import { EntidadService } from '@http/gestion-entidad/entidad.service';
-
+import { DominioDetalle } from '@models/expedientes/dominio-detalle';
+import { EntidadEstructura } from '@models/gestion-entidad/entidad-estructura';
+import { EntidadEstructuraValor } from '@models/gestion-entidad/entidad-estructura-valor';
+import { RegistroTabla } from '@models/gestion-entidad/registro-tabla';
+import { SeccionCampo } from '@models/gestion-entidad/seccion-campo';
 import * as Utileria from '@utils/utileria';
+import * as moment from 'moment';
 import { MensajeService } from '../mensaje/mensaje.service';
 import { ExternalTemplate } from './external-template';
-import { lastValueFrom } from 'rxjs';
+
 /**
  * Componente que por medio de la entidad que recibe, renderiza las tabulaciónes y sus contenidos en base a su estructura.
  */
@@ -22,15 +24,15 @@ import { lastValueFrom } from 'rxjs';
 })
 export class TabuladorEntidadComponent implements OnInit {
 
-  /** 
+  /**
   * Variables de entrada de configuración
-  **/ 
+  **/
   @Input() public claveEntidad: string = "";
   @Input() public idTabla: number;
 
-  /** 
+  /**
   * Configuración para los tabs externos
-  **/ 
+  **/
   @Input() public externalTemplates: ExternalTemplate[] = [];
   @Output() public enviarFormularioExterno = new EventEmitter<boolean>();
 
@@ -40,11 +42,11 @@ export class TabuladorEntidadComponent implements OnInit {
   public btnSubmit: boolean = false;
 
   public entidadEstructuras: EntidadEstructura[] = [];
-  public entidadEstructuraValores: EntidadEstructuraValor[] = [];
 
   constructor(
     private entidadEstructuraService : EntidadEstructuraService,
     private entidadEstructuraValorService: EntidadEstructuraValorService,
+    private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
     private entidadService: EntidadService,
     private mensajeService: MensajeService
   ) { }
@@ -80,8 +82,8 @@ export class TabuladorEntidadComponent implements OnInit {
     this.entidadEstructuraValorService.guardar(valores).subscribe((success) => {
       this.mensajeService.modalExito('Información guardada exitosamente');
       this.btnSubmit = false;
-    }, (error) => { 
-      this.btnSubmit = false 
+    }, (error) => {
+      this.btnSubmit = false
     });
   }
 
@@ -107,24 +109,33 @@ export class TabuladorEntidadComponent implements OnInit {
     index -= externalTemplatesLength;
 
     // Se consultan los valores relacionados a la tabulación seleccionada
-    const idEntidadEstructura = this.entidadEstructuras[index].idEntidadEstructura;
-    const valores : EntidadEstructuraValor[] = await this.consultarEntidadEstructuraValor(idEntidadEstructura, this.idTabla);
-    // Se procesan los valores
-    this.mapearValorInicial(valores, idEntidadEstructura);
+    const tabulacion = this.entidadEstructuras[index];
+    const seccionesTabla : EntidadEstructura[] = tabulacion.hijos.filter(s => s.esTabla);
+    const valores : EntidadEstructuraValor[] = await this.consultarEntidadEstructuraValor(tabulacion.idEntidadEstructura, this.idTabla);
+
+    // Se identifica si la tabulación cuenta con secciones de tipo tabla
+    if (seccionesTabla.length > 0) {
+      // Se consultan los valores de las secciones de tipo tabla.
+      const registros : RegistroTabla[] = await this.consultarRegistroTabla(tabulacion.idEntidadEstructura, this.idTabla);
+      this.mapearRegistrosTabla(registros, seccionesTabla);
+    }
+
+    // Se procesan los valores estándar
+    this.mapearValorInicial(valores, tabulacion.idEntidadEstructura);
   }
 
   private async consultarIdEntidad(clave: string) : Promise<number> {
-    return lastValueFrom(this.entidadService.consultarPorClave(clave))
-      .then((entidad) => { 
-        return entidad?.idEntidad ?? 0;
-      })
+    return this.entidadService.consultarPorClave(clave)
+      .toPromise()
+      .then((entidad) => { return entidad?.idEntidad ?? 0 })
       .catch(() => { return 0 })
   }
 
   private async consultarEntidadEstructura(idEntidad: number): Promise<void> {
-    return lastValueFrom(this.entidadEstructuraService.consultarArbol(idEntidad))
+    return this.entidadEstructuraService.consultarParaTabulador(idEntidad)
+      .toPromise()
       .then((estructuras) => {
-        this.entidadEstructuras = estructuras;
+        this.entidadEstructuras = estructuras ?? [];
         this.loading = false;
       })
       .catch(() => {
@@ -133,13 +144,26 @@ export class TabuladorEntidadComponent implements OnInit {
   }
 
   private async consultarEntidadEstructuraValor(idEntidadEstructura: number, idTabla: number) : Promise<EntidadEstructuraValor[]> {
-    return lastValueFrom(this.entidadEstructuraValorService.consultarPorTabulacion(idEntidadEstructura, idTabla))
+    const estructuras = await this.entidadEstructuraValorService
+      .consultarPorTabulacion(idEntidadEstructura, idTabla)
+      .toPromise()
+      .catch(() => [])
+
+    return estructuras ?? [];
+  }
+
+  private async consultarRegistroTabla(idEntidadEstructura: number, idTabla: number) : Promise<RegistroTabla[]> {
+    const registros = await this.entidadEstructuraTablaValorService
+      .consultarRegistroTablaPorTabulacion(idEntidadEstructura, idTabla)
+      .toPromise()
       .catch(() => []);
+
+    return registros ?? [];
   }
 
   private async obtenerValoresFinales(idEntidadEstructura: number) : Promise<EntidadEstructuraValor[]> {
-    const tabulacion = this.entidadEstructuras.find(e => e.idEntidadEstructura == idEntidadEstructura);
-    const secciones = tabulacion?.hijos ?? [];
+    const tabulacion = this.entidadEstructuras.find(e => e.idEntidadEstructura == idEntidadEstructura)!;
+    const secciones = tabulacion.hijos;
     let camposIniciales: SeccionCampo[] = [];
 
     for await (const seccion of secciones) {
@@ -150,19 +174,33 @@ export class TabuladorEntidadComponent implements OnInit {
   }
 
   private async mapearValorInicial(valoresIniciales: EntidadEstructuraValor[], idEntidadEstructura: number) : Promise<void> {
-    const tabulacion = this.entidadEstructuras.find(e => e.idEntidadEstructura == idEntidadEstructura);
-    const secciones = tabulacion?.hijos ?? [];
+    const tabulacion = this.entidadEstructuras.find(e => e.idEntidadEstructura == idEntidadEstructura)!;
+    const secciones = tabulacion.hijos;
     let camposIniciales: SeccionCampo[] = [];
 
     for await (const seccion of secciones) {
       camposIniciales = camposIniciales.concat(seccion.campos);
     }
 
-    valoresIniciales.forEach((valor: EntidadEstructuraValor) => {
+    for (const valor of valoresIniciales) {
       const campo = camposIniciales.find((c) => c.clave === valor.claveCampo);
-      if(!campo) return;
-      campo.valor = valor.valor;
+
+      if (!campo) {
+        continue;
+      }
+
       campo.idEntidadEstructuraValor = valor.idEntidadEstructuraValor;
+
+      if (campo.idDominioNavigation.tipoCampo === 'Date')
+        campo.valor = new Date(moment(valor.valor).format('MM-DD-YYYY'));
+      else
+        campo.valor = valor.valor;
+    }
+  }
+
+  private async mapearRegistrosTabla(registros: RegistroTabla[], seccionesTabla: EntidadEstructura[]) : Promise<void> {
+    seccionesTabla.forEach(seccion => {
+      seccion.registrosTabla = registros.filter(r => r.idEntidadEstructura === seccion.idEntidadEstructura);
     });
   }
 
@@ -189,7 +227,7 @@ export class TabuladorEntidadComponent implements OnInit {
 
     const valoresAgregar: EntidadEstructuraValor[] = camposAgregar
     .map((campo: SeccionCampo) => {
-      
+
       let valor : EntidadEstructuraValor = {
         idEntidadEstructuraValor : campo.idEntidadEstructuraValor,
         claveCampo : campo.clave,

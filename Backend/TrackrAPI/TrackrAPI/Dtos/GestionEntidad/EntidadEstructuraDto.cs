@@ -12,6 +12,7 @@ namespace TrackrAPI.Dtos.GestionEntidad
         public int IdEntidad { get; set; }
         public int? IdSeccion { get; set; }
         public int? IdEntidadEstructuraPadre { get; set; }
+        public bool EsTabla { get; set; }
 
         public List<EntidadEstructuraDto> Hijos { get; set; }
         public List<SeccionCampo> Campos { get; set; }

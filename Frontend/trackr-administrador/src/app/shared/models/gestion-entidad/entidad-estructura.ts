@@ -1,3 +1,4 @@
+import { RegistroTabla } from "./registro-tabla";
 import { SeccionCampo } from "./seccion-campo";
 
 export class EntidadEstructura {
@@ -10,8 +11,13 @@ export class EntidadEstructura {
     public idEntidadEstructuraPadre?: number;
 
     // Extras
+    // Estructuras - Pestañas
+    public esTabla: boolean;
     public hijos: EntidadEstructura[];
+
+    // Estructuras - Secciones
     public campos: SeccionCampo[];
+    public registrosTabla: RegistroTabla[];
 
     constructor() {}
 }

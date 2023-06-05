@@ -1,0 +1,46 @@
+<app-modal-base [titulo]="nombreSeccion">
+  <ng-template #modalBody>
+    <form
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      novalidate="novalidate"
+    >
+      <div *ngFor="let grupo of grupos">
+        <div class="row">
+          <div *ngIf="grupo.nombre !== 'null'" class="col-12 subseccion">
+            {{ grupo.nombre }}
+          </div>
+
+          <div
+            *ngFor="let campo of grupo.campos; let i = index"
+            [ngClass]="'col-md-' + campo.tamanoColumna"
+          >
+            <div class="form-group">
+              <app-campo-expediente
+                #campoModel="ngModel"
+                [(ngModel)]="campo.valor"
+                [name]="'campos' + i"
+                [campo]="campo"
+                [par]="i % 2 == 0"
+              >
+              </app-campo-expediente>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 text-center">
+          <button
+            type="submit"
+            class="btn btn-primario"
+            [disabled]="!formulario.valid || submiting"
+          >
+            Guardar
+          </button>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+</app-modal-base>

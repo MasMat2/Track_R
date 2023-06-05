@@ -34,6 +34,28 @@ namespace TrackrAPI.Services.GestionEntidad
                    });
         }
 
+        public IEnumerable<EntidadEstructuraDto> ConsultarParaTabulador(int idEntidad)
+        {
+            List<EntidadEstructuraDto> estructurasPadre = entidadEstructuraRepository.ConsultarPadres(idEntidad).ToList();
+
+            return ConsultarHijos(estructurasPadre).OrderBy(e => e.IdEntidadEstructura);
+        }
+
+        public IEnumerable<EntidadEstructuraDto> ConsultarHijos(IEnumerable<EntidadEstructuraDto> estructurasPadre)
+        {
+            foreach (EntidadEstructuraDto padre in estructurasPadre)
+            {
+                padre.Hijos = entidadEstructuraRepository.ConsultarHijos(padre.IdEntidadEstructura).ToList();
+
+                if (padre.Hijos.Any())
+                {
+                    ConsultarHijos(padre.Hijos);
+                }
+            }
+
+            return estructurasPadre;
+        }
+
         public IEnumerable<EntidadEstructuraDto> ConsultarArbol(int idEntidad)
         {
             var arbol = entidadEstructuraRepository.ConsultarArbol(idEntidad);

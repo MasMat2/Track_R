@@ -13,6 +13,10 @@ export class EntidadEstructuraService {
     return this.http.get<EntidadEstructura[]>(this.dataUrl + `consultarArbol/${idEntidad}`);
   }
 
+  public consultarParaTabulador(idEntidad: number): Observable<EntidadEstructura[]> {
+    return this.http.get<EntidadEstructura[]>(this.dataUrl + `tabulador/${idEntidad}`);
+  }
+
   public consultarPorEntidadParaSelector(idEntidad: number): Observable<EntidadEstructura[]> {
     return this.http.get<EntidadEstructura[]>(this.dataUrl + `consultarPorEntidadParaSelector/${idEntidad}`);
   }
@@ -28,5 +32,5 @@ export class EntidadEstructuraService {
   public consultarPadecimientosParaSelector(): Observable<ExpedientePadecimientoSelectorDTO[]> {
     return this.http.get<ExpedientePadecimientoSelectorDTO[]>(this.dataUrl + `consultarPadecimientosParaSelector/`);
   }
-  
+
 }

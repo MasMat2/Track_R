@@ -13,6 +13,8 @@ export class SeccionCampo {
     public tamanoColumna: number;
     public deshabilitado: boolean;
     public valor: number[] | boolean | string | Date | number;
+    public grupo: string;
+    public fila: number;
 
     // Extras - Utilerias
     public idDominioNavigation: Dominio;
