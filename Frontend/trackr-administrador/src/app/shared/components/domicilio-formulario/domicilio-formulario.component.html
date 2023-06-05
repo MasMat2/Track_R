@@ -137,7 +137,7 @@
           [(ngModel)]="domicilio.idColonia"
           [placeholder]="placeHolderSelect"
           [notFoundText]="placeHolderNoOptions"
-          [disabled]="readonly || domicilio.codigoPostal?.length != 5"
+          [disabled]="readonly || domicilio.codigoPostal.length != 5"
         ></ng-select>
       </div>
     </div>

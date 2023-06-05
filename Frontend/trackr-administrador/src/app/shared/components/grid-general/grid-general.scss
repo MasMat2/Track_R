@@ -17,9 +17,11 @@
   margin: 6px;
   cursor: pointer;
 }
+
 .divImage i{
   font-size: 18px;
 }
+
 .grid-input {
   text-align: center !important;
 }
@@ -48,6 +50,11 @@
   border: transparent !important;
 }
 
+.ag-root,
+.ag-row {
+  border: none !important;
+}
+
 .ag-header {
   border-bottom: 1px $color-secundario solid;
 }
@@ -57,7 +64,7 @@
 }
 
 .ag-body-viewport {
-  border-bottom: 1px $color-secundario solid;
+  border-bottom: 0px $color-secundario solid;
 
   max-height: calc(100vh - 346px);
     position: relative;
@@ -140,4 +147,9 @@ app-grid-action .see {
 
 .ag-center-cols-viewport {
   overflow: hidden;
+}
+
+.ag-cell {
+  display: flex;
+  align-items: center;
 }

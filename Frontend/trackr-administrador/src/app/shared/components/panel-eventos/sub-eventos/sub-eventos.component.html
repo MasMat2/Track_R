@@ -1,0 +1,14 @@
+<app-modal-base
+    [titulo]="titulo"
+    (onClose)="emitOnClick(undefined)"
+>
+    <ng-template #modalBody>
+        <app-panel-eventos
+            [elementoActivo]="elementoActivo"
+            [eventos]="eventos"
+            (onClicked)="emitOnClick($event)"
+        >
+
+        </app-panel-eventos>
+    </ng-template>
+</app-modal-base>

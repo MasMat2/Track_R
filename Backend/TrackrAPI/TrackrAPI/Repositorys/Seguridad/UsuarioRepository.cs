@@ -272,6 +272,7 @@ namespace TrackrAPI.Repositorys.Seguridad
 
         public UsuarioEncabezadoDto ConsultarEncabezado(int idUsuario)
         {
+
             return context.Usuario
                 .Where(u => u.IdUsuario == idUsuario)
                 .Select(u => new UsuarioEncabezadoDto {

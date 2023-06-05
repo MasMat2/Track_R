@@ -17,10 +17,11 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { TableModule } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent, 
   ],
   imports: [
     BrowserModule,

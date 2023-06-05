@@ -1,0 +1,41 @@
+.panel {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+  
+  .evento {
+    text-align: center;
+    min-width: 80px;
+    max-width: 100px;
+    padding: 10px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .imagen-evento {
+    aspect-ratio: 1/1;
+    height: 25px;
+    object-fit: contain;
+    margin-bottom: 8px;
+  }
+  
+  .icono-evento {
+    font-size: 25px;
+    color: #777777;
+    margin-bottom: 8px;
+  }
+  
+  .nombre-evento {
+    width: 100%;
+  }
+  
+  .evento:is(.deshabilitado) {
+    filter: opacity(0.4);
+  }
+  
+  .evento:not(.deshabilitado):hover {
+    cursor: pointer;
+    background-color: #d3d3d3;
+  }
