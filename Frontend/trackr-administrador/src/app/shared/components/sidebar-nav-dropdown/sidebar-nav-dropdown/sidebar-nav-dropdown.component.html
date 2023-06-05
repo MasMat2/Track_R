@@ -4,11 +4,11 @@
     <div class="lateral-superior">
       <!--Imagen de Usuario -->
       <div class="text-center pt-3 pb-4">
-        <img
-          class="imagen-usuario"
+        <img *ngIf="urlImagen !== undefined" 
+          class="imagen-usuario" 
+          [src]="urlImagen" 
           width="85px"
           height="85px"
-          [src]="imagenUsuario"
           alt="Imagen de Usuario"
           [matMenuTriggerFor]="menu"
         />

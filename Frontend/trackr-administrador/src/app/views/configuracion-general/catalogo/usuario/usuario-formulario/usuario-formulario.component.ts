@@ -1,3 +1,5 @@
+import { ArchivoService } from './../../../../../shared/http/catalogo/archivo.service';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -57,6 +59,7 @@ import * as Utileria from '@utils/utileria';
 import { Observable, Observer, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { UsuarioImagenService } from '@services/usuario-imagen.service';
 
 /**
  * Formulario de usuario, permite agregar, editar y eliminar.
@@ -206,7 +209,9 @@ export class UsuarioFormularioComponent implements OnInit {
     private listaPrecioService: ListaPrecioService,
     private tipoClienteService: TipoClienteService,
     private satFormaPagoService: SatFormaPagoService,
-    private codigoPostalService: CodigoPostalService
+    private codigoPostalService: CodigoPostalService,
+    private archivoService: ArchivoService,
+    private usuarioImagenService: UsuarioImagenService
   ) {}
 
   public ngOnInit(): void {
@@ -540,7 +545,10 @@ export class UsuarioFormularioComponent implements OnInit {
         }
 
         this.consultarUsuarioRol();
-        this.url = environment.urlBackend + 'Archivo/Usuario/' + data.idUsuario;
+        this.archivoService.obtenerUsuarioImagen(data.idUsuario).subscribe((imagen) => {
+          let objectURL = URL.createObjectURL(imagen);
+          this.url = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        });
       });
     } else {
       this.toDataURL(this.urlImagenDefault, (myBase64: string) => {
@@ -680,6 +688,7 @@ export class UsuarioFormularioComponent implements OnInit {
     }
     else {
       this.onClose(true);
+      this.usuarioImagenService.actualizarImagen(this.url);
     }
   }
 
