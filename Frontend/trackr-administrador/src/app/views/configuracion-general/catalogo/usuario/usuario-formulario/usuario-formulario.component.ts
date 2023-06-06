@@ -560,7 +560,6 @@ export class UsuarioFormularioComponent implements OnInit {
   public consultarUsuarioRol(): void {
     this.usuarioRolService.consultarPorUsuario(this.usuario.idUsuario).subscribe((data) => {
       this.rolSeleccionados = data.map((usuarioRol) => usuarioRol.idRol);
-      console.log(this.rolSeleccionados);
     });
   }
 

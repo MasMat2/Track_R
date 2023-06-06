@@ -8,7 +8,7 @@
     >
       <div *ngFor="let grupo of grupos">
         <div class="row">
-          <div *ngIf="grupo.nombre !== 'null'" class="col-12 subseccion">
+          <div *ngIf="grupo.nombre !== 'undefined'" class="col-12 subseccion">
             {{ grupo.nombre }}
           </div>
 

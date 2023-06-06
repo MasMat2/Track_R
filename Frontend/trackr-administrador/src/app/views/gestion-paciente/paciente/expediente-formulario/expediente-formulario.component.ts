@@ -86,8 +86,6 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
 
 
     this.externalTemplates.push(informacionGeneral);
-
-    console.log(this.externalTemplates)
   }
 
 

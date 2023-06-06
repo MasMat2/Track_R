@@ -61,8 +61,6 @@ export class SeccionTablaFormularioComponent implements OnInit {
         };
       })
       .sort((a, b) => b.fila - a.fila);
-
-    console.log(this.grupos);
   }
 
   public enviarFormulario(formulario: NgForm): void {
