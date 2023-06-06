@@ -27,6 +27,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
    * Referencias a templates de los componentes externos a utilizar en el tabulador de entidades.
    */
   @ViewChild('informacionGeneral', { static: false }) private informacionGeneralTpl : TemplateRef<any>;
+  @ViewChild('estudios', { static: false }) private estudiosTpl : TemplateRef<any>;
   @ViewChild('viaje', { static: false }) private viajeTpl : TemplateRef<any>;
 
   /**
@@ -46,7 +47,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
   public fechaLlegada: Date;
   public esExpedienteViaje = false;
   public navegacion: boolean = false;
-  public idExpedienteAdministrativo: number;
+  public idUsuario: number;
 
   public value = 'Información General';
 
@@ -65,8 +66,8 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
         this.esExpedienteViaje = false;
       } else {
         this.accion = GeneralConstant.COMPONENT_ACCION_EDITAR;
-        const idExpedienteAdministrativo = this.encryptionService.readUrlParams(params).i;
-        this.idExpedienteAdministrativo = idExpedienteAdministrativo;
+        const idUsuario = this.encryptionService.readUrlParams(params).i;
+        this.idUsuario = idUsuario;
         // this.expedienteAdministrativoService.consultar(idExpedienteAdministrativo).subscribe((data: any) => {
         //   this.cargarInformacion(data);
         // });
@@ -84,8 +85,17 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
       submitControl : false
     };
 
+    let estudios : ExternalTemplate = {
+      template : this.estudiosTpl,
+      label : 'Estudios',
+      enabled : this.idUsuario != null ? true : false,
+      externalSubmit : true,
+      submitControl : false
+    };
+
 
     this.externalTemplates.push(informacionGeneral);
+    this.externalTemplates.push(estudios);
   }
 
 
