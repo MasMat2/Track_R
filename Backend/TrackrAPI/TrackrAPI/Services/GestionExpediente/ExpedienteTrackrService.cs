@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Transactions;
+using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.Models;
+using TrackrAPI.Repositorys.GestionExpediente;
 using TrackrAPI.Repositorys.Inventario;
 using TrackrAPI.Repositorys.Seguridad;
 
-namespace TrackrAPI.Services.Seguridad
+namespace TrackrAPI.Services.GestionExpediente
 {
     public class ExpedienteTrackrService
     {
@@ -112,7 +114,7 @@ namespace TrackrAPI.Services.Seguridad
                 padecimiento.FechaDiagnostico = padecimientoDTO.FechaDiagnostico;
                 padecimiento.IdExpediente = idExpediente;
 
-                if(padecimiento.IdPadecimiento == 0)
+                if (padecimiento.IdPadecimiento == 0)
                 {
                     continue;
                 }

@@ -1,8 +1,8 @@
 ﻿using TrackrAPI.Helpers;
 using TrackrAPI.Models;
-using TrackrAPI.Repositorys.Seguridad;
+using TrackrAPI.Repositorys.GestionExpediente;
 
-namespace TrackrAPI.Services.Seguridad
+namespace TrackrAPI.Services.GestionExpediente
 {
     public class ExpedienteTrackrValidatorService
     {
@@ -25,7 +25,7 @@ namespace TrackrAPI.Services.Seguridad
 
 
         private readonly string MensajeNumeroLongitud = $"La longitud máxima del número de expediente son {LongitudNumero} caracteres";
-        private readonly string MensajeNumeroDuplicado= "El número de expediente ya existe";
+        private readonly string MensajeNumeroDuplicado = "El número de expediente ya existe";
 
         private static readonly int LongitudNumero = 10;
 
@@ -75,7 +75,7 @@ namespace TrackrAPI.Services.Seguridad
         {
             var expedienteDuplicadoNumero = expedienteTrackrRepository.ConsultarPorNumero(expedienteTrackr.Numero);
 
-            if(expedienteDuplicadoNumero != null)
+            if (expedienteDuplicadoNumero != null)
             {
                 throw new CdisException(MensajeNumeroDuplicado);
             }

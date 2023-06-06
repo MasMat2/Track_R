@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TrackrAPI.Dtos.GestionEntidad;
-using TrackrAPI.Dtos.Seguridad;
-using TrackrAPI.Services.Seguridad;
+using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Services.GestionExpediente;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace TrackrAPI.Controllers.Seguridad
+namespace TrackrAPI.Controllers.GestionExpediente
 {
     [Route("api/[controller]")]
     [ApiController]

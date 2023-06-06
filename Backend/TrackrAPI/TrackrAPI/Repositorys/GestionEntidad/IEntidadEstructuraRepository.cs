@@ -1,6 +1,7 @@
 ﻿using TrackrAPI.Dtos.GestionEntidad;
 using TrackrAPI.Models;
 using System.Collections.Generic;
+using TrackrAPI.Dtos.GestionExpediente;
 
 namespace TrackrAPI.Repositorys.GestionEntidad
 {

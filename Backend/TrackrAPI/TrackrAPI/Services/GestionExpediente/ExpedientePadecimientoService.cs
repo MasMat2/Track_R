@@ -1,9 +1,7 @@
-﻿using TrackrAPI.Dtos.GestionEntidad;
-using TrackrAPI.Dtos.Seguridad;
-using TrackrAPI.Models;
-using TrackrAPI.Repositorys.Seguridad;
+﻿using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Repositorys.GestionExpediente;
 
-namespace TrackrAPI.Services.Seguridad
+namespace TrackrAPI.Services.GestionExpediente
 {
     public class ExpedientePadecimientoService
     {
