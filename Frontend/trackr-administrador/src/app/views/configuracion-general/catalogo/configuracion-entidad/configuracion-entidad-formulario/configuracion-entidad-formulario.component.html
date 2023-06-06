@@ -1,264 +1,265 @@
-<div class="barra-lateral-modal"><i class="fa fa-plus"></i></div>
-	<div class="modal-content">
+<div class="d-flex">
+  <div class="barra-lateral-modal"><i class="fa fa-plus"></i></div>
+    <div class="modal-content">
 
-    <!-- Header -->
-		<div class="modal-header">
-			<div>{{ accion }} Entidad</div>
+      <!-- Header -->
+      <div class="modal-header">
+        <div>{{ accion }} Entidad</div>
 
-      <!-- Botón Cerrar -->
-			<button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
-				<i class="far fa-times-circle"></i>
-			</button>
-		</div>
+        <!-- Botón Cerrar -->
+        <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
+          <i class="far fa-times-circle"></i>
+        </button>
+      </div>
 
-    <form (keydown.enter)="$event.preventDefault()" #formulario="ngForm" (ngSubmit)="enviarFormulario(formulario)" novalidate="novalidate">
+      <form 
+        (keydown.enter)="$event.preventDefault()" 
+        #formulario="ngForm" 
+        (ngSubmit)="enviarFormulario(formulario)" 
+        novalidate="novalidate"
+      >
+        <div class="modal-body" id="modal">
+          <div class="container">
 
-		<div class="cuerpo-contenedor" id="modal">
-        <div class="container">
+            <!-- Campos de Entidad -->
+            <div class="row">
 
-          <!-- Campos de Entidad -->
-          <div class="row d-flex justify-content-center">
+              <!-- Clave -->
+              <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="label-input required-label">Clave</label>
+                    <div>
+                      <input
+                        #clave="ngModel"
+                        [(ngModel)]="entidad.clave"
+                        name="claveName"
+                        class="form-control"
+                        type="text"
+                        maxlength="20"
+                        required="required"
+                        autocomplete="off"
+                      />
 
-            <!-- Clave -->
-            <div class="col-md-4">
+                      <div *ngIf="clave.errors?.['required'] && clave.touched" class="error">
+                        La clave es requerida
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              <!-- Nombre -->
+              <div class="col-md-4">
                 <div class="form-group">
-                  <label class="label-input required-label">Clave</label>
+                  <label class="label-input required-label">Nombre</label>
                   <div>
                     <input
-                      #clave="ngModel"
-                      [(ngModel)]="entidad.clave"
-                      name="claveName"
+                      #nombre="ngModel"
+                      [(ngModel)]="entidad.nombre"
+                      name="nombreName"
                       class="form-control"
                       type="text"
-                      maxlength="20"
+                      maxlength="200"
                       required="required"
                       autocomplete="off"
                     />
 
-                    <div *ngIf="clave.errors?.['required'] && clave.touched" class="error">
-                      La clave es requerida
+                    <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
+                      El nombre es requerido
                     </div>
                   </div>
                 </div>
               </div>
 
-            <!-- Nombre -->
-            <div class="col-md-4">
-              <div class="form-group">
-                <label class="label-input required-label">Nombre</label>
-                <div>
-                  <input
-                    #nombre="ngModel"
-                    [(ngModel)]="entidad.nombre"
-                    name="nombreName"
-                    class="form-control"
-                    type="text"
-                    maxlength="200"
-                    required="required"
-                    autocomplete="off"
-                  />
-
-                  <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
-                    El nombre es requerido
-                  </div>
-                </div>
-              </div>
             </div>
+            <!-- Estructura de Entidad -->
+            <div class="container" *ngIf="this.entidad.idEntidad > 0">
 
-          </div>
-          <!-- Estructura de Entidad -->
-          <div class="container" *ngIf="this.entidad.idEntidad > 0">
+              <div class="separador"></div>
 
-            <div class="separador"></div>
+              <div class="row">
 
-            <div class="row">
+                <!-- Árbol de Jerarquía -->
+                <div class="col-md-6">
+                  <div class="form-group contenedor-jerarquia">
+                    <span style="font-weight: 600;">Jerarquía</span>
 
-              <!-- Árbol de Jerarquía -->
-              <div class="col-md-6">
-                <div class="form-group contenedor-jerarquia">
-                  <span style="font-weight: 600;">Jerarquía</span>
+                    <tree-root #tree [nodes]="jerarquiaArbol" [options]="options">
+                      <ng-template #treeNodeWrapperTemplate let-node let-index="index">
+                        <div
+                          [ngClass]="'fondo-impar'"
+                          (dblclick)="node.mouseAction('dblClick', $event)"
+                          class="node-wrapper"
+                        >
+                          <!-- Toggle Expand -->
+                          <tree-node-expander [node]="node"></tree-node-expander>
 
-                  <tree-root #tree [nodes]="jerarquiaArbol" [options]="options">
-                    <ng-template #treeNodeWrapperTemplate let-node let-index="index">
-                      <div
-                        [ngClass]="'fondo-impar'"
-                        (dblclick)="node.mouseAction('dblClick', $event)"
-                        class="node-wrapper"
-                      >
-                        <!-- Toggle Expand -->
-                        <tree-node-expander [node]="node"></tree-node-expander>
+                          <!-- Delete Button -->
+                          <div [ngClass]="{ 'node-expander-virtual': node.isLeaf && !node.hasChildren }" class="checkbox mr-1">
+                            <div type="button" class="delete" [class.delete-disabled]="disableSubmit" (click)="eliminarEntidadEstructura(node.data)"></div>
+                          </div>
 
-                        <!-- Delete Button -->
-                        <div [ngClass]="{ 'node-expander-virtual': node.isLeaf && !node.hasChildren }" class="checkbox mr-1">
-                          <div type="button" class="delete" [class.delete-disabled]="disableSubmit" (click)="eliminarEntidadEstructura(node.data)"></div>
+                          <!-- Node Content -->
+                          <tree-node-content (click)="seleccionarCuentaPadre(node.data)" [node]="node" [index]="index"></tree-node-content>
                         </div>
-
-                        <!-- Node Content -->
-                        <tree-node-content (click)="seleccionarCuentaPadre(node.data)" [node]="node" [index]="index"></tree-node-content>
-                      </div>
-                    </ng-template>
-                  </tree-root>
+                      </ng-template>
+                    </tree-root>
+                  </div>
                 </div>
-              </div>
 
-              <div class="col-md-6">
-                <div class="container">
+                <div class="col-md-6">
+                  <div class="container">
 
-                  <div class="row">
+                    <div class="row">
 
-                    <!-- Selector de Pestaña -->
-                    <div class="col-md-9">
-                      <div class="form-group">
+                      <!-- Selector de Pestaña -->
+                      <div class="col-md-9">
+                        <div class="form-group">
 
-                        <label class="label-input required-label">Pestaña Padre</label>
-                        <ng-select
-                          #jerarquiaPadre="ngModel"
-                          name="jerarquiaPadreName"
-                          class="select-custom"
-                          [items]="entidadList"
-                          bindLabel="nombre"
-                          bindValue="idEntidadEstructura"
-                          [(ngModel)]="idJerarquiaPadre"
-                          [placeholder]="placeholderSelect"
-                          [notFoundText]="placeholderNoOptions"
-                        ></ng-select>
+                          <label class="label-input required-label">Pestaña Padre</label>
+                          <ng-select
+                            #jerarquiaPadre="ngModel"
+                            name="jerarquiaPadreName"
+                            class="select-custom"
+                            [items]="entidadList"
+                            bindLabel="nombre"
+                            bindValue="idEntidadEstructura"
+                            [(ngModel)]="idJerarquiaPadre"
+                            [placeholder]="placeholderSelect"
+                            [notFoundText]="placeholderNoOptions"
+                          ></ng-select>
 
-                      </div>
-                    </div>
-
-                    <!-- Switch Nueva Pestaña -->
-                    <div class="col-md-3">
-                      <label class="label-input required-label">Nueva Pestaña</label>
-                      <div class="form-group switch-flex">
-                        <label class="switch" for="nuevoNodo">
-                          <input
-                            #nuevoNodo="ngModel"
-                            name="nuevoNodoName"
-                            id="nuevoNodo"
-                            type="checkbox"
-                            [(ngModel)]="esNuevaPestana"
-                            (ngModelChange)="actualizarBotonAgregar()"
-                          />
-                          <div class="slider round">
-                            <span class="on">Sí</span>
-                            <span class="off">No</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <!-- Grid de Secciones -->
-                  <div class="row mb-4" *ngIf="!esNuevaPestana">
-                    <div class="col-md-12">
-                      <div class="subseccion">Secciones</div>
-                      <app-grid-general
-                        [headerName]="HEADER_GRID_SECCIONES"
-                        [data]="seccionesList"
-                        [children]="columnsSeccion"
-                        (event)="onGridClick($event)"
-                        (selectionChanged)="onSelectionChange($event)"
-                        [disableEdit]="true"
-                        [disableDelete]="true"
-                        [disableXLS]="true">
-                      </app-grid-general>
-                    </div>
-                  </div>
-
-                  <!-- Nueva Pestaña -->
-                  <div class="row mb-4" *ngIf="esNuevaPestana">
-                    <!-- Clave -->
-                    <div class="col-md-4">
-                      <div class="form-group">
-
-                        <label class="label-input required-label">Clave</label>
-                        <div>
-                          <input
-                            #claveEntidadEstructura="ngModel"
-                            [(ngModel)]="entidadEstructura.clave"
-                            name="claveEntidadEstructuraName"
-                            class="form-control"
-                            type="text"
-                            autocomplete="off"
-                            [required]="esNuevaPestana"
-                            maxlength="20"
-                          />
-
-                          <div *ngIf="claveEntidadEstructura.errors?.['required'] && claveEntidadEstructura.touched" class="error">
-                            La clave es requerida
-                          </div>
-                        </div>
-
-                      </div>
-                    </div>
-
-                    <!-- Nombre -->
-                    <div class="col-md-8">
-                      <div class="form-group">
-
-                        <label class="label-input required-label">Nombre</label>
-                        <div>
-                          <input
-                            #nombreEntidadEstructura="ngModel"
-                            [(ngModel)]="entidadEstructura.nombre"
-                            name="nombreEntidadEstructuraName"
-                            class="form-control"
-                            type="text"
-                            autocomplete="off"
-                            [required]="esNuevaPestana"
-                            maxlength="200"
-                          />
-
-                          <div *ngIf="nombreEntidadEstructura.errors?.['required'] && nombreEntidadEstructura.touched" class="error">
-                            El nombre es requerido
-                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
 
-                  <!-- Botón Agregar Estructura de Jerarquía -->
-                  <div class="row mb-4">
-                    <div class="col-md-12 d-flex justify-content-center">
-                      <button
-                        type="button"
-                        [disabled]="disableAgregar"
-                        (click)="onAgregarClick()"
-                        class="btn-terceario btn-margin-left">
-                        Agregar
-                      </button>
-                    </div>
-                  </div>
+                      <!-- Switch Nueva Pestaña -->
+                      <div class="col-md-3">
+                        <label class="label-input required-label">Nueva Pestaña</label>
+                        <div class="form-group switch-flex">
+                          <label class="switch" for="nuevoNodo">
+                            <input
+                              #nuevoNodo="ngModel"
+                              name="nuevoNodoName"
+                              id="nuevoNodo"
+                              type="checkbox"
+                              [(ngModel)]="esNuevaPestana"
+                              (ngModelChange)="actualizarBotonAgregar()"
+                            />
+                            <div class="slider round">
+                              <span class="on">Sí</span>
+                              <span class="off">No</span>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
 
+                    </div>
+
+                    <!-- Grid de Secciones -->
+                    <div class="row mb-4" *ngIf="!esNuevaPestana">
+                      <div class="col-md-12">
+                        <div class="subseccion">Secciones</div>
+                        <app-grid-general
+                          [headerName]="HEADER_GRID_SECCIONES"
+                          [data]="seccionesList"
+                          [children]="columnsSeccion"
+                          (event)="onGridClick($event)"
+                          (selectionChanged)="onSelectionChange($event)"
+                          [disableEdit]="true"
+                          [disableDelete]="true"
+                          [disableXLS]="true">
+                        </app-grid-general>
+                      </div>
+                    </div>
+
+                    <!-- Nueva Pestaña -->
+                    <div class="row mb-4" *ngIf="esNuevaPestana">
+                      <!-- Clave -->
+                      <div class="col-md-4">
+                        <div class="form-group">
+
+                          <label class="label-input required-label">Clave</label>
+                          <div>
+                            <input
+                              #claveEntidadEstructura="ngModel"
+                              [(ngModel)]="entidadEstructura.clave"
+                              name="claveEntidadEstructuraName"
+                              class="form-control"
+                              type="text"
+                              autocomplete="off"
+                              [required]="esNuevaPestana"
+                              maxlength="20"
+                            />
+
+                            <div *ngIf="claveEntidadEstructura.errors?.['required'] && claveEntidadEstructura.touched" class="error">
+                              La clave es requerida
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+
+                      <!-- Nombre -->
+                      <div class="col-md-8">
+                        <div class="form-group">
+
+                          <label class="label-input required-label">Nombre</label>
+                          <div>
+                            <input
+                              #nombreEntidadEstructura="ngModel"
+                              [(ngModel)]="entidadEstructura.nombre"
+                              name="nombreEntidadEstructuraName"
+                              class="form-control"
+                              type="text"
+                              autocomplete="off"
+                              [required]="esNuevaPestana"
+                              maxlength="200"
+                            />
+
+                            <div *ngIf="nombreEntidadEstructura.errors?.['required'] && nombreEntidadEstructura.touched" class="error">
+                              El nombre es requerido
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Botón Agregar Estructura de Jerarquía -->
+                    <div class="row mb-4">
+                      <div class="col-md-12 d-flex justify-content-center">
+                        <button
+                          type="button"
+                          [disabled]="disableAgregar"
+                          (click)="onAgregarClick()"
+                          class="btn-terceario btn-margin-left">
+                          Agregar
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- Footer -->
-			<div class="modal-footer">
-        <!-- Botón Cerrar -->
-				<div class="text-right">
-					<button type="button" (click)="cancelar()" class="btn-secundario btn-margin-left">
-						{{ 'Cancelar' }}
-					</button>
-				</div>
+        <!-- Footer -->
+        <div class="modal-footer">
+          <!-- Botón Cerrar -->
+          <div class="text-right">
+            <button type="button" (click)="cancelar()" class="btn-secundario btn-margin-left">
+              {{ 'Cancelar' }}
+            </button>
+          </div>
 
-        <!-- Botón Guardar -->
-				<div class="text-right">
-					<button [disabled]="disableSubmit" type="submit" class="btn-primario btn-margin-left">
-						Guardar
-					</button>
-				</div>
-			</div>
-    </form>
+          <!-- Botón Guardar -->
+          <div class="text-right">
+            <button [disabled]="disableSubmit" type="submit" class="btn-primario btn-margin-left">
+              Guardar
+            </button>
+          </div>
+        </div>
+      </form>
 
+  </div>
 </div>
 
-
-<div id="loading-cdis" *ngIf="loading || disableSubmit">
-  <img src="assets/img/spinner.gif" alt="Procesando..." />
-  <span>Cargando... por favor espere</span>
-</div>

@@ -110,12 +110,13 @@
   padding: 1rem;
   color: $color-primario;
   font-weight: 500;
-  background-color: #E7E7E7;
+  background-color: #eeeeee;
 }
 
 .modal-content .close {
   color: $color-primario;
   opacity: 1 !important;
+  border: none;
 }
 
 .modal-content .close i:hover {
