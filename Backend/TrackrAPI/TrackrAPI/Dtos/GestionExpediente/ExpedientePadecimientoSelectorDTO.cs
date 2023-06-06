@@ -1,4 +1,4 @@
-﻿namespace TrackrAPI.Dtos.GestionEntidad
+﻿namespace TrackrAPI.Dtos.GestionExpediente
 {
     public class ExpedientePadecimientoSelectorDTO
     {

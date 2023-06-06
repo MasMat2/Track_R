@@ -4,6 +4,7 @@ using TrackrAPI.Dtos.GestionEntidad;
 using TrackrAPI.Models;
 using TrackrAPI.Services.GestionEntidad;
 using System.Collections.Generic;
+using TrackrAPI.Dtos.GestionExpediente;
 
 namespace TrackrAPI.Controllers.GestionEntidad
 {

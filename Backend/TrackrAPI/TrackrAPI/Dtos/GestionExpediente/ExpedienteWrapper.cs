@@ -1,6 +1,7 @@
-﻿using TrackrAPI.Models;
+﻿using TrackrAPI.Dtos.Seguridad;
+using TrackrAPI.Models;
 
-namespace TrackrAPI.Dtos.Seguridad
+namespace TrackrAPI.Dtos.GestionExpediente
 {
     public class ExpedienteWrapper
     {

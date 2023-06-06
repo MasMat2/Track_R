@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TrackrAPI.Dtos.GestionEntidad;
-using TrackrAPI.Dtos.Seguridad;
+using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Models;
 
-namespace TrackrAPI.Repositorys.Seguridad
+namespace TrackrAPI.Repositorys.GestionExpediente
 {
     public class ExpedientePadecimientoRepository : Repository<ExpedientePadecimiento>, IExpedientePadecimientoRepository
     {

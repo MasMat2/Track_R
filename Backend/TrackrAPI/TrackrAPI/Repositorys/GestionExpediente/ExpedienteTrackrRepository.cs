@@ -4,9 +4,9 @@ using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 
-namespace TrackrAPI.Repositorys.Seguridad
+namespace TrackrAPI.Repositorys.GestionExpediente
 {
-    public class ExpedienteTrackrRepository: Repository<ExpedienteTrackr>, IExpedienteTrackrRepository
+    public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedienteTrackrRepository
     {
         public ExpedienteTrackrRepository(TrackrContext context) : base(context)
         {

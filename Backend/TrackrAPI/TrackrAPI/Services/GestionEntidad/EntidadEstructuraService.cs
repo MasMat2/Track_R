@@ -5,6 +5,7 @@ using TrackrAPI.Repositorys.GestionEntidad;
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
+using TrackrAPI.Dtos.GestionExpediente;
 
 namespace TrackrAPI.Services.GestionEntidad
 {

@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Dtos.Seguridad;
-using TrackrAPI.Services.Seguridad;
+using TrackrAPI.Services.GestionExpediente;
 
-namespace TrackrAPI.Controllers.Seguridad
+namespace TrackrAPI.Controllers.GestionExpediente
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -38,7 +39,7 @@ namespace TrackrAPI.Controllers.Seguridad
         [HttpGet("consultarParaGrid/")]
         public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid()
         {
-        return expedienteTrackrService.ConsultarParaGrid();
+            return expedienteTrackrService.ConsultarParaGrid();
         }
 
         [HttpDelete("eliminar/{idExpediente}")]

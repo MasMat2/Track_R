@@ -1,4 +1,4 @@
-﻿namespace TrackrAPI.Dtos.Seguridad
+﻿namespace TrackrAPI.Dtos.GestionExpediente
 {
     public class ExpedientePadecimientoDTO
     {
