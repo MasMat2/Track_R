@@ -1,97 +1,106 @@
+.contenedor {
+  margin-top: 0;
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+}
 
-  .contenedor {
-    margin-top: 0;
-    -webkit-animation-name: fadeIn;
-    animation-name: fadeIn;
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
-  }
-  .contenedor-blanco {
-    background-color: white;
-    padding: 1rem;
-    margin: 1rem;
-  }
+.contenedor-blanco {
+  background-color: white;
+  padding: 1rem;
+  margin: 1rem;
+}
 
-  .cuerpo-contenedor label {
-    padding: .5em;
-  }
+.cuerpo-contenedor label {
+  padding: 0.5em;
+}
 
-  .cuerpo-contenedor {
-    width: auto;
-    margin: 1rem;
-  }
+.cuerpo-contenedor {
+  width: auto;
+  margin: 1rem;
+}
 
-  .titulo-contenedor {
-    font-size: 1.8rem;
-    padding: 2rem;
-    color: $color-primario;
-    background-color: #ffffff;
-  }
-
-.subtitulo-contenedor {
-  font-size: 1.3rem;
-  padding: .5rem;
+.titulo-contenedor {
+  font-size: 1.8rem;
+  padding: 2rem;
   color: $color-primario;
   background-color: #ffffff;
 }
 
-  .contenedor-admin .cuerpo-contenedor {
-    background-color: #ffffff;
-    padding: 20px;
-  }
+.subseccion {
+  color: $color-primario;
+  border-bottom: 1px $color-primario solid;
+  margin-bottom: 25px;
+  padding-top: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
 
-  .contenedor-admin .titulo-contenedor {
-    color: #7F7F7F;
-    font-weight: 600;
-    font-size: 1.2rem;
-  }
+.subtitulo-contenedor {
+  font-size: 1.3rem;
+  padding: 0.5rem;
+  color: $color-primario;
+  background-color: #ffffff;
+}
 
-  .panel-contenedor {
-    border-bottom: 1px solid #bec1af;
-  }
-  
-  .icono-primario {
-    color: $color-primario;
-  }
+.contenedor-admin .cuerpo-contenedor {
+  background-color: #ffffff;
+  padding: 20px;
+}
 
-  //Iconos SVG
+.contenedor-admin .titulo-contenedor {
+  color: #7f7f7f;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
 
-  .icono-imprimir {
-    display: block;
-    width: 15px;
-    height: 15px;
-    background: url(~/assets/img/svg/ico-15x15-Imprimir.svg);
-  }
+.panel-contenedor {
+  border-bottom: 1px solid #bec1af;
+}
 
-  .icono-descargar {
-    display: block;
-    width: 15px;
-    height: 15px;
-    background: url(~/assets/img/svg/ico-15x15-Descargar.svg);
-  }
+.icono-primario {
+  color: $color-primario;
+}
 
-  .panel-busqueda {
-    margin-top: 0.5rem;
-    border-top: 1px solid #e6e4e7f8;
-    height: 20px !important;
-  }
+//Iconos SVG
 
-  .separador {
-    margin: 15px 0px;
-    height: 1px;
-    background: $color-primario;
-  }
+.icono-imprimir {
+  display: block;
+  width: 15px;
+  height: 15px;
+  background: url(~/assets/img/svg/ico-15x15-Imprimir.svg);
+}
 
-  .grid-input {
-    border: 1px #9e9e9e solid !important;
-    width: 100%;
-    display: inline-block;
-    border-radius: 6px !important;
-    background: white;
-    text-align: center;
-  }
-  
-  // Modal mensaje de aviso
+.icono-descargar {
+  display: block;
+  width: 15px;
+  height: 15px;
+  background: url(~/assets/img/svg/ico-15x15-Descargar.svg);
+}
+
+.panel-busqueda {
+  margin-top: 0.5rem;
+  border-top: 1px solid #e6e4e7f8;
+  height: 20px !important;
+}
+
+.separador {
+  margin: 15px 0px;
+  height: 1px;
+  background: $color-primario;
+}
+
+.grid-input {
+  border: 1px #9e9e9e solid !important;
+  width: 100%;
+  display: inline-block;
+  border-radius: 6px !important;
+  background: white;
+  text-align: center;
+}
+
+// Modal mensaje de aviso
 
 .mensaje-aviso {
   .barra-lateral-modal {
