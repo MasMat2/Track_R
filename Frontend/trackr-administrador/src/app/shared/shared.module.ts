@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GridGeneralModule } from './components/grid-general/grid-general.module';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { PdfVisorModule } from '@sharedComponents/pdf-visor/pdf-visor.module';
 
 @NgModule({
   imports: [],
@@ -15,7 +16,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     CommonModule,
     GridGeneralModule,
     NgSelectModule,
-    DomicilioFormularioModule
+    DomicilioFormularioModule,
+    PdfVisorModule
   ],
   providers: []
 })

@@ -1,12 +1,11 @@
-import { ExpedienteGeneralFormularioModule } from './../expediente-general-formulario/expediente-general-formulario.module';
-import { DirectiveModule } from 'src/app/shared/directives/directive.module';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from 'src/app/shared/shared.module';
-import { ExpedienteFormularioComponent } from './expediente-formulario.component';
-import { MatTabsModule } from '@angular/material/tabs';
-import { TabsModule } from 'ngx-bootstrap/tabs';
+import { NgModule } from '@angular/core';
 import { TabuladorEntidadModule } from '@sharedComponents/tabulador-entidad/tabulador-entidad.module';
+import { DirectiveModule } from 'src/app/shared/directives/directive.module';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { ExpedienteEstudioModule } from '../expediente-estudio/expediente-estudio.module';
+import { ExpedienteGeneralFormularioModule } from './../expediente-general-formulario/expediente-general-formulario.module';
+import { ExpedienteFormularioComponent } from './expediente-formulario.component';
 
 @NgModule({
   imports: [
@@ -14,7 +13,8 @@ import { TabuladorEntidadModule } from '@sharedComponents/tabulador-entidad/tabu
     SharedModule,
     DirectiveModule,
     ExpedienteGeneralFormularioModule,
-    TabuladorEntidadModule
+    TabuladorEntidadModule,
+    ExpedienteEstudioModule
   ],
   declarations: [ExpedienteFormularioComponent]
 })

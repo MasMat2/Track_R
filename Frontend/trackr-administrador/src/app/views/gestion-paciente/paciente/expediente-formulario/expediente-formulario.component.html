@@ -7,7 +7,7 @@
   <div class="cuerpo-contenedor" style="padding-bottom: 0;">
     <app-tabulador-entidad
       [claveEntidad]="claveEntidadExpedienteTrackr"
-      [idTabla]="idExpedienteAdministrativo"
+      [idTabla]="idUsuario"
       [externalTemplates] = "externalTemplates">
     </app-tabulador-entidad>
   </div>
@@ -19,4 +19,9 @@
 <ng-template #informacionGeneral>
     <app-expediente-general-formulario>
     </app-expediente-general-formulario>
+</ng-template>
+
+<ng-template #estudios>
+  <app-expediente-estudio>
+  </app-expediente-estudio>
 </ng-template>
