@@ -44,7 +44,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
   public fechaLlegada: Date;
   public esExpedienteViaje = false;
   public navegacion: boolean = false;
-  public idExpedienteAdministrativo: number;
+  public idUsuario: number;
 
   public value = 'Información General';
 
@@ -62,8 +62,8 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
         this.esExpedienteViaje = false;
       } else {
         this.accion = GeneralConstant.COMPONENT_ACCION_EDITAR;
-        const idExpedienteAdministrativo = this.encryptionService.readUrlParams(params).i;
-        this.idExpedienteAdministrativo = idExpedienteAdministrativo;
+        const idUsuario = this.encryptionService.readUrlParams(params).i;
+        this.idUsuario = idUsuario;
       }
     });
   }
