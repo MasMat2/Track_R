@@ -25,5 +25,7 @@ namespace TrackrAPI.Dtos.GestionEntidad
         public bool? Deshabilitado { get; set; }
         public string ClaveSeccion { get; set; }
         public string NombreDominio { get; set; }
+        public string? Grupo { get; set; }
+        public int? Fila { get; set; }
     }
 }

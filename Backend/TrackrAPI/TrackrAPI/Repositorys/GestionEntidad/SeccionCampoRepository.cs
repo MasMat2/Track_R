@@ -32,10 +32,10 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                       .FirstOrDefault();
         }
 
-        public SeccionCampo ConsultarDuplicado(int orden, string clave, int idSeccion)
+        public SeccionCampo ConsultarDuplicado(int orden, string? grupo, string clave, int idSeccion)
         {
             return context.SeccionCampo
-                    .Where(s => (s.Orden == orden && s.IdSeccion == idSeccion) || s.Clave == clave)
+                    .Where(s => (s.Orden == orden && s.Grupo == grupo && s.IdSeccion == idSeccion) || s.Clave == clave)
                     .FirstOrDefault();
         }
 

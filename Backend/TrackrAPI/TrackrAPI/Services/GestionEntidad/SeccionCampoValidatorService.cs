@@ -69,7 +69,11 @@ namespace TrackrAPI.Services.GestionEntidad
 
         public void ValidarDuplicado(SeccionCampo seccionCampo)
         {
-            var seccionCampoDuplicado = seccionCampoRepository.ConsultarDuplicado(seccionCampo.Orden, seccionCampo.Clave, seccionCampo.IdSeccion);
+            var seccionCampoDuplicado = seccionCampoRepository.ConsultarDuplicado(
+                seccionCampo.Orden,
+                seccionCampo.Grupo,
+                seccionCampo.Clave,
+                seccionCampo.IdSeccion);
 
             if (seccionCampoDuplicado != null && seccionCampoDuplicado.IdSeccionCampo != seccionCampo.IdSeccionCampo)
             {

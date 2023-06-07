@@ -10,6 +10,6 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         SeccionCampo Consultar(int idSeccionCampo);
         SeccionCampo Consultar(string descripcion);
         SeccionCampo ConsultarPorClave(string clave);
-        SeccionCampo ConsultarDuplicado(int orden, string clave, int idSeccion);
+        SeccionCampo ConsultarDuplicado(int orden, string? grupo, string clave, int idSeccion);
     }
 }
