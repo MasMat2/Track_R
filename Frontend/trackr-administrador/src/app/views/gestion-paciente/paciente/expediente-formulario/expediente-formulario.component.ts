@@ -38,9 +38,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
   public accion: string;
   public mensajeAgregar = 'El expediente administrativo ha sido agregado.';
   public mensajeEditar = 'El expediente administrativo ha sido modificado.';
-  public claveEntidadExpedienteAdministrativo = GeneralConstant.ClaveEntidadExpedienteAdministrativo;
-  // public expedienteAdministrativo = new ExpedienteAdministrativo();
-  // public expedienteAdministrativoMercancia: ExpedienteAdministrativoMercancia[] = [];
+  public claveEntidadExpedienteTrackr = GeneralConstant.ClaveEntidadExpedienteTrackr;
   public configDate = GeneralConstant.CONFIG_DATEPICKER;
   public fechaAux: Date;
   public fechaLlegada: Date;
@@ -52,7 +50,6 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
 
   constructor(
     private encryptionService: EncryptionService,
-    // private expedienteAdministrativoService: ExpedienteAdministrativoService,
     private mensajeService: MensajeService,
     private route: ActivatedRoute,
     private router: Router,
@@ -67,9 +64,6 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
         this.accion = GeneralConstant.COMPONENT_ACCION_EDITAR;
         const idExpedienteAdministrativo = this.encryptionService.readUrlParams(params).i;
         this.idExpedienteAdministrativo = idExpedienteAdministrativo;
-        // this.expedienteAdministrativoService.consultar(idExpedienteAdministrativo).subscribe((data: any) => {
-        //   this.cargarInformacion(data);
-        // });
       }
     });
   }

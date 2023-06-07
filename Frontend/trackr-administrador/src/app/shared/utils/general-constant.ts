@@ -310,6 +310,7 @@ export class GeneralConstant {
 
   // Gestión de Entidades
   public static ClaveEntidadExpedienteAdministrativo = "001";
+  public static ClaveEntidadExpedienteTrackr = "002";
 
   public static CONFIG_DATEPICKER: any = {
     dateInputFormat: 'DD/MM/YYYY',
