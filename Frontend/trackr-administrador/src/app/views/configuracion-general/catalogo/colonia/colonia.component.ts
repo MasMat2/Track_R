@@ -23,6 +23,7 @@ export class ColoniaComponent implements OnInit {
   public TITULO_MODAL_ELIMINAR = 'Eliminar Colonia';
   public coloniaList: Colonia[];
   public cargandoGrid = false;
+  public loading: boolean = false;
 
   public columns = [
     { headerName: 'Clave', field: 'clave', minWidth: 150, width: 70 },
@@ -35,6 +36,7 @@ export class ColoniaComponent implements OnInit {
     private mensajeService: MensajeService,
     private modalService: BsModalService,
     private bsModalRef: BsModalRef) {}
+    
 
   ngOnInit() {
     this.accesoService.tieneAcceso(CodigoAcceso.AGREGAR_COLONIA).subscribe({
@@ -47,9 +49,11 @@ export class ColoniaComponent implements OnInit {
 
   public consultarGrid(){
     this.cargandoGrid = true;
+    this.loading = true;
     this.coloniaService.consultarParaGrid().subscribe((data)=>{
       this.coloniaList = data;
       this.cargandoGrid = false;
+      this.loading = false;
     })
   }
 

@@ -6,10 +6,18 @@ import { GridGeneralModule } from './components/grid-general/grid-general.module
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PdfVisorModule } from '@sharedComponents/pdf-visor/pdf-visor.module';
 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+//componentes
+import { SpinnerComponent } from './spinner/spinner.component';
+
 @NgModule({
-  imports: [],
-  declarations: [
+  imports: [
+    MatProgressSpinnerModule
   ],
+  declarations: [
+    SpinnerComponent
+   ],
   exports: [
     FormsModule,
     ReactiveFormsModule,
@@ -17,7 +25,9 @@ import { PdfVisorModule } from '@sharedComponents/pdf-visor/pdf-visor.module';
     GridGeneralModule,
     NgSelectModule,
     DomicilioFormularioModule,
-    PdfVisorModule
+    PdfVisorModule,
+    SpinnerComponent,
+    MatProgressSpinnerModule
   ],
   providers: []
 })

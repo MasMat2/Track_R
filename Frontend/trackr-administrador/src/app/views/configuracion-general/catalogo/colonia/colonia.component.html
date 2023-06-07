@@ -6,6 +6,7 @@
         <div class="contenedor-agregar" (click)="agregar()" *ngIf="tieneAccesoAgregar">
           <i class="fas fa-plus-circle"></i><span>Agregar</span>
         </div>
+
         <app-grid-general
           #gridNecesidad
           [headerName]="HEADER_GRID"

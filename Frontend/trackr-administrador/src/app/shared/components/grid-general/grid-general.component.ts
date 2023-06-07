@@ -118,7 +118,7 @@ export class GridGeneralComponent implements OnInit, AfterViewInit, OnChanges {
     skipPinnedBottom: true,
     allColumns: false,
     onlySelected: false,
-    suppressQuotes: true
+    suppressQuotes: true,
   };
 
   // TODO: 2023-05-03 -> Agregar Spinner

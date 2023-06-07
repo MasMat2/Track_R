@@ -65,12 +65,12 @@
 
 .ag-body-viewport {
   border-bottom: 0px $color-secundario solid;
-
+  
   max-height: calc(100vh - 346px);
     position: relative;
-    overflow: hidden;
+    overflow: scroll;
     overflow-y: auto !important;
-    width: 100%;
+    width: 100%; 
 }
 
 .ag-header .ag-header-cell-sortable,
@@ -146,7 +146,9 @@ app-grid-action .see {
 }
 
 .ag-center-cols-viewport {
-  overflow: hidden;
+  overflow: hidden !important;
+  width: 100%;
+  overflow-x: auto;
 }
 
 .ag-cell {
