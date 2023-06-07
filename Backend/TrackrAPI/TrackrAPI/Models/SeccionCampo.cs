@@ -14,6 +14,8 @@ namespace TrackrAPI.Models
         public int Orden { get; set; }
         public int TamanoColumna { get; set; }
         public bool? Deshabilitado { get; set; }
+        public string? Grupo { get; set; }
+        public int? Fila { get; set; }
 
         public virtual Dominio IdDominioNavigation { get; set; } = null!;
         public virtual Seccion IdSeccionNavigation { get; set; } = null!;

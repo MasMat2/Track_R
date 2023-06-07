@@ -119,6 +119,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<ExpedienteCampo> ExpedienteCampo { get; set; } = null!;
         public virtual DbSet<ExpedienteCampoValor> ExpedienteCampoValor { get; set; } = null!;
         public virtual DbSet<ExpedienteDatoSocial> ExpedienteDatoSocial { get; set; } = null!;
+        public virtual DbSet<ExpedienteEstudio> ExpedienteEstudio { get; set; } = null!;
         public virtual DbSet<ExpedientePacienteInformacion> ExpedientePacienteInformacion { get; set; } = null!;
         public virtual DbSet<ExpedientePadecimiento> ExpedientePadecimiento { get; set; } = null!;
         public virtual DbSet<ExpedienteSeccion> ExpedienteSeccion { get; set; } = null!;
@@ -2791,6 +2792,35 @@ namespace TrackrAPI.Models
                     .WithMany(p => p.ExpedienteDatoSocial)
                     .HasForeignKey(d => d.IdServicio)
                     .HasConstraintName("FK_ExpedienteDatoSocial_Servicio");
+            });
+
+            modelBuilder.Entity<ExpedienteEstudio>(entity =>
+            {
+                entity.HasKey(e => e.IdExpedienteEstudio);
+
+                entity.ToTable("ExpedienteEstudio", "Trackr");
+
+                entity.Property(e => e.Archivo).HasColumnType("image");
+
+                entity.Property(e => e.ArchivoNombre)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ArchivoTipoMime)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaRealizacion).HasColumnType("datetime");
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.IdExpedienteNavigation)
+                    .WithMany(p => p.ExpedienteEstudio)
+                    .HasForeignKey(d => d.IdExpediente)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExpedienteEstudio_ExpedienteTrackr");
             });
 
             modelBuilder.Entity<ExpedientePacienteInformacion>(entity =>
@@ -6730,6 +6760,8 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.Clave).HasMaxLength(50);
 
                 entity.Property(e => e.Descripcion).HasMaxLength(200);
+
+                entity.Property(e => e.Grupo).HasMaxLength(50);
 
                 entity.HasOne(d => d.IdDominioNavigation)
                     .WithMany(p => p.SeccionCampo)

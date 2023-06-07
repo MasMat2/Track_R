@@ -7,6 +7,7 @@ namespace TrackrAPI.Models
     {
         public ExpedienteTrackr()
         {
+            ExpedienteEstudio = new HashSet<ExpedienteEstudio>();
             ExpedientePadecimiento = new HashSet<ExpedientePadecimiento>();
         }
 
@@ -21,6 +22,7 @@ namespace TrackrAPI.Models
         public DateTime FechaAlta { get; set; }
 
         public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
+        public virtual ICollection<ExpedienteEstudio> ExpedienteEstudio { get; set; }
         public virtual ICollection<ExpedientePadecimiento> ExpedientePadecimiento { get; set; }
     }
 }
