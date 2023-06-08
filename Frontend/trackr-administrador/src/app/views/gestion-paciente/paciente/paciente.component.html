@@ -3,6 +3,41 @@
     <div>Pacientes</div>
   </div>
 
+  <div class="d-flex justify-content-end" style="margin-right: 20px;">
+    <div class="d-flex">
+      <input
+        type="text"
+        class="form-control"
+        style="width: 600px;"
+        placeholder="Buscar"
+        aria-label="Buscar"
+        />
+      <button
+        class="btn-buscar"
+        type="button"
+        >
+        <img 
+          class="filter-primario"
+          src="assets/img/svg/ico-18x18-buscar.svg"/>
+      </button>
+      <div class="col-md-1"></div>
+      <div class="d-flex align-items-center"
+        style="color:gray">
+        <button
+          class="btn"
+          type="button"
+          >
+          <img 
+          class="filter-gray"
+          src="assets/img/svg/ico-18x18-Filtros.svg"/>
+        </button>
+        <span>Filtros</span>
+      </div>
+    </div>
+  </div>
+
+  
+
   <div class="container-fluid">
     <div class="contenedor-agregar" (click)="agregar()">
       <i class="fas fa-plus-circle"></i><span>Agregar</span>
@@ -12,35 +47,23 @@
       <button
         type="button"
         class="btn"
-        [ngClass]="isVistaCuadricula ? 'icono-primario-activo' : 'icono-primario'"
         (click)="isVistaCuadricula = true"
       >
-      <i class="fa-solid fa-border-all fa-lg"></i>
+      <img 
+        src="assets/img/svg/ico-18x18-Grid-Bloques.svg" 
+        [ngClass]="isVistaCuadricula ? 'filter-primario': null"/>
       </button>
       
       <!-- Botón Vista de Lista -->
       <button
         type="button"
         class="btn"
-        [ngClass]="isVistaCuadricula ? 'icono-primario' : 'icono-primario-activo'"
         (click)="isVistaCuadricula = false"
         title="Vista de Lista"
       >
-      
-      <i class="fa-solid fa-list"></i>
-      </button>
-      
-      <!-- Botón Descargar Excel -->
-      <button
-        type="button"
-        class="btn"
-        (click)="descargarExcel()"
-      >
-      <img
-        class="grid-download"
-        src="assets/img/svg/ico-15x15-Descargar.svg"
-        title="Descargar Excel"
-      />
+      <img 
+        src="assets/img/svg/ico-18x18-Grid-Lista.svg" 
+        [ngClass]="!isVistaCuadricula ? 'filter-primario': null"/>
       </button>
     </div>
     <div class="row">
@@ -61,8 +84,6 @@
           >
           </app-grid-general>
         </ng-template>
-        
-
       </div>
     </div>
   </div>

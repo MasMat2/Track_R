@@ -6,7 +6,24 @@
     height="80vh"
   ></ngx-extended-pdf-viewer>
 </div> -->
-
+<!-- Botón Descargar Excel -->
+<div
+  class="d-flex justify-content-end">
+  <button
+  type="button"
+  class="btn"
+  >
+  <!-- (click)="descargarExcel()" -->
+    <i
+    title="Descargar Excel"
+    class="grid-download"
+    >
+      <img 
+      src="assets/img/svg/ico-15x15-Descargar.svg"/>
+    </i>
+  
+  </button>
+</div>
 <p-table
   class="primeng-table"
   [value]="estudioPacienteList"
@@ -49,7 +66,7 @@
           </ng-template>
         </div>
       </td>
-      <td class="text-center px-0">
+      <td class="botones-acciones text-center px-0">
         <button type="button" class="btn" (click)="onVer(estudio)" title="Ver">
           <i class="fa fa-lg fa-eye icono-primario"></i>
         </button>

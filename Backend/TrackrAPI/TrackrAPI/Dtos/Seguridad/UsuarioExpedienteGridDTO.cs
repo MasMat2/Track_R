@@ -11,5 +11,6 @@
         public int Glucosa { get; set; }
         public int PresionAsistolica { get; set; }
         public int PresionSistolica { get; set; }
+        public string Edad { get; set; }
     }
 }

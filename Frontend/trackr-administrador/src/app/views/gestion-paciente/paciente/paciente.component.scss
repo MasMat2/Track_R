@@ -1,15 +1,15 @@
-.icono-primario{
-  font-size: 24px;
-  
-}
-.icono-primario-activo{
-  font-size: 24px;
-  color:var(--color-primario)
+.filter-primario{
+  filter: invert(17%) sepia(50%) saturate(2928%) hue-rotate(271deg) brightness(91%) contrast(98%);
 }
 
+.btn-buscar{
+  color:purple;
+  border-radius: 5px;
+  border: 1px #d9d9d9 solid !important;
+  width: 50px;
+  margin-left: 10px;
+}
 
-.grid-download {
-  display: block;
-  width: 30px;
-  // background: url(~/assets/img/svg/ico-15x15-Descargar.svg);
+.filter-gray{
+  filter: invert(79%) sepia(13%) saturate(28%) hue-rotate(322deg) brightness(82%) contrast(88%);
 }

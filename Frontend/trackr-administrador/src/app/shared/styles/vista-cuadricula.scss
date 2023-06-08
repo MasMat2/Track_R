@@ -1,7 +1,7 @@
 .primeng-table {
 
     table,
-    tr,
+    tr ,
     td,
     th {
         // border: none !important;
@@ -32,17 +32,18 @@
     }
 
     tr {
-        border-top: 1px solid #bdc3c7 !important;
+        
         border-bottom: 1px solid #bdc3c7 !important;
-
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        background-clip: padding-box;
         // &:not(.ui-state-highlight) {
         // &:nth-child(even) {
         //   background-color: #ededed !important;
         // }
 
         // }
-        &:hover {
-            background-color: #fff2cc !important;
+        &:hover td:not(.botones-acciones) {
+            background-color: #deebf7  !important;
         }
     }
 }
@@ -60,7 +61,7 @@
 
 :host ::ng-deep table {
     border-collapse: separate;
-    border-spacing: 0 10px;
+    border-spacing: 0 40px;
 }
 
 tr th {
@@ -70,6 +71,7 @@ tr th {
 tr td:not(:last-child) {
     border: 1px solid #bdc3c7;
     border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);  // Añade el mismo sombreado aquí
 }
 
 .img-container {
@@ -86,4 +88,11 @@ tr td:not(:last-child) {
 
 .icono-primario {
     font-size: 18px !important;
+}
+
+br {
+    display: block;
+    content: " ";
+    margin: 10px 0;
+    line-height:1px;
 }
