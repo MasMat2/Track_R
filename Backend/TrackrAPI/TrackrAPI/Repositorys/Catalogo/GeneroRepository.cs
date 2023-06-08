@@ -3,28 +3,22 @@ using TrackrAPI.Dtos.Catalogo;
 using TrackrAPI.Models;
 using System.Collections.Generic;
 using System.Linq;
-using TrackrAPI.Dtos.Genero;
 
-namespace TrackrAPI.Repositorys.Genero
+namespace TrackrAPI.Repositorys.Catalogo
 {
 
 
-    public class GeneroRepository : Repository<Genero>
+    public class GeneroRepository : Repository<Genero>, IGeneroRepository
     {
         public GeneroRepository(TrackrContext context) : base(context)
         {
         }
 
-        public Genero? ConsultarDto(int idUsuario)
+        public Genero? Consultar(int idGenero)
         {
             return context.Genero
-             .Where(g => g.IdUsuario == idUsuario)
-             .Include(g => g.TipoDeGenero)
+             .Where(g => g.IdGenero == idGenero)
              .FirstOrDefault();
-        }
-        public IEnumerable<GeneroDto> ConsultarPorTipoDeGenero(string tipoDeGenero)
-        {
-            
         }
     }
 

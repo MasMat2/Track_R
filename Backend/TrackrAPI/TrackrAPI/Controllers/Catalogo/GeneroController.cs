@@ -4,12 +4,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
-
-using TrackrAPI.Dtos.Genero;
+using TrackrAPI.Dtos.Catalogo;
 using TrackrAPI.Services.Catalogo;
 using TrackrAPI.Services.Seguridad;
 
-namespace TrackrAPI.Controllers.Genero
+namespace TrackrAPI.Controllers.Catalogo
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,7 +16,7 @@ namespace TrackrAPI.Controllers.Genero
     public class GeneroController : ControllerBase
     {
         private GeneroService generoService;
-       // private readonly UsuarioService usuarioService;
+        // private readonly UsuarioService usuarioService;
 
         public GeneroController(GeneroService generoService /*UsuarioService usuarioService*/)//
         {
@@ -37,12 +36,12 @@ namespace TrackrAPI.Controllers.Genero
         public IEnumerable<GeneroDto> ConsultarPorTipoDeGenero(int IdUsuario, string tipoDeGenero)
         {
             return generoService.ConsultarPorTipoDeGenero(IdUsuario, tipoDeGenero);
-            }
+        }
 
         [HttpPost]
         [Route("agregar")]
         public void Agregar(GeneroDto generoDto)
-        { 
+        {
             generoService.Agregar(generoDto);
         }
 

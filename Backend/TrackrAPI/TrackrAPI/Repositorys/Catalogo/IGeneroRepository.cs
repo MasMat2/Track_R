@@ -1,14 +1,10 @@
-using TrackrAPI.Dtos.Genero;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys;
-using TrackrAPI.Repositorys.Catalogo;
 
 namespace TrackrAPI.Dtos.Catalogo
 {
-    public interface IGeneroRepository
+    public interface IGeneroRepository : IRepository<Genero>
     {
-       public GeneroDto? Consultar(string tipoDeGenero);
-
-       public GeneroDto? ConsultarConId(int idUsuario);
+       public Genero? Consultar(int idGenero);
     }
 }
