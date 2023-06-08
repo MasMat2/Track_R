@@ -217,7 +217,7 @@ export class TabuladorEntidadComponent implements OnInit {
         let valor : EntidadEstructuraValor = {
           idEntidadEstructuraValor : campo.idEntidadEstructuraValor,
           claveCampo : campo.clave,
-          valor : campo.valor.toString(),
+          valor : campo.valor?.toString() ?? '',
           idEntidadEstructura : idEntidadEstructura,
           idTabla : this.idTabla
         };
@@ -231,7 +231,7 @@ export class TabuladorEntidadComponent implements OnInit {
       let valor : EntidadEstructuraValor = {
         idEntidadEstructuraValor : campo.idEntidadEstructuraValor,
         claveCampo : campo.clave,
-        valor : campo.valor.toString(),
+        valor : campo.valor?.toString() ?? '',
         idEntidadEstructura : idEntidadEstructura,
         idTabla : this.idTabla
       };

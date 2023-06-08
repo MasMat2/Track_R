@@ -132,7 +132,7 @@ export class CampoExpedienteComponent
 
   validate(control: AbstractControl): Observable<ValidationErrors | null> {
     const validationErrors = this._validateInternal(control);
-    
+
     // En lugar de devolver null, devolvemos un Observable que emite null.
     return of(validationErrors || null);
 }
@@ -179,13 +179,13 @@ export class CampoExpedienteComponent
 
   cambioFecha() {
     if(this.campo.idDominioNavigation.fechaMaxima !== null){
-      if(this.campo.valor > this.campo.idDominioNavigation.fechaMaxima){
+      if(this.campo.valor && this.campo.valor > this.campo.idDominioNavigation.fechaMaxima){
         this.campo.valor = this.campo.idDominioNavigation.fechaMaxima;
         this.campo.valor.setHours(0,0,0)
       }
     }
     if(this.campo.idDominioNavigation.fechaMinima !== null){
-      if(this.campo.valor < this.campo.idDominioNavigation.fechaMinima){
+      if(this.campo.valor && this.campo.valor < this.campo.idDominioNavigation.fechaMinima){
         this.campo.valor = this.campo.idDominioNavigation.fechaMinima;
         this.campo.valor.setHours(0,0,1)
       }

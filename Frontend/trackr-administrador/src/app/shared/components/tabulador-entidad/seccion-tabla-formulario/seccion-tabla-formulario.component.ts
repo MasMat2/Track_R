@@ -39,9 +39,19 @@ export class SeccionTablaFormularioComponent implements OnInit {
   ngOnInit() {
     if (this.accion === 'Agregar') {
       for (const campo of this.campos) {
-        campo.valor = '';
+        campo.valor = campo.idDominioNavigation.tipoDato === 'List'
+          ? undefined
+          : '';
       }
     }
+    else {
+      for (const campo of this.campos) {
+        if (campo.idDominioNavigation.tipoDato === 'List') {
+          campo.valor = Number(campo.valor);
+        }
+      }
+    }
+
 
     const result: { [key: string]: SeccionCampo[] } = this.campos.reduce((r, a) => {
         r[a.grupo] = r[a.grupo] || [];
@@ -97,7 +107,7 @@ export class SeccionTablaFormularioComponent implements OnInit {
         let valor: TablaValorDto = {
           idEntidadEstructuraTablaValor: 0,
           claveCampo: campo.clave,
-          valor: campo.valor.toString(),
+          valor: campo.valor?.toString() ?? '',
         };
 
         return valor;
@@ -136,7 +146,7 @@ export class SeccionTablaFormularioComponent implements OnInit {
         let valor: TablaValorDto = {
           idEntidadEstructuraTablaValor: 0,
           claveCampo: campo.clave,
-          valor: campo.valor.toString(),
+          valor: campo.valor?.toString() ?? '',
         };
 
         return valor;

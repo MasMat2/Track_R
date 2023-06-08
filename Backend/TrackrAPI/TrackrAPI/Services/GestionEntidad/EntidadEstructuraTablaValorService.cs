@@ -21,15 +21,16 @@ namespace TrackrAPI.Services.GestionEntidad
         {
             return entidadEstructuraTablaValorRepository
                 .ConsultarPorTabulacion(idEntidadEstructura, idTabla)
-                .GroupBy(e => e.Numero)
-                .Select(registro =>
+                .GroupBy(e => e.IdEntidadEstructura)
+                .SelectMany(tabla =>
                 {
-                    return new RegistroTablaDto()
-                    {
-                        IdRegistroTabla = registro.Key,
-                        IdEntidadEstructura = registro.First().IdEntidadEstructura,
-                        Valores = registro.Where(ev => ev.Numero == registro.Key).ToList()
-                    };
+                    return tabla.GroupBy(e => e.Numero)
+                        .Select(registro => new RegistroTablaDto()
+                        {
+                            IdRegistroTabla = registro.Key,
+                            IdEntidadEstructura = tabla.First().IdEntidadEstructura,
+                            Valores = registro.Where(ev => ev.Numero == registro.Key).ToList()
+                        });
                 })
                 .OrderBy(r => r.IdRegistroTabla)
                 .ToList();

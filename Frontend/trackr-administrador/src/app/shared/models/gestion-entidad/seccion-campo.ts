@@ -12,7 +12,7 @@ export class SeccionCampo {
     public orden: number;
     public tamanoColumna: number;
     public deshabilitado: boolean;
-    public valor: number[] | boolean | string | Date | number;
+    public valor?: number[] | boolean | string | Date | number;
     public grupo: string;
     public fila: number;
 
