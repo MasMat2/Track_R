@@ -15,48 +15,39 @@ namespace TrackrAPI.Controllers.Catalogo
 
     public class GeneroController : ControllerBase
     {
-        private GeneroService generoService;
-        // private readonly UsuarioService usuarioService;
+        private GeneroService _generoService;
+        
 
-        public GeneroController(GeneroService generoService /*UsuarioService usuarioService*/)//
+        public GeneroController(GeneroService generoService )
         {
-            this.generoService = generoService;
-            //this.usuarioService = usuarioService;
+            _generoService = generoService;
         }
 
         [HttpGet]
         [Route("consultar/{idUsuario}")]
-        public GeneroDto Consultar(int IdUsuario)
+        public GeneroDto Consultar(int idGenero)
         {
-            return generoService.ConsultarDto(IdUsuario);
-        }
-
-        [HttpGet]
-        [Route("consultarPorTipoDeGenero/{tipoDeGenero}/")]
-        public IEnumerable<GeneroDto> ConsultarPorTipoDeGenero(int IdUsuario, string tipoDeGenero)
-        {
-            return generoService.ConsultarPorTipoDeGenero(IdUsuario, tipoDeGenero);
+            return _generoService.Consultar(idGenero);
         }
 
         [HttpPost]
-        [Route("agregar")]
         public void Agregar(GeneroDto generoDto)
         {
-            generoService.Agregar(generoDto);
+            _generoService.Agregar(generoDto);
         }
 
         [HttpPut]
-        [Route("editar")]
+        //[Route("editar")]
         public void Editar(GeneroDto generoDto)
         {
-            generoService.Editar(generoDto);
+            _generoService.Editar(generoDto);
         }
 
-        [HttpDelete]
-        [Route("eliminar/{idUsuario}")]
-        public void Eliminar(int idUsuario)
+        [HttpDelete("{idGenero}")]
+        //[Route("eliminar/{idUsuario}")]
+        public void Eliminar(int idGenero)
         {
-            generoService.Eliminar(idUsuario);
+            _generoService.Eliminar(idGenero);
         }
 
 
