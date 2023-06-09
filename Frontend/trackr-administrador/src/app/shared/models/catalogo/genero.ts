@@ -1,4 +1,4 @@
 export class Genero{
-    public tipoDegenero: string;
-    public idUsuario: number;
+    public Descripcion: string;
+    public idGenero: number;
 }
