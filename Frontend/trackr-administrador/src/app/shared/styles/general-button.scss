@@ -1,6 +1,10 @@
 @import "variables.scss";
 
 button {
+  &.btn {
+    border: none;
+  }
+
   &.btn-primario,
   &.btn-secundario,
   &.btn-secundario-cancelar,
