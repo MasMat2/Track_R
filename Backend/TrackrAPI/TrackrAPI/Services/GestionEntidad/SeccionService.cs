@@ -29,6 +29,12 @@ namespace TrackrAPI.Services.GestionEntidad
             return seccion;
         }
 
+        public Seccion ConsultarPorClave(string clave)
+        {
+            var seccion = seccionRepository.ConsultarPorClave(clave);
+            return seccion;
+        }
+
         public IEnumerable<SeccionGridDto> ConsultarGeneral()
         {
             return seccionRepository.ConsultarGeneral();
@@ -58,21 +64,25 @@ namespace TrackrAPI.Services.GestionEntidad
 
             if (seccion != null)
             {
-                using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+                using var scope = new TransactionScope(
+                    TransactionScopeOption.Required,
+                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+
+                var camposHijos = seccionCampoRepository.ConsultarPorSeccion(idSeccion);
+
+                foreach (var campo in camposHijos)
                 {
-                    var camposHijos = seccionCampoRepository.ConsultarPorSeccion(idSeccion);
+                    var seccionCampo = seccionCampoRepository.Consultar(campo.IdSeccionCampo);
 
-                    foreach (var campo in camposHijos)
+                    if (seccionCampo != null)
                     {
-
-                        var seccionCampo = seccionCampoRepository.Consultar(campo.IdSeccionCampo);
                         seccionCampoRepository.Eliminar(seccionCampo);
                     }
-
-                    seccionRepository.Eliminar(seccion);
-
-                    scope.Complete();
                 }
+
+                seccionRepository.Eliminar(seccion);
+
+                scope.Complete();
             }
         }
 

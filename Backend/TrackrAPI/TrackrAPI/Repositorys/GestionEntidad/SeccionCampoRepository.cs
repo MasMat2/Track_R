@@ -13,30 +13,37 @@ namespace TrackrAPI.Repositorys.GestionEntidad
             base.context = context;
         }
 
-        public SeccionCampo Consultar(int idSeccionCampo)
+        public SeccionCampo? Consultar(int idSeccionCampo)
         {
             return context.SeccionCampo.Where(e => e.IdSeccionCampo == idSeccionCampo).ToList().FirstOrDefault();
         }
 
-        public SeccionCampo Consultar(string descripcion)
+        public SeccionCampo? Consultar(string descripcion)
         {
             return context.SeccionCampo
-                      .Where(e => e.Descripcion == descripcion)
-                      .FirstOrDefault();
+                .Where(e => e.Descripcion == descripcion)
+                .FirstOrDefault();
         }
 
-        public SeccionCampo ConsultarPorClave(string clave)
+        public SeccionCampo? ConsultarPorClave(string clave)
         {
             return context.SeccionCampo
-                      .Where(e => e.Clave == clave)
-                      .FirstOrDefault();
+                .Where(e => e.Clave == clave)
+                .FirstOrDefault();
         }
 
-        public SeccionCampo ConsultarDuplicado(int orden, string? grupo, string clave, int idSeccion)
+        public SeccionCampo? ConsultarDuplicado(
+            int orden,
+            string? grupo,
+            string clave,
+            int idSeccion)
         {
             return context.SeccionCampo
-                    .Where(s => (s.Orden == orden && s.Grupo == grupo && s.IdSeccion == idSeccion) || s.Clave == clave)
-                    .FirstOrDefault();
+                .Where(s => (s.Orden == orden &&
+                    s.Grupo == grupo &&
+                    s.IdSeccion == idSeccion) ||
+                    s.Clave == clave)
+                .FirstOrDefault();
         }
 
         public IEnumerable<SeccionCampoDto> ConsultarPorSeccion(int idSeccion)
@@ -64,8 +71,10 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                     ValorMinimo = es.IdDominioNavigation.ValorMinimo,
                     ValorMaximo = es.IdDominioNavigation.ValorMaximo,
                     Deshabilitado = es.Deshabilitado,
-                    ClaveSeccion = es.IdSeccionNavigation.Clave,
-                    NombreDominio = es.IdDominioNavigation.Nombre
+                    ClaveSeccion = es.IdSeccionNavigation.Clave ?? "",
+                    NombreDominio = es.IdDominioNavigation.Nombre,
+                    Grupo = es.Grupo,
+                    Fila = es.Fila,
                 };
             return secciones;
         }
