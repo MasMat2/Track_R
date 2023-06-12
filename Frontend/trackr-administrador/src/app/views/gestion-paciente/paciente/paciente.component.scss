@@ -13,3 +13,11 @@
 .filter-gray{
   filter: invert(79%) sepia(13%) saturate(28%) hue-rotate(322deg) brightness(82%) contrast(88%);
 }
+
+.filter-text{
+  display: flex;
+  justify-content: end;
+  margin-right: 15vh;
+  color: gray;
+  font-style: italic;
+}

@@ -15,10 +15,6 @@
     margin-left:10vh
 }
 
-.botones-acciones :hover{
-    td{
-        &:hover {
-            background-color: red !important;
-        }
-    }
+.search-container {
+    border-bottom: 1px solid #000; /* Ajusta el color según tu diseño */
 }

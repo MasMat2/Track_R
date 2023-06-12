@@ -1,4 +1,4 @@
-.primeng-table {
+.grid-cuadricula {
 
     table,
     tr ,
@@ -7,10 +7,12 @@
         // border: none !important;
         // font-family: "Segoe UI", sans-serif;
         font-size: 13px;
+        border-radius: 10px !important;
     }
+    
 
     th {
-        font-size: 10px;
+        font-size: 13px;
     }
 
     th,
@@ -24,18 +26,19 @@
     }
 
     .table-header>th {
-        // TODO: 2023-05-17 -> Ajustar color
-        color: var(--color-primario);
-        background-color: #ffffff;
+        color: var(--color-primario) !important;
+        background-color: #ffffff !important;
         text-align: center;
         // font-weight: 600;
     }
 
-    tr {
+    tr td:not(:last-child)  {
         
-        border-bottom: 1px solid #bdc3c7 !important;
-        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        
+        
+        // box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         background-clip: padding-box;
+        margin: 100px !important;  // Añade margen entre las celdas
         // &:not(.ui-state-highlight) {
         // &:nth-child(even) {
         //   background-color: #ededed !important;
@@ -46,6 +49,14 @@
             background-color: #deebf7  !important;
         }
     }
+
+    tr td:last-child {
+        border: none !important;
+        background: transparent !important;
+    }
+
+    
+    
 }
 
 ::ng-deep .ui-table-caption {
@@ -69,9 +80,8 @@ tr th {
 }
 
 tr td:not(:last-child) {
-    border: 1px solid #bdc3c7;
-    border-radius: 10px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);  // Añade el mismo sombreado aquí
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.2);  // Añade el mismo sombreado aquí
+    margin: 100px;  // Añade margen entre las celdas
 }
 
 .img-container {
