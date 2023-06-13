@@ -23,6 +23,7 @@ namespace TrackrAPI.Models
         public decimal? ValorMaximo { get; set; }
         public DateTime? FechaMinima { get; set; }
         public DateTime? FechaMaxima { get; set; }
+        public bool? PermiteFueraDeRango { get; set; }
 
         public virtual ICollection<DominioDetalle> DominioDetalle { get; set; }
         public virtual ICollection<ExpedienteCampo> ExpedienteCampo { get; set; }

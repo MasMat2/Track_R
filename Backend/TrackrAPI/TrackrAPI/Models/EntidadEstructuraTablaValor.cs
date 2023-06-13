@@ -11,6 +11,7 @@ namespace TrackrAPI.Models
         public string ClaveCampo { get; set; } = null!;
         public string? Valor { get; set; }
         public int? IdTabla { get; set; }
+        public bool? FueraDeRango { get; set; }
 
         public virtual EntidadEstructura IdEntidadEstructuraNavigation { get; set; } = null!;
     }
