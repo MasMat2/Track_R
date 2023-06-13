@@ -1,9 +1,6 @@
-﻿using TrackrAPI.Dtos.Contabilidad;
-using TrackrAPI.Dtos.GestionEntidad;
+﻿using TrackrAPI.Dtos.GestionEntidad;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionEntidad;
-using System.Collections.Generic;
-using System.Linq;
 using System.Transactions;
 using TrackrAPI.Dtos.GestionExpediente;
 
@@ -101,9 +98,9 @@ namespace TrackrAPI.Services.GestionEntidad
         {
             using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
             {
-                EntidadEstructura entidadEstructura = entidadEstructuraRepository.Consultar(idEntidadEstructura);
+                var entidadEstructura = entidadEstructuraRepository.Consultar(idEntidadEstructura);
 
-                if (entidadEstructura != null)
+                if (entidadEstructura is not null)
                 {
                     var hijos = entidadEstructuraRepository.ConsultarHijosDeEstructura(entidadEstructura.IdEntidadEstructura);
                     EliminarHijos(hijos);
