@@ -1,9 +1,7 @@
-﻿using TrackrAPI.Dtos;
-using TrackrAPI.Dtos.Catalogo;
+﻿using TrackrAPI.Dtos.Catalogo;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Catalogo;
-using System.Linq;
 
 namespace TrackrAPI.Services.Catalogo
 {
@@ -67,7 +65,7 @@ namespace TrackrAPI.Services.Catalogo
             Validator.ValidarLongitudRangoString(dominio.Descripcion, LongitudDescripcion, MensajeDescripcionLongitud);
         }
 
-        public void ValidarExistencia(DominioDto dominio)
+        public void ValidarExistencia(DominioDto? dominio)
         {
             if (dominio == null)
             {
@@ -98,6 +96,11 @@ namespace TrackrAPI.Services.Catalogo
         public void ValidarDependencia(int idDominio)
         {
             var dominio = dominioRepository.ConsultarDependencias(idDominio);
+
+            if (dominio == null)
+            {
+                throw new CdisException(MensajeExistencia);
+            }
 
             if (dominio.DominioDetalle.Any())
             {
