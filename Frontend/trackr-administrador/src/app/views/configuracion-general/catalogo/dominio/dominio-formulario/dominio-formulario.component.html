@@ -213,7 +213,27 @@
               </div>
             </div>
           </div>
+
+          <div class="col-md-2">
+            <label class="label-input required-label">Permite Fuera de Rango</label>
+            <div class="form-group radion-bottom">
+              <label class="switch">
+                <input
+                  type="checkbox"
+                  #permiteFueraDeRango="ngModel"
+                  [(ngModel)]="dominio.permiteFueraDeRango"
+                  id="permiteFueraDeRango"
+                  name="permiteFueraDeRango"
+                  class="form-control">
+                <div class="slider round">
+                  <span class="on">Sí</span>
+                  <span class="off">No</span>
+                </div>
+              </label>
+            </div>
+          </div>
         </div>
+
         <div class="row">
           <div class="col-md-4">
             <div class="form-group">

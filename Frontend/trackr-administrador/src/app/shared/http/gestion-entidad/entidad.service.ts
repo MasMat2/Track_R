@@ -36,7 +36,6 @@ export class EntidadService {
   }
 
   actualizarExpedienteTrackr(): Observable<void> {
-    console.log('actualizarExpedienteTrackr')
     return this.http.post<void>(this.dataUrl + 'actualizarExpedienteTrackr', null);
   }
 }

@@ -69,7 +69,8 @@ namespace TrackrAPI.Services.GestionEntidad
                     IdTabla = registro.IdTabla,
                     Numero = ultimoRegistro + 1,
                     ClaveCampo = valorDto.ClaveCampo,
-                    Valor = valorDto.Valor
+                    Valor = valorDto.Valor,
+                    FueraDeRango = valorDto.FueraDeRango
                 };
 
                 entidadEstructuraTablaValorRepository.Agregar(valor);
@@ -101,6 +102,7 @@ namespace TrackrAPI.Services.GestionEntidad
                 var valorDto = valoresDto.Find(v => v.ClaveCampo == valor.ClaveCampo)!;
 
                 valor.Valor = valorDto.Valor;
+                valor.FueraDeRango = valorDto.FueraDeRango;
 
                 entidadEstructuraTablaValorRepository.Editar(valor);
             }
@@ -117,7 +119,8 @@ namespace TrackrAPI.Services.GestionEntidad
                     IdTabla = registro.IdTabla,
                     Numero = registro.Numero,
                     ClaveCampo = valorDto.ClaveCampo,
-                    Valor = valorDto.Valor
+                    Valor = valorDto.Valor,
+                    FueraDeRango = valorDto.FueraDeRango
                 };
 
                 entidadEstructuraTablaValorRepository.Agregar(valor);

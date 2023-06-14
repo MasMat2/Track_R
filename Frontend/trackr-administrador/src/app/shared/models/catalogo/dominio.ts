@@ -13,6 +13,7 @@ export class Dominio {
     public valorMaximo: number;
     public fechaMinima: Date;
     public fechaMaxima: Date;
+    public permiteFueraDeRango: boolean;
 
     public dominioDetalle: DominioDetalle[];
 
