@@ -296,11 +296,6 @@ export class HospitalFormularioComponent implements OnInit {
     this.campoColonia = '';
 
     if (event > 0) {
-      Object.keys(hijos).forEach((nombre) => {
-        // hijos[nombre].control.reset();
-        console.log(hijos);
-      });
-
       this.consultarEstados(event);
     }
   }
@@ -314,11 +309,6 @@ export class HospitalFormularioComponent implements OnInit {
     this.hospital.codigoPostal = '';
 
     if (event > 0) {
-      Object.keys(hijos).forEach((nombre) => {
-        // hijos[nombre].control.reset();
-        console.log(hijos);
-      });
-
       this.consultarMunicipios(event);
     }
   }
@@ -330,11 +320,6 @@ export class HospitalFormularioComponent implements OnInit {
     this.hospital.codigoPostal = '';
 
     if (event > 0) {
-      Object.keys(hijos).forEach((nombre) => {
-        console.log(hijos);
-        // hijos[nombre].control.reset();
-      });
-
       this.consultarColonias(event);
     }
   }
@@ -347,7 +332,6 @@ export class HospitalFormularioComponent implements OnInit {
   }
 
   public onChangeCodigoPostal(event: any | null, hijos: NgModel[]): void {
-    console.log(event);
     if (event.length < 4) {
       this.municipioList = [];
       this.codigoPostalList = [];
@@ -371,11 +355,6 @@ export class HospitalFormularioComponent implements OnInit {
 
           this.municipioList = [];
           this.codigoPostalList = [];
-
-          Object.keys(hijos).forEach((nombre) => {
-            console.log(hijos);
-            // hijos[nombre].control.reset();
-          });
 
           this.municipioService.consultarPorEstadoParaSelector(data.idEstado).subscribe((municipios) => {
             this.codigoPostalService.consultarPorCodigoPostal(data.codigoPostal1).subscribe((colonias) => {

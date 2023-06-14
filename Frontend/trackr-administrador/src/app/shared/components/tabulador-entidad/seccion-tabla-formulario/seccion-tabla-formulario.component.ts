@@ -171,8 +171,6 @@ export class SeccionTablaFormularioComponent implements OnInit {
 
     const number = Number.parseFloat(campo.valor?.toString() ?? '');
 
-    console.log(number, campo.valor);
-
     if (Number.isNaN(number)) {
       return false;
     }
