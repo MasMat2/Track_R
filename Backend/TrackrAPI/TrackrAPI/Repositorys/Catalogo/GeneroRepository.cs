@@ -20,6 +20,16 @@ namespace TrackrAPI.Repositorys.Catalogo
              .Where(g => g.IdGenero == idGenero)
              .FirstOrDefault();
         }
+
+        public IEnumerable<Genero> Consultar()
+        {
+            return context.Genero.ToList();
+        }
+
+        public void Eliminar(int idGenero)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

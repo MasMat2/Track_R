@@ -8,86 +8,79 @@ namespace TrackrAPI.Services.Catalogo
 {
     public class GeneroService
     {
-        private readonly IGeneroRepository _generoRepository;
-        private object generoRepository;
+       private readonly IGeneroRepository _generoRepository;
 
-        public GeneroService(IGeneroRepository generoRepository)
+       private readonly GeneroService _generoService;
+
+       public GeneroService(IGeneroRepository generoRepository)
+       {
+        _generoRepository = generoRepository;
+       }
+
+       public GeneroDto? Consultar(int idGenero)
+       {
+        var genero = _generoRepository.Consultar(idGenero);
+
+        if(genero == null)
         {
-            _generoRepository = generoRepository;
+            return null;
         }
 
-        public GeneroDto Consultar(int idGenero)
+        var generoDto = new GeneroDto
         {
-            var genero = _generoRepository.Consultar(idGenero);
+            IdGenero = genero.IdGenero,
+            Descripcion = genero.Descripcion
+        };
 
-            if (genero == null)
+        return generoDto;
+       }
+
+        public IEnumerable<GeneroDto> Consultar()
+        {
+            var generos = _generoRepository.Consultar();
+            var generosDto = new List<GeneroDto>();
+            foreach(var genero in generos)
             {
-                return null;
-            }
-
-            var generoDto = new GeneroDto
+                var generoDto = new GeneroDto
             {
                 IdGenero = genero.IdGenero,
-                Descripcion = genero.Descripcion,
+                Descripcion = genero.Descripcion
             };
-
-            return generoDto;
-        }
-
-
-        public void Agregar(GeneroDto generoDto, int idGenero)
+                generosDto.Add(generoDto);
+            }
+                return generosDto;
+            }
+        public void Agregar(GeneroDto generoDto)
         {
-            using var gen = new TransactionScope();
-            //Agregar el genero
-            var genero = new Genero()
+            var genero = new Genero
             {
-                IdGenero =idGenero,
                 Descripcion = generoDto.Descripcion
             };
-
             _generoRepository.Agregar(genero);
 
-            generoDto.IdGenero = genero.IdGenero;
-            gen.Complete();
-        }
+        }    
+
 
         public void Editar(GeneroDto generoDto)
         {
-           var genero = _generoRepository.Consultar(generoDto.IdGenero);
-
-           if (genero == null){
-            throw new CdisException("El usuario no existe");
-           }
-
-           using var gen = new TransactionScope();
-
-           genero.Descripcion = generoDto.Descripcion;
-
-           _generoRepository.Editar(genero);
-           gen.Complete();
-
-        }
-
-        public void Eliminar(int idGenero)
-        {
-            var genero = _generoRepository.Consultar(idGenero);
-            
+            var genero = _generoRepository.Consultar(generoDto.IdGenero);
             if( genero == null)
             {
                 throw new CdisException("El usuario no existe");
             }
-
-            using var gen = new TransactionScope();
-
-            //Eliminar al usuario
-
-            _generoRepository.Eliminar(genero);
-            gen.Complete();
+                _generoRepository.Editar(genero);
         }
-
-        internal void Agregar(GeneroDto generoDto)
+        public void Eliminar(int idGenero)
         {
-            throw new NotImplementedException();
-        }
+            var genero = _generoRepository.Consultar(idGenero);
+            if( genero == null)
+            {
+                throw new CdisException("El usuario no existe");
+            }
+            _generoRepository.Eliminar(idGenero);
+            }
+
+
+            
     }
 }
