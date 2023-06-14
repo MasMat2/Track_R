@@ -60,6 +60,7 @@ import { Observable, Observer, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { UsuarioImagenService } from '@services/usuario-imagen.service';
+import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
 
 /**
  * Formulario de usuario, permite agregar, editar y eliminar.
@@ -111,7 +112,7 @@ export class UsuarioFormularioComponent implements OnInit {
 
   // Datos de Contacto
   public paisList: Pais[] = [];
-  public estadoList: Estado[] = [];
+  public estadoList: EstadoSelectorDto[] = [];
   public municipioList: Municipio[] = [];
   public localidadList: Localidad[] = [];
   public coloniaList: Colonia[] = [];

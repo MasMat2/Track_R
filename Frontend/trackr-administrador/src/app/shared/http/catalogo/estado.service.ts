@@ -2,38 +2,44 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Estado } from '@models/catalogo/estado';
+import { EstadoFormularioConsultaDto } from '@dtos/catalogo/estado-formulario-consulta-dto';
+import { EstadoGridDto } from '@dtos/catalogo/estado-grid-dto';
+import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
+import { EstadoFormularioCapturaDto } from '@dtos/catalogo/estado-formulario-captura-dto';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class EstadoService {
   private dataUrl = 'estado/';
 
-  constructor(public http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
   consultar(idEstado: number): Observable<Estado> {
-    return this.http.get<Estado>(this.dataUrl + `consultar/${idEstado}`);
+    return this.http.get<Estado>(this.dataUrl + `${idEstado}`);
   }
 
-  consultarGeneral() {
-    return this.http.get<Estado[]>(this.dataUrl + 'consultarGeneral');
+  consultarParaFormulario(idEstado: number): Observable<EstadoFormularioConsultaDto> {
+    return this.http.get<EstadoFormularioConsultaDto>(this.dataUrl + `formulario/${idEstado}`);
   }
 
-  consultarTodosParaGrid(): Observable<Estado[]> {
-    return this.http.get<Estado[]>(this.dataUrl + 'consultarTodosParaGrid');
+  consultarParaGrid(): Observable<EstadoGridDto[]> {
+    return this.http.get<EstadoGridDto[]>(this.dataUrl + 'grid');
   }
 
-  consultarPorPaisParaSelector(idPais: number): Observable<Estado[]> {
-    return this.http.get<Estado[]>(this.dataUrl + `consultarPorPaisParaSelector/${idPais}`);
+  consultarPorPaisParaSelector(idPais: number): Observable<EstadoSelectorDto[]> {
+    return this.http.get<EstadoSelectorDto[]>(this.dataUrl + `selector/pais/${idPais}`);
   }
 
-  agregar(estado: Estado): Observable<void> {
-    return this.http.post<void>(this.dataUrl + 'agregar', estado);
+  agregar(estado: EstadoFormularioCapturaDto): Observable<void> {
+    return this.http.post<void>(this.dataUrl, estado);
   }
 
-  editar(estado: Estado): Observable<void> {
-    return this.http.put<void>(this.dataUrl + 'editar', estado);
+  editar(estado: EstadoFormularioCapturaDto): Observable<void> {
+    return this.http.put<void>(this.dataUrl, estado);
   }
 
   eliminar(idEstado: number): Observable<void> {
-    return this.http.delete<void>(this.dataUrl + `eliminar/${idEstado}`);
+    return this.http.delete<void>(this.dataUrl + `${idEstado}`);
   }
 }
