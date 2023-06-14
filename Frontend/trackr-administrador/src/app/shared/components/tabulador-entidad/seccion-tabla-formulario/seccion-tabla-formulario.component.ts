@@ -52,12 +52,13 @@ export class SeccionTablaFormularioComponent implements OnInit {
       }
     }
 
-
-    const result: { [key: string]: SeccionCampo[] } = this.campos.reduce((r, a) => {
+    const result: { [key: string]: SeccionCampo[] } = this.campos
+      .sort((a, b) => a.orden - b.orden)
+      .reduce((r, a) => {
         r[a.grupo] = r[a.grupo] || [];
         r[a.grupo].push(a);
         return r;
-    }, {} as { [key: string]: SeccionCampo[] });
+      }, {} as { [key: string]: SeccionCampo[] });
 
     this.grupos = Object.keys(result)
       .map((groupKey) => {
@@ -69,8 +70,7 @@ export class SeccionTablaFormularioComponent implements OnInit {
           fila: fila,
           campos: campos,
         };
-      })
-      .sort((a, b) => b.fila - a.fila);
+      });
   }
 
   public enviarFormulario(formulario: NgForm): void {

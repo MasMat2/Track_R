@@ -167,7 +167,7 @@ namespace TrackrAPI.Services.GestionEntidad
                             IdDominio = campoMedidas.IdDominio,
                             Clave = campoMedidas.Clave,
                             Descripcion = campo.Descripcion,
-                            Orden = campo.Orden,
+                            Orden = campoMedidas.Orden,
                             Deshabilitado = campo.Deshabilitado,
                             Requerido = campo.Requerido,
                             TamanoColumna = campo.TamanoColumna,
