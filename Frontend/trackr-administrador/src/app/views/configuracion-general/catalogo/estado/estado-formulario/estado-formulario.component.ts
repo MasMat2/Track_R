@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { EstadoFormularioCapturaDto } from '@dtos/catalogo/estado-formulario-captura-dto';
+import { EstadoFormularioConsultaDto } from '@dtos/catalogo/estado-formulario-consulta-dto';
 import { EstadoService } from '@http/catalogo/estado.service';
 import { PaisService } from '@http/catalogo/pais.service';
 import { Pais } from '@models/catalogo/pais';
@@ -30,7 +31,7 @@ export class EstadoFormularioComponent implements OnInit, OnDestroy {
   protected readonly placeHolderNoOptions: string =
     GeneralConstant.PLACEHOLDER_DROPDOWN_NO_OPTIONS;
 
-  protected idPais: number;
+  protected idPais?: number;
   protected paises$: Observable<Pais[]>;
 
   protected submiting: boolean = false;
@@ -62,7 +63,7 @@ export class EstadoFormularioComponent implements OnInit, OnDestroy {
       .consultarParaFormulario(idEstado)
       .pipe(
         takeUntil(this.destroy$),
-        map((estado) => {
+        map((estado: EstadoFormularioConsultaDto) => {
           const capturaDto = new EstadoFormularioCapturaDto();
           capturaDto.idEstado = estado.idEstado;
           capturaDto.clave = estado.clave;
@@ -73,7 +74,7 @@ export class EstadoFormularioComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe({
-        next: (estado) => {
+        next: (estado: EstadoFormularioCapturaDto) => {
           this.estado = estado;
           this.idPais = estado.idPais;
         },
@@ -97,7 +98,7 @@ export class EstadoFormularioComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.estado.idPais = this.idPais;
+    this.estado.idPais = this.idPais!;
 
     // TODO: 2023-06-14 -> Agregar el id al agregar
 

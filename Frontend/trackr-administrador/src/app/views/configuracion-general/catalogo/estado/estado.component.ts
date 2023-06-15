@@ -59,9 +59,7 @@ export class EstadoComponent implements OnInit {
       [GeneralConstant.GRID_ACCION_ELIMINAR]: () => this.eliminar(estado),
     };
 
-    const accion = acciones[gridData.accion];
-
-    accion();
+    acciones[gridData.accion]();
   }
 
   public agregar(): void {
