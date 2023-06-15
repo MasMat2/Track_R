@@ -9,22 +9,24 @@ export class GeneroService {
     private dataUrl = "genero/";  // URL to web api
 
     constructor(public http: HttpClient) { }
-    
-    consultar(idGenero: number): Observable<Genero> {
-        return this.http.get<Genero>(this.dataUrl + `consultar/${idGenero}`);
+
+    consultar(idGenero: number): Observable<GeneroDto> {
+        return this.http.get<GeneroDto>(this.dataUrl + `consultar/${idGenero}`);
     }
 
-    agregar(generoDto: Genero): Observable<void>{
+    consulta(): Observable<GeneroDto[]> {
+        return this.http.get<GeneroDto[]>(this.dataUrl + 'consultar');
+    }
+    agregar(generoDto: Genero): Observable<void> {
         return this.http.post<void>(this.dataUrl + 'agregar', Genero);
     }
 
-    editar(generoDto: Genero): Observable<void>{
+    editar(generoDto: Genero): Observable<void> {
         return this.http.put<void>(this.dataUrl + 'editar', Genero);
     }
 
-    eliminar(idGenero: number): Observable<void>{
+    eliminar(idGenero: number): Observable<void> {
         return this.http.delete<void>(this.dataUrl + `eliminar/${idGenero}`);
     }
 
-    }
-    
+}
