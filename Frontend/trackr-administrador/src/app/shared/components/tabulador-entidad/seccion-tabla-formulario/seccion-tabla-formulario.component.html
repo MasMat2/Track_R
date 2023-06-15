@@ -6,21 +6,21 @@
       (ngSubmit)="enviarFormulario(formulario)"
       novalidate="novalidate"
     >
-      <div *ngFor="let grupo of grupos">
+      <div *ngFor="let grupo of grupos; let i = index">
         <div class="row">
           <div *ngIf="grupo.nombre !== 'undefined' && grupo.nombre !== 'null'" class="col-12 subseccion">
             {{ grupo.nombre }}
           </div>
 
           <div
-            *ngFor="let campo of grupo.campos; let i = index"
+            *ngFor="let campo of grupo.campos; let j = index"
             [ngClass]="'col-md-' + campo.tamanoColumna"
           >
             <div class="form-group">
               <app-campo-expediente
                 #campoModel="ngModel"
                 [(ngModel)]="campo.valor"
-                [name]="'campos' + i"
+                [name]="'campos' + i + '-' + j"
                 [campo]="campo"
                 [par]="i % 2 == 0"
               >
@@ -35,7 +35,7 @@
           <button
             type="submit"
             class="btn btn-primario"
-            [disabled]="!formulario.valid || submiting"
+            [disabled]="submiting"
           >
             Guardar
           </button>
