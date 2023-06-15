@@ -1,0 +1,83 @@
+<div class="d-flex"><!--La clase "d-flex" es un selector de clase en CSS que se utiliza para aplicar estilos específicos a un elemento HTML. En este caso, se utiliza en un elemento <div> para aplicar una propiedad CSS llamada "display: flex". La propiedad CSS "display: flex" se utiliza para establecer un contenedor flexible, lo que significa que los elementos hijos dentro de ese contenedor se distribuirán automáticamente en una línea horizontal y se ajustarán automáticamente a diferentes tamaños de pantalla. Esto es parte del modelo de diseño llamado "Flexbox" en CSS, que permite un diseño flexible y adaptable.-->
+    <div class="barra-lateral-modal"><i class="fa fa-plus"></i></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <div>{{ accion }} Genero</div>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
+                <i class="far fa-times-circle"></i>
+            </button>
+        </div>
+
+        <form
+            (keydown.enter)="$event.preventDefault()"
+            #formulario="ngForm"
+            (ngSubmit)="enviarFormulario(formulario)"
+            novalidate = "novalidate"
+        
+        >
+            <div class="modal-body" id="modal">
+                <!--El atributo ngModel es el nombre de la variable donde guardaremos el valor-->
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="label-input required-label">ID Genero</label>
+                            <div>
+                                <input 
+                                #idGenero="ngModel"
+                                [(ngModel)]="genero.IdGenero"
+                                id="Id"
+                                name="IdName"
+                                class="form-control"
+                                type="text"
+                                maxlength="20"
+                                required="true"
+                                autocomplete="off"
+                                [disabled]="genero.idGenero > 0"
+                                /> 
+                                <div *ngIf="Id.errors?-['required'] && Id.touched" class="error">
+                                    El Id es requerido
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label class="label-input required-label">Nombre</label>
+                            <div>
+                                <input
+                                #nombre="ngModel"
+                                [(ngModel)]="genero.Nombre"
+                                id="nombre"
+                                name="Descripcion"
+                                class="form-control"
+                                type="text"
+                                maxlength="50"
+                                required="required"
+                                autocomplete="off"
+                                />
+                                <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
+                                    La descripcion es requerida
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-center">
+                  <button type ="button" 
+                    class="btn-secundario mr-3"
+                    (click)="cancelar();"
+                    >Cancelar
+                  </button>
+                  <button [disabled]="btnSubmit" 
+                    type="submit" 
+                    class="btn-primario btn-margin-left"
+                    >Guardar
+                  </button>
+                </div>
+              </div>
+    </form>
+    </div>
+</div>
