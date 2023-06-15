@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TrackrAPI.Dtos.Contabilidad;
 using TrackrAPI.Dtos.GestionEntidad;
 using TrackrAPI.Models;
-using System.Collections.Generic;
-using System.Linq;
 using TrackrAPI.Helpers;
 using TrackrAPI.Dtos.GestionExpediente;
 
@@ -16,7 +13,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
             this.context = context;
         }
 
-        public EntidadEstructura Consultar(int idEntidadEstructura)
+        public EntidadEstructura? Consultar(int idEntidadEstructura)
         {
             return context.EntidadEstructura
                 .Include(e => e.IdSeccionNavigation)
@@ -24,7 +21,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .FirstOrDefault();
         }
 
-        public EntidadEstructura ConsultarTabulacionDuplicada(string clave, string nombre, int idEntidad)
+        public EntidadEstructura? ConsultarTabulacionDuplicada(string clave, string nombre, int idEntidad)
         {
             return context.EntidadEstructura
                 .Where(e =>
@@ -68,22 +65,22 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         {
             return context.EntidadEstructura
                 .Include(e => e.IdSeccionNavigation)
-                .ThenInclude(s => s.SeccionCampo)
-                .ThenInclude(sc => sc.IdDominioNavigation)
-                .ThenInclude(d => d.DominioDetalle)
+                    .ThenInclude(s => s!.SeccionCampo)
+                        .ThenInclude(sc => sc.IdDominioNavigation)
+                            .ThenInclude(d => d.DominioDetalle)
                 .Where(e => e.IdEntidadEstructuraPadre == idEntidadEstructuraPadre)
                 .Select(e => new EntidadEstructuraDto()
                 {
                     IdEntidadEstructura = e.IdEntidadEstructura,
-                    Nombre = e.Tabulacion == true ?
-                             e.Clave + " - " + e.Nombre :
-                             e.IdSeccionNavigation.Clave + " - " + e.IdSeccionNavigation.Nombre,
+                    Nombre = e.Tabulacion == true
+                        ? e.Clave + " - " + e.Nombre
+                        : e.IdSeccionNavigation!.Clave + " - " + e.IdSeccionNavigation.Nombre,
                     Clave = e.Clave,
                     Tabulacion = e.Tabulacion,
                     IdEntidad = e.IdEntidad,
                     IdSeccion = e.IdSeccion,
                     IdEntidadEstructuraPadre = e.IdEntidadEstructuraPadre,
-                    EsTabla = e.IdSeccionNavigation.EsTabla ?? false,
+                    EsTabla = e.IdSeccionNavigation!.EsTabla ?? false,
                     Campos = e.IdSeccionNavigation.SeccionCampo.ToList()
                 });
         }
@@ -146,7 +143,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Select(e => new ExpedientePadecimientoSelectorDTO
                 {
                     IdPadecimiento = e.IdEntidadEstructura,
-                    Nombre = e.Nombre,
+                    Nombre = e.Nombre ?? string.Empty,
                 });
         }
     }

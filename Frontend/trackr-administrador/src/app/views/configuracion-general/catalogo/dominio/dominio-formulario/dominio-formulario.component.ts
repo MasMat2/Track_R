@@ -131,6 +131,7 @@ export class DominioFormularioComponent implements OnInit {
       return;
     }
 
+    // TODO: 2023-06-14 -> Tipo de Dato default
     this.dominio.tipoDato = 'default';
 
     if (this.accion === GeneralConstant.MODAL_ACCION_AGREGAR) {

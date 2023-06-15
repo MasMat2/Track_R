@@ -11,7 +11,7 @@ namespace TrackrAPI.Controllers.Catalogo
     [ApiController]
     public class DominioController: ControllerBase
     {
-        private DominioService dominioService;
+        private readonly DominioService dominioService;
 
         public DominioController(DominioService dominioService)
         {
@@ -35,16 +35,16 @@ namespace TrackrAPI.Controllers.Catalogo
 
         [HttpGet]
         [Route("consultarPorNombre/{nombre}")]
-        public Dominio ConsultarPorNombre(string nombre)
+        public Dominio? ConsultarPorNombre(string nombre)
         {
             return dominioService.Consultar(nombre);
         }
 
         [HttpGet]
         [Route("consultarTodosParaSelector")]
-        public IEnumerable<DominioDto> consultarTodosParaSelector()
+        public IEnumerable<DominioDto> ConsultarTodosParaSelector()
         {
-            return dominioService.consultarTodosParaSelector();
+            return dominioService.ConsultarTodosParaSelector();
         }
 
         [HttpPost]

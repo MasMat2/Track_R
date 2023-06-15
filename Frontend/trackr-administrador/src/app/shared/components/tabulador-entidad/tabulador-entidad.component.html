@@ -1,101 +1,97 @@
 <!-- Grupo de Tabulaciones -->
 <mat-tab-group
-    *ngIf="!loading"
-    class="mat-elevation-z1"
-    animationDuration="0ms"
-    (selectedIndexChange)="onSelectTabChange($event)"
+  *ngIf="!loading"
+  class="mat-elevation-z1"
+  animationDuration="0ms"
+  (selectedIndexChange)="onSelectTabChange($event)"
 >
-    <!-- Componentes Externos -->
-    <mat-tab
-        *ngFor="let element of externalTemplates; let i = index"
-        [disabled]="!element.enabled"
-    >
-        <!-- Label -->
-        <ng-template mat-tab-label>
-            {{ element.label }}
-            <mat-icon class="indicador" fontSet="fas" fontIcon="fa-circle"></mat-icon>
-        </ng-template>
+  <!-- Componentes Externos -->
+  <mat-tab
+    *ngFor="let element of externalTemplates; let i = index"
+    [disabled]="!element.enabled"
+  >
+    <!-- Label -->
+    <ng-template mat-tab-label>
+      {{ element.label }}
+      <mat-icon class="indicador" fontSet="fas" fontIcon="fa-circle"></mat-icon>
+    </ng-template>
 
-        <!-- Contenido -->
-        <ng-container *ngTemplateOutlet="element.template">
-        </ng-container>
+    <!-- Contenido -->
+    <ng-container *ngTemplateOutlet="element.template"> </ng-container>
+
+    <!-- Botón de Guardar -->
+    <!-- <div *ngIf="element.externalSubmit" class="contenedor-submit text-center">
+						<button
+								type="button"
+								class="btn-primario"
+								(click)="onEnviarFormularioExterno();"
+								[disabled]="element.submitControl"
+						>
+								Guardar
+						</button>
+				</div>         -->
+  </mat-tab>
+
+  <!-- Tabulaciones de primer nivel (Pestañas) -->
+  <mat-tab
+    *ngFor="let pestana of entidadEstructuras"
+    [label]="pestana.nombre"
+    [disabled]="!(idTabla > 0)"
+  >
+    <div class="cuerpo-contenedor">
+      <form
+        (keydown.enter)="$event.preventDefault()"
+        #formulario="ngForm"
+        (ngSubmit)="enviarFormulario(formulario, pestana.idEntidadEstructura)"
+        novalidate="novalidate"
+      >
+        <!-- Secciones -->
+        <div *ngFor="let seccion of pestana.hijos" class="row mb-5">
+          <div class="col-md-12 subseccion">
+            {{ seccion.nombre }}
+          </div>
+
+          <!-- Seccion estandar -->
+          <ng-container *ngIf="!seccion.esTabla">
+            <!-- Campos -->
+            <div
+              *ngFor="let campo of seccion.campos; let i = index"
+              [ngClass]="'col-md-' + campo.tamanoColumna"
+            >
+              <div class="form-group">
+                <app-campo-expediente
+                  #campoModel="ngModel"
+                  [(ngModel)]="campo.valor"
+                  [name]="'campos' + i"
+                  [campo]="campo"
+                  [par]="i % 2 == 0 ? true : false"
+                >
+                </app-campo-expediente>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Seccion Tabla -->
+          <ng-container *ngIf="seccion.esTabla">
+            <app-seccion-tabla
+              [idTabla]="idTabla"
+              [entidadEstructuraSeccion]="seccion"
+            ></app-seccion-tabla>
+          </ng-container>
+        </div>
 
         <!-- Botón de Guardar -->
-        <!-- <div *ngIf="element.externalSubmit" class="contenedor-submit text-center">
-            <button
-                type="button"
-                class="btn-primario"
-                (click)="onEnviarFormularioExterno();"
-                [disabled]="element.submitControl"
-            >
-                Guardar
-            </button>
-        </div>         -->
-
-    </mat-tab>
-
-    <!-- Tabulaciones de primer nivel (Pestañas) -->
-    <mat-tab
-        *ngFor="let pestana of entidadEstructuras"
-        [label]="pestana.nombre"
-        [disabled]="!(idTabla > 0)"
-    >
-        <div class="cuerpo-contenedor">
-            <form
-                (keydown.enter)="$event.preventDefault()"
-                #formulario="ngForm"
-                (ngSubmit)="enviarFormulario(formulario, pestana.idEntidadEstructura)"
-                novalidate="novalidate"
-            >
-                <!-- Secciones -->
-                <div *ngFor="let seccion of pestana.hijos" class="row mb-5">
-                    <div class="col-md-12 subseccion">
-                        {{seccion.nombre}}
-                    </div>
-
-                    <!-- Seccion estandar -->
-                    <ng-container *ngIf="!seccion.esTabla">
-                        <!-- Campos -->
-                        <div
-                            *ngFor="let campo of seccion.campos;let i = index"
-                            [ngClass]="'col-md-' + campo.tamanoColumna"
-                        >
-                            <div class="form-group">
-                                <app-campo-expediente
-                                    #campoModel = "ngModel"
-                                    [(ngModel)]="campo.valor"
-                                    [name]="'campos' + i"
-                                    [campo]="campo"
-                                    [par] = "(i%2==0) ? true : false"
-                                >
-                                </app-campo-expediente>
-                            </div>
-                        </div>
-                    </ng-container>
-
-                    <!-- Seccion Tabla -->
-                    <ng-container *ngIf="seccion.esTabla">
-                        <app-seccion-tabla
-                            [idTabla]="idTabla"
-                            [entidadEstructuraSeccion]="seccion"
-                        ></app-seccion-tabla>
-                    </ng-container>
-                </div>
-
-                <!-- Botón de Guardar -->
-                <!-- <div class="contenedor-submit text-center">
-                    <button type="submit" class="btn-primario" [disabled]="btnSubmit">Guardar</button>
-                </div> -->
-
-            </form>
-        </div>
-    </mat-tab>
-
+        <!-- <div class="contenedor-submit text-center">
+										<button type="submit" class="btn-primario" [disabled]="btnSubmit">Guardar</button>
+								</div> -->
+      </form>
+    </div>
+  </mat-tab>
 </mat-tab-group>
 
 <!-- Spinner -->
 <ng-container *ngIf="loading">
-    <div class="tab-spinner">
-        <mat-spinner></mat-spinner>
-    </div>
+  <div class="tab-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
 </ng-container>
