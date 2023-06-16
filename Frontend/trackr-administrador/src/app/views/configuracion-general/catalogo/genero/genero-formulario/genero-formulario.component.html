@@ -24,18 +24,18 @@
                             <label class="label-input required-label">ID Genero</label>
                             <div>
                                 <input 
-                                #idGenero="ngModel"
+                                #IdGenero="ngModel"
                                 [(ngModel)]="genero.IdGenero"
-                                id="Id"
-                                name="IdName"
+                                id="IdGenero"
+                                name="IdGeneroName"
                                 class="form-control"
                                 type="text"
                                 maxlength="20"
                                 required="true"
                                 autocomplete="off"
-                                [disabled]="genero.idGenero > 0"
+                                [disabled]="genero.IdGenero > 0"
                                 /> 
-                                <div *ngIf="Id.errors?-['required'] && Id.touched" class="error">
+                                <div *ngIf="IdGenero.errors?.['required'] && IdGenero.touched" class="error">
                                     El Id es requerido
                                 </div>
                             </div>
@@ -46,9 +46,9 @@
                             <label class="label-input required-label">Nombre</label>
                             <div>
                                 <input
-                                #nombre="ngModel"
-                                [(ngModel)]="genero.Nombre"
-                                id="nombre"
+                                #Descripcion="ngModel"
+                                [(ngModel)]="genero.Descripcion"
+                                id="Descripcion"
                                 name="Descripcion"
                                 class="form-control"
                                 type="text"
@@ -56,7 +56,7 @@
                                 required="required"
                                 autocomplete="off"
                                 />
-                                <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
+                                <div *ngIf="Descripcion.errors?.['required'] && Descripcion.touched" class="error">
                                     La descripcion es requerida
                                 </div>
                             </div>
