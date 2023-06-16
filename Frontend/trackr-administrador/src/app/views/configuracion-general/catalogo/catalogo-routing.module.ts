@@ -58,7 +58,11 @@ const routes: Routes = [
     path: 'pais',
     loadChildren: () => import('./pais/pais.module').then((m) => m.PaisModule)
   },
-];
+  {
+    path: 'genero',
+    loadChildren: () => import('./genero/genero.module').then((m) => m.GeneroModule)
+  }
+  ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
