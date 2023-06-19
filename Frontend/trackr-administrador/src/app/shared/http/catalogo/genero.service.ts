@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { Genero } from "@models/catalogo/genero";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { GeneroDto} from '@dtos/catalogos/generoDto'
 
 
 @Injectable()
@@ -17,12 +17,12 @@ export class GeneroService {
     consulta(): Observable<GeneroDto[]> {
         return this.http.get<GeneroDto[]>(this.dataUrl + 'consultar');
     }
-    agregar(generoDto: Genero): Observable<void> {
-        return this.http.post<void>(this.dataUrl + 'agregar', Genero);
+    agregar(genero: GeneroDto): Observable<void> {
+        return this.http.post<void>(this.dataUrl + 'agregar', genero);
     }
 
-    editar(generoDto: Genero): Observable<void> {
-        return this.http.put<void>(this.dataUrl + 'editar', Genero);
+    editar(genero: GeneroDto): Observable<void> {
+        return this.http.put<void>(this.dataUrl + 'editar', genero);
     }
 
     eliminar(idGenero: number): Observable<void> {
