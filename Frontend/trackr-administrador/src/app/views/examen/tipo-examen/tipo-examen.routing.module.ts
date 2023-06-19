@@ -14,10 +14,10 @@ const routes: Routes = [
       acceso: ACCESO_TIPO_EXAMEN.Consultar,
     },
   },
-  // {
-  //   path: 'contenido-examen',
-  //   loadChildren: () => import('./contenido-examen/contenido-examen.module').then(m => m.ContenidoExamenModule),
-  // }
+  {
+    path: 'contenido-examen',
+    loadChildren: () => import('./contenido-examen/contenido-examen.module').then(m => m.ContenidoExamenModule),
+  }
 ];
 
 @NgModule({

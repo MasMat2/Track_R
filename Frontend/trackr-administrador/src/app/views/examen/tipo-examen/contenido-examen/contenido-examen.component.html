@@ -1,0 +1,37 @@
+<div class="contenedor">
+  <div class="titulo-contenedor">
+    Contenido del Examen: {{ tipoExamen.nombre }}
+  </div>
+  <div class="cuerpo-contenedor">
+    <div class="row justify-content-center">
+      <div class="col-md-12">
+        <div
+          class="contenedor-agregar"
+          (click)="agregar()"
+          *ngIf="tieneAccesoAgregar"
+        >
+          <i class="fas fa-plus-circle"></i><span>Agregar</span>
+        </div>
+        <app-grid-general
+          #gridNecesidad
+          [headerName]="HEADER_GRID"
+          [data]="contenidoExamenList"
+          [children]="columns"
+          (event)="onGridClick($event)"
+          [accesoEditar]="EDITAR_TIPO_EXAMEN"
+          [accesoEliminar]="ELIMINAR_TIPO_EXAMEN"
+        >
+        </app-grid-general>
+      </div>
+    </div>
+    <div class="mt-3 text-center">
+      <button
+        type="button"
+        class="btn-secundario btn-margin-right"
+        (click)="backTo()"
+      >
+        Regresar
+      </button>
+    </div>
+  </div>
+</div>
