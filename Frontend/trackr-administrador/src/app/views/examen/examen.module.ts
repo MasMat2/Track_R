@@ -3,7 +3,7 @@ import { ExamenRoutingModule } from './examen.routing.module';
 
 @NgModule({
   imports: [
-    ExamenRoutingModule    
+    ExamenRoutingModule
   ],
   declarations: [
   ],

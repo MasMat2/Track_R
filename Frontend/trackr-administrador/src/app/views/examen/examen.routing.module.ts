@@ -18,6 +18,10 @@ const routes: Routes = [
         loadChildren: () =>
           import('./asignatura/asignatura.module').then((m) => m.AsignaturaModule)
       },
+      {
+        path: 'tipo-examen',
+        loadChildren: () => import('./tipo-examen/tipo-examen.module').then((m) => m.TipoExamenModule)
+      }
     ]
   }
 ];
