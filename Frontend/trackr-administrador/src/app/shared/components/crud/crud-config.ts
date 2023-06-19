@@ -1,6 +1,6 @@
 import { Type } from '@angular/core';
 import { CrudFormularioBase } from './components/crud-formulario-base';
-import { KeyValueCollection } from '@utils/types';
+import { KeyValueCollection } from '@utils/constants/types';
 
 /** Define la configuración necesaria para efectuar una acción en el formulario. */
 type FormActionConfig = {

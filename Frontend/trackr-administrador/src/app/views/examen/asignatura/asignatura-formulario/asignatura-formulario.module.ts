@@ -7,13 +7,7 @@ import { FormsModule } from "@angular/forms";
 @NgModule({
     imports: [
       CommonModule,
-      FormsModule
-      // TreeModule,
-      // DropDownTreeModule,
-      // NgSelectizeModule,
-      // DirectiveModule,
-      // Daterangepicker,
-      // BsDatepickerModule
+      FormsModule,
     ],
     declarations: [AsignaturaFormularioComponent],
     providers: []

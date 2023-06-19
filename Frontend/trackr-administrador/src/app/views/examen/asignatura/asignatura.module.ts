@@ -12,13 +12,7 @@ import { CommonModule } from "@angular/common";
       AsignaturaRoutingModule,
       GridGeneralModule,
       CommonModule,
-      // TreeModule,
-      // DropDownTreeModule,
-      // NgSelectizeModule,
-      // DirectiveModule,
-      // Daterangepicker,
       ModalModule.forChild(),
-      // BsDatepickerModule
       AsignaturaFormularioModule
 
     ],

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AsignaturaService } from '@http/examen/asignatura.service';
 import { Asignatura } from '@models/examen/asignatura';
-import { GeneralConstant } from '@utils/general-constant';
-import { isNil } from 'lodash';
+import { FORM_ACTION } from '@utils/constants/constants';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { MensajeService } from 'src/app/shared/components/mensaje/mensaje.service';
 import { FormularioService } from 'src/app/shared/services/formulario.service';
 
@@ -29,10 +29,11 @@ export class AsignaturaFormularioComponent implements OnInit {
     private formularioService: FormularioService,
     private mensajeService: MensajeService,
     private asignaturaService: AsignaturaService,
+    private bsModalRef: BsModalRef
   ) {}
 
   public ngOnInit(): void {
-    if (this.accion === GeneralConstant.MODAL_ACCION_AGREGAR) {
+    if (this.accion === FORM_ACTION.Agregar) {
       this.asignatura.fechaAlta = new Date();
       this.asignatura.estatus = true;
     }
@@ -59,9 +60,9 @@ export class AsignaturaFormularioComponent implements OnInit {
       return;
     }
 
-    if (this.accion === GeneralConstant.MODAL_ACCION_AGREGAR) {
+    if (this.accion === FORM_ACTION.Agregar) {
       this.agregar();
-    } else if (this.accion === GeneralConstant.MODAL_ACCION_EDITAR) {
+    } else if (this.accion === FORM_ACTION.Editar) {
       this.editar();
     }
   }
@@ -71,7 +72,7 @@ export class AsignaturaFormularioComponent implements OnInit {
       next: (idAsignatura) => {
         this.mensajeService.modalExito(this.MENSAJE_AGREGAR);
         this.asignatura.idAsignatura = idAsignatura;
-        this.onClose(true);
+        this.cerrar();
       },
       error: () => {
         this.submiting = false;
@@ -83,7 +84,7 @@ export class AsignaturaFormularioComponent implements OnInit {
     this.asignaturaService.editar(this.asignatura).subscribe({
       next: () => {
         this.mensajeService.modalExito(this.MENSAJE_EDITAR);
-        this.onClose(true);
+        this.cerrar();
       },
       error: () => {
         this.submiting = false;
@@ -91,7 +92,13 @@ export class AsignaturaFormularioComponent implements OnInit {
     });
   }
 
+  private cerrar(): void {
+    this.onClose(true);
+    this.bsModalRef.hide();
+  }
+
   public cancelar(): void {
     this.onClose(false);
+    this.bsModalRef.hide();
   }
 }

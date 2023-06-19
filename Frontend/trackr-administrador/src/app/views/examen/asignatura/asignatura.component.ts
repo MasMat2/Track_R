@@ -3,7 +3,10 @@ import { AsignaturaService } from '@http/examen/asignatura.service';
 import { AccesoService } from '@http/seguridad/acceso.service';
 import { Asignatura } from '@models/examen/asignatura';
 import { ACCESO_ASIGNATURA } from '@utils/codigos-acceso/examen.acceso';
-import { GeneralConstant } from '@utils/general-constant';
+import { FORM_ACTION } from '@utils/constants/constants';
+import { ICONO } from '@utils/constants/font-awesome-icons';
+import { GRID_ACTION } from '@utils/constants/grid';
+import { MODAL_CONFIG } from '@utils/constants/modal';
 import { ColDef } from 'ag-grid-community';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MensajeService } from 'src/app/shared/components/mensaje/mensaje.service';
@@ -17,7 +20,7 @@ export class AsignaturaComponent implements OnInit {
   protected readonly NOMBRE_ENTIDAD: string = 'Asignaturas';
 
   // Accesos
-  protected tieneAccesoAgregar: boolean = true;
+  protected tieneAccesoAgregar: boolean = false;
   protected readonly EDITAR_ASIGNATURA: string = ACCESO_ASIGNATURA.Editar;
   protected readonly ELIMINAR_ASIGNATURA: string = ACCESO_ASIGNATURA.Eliminar;
 
@@ -47,12 +50,11 @@ export class AsignaturaComponent implements OnInit {
 
   public ngOnInit(): void {
     this.consultarGrid();
-    // this.accesoService
-    //   .tieneAcceso(ACCESO_ASIGNATURA.Agregar)
-    //   .subscribe((tieneAcceso) => {
-    //     // this.tieneAccesoAgregar = tieneAcceso;
-    //     this.tieneAccesoAgregar = true;
-    //   });
+    this.accesoService
+      .tieneAcceso(ACCESO_ASIGNATURA.Agregar)
+      .subscribe((tieneAcceso) => {
+        this.tieneAccesoAgregar = tieneAcceso;
+      });
   }
 
   /**
@@ -71,9 +73,9 @@ export class AsignaturaComponent implements OnInit {
    */
   public onGridClick(gridData: { accion: string; data: Asignatura }) {
     const acciones: { [key: string]: () => void } = {
-      [GeneralConstant.GRID_ACCION_EDITAR]: () => this.editar(gridData.data.idAsignatura),
-      [GeneralConstant.GRID_ACCION_ELIMINAR]: () => this.eliminar(gridData.data),
-      [GeneralConstant.GRID_ACCION_VER]: () => {},
+      [GRID_ACTION.Editar]: () => this.editar(gridData.data.idAsignatura),
+      [GRID_ACTION.Eliminar]: () => this.eliminar(gridData.data),
+      [GRID_ACTION.Ver]: () => {},
     };
 
     acciones[gridData.accion]();
@@ -84,7 +86,7 @@ export class AsignaturaComponent implements OnInit {
    */
   protected agregar(): void {
     const initialState = {
-      accion: GeneralConstant.MODAL_ACCION_AGREGAR,
+      accion: FORM_ACTION.Agregar,
       esEdicion: false,
       onClose: (cerrar: boolean) => {
         if (cerrar) {
@@ -94,10 +96,14 @@ export class AsignaturaComponent implements OnInit {
       },
     };
 
-    this.bsModalRef = this.modalService.show(AsignaturaFormularioComponent, {
-      initialState,
-      ...GeneralConstant.CONFIG_MODAL_DEFAULT,
-    });
+    this.bsModalRef = this.modalService.show(
+      AsignaturaFormularioComponent,
+      {
+        initialState,
+        ...MODAL_CONFIG.Default,
+      }
+    );
+
   }
 
   /**
@@ -106,7 +112,7 @@ export class AsignaturaComponent implements OnInit {
 
   private editar(idAsignatura: number): void {
     const initialState = {
-      accion: GeneralConstant.MODAL_ACCION_EDITAR,
+      accion: FORM_ACTION.Editar,
       esEdicion: true,
       idAsignatura: idAsignatura,
       onClose: (cerrar: boolean) => {
@@ -119,7 +125,7 @@ export class AsignaturaComponent implements OnInit {
 
     this.bsModalRef = this.modalService.show(AsignaturaFormularioComponent, {
       initialState,
-      ...GeneralConstant.CONFIG_MODAL_DEFAULT,
+      ...MODAL_CONFIG.Default,
     });
   }
 
@@ -132,7 +138,7 @@ export class AsignaturaComponent implements OnInit {
       .modalConfirmacion(
         MENSAJE_CONFIRMACION,
         TITULO_MODAL,
-        GeneralConstant.ICONO_CRUZ
+        ICONO.Cruz
       )
       .then(() => {
         this.asignaturaService
