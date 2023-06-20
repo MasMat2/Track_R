@@ -18,3 +18,10 @@ export enum ACCESO_REACTIVO {
   Editar = 'APREAC2000',
   Eliminar = 'APREAC3000'
 };
+
+export enum ACCESO_NIVEL_EXAMEN {
+  Consultar = 'APNVEM0000',
+  Agregar = 'APNVEM1000',
+  Editar = 'APNVEM2000',
+  Eliminar = 'APNVEM3000'
+};

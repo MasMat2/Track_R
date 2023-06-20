@@ -25,7 +25,11 @@ const routes: Routes = [
       {
         path: 'reactivo',
         loadChildren: () => import('./reactivo/reactivo.module').then((m) => m.ReactivoModule)
-      }
+      },
+      {
+        path: 'nivel-examen',
+        loadChildren: () => import('./nivel-examen/nivel-examen.module').then((m) => m.NivelExamenModule)
+      },
     ]
   }
 ];

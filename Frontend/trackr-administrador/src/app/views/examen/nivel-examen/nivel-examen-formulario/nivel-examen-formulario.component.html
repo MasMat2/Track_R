@@ -1,0 +1,97 @@
+<div class="d-flex">
+  <div class="barra-lateral-modal"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div>{{ accion }} Nivel Examen</div>
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="cancelar()"
+      >
+        <i class="far fa-times-circle"></i>
+      </button>
+    </div>
+    <form
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      novalidate="novalidate"
+    >
+      <div class="modal-body" id="modal">
+        <div class="row justify-content-md-center">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="label-input required-label">Clave</label>
+              <div>
+                <input
+                  #clave="ngModel"
+                  [(ngModel)]="nivelExamen.clave"
+                  maxlength="30"
+                  name="clave"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                  [disabled]="esEditar()"
+                />
+              </div>
+              <div
+                *ngIf="clave.errors?.['required'] && clave.touched"
+                class="error"
+              >
+                La clave es requerida
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="label-input required-label">Descripción</label>
+              <div>
+                <input
+                  #descripcion="ngModel"
+                  [(ngModel)]="nivelExamen.descripcion"
+                  maxlength="200"
+                  name="descripcion"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                />
+              </div>
+              <div
+                *ngIf="descripcion.errors?.['required'] && descripcion.touched"
+                class="error"
+              >
+                La descripción es requerida
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="text-right">
+          <button
+            type="button"
+            class="btn-secundario btn-margin-right"
+            (click)="cancelar()"
+          >
+            Cancelar
+          </button>
+        </div>
+
+        <div class="text-right">
+          <button
+            [disabled]="submitting"
+            type="submit"
+            class="btn-primario btn-margin-left"
+          >
+            Guardar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
