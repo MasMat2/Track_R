@@ -52,7 +52,7 @@ export class AsignaturaComponent implements OnInit {
     this.consultarGrid();
     this.accesoService
       .tieneAcceso(ACCESO_ASIGNATURA.Agregar)
-      .subscribe((tieneAcceso) => {
+      .subscribe((tieneAcceso: boolean) => {
         this.tieneAccesoAgregar = tieneAcceso;
       });
   }
@@ -63,7 +63,7 @@ export class AsignaturaComponent implements OnInit {
   public consultarGrid(): void {
     this.asignaturaService
       .consultarGeneral()
-      .subscribe((asignaturas) => {
+      .subscribe((asignaturas: Asignatura[]) => {
         this.asignaturas = asignaturas;
       });
   }

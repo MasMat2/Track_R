@@ -60,7 +60,7 @@ export class ContenidoExamenFormularioComponent implements OnInit {
   private consultarContenidoExamen(idContenidoExamen: number): void {
     this.contenidoExamenService
       .consultar(idContenidoExamen)
-      .subscribe((contenidoExamen) => {
+      .subscribe((contenidoExamen: ContenidoExamen) => {
         contenidoExamen.fechaAlta = new Date(contenidoExamen.fechaAlta);
         contenidoExamen.idTipoExamen = this.tipoExamen.idTipoExamen;
 
@@ -71,7 +71,7 @@ export class ContenidoExamenFormularioComponent implements OnInit {
   private consultarAsignaturas(): void {
     this.asignaturaService
       .consultarTodosParaSelector()
-      .subscribe((asignaturas) => {
+      .subscribe((asignaturas: Asignatura[]) => {
         this.asignaturaList = asignaturas;
       });
   }
@@ -79,7 +79,7 @@ export class ContenidoExamenFormularioComponent implements OnInit {
   private consultarNivelesExamen(): void {
     this.nivelExamenService
       .consultarTodosParaSelector()
-      .subscribe((nivelesExamen) => {
+      .subscribe((nivelesExamen: NivelExamen[]) => {
         this.nivelExamenList = nivelesExamen;
       });
   }
@@ -135,7 +135,6 @@ export class ContenidoExamenFormularioComponent implements OnInit {
 
   numberOnly(event: any): boolean {
     // TODO: 2023-06-15 -> Revisar tipo de dato
-    console.log(event);
     const charCode = event.which ? event.which : event.keyCode;
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
       return false;

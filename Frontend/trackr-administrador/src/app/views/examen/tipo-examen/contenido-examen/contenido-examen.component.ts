@@ -87,8 +87,8 @@ export class ContenidoExamenComponent implements OnInit {
   private consultarAccesoAgregar(): void {
     this.accesoService
       .tieneAcceso(ACCESO_TIPO_EXAMEN.Agregar)
-      .subscribe((data) => {
-        this.tieneAccesoAgregar = data;
+      .subscribe((tieneAcceso: boolean) => {
+        this.tieneAccesoAgregar = tieneAcceso;
       });
   }
 
@@ -102,7 +102,7 @@ export class ContenidoExamenComponent implements OnInit {
   private consultarTipoExamen(idTipoExamen: number): void {
     this.tipoExamenService
       .consultar(idTipoExamen)
-      .subscribe((tipoExamen) => {
+      .subscribe((tipoExamen: TipoExamen) => {
         this.tipoExamen = tipoExamen;
       });
   }
@@ -113,8 +113,8 @@ export class ContenidoExamenComponent implements OnInit {
   private consultarGrid(): void {
     this.contenidoExamenService
       .consultarGeneral(this.idTipoExamen)
-      .subscribe((data) => {
-        this.contenidoExamenList = data;
+      .subscribe((contenidoExamen: ContenidoExamen[]) => {
+        this.contenidoExamenList = contenidoExamen;
       });
   }
 

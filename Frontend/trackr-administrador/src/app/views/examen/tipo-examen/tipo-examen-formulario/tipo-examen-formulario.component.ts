@@ -43,9 +43,9 @@ export class TipoExamenFormularioComponent implements OnInit {
   private consultarTipoExamen(idTipoExamen: number): void {
     this.tipoExamenService
       .consultar(idTipoExamen)
-      .subscribe((data) => {
-        this.tipoExamen = data;
-        this.tipoExamen.fechaAlta = new Date(this.tipoExamen.fechaAlta);
+      .subscribe((tipoExamen: TipoExamen) => {
+        tipoExamen.fechaAlta = new Date(tipoExamen.fechaAlta);
+        this.tipoExamen = tipoExamen;
       });
   }
 

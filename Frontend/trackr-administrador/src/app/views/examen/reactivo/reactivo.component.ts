@@ -84,7 +84,7 @@ export class ReactivoComponent implements OnInit {
   private consultarAccesoAgregar() {
     this.accesoService
       .tieneAcceso(ACCESO_REACTIVO.Agregar)
-      .subscribe((tieneAcceso) => {
+      .subscribe((tieneAcceso: boolean) => {
         this.tieneAccesoAgregar = tieneAcceso;
       });
   }
@@ -95,7 +95,7 @@ export class ReactivoComponent implements OnInit {
   private consultarGrid() {
     this.reactivoService
       .consultarGeneral()
-      .subscribe((reactivos) => {
+      .subscribe((reactivos: Reactivo[]) => {
         this.reactivoList = reactivos;
       });
   }

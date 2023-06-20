@@ -89,10 +89,14 @@ export class TipoExamenComponent implements OnInit {
 
   public ngOnInit(): void {
     this.consultarGrid();
+    this.consultarAccesoAgregar();
+  }
+
+  private consultarAccesoAgregar(): void {
     this.accesoService
       .tieneAcceso(ACCESO_TIPO_EXAMEN.Agregar)
-      .subscribe((data) => {
-        this.tieneAccesoAgregar = data;
+      .subscribe((tieneAcceso: boolean) => {
+        this.tieneAccesoAgregar = tieneAcceso;
       });
   }
 
@@ -100,9 +104,11 @@ export class TipoExamenComponent implements OnInit {
    * Consulta la informacion del grid.
    */
   private consultarGrid() {
-    this.tipoExamenService.consultarGeneral().subscribe((data) => {
-      this.tipoExamenList = data;
-    });
+    this.tipoExamenService
+      .consultarGeneral()
+      .subscribe((tiposExamen: TipoExamen[]) => {
+        this.tipoExamenList = tiposExamen;
+      });
   }
 
   /**

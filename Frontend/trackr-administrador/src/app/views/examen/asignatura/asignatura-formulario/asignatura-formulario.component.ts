@@ -44,7 +44,7 @@ export class AsignaturaFormularioComponent implements OnInit {
 
       this.asignaturaService
         .consultar(this.idAsignatura)
-        .subscribe((asignatura) => {
+        .subscribe((asignatura: Asignatura) => {
           asignatura.fechaAlta = new Date(asignatura.fechaAlta);
           this.asignatura = asignatura;
         });
@@ -68,28 +68,32 @@ export class AsignaturaFormularioComponent implements OnInit {
   }
 
   private agregar(): void {
-    this.asignaturaService.agregar(this.asignatura).subscribe({
-      next: (idAsignatura) => {
-        this.mensajeService.modalExito(this.MENSAJE_AGREGAR);
-        this.asignatura.idAsignatura = idAsignatura;
-        this.cerrar();
-      },
-      error: () => {
-        this.submiting = false;
-      }
-    });
+    this.asignaturaService
+      .agregar(this.asignatura)
+      .subscribe({
+        next: (idAsignatura: number) => {
+          this.mensajeService.modalExito(this.MENSAJE_AGREGAR);
+          this.asignatura.idAsignatura = idAsignatura;
+          this.cerrar();
+        },
+        error: () => {
+          this.submiting = false;
+        }
+      });
   }
 
   private editar(): void {
-    this.asignaturaService.editar(this.asignatura).subscribe({
-      next: () => {
-        this.mensajeService.modalExito(this.MENSAJE_EDITAR);
-        this.cerrar();
-      },
-      error: () => {
-        this.submiting = false;
-      },
-    });
+    this.asignaturaService
+      .editar(this.asignatura)
+      .subscribe({
+        next: () => {
+          this.mensajeService.modalExito(this.MENSAJE_EDITAR);
+          this.cerrar();
+        },
+        error: () => {
+          this.submiting = false;
+        },
+      });
   }
 
   private cerrar(): void {

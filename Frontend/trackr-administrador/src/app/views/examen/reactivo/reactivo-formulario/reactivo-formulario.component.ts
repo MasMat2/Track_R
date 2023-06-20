@@ -66,16 +66,13 @@ export class ReactivoFormularioComponent implements OnInit {
 
     this.consultarAsignaturas();
     this.consultarNivelesExamen();
-
-    console.log(this.reactivo);
   }
 
   private consultarReactivo(idReactivo: number): void {
     this.reactivoService
       .consultar(idReactivo)
-      .subscribe((reactivo) => {
+      .subscribe((reactivo: Reactivo) => {
         reactivo.fechaAlta = new Date(reactivo.fechaAlta);
-
         this.reactivo = reactivo;
       });
   }
@@ -83,16 +80,16 @@ export class ReactivoFormularioComponent implements OnInit {
   private consultarAsignaturas(): void {
     this.asignaturaService
       .consultarTodosParaSelector()
-      .subscribe((data) => {
-        this.asignaturaList = data;
+      .subscribe((asignaturas: Asignatura[]) => {
+        this.asignaturaList = asignaturas;
       });
   }
 
   private consultarNivelesExamen(): void {
     this.nivelExamenService
       .consultarTodosParaSelector()
-      .subscribe((data) => {
-        this.nivelExamenList = data;
+      .subscribe((nivelesExamen: NivelExamen[]) => {
+        this.nivelExamenList = nivelesExamen;
       });
   }
 
