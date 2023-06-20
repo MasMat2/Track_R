@@ -1,0 +1,27 @@
+<div class="contenedor">
+  <div class="titulo-contenedor">Consulta de Reactivos</div>
+  <div class="cuerpo-contenedor">
+    <div class="row justify-content-center">
+      <div class="col-md-12">
+        <div
+          class="contenedor-agregar"
+          (click)="agregar()"
+          *ngIf="tieneAccesoAgregar"
+        >
+          <i class="fas fa-plus-circle"></i><span>Agregar</span>
+        </div>
+        <app-grid-general
+          #gridNecesidad
+          [headerName]="HEADER_GRID"
+          [data]="reactivoList"
+          [children]="columns"
+          (event)="onGridClick($event)"
+          [accesoEditar]="EDITAR_ASIGNATURA"
+          [accesoEliminar]="ELIMINAR_ASIGNATURA"
+          [biggerRows]="true"
+        >
+        </app-grid-general>
+      </div>
+    </div>
+  </div>
+</div>

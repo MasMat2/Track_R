@@ -11,3 +11,10 @@ export enum ACCESO_TIPO_EXAMEN {
   Editar = 'APTPEM2000',
   Eliminar = 'APTPEM3000'
 };
+
+export enum ACCESO_REACTIVO {
+  Consultar = 'APREAC0000',
+  Agregar = 'APREAC1000',
+  Editar = 'APREAC2000',
+  Eliminar = 'APREAC3000'
+};

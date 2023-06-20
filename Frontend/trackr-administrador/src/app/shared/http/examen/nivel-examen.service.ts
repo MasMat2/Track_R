@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { NivelExamen } from '@models/examen/nivel-examen';
 import { Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class NivelExamenService {
   private dataUrl = 'nivelExamen/';
 

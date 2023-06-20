@@ -21,6 +21,10 @@ const routes: Routes = [
       {
         path: 'tipo-examen',
         loadChildren: () => import('./tipo-examen/tipo-examen.module').then((m) => m.TipoExamenModule)
+      },
+      {
+        path: 'reactivo',
+        loadChildren: () => import('./reactivo/reactivo.module').then((m) => m.ReactivoModule)
       }
     ]
   }
