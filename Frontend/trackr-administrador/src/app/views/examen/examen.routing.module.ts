@@ -30,6 +30,10 @@ const routes: Routes = [
         path: 'nivel-examen',
         loadChildren: () => import('./nivel-examen/nivel-examen.module').then((m) => m.NivelExamenModule)
       },
+      {
+        path: 'examen',
+        loadChildren: () => import('./mi-examen/examen.module').then((m) => m.ExamenModule)
+      }
     ]
   }
 ];

@@ -1,0 +1,257 @@
+<div class="d-flex">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div></div>
+    </div>
+    <form
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      novalidate="novalidate"
+    >
+      <div class="modal-body">
+        <div
+          *ngIf="!presentando && !examenTerminado && !blockQuestions"
+          class="presentacion"
+        >
+          <div class="row">
+            <div class="col-md-12">
+              <h1 class="titulo">
+                Bienvenido al examen en línea <i>{{ examen.tipoExamen }}</i>
+              </h1>
+            </div>
+            <div class="col-md-12 informacionContainer">
+              <h5 class="informacion">Clave: {{ examen.clave }}</h5>
+              <h5 class="informacion">Nombre: {{ examen.nombreUsuario }}</h5>
+            </div>
+            <div class="col-md-12 reglasContainer">
+              <ul>
+                <li>
+                  Antes de responder lea con atención los Reactivos y seleccione la respuesta correcta.
+                </li>
+                <li>
+                  Para pasar al siguiente Reactivo de Clic en el botón Siguiente.
+                </li>
+                <li>
+                  Si desea regresar al Reactivo anterior de Clic en el botón Anterior.
+                </li>
+                <li>
+                  Si desea Terminar el examen antes de finalizarlo presione Finalizar Examen.
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-12">
+              <button
+                type="button"
+                class="btn-secundario mr-3 alignButton"
+                (click)="cancelar()"
+              >
+                Regresar
+              </button>
+              <button
+                type="button"
+                class="btn-primario btn-margin-left btn-cargar"
+                (click)="consultarReactivos()"
+              >
+                Iniciar Examen
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          *ngIf="(presentando && !examenTerminado) || blockQuestions"
+          class="pregunta"
+        >
+          <div class="informacionReactivo">
+            <label>{{ reactivoList[indice].asignatura }}</label>
+            <span class="alginRight">
+              <label id="timer" class="timer">{{ examen.duracion }}:00</label>
+              <label>{{ segundosRestantes | timer }}</label>
+              <a
+                (click)="terminarExamen()"
+                class="finishButton"
+                *ngIf="!blockQuestions"
+                >Finalizar Examen</a
+              >
+              <a
+                (click)="cancelar()"
+                class="finishButton"
+                *ngIf="blockQuestions"
+                >Regresar</a
+              >
+            </span>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <h4>{{ indice + 1 }}.- {{ reactivoList[indice].pregunta }}</h4>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+              <div style="text-align: center; margin-top: 15px">
+                <img
+                  *ngIf="reactivoList[indice].imagenBase64 !== undefined"
+                  id="logo"
+                  class="imagenPregunta"
+                  [src]="reactivoList[indice].imagenBase64"
+                  height="200"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <h5 class="respuestas">{{ reactivoList[indice].respuesta }}</h5>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <div
+                class="form-group"
+                *ngIf="reactivoList[indice].necesitaRevision"
+              >
+                <label class="label-input required-label">Respuesta</label>
+                <div>
+                  <input
+                    #respuestaCorrecta="ngModel"
+                    [(ngModel)]="reactivoList[indice].respuestaAlumno"
+                    name="respuestaCorrecta"
+                    class="form-control respuesta"
+                    type="text"
+                    [required]="true"
+                    [disabled]="blockQuestions"
+                  />
+                </div>
+                <div
+                  *ngIf="
+                    respuestaCorrecta.errors?.['required'] &&
+                    respuestaCorrecta.touched
+                  "
+                  class="error"
+                >
+                  La respuesta es requerida
+                </div>
+              </div>
+              <div
+                class="form-group respuesta"
+                *ngIf="!reactivoList[indice].necesitaRevision"
+              >
+                <label class="label-input required-label"
+                  >Seleccione la Respuesta</label
+                >
+                <div>
+                  <ng-select
+                    #respuestasLst="ngModel"
+                    name="respuestasLst"
+                    bindLabel="nombre",
+                    bindValue="nombre"
+                    [items]="respuestas"
+                    [(ngModel)]="reactivoList[indice].respuestaAlumno"
+                    [placeholder]="DROPDOWN_PLACEHOLDER"
+                    [notFoundText]="DROPDOWN_NO_OPTIONS"
+                    [disabled]="blockQuestions"
+                  ></ng-select>
+                </div>
+                <div
+                  *ngIf="
+                    respuestasLst.errors?.['required'] && respuestasLst.touched
+                  "
+                  class="error"
+                >
+                  La respuesta correcta es requerida
+                </div>
+              </div>
+            </div>
+            <div class="col-md-1 check">
+              <i
+                class="fas fa-check icon upload respuesta"
+                *ngIf="blockQuestions && reactivoList[indice].resultado"
+              ></i>
+              <i
+                class="fas fa-times icon notUpload respuesta"
+                *ngIf="blockQuestions && !reactivoList[indice].resultado"
+              ></i>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 buttonSection">
+              <button
+                type="button"
+                class="btn-secundario mr-3 alignButton"
+                (click)="anterior()"
+                *ngIf="(indice + 1 > 1 && blockQuestions) || !blockQuestions"
+              >
+                Anterior
+              </button>
+              <button
+                type="button"
+                class="btn-primario btn-margin-left btn-cargar"
+                (click)="siguiente()"
+                *ngIf="
+                  indice + 1 != reactivoList.length ||
+                  (blockQuestions && indice + 1 != reactivoList.length)
+                "
+              >
+                Siguiente
+              </button>
+              <button
+                type="button"
+                class="btn-primario btn-margin-left btn-cargar"
+                (click)="terminarExamen()"
+                *ngIf="indice + 1 == reactivoList.length && !blockQuestions"
+              >
+                Finalizar Examen
+              </button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="examenTerminado" class="resultado">
+          <div class="row">
+            <div class="col-md-12">
+              <h1 class="titulo">
+                Gracias por su participación en el examen
+                <i>{{ examen.tipoExamen }}</i>
+              </h1>
+              <h2 class="titulo calificacion">
+                Su calificación es:
+                <i class="notBold">{{ examen.resultado }}</i>
+              </h2>
+            </div>
+            <div class="col-md-12 informacionContainer">
+              <h5 class="informacion">Clave: {{ examen.clave }}</h5>
+              <h5 class="informacion">Nombre: {{ examen.nombreUsuario }}</h5>
+            </div>
+            <div class="col-md-12 reglasContainer">
+              <ul>
+                <li>
+                  Si hay algún problema con la calificación o el examen favor de
+                  comunicarse con un representante.
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-12">
+              <button
+                type="button"
+                class="btn-secundario mr-3 alignButtonResultado"
+                (click)="cancelar()"
+              >
+                Regresar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="loading-cdis" *ngIf="submitting">
+  <img src="assets/img/spinner.gif" alt="Procesando..." />
+  <span>Procesando... por favor espere</span>
+</div>

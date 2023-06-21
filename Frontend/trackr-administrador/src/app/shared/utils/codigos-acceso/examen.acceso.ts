@@ -25,3 +25,8 @@ export enum ACCESO_NIVEL_EXAMEN {
   Editar = 'APNVEM2000',
   Eliminar = 'APNVEM3000'
 };
+
+export enum ACCESO_MI_EXAMEN {
+  Consultar = 'APMIEX0000',
+  Presentar = 'APMIEX0000',
+}
