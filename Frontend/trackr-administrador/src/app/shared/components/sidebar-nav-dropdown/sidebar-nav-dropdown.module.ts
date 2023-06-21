@@ -1,3 +1,5 @@
+import { AyudaModalComponent } from './sidebar-nav-dropdown/ayuda-modal/ayuda-modal.component';
+import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuAnidadoComponent } from './menu-anidado/menu-anidado.component';
@@ -12,7 +14,8 @@ import { MenuItemComponent } from './menu-item/menu-item.component';
   declarations: [
     MenuAnidadoComponent,
     SidebarNavDropdownComponent,
-    MenuItemComponent
+    MenuItemComponent,
+    AyudaModalComponent
   ],
   imports: [
     CommonModule,

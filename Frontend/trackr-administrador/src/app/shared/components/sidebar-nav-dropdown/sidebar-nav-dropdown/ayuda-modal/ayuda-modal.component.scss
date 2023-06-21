@@ -1,0 +1,45 @@
+.icono-ayuda {
+  max-width: 100px;
+  min-width: 50px;
+  text-align: center;
+}
+
+.contenedor-ayuda {
+  padding: 15px;
+  padding-left: 0;
+}
+
+.grid-ayudas {
+  width: 100%;
+}
+
+.grid-ayudas th {
+  padding: 5px 0;
+  border-top: 1px #9ba8b7 solid;
+  border-bottom: 1px #9ba8b7 solid;
+  background-color: #fff;
+}
+
+.grid-ayudas td {
+  padding: 5px 5px;
+}
+
+.grid-ayudas img {
+  cursor: pointer;
+}
+
+.grid-ayudas tr {
+  background-color: #EDEDED;
+  padding: 5px;
+  padding-left: 0;
+}
+
+.grid-ayudas tr:nth-child(even) {
+  background-color: #fff;
+}
+
+tr td:not(:last-child) {
+  box-shadow: none !important;  // Añade el mismo sombreado aquí
+  margin: 100px;  // Añade margen entre las celdas
+  border: none;  // Elimina el borde
+}

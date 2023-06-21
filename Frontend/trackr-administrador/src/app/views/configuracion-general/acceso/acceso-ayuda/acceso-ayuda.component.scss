@@ -1,0 +1,80 @@
+.image-box {
+  display: flex;
+  margin-top: 25px;
+  padding-left: 15px;
+
+  justify-items: center;
+  align-items: center;
+}
+
+.custom-file-label::after {
+  text-align: center;
+}
+
+.img-ico {
+  width: 40px;
+}
+
+.pointer {
+  width: 15px;
+  cursor: pointer;
+}
+
+.barra-horizontal {
+  border-top: 1.3px solid #ff6c00;
+  padding-top: 10px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.icono-acceso {
+  padding: 9px;
+  padding-left: 0;
+  font-size: 22px;
+  color: #741798;
+}
+
+.subtitulo {
+  color: #ff6c00;
+  padding-top: 10px;
+  border-top: 1px #ff6c00 solid;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.custom-file-label::after {
+  text-align: center;
+}
+
+.grid-ayudas {
+  width: 100%;
+  
+}
+
+.grid-ayudas th {
+  padding: 10px 0;
+  border-top: 1px #9ba8b7 solid;
+  border-bottom: 1px #9ba8b7 solid;
+  background-color: #fff;
+}
+
+.grid-ayudas td {
+  padding: 10px 5px;
+  border: none;
+}
+
+.grid-ayudas img {
+  cursor: pointer;
+}
+
+.grid-ayudas tr {
+  background-color: #EDEDED;
+  padding: 15px;
+  padding-left: 0;
+}
+
+.grid-ayudas tr:nth-child(even) {
+  background-color: #fff;
+}
