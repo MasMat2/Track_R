@@ -44,10 +44,10 @@ export class CodigoAcceso {
   public static ELIMINAR_PAIS = 'APPAIS3000';
 
   //Genero
-  public static CONSULTAR_GENERO = 'APGENERO0000';
-  public static AGREGAR_GENERO = 'APGENERO1000';
-  public static EDITAR_GENERO = 'APGENERO2000';
-  public static ELIMINAR_GENERO = 'APGENERO3000';
+  public static CONSULTAR_GENERO = 'APGENE0000';
+  public static AGREGAR_GENERO = 'APGENE1000';
+  public static EDITAR_GENERO = 'APGENE2000';
+  public static ELIMINAR_GENERO = 'APGENE3000';
 
   public static CONSULTAR_CAJA = 'APCAJA0000';
   public static AGREGAR_CAJA = 'APCAJA1000';

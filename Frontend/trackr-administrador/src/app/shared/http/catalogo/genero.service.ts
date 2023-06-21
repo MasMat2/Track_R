@@ -15,7 +15,7 @@ export class GeneroService {
     }
 
     consulta(): Observable<GeneroDto[]> {
-        return this.http.get<GeneroDto[]>(this.dataUrl + 'consultar');
+        return this.http.get<GeneroDto[]>(this.dataUrl + 'consulta');
     }
     agregar(genero: GeneroDto): Observable<void> {
         return this.http.post<void>(this.dataUrl + 'agregar', genero);

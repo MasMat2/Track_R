@@ -7,6 +7,7 @@ import { CodigoAcceso } from '@utils/codigo-acceso';
 import { GeneralConstant } from '@utils/general-constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneroFormularioComponent } from './genero-formulario/genero-formulario.component';
+import { GeneroDto } from '@dtos/catalogos/GeneroDto';
 
 @Component({
     selector: 'app-genero',
@@ -20,10 +21,10 @@ export class GeneroComponent implements OnInit {
     public HEADER_GRID = 'Generos';
     private MENSAJE_EXITO_ELIMINAR = 'El genero ha sido eliminado';
     private TITULO_MODAL_ELIMINAR = 'Eliminar Genero';
-    public generoList: Genero[];
+    public generoList: GeneroDto[];
 
     public columns = [
-        {headerName: 'ID', field: 'idGenero',  minWidth: 150, width: 70 },
+        {headerName: 'ID', field: 'IdGenero',  minWidth: 150, width: 70 },
         {headerName: 'Genero', field: 'Descripcion', minWidth: 150}
     ];
 
