@@ -2,23 +2,25 @@
   <div class="titulo-contenedor">Perfil</div>
   <div class="cuerpo-contenedor">
     <form
-    (keydown.enter)="$event.preventDefault()"
-    #formulario="ngForm"
-    (ngSubmit)="enviarFormulario(formulario)">
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+    >
       <ion-grid>
         <ion-row>
-            <ion-col>
-              <ion-input
-                #nombre="ngModel"
-                [(ngModel)]="usuario.nombre"
-                name="nombre"
-                class="form-control"
-                type="text"
-                maxlength="200"
-                [required]="true"
-                placeholder="Nombres">
-              </ion-input>
-            </ion-col>
+          <ion-col>
+            <ion-input
+              #nombre="ngModel"
+              [(ngModel)]="usuario.nombre"
+              name="nombre"
+              class="form-control"
+              type="text"
+              maxlength="200"
+              [required]="true"
+              placeholder="Nombres"
+            >
+            </ion-input>
+          </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
@@ -30,7 +32,8 @@
               type="text"
               maxlength="200"
               [required]="true"
-              placeholder="Apellido Paterno">
+              placeholder="Apellido Paterno"
+            >
             </ion-input>
           </ion-col>
           <ion-col>
@@ -42,7 +45,8 @@
               type="text"
               maxlength="200"
               [required]="true"
-              placeholder="Apellido Materno">
+              placeholder="Apellido Materno"
+            >
             </ion-input>
           </ion-col>
         </ion-row>
@@ -59,7 +63,8 @@
               type="email"
               errorText="Invalid email"
               ngModel
-              email>
+              email
+            >
             </ion-input>
           </ion-col>
         </ion-row>
@@ -72,7 +77,8 @@
               class="form-control"
               [required]="true"
               placeholder="Teléfono Móvil"
-              type="tel">
+              type="tel"
+            >
             </ion-input>
           </ion-col>
         </ion-row>
@@ -86,7 +92,8 @@
               placeholder="Contraseña"
               [required]="true"
               type="password"
-              appConfirmacionContrasena="confirmacionContrasenaName">
+              appConfirmacionContrasena="confirmacionContrasenaName"
+            >
             </ion-input>
           </ion-col>
           <ion-col>
@@ -98,20 +105,25 @@
               appConfirmacionContrasena="contrasenaName"
               [required]="usuario.contrasena !== '' && usuario.contrasena !== null"
               placeholder="Confirmar Contraseña"
-              type="password">
+              type="password"
+            >
             </ion-input>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
             <ion-item>
-              <ion-checkbox (ionChange)="changeEvent($event)" labelPlacement="end">Acepto Términos y Condiciones</ion-checkbox>
+              <ion-checkbox
+                (ionChange)="changeEvent($event)"
+                labelPlacement="end"
+                >Acepto Términos y Condiciones</ion-checkbox
+              >
             </ion-item>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button [disabled]="checkedbtn" type="submit">
+            <ion-button [disabled]="!termsAccepted || submitting" type="submit">
               Registrar Perfil
             </ion-button>
           </ion-col>
