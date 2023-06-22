@@ -27,6 +27,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
    * Referencias a templates de los componentes externos a utilizar en el tabulador de entidades.
    */
   @ViewChild('informacionGeneral', { static: false }) private informacionGeneralTpl : TemplateRef<any>;
+  @ViewChild('estudios', { static: false }) private estudiosTpl : TemplateRef<any>;
   @ViewChild('viaje', { static: false }) private viajeTpl : TemplateRef<any>;
 
   /**
@@ -78,8 +79,18 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
       submitControl : false
     };
 
+    
+    let estudios : ExternalTemplate = {
+      template : this.estudiosTpl,
+      label : 'Estudios',
+      enabled : this.idUsuario != null ? true : false,
+      externalSubmit : true,
+      submitControl : false
+    };
+
 
     this.externalTemplates.push(informacionGeneral);
+    this.externalTemplates.push(estudios);
   }
 
 

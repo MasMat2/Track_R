@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Extensions.Hosting.Internal;
+using MimeTypes;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Transactions;
 using TrackrAPI.Dtos.GestionExpediente;
@@ -7,6 +9,7 @@ using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionExpediente;
 using TrackrAPI.Repositorys.Inventario;
 using TrackrAPI.Repositorys.Seguridad;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TrackrAPI.Services.GestionExpediente
 {
@@ -126,7 +129,21 @@ namespace TrackrAPI.Services.GestionExpediente
 
         public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid()
         {
-            return expedienteTrackrRepository.ConsultarParaGrid();
+            IEnumerable<UsuarioExpedienteGridDTO> expedientes = expedienteTrackrRepository.ConsultarParaGrid();
+            foreach(UsuarioExpedienteGridDTO expediente in expedientes)
+            {
+                if (!string.IsNullOrWhiteSpace(expediente.TipoMime))
+                {
+                    string filePath = $"Archivos/Usuario/{expediente.IdUsuario}{MimeTypeMap.GetExtension(expediente.TipoMime)}";
+                    if (File.Exists(filePath))
+                    {
+                        byte[] imageArray = File.ReadAllBytes(filePath);
+                        expediente.ImagenBase64 = Convert.ToBase64String(imageArray);
+                    }
+                }
+
+            }
+            return expedientes;
         }
 
         /// <summary>

@@ -1,5 +1,23 @@
+<!-- Botón Descargar Excel -->
+<div
+  class="d-flex justify-content-end">
+  <button
+  type="button"
+  class="btn"
+  (click)="descargarExcel()"
+  >
+    <i
+    title="Descargar Excel"
+    class="grid-download"
+    >
+      <img 
+      src="assets/img/svg/ico-15x15-Descargar.svg"/>
+    </i>
+  
+  </button>
+</div>
 <p-table
-  class="primeng-table"
+  class="primeng-table grid-cuadricula"
   [value]="pacientes"
   dataKey="idProyectoElementoTecnica"
   *ngIf="pacientes"
@@ -7,12 +25,12 @@
 >
   <ng-template pTemplate="header">
     <tr class="table-header">
-      <th class="px-0">Fotografía</th>
-      <th>Paciente</th>
-      <th>Patologías</th>
-      <th>Glucosa</th>
-      <th>Presión</th>
-      <th></th>
+      <th class="px-0 text-center">Fotografía</th>
+      <th class="text-center">Paciente</th>
+      <th class="text-center">Patologías</th>
+      <th class="text-center">Glucosa</th>
+      <th class="text-center">Presión</th>
+      <th class="text-center"></th>
     </tr>
   </ng-template>
 
@@ -26,11 +44,25 @@
               : 'assets/img/default-user.jpg'
           "
         />
+<!-- 
+        <img *ngIf="paciente.imagenBase64 !== undefined" 
+          class="imagen-usuario" 
+          [src]="paciente.imagenBase64 != undefined
+          ? (paciente.imagenBase64 | urlImagen : paciente?.tipoMime)
+          : 'assets/img/default-user.jpg'"
+          width="85px"
+          height="85px"
+          alt="Imagen de Usuario"
+        /> -->
+
       </td>
-      <td>
-        <div style="width: 5px; aspect-ratio: 1; background-color: green"></div>
+      <!-- TODO: Arreglar las bolitas de colores que muestran los signos -->
+      <td style="">
+        <div class="green-dot"></div>
         {{ paciente.nombreCompleto }}
+        <p class="edad">{{ paciente.edad }}</p>
       </td>
+      
       <td>
         <div class="d-flex">
           <span
@@ -42,9 +74,16 @@
           </span>
         </div>
       </td>
-      <td>{{ paciente.glucosa }}</td>
-      <td>{{ paciente.presionSistolica }}/{{ paciente?.presionAsistolica }}</td>
-      <td class="text-center px-0">
+      <!-- TODO: Arreglar las bolitas de colores que muestran los signos -->
+      <td style="">
+        <div class="green-dot"></div>
+        <div class="d-flex justify-content-center align-items-center">{{ paciente.glucosa }}</div>
+      </td>
+      <td style="">
+        <div class="green-dot"></div>
+        <div class="d-flex justify-content-center align-items-center">{{ paciente.presionSistolica }}/{{ paciente?.presionAsistolica }}</div>
+      </td>
+      <td class="botones-acciones text-center px-0">
         <button 
           type="button" 
           class="btn" 
@@ -73,5 +112,6 @@
         </button>
       </td>
     </tr>
+    <br/>
   </ng-template>
 </p-table>
