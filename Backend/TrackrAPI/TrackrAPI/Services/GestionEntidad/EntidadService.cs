@@ -61,23 +61,26 @@ namespace TrackrAPI.Services.GestionEntidad
 
         public void Eliminar(int idEntidad)
         {
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+            using var scope = new TransactionScope(
+                TransactionScopeOption.Required,
+                new TransactionOptions {
+                    IsolationLevel = IsolationLevel.ReadCommitted
+                });
+
+            Entidad entidad = entidadRepository.Consultar(idEntidad);
+            var estructuras = entidadEstructuraRepository.ConsultarPorEntidad(entidad.IdEntidad);
+
+            // Eliminar EntidadEstructura
+            foreach (EntidadEstructura estructura in estructuras)
             {
-                Entidad entidad = entidadRepository.Consultar(idEntidad);
-                var estructuras = entidadEstructuraRepository.ConsultarPorEntidad(entidad.IdEntidad);
-
-                // Eliminar EntidadEstructura
-                foreach (EntidadEstructura estructura in estructuras)
-                {
-                    entidadEstructuraService.Eliminar(estructura.IdEntidadEstructura);
-                }
-
-                // Eliminar Entidad
-                entidadValidatorService.ValidarEliminar(idEntidad);
-                entidadRepository.Eliminar(entidad);
-
-                scope.Complete();
+                entidadEstructuraService.Eliminar(estructura.IdEntidadEstructura);
             }
+
+            // Eliminar Entidad
+            entidadValidatorService.ValidarEliminar(idEntidad);
+            entidadRepository.Eliminar(entidad);
+
+            scope.Complete();
         }
 
         public record ActualizacionExpedienteParams(
@@ -199,13 +202,6 @@ namespace TrackrAPI.Services.GestionEntidad
 
                 fila++;
             }
-        }
-
-        // TODO: 2023-06-12 -> Eliminar métodos
-        private void ActualizarPadecimientos(ActualizacionExpedienteParams aeParams)
-        {
-            ActualizarPadecimientosExistentes(aeParams);
-            AgregarNuevosPadecimientos(aeParams);
         }
 
         private void ActualizarPadecimientosExistentes(ActualizacionExpedienteParams aeParams)

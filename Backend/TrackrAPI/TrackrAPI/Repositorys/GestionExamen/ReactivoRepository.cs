@@ -57,8 +57,8 @@ public class ReactivoRepository : Repository<Reactivo>, IReactivoRepository
             .Select(p => new ReactivoGridDto
             {
                 IdReactivo = p.IdReactivo,
-                Asignatura = p.IdAsignaturaNavigation!.Descripcion ?? string.Empty,
-                NivelExamen = p.IdNivelExamenNavigation!.Descripcion ?? string.Empty,
+                Asignatura = p.IdAsignaturaNavigation.Descripcion ?? string.Empty,
+                NivelExamen = p.IdNivelExamenNavigation.Descripcion ?? string.Empty,
                 Clave = p.Clave ?? string.Empty,
                 Pregunta = p.Pregunta ?? string.Empty,
                 Respuesta = p.Respuesta ?? string.Empty,

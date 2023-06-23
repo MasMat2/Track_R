@@ -33,6 +33,10 @@ const routes: Routes = [
       {
         path: 'examen',
         loadChildren: () => import('./mi-examen/examen.module').then((m) => m.ExamenModule)
+      },
+      {
+        path: 'programacion-examen',
+        loadChildren: () => import('./programacion-examen/programacion-examen.module').then((m) => m.ProgramacionExamenModule)
       }
     ]
   }

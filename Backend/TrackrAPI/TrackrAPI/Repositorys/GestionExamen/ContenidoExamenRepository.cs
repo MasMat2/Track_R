@@ -38,8 +38,8 @@ public class ContenidoExamenRepository : Repository<ContenidoExamen>, IContenido
             .Select(p => new ContenidoExamenGridDto
             {
                 IdContenidoExamen = p.IdContenidoExamen,
-                Asignatura = p.IdAsignaturaNavigation!.Descripcion ?? string.Empty,
-                NivelExamen = p.IdNivelExamenNavigation!.Descripcion ?? string.Empty,
+                Asignatura = p.IdAsignaturaNavigation.Descripcion ?? string.Empty,
+                NivelExamen = p.IdNivelExamenNavigation.Descripcion ?? string.Empty,
                 Clave = p.Clave ?? string.Empty,
                 TotalPreguntas = p.TotalPreguntas,
                 Duracion = p.Duracion

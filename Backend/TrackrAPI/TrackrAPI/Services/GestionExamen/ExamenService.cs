@@ -157,57 +157,60 @@ public class ExamenService
 
     public void Actualizar(List<Examen> examenList)
     {
-        if(examenList[0].IdProgramacionExamen != 0)
+        if (examenList[0].IdProgramacionExamen == 0)
         {
-            List<Examen> examenDto = _examenRepository.ConsultarGeneral(examenList[0].IdProgramacionExamen).ToList();
+            return;
+        }
 
+        List<Examen> examenDto = _examenRepository
+            .ConsultarGeneral(examenList[0].IdProgramacionExamen)
+            .ToList();
 
-            foreach(Examen examen in examenList)
+        foreach (Examen examen in examenList)
+        {
+            var usuario = _usuarioRepository.Consultar(examen.IdUsuarioParticipante);
+
+            if (examenDto.Exists(p => p.IdExamen == examen.IdExamen))
             {
-              var usuario = _usuarioRepository.Consultar(examen.IdUsuarioParticipante);
+                // Editar(examen);
+            }
+            else
+            {
+                Agregar(examen);
 
-                if (examenDto.Exists(p => p.IdExamen == examen.IdExamen))
+                if (!string.IsNullOrWhiteSpace(usuario.CorreoPersonal))
                 {
-                    //Editar(examen);
-                }
-                else
-                {
-                    Agregar(examen);
-
-                    if (!string.IsNullOrWhiteSpace(usuario.CorreoPersonal))
-                    {
-                        EnviarCorreo(usuario.CorreoPersonal, examen);
-                    }
+                    EnviarCorreo(usuario.CorreoPersonal, examen);
                 }
             }
+        }
 
-            foreach(Examen examen in examenDto)
+        foreach (Examen examen in examenDto)
+        {
+            if (!examenList.Exists(p => p.IdExamen == examen.IdExamen))
             {
-                if (!examenList.Exists(p => p.IdExamen == examen.IdExamen))
-                {
-                    Eliminar(examen.IdExamen);
-                }
+                Eliminar(examen.IdExamen);
             }
         }
     }
 
     public void EnviarCorreo(string correo, Examen examen)
     {
-        var programacionExamen = _programacionExamenRepository.Consultar(examen.IdProgramacionExamen);
+        // var programacionExamen = _programacionExamenRepository.Consultar(examen.IdProgramacionExamen);
 
-        if (programacionExamen == null
-            || programacionExamen.FechaExamen == null
-            || programacionExamen.HoraExamen == null)
-        {
-            return;
-        }
+        // if (programacionExamen == null
+        //     || programacionExamen.FechaExamen == null
+        //     || programacionExamen.HoraExamen == null)
+        // {
+        //     return;
+        // }
 
-        var modeloCorreo = FormatoCorreo(
-            correo,
-            programacionExamen.FechaExamen.Value,
-            programacionExamen.HoraExamen.Value);
+        // var modeloCorreo = FormatoCorreo(
+        //     correo,
+        //     programacionExamen.FechaExamen.Value,
+        //     programacionExamen.HoraExamen.Value);
 
-        _correoHelper.Enviar(modeloCorreo);
+        // _correoHelper.Enviar(modeloCorreo);
 
     }
 

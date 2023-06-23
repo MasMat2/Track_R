@@ -5,7 +5,7 @@ public class ProgramacionExamenDto
     public int IdProgramacionExamen { get; set; }
     public int IdTipoExamen { get; set; }
     public int IdUsuarioResponsable { get; set; }
-    public int IdProyectoElementoTecnica { get; set; }
+    public int? IdProyectoElementoTecnica { get; set; }
     public string Clave { get; set; } = null!;
     public double? Duracion { get; set; }
     public int? CantidadParticipantes { get; set; }

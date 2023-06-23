@@ -30,3 +30,10 @@ export enum ACCESO_MI_EXAMEN {
   Consultar = 'APMIEX0000',
   Presentar = 'APMIEX0000',
 }
+
+export enum ACCESO_PROGRAMACION_EXAMEN {
+  Consultar = 'APPREX0000',
+  Agregar = 'APPREX1000',
+  Editar = 'APPREX2000',
+  Eliminar = 'APPREX3000'
+};

@@ -183,7 +183,7 @@ namespace TrackrAPI.Helpers
          * @param objeto a validar
          * @param mensaje a mostrar
          */
-        public static void ValidarRequerido(Object objeto, String mensaje)
+        public static void ValidarRequerido(Object? objeto, String mensaje)
         {
             if (objeto == null)
             {

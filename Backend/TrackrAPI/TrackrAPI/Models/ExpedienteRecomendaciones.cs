@@ -12,5 +12,6 @@ namespace TrackrAPI.Models
         public int IdUsuarioDoctor { get; set; }
 
         public virtual ExpedienteTrackr IdExpedienteNavigation { get; set; } = null!;
+        public virtual Usuario IdUsuarioDoctorNavigation { get; set; } = null!;
     }
 }
