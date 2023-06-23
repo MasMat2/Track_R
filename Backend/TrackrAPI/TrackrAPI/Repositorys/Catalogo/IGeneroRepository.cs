@@ -9,6 +9,6 @@ namespace TrackrAPI.Dtos.Catalogo
         public Genero? Consultar(int idGenero);
 
         public IEnumerable<Genero> Consultar();
-        public void Eliminar(int idGenero);
+       
     }
 }

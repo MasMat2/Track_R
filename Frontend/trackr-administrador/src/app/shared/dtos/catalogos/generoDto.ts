@@ -1,4 +1,4 @@
-export interface GeneroDto {
-    IdGenero: number;
-    Descripcion: string;
+export class GeneroDto {
+    idGenero: number;
+    descripcion: string;
 }

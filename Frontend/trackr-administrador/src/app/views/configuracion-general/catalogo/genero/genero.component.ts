@@ -24,8 +24,8 @@ export class GeneroComponent implements OnInit {
     public generoList: GeneroDto[];
 
     public columns = [
-        {headerName: 'ID', field: 'IdGenero',  minWidth: 150, width: 70 },
-        {headerName: 'Genero', field: 'Descripcion', minWidth: 150}
+        //{headerName: 'ID', field: 'idGenero',  minWidth: 150, width: 70 },
+        {headerName: 'Genero', field: 'descripcion', minWidth: 150}
     ];
 
     constructor(
@@ -51,7 +51,7 @@ export class GeneroComponent implements OnInit {
 
     onGridClick(gridData: {accion: string; data: Genero}){
         if (gridData.accion === GeneralConstant.GRID_ACCION_EDITAR) {
-            this.editar(gridData.data.IdGenero);
+            this.editar(gridData.data.idGenero);
         }else if(gridData.accion === GeneralConstant.GRID_ACCION_ELIMINAR){
             this.eliminar(gridData.data);
         }
@@ -82,12 +82,12 @@ export class GeneroComponent implements OnInit {
     eliminar(genero: Genero) {
         this.modalMensajeService
         .modalConfirmacion(
-            '¿Desea eliminar el genero <strong>'+genero.Descripcion+'</strong>',
+            '¿Desea eliminar el genero <strong>'+genero.descripcion+'</strong>',
             this.TITULO_MODAL_ELIMINAR,
             GeneralConstant.ICONO_CRUZ
             )
             .then((aceptar) => {
-                this.generoService.eliminar(genero.IdGenero).subscribe((data) => {
+                this.generoService.eliminar(genero.idGenero).subscribe((data) => {
                     this.modalMensajeService.modalExito(this.MENSAJE_EXITO_ELIMINAR);
                     this.consultarGrid();
                 });

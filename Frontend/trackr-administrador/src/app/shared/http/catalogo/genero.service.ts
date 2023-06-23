@@ -11,22 +11,22 @@ export class GeneroService {
     constructor(public http: HttpClient) { }
 
     consultar(idGenero: number): Observable<GeneroDto> {
-        return this.http.get<GeneroDto>(this.dataUrl + `consultar/${idGenero}`);
+        return this.http.get<GeneroDto>(this.dataUrl + `${idGenero}`);
     }
 
     consulta(): Observable<GeneroDto[]> {
-        return this.http.get<GeneroDto[]>(this.dataUrl + 'consulta');
+        return this.http.get<GeneroDto[]>(this.dataUrl);
     }
     agregar(genero: GeneroDto): Observable<void> {
-        return this.http.post<void>(this.dataUrl + 'agregar', genero);
+        return this.http.post<void>(this.dataUrl,genero);
     }
 
     editar(genero: GeneroDto): Observable<void> {
-        return this.http.put<void>(this.dataUrl + 'editar', genero);
+        return this.http.put<void>(this.dataUrl, genero);
     }
 
     eliminar(idGenero: number): Observable<void> {
-        return this.http.delete<void>(this.dataUrl + `eliminar/${idGenero}`);
+        return this.http.delete<void>(this.dataUrl + `${idGenero}`);
     }
 
 }

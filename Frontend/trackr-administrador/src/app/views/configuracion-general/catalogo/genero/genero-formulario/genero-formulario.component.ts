@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { GeneroService } from '@http/catalogo/genero.service';
-import { Genero } from '@models/catalogo/genero';
+import { GeneroDto } from '@dtos/catalogos/GeneroDto';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { GeneralConstant } from '@utils/general-constant';
 import { BsModalRef } from 'ngx-bootstrap/modal';
@@ -18,7 +18,7 @@ export class GeneroFormularioComponent implements OnInit {
     public mensajeAgregar = 'El genero ha sido agregado';
     public mensajeEditar = 'El genero ha sido modificado';
     public btnSubmit = false;
-    public genero = new Genero();
+    public genero = new GeneroDto();
     
     constructor(
         public bsModalRef: BsModalRef,
@@ -29,7 +29,7 @@ export class GeneroFormularioComponent implements OnInit {
     ngOnInit() {}
 
     limpiarFormulario(): void {
-        this.genero = new Genero();
+        this.genero = new GeneroDto();
         this.accion = GeneralConstant.MODAL_ACCION_AGREGAR;
     }
 

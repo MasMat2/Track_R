@@ -26,10 +26,7 @@ namespace TrackrAPI.Repositorys.Catalogo
             return context.Genero.ToList();
         }
 
-        public void Eliminar(int idGenero)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 
 }

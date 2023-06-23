@@ -24,7 +24,7 @@ namespace TrackrAPI.Controllers.Catalogo
         }
 
         [HttpGet]
-        [Route("/idGenero")]
+        [Route("{idGenero}")]
         public GeneroDto? Consultar(int idGenero)
         {
             return _generoService.Consultar(idGenero);

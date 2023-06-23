@@ -1,6 +1,6 @@
 export class Genero{
-    public Descripcion: string;
-    public IdGenero: number;
+    public descripcion: string;
+    public idGenero: number;
 
     constructor() {}
 }

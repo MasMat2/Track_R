@@ -77,7 +77,7 @@ namespace TrackrAPI.Services.Catalogo
             {
                 throw new CdisException("El usuario no existe");
             }
-            _generoRepository.Eliminar(idGenero);
+            _generoRepository.Eliminar(genero);
             }
 
 
