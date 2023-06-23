@@ -93,6 +93,7 @@ export class GridGeneralComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() pageSize = 1;
   @Input() manualButton = false;
   @Input() isRowSelectable: IsRowSelectable;
+  @Input() biggerRows = false;
 
   private _cargandoGrid = false;
 
@@ -201,7 +202,9 @@ export class GridGeneralComponent implements OnInit, AfterViewInit, OnChanges {
     }
     this.setXlsDownloadParams();
 
-
+    if (this.biggerRows){
+      this.gridOptions.rowHeight = 150;
+    }
   }
 
   onColumnResized() {

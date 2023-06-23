@@ -19,6 +19,12 @@ const routes: Routes = [
       import('src/app/views/gestion-paciente/gestion-paciente.module')
       .then((m) => m.GestionPacienteModule),
   },
+  {
+    path: 'examen',
+    loadChildren: () =>
+      import('src/app/views/examen/examen.module')
+      .then((m) => m.ExamenModule),
+  }
 ];
 
 @NgModule({
