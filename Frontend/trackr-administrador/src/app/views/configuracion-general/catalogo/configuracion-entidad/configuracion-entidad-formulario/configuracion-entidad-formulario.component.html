@@ -12,10 +12,10 @@
         </button>
       </div>
 
-      <form 
-        (keydown.enter)="$event.preventDefault()" 
-        #formulario="ngForm" 
-        (ngSubmit)="enviarFormulario(formulario)" 
+      <form
+        (keydown.enter)="$event.preventDefault()"
+        #formulario="ngForm"
+        (ngSubmit)="onSubmit(formulario)"
         novalidate="novalidate"
       >
         <div class="modal-body" id="modal">
@@ -95,7 +95,7 @@
 
                           <!-- Delete Button -->
                           <div [ngClass]="{ 'node-expander-virtual': node.isLeaf && !node.hasChildren }" class="checkbox mr-1">
-                            <div type="button" class="delete" [class.delete-disabled]="disableSubmit" (click)="eliminarEntidadEstructura(node.data)"></div>
+                            <div type="button" class="delete" [class.delete-disabled]="submitting" (click)="eliminarEntidadEstructura(node.data)"></div>
                           </div>
 
                           <!-- Node Content -->
@@ -253,7 +253,7 @@
 
           <!-- Botón Guardar -->
           <div class="text-right">
-            <button [disabled]="disableSubmit" type="submit" class="btn-primario btn-margin-left">
+            <button [disabled]="submitting" type="submit" class="btn-primario btn-margin-left">
               Guardar
             </button>
           </div>
