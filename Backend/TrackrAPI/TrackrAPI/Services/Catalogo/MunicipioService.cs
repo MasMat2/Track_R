@@ -1,64 +1,121 @@
 ﻿using TrackrAPI.Dtos.Catalogo;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Catalogo;
-using System.Collections.Generic;
 
-namespace TrackrAPI.Services.Catalogo
+namespace TrackrAPI.Services.Catalogo;
+
+public class MunicipioService
 {
-    public class MunicipioService
+    private readonly IMunicipioRepository _municipioRepository;
+    private readonly MunicipioValidatorService _municipioValidatorService;
+
+    public MunicipioService(
+        IMunicipioRepository municipioRepository,
+        MunicipioValidatorService municipioValidatorService) {
+        _municipioRepository = municipioRepository;
+        _municipioValidatorService = municipioValidatorService;
+    }
+
+
+    public IEnumerable<MunicipioSelectorDto> ConsultarTodosParaSelector()
     {
-        private IMunicipioRepository municipioRepository;
-        private MunicipioValidatorService municipioValidatorService;
+        var municipios = _municipioRepository.Consultar();
 
-        public MunicipioService(IMunicipioRepository municipioRepository,
-            MunicipioValidatorService municipioValidatorService) {
-            this.municipioRepository = municipioRepository;
-            this.municipioValidatorService = municipioValidatorService;
-        }
-        public IEnumerable<MunicipioDto> ConsultarTodosParaSelector()
+        var municipiosDto = municipios.Select(m => new MunicipioSelectorDto
         {
-            return municipioRepository.ConsultarTodosParaSelector();
-        }
+            IdMunicipio = m.IdMunicipio,
+            Nombre = m.Nombre
+        });
 
-        public MunicipioDto ConsultarDto(int idMunicipio)
-        {
-            var municipio = municipioRepository.ConsultarDto(idMunicipio);
-            municipioValidatorService.ValidarExistencia(municipio);
-            return municipio;
-        }
+        return municipiosDto;
+    }
 
-        public IEnumerable<MunicipioGridDto> ConsultarTodosParaGrid()
+    public MunicipioFormularioConsultaDto? ConsultarParaFormulario(int idMunicipio)
+    {
+        var municipio = _municipioRepository.ConsultarParaFormulario(idMunicipio);
+
+        if (municipio == null)
         {
-            return municipioRepository.ConsultarTodosParaGrid();
+            return null;
         }
 
-        public IEnumerable<EstadoSelectorDto> ConsultarPorPaisParaSelector(int idPais)
+        var municipioDto = new MunicipioFormularioConsultaDto
         {
-            return municipioRepository.ConsultarPorPaisParaSelector(idPais);
-        }
+            IdMunicipio = municipio.IdMunicipio,
+            IdPais = municipio.IdEstadoNavigation.IdPais,
+            IdEstado = municipio.IdEstado,
+            Nombre = municipio.Nombre,
+            Clave = municipio.Clave ?? string.Empty,
+        };
 
-        public IEnumerable<MunicipioDto> ConsultarPorEstadoParaSelector(int idEstado)
-        {
-            return municipioRepository.ConsultarPorEstadoParaSelector(idEstado);
-        }
+        return municipioDto;
+    }
 
-        public void Agregar(Municipio municipio)
-        {
-            municipioValidatorService.ValidarAgregar(municipio);
-            municipioRepository.Agregar(municipio);
-        }
+    public IEnumerable<MunicipioGridDto> ConsultarParaGrid()
+    {
+        var municipios = _municipioRepository.ConsultarParaGrid();
 
-        public void Editar(Municipio municipio)
-        {
-            municipioValidatorService.ValidarEditar(municipio);
-            municipioRepository.Editar(municipio);
-        }
+        var municipiosDto = municipios
+            .Select(m => new MunicipioGridDto
+            {
+                IdMunicipio = m.IdMunicipio,
+                Nombre = m.Nombre,
+                Clave = m.Clave ?? string.Empty,
+                NombreEstado = m.IdEstadoNavigation.Nombre,
+                NombrePais = m.IdEstadoNavigation.IdPaisNavigation.Nombre
+            })
+            .OrderBy(m => m.NombrePais)
+            .ThenBy(m => m.NombreEstado)
+            .ThenBy(m => m.Nombre);
 
-        public void Eliminar(int idMunicipio)
+        return municipiosDto;
+    }
+
+    public IEnumerable<MunicipioSelectorDto> ConsultarPorEstadoParaSelector(int idEstado)
+    {
+        var municipios = _municipioRepository.ConsultarPorEstado(idEstado);
+
+        var municipiosDto = municipios.Select(m => new MunicipioSelectorDto
         {
-            var municipio = municipioRepository.Consultar(idMunicipio);
-            municipioValidatorService.ValidarEliminar(idMunicipio);
-            municipioRepository.Eliminar(municipio);
-        }
+            IdMunicipio = m.IdMunicipio,
+            Nombre = m.Nombre
+        });
+
+        return municipiosDto;
+    }
+
+    public void Agregar(MunicipioFormularioCapturaDto municipioDto)
+    {
+        _municipioValidatorService.ValidarAgregar(municipioDto);
+
+        var municipio = new Municipio
+        {
+            Nombre = municipioDto.Nombre,
+            IdEstado = municipioDto.IdEstado,
+            Clave = municipioDto.Clave
+        };
+
+        _municipioRepository.Agregar(municipio);
+    }
+
+    public void Editar(MunicipioFormularioCapturaDto municipioDto)
+    {
+        _municipioValidatorService.ValidarEditar(municipioDto);
+
+        var municipio = _municipioRepository.Consultar(municipioDto.IdMunicipio)!;
+
+        municipio.Nombre = municipioDto.Nombre;
+        municipio.IdEstado = municipioDto.IdEstado;
+
+        _municipioRepository.Editar(municipio);
+    }
+
+    public void Eliminar(int idMunicipio)
+    {
+        _municipioValidatorService.ValidarEliminar(idMunicipio);
+
+        var municipio = _municipioRepository.Consultar(idMunicipio)!;
+
+        _municipioRepository.Eliminar(municipio);
     }
 }

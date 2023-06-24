@@ -1,68 +1,58 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TrackrAPI.Dtos.Catalogo;
-using TrackrAPI.Models;
 using TrackrAPI.Services.Catalogo;
-using System.Collections.Generic;
 
-namespace TrackrAPI.Controllers.Catalogo
+namespace TrackrAPI.Controllers.Catalogo;
+
+[Route("api/[controller]")]
+[ApiController]
+public class MunicipioController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MunicipioController : ControllerBase
+    private readonly MunicipioService _municipioService;
+
+    public MunicipioController(MunicipioService municipioService) {
+        _municipioService = municipioService;
+    }
+
+    [HttpGet("formulario/{idMunicipio}")]
+    public MunicipioFormularioConsultaDto? ConsultarParaFormulario(int idMunicipio)
     {
-        private MunicipioService municipioService;
+        return _municipioService.ConsultarParaFormulario(idMunicipio);
+    }
 
-        public MunicipioController(MunicipioService municipioService) {
-            this.municipioService = municipioService;
-        }
+    [HttpGet("grid")]
+    public IEnumerable<MunicipioGridDto> ConsultarParaGrid()
+    {
+        return _municipioService.ConsultarParaGrid();
+    }
 
-        [HttpGet]
-        [Route("consultarTodosParaGrid")]
-        public IEnumerable<MunicipioGridDto> ConsultarTodosParaGrid()
-        {
-            return municipioService.ConsultarTodosParaGrid();
-        }
+    [HttpGet("selector")]
+    public IEnumerable<MunicipioSelectorDto> ConsultarTodosParaSelector()
+    {
+        return _municipioService.ConsultarTodosParaSelector();
+    }
 
-        [HttpGet]
-        [Route("consultarPorEstadoParaSelector/{idEstado}")]
-        public IEnumerable<MunicipioDto> ConsultarPorEstadoParaSelector(int idEstado)
-        {
-            return municipioService.ConsultarPorEstadoParaSelector(idEstado);
-        }
+    [HttpGet("selector/estado/{idEstado}")]
+    public IEnumerable<MunicipioSelectorDto> ConsultarPorEstadoParaSelector(int idEstado)
+    {
+        return _municipioService.ConsultarPorEstadoParaSelector(idEstado);
+    }
 
-        [HttpGet]
-        [Route("consultarTodosParaSelector")]
-        public IEnumerable<MunicipioDto> ConsultarTodosParaSelector()
-        {
-            return municipioService.ConsultarTodosParaSelector();
-        }
+    [HttpPost]
+    public void Agregar(MunicipioFormularioCapturaDto municipio)
+    {
+        _municipioService.Agregar(municipio);
+    }
 
-        [HttpGet]
-        [Route("consultar/{idMunicipio}")]
-        public MunicipioDto Consultar(int idMunicipio)
-        {
-            return municipioService.ConsultarDto(idMunicipio);
-        }
+    [HttpPut]
+    public void Editar(MunicipioFormularioCapturaDto municipio)
+    {
+        _municipioService.Editar(municipio);
+    }
 
-        [HttpPost]
-        [Route("agregar")]
-        public void Agregar(Municipio municipio)
-        {
-            municipioService.Agregar(municipio);
-        }
-
-        [HttpPut]
-        [Route("editar")]
-        public void Editar(Municipio municipio)
-        {
-            municipioService.Editar(municipio);
-        }
-
-        [HttpDelete]
-        [Route("eliminar/{idMunicipio}")]
-        public void Eliminar(int idMunicipio)
-        {
-            municipioService.Eliminar(idMunicipio);
-        }
+    [HttpDelete("{idMunicipio}")]
+    public void Eliminar(int idMunicipio)
+    {
+        _municipioService.Eliminar(idMunicipio);
     }
 }

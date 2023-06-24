@@ -1,19 +1,16 @@
 ﻿using TrackrAPI.Dtos.Catalogo;
 using TrackrAPI.Models;
-using System.Collections.Generic;
 
-namespace TrackrAPI.Repositorys.Catalogo
+namespace TrackrAPI.Repositorys.Catalogo;
+
+public interface IMunicipioRepository: IRepository<Municipio>
 {
-    public interface IMunicipioRepository: IRepository<Municipio>
-    {
-        IEnumerable<MunicipioGridDto> ConsultarTodosParaGrid();
-        IEnumerable<MunicipioDto> ConsultarPorEstadoParaSelector(int idEstado);
-        public IEnumerable<MunicipioDto> ConsultarTodosParaSelector();
-        IEnumerable<EstadoSelectorDto> ConsultarPorPaisParaSelector(int idPais);
-        MunicipioDto ConsultarDto(int idMunicipio);
-        Municipio Consultar(int idMunicipio);
-        Municipio Consultar(string nombre, int idEstado);
-        Municipio ConsultarPorClave(string Clave);
-        bool ConsultarDependencias(int idLocalidad);
-    }
+    Municipio? Consultar(int idMunicipio);
+    Municipio? ConsultarParaFormulario(int idMunicipio);
+    Municipio? Consultar(string nombre, int idEstado);
+    Municipio? ConsultarPorClave(string clave);
+    IEnumerable<Municipio> Consultar();
+    IEnumerable<Municipio> ConsultarParaGrid();
+    IEnumerable<Municipio> ConsultarPorEstado(int idPais);
+    Municipio? ConsultarDependencias(int idLocalidad);
 }

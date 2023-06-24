@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angu
 import { GridGeneralComponent } from "@sharedComponents/grid-general/grid-general.component";
 import { ColDef, GridOptions } from "ag-grid-community";
 import { Observable } from "rxjs";
-import { ICrudConfig } from "../crud-config";
+import { ICrudConfig } from "../crud-base/crud-config";
 
 @Component({
     selector: "app-catalogo-base",

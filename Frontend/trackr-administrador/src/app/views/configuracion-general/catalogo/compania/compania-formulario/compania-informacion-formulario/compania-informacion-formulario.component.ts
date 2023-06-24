@@ -1,6 +1,8 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
+import { MunicipioSelector } from '@dtos/catalogo/municipio-selector';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { CompaniaLogotipoService } from '@http/catalogo/compania-logotipo.service';
 import { CompaniaService } from '@http/catalogo/compania.service';
@@ -17,22 +19,19 @@ import { AccesoService } from '@http/seguridad/acceso.service';
 import { Compania } from '@models/catalogo/compania';
 import { CompaniaContacto } from '@models/catalogo/compania-contacto';
 import { CompaniaLogotipo } from '@models/catalogo/compania-logotipo';
-import { Estado } from '@models/catalogo/estado';
 import { GiroComercial } from '@models/catalogo/giro-comercial';
 import { Lada } from '@models/catalogo/lada';
 import { Moneda } from '@models/catalogo/moneda';
-import { Municipio } from '@models/catalogo/municipio';
 import { Pais } from '@models/catalogo/pais';
 import { RegimenFiscal } from '@models/catalogo/regimen-fiscal';
 import { TipoCompania } from '@models/catalogo/tipo-compania';
 import { AgrupadorCuentaContable } from '@models/contabilidad/agrupador-cuenta-contable';
 import { Usuario } from '@models/seguridad/usuario';
-import { ACCESO_COMPANIA } from 'src/app/shared/utils/codigos-acceso/catalogo.accesos';
 import { MensajeService } from 'src/app/shared/components/mensaje/mensaje.service';
+import { ACCESO_COMPANIA } from 'src/app/shared/utils/codigos-acceso/catalogo.accesos';
 import { GeneralConstant } from 'src/app/shared/utils/general-constant';
 import * as Utileria from 'src/app/shared/utils/utileria';
 import { environment } from 'src/environments/environment';
-import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
 
 @Component({
   selector: 'app-compania-informacion-formulario',
@@ -68,7 +67,7 @@ export class CompaniaInformacionFormularioComponent implements OnInit {
 
   public paisList: Pais[] = [];
   public estadoList: EstadoSelectorDto[] = [];
-  public ciudadList: Municipio[] = [];
+  public ciudadList: MunicipioSelector[] = [];
   public ladaList: Lada[] = [];
   public regimenFiscalList: RegimenFiscal[] = [];
   public agrupadorCuentaList: AgrupadorCuentaContable[] = [];
