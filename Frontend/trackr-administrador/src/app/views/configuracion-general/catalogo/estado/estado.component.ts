@@ -3,12 +3,14 @@ import { EstadoGridDto } from '@dtos/catalogo/estado-grid-dto';
 import { EstadoService } from '@http/catalogo/estado.service';
 import { AccesoService } from '@http/seguridad/acceso.service';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
-import { AccesosEstado } from '@utils/codigos-acceso/catalogo.accesos';
-import { GeneralConstant } from '@utils/general-constant';
+import { ACCESO_ESTADO } from '@utils/codigos-acceso/catalogo.accesos';
 import { ColDef } from 'ag-grid-community';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { EstadoFormularioComponent } from './estado-formulario/estado-formulario.component';
+import { GRID_ACTION } from '@utils/constants/grid';
+import { FORM_ACTION } from '@utils/constants/constants';
+import { MODAL_CONFIG } from '@utils/constants/modal';
 
 @Component({
   templateUrl: 'estado.component.html',
@@ -19,8 +21,8 @@ export class EstadoComponent implements OnInit {
   private destroy$: Subject<void> = new Subject<void>();
 
   // Accesos
-  protected readonly ACCESO_EDITAR: string = AccesosEstado.EDITAR;
-  protected readonly ACCESO_ELIMINAR: string = AccesosEstado.ELIMINAR;
+  protected readonly ACCESO_EDITAR: string = ACCESO_ESTADO.Editar;
+  protected readonly ACCESO_ELIMINAR: string = ACCESO_ESTADO.Eliminar;
   protected tieneAccesoAgregar$: Observable<boolean>;
 
   // Grid
@@ -44,7 +46,7 @@ export class EstadoComponent implements OnInit {
   }
 
   public consultarAccesoAgregar(): void {
-    this.tieneAccesoAgregar$ = this.accesoService.tieneAcceso(AccesosEstado.AGREGAR);
+    this.tieneAccesoAgregar$ = this.accesoService.tieneAcceso(ACCESO_ESTADO.Agregar);
   }
 
   public consultarGrid(): void {
@@ -55,8 +57,8 @@ export class EstadoComponent implements OnInit {
     const estado = gridData.data;
 
     const acciones = {
-      [GeneralConstant.GRID_ACCION_EDITAR]: () => this.editar(estado.idEstado),
-      [GeneralConstant.GRID_ACCION_ELIMINAR]: () => this.eliminar(estado),
+      [GRID_ACTION.Editar as string]: () => this.editar(estado.idEstado),
+      [GRID_ACTION.Eliminar as string]: () => this.eliminar(estado),
     };
 
     acciones[gridData.accion]();
@@ -64,12 +66,12 @@ export class EstadoComponent implements OnInit {
 
   public agregar(): void {
     const initialState = {
-      accion: GeneralConstant.MODAL_ACCION_AGREGAR,
+      accion: FORM_ACTION.Agregar,
     };
 
     const bsModalRef = this.modalService.show(EstadoFormularioComponent, {
       initialState,
-      ...GeneralConstant.CONFIG_MODAL_DEFAULT,
+      ...MODAL_CONFIG.Default,
     });
 
     const content = bsModalRef.content as EstadoFormularioComponent;
@@ -95,12 +97,12 @@ export class EstadoComponent implements OnInit {
   public editar(idEstado: number): void {
     const initialState = {
       idEstado: idEstado,
-      accion: GeneralConstant.MODAL_ACCION_EDITAR,
+      accion: FORM_ACTION.Editar,
     };
 
     const bsModalRef = this.modalService.show(EstadoFormularioComponent, {
       initialState,
-      ...GeneralConstant.CONFIG_MODAL_DEFAULT,
+      ...MODAL_CONFIG.Default,
     });
 
     const content = bsModalRef.content as EstadoFormularioComponent;

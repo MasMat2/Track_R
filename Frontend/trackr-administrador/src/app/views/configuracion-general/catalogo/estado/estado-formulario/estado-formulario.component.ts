@@ -7,7 +7,7 @@ import { PaisService } from '@http/catalogo/pais.service';
 import { Pais } from '@models/catalogo/pais';
 import { FormularioService } from '@services/formulario.service';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
-import { GeneralConstant } from '@utils/general-constant';
+import { DROPDOWN_NO_OPTIONS, DROPDOWN_PLACEHOLDER, FORM_ACTION } from '@utils/constants/constants';
 import { Observable, Subject, map, takeUntil } from 'rxjs';
 
 @Component({
@@ -15,9 +15,6 @@ import { Observable, Subject, map, takeUntil } from 'rxjs';
   templateUrl: './estado-formulario.component.html',
 })
 export class EstadoFormularioComponent implements OnInit, OnDestroy {
-  private readonly MENSAJE_AGREGAR: string = 'El estado ha sido agregado';
-  private readonly MENSAJE_EDITAR: string = 'El estado ha sido modificado';
-
   protected estado = new EstadoFormularioCapturaDto();
 
   // Inputs
@@ -26,10 +23,8 @@ export class EstadoFormularioComponent implements OnInit, OnDestroy {
   public closed = new EventEmitter<EstadoFormularioCapturaDto | undefined>;
 
   // Selectores
-  protected readonly placeHolderSelect: string =
-    GeneralConstant.PLACEHOLDER_DROPDOWN;
-  protected readonly placeHolderNoOptions: string =
-    GeneralConstant.PLACEHOLDER_DROPDOWN_NO_OPTIONS;
+  protected readonly DROPDOWN_PLACEHOLDER: string = DROPDOWN_PLACEHOLDER;
+  protected readonly DROPDOWN_NO_OPTIONS: string = DROPDOWN_NO_OPTIONS;
 
   protected idPais?: number;
   protected paises$: Observable<Pais[]>;
@@ -46,8 +41,7 @@ export class EstadoFormularioComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
 
   public ngOnInit(): void {
-    // TODO: 2023-06-14 -> Error si cualquiera de las peticiones falla
-    if (this.accion === GeneralConstant.MODAL_ACCION_EDITAR && this.idEstado) {
+    if (this.accion === FORM_ACTION.Editar && this.idEstado) {
       this.consultarEstado(this.idEstado);
     }
 
@@ -100,12 +94,14 @@ export class EstadoFormularioComponent implements OnInit, OnDestroy {
 
     this.estado.idPais = this.idPais!;
 
-    // TODO: 2023-06-14 -> Agregar el id al agregar
+    const MENSAJE_AGREGAR: string = `El estado ha sido agregado`;
+    const MENSAJE_EDITAR: string = `El estado ha sido modificado`;
+
 
     const [observable, mensajeExito]: [Observable<void>, string] =
-      this.accion === GeneralConstant.MODAL_ACCION_AGREGAR
-        ? [this.agregar(), this.MENSAJE_AGREGAR]
-        : [this.editar(), this.MENSAJE_EDITAR];
+      this.accion === FORM_ACTION.Agregar
+        ? [this.agregar(), MENSAJE_AGREGAR]
+        : [this.editar(), MENSAJE_EDITAR];
 
     const subscription = observable.subscribe({
       next: () => {

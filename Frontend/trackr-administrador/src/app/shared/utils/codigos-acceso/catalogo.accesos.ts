@@ -1,14 +1,14 @@
-export enum AccesosCompania {
-  CONSULTAR = 'APCMPA0000',
-  AGREGAR = 'APCMPA1000',
-  EDITAR = 'APCMPA2000',
-  ELIMINAR = 'APCMPA3000',
-  EDITAR_HORA = 'APCMPA4000',
+export enum ACCESO_COMPANIA {
+  Consultar = 'APCMPA0000',
+  Agregar = 'APCMPA1000',
+  Editar = 'APCMPA2000',
+  Eliminar = 'APCMPA3000',
+  EditarHora = 'APCMPA4000',
 };
 
-export enum AccesosEstado {
-  CONSULTAR = 'APESDO0000',
-  AGREGAR = 'APESDO1000',
-  EDITAR = 'APESDO2000',
-  ELIMINAR = 'APESDO3000',
+export enum ACCESO_ESTADO {
+  Consultar = 'APESDO0000',
+  Agregar = 'APESDO1000',
+  Editar = 'APESDO2000',
+  Eliminar = 'APESDO3000',
 };

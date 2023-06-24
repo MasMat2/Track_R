@@ -89,8 +89,8 @@
                   [items]="paises$ | async"
                   [required]="true"
                   [(ngModel)]="idPais"
-                  [placeholder]="placeHolderSelect"
-                  [notFoundText]="placeHolderNoOptions"
+                  [placeholder]="DROPDOWN_PLACEHOLDER"
+                  [notFoundText]="DROPDOWN_NO_OPTIONS"
                 ></ng-select>
                 <div
                   *ngIf="paisLst.errors?.['required'] && paisLst.touched"
