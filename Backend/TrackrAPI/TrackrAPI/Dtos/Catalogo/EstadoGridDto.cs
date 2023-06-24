@@ -3,9 +3,9 @@
     public class EstadoGridDto
     {
         public int IdEstado { get; set; }
-        public string Clave { get; set; }
-        public string Nombre { get; set; }
-        public string NombrePais { get; set; }
+        public string Clave { get; set; } = string.Empty;
+        public string Nombre { get; set; } = string.Empty;
+        public string NombrePais { get; set; } = string.Empty;
 
     }
 }

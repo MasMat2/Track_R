@@ -5,3 +5,10 @@ export enum AccesosCompania {
   ELIMINAR = 'APCMPA3000',
   EDITAR_HORA = 'APCMPA4000',
 };
+
+export enum AccesosEstado {
+  CONSULTAR = 'APESDO0000',
+  AGREGAR = 'APESDO1000',
+  EDITAR = 'APESDO2000',
+  ELIMINAR = 'APESDO3000',
+};

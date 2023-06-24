@@ -36,6 +36,7 @@ import { Observable, Observer, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { CertificadoConfiguracionComponent } from '../certificado-configuracion/certificado-configuracion.component';
+import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
 
 @Component({
   selector: 'app-locacion-formulario',
@@ -59,7 +60,7 @@ export class HospitalFormularioComponent implements OnInit {
   public btnSubmit = false;
   public hospital = new Hospital();
 
-  public estadoList: Estado[] = [];
+  public estadoList: EstadoSelectorDto[] = [];
   public bancoList: Banco[] = [];
   public paisList: Pais[] = [];
   public regimenFiscalList: RegimenFiscal[] = [];

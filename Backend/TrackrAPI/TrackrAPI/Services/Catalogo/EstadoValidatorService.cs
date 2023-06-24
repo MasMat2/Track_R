@@ -27,59 +27,49 @@ namespace TrackrAPI.Services.Catalogo
 
         private readonly string MensajeNombreLongitud = $"La longitud máxima del nombre son {LongitudNombre } caracteres";
 
-        public void ValidarAgregar(Estado estado)
+        public void ValidarAgregar(EstadoFormularioCapturaDto estado)
         {
             ValidarRequerido(estado);
             ValidarRango(estado);
             ValidarDuplicado(estado);
         }
 
-        public void ValidarEditar(Estado estado)
+        public void ValidarEditar(EstadoFormularioCapturaDto estado)
         {
+            ValidarExistencia(estado.IdEstado);
             ValidarRequerido(estado);
             ValidarRango(estado);
-            ValidarExistencia(estado.IdEstado);
             ValidarDuplicado(estado);
         }
 
         public void ValidarEliminar(int idEstado)
         {
-            var estado = estadoRepository.Consultar(idEstado);
-
             ValidarExistencia(idEstado);
-            ValidarDependencia(estado);
+            ValidarDependencia(idEstado);
         }
 
-        public void ValidarRequerido(Estado estado)
+        public void ValidarRequerido(EstadoFormularioCapturaDto estado)
         {
             Validator.ValidarRequerido(estado.Nombre, MensajeNombreRequerido);
             Validator.ValidarRequerido(estado.IdPais, MensajePaisRequerido);
         }
 
-        public void ValidarRango(Estado estado)
+        public void ValidarRango(EstadoFormularioCapturaDto estado)
         {
             Validator.ValidarLongitudRangoString(estado.Nombre, LongitudNombre, MensajeNombreLongitud);
         }
 
-        public void ValidarExistencia(EstadoDto estado)
-        {
-            if (estado == null)
-            {
-                throw new CdisException(MensajeExistencia);
-            }
-        }
-
         public void ValidarExistencia(int idEstado)
         {
-            var estado = estadoRepository.Consultar(idEstado);
+            var estado = estadoRepository.ConsultarDependencias(idEstado);
 
-            if (estado == null)
+            if (estado is null)
             {
                 throw new CdisException(MensajeExistencia);
             }
         }
 
-        public void ValidarDuplicado(Estado estado)
+        public void ValidarDuplicado(EstadoFormularioCapturaDto estado)
         {
             var estadoDuplicado = estadoRepository.Consultar(estado.Nombre, estado.IdPais);
 
@@ -89,9 +79,9 @@ namespace TrackrAPI.Services.Catalogo
             }
         }
 
-        public void ValidarDependencia(Estado estado)
+        public void ValidarDependencia(int idEstado)
         {
-            var estadoDep = estadoRepository.ConsultarDependencias(estado.IdEstado);
+            var estadoDep = estadoRepository.ConsultarDependencias(idEstado)!;
 
             if (estadoDep.Municipio.Any()) {
                 throw new CdisException(MensajeDependencia);

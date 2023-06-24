@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
 import { EstadoService } from '@http/catalogo/estado.service';
 import { MunicipioService } from '@http/catalogo/municipio.service';
 import { PaisService } from '@http/catalogo/pais.service';
@@ -24,7 +25,7 @@ export class MunicipioFormularioComponent implements OnInit {
   public mensajeEditar = 'El municipio ha sido modificado';
   public btnSubmit = false;
   public municipio = new Municipio();
-  public estadoList: Estado[] = [];
+  public estadoList: EstadoSelectorDto[] = [];
   public paisList: Pais[] = [];
 
   constructor(
@@ -37,6 +38,12 @@ export class MunicipioFormularioComponent implements OnInit {
 
   public ngOnInit(): void {
     this.consultarPaises();
+
+    console.log(this.municipio)
+
+    if (this.municipio.idPais) {
+      this.consultarEstados(this.municipio.idPais.toString());
+    }
   }
 
   public consultarPaises(): void {
@@ -48,7 +55,10 @@ export class MunicipioFormularioComponent implements OnInit {
   public consultarEstados(idPais: string): void {
     if (idPais !== '') {
       this.estadoService.consultarPorPaisParaSelector(+idPais).subscribe(
-        (data) => this.estadoList = data
+        (data) => {
+          this.estadoList = data
+          console.log(data);
+        }
       );
     } else {
       this.estadoList = [];

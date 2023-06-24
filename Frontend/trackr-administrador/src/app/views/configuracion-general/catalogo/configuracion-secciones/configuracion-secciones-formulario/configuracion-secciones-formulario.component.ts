@@ -40,7 +40,9 @@ export class ConfiguracionSeccionesFormularioComponent implements OnInit {
     { headerName: 'Descripción', field: 'descripcion', minWidth: 30 },
     { headerName: 'Dominio', field: 'nombreDominio', minWidth: 30 },
     { headerName: 'Orden', field: 'orden', minWidth: 30 },
-    { headerName: 'Requerido', field: 'requerido', minWidth: 30, valueGetter: (params: any) => this.convertirSiNo(params.data)}
+    { headerName: 'Requerido', field: 'requerido', minWidth: 30, valueGetter: (params: any) => this.convertirSiNo(params.data)},
+    { headerName: 'Sección', field: 'grupo', minWidth: 30 },
+    { headerName: 'Fila', field: 'fila', minWidth: 30 },
   ];
 
   // DropDown Dominio
