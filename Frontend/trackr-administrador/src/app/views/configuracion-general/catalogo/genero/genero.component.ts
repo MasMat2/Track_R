@@ -71,6 +71,7 @@ export class GeneroComponent implements OnInit {
         this.generoService.consultar(idGenero).subscribe((data) => {
             this.bsModalRef = this.modalService.show(GeneroFormularioComponent, GeneralConstant.CONFIG_MODAL_DEFAULT);
             this.bsModalRef.content.genero = data;
+            this.bsModalRef.content.accion = GeneralConstant.MODAL_ACCION_EDITAR;
             this.bsModalRef.content.onClose = (cerrar: boolean) => {
                 if(cerrar){
                     this.consultarGrid();
