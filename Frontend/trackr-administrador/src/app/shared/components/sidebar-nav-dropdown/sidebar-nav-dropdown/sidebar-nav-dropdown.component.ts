@@ -57,22 +57,24 @@ export class SidebarNavDropdownComponent implements OnInit {
         }
       });
 
-    this.subs[0] = this.router.events
-      .pipe(
-        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-        map(() => this.route.snapshot),
-        map((route) => {
-          while (route.firstChild) {
-            route = route.firstChild;
-          }
-          return route;
-        })
-      )
-      .subscribe((route: ActivatedRouteSnapshot) => {
-        this.claveAcceso = route.data?.['acceso'];
-        this.consultarAcceso();
-      });
+    this.actualizarAcceso();
 
+    this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.actualizarAcceso()
+      });
+  }
+
+  private actualizarAcceso(): void {
+    let route = this.route.snapshot;
+
+    while (route.firstChild) {
+      route = route.firstChild;
+    }
+
+    this.claveAcceso = route.data?.['acceso'];
+    this.consultarAcceso();
   }
 
   public logout() {
