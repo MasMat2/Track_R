@@ -19,6 +19,11 @@ namespace TrackrAPI.Services.Seguridad
         {
             return ayudaSeccionRepository.ConsultarParaSelector();
         }
+        
+        public IEnumerable<AyudaSeccionGridDto> ConsultarTodosParaGrid()
+        {
+            return ayudaSeccionRepository.ConsultarTodosParaGrid();
+        }
 
         public void Agregar(AyudaSeccion ayudaSeccion)
         {

@@ -23,6 +23,13 @@ namespace TrackrAPI.Controllers.Seguridad
             return ayudaSeccionService.ConsultarParaSelector();
         }
 
+        [HttpGet]
+        [Route("consultarParaGrid")]
+        public IEnumerable<AyudaSeccionGridDto> ConsultarTodosParaGrid()
+        {
+            return ayudaSeccionService.ConsultarTodosParaGrid();
+        }
+
         [HttpPost]
         [Route("agregar")]
         public void Agregar(AyudaSeccion ayudaSeccion)

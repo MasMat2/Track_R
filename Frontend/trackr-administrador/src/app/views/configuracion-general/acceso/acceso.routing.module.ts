@@ -50,6 +50,13 @@ const routes: Routes = [
           )
       },
       {
+        path: 'ayuda-seccion',
+        loadChildren: () =>
+          import('../acceso/ayuda-seccion/ayuda-seccion.module').then(
+            (m) => m.AyudaSeccionModule
+          )
+      },
+      {
         path: 'acceso-ayuda',
         component: AccesoAyudaComponent,
         canActivate: [AdministradorAuthGuard],

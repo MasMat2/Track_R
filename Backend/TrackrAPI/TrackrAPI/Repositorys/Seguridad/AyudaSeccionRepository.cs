@@ -24,6 +24,15 @@ namespace TrackrAPI.Repositorys.Seguridad
                 .Select(s => new AyudaSeccionSelectorDto
                 {
                     IdAyudaSeccion = s.IdAyudaSeccion,
+                    Nombre = s.Nombre
+                }).ToList();
+        }
+        public IEnumerable<AyudaSeccionGridDto> ConsultarTodosParaGrid()
+        {
+            return context.AyudaSeccion
+                .Select(s => new AyudaSeccionGridDto
+                {
+                    IdAyudaSeccion = s.IdAyudaSeccion,
                     Clave = s.Clave,
                     Nombre = s.Nombre,
                     Orden = s.Orden
