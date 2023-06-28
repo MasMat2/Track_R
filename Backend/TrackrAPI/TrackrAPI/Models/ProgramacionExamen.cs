@@ -13,7 +13,7 @@ namespace TrackrAPI.Models
         public int IdProgramacionExamen { get; set; }
         public int IdTipoExamen { get; set; }
         public int IdUsuarioResponsable { get; set; }
-        public int IdProyectoElementoTecnica { get; set; }
+        public int? IdProyectoElementoTecnica { get; set; }
         public string? Clave { get; set; }
         public double? Duracion { get; set; }
         public int? CantidadParticipantes { get; set; }
@@ -22,7 +22,7 @@ namespace TrackrAPI.Models
         public DateTime? FechaAlta { get; set; }
         public bool? Estatus { get; set; }
 
-        public virtual ProyectoElementoTecnica IdProyectoElementoTecnicaNavigation { get; set; } = null!;
+        public virtual ProyectoElementoTecnica? IdProyectoElementoTecnicaNavigation { get; set; }
         public virtual TipoExamen IdTipoExamenNavigation { get; set; } = null!;
         public virtual Usuario IdUsuarioResponsableNavigation { get; set; } = null!;
         public virtual ICollection<Examen> Examen { get; set; }

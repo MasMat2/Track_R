@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, Output, AfterViewInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
+import { MunicipioSelector } from '@dtos/catalogo/municipio-selector';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { ColoniaService } from '@http/catalogo/colonia.service';
 import { EstadoService } from '@http/catalogo/estado.service';
@@ -8,9 +10,7 @@ import { PaisService } from '@http/catalogo/pais.service';
 import { DomicilioService } from '@http/inventario/domicilio.service';
 import { CodigoPostal } from '@models/catalogo/codigo-postal';
 import { Colonia } from '@models/catalogo/colonia';
-import { Estado } from '@models/catalogo/estado';
 import { Localidad } from '@models/catalogo/localidad';
-import { Municipio } from '@models/catalogo/municipio';
 import { Pais } from '@models/catalogo/pais';
 import { Domicilio } from '@models/seguridad/domicilio';
 import { GeneralConstant } from '@utils/general-constant';
@@ -34,11 +34,11 @@ export class DomicilioFormularioComponent implements OnChanges {
 
   @Input() readonly = false;
 
-  
+
   // Listas de Selectores
   public paisList: Pais[] = [];
-  public estadoList: Estado[] = [];
-  public municipioList: Municipio[] = [];
+  public estadoList: EstadoSelectorDto[] = [];
+  public municipioList: MunicipioSelector[] = [];
   public localidadList: Localidad[] = [];
   public coloniaList: Colonia[] = [];
 
@@ -54,7 +54,7 @@ export class DomicilioFormularioComponent implements OnChanges {
 
   public esPaisExtranjero: boolean = false;
   public idPaisMexico: number;
-  
+
 
 
   constructor(
@@ -74,7 +74,7 @@ export class DomicilioFormularioComponent implements OnChanges {
         this.idEstado = this.domicilio.idEstado
         this.codigoPostal = this.domicilio.codigoPostal
       }
-      
+
       this.consultarEstados(this.domicilio.idPais);
       this.consultarMunicipios(this.domicilio.idEstado);
       this.consultarLocalidades(this.domicilio.idEstado);
@@ -135,7 +135,7 @@ export class DomicilioFormularioComponent implements OnChanges {
    * Se asignan valores de idEstado, se consultan los municipios y localidades
    * con este último y se consultan las colonias, para asignar el valor
    * de acuerdo al código postal
-   * @param codigoPostalValue 
+   * @param codigoPostalValue
    * @returns Promesa
    */
   private async asignarValoresDeCodigoPostal(codigoPostalValue: string): Promise<void> {

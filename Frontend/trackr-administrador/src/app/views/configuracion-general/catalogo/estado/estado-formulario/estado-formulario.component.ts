@@ -1,95 +1,84 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { EstadoFormularioCapturaDto } from '@dtos/catalogo/estado-formulario-captura-dto';
+import { EstadoFormularioConsultaDto } from '@dtos/catalogo/estado-formulario-consulta-dto';
 import { EstadoService } from '@http/catalogo/estado.service';
 import { PaisService } from '@http/catalogo/pais.service';
-import { Estado } from '@models/catalogo/estado';
 import { Pais } from '@models/catalogo/pais';
-import { FormularioService } from '@services/formulario.service';
+import { CrudFormularioBase } from '@sharedComponents/crud/crud-base/crud-formulario-base';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { GeneralConstant } from '@utils/general-constant';
+import { Observable, Subject, map, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-estado-formulario',
   templateUrl: './estado-formulario.component.html',
 })
-export class EstadoFormularioComponent implements OnInit {
-  public placeHolderSelect = GeneralConstant.PLACEHOLDER_DROPDOWN;
-  public placeHolderNoOptions = GeneralConstant.PLACEHOLDER_DROPDOWN_NO_OPTIONS;
-  public onClose: any;
-  public accion: string;
-  public mensajeAgregar = 'El estado ha sido agregado';
-  public mensajeEditar = 'El estado ha sido modificado';
-  public btnSubmit = false;
-  public estado = new Estado();
-  public paisList: Pais[] = [];
-  public idPais: number;
+export class EstadoFormularioComponent extends CrudFormularioBase<EstadoFormularioCapturaDto> implements OnInit, OnDestroy {
+  private destroy$: Subject<void> = new Subject<void>();
+
+  // Selectores
+  protected readonly placeHolderSelect: string = GeneralConstant.PLACEHOLDER_DROPDOWN;
+  protected readonly placeHolderNoOptions: string = GeneralConstant.PLACEHOLDER_DROPDOWN_NO_OPTIONS;
+
+  protected idPais?: number;
+  protected paises$: Observable<Pais[]>;
+
+  protected submiting: boolean = false;
 
   constructor(
-    private mensajeService: MensajeService,
-    private formularioService: FormularioService,
     private estadoService: EstadoService,
     private paisService: PaisService,
-  ) {}
+    mensajeService: MensajeService,
+  ) {
+    super(mensajeService);
+  }
 
   public ngOnInit(): void {
+    super.onInit();
+
     this.consultarPaises();
   }
 
-  public consultarPaises(): void {
-    this.paisService.consultarGeneral().subscribe(
-      (data) => {
-        this.paisList = data;
-
-        if (this.estado.idPais > 0) {
-          this.idPais = this.estado.idPais;
-        }
-      }
-    );
+  public ngOnDestroy(): void {
+    this.destroy$.next();
   }
 
-  public enviarFormulario(formulario: NgForm): void {
-    this.btnSubmit = true;
-    if (!formulario.valid) {
-      this.formularioService.validarCamposRequeridos(formulario);
-      this.btnSubmit = false;
-      return;
-    }
+  protected override consultar(idEstado: number): Observable<EstadoFormularioCapturaDto> {
+    return this.estadoService
+      .consultarParaFormulario(idEstado)
+      .pipe(
+        takeUntil(this.destroy$),
+        tap((estado: EstadoFormularioConsultaDto) => {
+          this.idPais = estado.idPais;
+        }),
+        map((estado: EstadoFormularioConsultaDto) => {
+          const capturaDto = new EstadoFormularioCapturaDto();
+          capturaDto.idEstado = estado.idEstado;
+          capturaDto.clave = estado.clave;
+          capturaDto.nombre = estado.nombre;
+          capturaDto.idPais = estado.idPais;
 
-    this.estado.idPais = this.idPais;
-
-    if (this.accion === GeneralConstant.MODAL_ACCION_AGREGAR) {
-      this.agregar();
-    } else if (this.accion === GeneralConstant.MODAL_ACCION_EDITAR) {
-      this.editar();
-    }
+          return capturaDto;
+        })
+      );
   }
 
-  public agregar(): void {
-    this.estadoService.agregar(this.estado).subscribe(
-      (data) => {
-        this.mensajeService.modalExito(this.mensajeAgregar);
-        this.onClose(true);
-      },
-      (error) => {
-        this.btnSubmit = false;
-      }
-    );
+  protected override agregar(estado: EstadoFormularioCapturaDto): Observable<void> {
+    return this.estadoService.agregar(estado);
   }
 
-  public editar(): void {
-    this.estadoService.editar(this.estado).subscribe(
-      (data) => {
-        this.mensajeService.modalExito(this.mensajeEditar);
-        this.onClose(true);
-      },
-      (error) => {
-        this.btnSubmit = false;
-      }
-    );
+  protected override editar(estado: EstadoFormularioCapturaDto): Observable<void> {
+    return this.estadoService.editar(estado);
   }
 
-  public cancelar(): void {
-    this.onClose(true);
+  protected override onSubmit(formulario: NgForm): void {
+    this.entidad.idPais = this.idPais!;
+
+    super.onSubmit(formulario);
   }
 
+  private consultarPaises(): void {
+    this.paises$ = this.paisService.consultarGeneral();
+  }
 }

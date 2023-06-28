@@ -8,4 +8,5 @@ export class UsuarioExpedienteGridDTO {
     glucosa: number;
     presionSistolica: number;
     presionAsistolica: number;
+    edad: string;
 }

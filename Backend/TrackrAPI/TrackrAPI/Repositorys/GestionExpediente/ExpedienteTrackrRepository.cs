@@ -38,6 +38,7 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid()
         {
             return context.ExpedienteTrackr
+                .Include(et => et.IdUsuarioNavigation)
                 .Include(et => et.ExpedientePadecimiento)
                 .ThenInclude(ep => ep.IdPadecimientoNavigation)
                 .Select(et => new UsuarioExpedienteGridDTO
@@ -45,8 +46,9 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                     IdExpedienteTrackr = et.IdExpediente,
                     IdUsuario = et.IdUsuario,
                     NombreCompleto = et.IdUsuarioNavigation.ObtenerNombreCompleto(),
-                    Patologias = et.ExpedientePadecimiento.ObtenerPadecimientos()
-
+                    Patologias = et.ExpedientePadecimiento.ObtenerPadecimientos(),
+                    Edad = (DateTime.Today.Year - et.FechaNacimiento.Year).ToString() + " años",
+                    TipoMime = et.IdUsuarioNavigation.ImagenTipoMime
                 })
                 .ToList();
         }

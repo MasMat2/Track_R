@@ -1,0 +1,277 @@
+<div class="d-flex">
+  <div class="barra-lateral-modal"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div>{{ accion }} Programación de Examen</div>
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="cancelar()"
+      >
+        <i class="far fa-times-circle"></i>
+      </button>
+    </div>
+    <form
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      novalidate="novalidate"
+    >
+      <div class="modal-body" id="modal">
+        <div class="row">
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="label-input required-label">Clave</label>
+              <div>
+                <input
+                  #clave="ngModel"
+                  [(ngModel)]="programacionExamen.clave"
+                  name="clave"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                  [disabled]="accion == 'Editar'"
+                  maxlength="30"
+                />
+              </div>
+              <div
+                *ngIf="clave.errors?.['required'] && clave.touched"
+                class="error"
+              >
+                La clave es requerida
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-5">
+            <div class="form-group">
+              <label class="label-input required-label">Responsable</label>
+              <div>
+                <ng-select
+                  #usuarioResponsableLst="ngModel"
+                  name="usuarioResponsableLstName"
+                  bindLabel="nombreCompleto"
+                  bindValue="idUsuario"
+                  [items]="usuarioList"
+                  [required]="true"
+                  [(ngModel)]="programacionExamen.idUsuarioResponsable"
+                  [placeholder]="DROPDOWN_PLACEHOLDER"
+                  [notFoundText]="DROPDOWN_NO_OPTIONS"
+                ></ng-select>
+              </div>
+              <div
+                *ngIf="
+                  usuarioResponsableLst.errors?.['required'] &&
+                  usuarioResponsableLst.touched
+                "
+                class="error"
+              >
+                El responsable es requerido
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-5">
+            <div class="form-group">
+              <label class="label-input required-label">Tipo de Examen</label>
+              <div>
+                <ng-select
+                  #tipoExamenLst="ngModel"
+                  name="tipoExamenLstName"
+                  bindLabel="nombre"
+                  bindValue="idTipoExamen"
+                  [items]="tipoExamenList"
+                  [required]="true"
+                  [(ngModel)]="programacionExamen.idTipoExamen"
+                  [placeholder]="DROPDOWN_PLACEHOLDER"
+                  [notFoundText]="DROPDOWN_NO_OPTIONS"
+                  (ngModelChange)="actualizarDuracion()"
+                ></ng-select>
+              </div>
+              <div
+                *ngIf="tipoExamenLst.errors?.['required'] && tipoExamenLst.touched"
+                class="error"
+              >
+                El tipo de examen es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="label-input required-label"
+                >Duración (minutos)</label
+              >
+              <div>
+                <input
+                  #duracion="ngModel"
+                  [(ngModel)]="programacionExamen.duracion"
+                  name="duracion"
+                  class="form-control"
+                  type="number"
+                  [required]="true"
+                  [disabled]="true"
+                />
+              </div>
+              <div
+                *ngIf="duracion.errors?.['required'] && duracion.touched"
+                class="error"
+              >
+                La duración es requerida
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="label-input required-label"
+                >Cantidad de Participantes</label
+              >
+              <div>
+                <input
+                  [value]="programacionExamen.participantes.length"
+                  name="cantidadParticipantes"
+                  class="form-control"
+                  type="number"
+                  [required]="true"
+                  [disabled]="true"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Fecha del Examen</label>
+              <div class="calendario">
+                <input
+                  #fechaExamenName="ngModel"
+                  type="text"
+                  class="form-control"
+                  autocomplete="off"
+                  placeholder="dd/mm/aaaa"
+                  name="fechaExamenName"
+                  [(ngModel)]="programacionExamen.fechaExamen"
+                  [required]="true"
+                  bsDatepicker
+                />
+              </div>
+              <div
+                *ngIf="
+                  fechaExamenName.errors?.['required'] && fechaExamenName.touched
+                "
+                class="error"
+              >
+                La fecha del examen es requerida
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="label-input required-label">Hora del Examen</label>
+              <div>
+                <input
+                  #horaExamen="ngModel"
+                  [(ngModel)]="programacionExamen.horaExamen"
+                  name="horaExamen"
+                  class="form-control"
+                  type="time"
+                  [required]="true"
+                />
+              </div>
+              <div
+                *ngIf="horaExamen.errors?.['required'] && horaExamen.touched"
+                class="error"
+              >
+                La hora del examen es requerida
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-11">
+            <div class="form-group">
+              <label class="label-input required-label">Participantes</label>
+              <div>
+                <ng-select
+                  #participantesLst="ngModel"
+                  name="participantesLstName"
+                  bindLabel="nombreCompleto"
+                  bindValue="idUsuario"
+                  [items]="usuarioList"
+                  [multiple]="true"
+                  [required]="true"
+                  [(ngModel)]="programacionExamen.participantes"
+                  [placeholder]="DROPDOWN_PLACEHOLDER"
+                  [notFoundText]="DROPDOWN_NO_OPTIONS"
+                ></ng-select>
+              </div>
+              <div
+                *ngIf="
+                  participantesLst.errors?.['required'] && participantesLst.touched
+                "
+                class="error"
+              >
+                Los participantes son requeridos
+              </div>
+            </div>
+          </div>
+          <div class="col-md-1">
+            <div class="form-group">
+              <label class="label-input required-label">Promedio</label>
+              <div>
+                <input
+                  #promedio="ngModel"
+                  [(ngModel)]="programacionExamen.promedio"
+                  name="promedio"
+                  class="form-control"
+                  type="number"
+                  [disabled]="true"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="examenList.length > 0">
+          <div class="col-md-12">
+            <app-grid-general
+              #gridNecesidad
+              [headerName]="HEADER_GRID"
+              [data]="examenList"
+              [children]="columns"
+              (event)="onGridClick($event)"
+              [disableDelete]="true"
+              [disableEdit]="true"
+            >
+            </app-grid-general>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="text-right">
+          <button
+            [disabled]="submitting"
+            type="submit"
+            class="btn-primario btn-margin-left"
+          >
+            Guardar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="loading-cdis" *ngIf="submitting">
+  <img src="assets/img/spinner.gif" alt="Procesando..." />
+  <span>Procesando... por favor espere</span>
+</div>

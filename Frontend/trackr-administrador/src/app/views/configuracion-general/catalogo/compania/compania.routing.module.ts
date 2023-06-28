@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CompaniaComponent } from './compania.component';
-import { AccesosCompania } from 'src/app/shared/utils/codigos-acceso/catalogo.accesos';
+import { ACCESO_COMPANIA } from 'src/app/shared/utils/codigos-acceso/catalogo.accesos';
 
 const routes: Routes = [
   {
@@ -9,7 +9,7 @@ const routes: Routes = [
     component: CompaniaComponent,
     data: {
       title: 'Consulta',
-      acceso: AccesosCompania.CONSULTAR
+      acceso: ACCESO_COMPANIA.Consultar
     }
   },
   {

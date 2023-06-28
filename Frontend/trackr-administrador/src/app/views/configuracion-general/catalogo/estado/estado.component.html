@@ -1,21 +1,10 @@
-<div class="contenedor">
-  <div class="titulo-contenedor">Catálogo de Estados</div>
-  <div class="cuerpo-contenedor">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="contenedor-agregar" (click)="agregar()" *ngIf="tieneAccesoAgregar">
-          <i class="fas fa-plus-circle"></i><span>Agregar</span>
-        </div>
-        <app-grid-general
-          [headerName]="HEADER_GRID"
-          [data]="estadoList"
-          [children]="columns"
-          (event)="onGridClick($event)"
-          [accesoEditar]="accesoEditar"
-          [accesoEliminar]="accesoEliminar"
-        >
-        </app-grid-general>
-      </div>
-    </div>
-  </div>
-</div>
+<app-catalogo-base
+    titulo="Catálogo de Estados"
+    [columns]="columns"
+    [crudConfig]="crudConfig"
+    [elementos$]="registros$"
+    [tieneAccesoAgregar$]="tieneAccesoAgregar$"
+    (agregarClick)="agregar()"
+    (gridClick)="onGridClick($event)"
+>
+</app-catalogo-base>

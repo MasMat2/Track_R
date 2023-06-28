@@ -2922,6 +2922,12 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdExpediente)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ExpedienteRecomendaciones_ExpedienteTrackr");
+
+                entity.HasOne(d => d.IdUsuarioDoctorNavigation)
+                    .WithMany(p => p.ExpedienteRecomendaciones)
+                    .HasForeignKey(d => d.IdUsuarioDoctor)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExpedienteRecomendaciones_Usuario");
             });
 
             modelBuilder.Entity<ExpedienteSeccion>(entity =>
@@ -5782,7 +5788,6 @@ namespace TrackrAPI.Models
                 entity.HasOne(d => d.IdProyectoElementoTecnicaNavigation)
                     .WithMany(p => p.ProgramacionExamen)
                     .HasForeignKey(d => d.IdProyectoElementoTecnica)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Programac__IdPro__55B597A7");
 
                 entity.HasOne(d => d.IdTipoExamenNavigation)

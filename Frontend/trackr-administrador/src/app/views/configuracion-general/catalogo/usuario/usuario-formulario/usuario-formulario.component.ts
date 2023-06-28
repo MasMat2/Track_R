@@ -1,8 +1,8 @@
-import { ArchivoService } from './../../../../../shared/http/catalogo/archivo.service';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
+import { MunicipioSelector } from '@dtos/catalogo/municipio-selector';
 import { AreaService } from '@http/catalogo/area.service';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { ColoniaService } from '@http/catalogo/colonia.service';
@@ -34,11 +34,9 @@ import { Colonia } from '@models/catalogo/colonia';
 import { Compania } from '@models/catalogo/compania';
 import { Concepto } from '@models/catalogo/concepto';
 import { CuentaContable } from '@models/catalogo/cuenta-contable';
-import { Estado } from '@models/catalogo/estado';
 import { Hospital } from '@models/catalogo/hospital';
 import { ListaPrecio } from '@models/catalogo/lista-precio';
 import { Localidad } from '@models/catalogo/localidad';
-import { Municipio } from '@models/catalogo/municipio';
 import { Pais } from '@models/catalogo/pais';
 import { PuntoVenta } from '@models/catalogo/punto-venta';
 import { RegimenFiscal } from '@models/catalogo/regimen-fiscal';
@@ -52,14 +50,14 @@ import { TipoUsuario } from '@models/seguridad/tipo-usuario';
 import { Usuario } from '@models/seguridad/usuario';
 import { UsuarioLocacion } from '@models/seguridad/usuario-locacion';
 import { UsuarioRol } from '@models/seguridad/usuario-rol';
+import { UsuarioImagenService } from '@services/usuario-imagen.service';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { CodigoAcceso } from '@utils/codigo-acceso';
 import { GeneralConstant } from '@utils/general-constant';
 import * as Utileria from '@utils/utileria';
 import { Observable, Observer, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { UsuarioImagenService } from '@services/usuario-imagen.service';
+import { ArchivoService } from './../../../../../shared/http/catalogo/archivo.service';
 
 /**
  * Formulario de usuario, permite agregar, editar y eliminar.
@@ -111,8 +109,8 @@ export class UsuarioFormularioComponent implements OnInit {
 
   // Datos de Contacto
   public paisList: Pais[] = [];
-  public estadoList: Estado[] = [];
-  public municipioList: Municipio[] = [];
+  public estadoList: EstadoSelectorDto[] = [];
+  public municipioList: MunicipioSelector[] = [];
   public localidadList: Localidad[] = [];
   public coloniaList: Colonia[] = [];
 

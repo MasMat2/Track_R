@@ -1,0 +1,20 @@
+.green-dot {
+    width: 10px;
+    height: 10px;
+    background-color: green;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 10px;
+    margin-right: 20px;
+}
+.edad{
+    color:gray;
+    position: absolute;
+    margin-left:10vh
+}
+
+.search-container {
+    border-bottom: 1px solid #000; /* Ajusta el color según tu diseño */
+}

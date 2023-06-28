@@ -60,7 +60,7 @@ export class TokenInterceptor implements HttpInterceptor {
           window.location.reload();
         }
         // Unauthorized
-        else if (error.status === 401 || error.status === 0) {
+        else if (error.status === 401) {
           if (this.router.url.includes('administrador')) {
             localStorage.removeItem(GeneralConstant.TOKEN_KEY);
             this.router.navigate(['/login']);

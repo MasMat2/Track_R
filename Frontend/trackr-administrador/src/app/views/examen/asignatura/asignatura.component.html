@@ -1,0 +1,26 @@
+<div class="contenedor">
+  <div class="titulo-contenedor">Catálogo de {{ NOMBRE_ENTIDAD }}</div>
+  <div class="cuerpo-contenedor">
+    <div class="row">
+      <div class="col-12">
+        <div
+          class="contenedor-agregar"
+          (click)="agregar()"
+          *ngIf="tieneAccesoAgregar"
+        >
+          <i class="fas fa-plus-circle"></i><span>Agregar</span>
+        </div>
+        <app-grid-general
+          #gridNecesidad
+          [headerName]="NOMBRE_ENTIDAD"
+          [data]="asignaturas"
+          [children]="columns"
+          (event)="onGridClick($event)"
+          [accesoEditar]="EDITAR_ASIGNATURA"
+          [accesoEliminar]="ELIMINAR_ASIGNATURA"
+        >
+        </app-grid-general>
+      </div>
+    </div>
+  </div>
+</div>

@@ -14,7 +14,7 @@
 		</div>
 
     <!-- Contenido -->
-    <form (keydown.enter)="$event.preventDefault()" #formulario="ngForm" (ngSubmit)="enviarFormulario(formulario)" novalidate="novalidate">
+    <form (keydown.enter)="$event.preventDefault()" #formulario="ngForm" (ngSubmit)="onSubmit(formulario)" novalidate="novalidate">
 
 		<div class="cuerpo-contenedor" id="modal">
         <div class="container">
@@ -91,7 +91,7 @@
 
                         <!-- Delete Button -->
                         <div *ngIf="node.data.tipoAcceso != 'Evento'" [ngClass]="{ 'node-expander-virtual': node.isLeaf && !node.hasChildren }" class="checkbox mr-1">
-                          <div type="button" class="delete" [class.delete-disabled]="disableSubmit" (click)="eliminarJerarquiaEstructura(node.data)"></div>
+                          <div type="button" class="delete" [class.delete-disabled]="submitting" (click)="eliminarJerarquiaEstructura(node.data)"></div>
                         </div>
 
                         <!-- Node Content -->
@@ -177,7 +177,7 @@
 
         <!-- Botón Guardar -->
 				<div class="text-right">
-					<button [disabled]="disableSubmit" type="submit" class="btn-primario btn-margin-left">
+					<button [disabled]="submitting" type="submit" class="btn-primario btn-margin-left">
 						Guardar
 					</button>
 				</div>
@@ -193,7 +193,7 @@
   <span>Cargando... por favor espere</span>
 </div>
 
-<div id="loading-cdis" *ngIf="disableSubmit">
+<div id="loading-cdis" *ngIf="submitting">
   <img src="assets/img/spinner.gif" alt="Procesando..." />
   <span>Procesando... por favor espere</span>
 </div>
