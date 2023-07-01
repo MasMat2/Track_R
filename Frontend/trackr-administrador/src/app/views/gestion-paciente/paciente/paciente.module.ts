@@ -10,11 +10,14 @@ import { ExpedienteFormularioModule } from './expediente-formulario/expediente-f
 import { PacienteRoutingModule } from './paciente-routing.module';
 import { PacienteVistaCuadriculaComponent } from './paciente-vista-cuadricula/paciente-vista-cuadricula.component';
 import { PacienteComponent } from './paciente.component';
+import { ExpedientePadecimientoComponent } from './expediente-padecimiento/expediente-padecimiento.component';
+import { ExpedientePadecimientoModule } from './expediente-padecimiento/expediente-padecimiento.module';
 
 @NgModule({
   declarations: [
     PacienteComponent,
     PacienteVistaCuadriculaComponent,
+
   ],
   imports: [
     SharedModule,
@@ -23,7 +26,8 @@ import { PacienteComponent } from './paciente.component';
     TableModule,
     PacienteRoutingModule,
     ExpedienteFormularioModule,
-    ExpedienteEstudioModule
+    ExpedienteEstudioModule,
+    ExpedientePadecimientoModule
   ],
   entryComponents: [
     PacienteVistaCuadriculaComponent, 

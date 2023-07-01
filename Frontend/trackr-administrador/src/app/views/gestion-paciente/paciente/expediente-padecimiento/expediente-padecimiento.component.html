@@ -1,0 +1,23 @@
+
+<div>
+    <div>
+        <div *ngIf="padecimientoPacienteList.length < 1 else pacientesLista">
+            <h3 class="text-center"> Sin padecimientos registrados </h3>
+        </div>
+        <ng-template #pacientesLista>
+            <app-grid-general
+            [headerName]="HEADER_GRID"
+            [data]="padecimientoPacienteList"
+            [children]="columns"
+            >
+            </app-grid-general>
+        </ng-template>
+    </div>
+    
+    
+</div>
+
+
+
+
+
