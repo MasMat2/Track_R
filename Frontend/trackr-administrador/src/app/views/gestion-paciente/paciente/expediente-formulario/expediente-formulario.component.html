@@ -25,3 +25,12 @@
   <app-expediente-estudio>
   </app-expediente-estudio>
 </ng-template>
+
+<div *ngFor="let padecimiento of padecimientos">
+  <ng-template #padecimientos>
+    <app-expediente-padecimiento
+    [idPadecimiento]="padecimiento.idExpedientePadecimiento"
+    [idUsuario]="idUsuario">
+    </app-expediente-padecimiento>
+  </ng-template>
+</div>

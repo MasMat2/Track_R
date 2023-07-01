@@ -1,3 +1,4 @@
+import { ExpedientePadecimientoModule } from './../expediente-padecimiento/expediente-padecimiento.module';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TabuladorEntidadModule } from '@sharedComponents/tabulador-entidad/tabulador-entidad.module';
@@ -14,7 +15,8 @@ import { ExpedienteFormularioComponent } from './expediente-formulario.component
     DirectiveModule,
     ExpedienteGeneralFormularioModule,
     TabuladorEntidadModule,
-    ExpedienteEstudioModule
+    ExpedienteEstudioModule,
+    ExpedientePadecimientoModule
   ],
   declarations: [ExpedienteFormularioComponent]
 })

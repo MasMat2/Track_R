@@ -1,0 +1,15 @@
+
+<div class="row">
+  <p style="color:red">{{ titulo }}</p>
+  <p>Valores fuera de rango</p>
+</div>
+
+<div class="row">
+  <app-grid-general
+          [headerName]="titulo"
+          [data]="valores"
+          [children]="columns"
+          (event)="onGridClick($event)"
+        >
+        </app-grid-general>
+</div>

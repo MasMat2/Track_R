@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { PadecimientoFueraRangoDTO } from '@dtos/gestion-expediente/padecimiento-fuera-rango-dto';
 import { ExpedientePadecimientoDTO } from '@dtos/seguridad/expediente-padecimiento-dto';
 import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
 
@@ -12,11 +13,15 @@ export class ExpedientePadecimientoService {
     constructor(public http: HttpClient) {}
 
     public consultarPorUsuario(idUsuario: number) {
-        return this.http.get<ExpedientePadecimientoDTO>(this.dataUrl + `consultarPorUsuario/${idUsuario}`);
+        return this.http.get<ExpedientePadecimientoDTO[]>(this.dataUrl + `consultarPorUsuario/${idUsuario}`);
     }
 
     public consultarParaSelector(){
         return this.http.get<ExpedientePadecimientoSelectorDTO[]>(this.dataUrl + `consultarParaSelector`);
+    }
+
+    public consultarValoresFueraRango(idPadecimiento: number, idUsuario: number) {
+        return this.http.get<PadecimientoFueraRangoDTO[]>(this.dataUrl + `valoresFueraRango/${idPadecimiento},${idUsuario}`);
     }
 
 }

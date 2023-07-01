@@ -37,5 +37,21 @@ namespace TrackrAPI.Repositorys.GestionExpediente
             var padecimientos = context.ExpedientePadecimiento.Where(ep => ep.IdExpediente == idExpediente);
             context.ExpedientePadecimiento.RemoveRange(padecimientos);
         }
+
+        public IEnumerable<PadecimientoFueraRangoDTO> ConsultarValoresFueraRango(int idPadecimiento, int idUsuario)
+        {
+            return context.ExpedientePadecimiento
+                .Where(ep => ep.IdPadecimiento == idPadecimiento 
+                        && ep.IdExpedienteNavigation.IdUsuario == idUsuario)
+                .Select(pfrDTO => new PadecimientoFueraRangoDTO
+                {
+                    nombrePadecimiento = pfrDTO.IdPadecimientoNavigation.Nombre,
+                    nombreSeccion = pfrDTO.IdPadecimientoNavigation.IdSeccionNavigation.Nombre,
+                    descripcionSecionCampo = pfrDTO.IdPadecimientoNavigation.IdSeccionNavigation.SeccionCampo.FirstOrDefault().Descripcion,
+                    fechaMuestra = pfrDTO.IdPadecimientoNavigation.EntidadEstructuraTablaValor.FirstOrDefault().FechaMuestra.ToString(),
+                    valorEntidadEstructuraValor = pfrDTO.IdPadecimientoNavigation.EntidadEstructuraTablaValor.FirstOrDefault().Valor,
+                    valorReferencia = pfrDTO.IdPadecimientoNavigation.IdSeccionNavigation.SeccionCampo.FirstOrDefault().IdDominioNavigation.ValorMinimo.ToString(),
+                }).ToList();
+        }
     }
 }

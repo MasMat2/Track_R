@@ -1,3 +1,5 @@
+import { lastValueFrom } from 'rxjs';
+import { ExpedientePadecimientoService } from '@http/seguridad/expediente-padecimiento.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { TabDirective } from 'ngx-bootstrap/tabs';
@@ -13,6 +15,8 @@ import { GeneralConstant } from '@utils/general-constant';
 import { ExternalTemplate } from '@sharedComponents/tabulador-entidad/external-template';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { ExpedienteGeneralFormularioComponent } from '../expediente-general-formulario/expediente-general-formulario.component';
+import { ExpedientePadecimientoGridDTO } from '@dtos/gestion-expediente/expediente-padecimiento-grid-dto';
+import { ExpedientePadecimientoDTO } from '@dtos/seguridad/expediente-padecimiento-dto';
 
 @Component({
   selector: 'app-expediente-formulario',
@@ -54,6 +58,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
     private mensajeService: MensajeService,
     private route: ActivatedRoute,
     private router: Router,
+    private expedientePadecimientoService: ExpedientePadecimientoService
   ) { }
 
   public ngOnInit(): void {
@@ -93,5 +98,12 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
     this.externalTemplates.push(estudios);
   }
 
+  public padecimientos: ExpedientePadecimientoDTO[] = [];
+  public consultarPadecimientos(): void {
+    lastValueFrom(this.expedientePadecimientoService.consultarPorUsuario(this.idUsuario))
+      .then((padecimientos: ExpedientePadecimientoDTO[]) => {
+        this.padecimientos = padecimientos;
+    });
+  }
 
 }
