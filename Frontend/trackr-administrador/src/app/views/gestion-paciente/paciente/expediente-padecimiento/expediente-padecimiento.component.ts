@@ -4,6 +4,7 @@ import { EncryptionService } from '@services/encryption.service';
 import { GeneralConstant } from '@utils/general-constant';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { format } from 'date-fns';
 import { ExpedientePadecimientoGridDTO } from '@dtos/seguridad/expediente-padecimiento-grid-dto';
 import { ExpedientePadecimientoService  } from '@http/seguridad/expediente-padecimiento.service';
 
@@ -22,7 +23,7 @@ export class ExpedientePadecimientoComponent implements OnInit {
   public columns = [
     { headerName: 'Tipo de Padecimiento', field: 'nombrePadecimiento', minWidth: 150 },
     { headerName: 'Fecha de Diagnóstico', field: 'fechaDiagnostico', minWidth: 150 },
-    { headerName: 'Doctor', field: '', minWidth: 150 }
+    { headerName: 'Doctor', field: 'nombreDoctor', minWidth: 150 }
   ];
 
 
@@ -44,10 +45,22 @@ export class ExpedientePadecimientoComponent implements OnInit {
     this.consultarPadecimientos();
   }
 
-  consultarPadecimientos(){
+  private consultarPadecimientos(){
     lastValueFrom(this.expedientePadecimientoService.consultarParaGridPorUsuario(this.idUsuario))
     .then((padecimientoPacienteList: ExpedientePadecimientoGridDTO[]) => {
-      this.padecimientoPacienteList = padecimientoPacienteList;
+      this.padecimientoPacienteList = this.formatearFechas(padecimientoPacienteList);
+    });
+
+    
+  }
+
+
+  protected formatearFechas(padecimientos: ExpedientePadecimientoGridDTO[]): ExpedientePadecimientoGridDTO[] {
+    return padecimientos.map(padecimiento => {
+
+      const fechaDiagnostico = new Date(padecimiento.fechaDiagnostico);
+      const fechaFormateada = format(fechaDiagnostico, 'dd/MM/yyyy');
+      return { ...padecimiento, fechaDiagnostico: fechaFormateada };
     });
   }
 

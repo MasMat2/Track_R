@@ -6,5 +6,7 @@
         public int IdPadecimiento { get; set; }
         public DateTime FechaDiagnostico { get; set; }
         public string nombrePadecimiento { get; set;}
+
+        public string nombreDoctor { get; set; }
     }
 }

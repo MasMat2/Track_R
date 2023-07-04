@@ -1,6 +1,7 @@
 export class ExpedientePadecimientoGridDTO {
     idExpedientePadecimiento: number;
     idPadecimiento: number;
-    fechaDiagnostico: Date;
+    fechaDiagnostico: string;
     nombrePadecimiento: string;
+    nombreDoctor: string;
 }
