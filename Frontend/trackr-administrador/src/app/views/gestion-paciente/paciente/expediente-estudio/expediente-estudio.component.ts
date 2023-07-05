@@ -33,7 +33,6 @@ export class ExpedienteEstudioComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.expedienteEstudioService.agregar().subscribe();
     this.obtenerParametrosURL();
   }
 

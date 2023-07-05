@@ -32,7 +32,8 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
    */
   @ViewChild('informacionGeneral', { static: false }) private informacionGeneralTpl : TemplateRef<any>;
   @ViewChild('estudios', { static: false }) private estudiosTpl : TemplateRef<any>;
-  @ViewChild('viaje', { static: false }) private viajeTpl : TemplateRef<any>;
+  @ViewChild('padecimientoTpl', { static: false }) private padecimientosTpl : TemplateRef<any>;
+  public padecimientosList: ExpedientePadecimientoDTO[] = [];
 
   /**
    * Configuracion para el uso de componentes externos
@@ -74,7 +75,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
     });
   }
 
-  public ngAfterViewInit(): void {
+  public async ngAfterViewInit() {
 
     let informacionGeneral : ExternalTemplate = {
       template : this.informacionGeneralTpl,
@@ -92,17 +93,32 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
       externalSubmit : true,
       submitControl : false
     };
-
-
+    
     this.externalTemplates.push(informacionGeneral);
+    
+    await this.consultarPadecimientos();
+    
+    this.padecimientosList.forEach((padecimiento: ExpedientePadecimientoDTO) => {
+      console.log(padecimiento);
+      let padecimientoExtTpl : ExternalTemplate = {
+        template : this.padecimientosTpl,
+        label : padecimiento.nombrePadecimiento,
+        enabled : this.idUsuario != null ? true : false,
+        externalSubmit : true,
+        submitControl : false
+      };
+      this.externalTemplates.push(padecimientoExtTpl);
+    });
+
+
     this.externalTemplates.push(estudios);
   }
 
-  public padecimientos: ExpedientePadecimientoDTO[] = [];
-  public consultarPadecimientos(): void {
-    lastValueFrom(this.expedientePadecimientoService.consultarPorUsuario(this.idUsuario))
-      .then((padecimientos: ExpedientePadecimientoDTO[]) => {
-        this.padecimientos = padecimientos;
+  
+  public async consultarPadecimientos() {
+    await lastValueFrom(this.expedientePadecimientoService.consultarPorUsuario(this.idUsuario))
+      .then((padecimientos) => {
+        this.padecimientosList = padecimientos;
     });
   }
 

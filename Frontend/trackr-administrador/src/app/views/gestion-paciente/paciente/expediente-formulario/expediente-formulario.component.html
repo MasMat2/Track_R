@@ -26,11 +26,11 @@
   </app-expediente-estudio>
 </ng-template>
 
-<div *ngFor="let padecimiento of padecimientos">
-  <ng-template #padecimientos>
+<div *ngFor="let padecimiento of padecimientosList; let i = index">
+  <ng-template #padecimientoTpl>
     <app-expediente-padecimiento
-    [idPadecimiento]="padecimiento.idExpedientePadecimiento"
-    [idUsuario]="idUsuario">
+      [idPadecimiento]="padecimiento.idPadecimiento"
+      [idUsuario]="idUsuario">
     </app-expediente-padecimiento>
   </ng-template>
 </div>

@@ -18,7 +18,8 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                 {
                     IdExpedientePadecimiento = ep.IdExpedientePadecimiento,
                     IdPadecimiento = ep.IdPadecimiento,
-                    FechaDiagnostico = ep.FechaDiagnostico
+                    FechaDiagnostico = ep.FechaDiagnostico,
+                    NombrePadecimiento = ep.IdPadecimientoNavigation.Nombre
                 }).ToList();
         }
 
@@ -48,9 +49,9 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                     nombrePadecimiento = pfrDTO.IdPadecimientoNavigation.Nombre,
                     nombreSeccion = pfrDTO.IdPadecimientoNavigation.IdSeccionNavigation.Nombre,
                     descripcionSecionCampo = pfrDTO.IdPadecimientoNavigation.IdSeccionNavigation.SeccionCampo.FirstOrDefault().Descripcion,
+                    valorReferencia = pfrDTO.IdPadecimientoNavigation.IdSeccionNavigation.SeccionCampo.FirstOrDefault().IdDominioNavigation.ValorMinimo.ToString(),
                     fechaMuestra = pfrDTO.IdPadecimientoNavigation.EntidadEstructuraTablaValor.FirstOrDefault().FechaMuestra.ToString(),
                     valorEntidadEstructuraValor = pfrDTO.IdPadecimientoNavigation.EntidadEstructuraTablaValor.FirstOrDefault().Valor,
-                    valorReferencia = pfrDTO.IdPadecimientoNavigation.IdSeccionNavigation.SeccionCampo.FirstOrDefault().IdDominioNavigation.ValorMinimo.ToString(),
                 }).ToList();
         }
     }
