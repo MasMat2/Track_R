@@ -78,5 +78,20 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 };
             return secciones;
         }
+
+        public IEnumerable<ExpedienteColumnaDTO> ConsultarSeccionesPadecimientos(int idPadecimiento)
+        {
+            return context.SeccionCampo
+                .Where(sc => sc.IdSeccionNavigation.EntidadEstructura
+                    .Any(e => e.IdEntidadEstructuraPadre == idPadecimiento))
+                .Select(sc =>
+                    new ExpedienteColumnaDTO {
+                        Parametro = sc.Descripcion,
+                        Clave = "ME-" + sc.Clave,
+                        Variable = sc.IdSeccionNavigation.Nombre,
+                        ValorMinimo = sc.IdDominioNavigation.ValorMinimo,
+                        ValorMaximo = sc.IdDominioNavigation.ValorMaximo
+                    });
+        }
     }
 }

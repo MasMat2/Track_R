@@ -46,5 +46,17 @@ namespace TrackrAPI.Controllers.GestionEntidad
         {
             entidadEstructuraTablaValorService.Eliminar(registro);
         }
+
+        [HttpGet("valoresFueraRango/{idPadecimiento}/{idUsuario}")]
+        public IEnumerable<ValoresFueraRangoDTO> ConsultarValoresFueraRango(int idPadecimiento, int idUsuario)
+        {
+            return entidadEstructuraTablaValorService.ConsultarValores(idPadecimiento, idUsuario, true);
+        }
+
+        [HttpGet("valoresTodasVariables/{idPadecimiento}/{idUsuario}")]
+        public IEnumerable<ValoresFueraRangoDTO> ConsultarValoresTodasVariables(int idPadecimiento, int idUsuario)
+        {
+            return entidadEstructuraTablaValorService.ConsultarValores(idPadecimiento, idUsuario, null);
+        }
     }
 }

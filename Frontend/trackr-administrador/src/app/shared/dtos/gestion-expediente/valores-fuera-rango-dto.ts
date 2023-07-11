@@ -1,4 +1,4 @@
-export class PadecimientoFueraRangoDTO{
+export class ValoresFueraRangoDTO{
     nombrePadecimiento: string;
     nombreSeccion: string;
     descripcionSeccionCampo: string;

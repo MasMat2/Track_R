@@ -16,7 +16,7 @@
 
 <!-- Componentes Externos -->
 <!-- Información General del Expediente -->
-<ng-template #informacionGeneral>
+<!-- <ng-template #informacionGeneral>
     <app-expediente-general-formulario>
     </app-expediente-general-formulario>
 </ng-template>
@@ -27,10 +27,13 @@
 </ng-template>
 
 <div *ngFor="let padecimiento of padecimientosList; let i = index">
-  <ng-template #padecimientoTpl>
+  <ng-template>
     <app-expediente-padecimiento
       [idPadecimiento]="padecimiento.idPadecimiento"
       [idUsuario]="idUsuario">
     </app-expediente-padecimiento>
   </ng-template>
 </div>
+
+<div #container>
+  </div> -->

@@ -1,7 +1,7 @@
 import { lastValueFrom } from 'rxjs';
 import { ExpedientePadecimientoService } from '@http/seguridad/expediente-padecimiento.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ComponentFactoryResolver, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import * as moment from 'moment';
 
@@ -17,22 +17,18 @@ import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { ExpedienteGeneralFormularioComponent } from '../expediente-general-formulario/expediente-general-formulario.component';
 import { ExpedientePadecimientoGridDTO } from '@dtos/gestion-expediente/expediente-padecimiento-grid-dto';
 import { ExpedientePadecimientoDTO } from '@dtos/seguridad/expediente-padecimiento-dto';
+import { ExpedientePadecimientoComponent } from '../expediente-padecimiento/expediente-padecimiento.component';
+import { ExpedienteEstudioComponent } from '../expediente-estudio/expediente-estudio.component';
 
 @Component({
   selector: 'app-expediente-formulario',
   templateUrl: './expediente-formulario.component.html',
   styleUrls: ['./expediente-formulario.component.scss']
 })
-export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
+export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
 
   @ViewChild(ExpedienteGeneralFormularioComponent, { static: false }) public informacionGeneral: ExpedienteGeneralFormularioComponent;
 
-  /**
-   * Referencias a templates de los componentes externos a utilizar en el tabulador de entidades.
-   */
-  @ViewChild('informacionGeneral', { static: false }) private informacionGeneralTpl : TemplateRef<any>;
-  @ViewChild('estudios', { static: false }) private estudiosTpl : TemplateRef<any>;
-  @ViewChild('padecimientoTpl', { static: false }) private padecimientosTpl : TemplateRef<any>;
   public padecimientosList: ExpedientePadecimientoDTO[] = [];
 
   /**
@@ -40,25 +36,15 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
    */
   public externalTemplates: ExternalTemplate[] = [];
 
-  public onClose: any;
   public accion: string;
-  public mensajeAgregar = 'El expediente administrativo ha sido agregado.';
-  public mensajeEditar = 'El expediente administrativo ha sido modificado.';
   public claveEntidadExpedienteTrackr = GeneralConstant.ClaveEntidadExpedienteTrackr;
-  public configDate = GeneralConstant.CONFIG_DATEPICKER;
-  public fechaAux: Date;
-  public fechaLlegada: Date;
-  public esExpedienteViaje = false;
-  public navegacion: boolean = false;
   public idUsuario: number;
 
   public value = 'Información General';
 
   constructor(
     private encryptionService: EncryptionService,
-    private mensajeService: MensajeService,
     private route: ActivatedRoute,
-    private router: Router,
     private expedientePadecimientoService: ExpedientePadecimientoService
   ) { }
 
@@ -66,7 +52,6 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
     this.route.queryParams.subscribe((params) => {
       if (this.encryptionService.readUrlParams(params).a == 'esAgregar') {
         this.accion = GeneralConstant.COMPONENT_ACCION_AGREGAR;
-        this.esExpedienteViaje = false;
       } else {
         this.accion = GeneralConstant.COMPONENT_ACCION_EDITAR;
         const idUsuario = this.encryptionService.readUrlParams(params).i;
@@ -75,45 +60,62 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
     });
   }
 
-  public async ngAfterViewInit() {
+  public async ngAfterContentInit() {  
+    this.agregarTabInformacionGeneral();
+    this.agregarTabEstudios();
+    await this.agregarTabsPadecimientos();
+  }
 
-    let informacionGeneral : ExternalTemplate = {
-      template : this.informacionGeneralTpl,
+  private agregarTabInformacionGeneral(): void {
+    const informacionGeneral : ExternalTemplate = {
+      component : ExpedienteGeneralFormularioComponent,
+      args : {
+        idUsuario: this.idUsuario,
+      },
       label : 'Información General',
       enabled : true,
       externalSubmit : true,
       submitControl : false
     };
 
-    
-    let estudios : ExternalTemplate = {
-      template : this.estudiosTpl,
+    this.externalTemplates.push(informacionGeneral);
+  }
+
+  private agregarTabEstudios(): void {
+    const estudios : ExternalTemplate = {
+      component : ExpedienteEstudioComponent,
       label : 'Estudios',
+      args : {
+        idUsuario: this.idUsuario,
+      },
       enabled : this.idUsuario != null ? true : false,
       externalSubmit : true,
       submitControl : false
     };
     
-    this.externalTemplates.push(informacionGeneral);
-    
-    await this.consultarPadecimientos();
-    
-    this.padecimientosList.forEach((padecimiento: ExpedientePadecimientoDTO) => {
-      console.log(padecimiento);
-      let padecimientoExtTpl : ExternalTemplate = {
-        template : this.padecimientosTpl,
-        label : padecimiento.nombrePadecimiento,
-        enabled : this.idUsuario != null ? true : false,
-        externalSubmit : true,
-        submitControl : false
-      };
-      this.externalTemplates.push(padecimientoExtTpl);
-    });
-
-
     this.externalTemplates.push(estudios);
   }
 
+  private async agregarTabsPadecimientos(): Promise<void> {
+    await this.consultarPadecimientos();
+
+    this.padecimientosList.forEach((padecimiento: ExpedientePadecimientoDTO) => {
+      const padecimientoExtTpl: ExternalTemplate = {
+        component: ExpedientePadecimientoComponent,
+        args: {
+          idPadecimiento: padecimiento.idPadecimiento,
+          idUsuario: this.idUsuario,
+          nombrePadecimiento: padecimiento.nombrePadecimiento,
+        },
+        label: padecimiento.nombrePadecimiento,
+        enabled: this.idUsuario != null ? true : false,
+        externalSubmit: true,
+        submitControl: false
+      };
+
+      this.externalTemplates.push(padecimientoExtTpl);
+    });
+  }
   
   public async consultarPadecimientos() {
     await lastValueFrom(this.expedientePadecimientoService.consultarPorUsuario(this.idUsuario))

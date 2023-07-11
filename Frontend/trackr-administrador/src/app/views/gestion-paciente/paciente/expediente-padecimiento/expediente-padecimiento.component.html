@@ -1,15 +1,45 @@
-
-<div class="row">
-  <p style="color:red">{{ titulo }}</p>
-  <p>Valores fuera de rango</p>
+<div class="modal-header">
+  <div>{{nombrePadecimiento}}</div>
 </div>
+<mat-accordion multi="true">
+  <mat-expansion-panel expanded="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <p style="color: purple">Valores fuera de rango.</p>
+      </mat-panel-title>
+      <!-- <mat-panel-description>
+        This is a summary of the content
+      </mat-panel-description> -->
+    </mat-expansion-panel-header>
+    <div class="row">
+      <app-grid-general
+        [headerName]="tituloFueraRango"
+        [data]="valoresFueraRango"
+        [children]="columns"
+        (event)="onGridClick($event)"
+      >
+      </app-grid-general>
+    </div>
+  </mat-expansion-panel>
 
-<div class="row">
-  <app-grid-general
-          [headerName]="titulo"
-          [data]="valoresFueraRango"
-          [children]="columns"
-          (event)="onGridClick($event)"
-        >
-        </app-grid-general>
-</div>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <p style="color: purple">Bitácora de Muestras (Todas las Variables)</p>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="row">
+      <app-grid-general
+        [headerName]="tituloBitacoraMuestras"
+        [data]="bitacoraMuestras"
+        [children]="columns"
+        (event)="onGridClick($event)"
+      >
+      </app-grid-general>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    
+  </mat-expansion-panel>
+</mat-accordion>

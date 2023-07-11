@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EntidadTablaRegistroDto } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
+import { ValoresFueraRangoDTO } from '@dtos/gestion-expediente/valores-fuera-rango-dto';
 import { RegistroTabla } from '@models/gestion-entidad/registro-tabla';
 import { Observable } from 'rxjs';
 
@@ -11,7 +12,7 @@ export class EntidadEstructuraTablaValorService {
   constructor(public http: HttpClient) {}
 
   consultarRegistroTablaPorTabulacion(idEntidadEstructura: number, idTabla: number) {
-     return this.http.get<RegistroTabla[]>(this.dataUrl + `consultarRegistroTablaPorTabulacion/${idEntidadEstructura},${idTabla}`);
+    return this.http.get<RegistroTabla[]>(this.dataUrl + `consultarRegistroTablaPorTabulacion/${idEntidadEstructura},${idTabla}`);
   }
 
   consultarPorPestanaSeccion(idEntidadEstructura: number, idTabla: number) {
@@ -28,6 +29,13 @@ export class EntidadEstructuraTablaValorService {
 
   public eliminar(registro: EntidadTablaRegistroDto): Observable<void> {
     return this.http.post<void>(this.dataUrl + 'eliminar', registro);
+  }
+
+  public consultarValoresFueraRango(idPadecimiento: number, idUsuario: number) {
+    return this.http.get<ValoresFueraRangoDTO[]>(this.dataUrl + `valoresFueraRango/${idPadecimiento}/${idUsuario}`);
+  }
+  public consultarValoresTodasVariables(idPadecimiento: number, idUsuario: number) {
+    return this.http.get<ValoresFueraRangoDTO[]>(this.dataUrl + `valoresTodasVariables/${idPadecimiento}/${idUsuario}`);
   }
 
 }

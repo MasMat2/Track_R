@@ -1,6 +1,10 @@
 ﻿using TrackrAPI.Models;
 using System.Collections.Generic;
 using System.Linq;
+using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Helpers;
+using DocumentFormat.OpenXml.Office2016.Drawing;
+using Microsoft.EntityFrameworkCore;
 
 namespace TrackrAPI.Repositorys.GestionEntidad
 {
@@ -41,5 +45,24 @@ namespace TrackrAPI.Repositorys.GestionEntidad
 
             return ultimoRegistro?.Numero ?? 0;
         }
+
+        public IEnumerable<EntidadEstructuraTablaValor> ConsultarValoresPorCampos(int idExpediente, IEnumerable<string> claveCampos, bool? fueraRango)
+        {
+            // Inicia la consulta
+            var queryValoresCampos = context.EntidadEstructuraTablaValor
+                .Include(ep => ep.IdEntidadEstructuraNavigation)
+                .Where(ep => claveCampos.Contains(ep.ClaveCampo)
+                    && ep.IdTabla == idExpediente);
+
+            // Si fueraRango tiene un valor, añade la condición a la consulta
+            if (fueraRango.HasValue)
+            {
+                queryValoresCampos = queryValoresCampos.Where(ep => ep.FueraDeRango == fueraRango);
+            }
+
+            // Retorna el resultado de la consulta
+            return queryValoresCampos;
+        }
+
     }
 }
