@@ -1,7 +1,7 @@
 import { EntidadEstructuraService } from '../../../../shared/http/gestion-entidad/entidad-estructura.service';
 import { BusquedaExpedienteComponent } from '../busqueda-expediente/busqueda-expediente.component';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExpedientePadecimientoDTO } from '@dtos/seguridad/expediente-padecimiento-dto';
@@ -227,6 +227,7 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
       this.paciente = expedienteWrapper.paciente || new Usuario();
       this.domicilio = this.obtenerPacienteDomicilio(this.paciente);
       this.expediente = this.obtenerExpediente(expedienteWrapper.expediente);
+      this.expedienteTrackrService.setExpediente(this.expediente);
       
 
       this.padecimientos = expedienteWrapper.padecimientos.map(padecimiento => {

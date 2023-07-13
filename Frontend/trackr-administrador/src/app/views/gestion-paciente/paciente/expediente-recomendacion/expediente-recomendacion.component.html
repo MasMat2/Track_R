@@ -1,0 +1,90 @@
+<div>
+  &nbsp;
+</div>
+<div class="container"> 
+  <div class="subseccion">
+    <div>Recomendaciones</div>
+  </div>
+
+  <div class="modal-content">
+    <div class="container">
+        <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="form-group">
+              <label class="label-input required-label">Descripción</label>
+              <div>
+                <textarea
+                  #descripcion="ngModel"
+                  [(ngModel)]="inputRecomendacion"
+                  name="descripcion"
+                  class="form-control-textarea"
+                  type="text"
+                  maxlength="800"
+                  autocomplete="off"
+                  style="width: 100%;"
+                  rows="4"
+                  required=""
+                ></textarea>
+                <div *ngIf=" (inputRecomendacion.length === 0 && (descripcion.touched || botonTocado))  " class="error">
+                  La descripcion es requerida
+                </div>
+              </div>
+            </div>
+          </div>
+
+      <div class="col-md-2 justify-content-between align-items-center ">
+          <label class="label-input required-label">Fecha</label>
+        <div>
+          <input
+            [(ngModel)] = "fecha"
+            name="fechaAlta"
+            class="form-control"
+            type="text"
+            maxlength="50"
+            autocomplete="off"
+            required
+            [disabled]="true"
+            bsDatepicker
+          />
+
+        </div>
+      </div>
+    
+      <div class="col-md-2 align-items-center d-flex" (click)="botonTocado = true">
+        <label class="label-input required-label">&nbsp;</label>
+        
+        <div class="contenedor-agregar col-md-1 align-items-center justify-content-center" (click)="inputRecomendacion.length > 0 && agregar()" *ngIf="!editarAccion" >
+          <i class="fas fa-plus-circle" style="font-size: 24px;"></i>
+        </div>
+        <div class="contenedor-agregar col-md-1 align-items-center" (click)="editar()" *ngIf="editarAccion">
+          <img src="../../../../../assets/img/svg/ico-15x15-Editar-1.svg" style="width: 24px; height: 24px;">
+        </div>
+      </div>
+    
+      
+    </div> 
+  </div>
+</div>
+    
+
+
+
+<div class="row-justify-content-center">
+  <div class="col-md-12">
+    <div class="subseccion">Bitacora Recomendaciones</div>
+
+          <app-grid-general 
+          #gridRecomendacion
+          [headerName]="HEADER_GRID"
+          [children]="columns"
+          [gridOptions]="gridOptions"
+          [data]="recomendacionesList"
+          [accesoEditar]="EDITAR_PERFIL"
+          [accesoEliminar]="ELIMINAR_PERFIL"
+          (event)="onGridClick($event)"
+          >
+          </app-grid-general>
+
+    </div>
+  </div>
+</div>

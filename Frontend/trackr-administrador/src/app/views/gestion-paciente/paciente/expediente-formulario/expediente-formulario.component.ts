@@ -29,6 +29,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
   @ViewChild('informacionGeneral', { static: false }) private informacionGeneralTpl : TemplateRef<any>;
   @ViewChild('estudios', { static: false }) private estudiosTpl : TemplateRef<any>;
   @ViewChild('viaje', { static: false }) private viajeTpl : TemplateRef<any>;
+  @ViewChild('recomendaciones', { static: false }) private recomendacionesTpl : TemplateRef<any>;
 
   /**
    * Configuracion para el uso de componentes externos
@@ -88,9 +89,19 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
       submitControl : false
     };
 
+       
+    let recomendaciones : ExternalTemplate = {
+      template : this.recomendacionesTpl,
+      label : 'Recomendaciones',
+      enabled : this.idUsuario != null ? true : false,
+      externalSubmit : true,
+      submitControl : false
+    };
+
 
     this.externalTemplates.push(informacionGeneral);
     this.externalTemplates.push(estudios);
+    this.externalTemplates.push(recomendaciones);
   }
 
 

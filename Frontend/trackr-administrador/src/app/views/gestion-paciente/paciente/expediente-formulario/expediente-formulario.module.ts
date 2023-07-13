@@ -6,6 +6,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ExpedienteEstudioModule } from '../expediente-estudio/expediente-estudio.module';
 import { ExpedienteGeneralFormularioModule } from './../expediente-general-formulario/expediente-general-formulario.module';
 import { ExpedienteFormularioComponent } from './expediente-formulario.component';
+import { ExpedienteRecomendacionModule } from '../expediente-recomendacion/expediente-recomendacion.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { ExpedienteFormularioComponent } from './expediente-formulario.component
     DirectiveModule,
     ExpedienteGeneralFormularioModule,
     TabuladorEntidadModule,
-    ExpedienteEstudioModule
+    ExpedienteEstudioModule,
+    ExpedienteRecomendacionModule
   ],
   declarations: [ExpedienteFormularioComponent]
 })
