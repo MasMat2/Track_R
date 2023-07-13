@@ -125,6 +125,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<ExpedienteRecomendaciones> ExpedienteRecomendaciones { get; set; } = null!;
         public virtual DbSet<ExpedienteSeccion> ExpedienteSeccion { get; set; } = null!;
         public virtual DbSet<ExpedienteTrackr> ExpedienteTrackr { get; set; } = null!;
+        public virtual DbSet<ExpedienteTratamiento> ExpedienteTratamiento { get; set; } = null!;
         public virtual DbSet<Fabricante> Fabricante { get; set; } = null!;
         public virtual DbSet<FactorRh> FactorRh { get; set; } = null!;
         public virtual DbSet<Factura> Factura { get; set; } = null!;
@@ -1965,6 +1966,8 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.ClaveCampo).HasMaxLength(50);
 
+                entity.Property(e => e.FechaMuestra).HasColumnType("datetime");
+
                 entity.HasOne(d => d.IdEntidadEstructuraNavigation)
                     .WithMany(p => p.EntidadEstructuraTablaValor)
                     .HasForeignKey(d => d.IdEntidadEstructura)
@@ -2892,6 +2895,8 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.FechaDiagnostico).HasColumnType("date");
 
+                entity.Property(e => e.IdUsuarioDoctor).HasDefaultValueSql("((5333))");
+
                 entity.HasOne(d => d.IdExpedienteNavigation)
                     .WithMany(p => p.ExpedientePadecimiento)
                     .HasForeignKey(d => d.IdExpediente)
@@ -2903,6 +2908,12 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdPadecimiento)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Expedient__IdPad__25D17A5B");
+
+                entity.HasOne(d => d.IdUsuarioDoctorNavigation)
+                    .WithMany(p => p.ExpedientePadecimiento)
+                    .HasForeignKey(d => d.IdUsuarioDoctor)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Expedient__IdUsu__40857097");
             });
 
             modelBuilder.Entity<ExpedienteRecomendaciones>(entity =>
@@ -2978,6 +2989,48 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdUsuario)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Expedient__IdUsu__2200E977");
+            });
+
+            modelBuilder.Entity<ExpedienteTratamiento>(entity =>
+            {
+                entity.HasKey(e => e.IdExpedienteTratamiento)
+                    .HasName("PK__Expedien__58DDD7D813710334");
+
+                entity.ToTable("ExpedienteTratamiento", "Trackr");
+
+                entity.Property(e => e.Cantidad).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.Farmaco).HasMaxLength(200);
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.Imagen).HasColumnType("image");
+
+                entity.Property(e => e.ImagenTipoMime)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Indicaciones).HasMaxLength(500);
+
+                entity.Property(e => e.Unidad).HasMaxLength(100);
+
+                entity.HasOne(d => d.IdExpedienteNavigation)
+                    .WithMany(p => p.ExpedienteTratamiento)
+                    .HasForeignKey(d => d.IdExpediente)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Expedient__IdExp__3CB4DFB3");
+
+                entity.HasOne(d => d.IdPadecimientoNavigation)
+                    .WithMany(p => p.ExpedienteTratamiento)
+                    .HasForeignKey(d => d.IdPadecimiento)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Expedient__IdPad__3DA903EC");
+
+                entity.HasOne(d => d.IdUsuarioDoctorNavigation)
+                    .WithMany(p => p.ExpedienteTratamiento)
+                    .HasForeignKey(d => d.IdUsuarioDoctor)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Expedient__IdUsu__3E9D2825");
             });
 
             modelBuilder.Entity<Fabricante>(entity =>

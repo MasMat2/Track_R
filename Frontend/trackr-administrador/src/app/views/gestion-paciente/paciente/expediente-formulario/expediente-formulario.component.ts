@@ -5,10 +5,7 @@ import * as moment from 'moment';
 
 import { EncryptionService } from '@services/encryption.service';
 
-
-
 import { GeneralConstant } from '@utils/general-constant';
-
 
 import { ExternalTemplate } from '@sharedComponents/tabulador-entidad/external-template';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
@@ -28,6 +25,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
    */
   @ViewChild('informacionGeneral', { static: false }) private informacionGeneralTpl : TemplateRef<any>;
   @ViewChild('estudios', { static: false }) private estudiosTpl : TemplateRef<any>;
+  @ViewChild('tratamientos', { static: false }) private tratamientosTpl : TemplateRef<any>;
   @ViewChild('viaje', { static: false }) private viajeTpl : TemplateRef<any>;
 
   /**
@@ -88,9 +86,17 @@ export class ExpedienteFormularioComponent implements OnInit, AfterViewInit {
       submitControl : false
     };
 
+    let tratamientos : ExternalTemplate = {
+      template : this.tratamientosTpl,
+      label : 'Tratamientos',
+      enabled : this.idUsuario != null ? true : false,
+      externalSubmit : true,
+      submitControl : false
+    };
 
     this.externalTemplates.push(informacionGeneral);
     this.externalTemplates.push(estudios);
+    this.externalTemplates.push(tratamientos);
   }
 
 

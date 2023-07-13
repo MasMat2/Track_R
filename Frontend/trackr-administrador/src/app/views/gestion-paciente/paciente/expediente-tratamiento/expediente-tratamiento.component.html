@@ -1,0 +1,51 @@
+<!-- <div *ngIf="pdfSrc" style="width: 20%; float: right">
+
+  <ngx-extended-pdf-viewer
+    [base64Src]="pdfSrc"
+    [useBrowserLocale]="true"
+    height="80vh"
+  ></ngx-extended-pdf-viewer>
+</div> -->
+<!-- Botón Descargar Excel -->
+<div
+  class="p-4 subtitulo-contenedor">
+  Tratamientos
+</div>
+<p-table
+  class="primeng-table grid-cuadricula"
+  [value]="expedienteTratamientoList"
+  *ngIf="expedienteTratamientoList"
+  [autoLayout]="true"
+>
+  <ng-template pTemplate="header">
+    <tr class="table-header">
+      <th style="text-align: center; width: auto;">Núm.</th>
+      <th style="text-align: center; width: auto;">Farmaco</th>
+      <th style="text-align: center; width: auto;">Cantidad</th>
+      <th style="text-align: center; width: auto;">Unidad</th>
+      <th style="text-align: center; width: auto;">Indicaciones</th>
+      <th style="text-align: center; width: auto;">Padecimiento</th>
+      <th style="text-align: center; width: auto;">Días</th>
+      <th style="text-align: center; width: auto;">Horario (h)</th>
+      <th></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-tratamiento>
+    <tr>
+      <td>{{ tratamiento.idExpedienteTratamiento }}</td>
+      <td>{{ tratamiento.farmaco }}</td>
+      <td>{{ tratamiento.cantidad }}</td>
+      <td>{{ tratamiento.unidad }}</td>
+      <td>{{ tratamiento.indicaciones }}</td>
+      <td>{{ tratamiento.padecimiento }}</td>
+      <td>{{ tratamiento.fechaRegistro | date : "dd/MM/yyyy" }}</td>
+      <td>Horario (h)</td>
+      <td class="botones-acciones text-center px-0">
+        <button type="button" class="btn" title="Ver">
+          <i class="fa fa-lg fa-eye icono-primario"></i>
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

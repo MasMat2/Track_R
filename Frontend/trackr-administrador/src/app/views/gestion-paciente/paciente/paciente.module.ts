@@ -5,6 +5,7 @@ import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ExpedienteEstudioComponent } from './expediente-estudio/expediente-estudio.component';
 import { ExpedienteEstudioModule } from './expediente-estudio/expediente-estudio.module';
+import { ExpedienteTratamientoModule } from './expediente-tratamiento/expediente-tratamiento.module';
 import { ExpedienteFormularioComponent } from './expediente-formulario/expediente-formulario.component';
 import { ExpedienteFormularioModule } from './expediente-formulario/expediente-formulario.module';
 import { PacienteRoutingModule } from './paciente-routing.module';
@@ -23,7 +24,8 @@ import { PacienteComponent } from './paciente.component';
     TableModule,
     PacienteRoutingModule,
     ExpedienteFormularioModule,
-    ExpedienteEstudioModule
+    ExpedienteEstudioModule,
+    ExpedienteTratamientoModule
   ],
   entryComponents: [
     PacienteVistaCuadriculaComponent, 

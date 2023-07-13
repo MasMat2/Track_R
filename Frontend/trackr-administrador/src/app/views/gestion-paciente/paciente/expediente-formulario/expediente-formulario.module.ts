@@ -4,6 +4,7 @@ import { TabuladorEntidadModule } from '@sharedComponents/tabulador-entidad/tabu
 import { DirectiveModule } from 'src/app/shared/directives/directive.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ExpedienteEstudioModule } from '../expediente-estudio/expediente-estudio.module';
+import { ExpedienteTratamientoModule } from '../expediente-tratamiento/expediente-tratamiento.module';
 import { ExpedienteGeneralFormularioModule } from './../expediente-general-formulario/expediente-general-formulario.module';
 import { ExpedienteFormularioComponent } from './expediente-formulario.component';
 
@@ -14,7 +15,8 @@ import { ExpedienteFormularioComponent } from './expediente-formulario.component
     DirectiveModule,
     ExpedienteGeneralFormularioModule,
     TabuladorEntidadModule,
-    ExpedienteEstudioModule
+    ExpedienteEstudioModule,
+    ExpedienteTratamientoModule
   ],
   declarations: [ExpedienteFormularioComponent]
 })
