@@ -160,14 +160,14 @@ namespace TrackrAPI.Services.GestionEntidad
             ts.Complete();
         }
 
-        public IEnumerable<ValoresFueraRangoDTO> ConsultarValores(int idPadecimiento, int idUsuario, bool? fueraRango)
+        public IEnumerable<ValoresFueraRangoGridDTO> ConsultarValores(int idPadecimiento, int idUsuario, bool? fueraRango)
         {
             var columnas = this.seccionCampoRepository.ConsultarSeccionesPadecimientos(idPadecimiento);
             var clavesCampos = columnas.Select(c => c.Clave).ToList();
 
             var valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorCampos(idUsuario, clavesCampos, fueraRango);
 
-            var padecimientos = new List<ValoresFueraRangoDTO>();
+            var padecimientos = new List<ValoresFueraRangoGridDTO>();
 
             foreach (var valor in valores)
             {
@@ -180,7 +180,7 @@ namespace TrackrAPI.Services.GestionEntidad
                     {
                         valorReferencia = columnaCorrespondiente.ValorMinimo.ToString() + " - " + columnaCorrespondiente.ValorMaximo.ToString();
                     }
-                    padecimientos.Add(new ValoresFueraRangoDTO
+                    padecimientos.Add(new ValoresFueraRangoGridDTO
                     {
                         NombrePadecimiento = valor.IdEntidadEstructuraNavigation.Nombre,
                         Variable = columnaCorrespondiente.Variable,

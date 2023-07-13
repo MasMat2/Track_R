@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EntidadTablaRegistroDto } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
-import { ValoresFueraRangoDTO } from '@dtos/gestion-expediente/valores-fuera-rango-dto';
+import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
 import { RegistroTabla } from '@models/gestion-entidad/registro-tabla';
 import { Observable } from 'rxjs';
 
@@ -32,10 +32,10 @@ export class EntidadEstructuraTablaValorService {
   }
 
   public consultarValoresFueraRango(idPadecimiento: number, idUsuario: number) {
-    return this.http.get<ValoresFueraRangoDTO[]>(this.dataUrl + `valoresFueraRango/${idPadecimiento}/${idUsuario}`);
+    return this.http.get<ValoresFueraRangoGridDTO[]>(this.dataUrl + `valoresFueraRango/${idPadecimiento}/${idUsuario}`);
   }
   public consultarValoresTodasVariables(idPadecimiento: number, idUsuario: number) {
-    return this.http.get<ValoresFueraRangoDTO[]>(this.dataUrl + `valoresTodasVariables/${idPadecimiento}/${idUsuario}`);
+    return this.http.get<ValoresFueraRangoGridDTO[]>(this.dataUrl + `valoresTodasVariables/${idPadecimiento}/${idUsuario}`);
   }
 
 }

@@ -31,6 +31,13 @@ namespace TrackrAPI.Controllers.GestionEntidad
             return seccionCampoService.ConsultarPorSeccion(idSeccion);
         }
 
+        [HttpGet]
+        [Route("seccionesPadecimientos/{idPadecimiento}")]
+        public IEnumerable<ExpedienteColumnaSelectorDTO> ConsultarSeccionesPadecimientos(int idPadecimiento)
+        {
+            return seccionCampoService.ConsultarSeccionesPadecimientos(idPadecimiento);
+        }
+
         [HttpPost]
         [Route("agregar")]
         public void Agregar(SeccionCampo seccionCampo)

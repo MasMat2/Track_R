@@ -27,11 +27,33 @@ namespace TrackrAPI.Services.GestionEntidad
             return seccionCampoRepository.ConsultarPorSeccion(idSeccion);
         }
 
+        public IEnumerable<ExpedienteColumnaSelectorDTO> ConsultarSeccionesPadecimientos(int idPadecimiento)
+        {
+            // TODO: Conocer si se va a filtrar por la clave, porque hay distintas variables con distintas claves que tienen el mismo nombre
+            IEnumerable<ExpedienteColumnaDTO> secciones = seccionCampoRepository.ConsultarSeccionesPadecimientos(idPadecimiento);
+            var seccionesUnicas = new List<ExpedienteColumnaSelectorDTO>();
+            foreach (var seccion in secciones)
+            {
+                seccionesUnicas.Add(new ExpedienteColumnaSelectorDTO
+                {
+                    Clave = seccion.Clave,
+                    Variable = seccion.Variable,
+                });
+            }
+            
+            // Agrupar por la Clave y seleccionar la primera instancia de cada grupo
+
+            return seccionesUnicas
+                .GroupBy(sc => sc.Clave)
+                .Select(g => g.First());
+        }
+
         public void Agregar(SeccionCampo seccionCampo)
         {
             seccionCampoValidatorService.ValidarAgregar(seccionCampo);
             seccionCampoRepository.Agregar(seccionCampo);
         }
+
         public void Editar(SeccionCampo seccionCampo)
         {
             seccionCampoValidatorService.ValidarEditar(seccionCampo);
@@ -45,5 +67,6 @@ namespace TrackrAPI.Services.GestionEntidad
             seccionCampoValidatorService.ValidarEliminar(idSeccionCampo);
             seccionCampoRepository.Eliminar(seccionCampo);
         }
+
     }
 }

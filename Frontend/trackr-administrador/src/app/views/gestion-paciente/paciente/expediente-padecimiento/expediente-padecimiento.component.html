@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <div>{{nombrePadecimiento}}</div>
+  <div>{{ nombrePadecimiento }}</div>
 </div>
 <mat-accordion multi="true">
   <mat-expansion-panel expanded="true">
@@ -12,6 +12,7 @@
       </mat-panel-description> -->
     </mat-expansion-panel-header>
     <div class="row">
+      <!-- Grid Valores Fuera Rango -->
       <app-grid-general
         [headerName]="tituloFueraRango"
         [data]="valoresFueraRango"
@@ -29,6 +30,7 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <div class="row">
+      <!-- Grid Bitácora Muestras -->
       <app-grid-general
         [headerName]="tituloBitacoraMuestras"
         [data]="bitacoraMuestras"
@@ -40,6 +42,46 @@
   </mat-expansion-panel>
 
   <mat-expansion-panel>
-    
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <p style="color: purple">Histograma</p>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <!-- Select Variable -->
+    <ng-select
+      #variable="ngModel"
+      name="variableName"
+      class="select-custom"
+      [items]="variableList"
+      bindLabel="variable"
+      bindValue="clave"
+      (ngModelChange)="onChangeVariable($event)"
+      [(ngModel)]="claveVariable"
+      [placeholder]="placeHolderSelect"
+      [notFoundText]="placeHolderNoOptions"
+    ></ng-select>
+
+    <!-- Chip Opciones Filtrado -->
+    <!-- TODO: 2023-07-13 -> No funciona el Selector como debería -->
+    <mat-chip-list 
+    [multiple]="false"
+    aria-label="Selección de Filtro"
+    (change)="onFiltroChange($event)">
+      <mat-chip (click)="chipHoy.select()" #chipHoy="matChip">Hoy</mat-chip>
+      <mat-chip (click)="chip1Sem.select()" #chip1Sem="matChip">1 Semana</mat-chip>
+      <mat-chip (click)="chip2Sem.select()" #chip2Sem="matChip">2 Semanas</mat-chip>
+      <mat-chip (click)="chip3Sem.select()" #chip3Sem="matChip">3 Semanas</mat-chip>
+      <mat-chip (click)="chip1Mes.select()" #chip1Mes="matChip">1 Mes</mat-chip>
+      <mat-chip (click)="chip2Mes.select()" #chip2Mes="matChip">2 Meses</mat-chip>
+    </mat-chip-list>
+
+    <!-- Gráfica / Histograma -->
+    <canvas
+      baseChart
+      [data]="barChartData"
+      [labels]="barChartLabels"
+      [type]="barChartType"
+    >
+    </canvas>
   </mat-expansion-panel>
 </mat-accordion>

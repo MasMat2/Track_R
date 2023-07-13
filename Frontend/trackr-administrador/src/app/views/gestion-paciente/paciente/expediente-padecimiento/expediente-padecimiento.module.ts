@@ -1,14 +1,23 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExpedientePadecimientoComponent } from './expediente-padecimiento.component';
+import { NgModule } from '@angular/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { SeccionCampoService } from '@http/gestion-entidad/seccion-campo.service';
+import { NgChartsModule } from 'ng2-charts';
 import { SharedModule } from 'src/app/shared/shared.module';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { ExpedientePadecimientoComponent } from './expediente-padecimiento.component';
+import {MatChipsModule} from '@angular/material/chips';
+
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
-    MatExpansionModule
+    MatExpansionModule,
+    NgChartsModule,
+    MatChipsModule,
+  ],
+  providers: [
+    SeccionCampoService
   ],
   declarations: [ExpedientePadecimientoComponent],
   exports: [ExpedientePadecimientoComponent]

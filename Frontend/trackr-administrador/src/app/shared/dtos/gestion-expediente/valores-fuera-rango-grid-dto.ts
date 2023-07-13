@@ -1,4 +1,4 @@
-export class ValoresFueraRangoDTO{
+export class ValoresFueraRangoGridDTO{
     nombrePadecimiento: string;
     nombreSeccion: string;
     descripcionSeccionCampo: string;

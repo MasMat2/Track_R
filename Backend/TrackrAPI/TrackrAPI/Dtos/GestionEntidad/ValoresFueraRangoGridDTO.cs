@@ -1,7 +1,7 @@
 ﻿namespace TrackrAPI.Dtos.GestionEntidad
 {
     // Hace referencia a una EntidadEstructuraTablaValor
-    public class ValoresFueraRangoDTO
+    public class ValoresFueraRangoGridDTO
     {
         public string NombrePadecimiento { get; set; }
         public string Variable { get; set; }
