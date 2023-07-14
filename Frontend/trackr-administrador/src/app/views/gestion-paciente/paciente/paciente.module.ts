@@ -26,7 +26,7 @@ import { PacienteComponent } from './paciente.component';
     ExpedienteEstudioModule
   ],
   entryComponents: [
-    PacienteVistaCuadriculaComponent, 
+    PacienteVistaCuadriculaComponent,
     ExpedienteFormularioComponent,
   ],
   exports: [],

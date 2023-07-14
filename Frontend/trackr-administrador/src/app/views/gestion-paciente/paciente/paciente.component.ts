@@ -2,24 +2,14 @@ import { ExpedienteTrackrService } from '@http/seguridad/expediente-trackr.servi
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-grid-dto';
-import { UsuarioService } from '@http/seguridad/usuario.service';
 import { EncryptionService } from '@services/encryption.service';
 import { GeneralConstant } from '@utils/general-constant';
 import { lastValueFrom } from 'rxjs';
-import { Usuario } from '@models/seguridad/usuario';
-import { ExpedienteWrapper } from '@dtos/seguridad/expediente-wrapper';
-import { DomicilioService } from '../../../shared/http/inventario/domicilio.service';
 
 import { EstadoService } from '../../../shared/http/catalogo/estado.service';
-import { EntidadService } from '@http/gestion-entidad/entidad.service';
-import { Entidad } from '@models/gestion-entidad/entidad';
-import { EntidadEstructura } from '@models/gestion-entidad/entidad-estructura';
-import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
 import * as Utileria from '@utils/utileria';
 import { ExpedienteTrackR } from '@models/seguridad/expediente-trackr';
-import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
 import { ExpedientePadecimientoService } from '@http/seguridad/expediente-padecimiento.service';
-import { ExpedientePadecimientoDTO } from '@dtos/seguridad/expediente-padecimiento-dto';
 import { UsuarioExpedienteSidebarDTO } from '@dtos/seguridad/usuario-expediente-sidebar-dto';
 
 @Component({
@@ -38,7 +28,6 @@ export class PacienteComponent implements OnInit {
     nombreCompleto: '',
     genero: '',
     edad: '',
-    //patologias: [],
     idestado: 0,
     estado: '',
     direccion: '',
@@ -85,11 +74,9 @@ export class PacienteComponent implements OnInit {
   constructor(
     private router: Router,
     private encryptionService: EncryptionService,
-    private usuarioService: UsuarioService,
     private expedienteTrackrService: ExpedienteTrackrService,
     private estadoService: EstadoService,
     private expedienteService: ExpedientePadecimientoService,
-    private entidadEstructuraService: EntidadEstructuraService
   ) {}
 
   ngOnInit(): void {
@@ -100,8 +87,9 @@ export class PacienteComponent implements OnInit {
 
   protected ver(idUsuario: number): void {
 
-    this.consultaExpediente(idUsuario);
     this.mostrarSidebar = !this.mostrarSidebar;
+    this.limpiarZona();
+    this.consultaExpediente(idUsuario);
 
   }
 
@@ -157,7 +145,18 @@ export class PacienteComponent implements OnInit {
     );
   }
 
-
+  limpiarZona(): void {
+    this.paciente= {
+      idUsuario: 0,
+      nombreCompleto: '',
+      genero: '',
+      edad: '',
+      idestado: 0,
+      estado: '',
+      direccion: '',
+      padecimientos: []
+    };
+  }
 
   /**
    * Redirige a la pantalla de Expediente - Formulario en modo Editar
