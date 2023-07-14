@@ -21,3 +21,30 @@
   color: gray;
   font-style: italic;
 }
+
+.recuadro {
+  position: fixed;
+  top: 0;
+  right: -30%;
+  bottom: 0;
+  width: 30%;
+  background-color: #f1f1f1;
+  border-left: 3px solid rgba(134, 132, 132, 0.747);
+  transition: right 0.3s ease-out;
+}
+
+.recuadro.activo {
+  right: 0;
+}
+
+.text-container {
+  width: 100%;
+  margin-left: 10px;
+}
+
+
+
+.contenedor {
+  transition: margin-right 0.3s ease-out;
+  margin-right: 0;
+}
