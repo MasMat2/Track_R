@@ -8,15 +8,15 @@
       </button>
     </div>
 
-    <tabset>
-      <tab style="padding: 0;" heading="Información General">
-        <form
-          (keydown.enter)="$event.preventDefault()"
-          #formulario="ngForm"
-          (ngSubmit)="enviarFormulario(formulario)"
-          novalidate="novalidate"
-        >
-          <div class="cuerpo-contenedor">
+    <div class="modal-body">
+      <tabset>
+        <tab style="padding: 0;" heading="Información General">
+          <form
+            (keydown.enter)="$event.preventDefault()"
+            #formulario="ngForm"
+            (ngSubmit)="enviarFormulario(formulario)"
+            novalidate="novalidate"
+          >
             <div class="row">
 
               <div class="col-md-4">
@@ -830,215 +830,214 @@
                 </div>
               </div>
             </div>
-          </div>
+          </form>
 
           <div class="modal-footer">
             <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar</button>
             <button type="submit" class="btn-primario ml-3" [disabled]="btnSubmit">Guardar</button>
           </div>
+        </tab>
 
-        </form>
-      </tab>
-
-      <tab [disabled]="!(usuario.idUsuario > 0)" style="padding: 0;" heading="Permisos">
-        <div class="cuerpo-contenedor">
-          <div class="row">
-            <div class="col-md-4">
-              <div class="form-group">
-                <label class="label-input required-label">Compañía</label>
-                <div>
-                  <ng-select
-                    #companiaLst="ngModel"
-                    name="companiaName"
-                    class="select-custom"
-                    bindLabel="nombre"
-                    bindValue="idCompania"
-                    [items]="companiaList"
-                    [required]="!esExterno"
-                    [(ngModel)]="usuarioLocacion.idCompania"
-                    [placeholder]="placeHolderSelect"
-                    [notFoundText]="placeHolderNoOptions"
-                    (ngModelChange)="onCompaniaChange($event,false)"
-                  ></ng-select>
-                </div>
-                <!-- <div *ngIf="companiaLst.errors?.['required'] && companiaLst.touched" class="error">
-                  La compañía es requerida
-                </div> -->
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label class="label-input required-label">Locación</label>
-                <div>
-                  <ng-select
-                    #hotelLst="ngModel"
-                    name="hotelName"
-                    class="select-custom"
-                    [items]="hospitalList"
-                    bindLabel="nombre"
-                    bindValue="idHospital"
-                    [required]="!esExterno"
-                    [(ngModel)]="usuarioLocacion.idLocacion"
-                    [placeholder]="placeHolderSelect"
-                    [notFoundText]="placeHolderNoOptions"
-                    [disabled]="esExterno"
-                  ></ng-select>
-                </div>
-                <!-- <div *ngIf="hotelLst.errors?.['required'] && hotelLst.touched" class="error">
-                  El hospital es requerido
-                </div> -->
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label class="label-input required-label">Perfil</label>
-                <div>
-                  <ng-select
-                    #perfilLst="ngModel"
-                    name="perfilName"
-                    class="select-custom"
-                    [items]="perfilList"
-                    bindLabel="nombre"
-                    bindValue="idPerfil"
-                    [required]="!esExterno"
-                    [(ngModel)]="usuarioLocacion.idPerfil"
-                    [placeholder]="placeHolderSelect"
-                    [notFoundText]="placeHolderNoOptions"
-                  ></ng-select>
-                </div>
-                <!-- <div *ngIf="perfilLst.errors?.['required'] && perfilLst.touched && !submit" class="error">
-                  El perfil es requerido
-                </div> -->
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <app-grid-general
-                #gridPermisos
-                [headerName]="'Permisos'"
-                [data]="permisosList"
-                [children]="columns"
-                (event)="onGridClick($event)"
-              >
-              </app-grid-general>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar</button>
-          <button (click)="guardarPermiso()" type="button" class="btn-primario ml-3">Guardar</button>
-        </div>
-      </tab>
-
-      <tab [disabled]="!(usuario.idUsuario > 0)" style="padding: 0;" heading="Afectación contable">
-        <form
-          (keydown.enter)="$event.preventDefault()"
-          #formularioAfectacion="ngForm"
-          novalidate="novalidate"
-        >
+        <tab [disabled]="!(usuario.idUsuario > 0)" style="padding: 0;" heading="Permisos">
           <div class="cuerpo-contenedor">
             <div class="row">
-
               <div class="col-md-4">
                 <div class="form-group">
-                  <label class="label-input required-label">Rol</label>
+                  <label class="label-input required-label">Compañía</label>
                   <div>
                     <ng-select
-                      #acRolLst="ngModel"
-                      name="acRolName"
+                      #companiaLst="ngModel"
+                      name="companiaName"
                       class="select-custom"
-                      [items]="rolList"
                       bindLabel="nombre"
-                      bindValue="idRol"
-                      [required]="true"
-                      [(ngModel)]="usuarioRol.idRol"
+                      bindValue="idCompania"
+                      [items]="companiaList"
+                      [required]="!esExterno"
+                      [(ngModel)]="usuarioLocacion.idCompania"
                       [placeholder]="placeHolderSelect"
                       [notFoundText]="placeHolderNoOptions"
+                      (ngModelChange)="onCompaniaChange($event,false)"
                     ></ng-select>
                   </div>
-                  <div *ngIf="acRolLst.errors?.['required'] && acRolLst.touched" class="error">
-                    El rol es requerido
-                  </div>
+                  <!-- <div *ngIf="companiaLst.errors?.['required'] && companiaLst.touched" class="error">
+                    La compañía es requerida
+                  </div> -->
                 </div>
               </div>
-
               <div class="col-md-4">
                 <div class="form-group">
-                  <label class="label-input required-label">Concepto</label>
+                  <label class="label-input required-label">Locación</label>
                   <div>
                     <ng-select
-                      #conceptoLst="ngModel"
-                      name="conceptoName"
+                      #hotelLst="ngModel"
+                      name="hotelName"
                       class="select-custom"
-                      [items]="conceptoList"
+                      [items]="hospitalList"
                       bindLabel="nombre"
-                      bindValue="idConcepto"
-                      [required]="usuarioRol.idCuentaContable > 0"
-                      [(ngModel)]="usuarioRol.idConcepto"
+                      bindValue="idHospital"
+                      [required]="!esExterno"
+                      [(ngModel)]="usuarioLocacion.idLocacion"
                       [placeholder]="placeHolderSelect"
                       [notFoundText]="placeHolderNoOptions"
-                      (ngModelChange)="onConceptoChange($event)"
+                      [disabled]="esExterno"
                     ></ng-select>
                   </div>
-                  <div *ngIf="conceptoLst.errors?.['required'] && conceptoLst.touched" class="error">
-                    El concepto es requerido
-                  </div>
+                  <!-- <div *ngIf="hotelLst.errors?.['required'] && hotelLst.touched" class="error">
+                    El hospital es requerido
+                  </div> -->
                 </div>
               </div>
-
               <div class="col-md-4">
                 <div class="form-group">
-                  <label class="label-input required-label">Cuenta Contable</label>
+                  <label class="label-input required-label">Perfil</label>
                   <div>
                     <ng-select
-                      #cuentaContable="ngModel"
-                      name="cuentaContableName"
+                      #perfilLst="ngModel"
+                      name="perfilName"
                       class="select-custom"
-                      [items]="cuentaContableList"
+                      [items]="perfilList"
                       bindLabel="nombre"
-                      bindValue="idCuentaContable"
-                      [required]="usuarioRol.idConcepto > 0"
-                      [(ngModel)]="usuarioRol.idCuentaContable"
+                      bindValue="idPerfil"
+                      [required]="!esExterno"
+                      [(ngModel)]="usuarioLocacion.idPerfil"
                       [placeholder]="placeHolderSelect"
                       [notFoundText]="placeHolderNoOptions"
                     ></ng-select>
                   </div>
-                  <div *ngIf="cuentaContable.errors?.['required'] && cuentaContable.touched" class="error">
-                    La cuenta contable es requerida
-                  </div>
+                  <!-- <div *ngIf="perfilLst.errors?.['required'] && perfilLst.touched && !submit" class="error">
+                    El perfil es requerido
+                  </div> -->
                 </div>
               </div>
             </div>
-
             <div class="row">
               <div class="col-md-12">
                 <app-grid-general
-                  #gridUsuarioRol
-                  [headerName]="'Afectación Contable'"
-                  [data]="usuarioRolList"
-                  [children]="columnsUsuarioRol"
-                  (event)="onGridClickUsuarioRol($event)"
+                  #gridPermisos
+                  [headerName]="'Permisos'"
+                  [data]="permisosList"
+                  [children]="columns"
+                  (event)="onGridClick($event)"
                 >
                 </app-grid-general>
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" 
-              class="btn-secundario mr-3" 
-              (click)="cancelar()"
-              >Cancelar
-            </button>
-            <button 
-              (click)="guardarAfectacionContable(formularioAfectacion)" 
-              type="button" class="btn-primario ml-3"
-              >Guardar
-            </button>
+            <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar</button>
+            <button (click)="guardarPermiso()" type="button" class="btn-primario ml-3">Guardar</button>
           </div>
-        </form>
-      </tab>
-    </tabset>
+        </tab>
+
+        <tab [disabled]="!(usuario.idUsuario > 0)" style="padding: 0;" heading="Afectación contable">
+          <form
+            (keydown.enter)="$event.preventDefault()"
+            #formularioAfectacion="ngForm"
+            novalidate="novalidate"
+          >
+            <div class="cuerpo-contenedor">
+              <div class="row">
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="label-input required-label">Rol</label>
+                    <div>
+                      <ng-select
+                        #acRolLst="ngModel"
+                        name="acRolName"
+                        class="select-custom"
+                        [items]="rolList"
+                        bindLabel="nombre"
+                        bindValue="idRol"
+                        [required]="true"
+                        [(ngModel)]="usuarioRol.idRol"
+                        [placeholder]="placeHolderSelect"
+                        [notFoundText]="placeHolderNoOptions"
+                      ></ng-select>
+                    </div>
+                    <div *ngIf="acRolLst.errors?.['required'] && acRolLst.touched" class="error">
+                      El rol es requerido
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="label-input required-label">Concepto</label>
+                    <div>
+                      <ng-select
+                        #conceptoLst="ngModel"
+                        name="conceptoName"
+                        class="select-custom"
+                        [items]="conceptoList"
+                        bindLabel="nombre"
+                        bindValue="idConcepto"
+                        [required]="usuarioRol.idCuentaContable > 0"
+                        [(ngModel)]="usuarioRol.idConcepto"
+                        [placeholder]="placeHolderSelect"
+                        [notFoundText]="placeHolderNoOptions"
+                        (ngModelChange)="onConceptoChange($event)"
+                      ></ng-select>
+                    </div>
+                    <div *ngIf="conceptoLst.errors?.['required'] && conceptoLst.touched" class="error">
+                      El concepto es requerido
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="label-input required-label">Cuenta Contable</label>
+                    <div>
+                      <ng-select
+                        #cuentaContable="ngModel"
+                        name="cuentaContableName"
+                        class="select-custom"
+                        [items]="cuentaContableList"
+                        bindLabel="nombre"
+                        bindValue="idCuentaContable"
+                        [required]="usuarioRol.idConcepto > 0"
+                        [(ngModel)]="usuarioRol.idCuentaContable"
+                        [placeholder]="placeHolderSelect"
+                        [notFoundText]="placeHolderNoOptions"
+                      ></ng-select>
+                    </div>
+                    <div *ngIf="cuentaContable.errors?.['required'] && cuentaContable.touched" class="error">
+                      La cuenta contable es requerida
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <app-grid-general
+                    #gridUsuarioRol
+                    [headerName]="'Afectación Contable'"
+                    [data]="usuarioRolList"
+                    [children]="columnsUsuarioRol"
+                    (event)="onGridClickUsuarioRol($event)"
+                  >
+                  </app-grid-general>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button"
+                class="btn-secundario mr-3"
+                (click)="cancelar()"
+                >Cancelar
+              </button>
+              <button
+                (click)="guardarAfectacionContable(formularioAfectacion)"
+                type="button" class="btn-primario ml-3"
+                >Guardar
+              </button>
+            </div>
+          </form>
+        </tab>
+      </tabset>
+    </div>
 
   </div>
 </div>

@@ -1,23 +1,56 @@
 @import "variables";
 
 .form-control {
-  border: 1px #d9d9d9 solid !important;
+  border: 1px #d9d9d9 solid;
   color: #000000;
   border-radius: $border-radius-inputs !important;
   height: calc(1.5em + 0.75rem + 7px) !important;
-  
 }
 
-input {
-  border-radius: 10px !important;
+.form-group {
+  position: relative;
+  margin-top: 25px;
+
+  .label-input {
+    position: absolute;
+    top: -11px;
+    left: 16px;
+    z-index: 1002;
+    background-color: white;
+    padding: 0 5px;
+    font-size: 13px;
+    color: gray;
+  }
 }
 
-.inputNumber {
-  border: 2px $color-primario solid !important;
+input,
+textarea {
+  border-radius: 20px !important;
 }
 
-.ag-theme-balham .ag-icon-checkbox-checked {
-  color: $color-primario;
+// .ag-theme-balham .ag-icon-checkbox-checked {
+//   color: $color-primario;
+// }
+
+// Invalid
+input.ng-touched.ng-invalid:not(:focus),
+textarea.ng-touched.ng-invalid:not(:focus),
+.ng-select.ng-invalid.ng-touched:not(.ng-select-focused) .ng-select-container {
+  border: 1px solid #c00000;
+}
+
+// Focus
+.form-control:focus,
+.ng-select.ng-select-focused .ng-select-container {
+  border: 2px $color-terceario-hover solid;
+  box-shadow: none;
+}
+
+// Disabled
+.disabled,
+textarea:disabled  {
+  opacity: 1 !important;
+  background-color: #e4e7ea !important;
 }
 
 // Calendario - Date
@@ -31,101 +64,39 @@ input {
 }
 
 .calendario::after {
-  // content: url("~/assets/img/svg/ico-15x15-Calendario.svg");
+  // content: url("~/assets/img/svg/ico-18x18-Calendario_negro.svg");
   position: absolute;
   right: 0;
   bottom: 0;
   margin: 12px;
-  height: 15px;
-  width: 15px;
+  height: 18px;
+  width: 18px;
   pointer-events: none;
 }
 
-::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-}
-
 .bs-datepicker-head,
-.bs-datepicker-body table td span.selected,
-.bs-datepicker-body table td.selected span,
-.bs-datepicker-body table td span[class*="select-"]:after,
-.bs-datepicker-body table td[class*="select-"] span:after {
+.bs-datepicker-body table td span.selected
+{
   background-color: $color-primario !important;
   color: #ffffff !important;
-}
-
-.bs-datepicker-body table td span.selected,
-.bs-datepicker-body table td.selected span,
-.bs-datepicker-body table td span[class*="select-"]:after,
-.bs-datepicker-body table td[class*="select-"] span:after .selectize-input {
-  color: $color-primario !important;
 }
 
 .bs-datepicker-body table td span.disabled {
   color: #e6e6e6 !important;
 }
 
-.bs-datepicker-body table td span.is-other-month,
-.bs-datepicker-body table td.is-other-month span {
+.bs-datepicker-body table td span.is-other-month {
   color: #54708b;
 }
 
-.selectize-input {
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  color: #000000;
-}
-
-.selectize-dropdown .active {
-  background-color: $color-terceario;
-}
-
-.selectize-control.single .selectize-input {
-  height: 40px;
-}
-
-.selectize-input {
-  display: flex !important;
-  align-self: center !important;
-}
-
-.form-control:focus,
-.selectize-input.focus,
-.form-control-textarea:focus {
-  border: 2px $color-terceario-hover solid !important;
-  box-shadow: none !important;
-}
+//
 
 textarea {
   resize: none !important;
 }
 
-.form-control-textarea {
-  border-radius: $border-radius-inputs !important;
-}
-
 app-number-input.ng-invalid.ng-touched.ng-dirty input {
   border: 1px solid #c00000 !important;
-}
-
-ng-select.ng-invalid.ng-touched.ng-dirty .ng-select-container {
-  border: 1px solid #c00000 !important;
-}
-
-.ng-invalid.ng-touched .wrap-input-seleccionados,
-input[required].ng-touched.ng-invalid,
-input.ng-touched.ng-invalid,
-textarea[required].ng-touched.ng-invalid,
-textarea.ng-touched.ng-invalid {
-  border: 1px solid #c00000 !important;
-}
-
-ng-selectize.ng-touched.ng-invalid div.selectize-control div.selectize-input {
-  border-color: #c00000 !important;
-}
-
-input.ng-touched.ng-invalid ~ div.input-group-addon {
-  border-color: #c00000 !important;
 }
 
 app-number-input.ng-invalid.ng-touched.ng-dirty input {
@@ -133,15 +104,8 @@ app-number-input.ng-invalid.ng-touched.ng-dirty input {
 }
 
 .error {
-  color: rgba(255, 0, 0, 0.74) !important;
+  color: rgba(255, 0, 0, 0.74);
   font-size: 0.86em;
-}
-
-.selectize-control .selectize-input.disabled,
-.disabled,
-textarea:disabled  {
-  opacity: 1 !important;
-  background-color: #e4e7ea !important;
 }
 
 // Input - Time / Hora
@@ -187,39 +151,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 .custom-file-input:lang(en) ~ .custom-file-label::after {
   content: "Buscar" !important;
-}
-
-// Input - NgSelect
-
-.ng-select.select-custom {
-  border-radius: 10px !important;
-}
-
-.ng-select.select-custom .ng-select-container {
-  border-radius: 10px !important;
-}
-
-.ng-select .ng-arrow-wrapper .ng-arrow {
-  border-color: $color-border-inputs transparent transparent transparent;
-  border-width: 8px 5px 0 5px;
-}
-
-.ng-select.ng-select-opened>.ng-select-container .ng-arrow {
-  border-color: transparent transparent $color-border-inputs transparent;
-  border-width: 0 5px 8px 5px;
-}
-
-.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
-  background-color: $color-terceario  !important;
-}
-
-.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected,
-.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked {
-  background-color: $color-terceario !important;
-}
-
-.ng-select.select-custom.ng-select-disabled .ng-select-container {
-  background-color: #e4e7ea;
 }
 
 // Input - Switch
@@ -516,61 +447,6 @@ input[type=checkbox] + label, label + input[type=checkbox] {
   margin-right: 6px;
 }
 
-// Selectize - multioption
-
-.selectize-control.multi .selectize-input > div {
-  background: $color-terceario !important;
-  font-weight: 600;
-  border-radius: 20px !important;
-}
-
-.selectize-input > input {
-  opacity: 1 !important;
-  left: 0 !important;
-  position: relative !important;
-}
-
-.selectize-input {
-  border-radius: 20px !important;
-}
-
-.selectize-control.multi .selectize-input::after {
-  pointer-events: none;
-  z-index: 1;
-  content: ' ';
-  display: block;
-  position: absolute;
-  top: 50%;
-  right: 15px;
-  margin-top: -3px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-color: $color-border-inputs transparent transparent transparent;
-  border-width: 8px 5px 0 5px;
-}
-
-.selectize-control.multi .dropdown-active::after {
-  pointer-events: none;
-  z-index: 1;
-  content: ' ';
-  display: block;
-  position: absolute;
-  top: 50%;
-  right: 15px;
-  margin-top: -3px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-color: transparent transparent $color-border-inputs transparent;
-  border-width: 0 5px 8px 5px;
-}
-
 .remove {
   border-left: none !important;
 }
-
-textarea {
-  border-radius: 20px !important;
-}
-

@@ -7,8 +7,6 @@
       src="assets/img/svg/ico-15x15-Descargar.svg"
       [title]="downloadActionTitle ? downloadActionTitle : 'Descargar Excel'"
       />
-      <!-- TODO: 2023-05-03 -> Agregar icono -->
-      <!-- src="assets/img/svg/ico-15x15-Descargar.svg" -->
     <div
       class="divImage"
       *ngFor="let button of headerButtons"
@@ -18,11 +16,9 @@
   </div>
 </div>
 <div *ngIf="headerConfig" class="col-md-12 config-header header"></div>
-<!-- FIXME: 2023-05-02 -> FloatingFilter property not found -->
-<!-- [(floatingFilter)]="gridOptions.floatingFilter" -->
 <ag-grid-angular
   #agGrid
-  style="height: auto; word-wrap: normal; width: 100%;"
+  style="word-wrap: normal; width: 100%;"
   class="ag-theme-balham"
   (filterChange)="toggleFilter()"
   (gridSizeChanged)="onGridSizeChanged($event)"
@@ -34,7 +30,6 @@
 >
 </ag-grid-angular>
 <div
-  style="width: 65px; position: absolute; bottom: 4px;"
   class="grid-reg-pagina"
   *ngIf="paginationPageSizeSection && !mostrarTodo"
 >
