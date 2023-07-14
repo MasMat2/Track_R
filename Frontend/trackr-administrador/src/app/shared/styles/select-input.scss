@@ -1,105 +1,20 @@
 @import 'variables';
 
-ng-select.ng-invalid.ng-touched.ng-dirty .ng-select-container {
-  border: 1px solid #c00000 !important;
+.ng-select .ng-select-container {
+  border-radius: $border-radius-inputs;
 }
 
-.ng-select.select-custom {
-  border-radius: 10px !important;
+.ng-dropdown-panel {
+  z-index: 999999 !important;
 }
 
-.ng-select.select-custom .ng-select-container {
-  border-radius: 10px !important;
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+  &.ng-option-marked,
+  &.ng-option-selected {
+    background-color: $color-terceario;
+  }
 }
 
-.ng-select .ng-arrow-wrapper .ng-arrow {
-  border-color: $color-border-inputs transparent transparent transparent;
-  border-width: 8px 5px 0 5px;
-}
-
-.ng-select.ng-select-opened > .ng-select-container .ng-arrow {
-  border-color: transparent transparent $color-border-inputs transparent;
-  border-width: 0 5px 8px 5px;
-}
-
-.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
-  border-color: $color-primario transparent transparent transparent;
-}
-
-.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected,
-.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked {
-  border-color: transparent transparent $color-primario transparent;
-
-}
-
-.ng-select.select-custom.ng-select-disabled .ng-select-container {
-  background-color: #e9e4ea;
-}
-
-// Selectize
-
-.selectize-input .item {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 95%;
-}
-
-.selectize-input {
-  box-shadow: none !important;
-  border-radius: 10px !important;
-  color: #000000;
-}
-
-.selectize-dropdown .active {
-  background-color: #fff2cc;
-}
-
-.selectize-control.single .selectize-input {
-  height: 40px;
-}
-
-.selectize-input {
-  display: flex !important;
-  align-self: center !important;
-}
-
-.form-control:focus,
-.selectize-input.focus {
-  border: 2px $color-primario solid !important;
-  box-shadow: none !important;
-}
-
-ng-selectize.ng-touched.ng-invalid div.selectize-control div.selectize-input {
-  border-color: #c00000 !important;
-}
-
-.selectize-control .selectize-input.disabled {
-  opacity: 1 !important;
-  background-color: #e9e4ea !important;
-}
-
-.selectize-dropdown {
-  z-index: 9999 !important;
-}
-
-.selectize-control.single .selectize-input {
-  background: #ffffff;
-  line-height: 24px; // tamaño del input normal
-  border-radius: 10px !important;
-  box-shadow: none;
-}
-
-.selectize-input {
-  overflow: inherit;
-}
-
-.selectize-control.single .selectize-input:after {
-  border-color: $color-primario transparent transparent transparent;
-  border-width: 8px 5px 0 5px;
-}
-
-.selectize-control.single .selectize-input.dropdown-active:after {
-  border-color: transparent transparent $color-primario transparent;
-  border-width: 0 5px 8px 5px;
+.ng-select.ng-select-disabled .ng-select-container {
+  background-color: #e9ecef;
 }

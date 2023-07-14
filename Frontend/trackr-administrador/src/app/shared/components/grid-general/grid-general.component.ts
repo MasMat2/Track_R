@@ -18,7 +18,8 @@ import { CustomLoadingCellRenderer } from './loading-cell-renderer/loading-cell-
 
 @Component({
   selector: 'app-grid-general',
-  templateUrl: './grid-general.component.html'
+  templateUrl: './grid-general.component.html',
+  styleUrls: ['./grid-general.component.scss'],
 })
 export class GridGeneralComponent implements OnInit, AfterViewInit, OnChanges {
   public vmGrid: any = this;
