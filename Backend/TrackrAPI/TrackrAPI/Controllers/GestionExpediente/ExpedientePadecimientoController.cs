@@ -28,9 +28,9 @@ namespace TrackrAPI.Controllers.GestionExpediente
             return expedientePadecimientoService.ConsultarPorUsuario(idUsuario);
         }
          [HttpGet("consultaParaSidebar/{idUsuario}")]
-        public IEnumerable<ExpedienteSidebarDTO> ConsultaTest(int idUsuario)
+        public IEnumerable<ExpedienteSidebarDTO> ConsultarParaSidebar(int idUsuario)
         {
-            return expedientePadecimientoService.ConsultaTest(idUsuario);
+            return expedientePadecimientoService.ConsultarParaSidebar(idUsuario);
         }
 
 

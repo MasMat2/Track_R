@@ -21,7 +21,7 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                     FechaDiagnostico = ep.FechaDiagnostico
                 }).ToList();
         }
-        public IEnumerable<ExpedienteSidebarDTO> ConsultaTest (int idUsuario)
+        public IEnumerable<ExpedienteSidebarDTO> ConsultarParaSidebar (int idUsuario)
         {
             return context.ExpedientePadecimiento
                 .Where(ep => ep.IdExpedienteNavigation.IdUsuario == idUsuario)
