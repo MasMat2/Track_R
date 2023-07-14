@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
-import { MunicipioSelector } from '@dtos/catalogo/municipio-selector';
+import { MunicipioSelectorDto } from '@dtos/catalogo/municipio-selector-dto';
 import { AreaService } from '@http/catalogo/area.service';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { ColoniaService } from '@http/catalogo/colonia.service';
@@ -110,7 +110,7 @@ export class UsuarioFormularioComponent implements OnInit {
   // Datos de Contacto
   public paisList: Pais[] = [];
   public estadoList: EstadoSelectorDto[] = [];
-  public municipioList: MunicipioSelector[] = [];
+  public municipioList: MunicipioSelectorDto[] = [];
   public localidadList: Localidad[] = [];
   public coloniaList: Colonia[] = [];
 

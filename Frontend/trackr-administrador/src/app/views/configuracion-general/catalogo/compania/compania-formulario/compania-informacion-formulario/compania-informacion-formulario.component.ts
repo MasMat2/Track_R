@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
-import { MunicipioSelector } from '@dtos/catalogo/municipio-selector';
+import { MunicipioSelectorDto } from '@dtos/catalogo/municipio-selector-dto';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { CompaniaLogotipoService } from '@http/catalogo/compania-logotipo.service';
 import { CompaniaService } from '@http/catalogo/compania.service';
@@ -67,7 +67,7 @@ export class CompaniaInformacionFormularioComponent implements OnInit {
 
   public paisList: Pais[] = [];
   public estadoList: EstadoSelectorDto[] = [];
-  public ciudadList: MunicipioSelector[] = [];
+  public ciudadList: MunicipioSelectorDto[] = [];
   public ladaList: Lada[] = [];
   public regimenFiscalList: RegimenFiscal[] = [];
   public agrupadorCuentaList: AgrupadorCuentaContable[] = [];

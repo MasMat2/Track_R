@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EstadoGridDto } from '@dtos/catalogo/estado-grid-dto';
-import { MunicipioGrid } from '@dtos/catalogo/municipio-grid';
+import { MunicipioGridDto } from '@dtos/catalogo/municipio-grid-dto';
 import { MunicipioService } from '@http/catalogo/municipio.service';
 import { AccesoService } from '@http/seguridad/acceso.service';
 import { ICrudConfig } from '@sharedComponents/crud/crud-base/crud-config';
@@ -16,7 +16,7 @@ import { MunicipioFormularioComponent } from './municipio-formulario/municipio-f
 @Component({
   templateUrl: 'municipio.component.html'
 })
-export class MunicipioComponent extends CrudBase<MunicipioGrid> implements OnInit {
+export class MunicipioComponent extends CrudBase<MunicipioGridDto> implements OnInit {
 
   private readonly NOMBRE_ENTIDAD: string = "Municipio";
 
@@ -65,7 +65,7 @@ export class MunicipioComponent extends CrudBase<MunicipioGrid> implements OnIni
     super.onInit();
   }
 
-  protected consultarGrid(): Observable<MunicipioGrid[]> {
+  protected consultarGrid(): Observable<MunicipioGridDto[]> {
     return this.municipioService.consultarParaGrid();
   }
 

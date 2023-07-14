@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
-import { MunicipioSelector } from '@dtos/catalogo/municipio-selector';
+import { MunicipioSelectorDto } from '@dtos/catalogo/municipio-selector-dto';
 import { EstadoService } from '@http/catalogo/estado.service';
 import { LocalidadService } from '@http/catalogo/localidad.service';
 import { MunicipioService } from '@http/catalogo/municipio.service';
@@ -27,7 +27,7 @@ export class LocalidadFormularioComponent implements OnInit {
   public btnSubmit = false;
   public tempLocalidad = new Localidad();
   public localidad = new Localidad();
-  public municipioList: MunicipioSelector[] = [];
+  public municipioList: MunicipioSelectorDto[] = [];
   public estadoList: EstadoSelectorDto[] = [];
   public paisList: Pais[] = [];
   public opcion = false;

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
-import { MunicipioSelector } from '@dtos/catalogo/municipio-selector';
+import { MunicipioSelectorDto } from '@dtos/catalogo/municipio-selector-dto';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { ColoniaService } from '@http/catalogo/colonia.service';
 import { EstadoService } from '@http/catalogo/estado.service';
@@ -38,7 +38,7 @@ export class DomicilioFormularioComponent implements OnChanges {
   // Listas de Selectores
   public paisList: Pais[] = [];
   public estadoList: EstadoSelectorDto[] = [];
-  public municipioList: MunicipioSelector[] = [];
+  public municipioList: MunicipioSelectorDto[] = [];
   public localidadList: Localidad[] = [];
   public coloniaList: Colonia[] = [];
 
