@@ -63,17 +63,6 @@
 
     <!-- Chip Opciones Filtrado -->
     <!-- TODO: 2023-07-13 -> No funciona el Selector como debería -->
-    <mat-chip-list 
-    [multiple]="false"
-    aria-label="Selección de Filtro"
-    (change)="onFiltroChange($event)">
-      <mat-chip (click)="chipHoy.select()" #chipHoy="matChip">Hoy</mat-chip>
-      <mat-chip (click)="chip1Sem.select()" #chip1Sem="matChip">1 Semana</mat-chip>
-      <mat-chip (click)="chip2Sem.select()" #chip2Sem="matChip">2 Semanas</mat-chip>
-      <mat-chip (click)="chip3Sem.select()" #chip3Sem="matChip">3 Semanas</mat-chip>
-      <mat-chip (click)="chip1Mes.select()" #chip1Mes="matChip">1 Mes</mat-chip>
-      <mat-chip (click)="chip2Mes.select()" #chip2Mes="matChip">2 Meses</mat-chip>
-    </mat-chip-list>
 
     <!-- Gráfica / Histograma -->
     <canvas
