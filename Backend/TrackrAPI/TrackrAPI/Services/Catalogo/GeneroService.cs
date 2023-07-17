@@ -58,7 +58,7 @@ namespace TrackrAPI.Services.Catalogo
             };
             _generoRepository.Agregar(genero);
 
-        }    
+        }
 
 
         public void Editar(GeneroDto generoDto)
@@ -68,6 +68,8 @@ namespace TrackrAPI.Services.Catalogo
             {
                 throw new CdisException("El usuario no existe");
             }
+
+                genero.Descripcion = generoDto.Descripcion;
                 _generoRepository.Editar(genero);
         }
         public void Eliminar(int idGenero)
@@ -81,6 +83,6 @@ namespace TrackrAPI.Services.Catalogo
             }
 
 
-            
+
     }
 }
