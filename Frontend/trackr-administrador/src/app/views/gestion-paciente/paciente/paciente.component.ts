@@ -6,10 +6,6 @@ import { EncryptionService } from '@services/encryption.service';
 import { GeneralConstant } from '@utils/general-constant';
 import { lastValueFrom } from 'rxjs';
 
-import { EstadoService } from '../../../shared/http/catalogo/estado.service';
-import * as Utileria from '@utils/utileria';
-import { ExpedienteTrackR } from '@models/seguridad/expediente-trackr';
-import { ExpedientePadecimientoService } from '@http/seguridad/expediente-padecimiento.service';
 import { UsuarioExpedienteSidebarDTO } from '@dtos/seguridad/usuario-expediente-sidebar-dto';
 
 @Component({
@@ -20,18 +16,15 @@ import { UsuarioExpedienteSidebarDTO } from '@dtos/seguridad/usuario-expediente-
 export class PacienteComponent implements OnInit {
   protected pacientes: UsuarioExpedienteGridDTO[] = [];
   protected isVistaCuadricula: boolean = true;
-  protected patologias: string[] = [];
   protected mostrarSidebar: boolean = false;
   anchoContenedor: string = '100%';
+  pacientetest: any;
   paciente: UsuarioExpedienteSidebarDTO = {
     idUsuario: 0,
     nombreCompleto: '',
-    genero: '',
+    idGenero: 0,
     edad: '',
-    idestado: 0,
-    estado: '',
-    direccion: '',
-    padecimientos: []
+    padecimientos: [],
   };
 
   // App Grid View
@@ -74,9 +67,7 @@ export class PacienteComponent implements OnInit {
   constructor(
     private router: Router,
     private encryptionService: EncryptionService,
-    private expedienteTrackrService: ExpedienteTrackrService,
-    private estadoService: EstadoService,
-    private expedienteService: ExpedientePadecimientoService,
+    private expedienteTrackrService: ExpedienteTrackrService
   ) {}
 
   ngOnInit(): void {
@@ -86,76 +77,21 @@ export class PacienteComponent implements OnInit {
   protected descargarExcel(): void {}
 
   protected ver(idUsuario: number): void {
+    this.mostrarSidebar = true;
 
-    this.mostrarSidebar = !this.mostrarSidebar;
-    this.limpiarZona();
-    this.consultaExpediente(idUsuario);
-
+    this.consultarParaSidebar(idUsuario);
   }
 
-  protected consultaExpediente(idUsuario: number) {
-    this.expedienteTrackrService.consultarWrapperPorUsuario(idUsuario).subscribe(
-      (data) => {
-        this.paciente.nombreCompleto = data.paciente.nombreCompleto;
-        this.paciente.genero = data.expediente.idGenero === 1 ? 'Hombre' : 'Mujer';
-        this.paciente.ciudad = data.paciente.ciudad;
-        this.paciente.colonia = data.paciente.colonia;
-        this.paciente.idestado = data.paciente.idEstado;
-        this.paciente.tipoMime = data.paciente.imagenTipoMime;
-
-        this.calcularEdad(data.expediente);
-        this.paciente.edad = data.expediente.edad;
-
-        this.consultaEstado(this.paciente.idestado);
-        this.consultarPadecimientos(idUsuario);
-      },
-      (error) => {
-        console.error('Error al consultar el expediente:', error);
-      }
-    );
+  toggleSidebar() {
+    this.mostrarSidebar = false;
   }
 
-  protected calcularEdad(expediente: ExpedienteTrackR) {
-    let fechaNacimiento = new Date(expediente.fechaNacimiento);
-    let edadObject = Utileria.diferenciaFechas(fechaNacimiento, new Date());
-    let edadString = edadObject.years + ' años ';
-    expediente.edad = edadString;
-  }
-
-  protected consultaEstado(idEstado: number) {
-    this.estadoService.consultar(idEstado).subscribe(
-      (data) => {
-        this.paciente.estado = data.nombre;
-      },
-      (error) => {
-        console.error('Error al consultar', error);
-      }
-    );
-  }
-
-
-  protected consultarPadecimientos(idUsuario:number){
-    this.expedienteService.consultaParaSidebar(idUsuario).subscribe(
-      (data) => {
-       this.paciente.padecimientos=data;
-      },
-      (error) => {
-        console.error('Error al consultar el expediente:', error);
-      }
-    );
-  }
-
-  limpiarZona(): void {
-    this.paciente= {
-      idUsuario: 0,
-      nombreCompleto: '',
-      genero: '',
-      edad: '',
-      idestado: 0,
-      estado: '',
-      direccion: '',
-      padecimientos: []
-    };
+  protected consultarParaSidebar(idUsuario: number) {
+    this.expedienteTrackrService
+      .consultaParaSidebar(idUsuario)
+      .subscribe((data) => {
+        this.paciente = data;
+      });
   }
 
   /**
@@ -209,7 +145,6 @@ export class PacienteComponent implements OnInit {
     } else if (gridData.accion === GeneralConstant.GRID_ACCION_ELIMINAR) {
       this.eliminar(gridData.data);
     } else if ((gridData.accion = GeneralConstant.GRID_ACCION_VER)) {
-      console.log(gridData.data.patologias);
       this.ver(gridData.data.idUsuario);
     }
   }

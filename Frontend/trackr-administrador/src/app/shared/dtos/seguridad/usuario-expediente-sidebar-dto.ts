@@ -5,12 +5,10 @@ export class UsuarioExpedienteSidebarDTO{
     nombreCompleto:string;
     imagenBase64?:string;
     tipoMime?: string;
-    genero:string;
+    idGenero:number;
     edad:string;
     colonia?:string;
     ciudad?:string;
-    idestado:number;
-    estado:string;
-    direccion:string;
-    padecimientos: ExpedientePadecimientoSidebarDTO[];
+    estado?:string;
+    padecimientos?: ExpedientePadecimientoSidebarDTO[];
 }

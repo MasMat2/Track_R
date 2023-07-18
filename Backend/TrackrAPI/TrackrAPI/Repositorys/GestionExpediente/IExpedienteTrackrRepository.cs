@@ -1,4 +1,5 @@
-﻿using TrackrAPI.Dtos.Seguridad;
+﻿using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.Models;
 
 namespace TrackrAPI.Repositorys.GestionExpediente
@@ -10,6 +11,6 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         public ExpedienteTrackr ConsultarPorUsuario(int idUsuario);
 
         public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid();
-
+        public UsuarioExpedienteSidebarDTO ConsultarParaSidebar(int idUsuario);
     }
 }

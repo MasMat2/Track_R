@@ -10,6 +10,8 @@ import { ExpedienteFormularioModule } from './expediente-formulario/expediente-f
 import { PacienteRoutingModule } from './paciente-routing.module';
 import { PacienteVistaCuadriculaComponent } from './paciente-vista-cuadricula/paciente-vista-cuadricula.component';
 import { PacienteComponent } from './paciente.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { PacienteComponent } from './paciente.component';
     TableModule,
     PacienteRoutingModule,
     ExpedienteFormularioModule,
-    ExpedienteEstudioModule
+    ExpedienteEstudioModule,
+    MatSidenavModule,
+    MatIconModule
   ],
   entryComponents: [
     PacienteVistaCuadriculaComponent,

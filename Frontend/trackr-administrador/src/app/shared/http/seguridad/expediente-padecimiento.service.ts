@@ -19,8 +19,5 @@ export class ExpedientePadecimientoService {
     public consultarParaSelector(){
         return this.http.get<ExpedientePadecimientoSelectorDTO[]>(this.dataUrl + `consultarParaSelector`);
     }
-    public consultaParaSidebar(idUsuario:number){
-        return this.http.get<ExpedientePadecimientoSidebarDTO[]>(this.dataUrl + `consultaParaSidebar/${idUsuario}`);
-    }
 
 }

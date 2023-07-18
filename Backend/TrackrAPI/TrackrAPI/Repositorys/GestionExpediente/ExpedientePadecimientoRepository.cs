@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Models;
-
+using TrackrAPI.Helpers;
 namespace TrackrAPI.Repositorys.GestionExpediente
 {
     public class ExpedientePadecimientoRepository : Repository<ExpedientePadecimiento>, IExpedientePadecimientoRepository
@@ -21,17 +21,8 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                     FechaDiagnostico = ep.FechaDiagnostico
                 }).ToList();
         }
-        public IEnumerable<ExpedienteSidebarDTO> ConsultarParaSidebar (int idUsuario)
-        {
-            return context.ExpedientePadecimiento
-                .Where(ep => ep.IdExpedienteNavigation.IdUsuario == idUsuario)
-                .Select(ep => new ExpedienteSidebarDTO
-                {
-                    IdPadecimiento = ep.IdPadecimiento,
-                    FechaDiagnostico = ep.FechaDiagnostico,
-                    Nombre=ep.IdPadecimientoNavigation.Nombre
-                }).ToList();
-        }
+
+
 
 
         public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarParaSelector()

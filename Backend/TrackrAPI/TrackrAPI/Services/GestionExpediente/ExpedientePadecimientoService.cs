@@ -25,9 +25,6 @@ namespace TrackrAPI.Services.GestionExpediente
             return expedientePadecimientoRepository.ConsultarPorUsuario(idUsuario);
         }
 
-        public IEnumerable <ExpedienteSidebarDTO> ConsultarParaSidebar(int idUsuario){
-            return expedientePadecimientoRepository.ConsultarParaSidebar(idUsuario);
-        }
 
     }
 }
