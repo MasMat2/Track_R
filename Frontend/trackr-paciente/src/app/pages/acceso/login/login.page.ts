@@ -6,10 +6,10 @@ import { LoginService } from '@http/seguridad/login.service';
 import { IonicModule } from '@ionic/angular';
 import { LoginRequest } from '@models/seguridad/login-request';
 import { LoginResponse } from '@models/seguridad/login-response';
-import { StorageService } from '@services/storage.service';
 import { GeneralConstant } from '@utils/general-constant';
 import * as Utileria from '@utils/utileria';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -30,8 +30,8 @@ export class LoginPage implements OnInit {
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private storageService: StorageService
-    ) { }
+    private authService: AuthService
+  ) { }
 
   ngOnInit() {
   }
@@ -64,14 +64,15 @@ export class LoginPage implements OnInit {
    * Llama al método Authenticate de LoginService. Si es exitoso, guarda el LoginResponse Token en el localStorage y redirige a la página de pacientes.
    */
   public async autenticarPaciente() {
+    // TODO: 2023-07-18 ->
     this.loginRequest.claveTipoUsuario = GeneralConstant.CLAVE_USUARIO_PACIENTE;
     await lastValueFrom(this.loginService.authenticate(this.loginRequest))
           .then((loginResponse: LoginResponse) => {
-            this.storageService.set(GeneralConstant.TOKEN_KEY, loginResponse.token);
+            this.authService.guardarToken(loginResponse.token);
             this.router.navigate(['/home']);
           })
           .catch(error => {
-            this.storageService.remove(GeneralConstant.TOKEN_KEY);
+            this.authService.cerrarSesion(false);
             this.btnSubmit = false;
           });
   }

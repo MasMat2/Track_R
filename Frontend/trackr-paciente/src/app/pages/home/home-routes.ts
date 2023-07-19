@@ -8,6 +8,7 @@ export default [
     component: HomePage,
     children: [
       { path: 'dashboard', component: DashboardPage },
+      { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
     ]
   },
 ] as Route[];

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { GeneralConstant } from '@utils/general-constant';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-footer',
@@ -42,14 +42,14 @@ export class FooterComponent implements OnInit {
     }
   ];
   constructor(
-    private router: Router)
-  {}
+    private router: Router,
+    private authService: AuthService
+  ) { }
 
   public ngOnInit(): void {}
 
   public cerrarSesion(): void {
-    localStorage.removeItem(GeneralConstant.TOKEN_KEY);
-    this.router.navigate(['/login']);
+    this.authService.cerrarSesion();
   }
 
   setOpen(isOpen: boolean) {
