@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
+import { UsuarioService } from '@http/seguridad/usuario.service';
 import { CheckboxCustomEvent, IonicModule } from '@ionic/angular';
-import * as Utileria from '@shared/utileria';
-import { Usuario } from 'src/app/models/usuario';
-import { UsuarioService } from 'src/app/services/seguridad/usuario.service';
+import { Usuario } from '@models/usuario';
+import * as Utileria from '@utils/utileria';
 
 @Component({
   selector: 'app-registro',

@@ -1,11 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GeneralConstant } from '@shared/general-constant';
+import { IonicModule } from '@ionic/angular';
+import { GeneralConstant } from '@utils/general-constant';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss']
+  styleUrls: ['./footer.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonicModule
+  ]
 })
 export class FooterComponent implements OnInit {
   isActionSheetOpen = false;
@@ -55,7 +62,7 @@ export class FooterComponent implements OnInit {
         this.cerrarSesion();
         break;
       case 'seeProfile':
-        this.router.navigate(['/perfil']); //TODO: Reemplazar la ruta por la ruta del perfil
+        this.router.navigate(['/home/perfil']); //TODO: Reemplazar la ruta por la ruta del perfil
         break;
       default:
         break;

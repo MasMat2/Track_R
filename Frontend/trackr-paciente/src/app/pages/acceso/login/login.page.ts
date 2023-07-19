@@ -1,15 +1,15 @@
-import { LoginResponse } from './../../models/seguridad/login-response';
-import { LoginRequest } from './../../models/seguridad/login-request';
-import { LoginService } from './../../services/seguridad/login.service';
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import * as Utileria from '@shared/utileria';
-import { IonicModule } from '@ionic/angular';
 import { Router, RouterLink } from '@angular/router';
+import { LoginService } from '@http/seguridad/login.service';
+import { IonicModule } from '@ionic/angular';
+import { LoginRequest } from '@models/seguridad/login-request';
+import { LoginResponse } from '@models/seguridad/login-response';
+import { StorageService } from '@services/storage.service';
+import { GeneralConstant } from '@utils/general-constant';
+import * as Utileria from '@utils/utileria';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
-import { GeneralConstant } from '@shared/general-constant';
-import { StorageService } from 'src/app/services/seguridad/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +21,7 @@ import { StorageService } from 'src/app/services/seguridad/storage.service';
     CommonModule,
     FormsModule,
     RouterLink,
-    ]
+  ]
 })
 export class LoginPage implements OnInit {
   loginRequest: LoginRequest = new LoginRequest();
@@ -68,7 +68,7 @@ export class LoginPage implements OnInit {
     await lastValueFrom(this.loginService.authenticate(this.loginRequest))
           .then((loginResponse: LoginResponse) => {
             this.storageService.set(GeneralConstant.TOKEN_KEY, loginResponse.token);
-            this.router.navigate(['/paciente']);
+            this.router.navigate(['/home']);
           })
           .catch(error => {
             this.storageService.remove(GeneralConstant.TOKEN_KEY);

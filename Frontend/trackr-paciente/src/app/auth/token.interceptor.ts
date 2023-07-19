@@ -1,13 +1,12 @@
-import { AlertController } from '@ionic/angular';
-import { catchError } from 'rxjs/operators';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
+import { StorageService } from '@services/storage.service';
+import { GeneralConstant } from '@utils/general-constant';
 import { Observable, from, lastValueFrom, throwError } from 'rxjs';
-
+import { catchError } from 'rxjs/operators';
 import { environment } from './../../environments/environment';
-import { GeneralConstant } from '@shared/general-constant';
-import { StorageService } from '../services/seguridad/storage.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -19,7 +18,7 @@ export class TokenInterceptor implements HttpInterceptor {
     private router: Router,
     private alertController: AlertController,
     private storage: StorageService
-  ) 
+  )
   {}
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -42,15 +41,15 @@ export class TokenInterceptor implements HttpInterceptor {
           if (error.status === 409)
           {
             this.presentarAlerta(error.error);
-          } 
-      /* Cuando el token enviado en la peticion es invalido, el servidor retorna un error 401 */          
+          }
+      /* Cuando el token enviado en la peticion es invalido, el servidor retorna un error 401 */
           else if (error.status === 401 || error.status === 0)
           {
             this.storage.remove("token-cliente");
             this.router.navigate(['/login']);
           }
-      /* Errores inesperados */          
-          else 
+      /* Errores inesperados */
+          else
           {
             this.presentarAlerta(this.mensajeErrorInesperado);
           }
@@ -76,7 +75,7 @@ export class TokenInterceptor implements HttpInterceptor {
       });
     }
     /* Peticiones que requiren de un token */
-    else 
+    else
     {
       peticion = request.clone({
         url: environment.urlBackend + request.url,
@@ -103,7 +102,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
   /**
    * Creación de modal de alerta, para la gestión de errores
-   * @param mensaje string a mostrar en la alerta 
+   * @param mensaje string a mostrar en la alerta
    */
   private async presentarAlerta(mensaje: string): Promise<void> {
     var header = 'Error';
@@ -116,7 +115,7 @@ export class TokenInterceptor implements HttpInterceptor {
       message: mensaje,
       buttons: ['Aceptar']
     });
-    
+
     await alert.present();
   }
 }

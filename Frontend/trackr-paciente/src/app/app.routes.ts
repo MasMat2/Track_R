@@ -1,23 +1,21 @@
 import { Routes } from '@angular/router';
-import { LayoutPacientePage } from './pages/paciente/layout-paciente/layout-paciente.page';
+import { HomePage } from './pages/home/home.page';
+import { AccesoPage } from './pages/acceso/acceso.page';
 
 export const routes: Routes = [
   {
-    path: 'paciente',
-    component: LayoutPacientePage,
-    loadChildren: () => import('./pages/paciente/paciente-routes')
+    path: 'home',
+    // component: HomePage,
+    loadChildren: () => import('./pages/home/home-routes')
   },
   {
-    path: 'home-slide',
-    loadComponent: () => import('./pages/home-slide/home-slide.page').then( m => m.HomeSlidePage)
-  },
-  {
-    path: 'login',
-    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
+    path: 'acceso',
+    // component: AccesoPage,
+    loadChildren: () => import('./pages/acceso/acceso-routes')
   },
   {
     path: '**',
-    redirectTo: 'home-slide',
+    redirectTo: 'acceso',
     pathMatch: 'full',
   },
 
