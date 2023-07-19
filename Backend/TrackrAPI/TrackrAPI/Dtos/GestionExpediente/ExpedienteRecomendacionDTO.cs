@@ -1,10 +1,10 @@
-namespace TrackrAPI.Dtos.GestionExpediente
+namespace TrackrAPI.Dtos.GestionExpediente;
+
+public class ExpedienteRecomendacionDTO
 {
-    public class ExpedienteRecomendacionDTO
-    {
-        public int ExpedienteId { get; set; }
-        public DateTime Fecha { get; set; }
-        public string? Recomendacion { get; set; } = string.Empty;
-        public int DoctorId { get; set; }
-    }
+    public int IdExpedienteRecomendacion { get; set; }
+    public int IdExpediente { get; set; }
+    public DateTime Fecha { get; set; }
+    public string? Descripcion { get; set; } = string.Empty;
+    public int IdDoctor { get; set; }
 }

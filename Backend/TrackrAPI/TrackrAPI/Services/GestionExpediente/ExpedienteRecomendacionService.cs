@@ -2,47 +2,60 @@ using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionExpediente;
 
-namespace TrackrAPI.Services.GestionExpediente
+namespace TrackrAPI.Services.GestionExpediente;
+
+public class ExpedienteRecomendacionService
 {
-    public class ExpedienteRecomendacionService
+    private readonly IExpedienteRecomendacionRepository _expedienteRecomendacionRepository;
+
+    public ExpedienteRecomendacionService(IExpedienteRecomendacionRepository expedienteRecomendacionRepository)
     {
-        private readonly IExpedienteRecomendacionRepository expedienteRecomendacionRepository;
+        this._expedienteRecomendacionRepository = expedienteRecomendacionRepository;
+    }
 
-        public ExpedienteRecomendacionService(IExpedienteRecomendacionRepository expedienteRecomendacionRepository)
+    public IEnumerable<ExpedienteRecomendacionGridDTO> ConsultarPorUsuario(int idUsuario)
+    {
+        return _expedienteRecomendacionRepository.ConsultarPorUsuario(idUsuario);
+    }
+
+    public ExpedienteRecomendacionDTO ConsultarPorId(int idExpedienteRecomendacion)
+    {
+        var recomendacionModel = _expedienteRecomendacionRepository.ConsultarPorId(idExpedienteRecomendacion);
+
+        return new ExpedienteRecomendacionDTO
         {
-            this.expedienteRecomendacionRepository = expedienteRecomendacionRepository;
-        }
+            Descripcion = recomendacionModel.Descripcion,
+            Fecha = recomendacionModel.FechaRealizacion,
+            IdDoctor = recomendacionModel.IdUsuarioDoctor,
+            IdExpediente = recomendacionModel.IdExpediente,
+            IdExpedienteRecomendacion = recomendacionModel.IdExpedienteRecomendaciones
+        };
+    }
 
-        public IEnumerable<ExpedienteRecomendacionGridDTO> Consultar(int idUsuario)
+
+    public void Agregar(ExpedienteRecomendacionDTO expedienteRecomendacionDTO)
+    {
+        var recomendacion = new ExpedienteRecomendaciones
         {
-            return expedienteRecomendacionRepository.Consultar(idUsuario);
-        }
+            Descripcion = expedienteRecomendacionDTO.Descripcion ?? string.Empty,
+            FechaRealizacion = DateTime.Now,
+            IdExpediente = expedienteRecomendacionDTO.IdExpediente,
+            IdUsuarioDoctor = expedienteRecomendacionDTO.IdDoctor
+        };
+        _expedienteRecomendacionRepository.Agregar(recomendacion);
+    }
 
-        public void Agregar(ExpedienteRecomendacionDTO expedienteRecomendacionDTO)
-        {
-            var recomendacion = new ExpedienteRecomendaciones
-            {
-                Descripcion = expedienteRecomendacionDTO.Recomendacion,
-                FechaRealizacion = expedienteRecomendacionDTO.Fecha,
-                IdExpediente = expedienteRecomendacionDTO.ExpedienteId,
-                IdUsuarioDoctor = expedienteRecomendacionDTO.DoctorId
-            };
+    public void Editar(ExpedienteRecomendacionDTO expedienteRecomendacionDTO)
+    {
+        var recomendacion = _expedienteRecomendacionRepository.ConsultarPorId(expedienteRecomendacionDTO.IdExpedienteRecomendacion);
+        recomendacion.Descripcion = expedienteRecomendacionDTO.Descripcion;
+        Console.WriteLine(recomendacion);
+        _expedienteRecomendacionRepository.Editar(recomendacion);
+    }
 
-            expedienteRecomendacionRepository.Agregar(recomendacion);
-        }
-
-        public void Editar(int idExpedienteRecomendacion, ExpedienteRecomendacionDTO expedienteRecomendacionDTO)
-        {
-            var recomendacion = expedienteRecomendacionRepository.ConsultarPorId(idExpedienteRecomendacion);
-            recomendacion.Descripcion = expedienteRecomendacionDTO.Recomendacion;
-            Console.WriteLine(recomendacion);
-            expedienteRecomendacionRepository.Editar(recomendacion);
-        }
-
-        public void Eliminar(int idExpedienteRecomendacion)
-        {
-            var recomendacion = expedienteRecomendacionRepository.ConsultarPorId(idExpedienteRecomendacion);
-            expedienteRecomendacionRepository.Eliminar(recomendacion);
-        }
+    public void Eliminar(int idExpedienteRecomendacion)
+    {
+        var recomendacion = _expedienteRecomendacionRepository.ConsultarPorId(idExpedienteRecomendacion);
+        _expedienteRecomendacionRepository.Eliminar(recomendacion);
     }
 }
