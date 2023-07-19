@@ -1,21 +1,18 @@
-<div>
-  &nbsp;
-</div>
 <div class="container"> 
   <div class="subseccion">
     <div>Recomendaciones</div>
   </div>
-
+<form>
   <div class="modal-content">
     <div class="container">
         <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="form-group">
-              <label class="label-input required-label">Descripción</label>
+              <label style="color: gray;" >Recomendacion</label>
               <div>
                 <textarea
                   #descripcion="ngModel"
-                  [(ngModel)]="inputRecomendacion"
+                  [(ngModel)]="recomendacion.descripcion"
                   name="descripcion"
                   class="form-control-textarea"
                   type="text"
@@ -23,9 +20,9 @@
                   autocomplete="off"
                   style="width: 100%;"
                   rows="4"
-                  required=""
+                  required
                 ></textarea>
-                <div *ngIf=" (inputRecomendacion.length === 0 && (descripcion.touched || botonTocado))  " class="error">
+                <div *ngIf="((descripcion.errors?.['required'] || descripcion.touched ) && botonTocado)" class="error">
                   La descripcion es requerida
                 </div>
               </div>
@@ -36,7 +33,7 @@
           <label class="label-input required-label">Fecha</label>
         <div>
           <input
-            [(ngModel)] = "fecha"
+            [(ngModel)] = "fechaString"
             name="fechaAlta"
             class="form-control"
             type="text"
@@ -50,37 +47,34 @@
         </div>
       </div>
     
-      <div class="col-md-2 align-items-center d-flex" (click)="botonTocado = true">
+      <div class="col-md-2 align-items-center d-flex contenedor-agregar" (click)="marcarBotonTocado()">
         <label class="label-input required-label">&nbsp;</label>
         
-        <div class="contenedor-agregar col-md-1 align-items-center justify-content-center" (click)="inputRecomendacion.length > 0 && agregar()" *ngIf="!editarAccion" >
-          <i class="fas fa-plus-circle" style="font-size: 24px;"></i>
-        </div>
-        <div class="contenedor-agregar col-md-1 align-items-center" (click)="editar()" *ngIf="editarAccion">
-          <img src="../../../../../assets/img/svg/ico-15x15-Editar-1.svg" style="width: 24px; height: 24px;">
-        </div>
+        <ng-template [ngIf]="!recomendacion.idExpedienteRecomendacion" [ngIfElse]="botonEditar" >
+            <i class="fas fa-plus-circle" style="font-size: 24px;" (click)="agregar()" ></i> 
+        </ng-template>
+       
+        <ng-template #botonEditar class="">
+          <img src="assets/img/svg/ico-15x15-Editar-1.svg" style="width: 24px; height: 24px;" (click)="editar()" >
+        </ng-template>
       </div>
     
-      
+
     </div> 
   </div>
 </div>
-    
-
-
-
-<div class="row-justify-content-center">
+</form>
+ 
+<div class="row">
   <div class="col-md-12">
-    <div class="subseccion">Bitacora Recomendaciones</div>
+    <div style="color: gray;">Bitacora Recomendaciones</div>
 
           <app-grid-general 
           #gridRecomendacion
           [headerName]="HEADER_GRID"
           [children]="columns"
           [gridOptions]="gridOptions"
-          [data]="recomendacionesList"
-          [accesoEditar]="EDITAR_PERFIL"
-          [accesoEliminar]="ELIMINAR_PERFIL"
+          [data]="recomendacionesList$ | async"
           (event)="onGridClick($event)"
           >
           </app-grid-general>

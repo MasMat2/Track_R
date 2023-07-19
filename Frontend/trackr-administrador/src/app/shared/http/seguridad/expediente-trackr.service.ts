@@ -10,7 +10,6 @@ import { Observable } from 'rxjs';
 })
 export class ExpedienteTrackrService {
     private dataUrl = 'expedientetrackr/';
-    private expediente: ExpedienteTrackR;
 
     constructor(public http: HttpClient) {}
 
@@ -32,13 +31,6 @@ export class ExpedienteTrackrService {
 
     public eliminar(idExpediente: number): Observable<void> {
         return this.http.delete<void>(this.dataUrl + `eliminar/${idExpediente}`);
-    }
-
-    setExpediente(expediente: ExpedienteTrackR) : void{
-        this.expediente =  expediente;
-    }
-    getExpediente(): ExpedienteTrackR{
-        return this.expediente;
     }
 
 }

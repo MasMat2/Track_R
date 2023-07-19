@@ -1,82 +1,75 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { ExpedienteRecomendacionService } from '../../../../shared/http/gestion-expediente/expediente-recomendacion.service';
-import { ExpedienteRecomendacion } from '@models/gestion-expediente/expediente-recomendacion';
+import { ExpedienteRecomendacionGridDTO } from '@models/gestion-expediente/expediente-recomendacion';
 import { GridOptions } from 'ag-grid-community';
 import { EncryptionService } from '@services/encryption.service';
-import { lastValueFrom, Subject } from 'rxjs';
+import { Observable, lastValueFrom} from 'rxjs';
 import { first } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { GridGeneralComponent } from '@sharedComponents/grid-general/grid-general.component';
-import { CodigoAcceso } from '@utils/codigo-acceso';
 import { MensajeService } from '../../../../shared/components/mensaje/mensaje.service';
 import { GRID_ACTION } from '@utils/constants/grid';
-import { ExpedienteTrackrService } from '../../../../shared/http/seguridad/expediente-trackr.service';
+import { ExpedienteRecomendacionFormDTO } from '@dtos/gestion-expediente/expediente- recomendacion-form-dto';
 
 @Component({
   selector: 'app-expediente-recomendacion',
   templateUrl: './expediente-recomendacion.component.html',
 })
 export class ExpedienteRecomendacionComponent implements OnInit{
+  //Variables relacionadas con el componente y la vista
   
-  @ViewChild('gridRecomendacion', { static: false }) gridRecomendacion: GridGeneralComponent;
- 
-  protected estudio : ExpedienteRecomendacion;
-  protected idExpediente : number;
-  protected editarAccion: boolean = false;
-  protected botonTocado : boolean;
-  protected recomendacion : ExpedienteRecomendacion = new ExpedienteRecomendacion();
-  protected fecha : string;
-  protected destroy$: Subject<void> = new Subject<void>();
+  protected fechaString : string;
   protected inputRecomendacion: string = '';
-  private MENSAJE_EDITAR: string = 'MENSAJE EDITADO';
-  private MENSAJE_AGREGAR: string = 'MENSAJE AGREGADO';
-  public gridOptions : GridOptions;
-  public EDITAR_PERFIL = CodigoAcceso.EDITAR_PERFIL;
-  public ELIMINAR_PERFIL = CodigoAcceso.ELIMINAR_PERFIL;
-  public HEADER_GRID = 'Recomendaciones';
- 
+  protected botonTocado : boolean = false;
 
+  //Variables relacionadas con la consulta de datos y la interaccion con el servicio
+  protected idUsuario : number;
+  protected editarAccion: boolean = false;
+  protected recomendacion : ExpedienteRecomendacionFormDTO = new ExpedienteRecomendacionFormDTO;
+
+  //Mensajes de confirmacion
+  private MENSAJE_EDITAR: string = 'La recomendacion ha sido editada';
+  private MENSAJE_AGREGAR: string = 'La recomendacion ha sido agregada';
+
+  //Configuraciones y datos del grid
+  public gridOptions : GridOptions;
+  public HEADER_GRID = 'Recomendaciones';
   public columns = [
     { headerName: 'Num', valueGetter: (params: any) => params.node.rowIndex + 1, maxWidth: 90 },
-    { headerName: 'Fecha', field: 'fecha', minWidth: 150},
-    { headerName: 'Recomendacion', field: 'recomendacion', minWidth: 150 },
+    { headerName: 'Fecha', field: 'fecha', maxWidth: 90},
+    { headerName: 'Recomendacion', field: 'descripcion', minWidth: 150 },
     { headerName: 'Doctor', field: 'doctor', minWidth: 150 },
-    
   ];
-  public recomendacionesList: any[] = [];
+  public recomendacionesList$: Observable<ExpedienteRecomendacionGridDTO[]>;
   
-
   constructor(
     private expedienteRecomendacionService : ExpedienteRecomendacionService,
     private encryptionService: EncryptionService,
     private route: ActivatedRoute,
-    private mensajeService : MensajeService,
-    private expedienteTrackrService : ExpedienteTrackrService
+    private mensajeService : MensajeService
     ) 
   {}
 
   ngOnInit(): void
    {
     this.obtenerParametrosURL();
-    this.fecha = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }); 
-  }
+    this.setFechaString();
+   }
 
-  public consultarGrid()
+
+  private consultarGrid()
   {
-    this.expedienteRecomendacionService.consultar(this.idExpediente).subscribe((data) => {
-      this.recomendacionesList = data;
-    })
+    this.recomendacionesList$ = this.expedienteRecomendacionService.consultarPorUsuario(this.idUsuario);
   }
 
   private async obtenerParametrosURL(): Promise<void>
    {
     const queryParams = await lastValueFrom(this.route.queryParams.pipe(first()));
     const params = this.encryptionService.readUrlParams(queryParams);
-    this.idExpediente = Number(params.i);
+    this.idUsuario = Number(params.i);
     this.consultarGrid();
   }
 
-  public eliminar(idExpedienteRecomendacion : number) : void
+  protected eliminar(idExpedienteRecomendacion : number) : void
   {
     const MENSAJE_CONFIRMACION : string = '¿Desea eliminar la recomendacion?';
     const TITULO_MODAL : string = 'Eliminar recomendacion'
@@ -86,24 +79,18 @@ export class ExpedienteRecomendacionComponent implements OnInit{
     .modalConfirmacion(
       MENSAJE_CONFIRMACION,
       TITULO_MODAL
-    ).then((aceptar) => {
-      this.expedienteRecomendacionService.eliminar(idExpedienteRecomendacion).subscribe((data) => {
-        this.mensajeService.modalExito(MENSAJE_EXITO  );
+    ).then(() => {
+      this.expedienteRecomendacionService.eliminar(idExpedienteRecomendacion).subscribe(() => {
+        this.mensajeService.modalExito(MENSAJE_EXITO);
         this.consultarGrid();
       })
     })
   }
 
-  public editar() : void
+  protected editar() : void
   {
-      const recomendacion = { 
-        ExpedienteId: this.expedienteTrackrService.getExpediente().idExpediente,
-        Fecha: this.recomendacion.fecha,
-        Recomendacion: this.inputRecomendacion,
-        DoctorId : this.recomendacion.idDoctor  
-      };
-  
-      const subscription = this.expedienteRecomendacionService.editar(this.recomendacion.idExpedienteRecomendacion, recomendacion).subscribe({
+    if(this.recomendacion.descripcion.length > 0){
+       const subscription = this.expedienteRecomendacionService.editar(this.recomendacion).subscribe({
         next: () => {
           this.mensajeService.modalExito(this.MENSAJE_EDITAR)
         },
@@ -111,45 +98,77 @@ export class ExpedienteRecomendacionComponent implements OnInit{
           subscription.unsubscribe();
           this.consultarGrid();
           this.editarAccion = false;
+          this.botonTocado = false;
+          this.limpiarCampos();
         }
-      })
-  
-  }
-
-  agregar()
-  {
-    const recomendacion = {
-      ExpedienteId: this.expedienteTrackrService.getExpediente().idExpediente,
-      Fecha: new Date(),
-      Recomendacion : this.inputRecomendacion,
-      DoctorId: 1
+      }) 
+    
     }
-
-    const subscription = this.expedienteRecomendacionService.agregar(recomendacion).subscribe({
-      next: () => {
-        this.mensajeService.modalExito(this.MENSAJE_AGREGAR)
-      },
-      complete: () => {
-          subscription.unsubscribe();
-          this.consultarGrid();
-      }
-    });
- 
   }
 
-  onGridClick(gridData : {accion : string, data: ExpedienteRecomendacion}): void 
+  protected agregar()
+  {
+    if(this.recomendacion.descripcion){
+
+      this.expedienteRecomendacionService.obtenerIdExpediente(this.idUsuario)
+      .subscribe(idExpedienteGotten => {
+        const recomendacion = {
+          idExpedienteRecomendacion: 1,
+          idExpediente: idExpedienteGotten,
+          fecha: new Date(),
+          descripcion: this.recomendacion.descripcion,
+          idDoctor : 1
+        };
+        this.recomendacion = recomendacion;
+  
+        const subscription = this.expedienteRecomendacionService.agregar(this.recomendacion).subscribe({
+          next: () => {
+            this.mensajeService.modalExito(this.MENSAJE_AGREGAR)
+          },
+          complete: () => {
+              subscription.unsubscribe();
+              this.consultarGrid();
+              this.botonTocado = false;
+              this.limpiarCampos();
+          }
+        }); 
+    });
+    }
+  }
+
+  protected onGridClick(gridData : {accion : string, data: ExpedienteRecomendacionGridDTO}): void 
   { 
-    this.recomendacion = gridData.data;
+    var recomendacionGrid = gridData.data;
     
     const acciones = {
-      [GRID_ACTION.Eliminar as string] : () => this.eliminar(this.recomendacion.idExpedienteRecomendacion),
+      [GRID_ACTION.Eliminar as string] : () => this.eliminar(recomendacionGrid.idExpedienteRecomendacion),
       [GRID_ACTION.Editar as string] : () => {
-        this.editarAccion = !this.editarAccion;
-        this.inputRecomendacion = this.recomendacion.recomendacion
+        this.editarAccion = true;
+        this.expedienteRecomendacionService.consultarPorId(recomendacionGrid.idExpedienteRecomendacion)
+        .subscribe(recomendacion => {
+
+          this.recomendacion = recomendacion;
+          this.setFechaString(); 
+        });
       }
     };
     
     acciones[gridData.accion]();
+  }
+
+  protected marcarBotonTocado() : void
+  { 
+    this.botonTocado = true;
+  }
+
+  private limpiarCampos() : void
+  {
+    this.recomendacion  = new ExpedienteRecomendacionFormDTO;
+  }
+
+  private setFechaString() : void 
+  { 
+    this.fechaString = this.recomendacion.fecha.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
   }
 
 }

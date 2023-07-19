@@ -1,8 +1,8 @@
-export class ExpedienteRecomendacion
+export class ExpedienteRecomendacionGridDTO
 {
-    idExpedienteRecomendacion: number;
-    fecha: Date;
-    recomendacion: string;
-    doctor: string;
-    idDoctor: number;
+    public idExpedienteRecomendacion: number;
+    public fecha: Date;
+    public descripcion: string;
+    public doctor: string;
+    public idDoctor: number;
 }

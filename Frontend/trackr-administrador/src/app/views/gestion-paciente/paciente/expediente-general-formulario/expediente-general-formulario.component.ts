@@ -227,7 +227,6 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
       this.paciente = expedienteWrapper.paciente || new Usuario();
       this.domicilio = this.obtenerPacienteDomicilio(this.paciente);
       this.expediente = this.obtenerExpediente(expedienteWrapper.expediente);
-      this.expedienteTrackrService.setExpediente(this.expediente);
       
 
       this.padecimientos = expedienteWrapper.padecimientos.map(padecimiento => {
