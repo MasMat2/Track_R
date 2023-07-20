@@ -49,12 +49,11 @@
 
 
 .img-container {
-position:relative;
-  width: 100%;
+  aspect-ratio: 1/1;
+  width: 60px;
 }
 
 .img-container img {
-  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
