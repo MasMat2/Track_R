@@ -32,10 +32,10 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                     IdExpedientePadecimiento = ep.IdExpedientePadecimiento,
                     IdPadecimiento = ep.IdPadecimiento,
                     FechaDiagnostico = ep.FechaDiagnostico,
-                    nombrePadecimiento = ep.IdPadecimientoNavigation.Nombre,
-                    nombreDoctor = ep.IdUsuarioDoctorNavigation.ObtenerNombreCompleto()
+                    NombrePadecimiento = ep.IdPadecimientoNavigation.Nombre,
+                    NombreDoctor = ep.IdUsuarioDoctorNavigation.ObtenerNombreCompleto()
 
-                }).ToList();
+                });
         }
 
         public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarParaSelector()

@@ -17,7 +17,7 @@ export class ExpedientePadecimientoService {
     }
 
     public consultarParaGridPorUsuario(idUsuario: number) {
-        return this.http.get<ExpedientePadecimientoGridDTO[]>(this.dataUrl + `gridPorUsuario/${idUsuario}`);
+        return this.http.get<ExpedientePadecimientoGridDTO[]>(this.dataUrl + `grid/usuario/${idUsuario}`);
     }
 
     public consultarParaSelector(){

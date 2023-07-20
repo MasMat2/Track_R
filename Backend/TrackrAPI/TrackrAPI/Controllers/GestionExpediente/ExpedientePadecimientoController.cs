@@ -28,7 +28,7 @@ namespace TrackrAPI.Controllers.GestionExpediente
             return expedientePadecimientoService.ConsultarPorUsuario(idUsuario);
         }
 
-        [HttpGet("gridPorUsuario/{idUsuario}")]
+        [HttpGet("grid/usuario/{idUsuario}")]
         public IEnumerable<ExpedientePadecimientoGridDTO> ConsultarParaGridPorUsuario(int idUsuario)
         {
             return expedientePadecimientoService.ConsultarParaGridPorUsuario(idUsuario);

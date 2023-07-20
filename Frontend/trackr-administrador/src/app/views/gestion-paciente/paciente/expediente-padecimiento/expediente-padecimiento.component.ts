@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
+import { Observable, lastValueFrom } from 'rxjs';
 import { EncryptionService } from '@services/encryption.service';
 import { GeneralConstant } from '@utils/general-constant';
 import { ActivatedRoute } from '@angular/router';
@@ -7,6 +7,7 @@ import { first } from 'rxjs/operators';
 import { format } from 'date-fns';
 import { ExpedientePadecimientoGridDTO } from '@dtos/seguridad/expediente-padecimiento-grid-dto';
 import { ExpedientePadecimientoService  } from '@http/seguridad/expediente-padecimiento.service';
+import { ColDef, ValueGetterParams } from 'ag-grid-community';
 
 
 @Component({
@@ -17,12 +18,17 @@ import { ExpedientePadecimientoService  } from '@http/seguridad/expediente-padec
 export class ExpedientePadecimientoComponent implements OnInit {
 
   protected idUsuario: number;
-  protected padecimientoPacienteList: ExpedientePadecimientoGridDTO[] = [];
+  protected padecimientos$: Observable<ExpedientePadecimientoGridDTO[]>;
   public HEADER_GRID = 'Pacientes';
 
-  public columns = [
+  protected columns: ColDef[] = [
     { headerName: 'Tipo de Padecimiento', field: 'nombrePadecimiento', minWidth: 150 },
-    { headerName: 'Fecha de Diagnóstico', field: 'fechaDiagnostico', minWidth: 150 },
+    { headerName: 'Fecha de Diagnóstico', field: 'fechaDiagnostico', minWidth: 150,
+      valueGetter: (params: ValueGetterParams) => {
+        const fechaDiagnostico = new Date(params.data.fechaDiagnostico);
+        return format(fechaDiagnostico, 'dd/MM/yyyy');
+      }  
+    },
     { headerName: 'Doctor', field: 'nombreDoctor', minWidth: 150 }
   ];
 
@@ -45,23 +51,12 @@ export class ExpedientePadecimientoComponent implements OnInit {
     this.consultarPadecimientos();
   }
 
-  private consultarPadecimientos(){
-    lastValueFrom(this.expedientePadecimientoService.consultarParaGridPorUsuario(this.idUsuario))
-    .then((padecimientoPacienteList: ExpedientePadecimientoGridDTO[]) => {
-      this.padecimientoPacienteList = this.formatearFechas(padecimientoPacienteList);
-    });
 
-    
+
+  private consultarPadecimientos(): void {
+    this.padecimientos$ = this.expedientePadecimientoService.consultarParaGridPorUsuario(this.idUsuario);
   }
 
 
-  protected formatearFechas(padecimientos: ExpedientePadecimientoGridDTO[]): ExpedientePadecimientoGridDTO[] {
-    return padecimientos.map(padecimiento => {
-
-      const fechaDiagnostico = new Date(padecimiento.fechaDiagnostico);
-      const fechaFormateada = format(fechaDiagnostico, 'dd/MM/yyyy');
-      return { ...padecimiento, fechaDiagnostico: fechaFormateada };
-    });
-  }
 
 }
