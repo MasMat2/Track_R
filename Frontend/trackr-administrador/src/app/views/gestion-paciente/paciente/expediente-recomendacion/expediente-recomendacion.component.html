@@ -2,7 +2,12 @@
   <div class="subseccion">
     <div>Recomendaciones</div>
   </div>
-<form>
+<form
+  #formulario="ngForm"
+  (ngSubmit)="enviarFormulario(formulario)"
+  (keydown.enter)="$event.preventDefault()"
+  novalidate="novalidate"
+>
   <div class="modal-content">
     <div class="container">
         <div class="row justify-content-center">
@@ -22,7 +27,7 @@
                   rows="4"
                   required
                 ></textarea>
-                <div *ngIf="((descripcion.errors?.['required'] || descripcion.touched ) && botonTocado)" class="error">
+                <div *ngIf="(descripcion.errors?.['required'] && descripcion.touched )" class="error">
                   La descripcion es requerida
                 </div>
               </div>
@@ -33,7 +38,7 @@
           <label class="label-input required-label">Fecha</label>
         <div>
           <input
-            [(ngModel)] = "fechaString"
+            [(ngModel)] = "recomendacion.fecha"
             name="fechaAlta"
             class="form-control"
             type="text"
@@ -47,15 +52,27 @@
         </div>
       </div>
     
-      <div class="col-md-2 align-items-center d-flex contenedor-agregar" (click)="marcarBotonTocado()">
+      <div class="col-md-2 align-items-center d-flex contenedor-agregar" >
         <label class="label-input required-label">&nbsp;</label>
         
-        <ng-template [ngIf]="!recomendacion.idExpedienteRecomendacion" [ngIfElse]="botonEditar" >
-            <i class="fas fa-plus-circle" style="font-size: 24px;" (click)="agregar()" ></i> 
+        <ng-template [ngIf]="esAgregar" [ngIfElse]="botonEditar" >
+          <button
+           type="submit"
+           [disabled]="submiting"
+           class="btn"
+          >
+            <i class="fas fa-plus-circle" style="font-size: 24px;"></i> 
+          </button>
         </ng-template>
        
-        <ng-template #botonEditar class="">
-          <img src="assets/img/svg/ico-15x15-Editar-1.svg" style="width: 24px; height: 24px;" (click)="editar()" >
+        <ng-template #botonEditar class="button">
+          <button 
+          [disabled]="submiting"
+          type="submit"
+          class="btn"
+          >
+            <img src="assets/img/svg/ico-15x15-Editar-1.svg" style="width: 24px; height: 24px;" (click)="editar()" >
+          </button>
         </ng-template>
       </div>
     
