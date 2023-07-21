@@ -5,6 +5,6 @@ namespace TrackrAPI.Repositorys.GestionExpediente;
 
 public interface IExpedienteRecomendacionRepository : IRepository<ExpedienteRecomendaciones>
 {
-    public IEnumerable<ExpedienteRecomendacionGridDTO> ConsultarPorUsuario(int idUsuario);
-    public ExpedienteRecomendaciones? ConsultarPorId(int idExpedienteRecomendacion);
+    public IEnumerable<ExpedienteRecomendacionGridDTO> ConsultarGridPorUsuario(int idUsuario);
+    public ExpedienteRecomendaciones? Consultar(int idExpedienteRecomendacion);
 }

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Helpers;
-using TrackrAPI.Models;
 using TrackrAPI.Services.GestionExpediente;
 
 namespace Trackr.Controllers.GestionExpediente;
@@ -12,54 +11,37 @@ public class ExpedienteRecomendacionController : ControllerBase
 {
 
     private readonly ExpedienteRecomendacionService _expedienteRecomendacionService;
-    private readonly ExpedienteTrackrService _expedienteTrackrService;
-    private readonly TrackrContext _context;
 
-    public ExpedienteRecomendacionController(ExpedienteRecomendacionService expedienteRecomendacionService, ExpedienteTrackrService expedienteTrackrService, TrackrContext context)
+    public ExpedienteRecomendacionController(ExpedienteRecomendacionService expedienteRecomendacionService)
     {
-        this._expedienteRecomendacionService = expedienteRecomendacionService;
-        this._expedienteTrackrService = expedienteTrackrService;
-        this._context = context;
+        _expedienteRecomendacionService = expedienteRecomendacionService;
+
     }
 
-    [HttpGet("usuario/{idUsuario}")]
-    public IEnumerable<ExpedienteRecomendacionGridDTO> ConsultarPorUsuario(int idUsuario)
+    [HttpGet("grid/usuario/{idUsuario}")]
+    public IEnumerable<ExpedienteRecomendacionGridDTO> ConsultarGridPorUsuario(int idUsuario)
     {
-        return _expedienteRecomendacionService.ConsultarPorUsuario(idUsuario);
+        return _expedienteRecomendacionService.ConsultarGridPorUsuario(idUsuario);
     }
 
     [HttpGet("{idExpedienteRecomendacion}")]
-    public ExpedienteRecomendacionDTO ConsultarPorId(int idExpedienteRecomendacion)
+    public ExpedienteRecomendacionFormDTO Consultar(int idExpedienteRecomendacion)
     {
-        return _expedienteRecomendacionService.ConsultarPorId(idExpedienteRecomendacion);
-    }
-    [HttpGet]
-    public IEnumerable<ExpedienteRecomendaciones> Consultar()
-    {
-        return _context.ExpedienteRecomendaciones.ToList();
-    }
-
-    [HttpGet("expediente/{idUsuario}")]
-    public int ObtenerIdExpediente(int idUsuario)
-    {
-        return _expedienteTrackrService.ConsultarWrapperPorUsuario(idUsuario).expediente.IdExpediente;
+        return _expedienteRecomendacionService.Consultar(idExpedienteRecomendacion);
     }
 
     [HttpPost]
-    public void Agregar(ExpedienteRecomendacionDTO expedienteRecomendacionDTO)
+    public void Agregar(ExpedienteRecomendacionFormDTO expedienteRecomendacionFormDTO)
     {
-        int idDoctor = Utileria.ObtenerIdUsuarioSesion(this);
-        expedienteRecomendacionDTO.IdDoctor = idDoctor;
-
-        expedienteRecomendacionDTO.Fecha = DateTime.Now;
-        _expedienteRecomendacionService.Agregar(expedienteRecomendacionDTO);
-
+        int IdDoctor = Utileria.ObtenerIdUsuarioSesion(this);
+        expedienteRecomendacionFormDTO.IdDoctor = IdDoctor;
+        _expedienteRecomendacionService.Agregar(expedienteRecomendacionFormDTO);
     }
 
     [HttpPut]
-    public void Editar(ExpedienteRecomendacionDTO expedienteRecomendacionDTO)
+    public void Editar(ExpedienteRecomendacionFormDTO expedienteRecomendacionFormDTO)
     {
-        _expedienteRecomendacionService.Editar(expedienteRecomendacionDTO);
+        _expedienteRecomendacionService.Editar(expedienteRecomendacionFormDTO);
     }
 
     [HttpDelete("{idExpedienteRecomendacion}")]

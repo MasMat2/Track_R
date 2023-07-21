@@ -12,7 +12,7 @@ public class ExpedienteRecomendacionRepository : Repository<ExpedienteRecomendac
         base.context = context;
     }
 
-    public IEnumerable<ExpedienteRecomendacionGridDTO> ConsultarPorUsuario(int idUsuario)
+    public IEnumerable<ExpedienteRecomendacionGridDTO> ConsultarGridPorUsuario(int idUsuario)
     {
         return context.ExpedienteRecomendaciones
         .Include(us => us.IdUsuarioDoctorNavigation)
@@ -27,7 +27,7 @@ public class ExpedienteRecomendacionRepository : Repository<ExpedienteRecomendac
         .ToList();
     }
 
-    public ExpedienteRecomendaciones? ConsultarPorId(int idExpedienteRecomendacion)
+    public ExpedienteRecomendaciones? Consultar(int idExpedienteRecomendacion)
     {
         return context.ExpedienteRecomendaciones
         .Where(er => er.IdExpedienteRecomendaciones == idExpedienteRecomendacion)
