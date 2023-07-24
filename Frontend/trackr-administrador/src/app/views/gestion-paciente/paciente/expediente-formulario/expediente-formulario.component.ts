@@ -19,6 +19,7 @@ import { ExpedientePadecimientoGridDTO } from '@dtos/gestion-expediente/expedien
 import { ExpedientePadecimientoDTO } from '@dtos/seguridad/expediente-padecimiento-dto';
 import { DashboardPadecimientoComponent } from '../dashboard-padecimiento/dashboard-padecimiento.component';
 import { ExpedienteEstudioComponent } from '../expediente-estudio/expediente-estudio.component';
+import { ExpedientePadecimientoComponent } from '../expediente-padecimiento/expediente-padecimiento.component';
 
 @Component({
   selector: 'app-expediente-formulario',
@@ -60,10 +61,24 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
     });
   }
 
-  public async ngAfterContentInit() {  
+  public async ngAfterContentInit() {
     this.agregarTabInformacionGeneral();
     this.agregarTabEstudios();
-    await this.agregarTabsPadecimientos();
+    this.agregarTabPadecimientos();
+    await this.agregarTabsDashboardPadecimiento();
+  }
+
+  private agregarTabPadecimientos(): void {
+    const padecimientos : ExternalTemplate = {
+      component : ExpedientePadecimientoComponent,
+      args : { },
+      label : 'Padecimientos',
+      enabled : true,
+      externalSubmit : true,
+      submitControl : false
+    };
+
+    this.externalTemplates.push(padecimientos);
   }
 
   private agregarTabInformacionGeneral(): void {
@@ -92,11 +107,11 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
       externalSubmit : true,
       submitControl : false
     };
-    
+
     this.externalTemplates.push(estudios);
   }
 
-  private async agregarTabsPadecimientos(): Promise<void> {
+  private async agregarTabsDashboardPadecimiento(): Promise<void> {
     await this.consultarPadecimientos();
 
     this.padecimientosList.forEach((padecimiento: ExpedientePadecimientoDTO) => {
@@ -116,7 +131,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
       this.externalTemplates.push(padecimientoExtTpl);
     });
   }
-  
+
   public async consultarPadecimientos() {
     await lastValueFrom(this.expedientePadecimientoService.consultarPorUsuario(this.idUsuario))
       .then((padecimientos) => {

@@ -30,5 +30,10 @@ namespace TrackrAPI.Services.GestionExpediente
             return expedientePadecimientoRepository.ConsultarValoresFueraRango(idPadecimiento, idUsuario);
         }
 
+        public IEnumerable<ExpedientePadecimientoGridDTO> ConsultarParaGridPorUsuario(int idUsuario)
+        {
+            return expedientePadecimientoRepository.ConsultarParaGridPorUsuario(idUsuario);
+        }
+
     }
 }
