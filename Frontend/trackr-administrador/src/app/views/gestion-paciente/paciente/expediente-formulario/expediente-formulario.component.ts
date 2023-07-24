@@ -20,6 +20,7 @@ import { ExpedientePadecimientoDTO } from '@dtos/seguridad/expediente-padecimien
 import { DashboardPadecimientoComponent } from '../dashboard-padecimiento/dashboard-padecimiento.component';
 import { ExpedienteEstudioComponent } from '../expediente-estudio/expediente-estudio.component';
 import { ExpedientePadecimientoComponent } from '../expediente-padecimiento/expediente-padecimiento.component';
+import { ExpedienteRecomendacionComponent } from '../expediente-recomendacion/expediente-recomendacion.component';
 
 @Component({
   selector: 'app-expediente-formulario',
@@ -63,9 +64,23 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
 
   public async ngAfterContentInit() {
     this.agregarTabInformacionGeneral();
+    this.agregarTabRecomendaciones();
     this.agregarTabEstudios();
     this.agregarTabPadecimientos();
     await this.agregarTabsDashboardPadecimiento();
+  }
+
+  private agregarTabRecomendaciones() {
+    const recomendaciones: ExternalTemplate = {
+      component: ExpedienteRecomendacionComponent,
+      args: { },
+      label : 'Recomendaciones',
+      enabled : this.idUsuario != null ? true : false,
+      externalSubmit : true,
+      submitControl : false
+    };
+
+    this.externalTemplates.push(recomendaciones);
   }
 
   private agregarTabPadecimientos(): void {
@@ -73,7 +88,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
       component : ExpedientePadecimientoComponent,
       args : { },
       label : 'Padecimientos',
-      enabled : true,
+      enabled : this.idUsuario != null ? true : false,
       externalSubmit : true,
       submitControl : false
     };
