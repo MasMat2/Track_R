@@ -18,11 +18,10 @@ export class PacienteComponent implements OnInit {
   protected isVistaCuadricula: boolean = true;
   protected mostrarSidebar: boolean = false;
   anchoContenedor: string = '100%';
-  pacientetest: any;
   paciente: UsuarioExpedienteSidebarDTO = {
     idUsuario: 0,
     nombreCompleto: '',
-    idGenero: 0,
+    genero: '',
     edad: '',
     padecimientos: [],
   };

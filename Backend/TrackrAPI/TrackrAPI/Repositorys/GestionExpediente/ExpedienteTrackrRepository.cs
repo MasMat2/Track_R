@@ -55,28 +55,22 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
     }
     public UsuarioExpedienteSidebarDTO ConsultarParaSidebar(int idUsuario)
     {
-
         var expedienteSidebarDTO = context.ExpedienteTrackr
-            .Include(et => et.IdUsuarioNavigation)
-                .ThenInclude(ep => ep.IdEstadoNavigation)
-            .Include(et => et.ExpedientePadecimiento)
-                .ThenInclude(ep => ep.IdPadecimientoNavigation)
             .Where(et => et.IdUsuario == idUsuario)
             .Select(et => new
             {
                 Usuario = new UsuarioExpedienteSidebarDTO
                 {
-                    idUsuario = et.IdUsuario,
-                    nombreCompleto = et.IdUsuarioNavigation.ObtenerNombreCompleto(),
-                    tipoMime = et.IdUsuarioNavigation.ImagenTipoMime,
-                    idGenero = et.IdGenero,
-                    edad = (DateTime.Today.Year - et.FechaNacimiento.Year).ToString(),
-                    colonia = et.IdUsuarioNavigation.Colonia,
-                    ciudad = et.IdUsuarioNavigation.Ciudad,
-                    estado = et.IdUsuarioNavigation.IdEstadoNavigation.Nombre,
+                    IdUsuario = et.IdUsuario,
+                    NombreCompleto = et.IdUsuarioNavigation.ObtenerNombreCompleto(),
+                    TipoMime = et.IdUsuarioNavigation.ImagenTipoMime,
+                    Genero = et.IdGeneroNavigation.Descripcion ,
+                    Edad = (DateTime.Today.Year - et.FechaNacimiento.Year).ToString(),
+                    Colonia = et.IdUsuarioNavigation.Colonia,
+                    Ciudad = et.IdUsuarioNavigation.Ciudad,
+                    Estado = et.IdUsuarioNavigation.IdEstadoNavigation.Nombre,
                 },
                 Padecimientos = et.ExpedientePadecimiento
-                    .Where(ep => ep.IdExpediente == et.IdExpediente)
                     .Select(ep => new ExpedienteSidebarDTO
                     {
                         IdPadecimiento = ep.IdPadecimiento,
@@ -87,12 +81,11 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
             })
             .FirstOrDefault();
 
-
-
-        expedienteSidebarDTO.Usuario.padecimientos = expedienteSidebarDTO.Padecimientos;
+        expedienteSidebarDTO.Usuario.Padecimientos = expedienteSidebarDTO.Padecimientos;
 
         return expedienteSidebarDTO.Usuario;
     }
+
 
 
 }

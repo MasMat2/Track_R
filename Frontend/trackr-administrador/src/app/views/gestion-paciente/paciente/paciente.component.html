@@ -40,11 +40,8 @@
 
         <div class="text-container">
           <div class="datos">
-            <div class="font-weight-normal mt-3" *ngIf="paciente.idGenero === 1">
-              Hombre
-            </div>
-            <div class="font-weight-normal mt-3" *ngIf="paciente.idGenero === 2">
-              Mujer
+            <div class="font-weight-normal mt-3" *ngIf="paciente.genero">
+             {{paciente.genero}} 
             </div>
             <div class="font-weight-bold mt-2" style="font-size: 1.5rem">
               {{ paciente.edad + " años" }}
