@@ -17,7 +17,7 @@ import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { ExpedienteGeneralFormularioComponent } from '../expediente-general-formulario/expediente-general-formulario.component';
 import { ExpedientePadecimientoGridDTO } from '@dtos/gestion-expediente/expediente-padecimiento-grid-dto';
 import { ExpedientePadecimientoDTO } from '@dtos/seguridad/expediente-padecimiento-dto';
-import { ExpedientePadecimientoComponent } from '../expediente-padecimiento/expediente-padecimiento.component';
+import { DashboardPadecimientoComponent } from '../dashboard-padecimiento/dashboard-padecimiento.component';
 import { ExpedienteEstudioComponent } from '../expediente-estudio/expediente-estudio.component';
 
 @Component({
@@ -101,7 +101,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
 
     this.padecimientosList.forEach((padecimiento: ExpedientePadecimientoDTO) => {
       const padecimientoExtTpl: ExternalTemplate = {
-        component: ExpedientePadecimientoComponent,
+        component: DashboardPadecimientoComponent,
         args: {
           idPadecimiento: padecimiento.idPadecimiento,
           idUsuario: this.idUsuario,

@@ -11,11 +11,11 @@ import { lastValueFrom } from 'rxjs';
 
 
 @Component({
-  selector: 'app-expediente-padecimiento',
-  templateUrl: './expediente-padecimiento.component.html',
-  styleUrls: ['./expediente-padecimiento.component.scss']
+  selector: 'app-dashboard-padecimiento',
+  templateUrl: './dashboard-padecimiento.component.html',
+  styleUrls: ['./dashboard-padecimiento.component.scss']
 })
-export class ExpedientePadecimientoComponent implements OnInit {
+export class DashboardPadecimientoComponent implements OnInit {
 
   // Inputs
   @Input() public nombrePadecimiento: string;

@@ -1,5 +1,4 @@
 import { AfterContentInit, AfterViewInit, Component, ComponentRef, Input, OnInit, Type, ViewChild, ViewContainerRef } from '@angular/core';
-import { ExpedientePadecimientoComponent } from 'src/app/views/gestion-paciente/paciente/expediente-padecimiento/expediente-padecimiento.component';
 
 @Component({
   selector: 'app-tab',

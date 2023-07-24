@@ -1,4 +1,3 @@
-import { ExpedientePadecimientoComponent } from './expediente-padecimiento/expediente-padecimiento.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TableModule } from 'primeng/table';
@@ -11,7 +10,7 @@ import { ExpedienteFormularioModule } from './expediente-formulario/expediente-f
 import { PacienteRoutingModule } from './paciente-routing.module';
 import { PacienteVistaCuadriculaComponent } from './paciente-vista-cuadricula/paciente-vista-cuadricula.component';
 import { PacienteComponent } from './paciente.component';
-import { ExpedientePadecimientoModule } from './expediente-padecimiento/expediente-padecimiento.module';
+import { DashboardPadecimientoModule } from './dashboard-padecimiento/dashboard-padecimiento.module';
 
 @NgModule({
   declarations: [
@@ -26,7 +25,7 @@ import { ExpedientePadecimientoModule } from './expediente-padecimiento/expedien
     PacienteRoutingModule,
     ExpedienteFormularioModule,
     ExpedienteEstudioModule,
-    ExpedientePadecimientoModule
+    DashboardPadecimientoModule
   ],
   entryComponents: [
     PacienteVistaCuadriculaComponent, 
