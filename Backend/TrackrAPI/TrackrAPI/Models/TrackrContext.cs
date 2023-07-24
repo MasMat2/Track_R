@@ -2922,9 +2922,7 @@ namespace TrackrAPI.Models
 
                 entity.ToTable("ExpedienteRecomendaciones", "Trackr");
 
-                entity.Property(e => e.Descripcion)
-                    .HasMaxLength(200)
-                    .IsFixedLength();
+                entity.Property(e => e.Descripcion).HasMaxLength(200);
 
                 entity.Property(e => e.FechaRealizacion).HasColumnType("datetime");
 
@@ -2983,6 +2981,12 @@ namespace TrackrAPI.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Peso).HasColumnType("decimal(6, 2)");
+
+                entity.HasOne(d => d.IdGeneroNavigation)
+                    .WithMany(p => p.ExpedienteTrackr)
+                    .HasForeignKey(d => d.IdGenero)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Expedient__IdGen__4361DD42");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
                     .WithMany(p => p.ExpedienteTrackr)

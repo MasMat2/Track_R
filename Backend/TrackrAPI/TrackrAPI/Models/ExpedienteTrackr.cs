@@ -23,6 +23,7 @@ namespace TrackrAPI.Models
         public int IdGenero { get; set; }
         public DateTime FechaAlta { get; set; }
 
+        public virtual Genero IdGeneroNavigation { get; set; } = null!;
         public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
         public virtual ICollection<ExpedienteEstudio> ExpedienteEstudio { get; set; }
         public virtual ICollection<ExpedientePadecimiento> ExpedientePadecimiento { get; set; }

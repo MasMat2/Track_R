@@ -5,7 +5,7 @@ export class UsuarioExpedienteSidebarDTO{
     nombreCompleto:string;
     imagenBase64?:string;
     tipoMime?: string;
-    idGenero:number;
+    genero:string;
     edad:string;
     colonia?:string;
     ciudad?:string;
