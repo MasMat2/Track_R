@@ -2,7 +2,7 @@
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
-
+using TrackrAPI.Helpers;
 namespace TrackrAPI.Repositorys.GestionExpediente
 {
     public class ExpedientePadecimientoRepository : Repository<ExpedientePadecimiento>, IExpedientePadecimientoRepository
@@ -58,7 +58,7 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         public IEnumerable<PadecimientoFueraRangoDTO> ConsultarValoresFueraRango(int idPadecimiento, int idUsuario)
         {
             return context.ExpedientePadecimiento
-                .Where(ep => ep.IdPadecimiento == idPadecimiento 
+                .Where(ep => ep.IdPadecimiento == idPadecimiento
                         && ep.IdExpedienteNavigation.IdUsuario == idUsuario)
                 .Select(pfrDTO => new PadecimientoFueraRangoDTO
                 {

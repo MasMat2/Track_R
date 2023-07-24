@@ -21,3 +21,42 @@
   color: gray;
   font-style: italic;
 }
+.mat-sidenav {
+  min-width: 220px;
+  max-width: 300px;
+  width:100%;
+  background-color: #EFEDE4;
+  border-left: 2px solid rgba(134, 132, 132, 0.747);
+}
+
+
+
+.mat-sidenav-content {
+  padding: 20px;
+  display: flex;
+}
+
+.text-container {
+  width: 100%;
+  margin-left: 10px;
+}
+
+
+.contenedor {
+ transition: margin-right 0.6s ease-out;
+  margin-right: 0;
+}
+
+
+.img-container {
+  aspect-ratio: 1/1;
+  width: 60px;
+}
+
+.img-container img {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

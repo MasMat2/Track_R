@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { TableModule } from 'primeng/table';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -27,7 +29,9 @@ import { PacienteComponent } from './paciente.component';
     ExpedienteFormularioModule,
     ExpedienteEstudioModule,
     DashboardPadecimientoModule,
-    ExpedientePadecimientoModule
+    ExpedientePadecimientoModule,
+    MatSidenavModule,
+    MatIconModule
   ],
   entryComponents: [
     PacienteVistaCuadriculaComponent,

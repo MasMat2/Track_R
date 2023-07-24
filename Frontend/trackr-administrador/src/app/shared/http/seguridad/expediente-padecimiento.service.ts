@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ExpedientePadecimientoDTO } from '@dtos/seguridad/expediente-padecimiento-dto';
 import { ExpedientePadecimientoGridDTO } from '@dtos/seguridad/expediente-padecimiento-grid-dto';
 import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
+import { ExpedientePadecimientoSidebarDTO } from '@dtos/seguridad/expediente-padecimiento-sidebar-dto';
 
 @Injectable({
     providedIn: 'root'

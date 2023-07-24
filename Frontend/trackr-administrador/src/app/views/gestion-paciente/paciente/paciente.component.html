@@ -1,91 +1,177 @@
-<div class="contenedor">
-  <div class="titulo-contenedor">
-    <div>Pacientes</div>
-  </div>
-
-  <h3 class="filter-text">Filtros de Búsqueda de pacientes</h3>
-  <div class="d-flex justify-content-end" style="margin-right: 20px">
-    <div class="d-flex">
-      <input
-        type="text"
-        class="form-control"
-        style="width: 600px"
-        placeholder="Buscar"
-        aria-label="Buscar"
-      />
-      <button class="btn-buscar" type="button">
-        <img
-          class="filter-primario"
-          src="assets/img/svg/ico-18x18-buscar.svg"
-        />
-      </button>
-      <div class="col-md-1"></div>
-      <div class="d-flex align-items-center" style="color: gray">
-        <button class="btn" type="button">
-          <img class="filter-gray" src="assets/img/svg/ico-18x18-Filtros.svg" />
-        </button>
-        <span>Filtros</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="d-flex align-items-center justify-content-between" style="margin-left: 10px;">
-    <div
-      class="contenedor-agregar justify-content-start"
-      (click)="agregar()"
-    >
-      <i class="fas fa-plus-circle"></i><span>Agregar</span>
-    </div>
-    <div class="justify-content-end">
-      <div style="text-align: right">
-        <!-- Botón Vista Cuadrícula  -->
-        <button type="button" class="btn" (click)="isVistaCuadricula = true">
-          <img
-            src="assets/img/svg/ico-18x18-Grid-Bloques.svg"
-            [ngClass]="isVistaCuadricula ? 'filter-primario' : null"
-          />
-        </button>
-  
-        <!-- Botón Vista de Lista -->
+<mat-sidenav-container style="background-color: white;">
+  <mat-sidenav #sidenav mode="side" [opened]="mostrarSidebar" position="end" [fixedInViewport]="true">
+    <div class="container-fluid">
+      <div class="d-flex justify-content-end">
         <button
           type="button"
-          class="btn"
-          (click)="isVistaCuadricula = false"
-          title="Vista de Lista"
+          class="close"
+          aria-label="Close"
+          (click)="toggleSidebar()"
         >
-          <img
-            src="assets/img/svg/ico-18x18-Grid-Lista.svg"
-            [ngClass]="!isVistaCuadricula ? 'filter-primario' : null"
-          />
+          <i class="far fa-times-circle"></i>
         </button>
       </div>
-    </div>
-  </div>
+      <div *ngIf="paciente">
+        <div class="bg-white d-flex align-items-center gap-2">
+          <div class="img-container">
+            <img
+              [src]="
+                paciente.imagenBase64 != undefined || null
+                  ? (paciente.imagenBase64 | urlImagen : paciente.tipoMime)
+                  : 'assets/img/default-user.jpg'
+              "
+              class="rounded"
+            />
+          </div>
+          <div class="bg-white">
+            <div style="font-weight: 550; font-size: medium;">
+              Paciente
+            </div>
+            <div
+              style="
+                font-weight: bolder;
+                font-size: larger;
+              "
+            >
+              {{ paciente.nombreCompleto }}
+            </div>
+          </div>
+        </div>
 
-  <div class="row">
-    <hr class="col-md-12">
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-      <ng-container *ngIf="isVistaCuadricula; else vistaLista">
-        <app-paciente-vista-cuadricula
-          [pacientes]="pacientes"
-          (event)="onGridClick($event)"
+        <div class="text-container">
+          <div class="datos">
+            <div class="font-weight-normal mt-3" *ngIf="paciente.idGenero === 1">
+              Hombre
+            </div>
+            <div class="font-weight-normal mt-3" *ngIf="paciente.idGenero === 2">
+              Mujer
+            </div>
+            <div class="font-weight-bold mt-2" style="font-size: 1.5rem">
+              {{ paciente.edad + " años" }}
+            </div>
+            <div class="font-weight-light mt-2" style="font-size: 0.6rem">
+              <span *ngIf="paciente.colonia">{{ paciente.colonia }}, </span>
+              <span *ngIf="paciente.ciudad">{{ paciente.ciudad }}, </span>
+              <span *ngIf="paciente.estado">{{ paciente.estado }}</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="padecimientos mt-3 bg-white"
+          *ngIf="paciente.padecimientos && paciente.padecimientos.length > 0"
         >
-        </app-paciente-vista-cuadricula>
-      </ng-container>
-      <ng-template #vistaLista>
-        <app-grid-general
-          [headerName]="HEADER_GRID"
-          [data]="pacientes"
-          [children]="columns"
-          (event)="onGridClick($event)"
-        >
-        </app-grid-general>
-      </ng-template>
+          <div class="p-3">
+            <label
+              class="font-weight-bold"
+              style="
+                font-weight: 900;
+                font-size: 1.125rem;
+                color: gray;
+              "
+            >
+              Padecimientos
+            </label>
+            <ul>
+              <li *ngFor="let padecimiento of paciente.padecimientos">
+                <div>
+                  <label
+                    >{{ padecimiento.nombre }} -- Desde
+                    {{ padecimiento.fechaDiagnostico | date : "yyyy" }}</label
+                  >
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+  </mat-sidenav>
 
-<div class="modal-footer"></div>
+  <mat-sidenav-content>
+    <div class="contenedor" style="width: 100%">
+      <div class="titulo-contenedor">
+        <div>Pacientes</div>
+      </div>
+      <h3 class="filter-text">Filtros de Búsqueda de pacientes</h3>
+      <div class="d-flex justify-content-end" style="margin-right: 20px">
+        <div class="d-flex">
+          <input
+            type="text"
+            class="form-control"
+            style="width: 600px"
+            placeholder="Buscar"
+            aria-label="Buscar"
+          />
+          <button class="btn-buscar" type="button">
+            <img
+              class="filter-primario"
+              src="assets/img/svg/ico-18x18-buscar.svg"
+            />
+          </button>
+          <div class="col-md-1"></div>
+          <div class="d-flex align-items-center" style="color: gray">
+            <button class="btn" type="button">
+              <img
+                class="filter-gray"
+                src="assets/img/svg/ico-18x18-Filtros.svg"
+              />
+            </button>
+            <span>Filtros</span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="d-flex align-items-center justify-content-between"
+        style="margin-left: 10px"
+      >
+        <div class="contenedor-agregar justify-content-start" (click)="agregar()">
+          <i class="fas fa-plus-circle"></i><span>Agregar</span>
+        </div>
+        <div class="justify-content-end">
+          <div style="text-align: right">
+            <button type="button" class="btn" (click)="isVistaCuadricula = true">
+              <img
+                src="assets/img/svg/ico-18x18-Grid-Bloques.svg"
+                [ngClass]="isVistaCuadricula ? 'filter-primario' : null"
+              />
+            </button>
+            <button
+              type="button"
+              class="btn"
+              (click)="isVistaCuadricula = false"
+              title="Vista de Lista"
+            >
+              <img
+                src="assets/img/svg/ico-18x18-Grid-Lista.svg"
+                [ngClass]="!isVistaCuadricula ? 'filter-primario' : null"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <hr class="col-md-12" />
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <ng-container *ngIf="isVistaCuadricula; else vistaLista">
+            <app-paciente-vista-cuadricula
+              [pacientes]="pacientes"
+              (event)="onGridClick($event)"
+            >
+            </app-paciente-vista-cuadricula>
+          </ng-container>
+          <ng-template #vistaLista>
+            <app-grid-general
+              [headerName]="HEADER_GRID"
+              [data]="pacientes"
+              [children]="columns"
+              (event)="onGridClick($event)"
+            >
+            </app-grid-general>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
