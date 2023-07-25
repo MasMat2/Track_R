@@ -1,7 +1,5 @@
-import { Location } from "@angular/common";
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgControl } from '@angular/forms';
-import { Router } from '@angular/router';
 import { ITreeOptions, TREE_ACTIONS } from '@circlon/angular-tree-component';
 import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
 import { EntidadService } from '@http/gestion-entidad/entidad.service';
@@ -9,10 +7,11 @@ import { SeccionService } from '@http/gestion-entidad/seccion.service';
 import { Entidad } from '@models/gestion-entidad/entidad';
 import { EntidadEstructura } from '@models/gestion-entidad/entidad-estructura';
 import { Seccion } from '@models/gestion-entidad/seccion';
-import { CrudFormularioBase } from '@sharedComponents/crud/components/crud-formulario-base';
+import { CrudFormularioBase } from '@sharedComponents/crud/crud-base/crud-formulario-base';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { GeneralConstant } from '@utils/general-constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Observable, map } from "rxjs";
 import { SeccionCampoModalComponent } from './seccion-campo-modal/seccion-campo-modal.component';
 
 @Component({
@@ -110,10 +109,8 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
     private bsModalRef: BsModalRef,
 		private bsModalService: BsModalService,
     mensajeService: MensajeService,
-    router: Router,
-    location: Location
   ) {
-    super(entidadService, mensajeService, router, location);
+    super(mensajeService);
   }
 
   async ngOnInit(): Promise<void> {
@@ -124,7 +121,7 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
   // #region Consultas
   private async consultarArbol(): Promise<EntidadEstructura[]> {
     const arbol = await this.entidadEstructuraService
-      .consultarArbol(this.idEntidad)
+      .consultarArbol(this.idEntidad!)
       .toPromise();
 
     return arbol ?? [];
@@ -140,7 +137,7 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
 
   private async consultarSelector(): Promise<EntidadEstructura[]> {
     const estructuras = await this.entidadEstructuraService
-      .consultarPorEntidadParaSelector(this.idEntidad)
+      .consultarPorEntidadParaSelector(this.idEntidad!)
       .toPromise();
 
     return estructuras ?? [];
@@ -238,14 +235,14 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
     }
 
     this.disableAgregar = true;
-    this.disableSubmit = true;
+    this.submitting = true;
 
     if (this.esNuevaPestana)
       await this.agregarNuevoNodo();
     else
       await this.agregarNodosSeleccionados();
 
-    this.disableSubmit = false;
+    this.submitting = false;
     this.elementosSeleccionados = [];
     this.actualizarBotonAgregar();
   }
@@ -301,7 +298,7 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
   }
 
   public async eliminarEntidadEstructura(jerarquia: EntidadEstructura): Promise<void> {
-    if (this.disableSubmit)
+    if (this.submitting)
       return;
 
     let cancel: boolean = false;
@@ -320,7 +317,7 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
       return;
 
     this.disableAgregar = true;
-    this.disableSubmit = true;
+    this.submitting = true;
 
     this.entidadEstructuraService.eliminar(jerarquia.idEntidadEstructura).toPromise()
       .then(async (data) => {
@@ -330,18 +327,30 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
       .catch((error) => { })
       .finally(() => {
         this.disableAgregar = false;
-        this.disableSubmit = false;
+        this.submitting = false;
       });
   }
   // #endregion
 
   public actualizarBotonAgregar(): void {
-    if (this.disableSubmit)
+    if (this.submitting)
       return;
 
     if (this.esNuevaPestana)
       this.disableAgregar = false;
     else
       this.disableAgregar = this.elementosSeleccionados.length <= 0;
+  }
+
+  protected agregar(entidad: Entidad): Observable<void> {
+    return this.entidadService.agregar(entidad).pipe(map((data) => undefined));
+  }
+
+  protected editar(entidad: Entidad): Observable<void> {
+    return this.entidadService.editar(entidad);
+  }
+
+  protected consultar(idEntidad: number): Observable<Entidad> {
+    return this.entidadService.consultar(idEntidad);
   }
 }

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdministradorAuthGuard } from 'src/app/auth/administrador-auth-guard.service';
 import { CodigoAcceso } from 'src/app/shared/utils/codigo-acceso';
+import { AccesoAyudaComponent } from './acceso-ayuda/acceso-ayuda.component';
 
 const routes: Routes = [
   {
@@ -47,6 +48,19 @@ const routes: Routes = [
           import('../acceso/jerarquia-acceso/jerarquia-acceso.module').then(
             (m) => m.JerarquiaAccesoModule
           )
+      },
+      {
+        path: 'ayuda-seccion',
+        loadChildren: () =>
+          import('../acceso/ayuda-seccion/ayuda-seccion.module').then(
+            (m) => m.AyudaSeccionModule
+          )
+      },
+      {
+        path: 'acceso-ayuda',
+        component: AccesoAyudaComponent,
+        canActivate: [AdministradorAuthGuard],
+        // TODO: Accesos de Agregar Ayuda
       }
     ]
   }

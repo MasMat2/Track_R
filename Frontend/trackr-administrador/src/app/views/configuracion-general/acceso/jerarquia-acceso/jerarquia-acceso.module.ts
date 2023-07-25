@@ -6,7 +6,7 @@ import { SharedModule } from "src/app/shared/shared.module";
 import { JerarquiaAccesoFormularioModule } from "./jerarquia-acceso-formulario/jerarquia-acceso-formulario.module";
 import { JerarquiaAccesoComponent } from "./jerarquia-acceso.component";
 import { JerarquiaAccesoRoutingModule } from "./jerarquia-acceso.routing.module";
-import { CatalogoBaseModule } from "@sharedComponents/crud/components/catalogo-base/catalogo-base.module";
+import { CatalogoBaseModule } from "@sharedComponents/crud/catalogo-base/catalogo-base.module";
 
 @NgModule({
     imports: [

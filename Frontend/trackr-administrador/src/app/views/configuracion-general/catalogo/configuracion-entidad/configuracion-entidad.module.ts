@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { EntidadService } from "@http/gestion-entidad/entidad.service";
-import { CatalogoBaseModule } from "@sharedComponents/crud/components/catalogo-base/catalogo-base.module";
+import { CatalogoBaseModule } from "@sharedComponents/crud/catalogo-base/catalogo-base.module";
 import { CollapseModule } from "ngx-bootstrap/collapse";
 import { ModalModule } from "ngx-bootstrap/modal";
 import { DirectiveModule } from "src/app/shared/directives/directive.module";

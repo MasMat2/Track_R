@@ -1,15 +1,16 @@
 <app-catalogo-base
-    [catalogoConfig]="catalogoConfig"
-    [crudConfig]="crudConfig"
-    [elementos]="elementos"
-    [tieneAccesoAgregar]="tieneAccesoAgregar"
-    (agregarClick)="agregar()"
-    (gridClick)="onGridClick($event)"
+  titulo="Catálogo de Configuración de Entidades"
+  [columns]="columns"
+  [crudConfig]="crudConfig"
+  [elementos$]="registros$"
+  [tieneAccesoAgregar$]="tieneAccesoAgregar$"
+  (agregarClick)="agregar()"
+  (gridClick)="onGridClick($event)"
 >
 </app-catalogo-base>
 
 <div class="modal-footer">
-    <div class="text-center">
-        <button class="btn btn-primario" (click)="actualizar()">Actualizar</button>
-    </div>
+  <div class="text-center">
+    <button class="btn btn-primario" (click)="actualizar()">Actualizar</button>
+  </div>
 </div>

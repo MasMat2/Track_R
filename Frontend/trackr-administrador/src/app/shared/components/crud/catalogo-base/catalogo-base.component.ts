@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
-import { ICrudConfig } from "../../crud-config";
-import { ICatalogoConfig } from "../../catalogo-config";
 import { GridGeneralComponent } from "@sharedComponents/grid-general/grid-general.component";
+import { ColDef, GridOptions } from "ag-grid-community";
+import { Observable } from "rxjs";
+import { ICrudConfig } from "../crud-base/crud-config";
 
 @Component({
     selector: "app-catalogo-base",
@@ -14,10 +15,12 @@ export class CatalogoBaseComponent implements OnInit {
     @ViewChild('grid', { static: false }) public grid: GridGeneralComponent;
 
     // Variables de Entrada
-    @Input() public catalogoConfig: ICatalogoConfig;
+    @Input() public columns: ColDef[];
+    @Input() public titulo: string;
+    @Input() public gridOptions?: GridOptions;
     @Input() public crudConfig: ICrudConfig;
-    @Input() public elementos: any[] = [];
-    @Input() public tieneAccesoAgregar: boolean = false;
+    @Input() public elementos$: Observable<any[]>;
+    @Input() public tieneAccesoAgregar$: Observable<boolean>;
 
     // Eventos
     @Output() public gridClick = new EventEmitter<{accion: string, data: any}>();
@@ -30,7 +33,6 @@ export class CatalogoBaseComponent implements OnInit {
 
     public disableEdit: boolean = true;
     public disableDelete: boolean = true;
-
 
     constructor(
     ) { }

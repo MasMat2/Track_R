@@ -1,10 +1,10 @@
 
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { MunicipioSelectorDto } from '@dtos/catalogo/municipio-selector-dto';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { MunicipioService } from '@http/catalogo/municipio.service';
 import { CodigoPostal } from '@models/catalogo/codigo-postal';
-import { Municipio } from '@models/catalogo/municipio';
 import { FormularioService } from '@services/formulario.service';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { GeneralConstant } from '@utils/general-constant';
@@ -27,7 +27,7 @@ export class CodigoPostalFormularioComponent implements OnInit {
   public codigoPostal= new CodigoPostal();
 
   public idMunicipio: number;
-  public municipioList: Municipio[] = [];
+  public municipioList: MunicipioSelectorDto[] = [];
 
   constructor(
     public bsModalRef: BsModalRef,
@@ -42,7 +42,7 @@ export class CodigoPostalFormularioComponent implements OnInit {
   }
 
   public consultarMunicipio(): void  {
-    this.municipioService.consultarTodosParaSelector().subscribe((data) => {
+    this.municipioService.consultarParaSelector().subscribe((data) => {
       this.municipioList = data;
 
       if (this.codigoPostal.idMunicipio > 0) {

@@ -1,0 +1,192 @@
+<div class="contenedor">
+  <div class="titulo-contenedor">
+    Agregar Ayuda Contextual: {{ acceso.nombre}}
+    <button *ngIf="esModal" type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
+      <i class="far fa-times-circle"></i>
+    </button>
+  </div>
+  <div class="cuerpo-contenedor">
+    <form
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      novalidate="novalidate"
+    >
+
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <label class="label-input required-label">URL Vídeo</label>
+            <div>
+              <input
+                #urlVideoAyuda="ngModel"
+                [(ngModel)]="acceso.urlVideoAyuda"
+                name="urlVideoAyuda"
+                class="form-control"
+                type="text"
+                maxlength="500"
+                autocomplete="off"
+              />
+            </div>
+            <div *ngIf="urlVideoAyuda.errors?.['required'] && urlVideoAyuda.touched" class="error">El URL de Vídeo es requerido</div>
+          </div>
+        </div>
+        <div class="col-md-4" >
+          <button type="button" class="btn-primario ml-3" style="margin-top:5%" (click)="agregarUrl()">Guardar</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12"><label class="subtitulo"></label></div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="label-input required-label">Etiqueta del Campo</label>
+            <div>
+              <input
+                #etiquetaCampo="ngModel"
+                [(ngModel)]="accesoAyuda.etiquetaCampo"
+                name="etiquetaCampo"
+                class="form-control"
+                type="text"
+                maxlength="100"
+                autocomplete="off"
+              />
+            </div>
+            <div *ngIf="etiquetaCampo.errors?.['required'] && etiquetaCampo.touched" class="error">La etiqueta de campo es requerida</div>
+          </div>
+        </div>
+        <div class="col-md-10">
+          <div class="form-group">
+            <label class="label-input required-label">Descripcion</label>
+            <div>
+              <input
+                #descripcionAyuda="ngModel"
+                [(ngModel)]="accesoAyuda.descripcionAyuda"
+                name="descripcionAyuda"
+                class="form-control"
+                type="text"
+                [required]="true"
+                maxlength="500"
+                autocomplete="off"
+              />
+            </div>
+            <div *ngIf="descripcionAyuda.errors?.['required'] && descripcionAyuda.touched" class="error">La descripción de ayuda es requerida</div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="label-input required-label">Orden</label>
+            <div>
+              <input
+                #orden="ngModel"
+                [(ngModel)]="accesoAyuda.orden"
+                name="orden"
+                class="form-control"
+                type="number"
+                appPermitirSoloNumeros
+                [permitirDecimales]="false"
+                [longitud]="3"
+                [value]="accesoAyuda.orden"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Sección</label>
+            <div>
+              <ng-select
+                #seccionSelect="ngModel"
+                name="seccionName"
+                bindLabel="nombre"	
+                bindValue="idAyudaSeccion"
+                [items]="ayudaSeccionList"
+                [(ngModel)]="accesoAyuda.idAyudaSeccion"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+          <div class="row">
+            <div class="col-sm-12"><label class="subtitulo">Imagen (25 x 25 Px)</label></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div>
+                <div>
+                  <input
+                    type="file"
+                    id="imagen"
+                    name="imagen"
+                    type="file"
+                    autocomplete="off"
+                    accept="image/jpeg,image/gif,image/png"
+                    style="display: none !important"
+                    (change)="fileChangeImagen($event)"
+                  />
+                  <button
+                      onclick="document.getElementById('imagen').click()"
+                      type="button"
+                      class="btn-terceario"
+                    >
+                      Buscar
+                    </button>
+                  <label 
+                    class="custom-file-label" 
+                    for="inputGroupFile04">{{
+                    this.accesoAyuda.nombreArchivo
+                  }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row image-box" *ngIf="accesoAyuda.imagen != null">
+            <div class="col-md-2">
+              <img [src]="transform(this.accesoAyuda.imagen)" alt="Imagen_Hotel" width="25px" />
+            </div>
+            <div class="col-md-3 center" style="word-break:break-all">
+              {{ accesoAyuda.nombreArchivo }}
+            </div>
+          </div>
+          <div class="text-center mt-3">
+            <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar</button>
+            <button type="submit" class="btn-primario ml-3" [disabled]="btnSubmit">Guardar</button>
+          </div>
+          <div class="row mt-4">
+            <div class="col-md-12">
+              <table class="grid-ayudas">
+                <tr>
+                  <th style="width: 100px; text-align: center">Imagen</th>
+                  <th style="width: 250px">Sección</th>
+                  <th>Descripción</th>
+                  <th width="40px"></th>
+                  <th width="40px"></th>
+                </tr>
+                <tr *ngFor="let accesoAyuda of accesoAyudaList">
+                  <td style="text-align: center">
+                    <div *ngIf="accesoAyuda.imagen != null">
+                      <img [src]="transform(accesoAyuda.imagen)" height="25px" title="Inicio" />
+                    </div>
+                  </td>
+                  <td>{{ accesoAyuda.nombreAyudaSeccion}}</td>
+                  <td>{{ accesoAyuda.descripcionAyuda }}</td>
+                  <td>
+                    <img (click)="onClickEditar(accesoAyuda.idAccesoAyuda)" src="assets/img/svg/ico-15x15-Editar-1.svg" height="20px" title="Inicio" />
+                  </td>
+                  <td>
+                    <img (click)="eliminarAccesoImagen(accesoAyuda)" src="assets/img/svg/ico-15x15-Eliminar.svg" height="20px" title="Inicio" />
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+    </form>
+  </div>
+</div>

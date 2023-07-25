@@ -37,6 +37,17 @@
         [item]="{ name: 'Notificaciones', icon: 'fa-regular fa-bell', url: 'administrador', claveTipoAcceso: '' }"
       >
       </app-menu-item>
+      
+
+      <button
+        *ngIf="ayudas.length > 0 || acceso?.urlVideoAyuda"
+        class="button-item d-flex justify-content-center"
+        mat-button
+        (click)="consultarAyuda()"
+        routerLinkActive="active"
+      >
+        <i class="item mr-3 fas fa-question-circle"></i>
+      </button>
     </div>
   </mat-sidenav>
 

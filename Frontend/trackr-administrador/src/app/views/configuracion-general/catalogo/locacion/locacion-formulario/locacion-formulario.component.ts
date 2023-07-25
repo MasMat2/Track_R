@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
+import { MunicipioSelectorDto } from '@dtos/catalogo/municipio-selector-dto';
 import { BancoService } from '@http/catalogo/banco.service';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { CompaniaService } from '@http/catalogo/compania.service';
@@ -17,12 +19,10 @@ import { UsuarioService } from '@http/seguridad/usuario.service';
 import { Banco } from '@models/catalogo/banco';
 import { CodigoPostal } from '@models/catalogo/codigo-postal';
 import { Compania } from '@models/catalogo/compania';
-import { Estado } from '@models/catalogo/estado';
 import { Hospital } from '@models/catalogo/hospital';
 import { HospitalLogotipo } from '@models/catalogo/hospital-logotipo';
 import { Lada } from '@models/catalogo/lada';
 import { ListaPrecio } from '@models/catalogo/lista-precio';
-import { Municipio } from '@models/catalogo/municipio';
 import { Pais } from '@models/catalogo/pais';
 import { RegimenFiscal } from '@models/catalogo/regimen-fiscal';
 import { Almacen } from '@models/inventario/almacen';
@@ -36,7 +36,6 @@ import { Observable, Observer, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { CertificadoConfiguracionComponent } from '../certificado-configuracion/certificado-configuracion.component';
-import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
 
 @Component({
   selector: 'app-locacion-formulario',
@@ -68,7 +67,7 @@ export class HospitalFormularioComponent implements OnInit {
   public companiaList: Compania[] = [];
   public listaPrecioList: ListaPrecio[] = [];
   public ladaList: Lada[] = [];
-  public municipioList: Municipio[] = [];
+  public municipioList: MunicipioSelectorDto[] = [];
   public codigoPostalList: CodigoPostal[] = [];
   public almacenList: Almacen[] = [];
 
