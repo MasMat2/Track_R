@@ -1,0 +1,101 @@
+<div class="container"> 
+  <div class="subseccion">
+    <div>Recomendaciones</div>
+  </div>
+<form
+  #formulario="ngForm"
+  (ngSubmit)="enviarFormulario(formulario)"
+  (keydown.enter)="$event.preventDefault()"
+  novalidate="novalidate"
+>
+  <div class="modal-content">
+    <div class="container">
+        <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="form-group">
+              <label style="color: gray;" >Recomendacion</label>
+              <div>
+                <textarea
+                  #descripcion="ngModel"
+                  [(ngModel)]="recomendacion.descripcion"
+                  name="descripcion"
+                  class="form-control-textarea"
+                  type="text"
+                  maxlength="800"
+                  autocomplete="off"
+                  style="width: 100%;"
+                  rows="4"
+                  required
+                ></textarea>
+                <div *ngIf="(descripcion.errors?.['required'] && descripcion.touched )" class="error">
+                  La descripcion es requerida
+                </div>
+              </div>
+            </div>
+          </div>
+
+      <div class="col-md-2 justify-content-between align-items-center ">
+          <label class="label-input required-label">Fecha</label>
+        <div>
+          <input
+            [(ngModel)] = "recomendacion.fecha"
+            name="fechaAlta"
+            class="form-control"
+            type="text"
+            maxlength="50"
+            autocomplete="off"
+            required
+            [disabled]="true"
+            bsDatepicker
+          />
+
+        </div>
+      </div>
+    
+      <div class="col-md-2 align-items-center d-flex contenedor-agregar" >
+        <label class="label-input required-label">&nbsp;</label>
+        
+        <ng-template [ngIf]="esAgregar" [ngIfElse]="botonEditar" >
+          <button
+           type="submit"
+           [disabled]="submiting"
+           class="btn"
+          >
+            <i class="fas fa-plus-circle" style="font-size: 24px;"></i> 
+          </button>
+        </ng-template>
+       
+        <ng-template #botonEditar class="button">
+          <button 
+          [disabled]="submiting"
+          type="submit"
+          class="btn"
+          >
+            <img src="assets/img/svg/ico-15x15-Editar-1.svg" style="width: 24px; height: 24px;" (click)="editar()" >
+          </button>
+        </ng-template>
+      </div>
+    
+
+    </div> 
+  </div>
+</div>
+</form>
+ 
+<div class="row">
+  <div class="col-md-12">
+    <div style="color: gray;">Bitacora Recomendaciones</div>
+
+          <app-grid-general 
+          #gridRecomendacion
+          [headerName]="HEADER_GRID"
+          [children]="columns"
+          [gridOptions]="gridOptions"
+          [data]="recomendacionesList$ | async"
+          (event)="onGridClick($event)"
+          >
+          </app-grid-general>
+
+    </div>
+  </div>
+</div>

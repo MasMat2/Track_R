@@ -1,10 +1,11 @@
-import { TemplateRef } from "@angular/core";
+import { TemplateRef, Type } from "@angular/core";
 
 export class ExternalTemplate {
 
-    template: TemplateRef<any>;
+    component: Type<any>;
     label: string;
     enabled: boolean;
+    args: { [key: string]: any };
 
     externalSubmit?: boolean = false;
     submitControl?: boolean;

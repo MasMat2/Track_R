@@ -2,20 +2,29 @@ import { ExpedienteTrackrService } from '@http/seguridad/expediente-trackr.servi
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-grid-dto';
-import { UsuarioService } from '@http/seguridad/usuario.service';
 import { EncryptionService } from '@services/encryption.service';
 import { GeneralConstant } from '@utils/general-constant';
 import { lastValueFrom } from 'rxjs';
 
+import { UsuarioExpedienteSidebarDTO } from '@dtos/seguridad/usuario-expediente-sidebar-dto';
+
 @Component({
   selector: 'app-paciente',
   templateUrl: './paciente.component.html',
-  styleUrls: ['./paciente.component.scss']
+  styleUrls: ['./paciente.component.scss'],
 })
 export class PacienteComponent implements OnInit {
   protected pacientes: UsuarioExpedienteGridDTO[] = [];
   protected isVistaCuadricula: boolean = true;
-  protected patologias: string[] = [];
+  protected mostrarSidebar: boolean = false;
+  anchoContenedor: string = '100%';
+  paciente: UsuarioExpedienteSidebarDTO = {
+    idUsuario: 0,
+    nombreCompleto: '',
+    genero: '',
+    edad: '',
+    padecimientos: [],
+  };
 
   // App Grid View
   public HEADER_GRID = 'Pacientes';
@@ -24,7 +33,10 @@ export class PacienteComponent implements OnInit {
       action: GeneralConstant.GRID_ACCION_EDITAR,
       title: 'Editar',
       cellRendererSelector: (params: any) => {
-        const component = { component: 'actionButton', params: { disabled: false } };
+        const component = {
+          component: 'actionButton',
+          params: { disabled: false },
+        };
         return component;
       },
     },
@@ -36,35 +48,49 @@ export class PacienteComponent implements OnInit {
       action: GeneralConstant.GRID_ACCION_ELIMINAR,
       title: 'Eliminar',
       cellRendererSelector: (params: any) => {
-        const component = { component: 'actionButton', params: { disabled: false } };
+        const component = {
+          component: 'actionButton',
+          params: { disabled: false },
+        };
         return component;
       },
     },
     GeneralConstant.CONFIG_COLUMN_ACTION
   );
 
-
   public columns = [
     { headerName: 'Paciente', field: 'nombreCompleto', minWidth: 150 },
     this.columnaEditar,
-    this.columnaEliminar
+    this.columnaEliminar,
   ];
   constructor(
     private router: Router,
     private encryptionService: EncryptionService,
-    private usuarioService: UsuarioService,
     private expedienteTrackrService: ExpedienteTrackrService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.consultarPacientes();
   }
 
-  protected descargarExcel(): void {
+  protected descargarExcel(): void {}
+
+  protected ver(idUsuario: number): void {
+    this.mostrarSidebar = true;
+
+    this.consultarParaSidebar(idUsuario);
   }
 
-  protected ver(gridData: { accion: string; event: UsuarioExpedienteGridDTO }): void {
+  toggleSidebar() {
+    this.mostrarSidebar = false;
+  }
 
+  protected consultarParaSidebar(idUsuario: number) {
+    this.expedienteTrackrService
+      .consultaParaSidebar(idUsuario)
+      .subscribe((data) => {
+        this.paciente = data;
+      });
   }
 
   /**
@@ -73,11 +99,14 @@ export class PacienteComponent implements OnInit {
    * @param idUsuario del usuario seleccionado
    */
   protected editar(idUsuario: any): void {
-    this.router.navigate(['/administrador/gestion-paciente/paciente/expediente-formulario'], {
-      queryParams: this.encryptionService.generateURL({
-        i: idUsuario.toString(),
-      })
-    });
+    this.router.navigate(
+      ['/administrador/gestion-paciente/paciente/expediente-formulario'],
+      {
+        queryParams: this.encryptionService.generateURL({
+          i: idUsuario.toString(),
+        }),
+      }
+    );
   }
 
   /**
@@ -85,11 +114,13 @@ export class PacienteComponent implements OnInit {
    * debido a que no se pasa ningun parametro en la URL
    */
   protected agregar(): void {
-    this.router.navigate(['/administrador/gestion-paciente/paciente/expediente-formulario']);
+    this.router.navigate([
+      '/administrador/gestion-paciente/paciente/expediente-formulario',
+    ]);
   }
 
   protected eliminar(data: any): void {
-    this.expedienteTrackrService.eliminar(data.idExpediente)
+    this.expedienteTrackrService.eliminar(data.idExpediente);
   }
 
   /**
@@ -97,10 +128,11 @@ export class PacienteComponent implements OnInit {
    * aquellos con clave de perfil PACIENTE.
    */
   protected consultarPacientes(): void {
-    lastValueFrom(this.expedienteTrackrService.consultarParaGrid())
-    .then((pacientes: UsuarioExpedienteGridDTO[]) => {
-      this.pacientes = pacientes;
-    });
+    lastValueFrom(this.expedienteTrackrService.consultarParaGrid()).then(
+      (pacientes: UsuarioExpedienteGridDTO[]) => {
+        this.pacientes = pacientes;
+      }
+    );
   }
 
   /**
@@ -111,7 +143,8 @@ export class PacienteComponent implements OnInit {
       this.editar(gridData.data.idUsuario);
     } else if (gridData.accion === GeneralConstant.GRID_ACCION_ELIMINAR) {
       this.eliminar(gridData.data);
+    } else if ((gridData.accion = GeneralConstant.GRID_ACCION_VER)) {
+      this.ver(gridData.data.idUsuario);
     }
   }
-
 }

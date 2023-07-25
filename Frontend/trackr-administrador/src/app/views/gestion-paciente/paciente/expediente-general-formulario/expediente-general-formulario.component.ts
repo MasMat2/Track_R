@@ -1,7 +1,7 @@
 import { EntidadEstructuraService } from '../../../../shared/http/gestion-entidad/entidad-estructura.service';
 import { BusquedaExpedienteComponent } from '../busqueda-expediente/busqueda-expediente.component';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExpedientePadecimientoDTO } from '@dtos/seguridad/expediente-padecimiento-dto';

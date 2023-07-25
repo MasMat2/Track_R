@@ -11,10 +11,15 @@ namespace TrackrAPI.Services.GestionEntidad
     public class EntidadEstructuraTablaValorService
     {
         private readonly IEntidadEstructuraTablaValorRepository entidadEstructuraTablaValorRepository;
+        private readonly ISeccionCampoRepository seccionCampoRepository;
 
-        public EntidadEstructuraTablaValorService(IEntidadEstructuraTablaValorRepository entidadEstructuraTablaValorRepository)
+        public EntidadEstructuraTablaValorService(
+            IEntidadEstructuraTablaValorRepository entidadEstructuraTablaValorRepository,
+            ISeccionCampoRepository seccionCampoRepository
+            )
         {
             this.entidadEstructuraTablaValorRepository = entidadEstructuraTablaValorRepository;
+            this.seccionCampoRepository = seccionCampoRepository;
         }
 
         public List<RegistroTablaDto> ConsultarRegistroTablaPorTabulacion(int idEntidadEstructura, int idTabla)
@@ -153,6 +158,41 @@ namespace TrackrAPI.Services.GestionEntidad
             }
 
             ts.Complete();
+        }
+
+        public IEnumerable<ValoresFueraRangoGridDTO> ConsultarValores(int idPadecimiento, int idUsuario, bool? fueraRango)
+        {
+            var columnas = this.seccionCampoRepository.ConsultarSeccionesPadecimientos(idPadecimiento);
+            var clavesCampos = columnas.Select(c => c.Clave).ToList();
+
+            var valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorCampos(idUsuario, clavesCampos, fueraRango);
+
+            var padecimientos = new List<ValoresFueraRangoGridDTO>();
+
+            foreach (var valor in valores)
+            {
+                var columnaCorrespondiente = columnas.FirstOrDefault(c => c.Clave == valor.ClaveCampo);
+
+                if (columnaCorrespondiente != null)
+                {
+                    string valorReferencia = "";
+                    if(columnaCorrespondiente.ValorMinimo != null || columnaCorrespondiente.ValorMaximo != null)
+                    {
+                        valorReferencia = columnaCorrespondiente.ValorMinimo.ToString() + " - " + columnaCorrespondiente.ValorMaximo.ToString();
+                    }
+                    padecimientos.Add(new ValoresFueraRangoGridDTO
+                    {
+                        NombrePadecimiento = valor.IdEntidadEstructuraNavigation.Nombre,
+                        Variable = columnaCorrespondiente.Variable,
+                        Parametro = columnaCorrespondiente.Parametro,
+                        FechaHora = valor.FechaMuestra,
+                        ValorRegistrado = valor.Valor,
+                        ValorReferencia = valorReferencia
+                    });
+                }
+            }
+
+            return padecimientos;
         }
     }
 }

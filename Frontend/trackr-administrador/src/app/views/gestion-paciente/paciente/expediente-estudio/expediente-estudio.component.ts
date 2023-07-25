@@ -2,7 +2,7 @@ import { GeneralConstant } from '@utils/general-constant';
 import { first } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ExpedienteEstudioGridDTO } from '@dtos/gestion-expediente/expediente-estudio-grid-dto';
+import { ExpedienteEstudioGridDTO } from '@dtos/gestion-expediente/expediente-recomendacion/expediente-estudio-grid-dto';
 import { ExpedienteEstudioService } from '@http/gestion-expediente/expediente-estudio.service';
 import { ExpedienteEstudio } from '@models/gestion-expediente/expediente-estudio';
 import { EncryptionService } from '@services/encryption.service';
@@ -33,7 +33,6 @@ export class ExpedienteEstudioComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.expedienteEstudioService.agregar().subscribe();
     this.obtenerParametrosURL();
   }
 

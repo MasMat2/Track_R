@@ -8,15 +8,16 @@
   <button
     class="button-item"
     mat-button
+    style="height: 60px;"
     [ngClass]="{ 'active': menuTrigger.menuOpen }"
     (click)="menuTrigger.openMenu()"
     routerLinkActive="active"
   >
-    <div class="d-flex justify-content-center w-100">
+    <div class="d-flex justify-content-center align-items-center w-100">
       <i class="item mr-3 {{ item.icon }}"></i>
+      <i class="fas fa-caret-right" style="color: #ffffff;"></i>
     </div>
 
-    <i class="fas fa-caret-right" style="position: absolute; right: 20px; color: #ffffff;"></i>
 
     <div
       #menuTrigger="matMenuTrigger"
@@ -42,6 +43,7 @@
     class="button-item d-flex justify-content-center"
     mat-button
     [routerLink]="item.url"
+    style="height: 60px;"
     routerLinkActive="active"
   >
     <i class="item mr-3 {{ item.icon }}"></i>
@@ -49,13 +51,15 @@
 </ng-template>
 
 <ng-template #accesoExterno>
-  <a
+  <button
+    type="button"
     class="button-item d-flex justify-content-center"
     mat-button
-    [href]="item.url"
+    style="height: 60px;"
+    [routerLink]="item.url"
   >
     <i class="item mr-3 {{ item.icon }}"></i>
-  </a>
+  </button>
 </ng-template>
 
 

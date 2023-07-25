@@ -1,12 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { TableModule } from 'primeng/table';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { ExpedienteEstudioComponent } from './expediente-estudio/expediente-estudio.component';
+import { DashboardPadecimientoModule } from './dashboard-padecimiento/dashboard-padecimiento.module';
 import { ExpedienteEstudioModule } from './expediente-estudio/expediente-estudio.module';
 import { ExpedienteFormularioComponent } from './expediente-formulario/expediente-formulario.component';
 import { ExpedienteFormularioModule } from './expediente-formulario/expediente-formulario.module';
+import { ExpedientePadecimientoModule } from './expediente-padecimiento/expediente-padecimiento.module';
+import { ExpedienteTratamientoModule } from './expediente-tratamiento/expediente-tratamiento.module';
 import { PacienteRoutingModule } from './paciente-routing.module';
 import { PacienteVistaCuadriculaComponent } from './paciente-vista-cuadricula/paciente-vista-cuadricula.component';
 import { PacienteComponent } from './paciente.component';
@@ -15,6 +19,7 @@ import { PacienteComponent } from './paciente.component';
   declarations: [
     PacienteComponent,
     PacienteVistaCuadriculaComponent,
+
   ],
   imports: [
     SharedModule,
@@ -23,10 +28,15 @@ import { PacienteComponent } from './paciente.component';
     TableModule,
     PacienteRoutingModule,
     ExpedienteFormularioModule,
-    ExpedienteEstudioModule
+    ExpedienteEstudioModule,
+    DashboardPadecimientoModule,
+    ExpedientePadecimientoModule,
+    MatSidenavModule,
+    MatIconModule,
+    ExpedienteTratamientoModule
   ],
   entryComponents: [
-    PacienteVistaCuadriculaComponent, 
+    PacienteVistaCuadriculaComponent,
     ExpedienteFormularioComponent,
   ],
   exports: [],

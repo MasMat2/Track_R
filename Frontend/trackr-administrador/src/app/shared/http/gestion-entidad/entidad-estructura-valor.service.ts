@@ -9,7 +9,7 @@ export class EntidadEstructuraValorService {
   constructor(public http: HttpClient) {}
 
   consultarPorTabulacion(idEntidadEstructura: number, idTabla: number) {
-     return this.http.get<EntidadEstructuraValor[]>(this.dataUrl + `consultarPorTabulacion/${idEntidadEstructura},${idTabla}`);
+    return this.http.get<EntidadEstructuraValor[]>(this.dataUrl + `consultarPorTabulacion/${idEntidadEstructura},${idTabla}`);
   }
 
   guardar(entidadEstructuraValorList: any[]) {

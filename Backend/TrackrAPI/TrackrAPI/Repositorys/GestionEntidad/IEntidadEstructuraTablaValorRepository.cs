@@ -9,5 +9,6 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         public IEnumerable<EntidadEstructuraTablaValor> ConsultarPorPestanaSeccion(int idEntidadEstructura, int idTabla);
         public IEnumerable<EntidadEstructuraTablaValor> ConsultarPorNumeroRegistro(int idEntidadEstructura, int idTabla, int numeroRegistro);
         int ConsultarUltimoRegistro(int idEntidadEstructura, int idTabla);
+        public IEnumerable<EntidadEstructuraTablaValor> ConsultarValoresPorCampos(int idExpediente, IEnumerable<string> claveCampos, bool? fueraRango);
     }
 }

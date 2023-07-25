@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ExpedienteEstudioGridDTO } from '@dtos/gestion-expediente/expediente-estudio-grid-dto';
+import { ExpedienteEstudioGridDTO } from '@dtos/gestion-expediente/expediente-recomendacion/expediente-estudio-grid-dto';
 import { ExpedienteEstudio } from '@models/gestion-expediente/expediente-estudio';
 
 @Injectable({
