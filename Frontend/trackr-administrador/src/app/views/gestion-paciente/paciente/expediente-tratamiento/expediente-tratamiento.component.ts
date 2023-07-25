@@ -1,12 +1,11 @@
-import { GeneralConstant } from '@utils/general-constant';
 import { first } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ExpedienteTratamientoGridDTO } from '@dtos/gestion-expediente/expediente-tratamiento-grid-dto';
+import { ExpedienteTratamientoGridDto } from '@dtos/gestion-expediente/expediente-tratamiento-grid-dto';
 import { ExpedienteTratamientoService } from '@http/gestion-expediente/expediente-tratamiento.service';
-import { ExpedienteTratamiento } from '@models/gestion-expediente/expediente-tratamiento';
 import { EncryptionService } from '@services/encryption.service';
-import { lastValueFrom } from 'rxjs';
+import { Observable, lastValueFrom } from 'rxjs';
+import { ColDef } from 'ag-grid-community';
 
 @Component({
   selector: 'app-expediente-tratamiento',
@@ -15,12 +14,22 @@ import { lastValueFrom } from 'rxjs';
 })
 export class ExpedienteTratamientoComponent implements OnInit {
 
-  protected expedienteTratamientoList: ExpedienteTratamientoGridDTO[] = [];
-  protected tratamiento: ExpedienteTratamiento;
-  protected urlImagen = "";
-  // protected pdfSrc: any;
-  protected idUsuario: number;
+  protected expedienteTratamientoList: ExpedienteTratamientoGridDto[] = [];
+  private idUsuario: number;
 
+    // Grid
+  protected readonly HEADER_GRID: string = 'Tratamientos';
+  protected tratamientos$: Observable<ExpedienteTratamientoGridDto[]>;
+  protected columns: ColDef[] = [
+    { headerName: 'Núm.', field: 'idExpedienteTratamiento', minWidth: 150 },
+    { headerName: 'Farmaco', field: 'farmaco', minWidth: 150 },
+    { headerName: 'Cantidad', field: 'cantidad', minWidth: 150 },
+    { headerName: 'Unidad', field: 'unidad', minWidth: 150 },
+    { headerName: 'Indicaciones', field: 'indicaciones', minWidth: 150 },
+    { headerName: 'Padecimiento', field: 'padecimiento', minWidth: 150 },
+    { headerName: 'Días', field: 'fechaRegistro', minWidth: 150 },
+    { headerName: 'Horario (h)', field: 'fechaRegistro', minWidth: 150 }
+  ];
 
   constructor(
     private expedienteTratamientoService: ExpedienteTratamientoService,
@@ -28,26 +37,19 @@ export class ExpedienteTratamientoComponent implements OnInit {
     private encryptionService: EncryptionService
   ) { }
 
-  ngOnInit() {
-    this.expedienteTratamientoService.agregar().subscribe();
+  public ngOnInit(): void{
     this.obtenerParametrosURL();
   }
 
-  consultarTratamientos(){
-    lastValueFrom(this.expedienteTratamientoService.consultarPorUsuario(this.idUsuario))
-    .then((tratamientoPacienteList: ExpedienteTratamientoGridDTO[]) => {
-      this.expedienteTratamientoList = tratamientoPacienteList;
-    });
+  protected consultarPorUsuario(): void{
+    this.tratamientos$ = this.expedienteTratamientoService.consultarPorUsuario(this.idUsuario)
   }
 
-  /**
-   * Obtiene los parámetros de la URL y los asigna a las variables del componente.
-   */
   private async obtenerParametrosURL(): Promise<void> {
     const queryParams = await lastValueFrom(this.route.queryParams.pipe(first()));
     const params = this.encryptionService.readUrlParams(queryParams);
     this.idUsuario = Number(params.i);
-    this.consultarTratamientos();
+    this.consultarPorUsuario();
   }
 
 }

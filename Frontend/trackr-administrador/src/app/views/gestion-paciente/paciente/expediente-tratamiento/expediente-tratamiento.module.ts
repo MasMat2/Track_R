@@ -1,8 +1,8 @@
-import { PdfVisorModule } from '@sharedComponents/pdf-visor/pdf-visor.module';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
+import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.module';
 import { ExpedienteTratamientoComponent } from './expediente-tratamiento.component';
 
 @NgModule({
@@ -10,7 +10,7 @@ import { ExpedienteTratamientoComponent } from './expediente-tratamiento.compone
     CommonModule,
     TableModule,
     PipesModule,
-    PdfVisorModule
+    GridGeneralModule
   ],
   declarations: [ExpedienteTratamientoComponent],
   exports: [ExpedienteTratamientoComponent]

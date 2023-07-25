@@ -1,13 +1,11 @@
 ﻿using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Models;
 
-namespace TrackrAPI.Repositorys.GestionExpediente
+namespace TrackrAPI.Repositorys.GestionExpediente;
+public interface IExpedienteTratamientoRepository: IRepository<ExpedienteTratamiento>
 {
-
-    public interface IExpedienteTratamientoRepository: IRepository<ExpedienteTratamiento>
-    {
-        public IEnumerable<ExpedienteTratamientoGridDTO> ConsultarPorUsuario(int idUsuario);
-        
-        public ExpedienteTratamiento Consultar(int idExpedienteTratamiento);
-    }
+    public IEnumerable<ExpedienteTratamiento> ConsultarPorUsuario(int idUsuario);
+    
+    public ExpedienteTratamiento? Consultar(int idExpedienteTratamiento);
 }
+

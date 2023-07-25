@@ -1,4 +1,4 @@
-export class ExpedienteTratamientoGridDTO{
+export class ExpedienteTratamientoGridDto{
     idExpedienteTratamiento : number;
     farmaco : number;
     cantidad: number

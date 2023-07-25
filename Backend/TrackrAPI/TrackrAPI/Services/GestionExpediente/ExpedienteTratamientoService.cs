@@ -2,37 +2,58 @@
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionExpediente;
 
-namespace TrackrAPI.Services.GestionExpediente
+namespace TrackrAPI.Services.GestionExpediente;
+public class ExpedienteTratamientoService
 {
-    public class ExpedienteTratamientoService
+    private readonly IExpedienteTratamientoRepository expedienteTratamientoRepository;
+    
+    public ExpedienteTratamientoService(IExpedienteTratamientoRepository expedienteTratamientoRepository)
     {
-        private readonly IExpedienteTratamientoRepository expedienteTratamientoRepository;
-        
-        public ExpedienteTratamientoService(IExpedienteTratamientoRepository expedienteTratamientoRepository)
-        {
-            this.expedienteTratamientoRepository = expedienteTratamientoRepository;
-        }
-
-        /// <summary>
-        /// Consulta el ExpedienteTratamiento de un Usuario para ser desplegado en el Grid
-        /// </summary>
-        /// <param name="idUsuario">IdUsuario que filtra los Tratamientos</param>
-        /// <returns>Lista de Tratamientos</returns>
-        public IEnumerable<ExpedienteTratamientoGridDTO> ConsultarPorUsuario(int idUsuario)
-        {
-            return expedienteTratamientoRepository.ConsultarPorUsuario(idUsuario);
-        }
-
-
-        /// <summary>
-        /// Consulta un ExpedienteTratamiento por su id
-        /// </summary>
-        /// <param name="idExpedienteTratamiento">IdTratamiento a consultar</param>
-        /// <returns>Tratamiento Consultado</returns>
-        public ExpedienteTratamiento Consultar(int idExpedienteTratamiento)
-        {
-            return expedienteTratamientoRepository.Consultar(idExpedienteTratamiento);
-        }
-
+        this.expedienteTratamientoRepository = expedienteTratamientoRepository;
     }
+
+    public ExpedienteTratamientoDto? Consultar(int idExpedienteTratamiento)
+    {
+        var expedienteTratamiento =  expedienteTratamientoRepository.Consultar(idExpedienteTratamiento);
+
+        if (expedienteTratamiento is null)
+        {
+            return null;
+        }
+
+        var expedienteTratamientoDto = new ExpedienteTratamientoDto
+        {
+
+            IdExpedienteTratamiento = expedienteTratamiento.IdExpedienteTratamiento,
+            Farmaco = expedienteTratamiento.Farmaco,
+            Cantidad = expedienteTratamiento.Cantidad,
+            Unidad = expedienteTratamiento.Unidad,
+            Indicaciones = expedienteTratamiento.Indicaciones,
+            IdPadecimiento = expedienteTratamiento.IdPadecimiento,
+            FechaRegistro = expedienteTratamiento.FechaRegistro,
+
+        };
+
+        return expedienteTratamientoDto;
+    }       
+
+    public IEnumerable<ExpedienteTratamientoGridDTO> ConsultarPorUsuario(int idUsuario)
+    {
+        var expedienteTratamientos = expedienteTratamientoRepository.ConsultarPorUsuario(idUsuario);
+
+        var expedienteTratamientosDto = expedienteTratamientos.Select(et => new ExpedienteTratamientoGridDTO
+            {
+                IdExpedienteTratamiento = et.IdExpedienteTratamiento,
+                Farmaco = et.Farmaco,
+                Cantidad = et.Cantidad,
+                Unidad = et.Unidad,
+                Indicaciones = et.Indicaciones,
+                Padecimiento = et.IdPadecimiento.ToString() ?? string.Empty,
+                FechaRegistro = et.FechaRegistro
+            });
+
+            return expedienteTratamientosDto;
+    }
+
 }
+

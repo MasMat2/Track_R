@@ -10,23 +10,23 @@ namespace TrackrAPI.Controllers.GestionExpediente
     [ApiController]
     public class ExpedienteTratamientoController
     {
-        ExpedienteTratamientoService expedienteTratamientoService;
+        private readonly ExpedienteTratamientoService expedienteTratamientoService;
 
         public ExpedienteTratamientoController(ExpedienteTratamientoService expedienteTratamientoService)
         {
             this.expedienteTratamientoService = expedienteTratamientoService;
         }
-        [HttpGet("consultarPorUsuario/{idUsuario}")]
+
+        [HttpGet("{idExpedienteTratamiento}")]
+        public ExpedienteTratamientoDto? Consultar(int idExpedienteTratamiento)
+        {
+            return expedienteTratamientoService.Consultar(idExpedienteTratamiento);
+        }
+
+        [HttpGet("usuario/{idUsuario}")]
         public IEnumerable<ExpedienteTratamientoGridDTO> ConsultarPorUsuario(int idUsuario)
         {
             return expedienteTratamientoService.ConsultarPorUsuario(idUsuario);
         }
-
-
-        [HttpGet("consultar/{idExpedienteTratamiento}")]
-        public ExpedienteTratamiento Consultar(int idExpedienteTratamiento)
-        {
-            return expedienteTratamientoService.Consultar(idExpedienteTratamiento);
-        }
-    }
+    }   
 }
