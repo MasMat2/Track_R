@@ -10,6 +10,7 @@ import { ExpedienteEstudioModule } from './expediente-estudio/expediente-estudio
 import { ExpedienteFormularioComponent } from './expediente-formulario/expediente-formulario.component';
 import { ExpedienteFormularioModule } from './expediente-formulario/expediente-formulario.module';
 import { ExpedientePadecimientoModule } from './expediente-padecimiento/expediente-padecimiento.module';
+import { ExpedienteTratamientoModule } from './expediente-tratamiento/expediente-tratamiento.module';
 import { PacienteRoutingModule } from './paciente-routing.module';
 import { PacienteVistaCuadriculaComponent } from './paciente-vista-cuadricula/paciente-vista-cuadricula.component';
 import { PacienteComponent } from './paciente.component';
@@ -31,7 +32,8 @@ import { PacienteComponent } from './paciente.component';
     DashboardPadecimientoModule,
     ExpedientePadecimientoModule,
     MatSidenavModule,
-    MatIconModule
+    MatIconModule,
+    ExpedienteTratamientoModule
   ],
   entryComponents: [
     PacienteVistaCuadriculaComponent,

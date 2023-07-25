@@ -7,10 +7,7 @@ import * as moment from 'moment';
 
 import { EncryptionService } from '@services/encryption.service';
 
-
-
 import { GeneralConstant } from '@utils/general-constant';
-
 
 import { ExternalTemplate } from '@sharedComponents/tabulador-entidad/external-template';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
@@ -21,6 +18,7 @@ import { DashboardPadecimientoComponent } from '../dashboard-padecimiento/dashbo
 import { ExpedienteEstudioComponent } from '../expediente-estudio/expediente-estudio.component';
 import { ExpedientePadecimientoComponent } from '../expediente-padecimiento/expediente-padecimiento.component';
 import { ExpedienteRecomendacionComponent } from '../expediente-recomendacion/expediente-recomendacion.component';
+import { ExpedienteTratamientoComponent } from '../expediente-tratamiento/expediente-tratamiento.component';
 
 @Component({
   selector: 'app-expediente-formulario',
@@ -63,11 +61,25 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
   }
 
   public async ngAfterContentInit() {
+    this.agregarTabTratamientos();
     this.agregarTabInformacionGeneral();
     this.agregarTabRecomendaciones();
     this.agregarTabEstudios();
     this.agregarTabPadecimientos();
     await this.agregarTabsDashboardPadecimiento();
+  }
+
+  private agregarTabTratamientos(): void {
+    const tratamientos : ExternalTemplate = {
+      component : ExpedienteTratamientoComponent,
+      label : 'Tratamientos',
+      args : { },
+      enabled : this.idUsuario != null ? true : false,
+      externalSubmit : true,
+      submitControl : false
+    };
+
+    this.externalTemplates.push(tratamientos);
   }
 
   private agregarTabRecomendaciones() {

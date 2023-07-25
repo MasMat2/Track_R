@@ -7,6 +7,7 @@ import { DashboardPadecimientoModule } from '../dashboard-padecimiento/dashboard
 import { ExpedienteEstudioModule } from '../expediente-estudio/expediente-estudio.module';
 import { ExpedientePadecimientoModule } from '../expediente-padecimiento/expediente-padecimiento.module';
 import { ExpedienteRecomendacionModule } from '../expediente-recomendacion/expediente-recomendacion.module';
+import { ExpedienteTratamientoModule } from '../expediente-tratamiento/expediente-tratamiento.module';
 import { ExpedienteGeneralFormularioModule } from './../expediente-general-formulario/expediente-general-formulario.module';
 import { ExpedienteFormularioComponent } from './expediente-formulario.component';
 
@@ -20,7 +21,8 @@ import { ExpedienteFormularioComponent } from './expediente-formulario.component
     ExpedienteEstudioModule,
     DashboardPadecimientoModule,
     ExpedientePadecimientoModule,
-    ExpedienteRecomendacionModule
+    ExpedienteRecomendacionModule,
+    ExpedienteTratamientoModule
   ],
   declarations: [ExpedienteFormularioComponent]
 })
