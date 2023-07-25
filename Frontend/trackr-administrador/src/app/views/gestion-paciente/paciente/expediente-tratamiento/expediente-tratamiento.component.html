@@ -4,9 +4,11 @@
 </div>
 
 <app-grid-general
-#gridTratamientos
-[headerName]="HEADER_GRID"
-[data]="tratamientos$ | async"
-[children]="columns"
+  #gridTratamientos
+  [headerName]="HEADER_GRID"
+  [data]="tratamientos$ | async"
+  [children]="columns"
+  [disableDelete]="true"
+  [disableEdit]="true"
 >
 </app-grid-general>

@@ -61,38 +61,27 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
   }
 
   public async ngAfterContentInit() {
-    this.agregarTabTratamientos();
     this.agregarTabInformacionGeneral();
-    this.agregarTabRecomendaciones();
-    this.agregarTabEstudios();
     this.agregarTabPadecimientos();
+    this.agregarTabEstudios();
     await this.agregarTabsDashboardPadecimiento();
+    this.agregarTabTratamientos();
+    this.agregarTabRecomendaciones();
   }
 
-  private agregarTabTratamientos(): void {
-    const tratamientos : ExternalTemplate = {
-      component : ExpedienteTratamientoComponent,
-      label : 'Tratamientos',
-      args : { },
-      enabled : this.idUsuario != null ? true : false,
+  private agregarTabInformacionGeneral(): void {
+    const informacionGeneral : ExternalTemplate = {
+      component : ExpedienteGeneralFormularioComponent,
+      args : {
+        idUsuario: this.idUsuario,
+      },
+      label : 'General',
+      enabled : true,
       externalSubmit : true,
       submitControl : false
     };
 
-    this.externalTemplates.push(tratamientos);
-  }
-
-  private agregarTabRecomendaciones() {
-    const recomendaciones: ExternalTemplate = {
-      component: ExpedienteRecomendacionComponent,
-      args: { },
-      label : 'Recomendaciones',
-      enabled : this.idUsuario != null ? true : false,
-      externalSubmit : true,
-      submitControl : false
-    };
-
-    this.externalTemplates.push(recomendaciones);
+    this.externalTemplates.push(informacionGeneral);
   }
 
   private agregarTabPadecimientos(): void {
@@ -106,21 +95,6 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
     };
 
     this.externalTemplates.push(padecimientos);
-  }
-
-  private agregarTabInformacionGeneral(): void {
-    const informacionGeneral : ExternalTemplate = {
-      component : ExpedienteGeneralFormularioComponent,
-      args : {
-        idUsuario: this.idUsuario,
-      },
-      label : 'Información General',
-      enabled : true,
-      externalSubmit : true,
-      submitControl : false
-    };
-
-    this.externalTemplates.push(informacionGeneral);
   }
 
   private agregarTabEstudios(): void {
@@ -157,6 +131,32 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
 
       this.externalTemplates.push(padecimientoExtTpl);
     });
+  }
+
+  private agregarTabTratamientos(): void {
+    const tratamientos : ExternalTemplate = {
+      component : ExpedienteTratamientoComponent,
+      label : 'Tratamientos',
+      args : { },
+      enabled : this.idUsuario != null ? true : false,
+      externalSubmit : true,
+      submitControl : false
+    };
+
+    this.externalTemplates.push(tratamientos);
+  }
+
+  private agregarTabRecomendaciones() {
+    const recomendaciones: ExternalTemplate = {
+      component: ExpedienteRecomendacionComponent,
+      args: { },
+      label : 'Recomendaciones',
+      enabled : this.idUsuario != null ? true : false,
+      externalSubmit : true,
+      submitControl : false
+    };
+
+    this.externalTemplates.push(recomendaciones);
   }
 
   public async consultarPadecimientos() {
