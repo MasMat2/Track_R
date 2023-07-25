@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MunicipioSelector } from '@dtos/catalogo/municipio-selector';
+import { MunicipioSelectorDto } from '@dtos/catalogo/municipio-selector-dto';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { MunicipioService } from '@http/catalogo/municipio.service';
 import { CodigoPostal } from '@models/catalogo/codigo-postal';
@@ -27,7 +27,7 @@ export class CodigoPostalFormularioComponent implements OnInit {
   public codigoPostal= new CodigoPostal();
 
   public idMunicipio: number;
-  public municipioList: MunicipioSelector[] = [];
+  public municipioList: MunicipioSelectorDto[] = [];
 
   constructor(
     public bsModalRef: BsModalRef,

@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
-import { MunicipioSelector } from '@dtos/catalogo/municipio-selector';
+import { MunicipioSelectorDto } from '@dtos/catalogo/municipio-selector-dto';
 import { BancoService } from '@http/catalogo/banco.service';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { CompaniaService } from '@http/catalogo/compania.service';
@@ -67,7 +67,7 @@ export class HospitalFormularioComponent implements OnInit {
   public companiaList: Compania[] = [];
   public listaPrecioList: ListaPrecio[] = [];
   public ladaList: Lada[] = [];
-  public municipioList: MunicipioSelector[] = [];
+  public municipioList: MunicipioSelectorDto[] = [];
   public codigoPostalList: CodigoPostal[] = [];
   public almacenList: Almacen[] = [];
 

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
-import { MunicipioFormularioCaptura } from '@dtos/catalogo/municipio-formulario-captura';
-import { MunicipioFormularioConsulta } from '@dtos/catalogo/municipio-formulario-consulta';
+import { MunicipioFormularioCapturaDto } from '@dtos/catalogo/municipio-formulario-captura-dto';
+import { MunicipioFormularioConsultaDto } from '@dtos/catalogo/municipio-formulario-consulta-dto';
 import { EstadoService } from '@http/catalogo/estado.service';
 import { MunicipioService } from '@http/catalogo/municipio.service';
 import { PaisService } from '@http/catalogo/pais.service';
@@ -16,7 +16,7 @@ import { Observable, map, tap } from 'rxjs';
   selector: 'app-municipio-formulario',
   templateUrl: './municipio-formulario.component.html',
 })
-export class MunicipioFormularioComponent extends CrudFormularioBase<MunicipioFormularioCaptura> implements OnInit {
+export class MunicipioFormularioComponent extends CrudFormularioBase<MunicipioFormularioCapturaDto> implements OnInit {
 
   public DROPDOWN_PLACEHOLDER: string = DROPDOWN_PLACEHOLDER;
   public DROPDOWN_NO_OPTIONS: string = DROPDOWN_NO_OPTIONS;
@@ -42,11 +42,11 @@ export class MunicipioFormularioComponent extends CrudFormularioBase<MunicipioFo
     this.consultarPaises();
   }
 
-  protected consultar(idMunicipio: number): Observable<MunicipioFormularioCaptura> {
+  protected consultar(idMunicipio: number): Observable<MunicipioFormularioCapturaDto> {
     return this.municipioService
       .consultarParaFormulario(idMunicipio)
       .pipe(
-        tap((municipio: MunicipioFormularioConsulta) => {
+        tap((municipio: MunicipioFormularioConsultaDto) => {
           this.idEstado = municipio.idEstado;
 
           this.estadoService
@@ -57,8 +57,8 @@ export class MunicipioFormularioComponent extends CrudFormularioBase<MunicipioFo
             });
 
         }),
-        map((municipio: MunicipioFormularioConsulta) => {
-          const municipioCaptura = new MunicipioFormularioCaptura();
+        map((municipio: MunicipioFormularioConsultaDto) => {
+          const municipioCaptura = new MunicipioFormularioCapturaDto();
           municipioCaptura.idMunicipio = municipio.idMunicipio;
           municipioCaptura.clave = municipio.clave;
           municipioCaptura.nombre = municipio.nombre;
@@ -69,11 +69,11 @@ export class MunicipioFormularioComponent extends CrudFormularioBase<MunicipioFo
       );
   }
 
-  protected agregar(municipio: MunicipioFormularioCaptura): Observable<void> {
+  protected agregar(municipio: MunicipioFormularioCapturaDto): Observable<void> {
     return this.municipioService.agregar(municipio);
   }
 
-  protected editar(municipio: MunicipioFormularioCaptura): Observable<void> {
+  protected editar(municipio: MunicipioFormularioCapturaDto): Observable<void> {
     return this.municipioService.editar(municipio);
   }
 
