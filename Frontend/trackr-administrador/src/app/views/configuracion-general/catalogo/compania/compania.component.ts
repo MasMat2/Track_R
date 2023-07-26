@@ -6,7 +6,7 @@ import { AccesoService } from '@http/seguridad/acceso.service';
 import { CompaniaService } from '@http/catalogo/compania.service';
 import { TipoCompaniaService } from '@http/catalogo/tipo-compania.service';
 import { EncryptionService } from '@services/encryption.service';
-import { AccesosCompania } from 'src/app/shared/utils/codigos-acceso/catalogo.accesos';
+import { ACCESO_COMPANIA } from 'src/app/shared/utils/codigos-acceso/catalogo.accesos';
 import { GeneralConstant } from 'src/app/shared/utils/general-constant';
 import { MensajeService } from 'src/app/shared/components/mensaje/mensaje.service';
 
@@ -30,8 +30,8 @@ export class CompaniaComponent implements OnInit {
 
   public tieneAccesoAgregar = false;
 
-  public accesoEditar = AccesosCompania.EDITAR;
-  public accesoEliminar = AccesosCompania.ELIMINAR;
+  public accesoEditar = ACCESO_COMPANIA.Editar;
+  public accesoEliminar = ACCESO_COMPANIA.Eliminar;
   public HEADER_GRID = 'Compañía';
   private MENSAJE_EXITO_ELIMINAR = 'La compañía ha sido eliminada';
   private TITULO_MODAL_ELIMINAR = 'Eliminar Compañía';
@@ -61,7 +61,7 @@ export class CompaniaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.accesoService.tieneAcceso(AccesosCompania.AGREGAR).subscribe((data) => {
+    this.accesoService.tieneAcceso(ACCESO_COMPANIA.Agregar).subscribe((data) => {
       this.tieneAccesoAgregar = data;
     });
     this.filtro.idTipoCompania = 0;

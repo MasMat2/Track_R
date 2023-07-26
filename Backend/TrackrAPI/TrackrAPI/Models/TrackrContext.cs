@@ -122,6 +122,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<ExpedienteEstudio> ExpedienteEstudio { get; set; } = null!;
         public virtual DbSet<ExpedientePacienteInformacion> ExpedientePacienteInformacion { get; set; } = null!;
         public virtual DbSet<ExpedientePadecimiento> ExpedientePadecimiento { get; set; } = null!;
+        public virtual DbSet<ExpedienteRecomendaciones> ExpedienteRecomendaciones { get; set; } = null!;
         public virtual DbSet<ExpedienteSeccion> ExpedienteSeccion { get; set; } = null!;
         public virtual DbSet<ExpedienteTrackr> ExpedienteTrackr { get; set; } = null!;
         public virtual DbSet<Fabricante> Fabricante { get; set; } = null!;
@@ -2902,6 +2903,31 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdPadecimiento)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Expedient__IdPad__25D17A5B");
+            });
+
+            modelBuilder.Entity<ExpedienteRecomendaciones>(entity =>
+            {
+                entity.HasKey(e => e.IdExpedienteRecomendaciones);
+
+                entity.ToTable("ExpedienteRecomendaciones", "Trackr");
+
+                entity.Property(e => e.Descripcion)
+                    .HasMaxLength(200)
+                    .IsFixedLength();
+
+                entity.Property(e => e.FechaRealizacion).HasColumnType("datetime");
+
+                entity.HasOne(d => d.IdExpedienteNavigation)
+                    .WithMany(p => p.ExpedienteRecomendaciones)
+                    .HasForeignKey(d => d.IdExpediente)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExpedienteRecomendaciones_ExpedienteTrackr");
+
+                entity.HasOne(d => d.IdUsuarioDoctorNavigation)
+                    .WithMany(p => p.ExpedienteRecomendaciones)
+                    .HasForeignKey(d => d.IdUsuarioDoctor)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExpedienteRecomendaciones_Usuario");
             });
 
             modelBuilder.Entity<ExpedienteSeccion>(entity =>
@@ -5762,7 +5788,6 @@ namespace TrackrAPI.Models
                 entity.HasOne(d => d.IdProyectoElementoTecnicaNavigation)
                     .WithMany(p => p.ProgramacionExamen)
                     .HasForeignKey(d => d.IdProyectoElementoTecnica)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Programac__IdPro__55B597A7");
 
                 entity.HasOne(d => d.IdTipoExamenNavigation)

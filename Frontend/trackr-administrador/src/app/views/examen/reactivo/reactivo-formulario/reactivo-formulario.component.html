@@ -1,0 +1,329 @@
+<div class="d-flex">
+  <div class="barra-lateral-modal"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div>{{ accion }} Reactivo</div>
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="cancelar()"
+      >
+        <i class="far fa-times-circle"></i>
+      </button>
+    </div>
+    <form
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      novalidate="novalidate"
+    >
+      <div class="modal-body" id="modal">
+        <div class="row">
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="label-input required-label">Clave</label>
+              <div>
+                <input
+                  #clave="ngModel"
+                  [(ngModel)]="reactivo.clave"
+                  name="clave"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                  [disabled]="accion == 'Editar'"
+                  maxlength="30"
+                />
+              </div>
+              <div
+                *ngIf="clave.errors?.['required'] && clave.touched"
+                class="error"
+              >
+                La clave es requerida
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="label-input required-label">Fecha Alta</label>
+              <div class="calendario">
+                <input
+                  #fechaAltaName="ngModel"
+                  type="text"
+                  class="form-control"
+                  autocomplete="off"
+                  placeholder="dd/mm/aaaa"
+                  name="fechaAltaName"
+                  [(ngModel)]="reactivo.fechaAlta"
+                  [required]="true"
+                  bsDatepicker
+                  disabled="disabled"
+                />
+              </div>
+              <div
+                *ngIf="fechaAltaName.errors?.['required'] && fechaAltaName.touched"
+                class="error"
+              >
+                La fecha alta es requerida
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Asignatura</label>
+              <div>
+                <ng-select
+                  #asignaturaLst="ngModel"
+                  name="asignaturaLstName"
+                  bindLabel="descripcion"
+                  bindValue="idAsignatura"
+                  [items]="asignaturaList"
+                  [required]="true"
+                  [(ngModel)]="reactivo.idAsignatura"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                ></ng-select>
+              </div>
+              <div
+                *ngIf="asignaturaLst.errors?.['required'] && asignaturaLst.touched"
+                class="error"
+              >
+                La asignatura es requerida
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Nivel</label>
+              <div>
+                <ng-select
+                  #nivelLst="ngModel"
+                  name="nivelLstName"
+                  bindLabel="descripcion"
+                  bindValue="idNivelExamen"
+                  [items]="nivelExamenList"
+                  [required]="true"
+                  [(ngModel)]="reactivo.idNivelExamen"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                ></ng-select>
+              </div>
+              <div
+                *ngIf="nivelLst.errors?.['required'] && nivelLst.touched"
+                class="error"
+              >
+                El nivel es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="label-input required-label">Pregunta</label>
+              <div>
+                <textarea
+                  #pregunta="ngModel"
+                  [(ngModel)]="reactivo.pregunta"
+                  name="pregunta"
+                  class="form-control preguntaTextArea"
+                  [required]="true"
+                ></textarea>
+              </div>
+              <div
+                *ngIf="pregunta.errors?.['required'] && pregunta.touched"
+                class="error"
+              >
+                La pregunta es requerida
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="label-input required-label"></label>
+              <div>
+                <input
+                  #archivo="ngModel"
+                  [(ngModel)]="reactivo.file"
+                  id="archivo"
+                  name="archivo"
+                  class="form-control"
+                  type="file"
+                  autocomplete="off"
+                  (change)="fileChange($event)"
+                  style="display: none"
+                  accept="image/*"
+                />
+                <button
+                  onclick="document.getElementById('archivo').click()"
+                  type="button"
+                  class="btn-terceario btn-cargar"
+                >
+                  Cargar Imagen
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div style="text-align: center; margin-top: 15px">
+              <img
+                *ngIf="reactivo.imagen"
+                id="logo"
+                [src]="reactivo.imagenBase64"
+                height="200"
+              />
+
+              <img
+                *ngIf="!reactivo.imagen"
+                id="logo"
+                [src]="URL_IMAGEN_DEFAULT"
+                height="200"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label
+                class="label-input required-label"
+                [title]="TOOLTIP_INSTRUCCIONES"
+                >Respuesta <i class="fas fa-question-circle"></i
+              ></label>
+              <div>
+                <textarea
+                  #respuesta="ngModel"
+                  [(ngModel)]="reactivo.respuesta"
+                  name="respuesta"
+                  class="form-control respuestaTextArea"
+                  [required]="true"
+                ></textarea>
+              </div>
+              <div
+                *ngIf="respuesta.errors?.['required'] && respuesta.touched"
+                class="error"
+              >
+                La respuesta es requerida
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group" *ngIf="reactivo.necesitaRevision">
+              <label class="label-input required-label"
+                >Respuesta Correcta</label
+              >
+              <div>
+                <input
+                  #respuestaCorrecta="ngModel"
+                  [(ngModel)]="reactivo.respuestaCorrecta"
+                  name="respuestaCorrecta"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                />
+              </div>
+              <div
+                *ngIf="respuestaCorrecta.errors?.['required'] && respuestaCorrecta.touched"
+                class="error"
+              >
+                La respuesta correcta es requerida
+              </div>
+            </div>
+            <div class="form-group" *ngIf="!reactivo.necesitaRevision">
+              <label class="label-input required-label"
+                >Respuesta Correcta</label
+              >
+              <div>
+                <ng-select
+                  #respuestasLst="ngModel"
+                  name="respuestasLst"
+                  bindLabel="nombre"
+                  bindValue="nombre"
+                  [items]="respuestas"
+                  [(ngModel)]="reactivo.respuestaCorrecta"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                  [required]="true"
+                ></ng-select>
+              </div>
+              <div
+                *ngIf="respuestasLst.errors?.['required'] && respuestasLst.touched"
+                class="error"
+              >
+                La respuesta correcta es requerida
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="label-input required-label">¿Necesita Revisión?</label><br>
+            <label class="switch">
+                <input
+                    #necesitaRevision
+                    id="necesitaRevision"
+                    name="necesitaRevision"
+                    type="checkbox"
+                    [(ngModel)]="reactivo.necesitaRevision"
+                    (ngModelChange)="setRespuestaCorrecta()"
+                />
+                <span class="slider round">
+                  <span class="on">Sí</span>
+                  <span class="off">No</span>
+                </span>
+            </label>
+           </div>
+
+          <!-- <div class="col-md-4 switchContainer">
+            <div class="form-group">
+              <label class="label-input required-label"
+                >¿Necesita Revisión?</label
+              >
+              <div>
+                <label for="necesitaRevision" class="switchLabel">No</label>
+                <input
+                  #necesitaRevision="ngModel"
+                  [(ngModel)]="reactivo.necesitaRevision"
+                  name="necesitaRevision"
+                  id="necesitaRevision"
+                  type="checkbox"
+                  class="switch"
+                  (change)="setRespuestaCorrecta()"
+                />
+                <label for="necesitaRevision" class="switchLabel">Si</label>
+              </div>
+            </div>
+          </div> -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="text-right">
+          <button
+            [disabled]="submitting"
+            type="submit"
+            class="btn-primario btn-margin-left"
+          >
+            Guardar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="loading-cdis" *ngIf="submitting">
+  <img src="assets/img/spinner.gif" alt="Procesando..." />
+  <span>Procesando... por favor espere</span>
+</div>

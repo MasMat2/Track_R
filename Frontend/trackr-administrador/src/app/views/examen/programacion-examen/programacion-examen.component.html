@@ -1,0 +1,26 @@
+<div class="contenedor">
+  <div class="titulo-contenedor">Consulta de Examenes Programados</div>
+  <div class="cuerpo-contenedor">
+    <div class="row justify-content-center">
+      <div class="col-md-12">
+        <div
+          class="contenedor-agregar"
+          (click)="agregar()"
+          *ngIf="tieneAccesoAgregar"
+        >
+          <i class="fas fa-plus-circle"></i><span>Agregar</span>
+        </div>
+        <app-grid-general
+          #gridNecesidad
+          [headerName]="HEADER_GRID"
+          [data]="programacionExamenList"
+          [children]="columns"
+          (event)="onGridClick($event)"
+          [accesoEditar]="ACCESO_EDITAR"
+          [accesoEliminar]="ACCESO_ELIMINAR"
+        >
+        </app-grid-general>
+      </div>
+    </div>
+  </div>
+</div>

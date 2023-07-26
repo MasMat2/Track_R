@@ -1,17 +1,18 @@
-﻿using TrackrAPI.Repositorys;
-using TrackrAPI.Dtos.Catalogo;
+﻿using TrackrAPI.Dtos.Catalogo;
 using TrackrAPI.Models;
-using System.Collections.Generic;
 using TrackrAPI.Repositorys.Catalogo;
+using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Services.Catalogo
 {
     public class DominioService
     {
-        private IDominioRepository dominioRepository;
-        private DominioValidatorService dominioValidatorService;
+        private readonly IDominioRepository dominioRepository;
+        private readonly DominioValidatorService dominioValidatorService;
 
-        public DominioService(IDominioRepository dominioRepository, DominioValidatorService dominioValidatorService)
+        public DominioService(
+            IDominioRepository dominioRepository,
+            DominioValidatorService dominioValidatorService)
         {
             this.dominioRepository = dominioRepository;
             this.dominioValidatorService = dominioValidatorService;
@@ -20,15 +21,15 @@ namespace TrackrAPI.Services.Catalogo
         {
             var dominio = dominioRepository.ConsultarDto(idDominio);
             dominioValidatorService.ValidarExistencia(dominio);
-            return dominio;
+            return dominio!;
         }
 
-        public Dominio Consultar(int idDominio)
+        public Dominio? Consultar(int idDominio)
         {
             return dominioRepository.Consultar(idDominio);
         }
 
-        public Dominio Consultar(string nombre)
+        public Dominio? Consultar(string nombre)
         {
             return dominioRepository.Consultar(nombre);
         }
@@ -38,9 +39,9 @@ namespace TrackrAPI.Services.Catalogo
             return dominioRepository.ConsultarTodosParaGrid(idUsuarioSesion);
         }
 
-        public IEnumerable<DominioDto> consultarTodosParaSelector()
+        public IEnumerable<DominioDto> ConsultarTodosParaSelector()
         {
-            return dominioRepository.consultarTodosParaSelector();
+            return dominioRepository.ConsultarTodosParaSelector();
         }
 
         public int Agregar(Dominio dominio)
@@ -58,7 +59,13 @@ namespace TrackrAPI.Services.Catalogo
 
         public void Eliminar(int idDominio)
         {
-            Dominio dominio = dominioRepository.Consultar(idDominio);
+            var dominio = dominioRepository.Consultar(idDominio);
+
+            if (dominio is null)
+            {
+                throw new CdisException("El dominio no existe");
+            }
+
             dominioValidatorService.ValidarEliminar(idDominio);
             dominioRepository.Eliminar(dominio);
         }

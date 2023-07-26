@@ -7,9 +7,9 @@ namespace TrackrAPI.Repositorys.GestionEntidad
     public interface ISeccionCampoRepository : IRepository<SeccionCampo>
     {
         IEnumerable<SeccionCampoDto> ConsultarPorSeccion(int idSeccion);
-        SeccionCampo Consultar(int idSeccionCampo);
-        SeccionCampo Consultar(string descripcion);
-        SeccionCampo ConsultarPorClave(string clave);
-        SeccionCampo ConsultarDuplicado(int orden, string? grupo, string clave, int idSeccion);
+        SeccionCampo? Consultar(int idSeccionCampo);
+        SeccionCampo? Consultar(string descripcion);
+        SeccionCampo? ConsultarPorClave(string clave);
+        SeccionCampo? ConsultarDuplicado(int orden, string? grupo, string clave, int idSeccion);
     }
 }

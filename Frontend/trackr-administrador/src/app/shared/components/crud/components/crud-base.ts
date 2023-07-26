@@ -1,12 +1,12 @@
 import { Router } from "@angular/router";
 import { AccesoService } from "@http/seguridad/acceso.service";
 import { EncryptionService } from "@services/encryption.service";
+import { MensajeService } from "@sharedComponents/mensaje/mensaje.service";
+import { KeyValueCollection } from "@utils/constants/types";
+import { GeneralConstant } from "@utils/general-constant";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { ICrudConfig } from "../crud-config";
 import { ICrudService } from "../services/crud-service";
-import { MensajeService } from "@sharedComponents/mensaje/mensaje.service";
-import { GeneralConstant } from "@utils/general-constant";
-import { KeyValueCollection } from "@utils/types";
 
 /**
  * Clase abstracta que define la lógica básica para realizar operaciones CRUD. Para utilizar esta clase se debe generar

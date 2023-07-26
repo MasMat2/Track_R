@@ -18,22 +18,15 @@
   margin: 0;
 }
 
-
 .modal-medium {
   width: 70% !important;
   max-width: 70% !important;
   margin: 0;
 }
 
-
 .modal-xsm {
   width: 35% !important;
   max-width: 35% !important;
-}
-
-.modal-md-confirmacion {
-  width: 35% !important;
-  max-width: 40% !important;
 }
 
 .modal-md-aviso {
@@ -126,7 +119,6 @@
 .modal-content {
   max-height: 90vh;
   border-radius: 0 !important;
-  overflow: auto;
 }
 
 .title-modal-confirmacion {
@@ -184,23 +176,13 @@
   font-size: 4rem;
 }
 
-.barra-lateral-modal i{
-  display: none;
-}
-
 .modal-open .modal {
   background: #00000077;
 }
 
-modal-container .cuerpo-contenedor {
-  max-height: calc(100vh - 150px) !important;
-  overflow: scroll !important;
-  overflow-x: auto !important;
-  overflow-y: auto !important;
-}
-
 .modal-body {
-  width: auto; 
+  width: auto;
+  overflow: auto;
 }
 
 .modal-body label {
@@ -210,5 +192,4 @@ modal-container .cuerpo-contenedor {
 .modal-content {
    max-height: 90vh;
    border-radius: 0 !important;
-   overflow: auto;
-} 
+}

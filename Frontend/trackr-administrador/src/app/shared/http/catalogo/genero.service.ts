@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+<<<<<<< HEAD
 import { GeneroDto} from '@dtos/catalogos/GeneroDto';
+=======
+import { GeneroDto } from '@dtos/catalogo/generoDto';
+>>>>>>> a871e4299abd973a0949004ca3fe85330f7e4b43
 
 
 @Injectable()

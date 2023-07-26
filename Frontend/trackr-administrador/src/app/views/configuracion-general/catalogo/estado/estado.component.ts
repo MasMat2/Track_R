@@ -1,26 +1,33 @@
 import { Component, OnInit } from '@angular/core';
+import { EstadoGridDto } from '@dtos/catalogo/estado-grid-dto';
 import { EstadoService } from '@http/catalogo/estado.service';
 import { AccesoService } from '@http/seguridad/acceso.service';
-import { Estado } from '@models/catalogo/estado';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
-import { CodigoAcceso } from '@utils/codigo-acceso';
-import { GeneralConstant } from '@utils/general-constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ACCESO_ESTADO } from '@utils/codigos-acceso/catalogo.accesos';
+import { ColDef } from 'ag-grid-community';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { EstadoFormularioComponent } from './estado-formulario/estado-formulario.component';
+import { GRID_ACTION } from '@utils/constants/grid';
+import { FORM_ACTION } from '@utils/constants/constants';
+import { MODAL_CONFIG } from '@utils/constants/modal';
 
 @Component({
   templateUrl: 'estado.component.html',
 })
 export class EstadoComponent implements OnInit {
-  public tieneAccesoAgregar = false;
-  public accesoEditar = CodigoAcceso.EDITAR_ESTADO;
-  public accesoEliminar = CodigoAcceso.ELIMINAR_ESTADO;
-  public HEADER_GRID = 'Estados';
-  public MENSAJE_EXITO_ELIMINAR = 'El estado ha sido eliminado';
-  public TITULO_MODAL_ELIMINAR = 'Eliminar Estado';
-  public estadoList: Estado[];
+  protected readonly HEADER_GRID: string = 'Estados';
 
-  public columns = [
+  private destroy$: Subject<void> = new Subject<void>();
+
+  // Accesos
+  protected readonly ACCESO_EDITAR: string = ACCESO_ESTADO.Editar;
+  protected readonly ACCESO_ELIMINAR: string = ACCESO_ESTADO.Eliminar;
+  protected tieneAccesoAgregar$: Observable<boolean>;
+
+  // Grid
+  protected estados$: Observable<EstadoGridDto[]>;
+  protected columns: ColDef[] = [
     { headerName: 'Clave', field: 'clave', minWidth: 150, width: 70 },
     { headerName: 'Nombre', field: 'nombre', minWidth: 150 },
     { headerName: 'País', field: 'nombrePais', minWidth: 150 },
@@ -30,78 +37,107 @@ export class EstadoComponent implements OnInit {
     private mensajeService: MensajeService,
     private estadoService: EstadoService,
     private accesoService: AccesoService,
-    private modalService: BsModalService,
-    private bsModalRef: BsModalRef
+    private modalService: BsModalService
   ) {}
 
   public ngOnInit(): void {
-    this.accesoService.tieneAcceso(CodigoAcceso.AGREGAR_ESTADO).subscribe({
-      next: (data) => {
-        this.tieneAccesoAgregar = data;
-      },
-    });
-
     this.consultarGrid();
+    this.consultarAccesoAgregar();
+  }
+
+  public consultarAccesoAgregar(): void {
+    this.tieneAccesoAgregar$ = this.accesoService.tieneAcceso(ACCESO_ESTADO.Agregar);
   }
 
   public consultarGrid(): void {
-    this.estadoService.consultarTodosParaGrid().subscribe((data) => {
-      this.estadoList = data;
-    });
+    this.estados$ = this.estadoService.consultarParaGrid();
   }
 
-  public onGridClick(gridData: { accion: string; data: Estado }): void {
-    if (gridData.accion === GeneralConstant.GRID_ACCION_EDITAR) {
-      this.editar(gridData.data.idEstado);
-      return;
-    }
+  public onGridClick(gridData: { accion: string; data: EstadoGridDto }): void {
+    const estado = gridData.data;
 
-    if (gridData.accion === GeneralConstant.GRID_ACCION_ELIMINAR) {
-      this.eliminar(gridData.data);
-      return;
-    }
+    const acciones = {
+      [GRID_ACTION.Editar as string]: () => this.editar(estado.idEstado),
+      [GRID_ACTION.Eliminar as string]: () => this.eliminar(estado),
+    };
+
+    acciones[gridData.accion]();
   }
 
   public agregar(): void {
-    this.bsModalRef = this.modalService.show(
-      EstadoFormularioComponent,
-      GeneralConstant.CONFIG_MODAL_DEFAULT
-    );
-    this.bsModalRef.content.accion = GeneralConstant.MODAL_ACCION_AGREGAR;
-    this.bsModalRef.content.onClose = (cerrar: boolean) => {
-      if (cerrar) {
-        this.consultarGrid();
-      }
-      this.bsModalRef.hide();
+    const initialState = {
+      accion: FORM_ACTION.Agregar,
     };
+
+    const bsModalRef = this.modalService.show(EstadoFormularioComponent, {
+      initialState,
+      ...MODAL_CONFIG.Default,
+    });
+
+    const content = bsModalRef.content as EstadoFormularioComponent;
+
+    const subscription = content.closed
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (estado) => {
+          if (estado !== undefined) {
+            this.consultarGrid();
+          }
+
+          bsModalRef.hide();
+        },
+        error: (err) => {
+        },
+        complete: () => {
+          subscription.unsubscribe();
+        }
+      });
   }
 
   public editar(idEstado: number): void {
-    this.estadoService.consultar(idEstado).subscribe((data) => {
-      this.bsModalRef = this.modalService.show(
-        EstadoFormularioComponent,
-        GeneralConstant.CONFIG_MODAL_DEFAULT
-      );
-      this.bsModalRef.content.estado = data;
-      this.bsModalRef.content.accion = GeneralConstant.MODAL_ACCION_EDITAR;
-      this.bsModalRef.content.onClose = (cerrar: boolean) => {
-        if (cerrar) {
-          this.consultarGrid();
-        }
-        this.bsModalRef.hide();
-      };
+    const initialState = {
+      idEstado: idEstado,
+      accion: FORM_ACTION.Editar,
+    };
+
+    const bsModalRef = this.modalService.show(EstadoFormularioComponent, {
+      initialState,
+      ...MODAL_CONFIG.Default,
     });
+
+    const content = bsModalRef.content as EstadoFormularioComponent;
+
+    const subscription = content.closed
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (estado) => {
+          if (estado !== undefined) {
+            this.consultarGrid();
+          }
+
+          bsModalRef.hide();
+        },
+        error: (err) => {
+        },
+        complete: () => {
+          subscription.unsubscribe();
+        }
+      });
   }
 
-  public eliminar(estado: Estado): void {
+  public eliminar(estado: EstadoGridDto): void {
+    const TITULO_MODAL: string = 'Eliminar Estado';
+    const MENSAJE_CONFIRMACION: string = '¿Desea eliminar el estado <strong>' + estado.nombre + '</strong>?';
+    const MENSAJE_EXITO: string = 'El estado ha sido eliminado';
+
     this.mensajeService
       .modalConfirmacion(
-        '¿Desea eliminar el estado <strong>' + estado.nombre + '</strong>?',
-        this.TITULO_MODAL_ELIMINAR
+        MENSAJE_CONFIRMACION,
+        TITULO_MODAL
       )
       .then((aceptar) => {
         this.estadoService.eliminar(estado.idEstado).subscribe((data) => {
-          this.mensajeService.modalExito(this.MENSAJE_EXITO_ELIMINAR);
+          this.mensajeService.modalExito(MENSAJE_EXITO);
           this.consultarGrid();
         });
       });

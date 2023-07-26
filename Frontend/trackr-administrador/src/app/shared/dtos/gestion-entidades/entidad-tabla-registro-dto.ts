@@ -9,4 +9,5 @@ export interface TablaValorDto {
     idEntidadEstructuraTablaValor: number;
     claveCampo: string;
     valor: string;
+    fueraDeRango: boolean;
 }

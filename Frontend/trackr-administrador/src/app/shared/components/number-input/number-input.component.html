@@ -1,9 +1,9 @@
-<div style="position: relative;">
+<div style="position: relative">
   <input
     #numeroModel="ngModel"
     [name]="nameForm"
     class="form-control"
-    type="text"
+    type="number"
     [required]="required"
     [(ngModel)]="valor"
     (ngModelChange)="onCantidadChange()"
@@ -12,13 +12,31 @@
     [max]="max"
     [min]="min"
     appPermitirSoloNumeros
-    [ngClass]="{'ng-touched': touchedVar}"
+    [ngClass]="{ 'ng-touched': touchedVar }"
     [disabled]="deshabilitado"
   />
   <div *ngIf="!deshabilitado" class="flecha-arriba" (click)="aumentar()"></div>
   <div *ngIf="!deshabilitado" class="flecha-abajo" (click)="disminuir()"></div>
 </div>
-<label class="error" *ngIf="numeroModel.errors?.['required'] && (numeroModel.touched || touchedVar) ">El campo es requerido</label>
-<label class="error" *ngIf="numeroModel.errors?.['maxLength'] && (numeroModel.touched || touchedVar) ">La longitud máxima es de {{longitud}} caracteres</label>
-<label class="error" *ngIf="numeroModel.errors?.['max'] && (numeroModel.touched || touchedVar) ">El valor no puede exceder el límite de '{{max}}'</label>
-<label class="error" *ngIf="numeroModel.errors?.['min'] && (numeroModel.touched || touchedVar) ">El valor debe ser mayor a '{{min}}'</label>
+<label
+  class="error"
+  *ngIf="numeroModel.errors?.['required'] && (numeroModel.touched || touchedVar) "
+  >El campo es requerido</label
+>
+<label
+  class="error"
+  *ngIf="numeroModel.errors?.['maxLength'] && (numeroModel.touched || touchedVar) "
+  >La longitud máxima es de {{ longitud }} caracteres</label
+>
+<label
+  class="error"
+  *ngIf="numeroModel.errors?.['max'] && (numeroModel.touched || touchedVar) "
+  >El valor no puede exceder el límite de '{{ max }}'</label
+>
+<label
+  class="error"
+  *ngIf="numeroModel.errors?.['min'] && (numeroModel.touched || touchedVar) "
+  >El valor debe ser mayor a '{{ min }}'</label
+>
+
+

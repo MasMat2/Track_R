@@ -18,7 +18,8 @@ import { CustomLoadingCellRenderer } from './loading-cell-renderer/loading-cell-
 
 @Component({
   selector: 'app-grid-general',
-  templateUrl: './grid-general.component.html'
+  templateUrl: './grid-general.component.html',
+  styleUrls: ['./grid-general.component.scss'],
 })
 export class GridGeneralComponent implements OnInit, AfterViewInit, OnChanges {
   public vmGrid: any = this;
@@ -93,6 +94,7 @@ export class GridGeneralComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() pageSize = 1;
   @Input() manualButton = false;
   @Input() isRowSelectable: IsRowSelectable;
+  @Input() biggerRows = false;
 
   private _cargandoGrid = false;
 
@@ -201,7 +203,9 @@ export class GridGeneralComponent implements OnInit, AfterViewInit, OnChanges {
     }
     this.setXlsDownloadParams();
 
-
+    if (this.biggerRows){
+      this.gridOptions.rowHeight = 150;
+    }
   }
 
   onColumnResized() {

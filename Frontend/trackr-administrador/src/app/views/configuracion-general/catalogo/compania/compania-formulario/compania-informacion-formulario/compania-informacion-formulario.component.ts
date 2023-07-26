@@ -27,11 +27,12 @@ import { RegimenFiscal } from '@models/catalogo/regimen-fiscal';
 import { TipoCompania } from '@models/catalogo/tipo-compania';
 import { AgrupadorCuentaContable } from '@models/contabilidad/agrupador-cuenta-contable';
 import { Usuario } from '@models/seguridad/usuario';
-import { AccesosCompania } from 'src/app/shared/utils/codigos-acceso/catalogo.accesos';
+import { ACCESO_COMPANIA } from 'src/app/shared/utils/codigos-acceso/catalogo.accesos';
 import { MensajeService } from 'src/app/shared/components/mensaje/mensaje.service';
 import { GeneralConstant } from 'src/app/shared/utils/general-constant';
 import * as Utileria from 'src/app/shared/utils/utileria';
 import { environment } from 'src/environments/environment';
+import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
 
 @Component({
   selector: 'app-compania-informacion-formulario',
@@ -66,7 +67,7 @@ export class CompaniaInformacionFormularioComponent implements OnInit {
   public companiaContacto: CompaniaContacto = new CompaniaContacto();
 
   public paisList: Pais[] = [];
-  public estadoList: Estado[] = [];
+  public estadoList: EstadoSelectorDto[] = [];
   public ciudadList: Municipio[] = [];
   public ladaList: Lada[] = [];
   public regimenFiscalList: RegimenFiscal[] = [];
@@ -138,7 +139,7 @@ export class CompaniaInformacionFormularioComponent implements OnInit {
     }
     else {
       this.accesoService
-        .tieneAcceso(AccesosCompania.EDITAR)
+        .tieneAcceso(ACCESO_COMPANIA.Editar)
         .toPromise()
         .then((tieneAcceso) => this.tieneAccesoEditar = tieneAcceso ?? false)
         .catch(() => {});

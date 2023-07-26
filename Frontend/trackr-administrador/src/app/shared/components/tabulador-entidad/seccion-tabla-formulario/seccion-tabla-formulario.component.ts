@@ -52,12 +52,13 @@ export class SeccionTablaFormularioComponent implements OnInit {
       }
     }
 
-
-    const result: { [key: string]: SeccionCampo[] } = this.campos.reduce((r, a) => {
+    const result: { [key: string]: SeccionCampo[] } = this.campos
+      .sort((a, b) => a.orden - b.orden)
+      .reduce((r, a) => {
         r[a.grupo] = r[a.grupo] || [];
         r[a.grupo].push(a);
         return r;
-    }, {} as { [key: string]: SeccionCampo[] });
+      }, {} as { [key: string]: SeccionCampo[] });
 
     this.grupos = Object.keys(result)
       .map((groupKey) => {
@@ -69,8 +70,7 @@ export class SeccionTablaFormularioComponent implements OnInit {
           fila: fila,
           campos: campos,
         };
-      })
-      .sort((a, b) => b.fila - a.fila);
+      });
   }
 
   public enviarFormulario(formulario: NgForm): void {
@@ -104,10 +104,11 @@ export class SeccionTablaFormularioComponent implements OnInit {
 
     registro.valores = campos.map(
       (campo: SeccionCampo) => {
-        let valor: TablaValorDto = {
+        const valor: TablaValorDto = {
           idEntidadEstructuraTablaValor: 0,
           claveCampo: campo.clave,
           valor: campo.valor?.toString() ?? '',
+          fueraDeRango: this.estaFueraDeRango(campo)
         };
 
         return valor;
@@ -143,10 +144,11 @@ export class SeccionTablaFormularioComponent implements OnInit {
 
     registro.valores = camposAgregar.map(
       (campo: SeccionCampo) => {
-        let valor: TablaValorDto = {
+        const valor: TablaValorDto = {
           idEntidadEstructuraTablaValor: 0,
           claveCampo: campo.clave,
           valor: campo.valor?.toString() ?? '',
+          fueraDeRango: this.estaFueraDeRango(campo)
         };
 
         return valor;
@@ -162,5 +164,24 @@ export class SeccionTablaFormularioComponent implements OnInit {
           subscription.unsubscribe();
         }
       });
+  }
+
+  private estaFueraDeRango(campo: SeccionCampo) {
+    const dominio = campo.idDominioNavigation;
+
+    const number = Number.parseFloat(campo.valor?.toString() ?? '');
+
+    if (Number.isNaN(number)) {
+      return false;
+    }
+
+    const min = dominio.valorMinimo;
+    const max = dominio.valorMaximo;
+
+    const valor = Number(campo.valor);
+
+    const fueraDeRango = valor < min || valor > max;
+
+    return fueraDeRango;
   }
 }

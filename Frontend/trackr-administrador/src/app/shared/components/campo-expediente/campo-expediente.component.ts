@@ -100,15 +100,23 @@ export class CampoExpedienteComponent
   }
 
   ngOnInit() {
-    if (this.campo.idDominioNavigation.fechaMinima !== null && this.campo.idDominioNavigation.fechaMaxima !== null) {
+    const dominio = this.campo.idDominioNavigation;
+
+    if (
+      dominio.fechaMinima !== null &&
+      dominio.fechaMaxima !== null
+    ) {
       setTimeout(() => {
-        this.campo.idDominioNavigation.fechaMinima = new Date(this.campo.idDominioNavigation.fechaMinima);
-        this.campo.idDominioNavigation.fechaMaxima = new Date(this.campo.idDominioNavigation.fechaMaxima);
-        this.campo.idDominioNavigation.fechaMaxima.setHours(23, 59, 59);
+        dominio.fechaMinima = new Date(dominio.fechaMinima);
+        dominio.fechaMaxima = new Date(dominio.fechaMaxima);
+        dominio.fechaMaxima.setHours(23, 59, 59);
       }, 500);
     }
 
-    if (this.campo.idDominioNavigation.tipoCampo === 'Switch' && this.campo.valor === undefined) {
+    if (
+      dominio.tipoCampo === 'Switch' &&
+      this.campo.valor === undefined
+    ) {
       this.campo.valor = false;
     }
   }
@@ -137,18 +145,34 @@ export class CampoExpedienteComponent
     return of(validationErrors || null);
 }
   _validateInternal(control: AbstractControl): ValidationErrors | null {
-    control = new FormControl(this.campo.valor, Validators.compose([
-      this.campo.requerido ? Validators.required : null,
-      Validators.min(this.campo.idDominioNavigation.valorMinimo),
-      Validators.max(this.campo.idDominioNavigation.valorMaximo),
-      this.campo.idDominioNavigation.longitudMaxima !== null ? Validators.maxLength(this.campo.idDominioNavigation.longitudMaxima) : null
-    ]));
+    const dominio = this.campo.idDominioNavigation;
 
-    if(this.campo.idDominioNavigation.fechaMaxima !== null || this.campo.idDominioNavigation.fechaMinima !== null){
-      let fechaCampo = new Date(control.value)
+    control = new FormControl(
+      this.campo.valor,
+      Validators.compose([
+        this.campo.requerido
+          ? Validators.required
+          : null,
+        dominio.permiteFueraDeRango
+          ? null
+          : Validators.min(dominio.valorMinimo),
+        dominio.permiteFueraDeRango
+          ? null
+          : Validators.max(dominio.valorMaximo),
+        dominio.longitudMaxima !== null
+          ? Validators.maxLength(dominio.longitudMaxima)
+          : null,
+      ])
+    );
+
+    if (dominio.fechaMaxima !== null || dominio.fechaMinima !== null) {
+      const fechaCampo = new Date(control.value);
       fechaCampo.setHours(0,0,0,0);
-      if( (fechaCampo > (new Date(this.campo.idDominioNavigation.fechaMaxima.toString())) )
-      || fechaCampo < (new Date(this.campo.idDominioNavigation.fechaMinima.toString()))){
+
+      const fechaMaxima = new Date(dominio.fechaMaxima.toString());
+      const fechaMinima = new Date(dominio.fechaMinima.toString());
+
+      if( fechaCampo > fechaMaxima || fechaCampo < fechaMinima){
         return  { dateInvalid: true }
       }
     }
@@ -178,15 +202,17 @@ export class CampoExpedienteComponent
   }
 
   cambioFecha() {
-    if(this.campo.idDominioNavigation.fechaMaxima !== null){
-      if(this.campo.valor && this.campo.valor > this.campo.idDominioNavigation.fechaMaxima){
-        this.campo.valor = this.campo.idDominioNavigation.fechaMaxima;
+    const dominio = this.campo.idDominioNavigation;
+
+    if(dominio.fechaMaxima !== null){
+      if(this.campo.valor && this.campo.valor > dominio.fechaMaxima){
+        this.campo.valor = dominio.fechaMaxima;
         this.campo.valor.setHours(0,0,0)
       }
     }
-    if(this.campo.idDominioNavigation.fechaMinima !== null){
-      if(this.campo.valor && this.campo.valor < this.campo.idDominioNavigation.fechaMinima){
-        this.campo.valor = this.campo.idDominioNavigation.fechaMinima;
+    if(dominio.fechaMinima !== null){
+      if(this.campo.valor && this.campo.valor < dominio.fechaMinima){
+        this.campo.valor = dominio.fechaMinima;
         this.campo.valor.setHours(0,0,1)
       }
     }

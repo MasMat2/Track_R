@@ -3,16 +3,16 @@
   <div class="cuerpo-contenedor">
     <div class="row">
       <div class="col-md-12">
-        <div class="contenedor-agregar" (click)="agregar()" *ngIf="tieneAccesoAgregar">
+        <div class="contenedor-agregar" (click)="agregar()" *ngIf="tieneAccesoAgregar$ | async">
           <i class="fas fa-plus-circle"></i><span>Agregar</span>
         </div>
         <app-grid-general
           [headerName]="HEADER_GRID"
-          [data]="estadoList"
+          [data]="estados$ | async"
           [children]="columns"
           (event)="onGridClick($event)"
-          [accesoEditar]="accesoEditar"
-          [accesoEliminar]="accesoEliminar"
+          [accesoEditar]="ACCESO_EDITAR"
+          [accesoEliminar]="ACCESO_ELIMINAR"
         >
         </app-grid-general>
       </div>

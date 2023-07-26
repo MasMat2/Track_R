@@ -1,0 +1,201 @@
+<div class="d-flex">
+  <div class="barra-lateral-modal"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div>{{ accion }} Contenido del Examen</div>
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="cancelar()"
+      >
+        <i class="far fa-times-circle"></i>
+      </button>
+    </div>
+    <form
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      novalidate="novalidate"
+    >
+      <div class="modal-body" id="modal">
+        <div class="row justify-content-md-center">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="label-input required-label">Clave</label>
+              <div>
+                <input
+                  #clave="ngModel"
+                  [(ngModel)]="contenidoExamen.clave"
+                  name="clave"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                  maxlength="30"
+                />
+              </div>
+              <div
+                *ngIf="clave.errors?.['required'] && clave.touched"
+                class="error"
+              >
+                La clave es requerida
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="label-input required-label">Tipo de Examen</label>
+              <div>
+                <input
+                  #nombre="ngModel"
+                  [(ngModel)]="tipoExamen.nombre"
+                  name="nombre"
+                  class="form-control"
+                  type="text"
+                  disabled
+                />
+              </div>
+              <div
+                *ngIf="nombre.errors?.['required'] && nombre.touched"
+                class="error"
+              >
+                El tipo de Examen es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="label-input required-label">Asignatura</label>
+              <div>
+                <ng-select
+                  #asignaturaLst="ngModel"
+                  name="asignaturaLstName"
+                  bindLabel="descripcion"
+                  bindValue="idAsignatura"
+                  [items]="asignaturaList"
+                  [required]="true"
+                  [(ngModel)]="contenidoExamen.idAsignatura"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                ></ng-select>
+              </div>
+              <div
+                *ngIf="asignaturaLst.errors?.['required'] && asignaturaLst.touched"
+                class="error"
+              >
+                La asignatura es requerida
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="label-input required-label">Nivel</label>
+              <div>
+                <ng-select
+                  #nivelLst="ngModel"
+                  name="nivelLstName"
+                  bindLabel="descripcion"
+                  bindValue="idNivelExamen"
+                  [items]="nivelExamenList"
+                  [required]="true"
+                  [(ngModel)]="contenidoExamen.idNivelExamen"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                ></ng-select>
+              </div>
+              <div
+                *ngIf="nivelLst.errors?.['required'] && nivelLst.touched"
+                class="error"
+              >
+                El nivel es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="label-input required-label"
+                >Cantidad de Reactivos</label
+              >
+              <div>
+                <input
+                  #totalPreguntas="ngModel"
+                  [(ngModel)]="contenidoExamen.totalPreguntas"
+                  name="totalPreguntas"
+                  class="form-control"
+                  type="text"
+                  (keypress)="numberOnly($event)"
+                  [required]="true"
+                  maxlength="3"
+                />
+              </div>
+              <div
+                *ngIf="
+                  totalPreguntas.errors?.['required'] && totalPreguntas.touched
+                "
+                class="error"
+              >
+                La cantidad de reactivos es requerido
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="label-input required-label"
+                >Duración (Minutos)</label
+              >
+              <div>
+                <input
+                  #duracion="ngModel"
+                  [(ngModel)]="contenidoExamen.duracion"
+                  name="duracion"
+                  class="form-control"
+                  type="text"
+                  (keypress)="numberOnly($event)"
+                  maxlength="3"
+                  [required]="true"
+                />
+              </div>
+              <div
+                *ngIf="duracion.errors?.['required'] && duracion.touched"
+                class="error"
+              >
+                La duración es requerida
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="text-right">
+          <button
+            type="button"
+            class="btn-secundario btn-margin-right"
+            (click)="cancelar()"
+          >
+            Cancelar
+          </button>
+        </div>
+
+        <div class="text-right">
+          <button
+            [disabled]="submitting"
+            type="submit"
+            class="btn-primario btn-margin-left"
+          >
+            Guardar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

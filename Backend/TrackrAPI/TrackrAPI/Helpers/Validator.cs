@@ -6,7 +6,7 @@ namespace TrackrAPI.Helpers
     {
         /**
          * Valida el rango de valores que están para un campo de tipo entero
-         * 
+         *
          * @param valor Valor a validar
          * @param minimo Valor minimo
          * @param maximo Valor maximo
@@ -33,7 +33,7 @@ namespace TrackrAPI.Helpers
 
         /**
          * Valida el rango de valores que están para un campo de tipo double
-         * 
+         *
          * @param valor Valor a validar
          * @param minimo Valor minimo
          * @param maximo Valor maximo
@@ -55,12 +55,12 @@ namespace TrackrAPI.Helpers
         /**
          * Valida que la longitud del texto no sea mayor a la longitud recibida como
          * parametro
-         * 
+         *
          * @param texto Texto a validar
          * @param longitud a validar
          * @param mensaje que muestra
          */
-        public static void ValidarLongitudMaximaString(String texto, int longitud, String mensaje)
+        public static void ValidarLongitudMaximaString(String? texto, int longitud, String mensaje)
         {
 
             if (string.IsNullOrWhiteSpace(texto))
@@ -76,7 +76,7 @@ namespace TrackrAPI.Helpers
 
         /**
          * Valida que la longitud del texto se encuentre entre un rango especifico
-         * 
+         *
          * @param texto texto a validar su longitud
          * @param minimo rango minimo a validar
          * @param maximo rango máximo a valida
@@ -102,7 +102,7 @@ namespace TrackrAPI.Helpers
             }
         }
 
-        public static void ValidarLongitudRangoString(String texto, int maximo, String mensaje)
+        public static void ValidarLongitudRangoString(String? texto, int maximo, String mensaje)
         {
 
             if (string.IsNullOrWhiteSpace(texto))
@@ -118,11 +118,11 @@ namespace TrackrAPI.Helpers
 
         /**
          * Valida que un texto sea diferente de null y diferente de vacío
-         * 
+         *
          * @param texto texto a validar
          * @param mensaje mensaje que se muestra al marcar error
          */
-        public static void ValidarRequerido(string texto, String mensaje)
+        public static void ValidarRequerido(string? texto, String mensaje)
         {
             if (texto == null)
             {
@@ -137,7 +137,7 @@ namespace TrackrAPI.Helpers
 
         /**
          * Valida que un numero entero sea mayor a 0
-         * 
+         *
          * @param numero a validar
          * @param mensaje a mostrar
          */
@@ -151,7 +151,7 @@ namespace TrackrAPI.Helpers
 
         /**
          * Valida que una fecha sea requerida, realiza la comparación contra null
-         * 
+         *
          * @param fecha a validar
          * @param mensaje a mostrar
          */
@@ -165,7 +165,7 @@ namespace TrackrAPI.Helpers
 
         /**
          * Valida que un numero de tipo double sea mayor que 0
-         * 
+         *
          * @param numero a validar
          * @param mensaje a mostrar
          */
@@ -179,11 +179,11 @@ namespace TrackrAPI.Helpers
 
         /**
          * Valida que un objeto no sea nulo
-         * 
+         *
          * @param objeto a validar
          * @param mensaje a mostrar
          */
-        public static void ValidarRequerido(Object objeto, String mensaje)
+        public static void ValidarRequerido(Object? objeto, String mensaje)
         {
             if (objeto == null)
             {
@@ -193,7 +193,7 @@ namespace TrackrAPI.Helpers
 
         /**
          * Valida que un objeto no sea nulo
-         * 
+         *
          * @param objeto a validar
          * @param mensaje a mostrar
          */
@@ -207,7 +207,7 @@ namespace TrackrAPI.Helpers
 
         /**
          * Valida el correo mediante una expresión regular
-         * 
+         *
          * @param correo a validar
          * @param mensaje a mostar
          */
@@ -296,7 +296,7 @@ namespace TrackrAPI.Helpers
                 throw new CdisException(mensaje);
             }
         }
-        
+
         public static void ValidarNumeroEntero(String numero, String mensaje)
         {
              if (string.IsNullOrWhiteSpace(numero))
@@ -314,7 +314,7 @@ namespace TrackrAPI.Helpers
 
         /**
          * Valida que una cadena sea válida a base de una expresión regular
-         * 
+         *
          * @param regex a validar
          * @param mensaje a mostar
          * @param cadena cadena a validar
@@ -331,7 +331,7 @@ namespace TrackrAPI.Helpers
 
         /**
          * Valida que un número de tipo int no sea menor a 0
-         * 
+         *
          * @param valor a validar
          * @param mensaje a mostrar
          */
@@ -361,7 +361,7 @@ namespace TrackrAPI.Helpers
 
         /**
          * Valida que la fecha de inicio sea menor o igual a la fecha fin
-         * 
+         *
          * @param fechaInicio Fecha de Inicio
          * @param fechaFin Fecha de Fin
          * @param mensaje Mensaje que muestra si no cumple la validacion
@@ -386,7 +386,7 @@ namespace TrackrAPI.Helpers
         /**
          * Valida que el numero exterior tenga un formato valido. Acepta: Letras mayusculas y
          * minusculas, numeros, puntos, comas, guiones simples.
-         * 
+         *
          * @param numero string a validar
          * @param mensaje de error a mostrar
          */
@@ -404,7 +404,7 @@ namespace TrackrAPI.Helpers
 
         /**
          * Valida que el valor recibido sea un número positivo
-         * 
+         *
          * @param valor Valor a validar
          * @param mensaje Mensaje que muestra si no cumple la validacion
          */
