@@ -12,13 +12,13 @@ import * as Utileria from '@utils/utileria';
     templateUrl: './genero-formulario.component.html',
 })
 export class GeneroFormularioComponent implements OnInit {
-    public placeHolderSelect = GeneralConstant.PLACEHOLDER_DROPDOWN;
+    protected placeHolderSelect = GeneralConstant.PLACEHOLDER_DROPDOWN;
     public onClose: any;
     public accion: string;
-    public mensajeAgregar = 'El genero ha sido agregado';
-    public mensajeEditar = 'El genero ha sido modificado';
-    public btnSubmit = false;
-    public genero = new GeneroDto();
+    private mensajeAgregar = 'El genero ha sido agregado';
+    private mensajeEditar = 'El genero ha sido modificado';
+    protected btnSubmit = false;
+    protected genero = new GeneroDto();
     
     constructor(
         public bsModalRef: BsModalRef,

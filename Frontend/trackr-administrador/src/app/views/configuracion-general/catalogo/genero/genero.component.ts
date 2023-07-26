@@ -8,6 +8,7 @@ import { GeneralConstant } from '@utils/general-constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneroFormularioComponent } from './genero-formulario/genero-formulario.component';
 import { GeneroDto } from '@dtos/catalogos/GeneroDto';
+import { ColDef } from 'ag-grid-community/dist/lib/entities/colDef';
 
 @Component({
     selector: 'app-genero',
@@ -15,25 +16,24 @@ import { GeneroDto } from '@dtos/catalogos/GeneroDto';
 })
 
 export class GeneroComponent implements OnInit {
-    public tieneAccesoAgregar = false;
-    public accesoEditar = CodigoAcceso.EDITAR_GENERO;
-    public accesoEliminar = CodigoAcceso.ELIMINAR_GENERO;
-    public HEADER_GRID = 'Generos';
-    private MENSAJE_EXITO_ELIMINAR = 'El genero ha sido eliminado';
-    private TITULO_MODAL_ELIMINAR = 'Eliminar Genero';
+    public  tieneAccesoAgregar = false;
+    public readonly accesoEditar = CodigoAcceso.EDITAR_GENERO;
+    public readonly accesoEliminar = CodigoAcceso.ELIMINAR_GENERO;
+    public  readonly HEADER_GRID = 'Generos';
+    private readonly MENSAJE_EXITO_ELIMINAR = 'El genero ha sido eliminado';
+    private readonly TITULO_MODAL_ELIMINAR = 'Eliminar Genero';
     public generoList: GeneroDto[];
 
-    public columns = [
-        //{headerName: 'ID', field: 'idGenero',  minWidth: 150, width: 70 },
+    public columns: ColDef[] =  [
         {headerName: 'Genero', field: 'descripcion', minWidth: 150}
     ];
-
+    
     constructor(
         private modalMensajeService: MensajeService,
         private generoService: GeneroService,
         private accesoService : AccesoService,
         private modalService: BsModalService,
-        private bsModalRef: BsModalRef
+        public bsModalRef: BsModalRef
     ) {}
     ngOnInit(): void {
         this.accesoService.tieneAcceso(CodigoAcceso.AGREGAR_GENERO).subscribe((data) => {
@@ -69,9 +69,14 @@ export class GeneroComponent implements OnInit {
     }    
     editar(idGenero: number) {
         this.generoService.consultar(idGenero).subscribe((data) => {
-            this.bsModalRef = this.modalService.show(GeneroFormularioComponent, GeneralConstant.CONFIG_MODAL_DEFAULT);
-            this.bsModalRef.content.genero = data;
-            this.bsModalRef.content.accion = GeneralConstant.MODAL_ACCION_EDITAR;
+
+            const initialState = {
+                accion: GeneralConstant.COMPONENT_ACCION_EDITAR,
+                genero: data
+            };
+            this.bsModalRef = this.modalService.show(GeneroFormularioComponent, {initialState, ... GeneralConstant.CONFIG_MODAL_LARGE});
+            //this.bsModalRef.content.genero = data;
+            //this.bsModalRef.content.accion = GeneralConstant.MODAL_ACCION_EDITAR;
             this.bsModalRef.content.onClose = (cerrar: boolean) => {
                 if(cerrar){
                     this.consultarGrid();

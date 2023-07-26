@@ -1,61 +1,55 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
 using TrackrAPI.Dtos.Catalogo;
 using TrackrAPI.Services.Catalogo;
-using TrackrAPI.Services.Seguridad;
 
-namespace TrackrAPI.Controllers.Catalogo
+
+namespace TrackrAPI.Controllers.Catalogo;
+
+[Route("api/[controller]")]
+[ApiController]
+
+public class GeneroController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    private readonly GeneroService _generoService;
 
-    public class GeneroController : ControllerBase
+
+    public GeneroController(GeneroService generoService)
     {
-        private GeneroService _generoService;
-        
-
-        public GeneroController(GeneroService generoService )
-        {
-            _generoService = generoService;
-        }
-
-        [HttpGet]
-        [Route("{idGenero}")]
-        public GeneroDto? Consultar(int idGenero)
-        {
-            return _generoService.Consultar(idGenero);
-        }
-
-        [HttpGet]
-        public IEnumerable<GeneroDto> Consultar()
-        {
-            return _generoService.Consultar();
-        }
-
-        [HttpPost]
-        public void Agregar(GeneroDto generoDto)
-        {
-            _generoService.Agregar(generoDto);
-        }
-
-        [HttpPut]
-        //[Route("editar")]
-        public void Editar(GeneroDto generoDto)
-        {
-            _generoService.Editar(generoDto);
-        }
-
-        [HttpDelete("{idGenero}")]
-        //[Route("eliminar/{idUsuario}")]
-        public void Eliminar(int idGenero)
-        {
-            _generoService.Eliminar(idGenero);
-        }
-
-
+        _generoService = generoService;
     }
+
+    [HttpGet]
+    [Route("{idGenero}")]
+    public GeneroDto? Consultar(int idGenero)
+    {
+        return _generoService.Consultar(idGenero);
+    }
+
+    [HttpGet("{idGenero}")]
+    public IEnumerable<GeneroDto> Consultar()
+    {
+        return _generoService.Consultar();
+    }
+
+    [HttpPost]
+    public void Agregar(GeneroDto generoDto)
+    {
+        _generoService.Agregar(generoDto);
+    }
+
+    [HttpPut]
+    
+    public void Editar(GeneroDto generoDto)
+    {
+        _generoService.Editar(generoDto);
+    }
+
+    [HttpDelete("{idGenero}")]
+    
+    public void Eliminar(int idGenero)
+    {
+        _generoService.Eliminar(idGenero);
+    }
+
+
 }
