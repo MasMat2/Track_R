@@ -1,1 +1,65 @@
+.button-container {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
 
+.contenedor {
+  margin-top: 0;
+}
+
+.cuerpo-contenedor {
+  width: auto;
+  margin: 1rem;
+}
+
+.titulo-contenedor {
+  font-size: 1.8rem;
+  padding: 2rem;
+  color: $color-primario;
+  background-color: #ffffff;
+}
+
+.subseccion {
+  color: $color-primario;
+  border-bottom: 1px $color-primario solid;
+  margin-bottom: 25px;
+  padding-top: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.subtitulo-contenedor {
+  font-size: 1.3rem;
+  padding: 0.5rem;
+  color: $color-primario;
+  background-color: #ffffff;
+}
+
+.subseccion {
+  color: $color-primario;
+  border-bottom: 1px $color-primario solid;
+  margin-bottom: 25px;
+  padding-top: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+// TODO: 2023-07-11 -> Renombrar a color-primario
+.icono-primario {
+  color: $color-primario;
+}
+
+.panel-busqueda {
+  margin-top: 0.5rem;
+  border-top: 1px solid #e6e4e7f8;
+  height: 20px !important;
+}
+
+.separador {
+  margin: 15px 0px;
+  height: 1px;
+  background: $color-primario;
+}

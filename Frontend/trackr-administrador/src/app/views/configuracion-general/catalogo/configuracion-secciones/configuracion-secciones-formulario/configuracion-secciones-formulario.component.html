@@ -1,0 +1,320 @@
+<div class="barra-lateral-modal"><i class="fa fa-plus"></i></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div>{{ accion }} Sección</div>
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="cancelar()"
+      >
+        <i class="far fa-times-circle"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <!-- SECCIONES -->
+      <form
+        (keydown.enter)="$event.preventDefault()"
+        #formularioSeccion="ngForm"
+        novalidate="novalidate"
+        id="formulario"
+      >
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Clave</label>
+              <div>
+                <input
+                  #claveSeccion="ngModel"
+                  [(ngModel)]="seccion.clave"
+                  id="claveSeccion"
+                  name="claveSeccion"
+                  class="form-control"
+                  type="text"
+                  maxlength="10"
+                  required="true"
+                  autocomplete="off"
+                  [disabled]="true"
+                />
+                <div
+                  *ngIf="claveSeccion.errors?.['required'] && claveSeccion.touched"
+                  class="error"
+                >
+                  La clave es requerida
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Nombre</label>
+              <div>
+                <input
+                  #nombreSeccion="ngModel"
+                  [(ngModel)]="seccion.nombre"
+                  id="nombreSeccion"
+                  name="nombreSeccion"
+                  class="form-control"
+                  type="text"
+                  maxlength="100"
+                  required="required"
+                  autocomplete="off"
+                />
+                <div
+                  *ngIf="nombreSeccion.errors?.['required'] && nombreSeccion.touched"
+                  class="error"
+                >
+                  El nombre es requerido
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="label-input required-label">Tabla</label><br>
+            <label class="switch">
+                <input
+                    #tabla
+                    id="tabla"
+                    name="tablaName"
+                    type="checkbox"
+                    [(ngModel)]="seccion.esTabla"
+                />
+                <span class="slider round">
+                <span class="on">Si</span>
+                <span class="off">No</span>
+                </span>
+            </label>
+        </div>
+        </div>
+      </form>
+      <!-- CAMPOS -->
+      <div *ngIf="seccion.idSeccion > 0">
+        <div class="subseccion">Campos</div>
+        <form
+          (keydown.enter)="$event.preventDefault()"
+          #formularioCampong="ngForm"
+          (ngSubmit)="enviarFormularioCampo(formularioCampong)"
+          novalidate="novalidate"
+          id="formularioCampo"
+        >
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="label-input required-label">Clave</label>
+                <div>
+                  <input
+                    #nombreCampo="ngModel"
+                    [(ngModel)]="campo.clave"
+                    id="nombreCampo"
+                    name="nombreCampo"
+                    class="form-control"
+                    type="text"
+                    maxlength="10"
+                    required="required"
+                    autocomplete="off"
+                  />
+                  <div
+                    *ngIf="nombreCampo.errors?.['required'] && nombreCampo.touched"
+                    class="error"
+                  >
+                    La clave es requerida
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="label-input required-label">Descripción</label>
+                <div>
+                  <input
+                    #descripcionCampo="ngModel"
+                    [(ngModel)]="campo.descripcion"
+                    id="descripcionCampo"
+                    name="descripcionCampo"
+                    class="form-control"
+                    type="text"
+                    maxlength="200"
+                    required="required"
+                    autocomplete="off"
+                  />
+                  <div
+                    *ngIf="descripcionCampo.errors?.['required'] && descripcionCampo.touched"
+                    class="error"
+                  >
+                    La descripción es requerida
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="label-input required-label">Dominio</label>
+                <div>
+                  <ng-select
+                    #dominio="ngModel"
+                    name="dominio"
+                    bindLabel="nombre"
+                    bindValue="idDominio"
+                    [items]="dominioList"
+                    [required]="true"
+                    [(ngModel)]="campo.idDominio"
+                    [placeholder]="placeHolderSelect"
+                    [notFoundText]="placeHolderNoOptions"
+                  ></ng-select>
+                </div>
+                <div
+                  *ngIf="dominio.errors?.['required'] && dominio.touched"
+                  class="error"
+                >
+                  El dominio es requerido
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="label-input required-label">Orden</label>
+                <div>
+                  <input
+                    #ordenCampo="ngModel"
+                    [(ngModel)]="campo.orden"
+                    id="ordenCampo"
+                    name="ordenCampo"
+                    class="form-control"
+                    type="number"
+                    min="0"
+                    step="1"
+                    maxlength="10"
+                    required="required"
+                    autocomplete="off"
+                    appPermitirSoloNumeros
+                  />
+                  <div
+                    *ngIf="ordenCampo.errors?.['required'] && ordenCampo.touched"
+                    class="error"
+                  >
+                    El orden es requerido
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label class="label-input required-label"
+                  >Cantidad de Columnas</label
+                >
+                <div>
+                  <input
+                    #tamanoColumna="ngModel"
+                    [(ngModel)]="campo.tamanoColumna"
+                    id="tamanoColumna"
+                    name="tamanoColumna"
+                    class="form-control"
+                    type="number"
+                    maxlength="2"
+                    min="0"
+                    step="1"
+                    required="required"
+                    autocomplete="off"
+                    appPermitirSoloNumeros
+                  />
+                  <div
+                    *ngIf="tamanoColumna.errors?.['required'] && tamanoColumna.touched"
+                    class="error"
+                  >
+                    La cantidad de columnas es requerida
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-1">
+              <label class="label-input required-label">Requerido</label><br />
+              <label class="switch">
+                <input
+                  #requerido
+                  id="requerido"
+                  type="checkbox"
+                  [checked]="campo.requerido"
+                  (change)="onRequeridoChanged(requerido.checked)"
+                />
+                <span class="slider round">
+                  <span class="on">Si</span>
+                  <span class="off">No</span>
+                </span>
+              </label>
+            </div>
+            <div class="col-md-1">
+              <label class="label-input required-label">Deshabilitado</label
+              ><br />
+              <label class="switch">
+                <input
+                  #deshabilitado
+                  id="deshabilitado"
+                  type="checkbox"
+                  [checked]="campo.deshabilitado"
+                  (change)="onDeshbilitadoChanged(deshabilitado.checked)"
+                />
+                <span class="slider round">
+                  <span class="on">Si</span>
+                  <span class="off">No</span>
+                </span>
+              </label>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-12 text-center">
+              <button
+                class="btn-secundario mr-3"
+                (click)="limpiarFormularioCampos()"
+              >
+                Cancelar
+              </button>
+
+              <button
+                [disabled]="false"
+                type="submit"
+                class="btn-terceario ml-3"
+              >
+                <div *ngIf="campo.idSeccionCampo > 0">Guardar</div>
+                <div *ngIf="!(campo.idSeccionCampo > 0)">Agregar</div>
+              </button>
+            </div>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-md-12">
+            <app-grid-general
+              [headerName]="HEADER_GRID_CAMPOS"
+              [data]="camposList"
+              [children]="columnsCampos"
+              (event)="onGridClickCampo($event)"
+            >
+            </app-grid-general>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="text-right">
+        <button
+          type="button"
+          (click)="cancelar()"
+          class="btn-secundario btn-margin-left"
+        >
+          Cancelar
+        </button>
+      </div>
+      <div class="text-right">
+        <button
+          type="button"
+          (click)="enviarFormularioSeccion(formularioSeccion)"
+          class="btn-primario btn-margin-left"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+</div>
+

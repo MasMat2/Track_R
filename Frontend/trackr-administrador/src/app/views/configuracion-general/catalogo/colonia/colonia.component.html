@@ -1,0 +1,24 @@
+<div class="contenedor">
+  <div class="titulo-contenedor">Catálogo de Colonias</div>
+  <div class="cuerpo-contenedor">
+    <div class="row justify-content-center">
+      <div class="col-md-12">
+        <div class="contenedor-agregar" (click)="agregar()" *ngIf="tieneAccesoAgregar">
+          <i class="fas fa-plus-circle"></i><span>Agregar</span>
+        </div>
+
+        <app-grid-general
+          #gridNecesidad
+          [headerName]="HEADER_GRID"
+          [data]="coloniaList"
+          [children]="columns"
+          (event)="onGridClick($event)"
+          [accesoEditar]="accesoEditar"
+          [accesoEliminar]="accesoEliminar"
+          [cargandoGrid]="cargandoGrid"
+        >
+        </app-grid-general>
+      </div>
+    </div>
+  </div>
+</div>

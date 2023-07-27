@@ -8,7 +8,11 @@ namespace TrackrAPI.Models
         public int IdUsuarioRol { get; set; }
         public int IdUsuario { get; set; }
         public int IdRol { get; set; }
+        public int? IdCuentaContable { get; set; }
+        public int? IdConcepto { get; set; }
 
+        public virtual Concepto? IdConceptoNavigation { get; set; }
+        public virtual CuentaContable? IdCuentaContableNavigation { get; set; }
         public virtual Rol IdRolNavigation { get; set; } = null!;
         public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
     }

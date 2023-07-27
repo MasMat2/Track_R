@@ -1,0 +1,112 @@
+<div class="barra-lateral-modal"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div>{{ accion }} Localidad</div>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
+        <i class="far fa-times-circle"></i>
+      </button>
+    </div>
+    <form
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      novalidate="novalidate"
+
+    >
+      <div class="cuerpo-contenedor" id="modal">
+
+        <!-- <div class="row">
+          <div class="form-group col-md-12">
+            <label class="label-input required-label">País</label>
+            <ng-selectize
+              id="PaisInput"
+              #paisLst="ngModel"
+              name="paisName"
+              [config]="configPais"
+              [options]="paisList"
+              [required]="true"
+              [(ngModel)]="localidad.idPais"
+              [placeholder]="placeHolderSelect"
+              [noOptionsPlaceholder]="placeHolderNoOptions"
+              (ngModelChange)="consultarEstados($event);"
+            ></ng-selectize>
+            <div *ngIf="paisLst.errors?.['required'] && paisLst.touched" class="error">
+              El país es requerido
+            </div>
+          </div>
+        </div> -->
+
+        <div class="row">
+          <div class="form-group col-md-12">
+            <label class="label-input required-label">Estado</label>
+            <ng-select
+              #estadoLst="ngModel"
+              name="estadoName"
+              bindLabel="nombre"
+              bindValue="idEstado"
+              [items]="estadoList"
+              [required]="true"
+              [(ngModel)]="localidad.idEstado"
+              [placeholder]="placeHolderSelect"
+              [notFoundText]="placeHolderNoOptions"
+              (ngModelChange)="consultarMunicipios($event);"
+            ></ng-select>
+            <div *ngIf="estadoLst.errors?.['required'] && estadoLst.touched" class="error">
+              El estado es requerido
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="row">
+          <div class="form-group col-md-12">
+            <label class="label-input required-label">Municipio</label>
+            <ng-selectize
+              #municipioLst="ngModel"
+              name="nombreMunicipio"
+              [config]="configMunicipio"
+              [options]="municipioList"
+              [required]="true"
+              [(ngModel)]="localidad.idMunicipio"
+              [(placeholder)]="placeHolderSelect"
+              [noOptionsPlaceholder]="placeHolderNoOptions"
+            ></ng-selectize>
+            <div *ngIf="municipioLst.errors?.['required'] && municipioLst.touched" class="error">
+              El municipio es requerido
+            </div>
+          </div>
+        </div> -->
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="label-input required-label">Nombre</label>
+              <div>
+                <input
+                  #nombre="ngModel"
+                  [(ngModel)]="localidad.nombre"
+                  name="nombre"
+                  class="form-control"
+                  type="text"
+                  maxlength="50"
+                  autocomplete="off"
+                  required
+
+                />
+                <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
+                  El nombre es requerido
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="text-right">
+          <button [disabled]="btnSubmit" type="submit" class="btn-primario btn-margin-left">
+            Guardar
+          </button>
+        </div>
+      </div>
+    </form>
+</div>
+

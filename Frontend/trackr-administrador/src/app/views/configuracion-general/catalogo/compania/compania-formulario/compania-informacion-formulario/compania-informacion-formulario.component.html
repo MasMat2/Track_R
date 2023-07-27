@@ -1,0 +1,849 @@
+<div class="contenedor">
+  <div *ngIf="desdeLogin" class="titulo-contenedor">{{titulo}}</div>
+  <div class="cuerpo-contenedor">
+    <form
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      novalidate="novalidate"
+      autocomplete="off"
+    >
+      <div class="subseccion">Información General</div>
+
+      <div class="row">
+        <!-- RFC -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">RFC</label>
+            <div>
+              <input
+                #rfc="ngModel"
+                [(ngModel)]="compania.rfc"
+                name="Rfc"
+                class="form-control"
+                type="text"
+                [required]="true"
+                maxlength="13"
+                appFormatoRfc
+              />
+            </div>
+            <div *ngIf="rfc.errors?.['required'] && rfc.touched" class="error">
+              El RFC es requerido
+            </div>
+            <div *ngIf="rfc.errors?.['formatoRfc'] && rfc.touched" class="error">
+              El RFC tiene un formato inválido
+            </div>
+          </div>
+        </div>
+
+        <!-- Nombre de Compañía -->
+        <div class="col-md-8">
+          <div class="form-group">
+            <label class="label-input required-label">Nombre Compañía</label>
+            <div>
+              <input
+                #nombre="ngModel"
+                [(ngModel)]="compania.nombre"
+                name="nombre"
+                class="form-control"
+                type="text"
+                [required]="true"
+                maxlength="100"
+              />
+            </div>
+            <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
+              El nombre compañía es requerido
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- País -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">País</label>
+            <ng-select
+              #paisLst="ngModel"
+              name="paisName"
+              bindLabel="nombre"
+              bindValue="idPais"
+              class="select-custom"
+              [items]="paisList"
+              [required]="true"
+              [(ngModel)]="compania.idPais"
+              [placeholder]="placeHolderSelect"
+              [notFoundText]="placeHolderNoOptions"
+              (ngModelChange)="onPaisChange($event)"
+            ></ng-select>
+            <div *ngIf="paisLst.errors?.['required'] && paisLst.touched" class="error">
+              El país es requerido
+            </div>
+          </div>
+        </div>
+
+        <!-- Código Postal -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Código Postal</label>
+            <div>
+              <input
+                #codigoPostal="ngModel"
+                [(ngModel)]="compania.codigoPostal"
+                name="codigoPostal"
+                class="form-control"
+                type="text"
+                [required]="true"
+                appFormatoNumerico
+                maxlength="5"
+                minlength="5"
+                (ngModelChange)="onCodigoPostalChange($event)"
+              />
+            </div>
+            <div
+              *ngIf="
+                (codigoPostal.errors?.['required'] ||
+                  codigoPostal.errors?.['minlength'] ||
+                  codigoPostal.errors?.['maxlength']
+                ) && codigoPostal.touched
+              "
+              class="error"
+            >
+              El código postal es requerido (5 dígitos)
+            </div>
+            <div *ngIf="codigoPostal.errors?.['formatoNumerico'] && codigoPostal.touched" class="error">
+              El código postal tiene un formato inválido
+            </div>
+          </div>
+        </div>
+
+        <!-- Estado -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Estado</label>
+            <div>
+              <ng-select
+                #estadoLst="ngModel"
+                name="estadoName"
+                bindLabel="nombre"
+                bindValue="idEstado"
+                class="select-custom"
+                [items]="estadoList"
+                [required]="true"
+                [(ngModel)]="compania.idEstado"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+            </div>
+            <div *ngIf="estadoLst.errors?.['required'] && estadoLst.touched" class="error">
+              El estado es requerido
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Ciudad -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Ciudad</label>
+            <div>
+              <ng-select
+                #ciudad="ngModel"
+                name="ciudadName"
+                bindLabel="nombre"
+                bindValue="idMunicipio"
+                class="select-custom"
+                [items]="ciudadList"
+                [required]="true"
+                [(ngModel)]="compania.idMunicipio"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+            </div>
+            <div *ngIf="ciudad.errors?.['required'] && ciudad.touched" class="error">
+              La ciudad es requerida
+            </div>
+          </div>
+        </div>
+
+        <!-- Colonia -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Colonia</label>
+            <div>
+              <input
+                #colonia="ngModel"
+                [(ngModel)]="compania.colonia"
+                name="colonia"
+                class="form-control"
+                type="text"
+                [required]="true"
+                maxlength="100"
+              />
+            </div>
+            <div *ngIf="colonia.errors?.['required'] && colonia.touched" class="error">
+              La colonia es requerida
+            </div>
+          </div>
+        </div>
+
+        <!-- Calle -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Calle</label>
+            <div>
+              <input
+                #calle="ngModel"
+                [(ngModel)]="compania.calle"
+                name="calle"
+                class="form-control"
+                type="text"
+                [required]="true"
+                maxlength="100"
+              />
+            </div>
+            <div *ngIf="calle.errors?.['required'] && calle.touched" class="error">
+              La calle es requerida
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Número Interior -->
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="label-input required-label"
+              >Núm. Interior</label
+            >
+            <div>
+              <input
+                #numeroInterior="ngModel"
+                [(ngModel)]="compania.numeroInterior"
+                name="numeroInterior"
+                class="form-control"
+                type="text"
+                [required]="false"
+                maxlength="6"
+                appFormatoAlfanumerico
+              />
+            </div>
+            <div *ngIf="numeroInterior.errors?.['formatoAlfanumerico'] && numeroInterior.touched" class="error">
+              El núm. interior tiene un formato inválido
+            </div>
+          </div>
+        </div>
+
+        <!-- Número Exterior -->
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="label-input required-label"
+              >Núm. Exterior</label
+            >
+            <div>
+              <input
+                #numeroExterior="ngModel"
+                [(ngModel)]="compania.numeroExterior"
+                name="numeroExterior"
+                class="form-control"
+                type="text"
+                [required]="true"
+                maxlength="6"
+                appFormatoAlfanumerico
+              />
+            </div>
+            <div *ngIf="numeroExterior.errors?.['required'] && numeroExterior.touched" class="error">
+              El núm. exterior es requerido
+            </div>
+            <div *ngIf="numeroInterior.errors?.['formatoAlfanumerico'] && numeroExterior.touched" class="error">
+              El núm. exterior tiene un formato inválido
+            </div>
+          </div>
+        </div>
+
+        <!-- Teléfono -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label" >Teléfono (10 dígitos)</label>
+            <div class="row">
+              <!-- Lada -->
+              <div class="col-4 pr-0">
+                <ng-select
+                  class="lada-input"
+                  #ladaModel="ngModel"
+                  name="ladaName"
+                  bindLabel="claveNumero"
+                  bindValue="idLada"
+                  [items]="ladaList"
+                  [required]="false"
+                  [(ngModel)]="compania.idLada"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                ></ng-select>
+              </div>
+
+              <!-- Dígitos -->
+              <div class="col-8">
+                <input
+                  #telefono="ngModel"
+                  [(ngModel)]="compania.telefono"
+                  name="telefonoName"
+                  class="form-control"
+                  type="text"
+                  [required]="false"
+                  maxlength="10"
+                  minlength="10"
+                  appFormatoTelefono
+                />
+              </div>
+            </div>
+            <div
+              *ngIf="
+                (telefono.errors?.['required'] ||
+                  telefono.errors?.['minlength'] ||
+                  telefono.errors?.['maxlength']
+                ) && telefono.touched
+              "
+              class="error"
+            >
+              El teléfono es requerido (10 dígitos)
+            </div>
+          </div>
+        </div>
+
+        <!-- Correo Electrónico -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label" >Correo Electrónico</label>
+            <div>
+              <input
+                #correo="ngModel"
+                [(ngModel)]="compania.correo"
+                name="correo"
+                class="form-control"
+                type="text"
+                [required]="true"
+                maxlength="100"
+                appFormatoCorreo
+              />
+            </div>
+            <div *ngIf="correo.errors?.['required'] && correo.touched" class="error">
+              El correo electrónico es requerido
+            </div>
+            <div *ngIf="correo.errors?.['formatoCorreo']" class="error">
+              El correo electrónico tiene un formato inválido
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Portal Web -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Portal Web</label>
+            <div>
+              <input
+                #portalWeb="ngModel"
+                [(ngModel)]="compania.portalWeb"
+                name="portalWeb"
+                class="form-control"
+                type="text"
+                [required]="true"
+                maxlength="500"
+              />
+            </div>
+            <div *ngIf="portalWeb.errors?.['required'] && portalWeb.touched" class="error">
+              El portal web es requerido
+            </div>
+          </div>
+        </div>
+
+        <!-- Tipo de Compañía -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label" >Tipo de Compañía</label>
+            <div>
+              <ng-select
+                #tipoCompaniaLst="ngModel"
+                name="tipoCompaniaName"
+                [required]="true"
+                bindLabel="nombre"
+                bindValue="idTipoCompania"
+                [items]="tipoCompaniaList"
+                [(ngModel)]="compania.idTipoCompania"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+              <div *ngIf="tipoCompaniaLst.errors?.['required'] && tipoCompaniaLst.touched" class="error">
+                El tipo de companía es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Giro Comercial -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label" >Giro Comercial</label>
+            <div>
+              <ng-select
+                #giroComercial="ngModel"
+                name="giroComercialName"
+                [required]="true"
+                bindLabel="nombre"
+                bindValue="idGiroComercial"
+                [items]="giroComercialList"
+                [(ngModel)]="compania.idGiroComercial"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+              <div *ngIf="giroComercial.errors?.['required'] && giroComercial.touched" class="error">
+                El giro comercial es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!desdeLogin" class="col-md-2">
+          <label class="label-input required-label">Uso Almacén</label>
+          <div class="form-group radion-bottom">
+            <label class="switch">
+              <input
+                type="checkbox"
+                #usoAlmacen="ngModel"
+                [(ngModel)]="compania.usoAlmacen"
+                id="usoAlmacen"
+                name="usoAlmacen"
+                class="form-control"
+              >
+              <div class="slider round">
+                <span class="on">Sí</span>
+                <span class="off">No</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- URL -->
+        <div class="col-md-4" *ngIf="compania.clave">
+          <div class="form-group">
+            <label class="label-input required-label" >URL Sistema Compras en Línea</label>
+            <a [href]="urlFrontend + compania.clave + '/login'" target="_blank">
+              {{ urlFrontend + compania.clave + "/login" }}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="desdeLogin" class="row">
+
+        <!-- Contraseña -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label" >Contraseña</label>
+            <div>
+              <input
+                #contrasena="ngModel"
+                [(ngModel)]="compania.contrasenaUsuario"
+                name="contrasenaName"
+                class="form-control"
+                type="text"
+                [required]="true"
+                maxlength="100"
+              />
+            </div>
+            <div *ngIf="contrasena.errors?.['required'] && contrasena.touched" class="error">
+              La contraseña es requerida
+            </div>
+          </div>
+        </div>
+
+        <!-- Confirmar Contraseña -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Confirmar Contraseña</label>
+            <div>
+              <input
+                #confirmarContrasenaText="ngModel"
+                [(ngModel)]="confirmarContrasena"
+                name="confirmarContrasenaName"
+                class="form-control"
+                type="text"
+                [required]="true"
+                maxlength="100"
+              />
+            </div>
+            <div *ngIf="confirmarContrasenaText.errors?.['required'] && confirmarContrasenaText.touched" class="error">
+              La confirmación de contraseña es requerida
+            </div>
+            <div *ngIf="contrasena.value != confirmarContrasenaText.value && confirmarContrasenaText.touched" class="error">
+              Las contraseñas no coinciden
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div *ngIf="!desdeLogin">
+        <div class="subseccion">Logotipo de Compañía</div>
+        <!-- Input -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <div>
+              <div class="custom-file">
+                <input
+                  #companiaLogotipoInput
+                  type="file"
+                  class="custom-file-input"
+                  id="companiaLogotipo"
+                  name="companiaLogotipo"
+                  autocomplete="off"
+                  accept="image/jpeg,image/png"
+                  (change)="onFileChangeLogotipo($event)"
+                  [disabled]="companiaLogotipo"
+                />
+                <label class="custom-file-label" for="companiaLogotipo">
+                  {{ companiaLogotipo?.nombreImagen }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="companiaLogotipo?.imagenBase64 || companiaLogotipo?.src">
+          <!-- Nombre -->
+          <div class="row mb-3">
+            <div
+              class="col-md-6 d-flex"
+              style="word-break:break-all; gap: 10px;"
+            >
+              {{ companiaLogotipo?.nombreImagen }}
+              <img
+                style="cursor: pointer"
+                src="assets/img/svg/ico-15x15-Eliminar-gris.svg"
+                alt="Eliminar"
+                (click)="eliminarLogotipo()"
+              />
+            </div>
+          </div>
+
+          <!-- Imagen -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <img
+                [src]="companiaLogotipo?.imagenBase64
+                  ? obtenerSrcLogotipo(companiaLogotipo!)
+                  : urlBackend + companiaLogotipo!.src"
+                alt="Logotipo Compania"
+                width="200px" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de Contabilidad -->
+      <div class="subseccion">Contabilidad</div>
+
+      <div class="row">
+        <!-- Régimen Fiscal -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label" >Régimen Fiscal</label>
+            <div>
+              <ng-select
+                #regimenFiscalLst="ngModel"
+                name="regimenFiscalName"
+                [required]="true"
+                bindLabel="claveNombre"
+                bindValue="idRegimenFiscal"
+                [items]="regimenFiscalList"
+                [(ngModel)]="compania.idRegimenFiscal"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+            </div>
+            <div *ngIf="regimenFiscalLst.errors?.['required'] && regimenFiscalLst.touched" class="error">
+              El régimen fiscal es requerido
+            </div>
+          </div>
+        </div>
+
+        <!-- Agrupador de Cuenta Contable -->
+        <div class="col-md-4" *ngIf="esEditar()">
+          <div class="form-group">
+            <label class="label-input required-label" >Agrupador de Cuenta Contable</label>
+            <div>
+              <ng-select
+                #agrupadorCuentaLst="ngModel"
+                name="agrupadorCuentaName"
+                [required]="false"
+                bindLabel="descripcion"
+                bindValue="idAgrupadorCuentaContable"
+                [items]="agrupadorCuentaList"
+                [(ngModel)]="compania.idAgrupadorCuentaContable"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Moneda -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Moneda</label>
+            <div>
+              <ng-select
+                #monedaLst="ngModel"
+                name="monedaName"
+                [required]="true"
+                bindLabel="claveNombre"
+                bindValue="idMoneda"
+                [items]="monedaList"
+                [(ngModel)]="compania.idMoneda"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+              <div *ngIf="monedaLst.errors?.['required'] && monedaLst.touched" class="error">
+                La moneda es requerida
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="esEditar()">
+        <!-- Afectación Contable -->
+        <div class="col-md-2">
+          <label class="label-input required-label">Afectación Contable</label>
+          <div class="form-group radion-bottom">
+            <label class="switch">
+              <input
+                type="checkbox"
+                #afectacion="ngModel"
+                [(ngModel)]="compania.afectacionContable"
+                id="afectacion"
+                name="afectacionName"
+                class="form-control">
+              <div class="slider round">
+                <span class="on">Sí</span>
+                <span class="off">No</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Timbrado -->
+        <div class="col-md-2">
+          <label class="label-input required-label">Timbrado</label>
+          <div class="form-group radion-bottom">
+            <label class="switch">
+              <input
+                type="checkbox"
+                #timbrado="ngModel"
+                [(ngModel)]="compania.timbrado"
+                id="timbrado"
+                name="timbradoName"
+                class="form-control">
+              <div class="slider round">
+                <span class="on">Sí</span>
+                <span class="off">No</span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección Datos de Contacto -->
+      <div *ngIf="desdeLogin">
+        <div class="subseccion">Datos de Contacto</div>
+
+        <div class="contenedor-informativo">
+          <i class="fas fa-info-circle"></i>
+          <div>
+            Indique los datos de contacto personal, para futuras referencias.
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Nombre -->
+        <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Nombre</label>
+              <div>
+                <input
+                  #nombre="ngModel"
+                  [(ngModel)]="companiaContacto.nombre"
+                  name="nombre"
+                  class="form-control"
+                  type="text"
+                  [required]="desdeLogin"
+                  maxlength="200"
+                  appFormatoNombre
+                />
+              </div>
+              <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
+                El nombre es requerido
+              </div>
+              <div *ngIf="nombre.errors?.['formatoNombre'] && nombre.touched" class="error">
+                El nombre tiene un formato inválido
+              </div>
+            </div>
+          </div>
+
+          <!-- Apellido Paterno -->
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Apellido Paterno</label>
+              <div>
+                <input
+                  #apellidoP="ngModel"
+                  [(ngModel)]="companiaContacto.apellidoPaterno"
+                  name="apellidoP"
+                  class="form-control"
+                  type="text"
+                  maxlength="200"
+                  [required]="desdeLogin"
+                  appFormatoNombre
+                />
+              </div>
+              <div *ngIf="apellidoP.errors?.['required'] && apellidoP.touched" class="error">
+                El apellido paterno es requerido
+              </div>
+              <div *ngIf="apellidoP.errors?.['formatoNombre'] && apellidoP.touched" class="error">
+                El apellido paterno tiene un formato inválido
+              </div>
+            </div>
+          </div>
+
+          <!-- Apellido Materno -->
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Apellido Materno</label>
+              <div>
+                <input
+                  #apellidoM="ngModel"
+                  [(ngModel)]="companiaContacto.apellidoMaterno"
+                  name="apellidoM"
+                  class="form-control"
+                  type="text"
+                  maxlength="200"
+                  [required]="desdeLogin"
+                  appFormatoNombre
+                />
+              </div>
+              <div *ngIf="apellidoM.errors?.['required'] && apellidoM.touched" class="error">
+                El apellido materno es requerido
+              </div>
+              <div *ngIf="apellidoM.errors?.['formatoNombre'] && apellidoM.touched" class="error">
+                El apellido materno tiene un formato inválido
+              </div>
+            </div>
+          </div>
+       </div>
+
+        <div class="row">
+          <!-- Correo Electrónico -->
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Correo Electrónico</label>
+              <div>
+                <input
+                  #correoElectronico="ngModel"
+                  [(ngModel)]="companiaContacto.correo"
+                  name="correoElectronico"
+                  class="form-control"
+                  type="text"
+                  maxlength="50"
+                  [required]="desdeLogin"
+                  appFormatoCorreo
+                />
+              </div>
+              <div *ngIf="correoElectronico.errors?.['formatoCorreo'] && correoElectronico.touched" class="error">
+                El correo tiene un formato inválido
+              </div>
+              <div *ngIf="correoElectronico.errors?.['required'] && correoElectronico.touched" class="error">
+                El correo es requerido
+              </div>
+            </div>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label" >Teléfono (10 dígitos)</label>
+              <div class="row">
+                <!-- Lada -->
+                <div class="col-4 pr-0">
+                  <ng-select
+                    class="lada-input"
+                    #lada="ngModel"
+                    name="lada"
+                    bindLabel="nombre"
+                    bindValue="idLada"
+                    [items]="ladaList"
+                    [(ngModel)]="companiaContacto.idLada"
+                    [placeholder]="placeHolderSelect"
+                    [notFoundText]="placeHolderNoOptions"
+                    required
+                  ></ng-select>
+                </div>
+                <div *ngIf=" lada.errors?.['required'] && lada.touched" class="error">
+                  La lada es requerida
+                </div>
+                <!-- Dígitos -->
+                <div class="col-8">
+                  <input
+                    #telefonoContacto="ngModel"
+                    [(ngModel)]="companiaContacto.telefonoMovil"
+                    name="telefonoContacto"
+                    class="form-control"
+                    type="text"
+                    maxlength="10"
+                    minlength="10"
+                    appFormatoTelefono
+                    required
+                  />
+                </div>
+              </div>
+              <div
+                *ngIf="
+                  (telefonoContacto.errors?.['required'] ||
+                    telefonoContacto.errors?.['minlength'] ||
+                    telefonoContacto.errors?.['maxlength']
+                  ) && (telefonoContacto.touched)
+                "
+                class="error"
+              >
+                El teléfono es requerido (10 dígitos)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Guardar y cancelar -->
+      <!-- <div class="text-center mt-3"></div> -->
+      <div class="text-center mt-3">
+        <button
+          type="button"
+          class="btn-secundario mr-3"
+          (click)="regresar()"
+        >
+          &lang;&lang; Regresar
+        </button>
+        <button
+          type="submit"
+          class="btn-primario mr-3"
+          [disabled]="btnSubmit"
+          *ngIf="tieneAccesoEditar"
+        >Guardar
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

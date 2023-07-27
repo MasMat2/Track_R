@@ -1,0 +1,131 @@
+@import "variables.scss";
+
+button {
+  &.btn {
+    border: none;
+  }
+
+  &.btn-primario,
+  &.btn-secundario,
+  &.btn-secundario-cancelar,
+  &.btn-terceario,
+  &.btn-terceario,
+  &.btn-cuaternario {
+    transition: 200ms;
+    width: auto;
+    min-height: 40px;
+    border: 1px #f2f2f2 solid;
+    color: #fff;
+    font-size: 14px;
+    -webkit-box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
+    box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
+    width: 243px !important;
+    max-width: 100%;
+    border-radius: 20px;
+  }
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  &:focus {
+    outline: 0;
+  }
+  &.boton-tipo-icono {
+    min-width: auto !important;
+    height: auto !important;
+    color: inherit !important;
+    margin-bottom: auto !important;
+  }
+  &.invisible {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  &.full-disabled {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &.btn-margin-left {
+    margin-left: 5px;
+  }
+}
+
+.btn-primario,
+.btn-filtro {
+  background-color: $color-primario;
+  &:hover {
+    background-color: $color-primario-hover;
+  }
+}
+
+.btn-terceario {
+  background-color: $color-terceario;
+  color: #000000 !important;
+  &:hover {
+    background-color: $color-terceario-hover;
+  }
+}
+
+.btn-cuaternario {
+  background-color: $color-cuaternario;
+  &:hover {
+    background-color: $color-cuaternario-hover;
+  }
+}
+
+.btn-secundario {
+  background-color: $color-secundario;
+  C5C5C5 &:hover {
+    background-color: $color-secundario-hover;
+  }
+}
+
+.btn-secundario-cancelar {
+  background-color: #a5a5a5;
+  &:hover {
+    background-color: #c5c5c5;
+  }
+}
+
+.btn-secundario:hover {
+  background: $color-secundario-hover;
+}
+
+.btn-primario i {
+  margin-right: 5px;
+}
+
+.limpiar {
+  margin-left: 14px;
+  color: #000000;
+}
+
+.contenedor-agregar {
+  font-size: 1.2rem;
+  display: inline-block;
+  overflow-y: initial;
+}
+
+.contenedor-agregar i {
+  color: $color-primario;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.contenedor-agregar i:hover {
+  color: $color-primario-hover;
+}
+
+.contenedor-agregar span {
+  cursor: pointer;
+}
+
+.container-btn-centro {
+  display: flex;
+  flex-wrap: nowrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}

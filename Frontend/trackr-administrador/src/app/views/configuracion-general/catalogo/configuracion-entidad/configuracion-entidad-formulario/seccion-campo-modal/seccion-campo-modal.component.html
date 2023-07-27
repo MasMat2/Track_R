@@ -1,0 +1,33 @@
+<div class="d-flex">
+    <div class="barra-lateral-modal"><i class="fa fa-plus"></i></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        Desglose de Sección
+        <button type="button" class="close pull-right" aria-label="Close" (click)="cerrar()">
+          <i class="far fa-times-circle"></i>
+        </button>
+      </div>
+  
+      <div class="container cuerpo-contenedor">
+  
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="subseccion">Campos</div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-md-12">
+            <app-grid-general
+            [headerName]="HEADER_GRID_CAMPOS"
+            [data]="camposList"
+            [children]="columnsCampos"
+            [disableEdit]="true"
+            [disableDelete]="true"
+            [disableXLS]="true">
+            </app-grid-general>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

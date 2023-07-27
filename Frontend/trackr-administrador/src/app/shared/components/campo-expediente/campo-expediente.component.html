@@ -1,0 +1,424 @@
+<div>
+  <!-- Tipo Text -->
+  <div *ngIf="campo.idDominioNavigation.tipoCampo === 'Text'">
+    <label class="label-input required-label"
+      >{{ campo.descripcion }} {{ campo.requerido ? " *" : "" }}</label
+    >
+    <div>
+      <input
+        #campoModel="ngModel"
+        type="text"
+        class="form-control"
+        [(ngModel)]="campo.valor"
+        [name]="campo.idSeccionCampo.toString()"
+        [maxlength]="campo.idDominioNavigation.longitudMaxima"
+        [required]="campo.requerido"
+        autocomplete="off"
+        [value]="campo.valor"
+        (blur)="onTouched($event)"
+        [disabled]="campo.deshabilitado"
+        [ngClass]="{ 'ng-touched': touched }"
+      />
+    </div>
+    <label
+      class="error"
+      *ngIf="campoModel.errors?.['required'] && (campoModel.touched || touched) "
+      >El campo es requerido</label
+    >
+    <label
+      class="error"
+      *ngIf="campoModel.errors?.['maxLength'] && (campoModel.touched || touched) "
+      >La longitud máxima es de
+      {{ campo.idDominioNavigation.longitudMaxima }} caracteres</label
+    >
+  </div>
+
+  <!-- Tipo TextArea -->
+  <div *ngIf="campo.idDominioNavigation.tipoCampo === 'TextArea'">
+    <label class="label-input required-label"
+      >{{ campo.descripcion }} {{ campo.requerido ? " *" : "" }}</label
+    >
+    <div>
+      <textarea
+        #campoModel="ngModel"
+        class="form-control-textarea"
+        [(ngModel)]="campo.valor"
+        [name]="campo.idSeccionCampo.toString()"
+        [required]="campo.requerido"
+        [maxlength]="campo.idDominioNavigation.longitudMaxima"
+        autocomplete="off"
+        [value]="campo.valor"
+        (blur)="onTouched($event)"
+        [disabled]="campo.deshabilitado"
+        [ngClass]="{ 'ng-touched': touched }"
+        (keydown.enter)="$event.stopPropagation()"
+      ></textarea>
+    </div>
+    <label
+      class="error"
+      *ngIf="campoModel.errors?.['required'] && (campoModel.touched || touched) "
+      >El campo es requerido</label
+    >
+    <label
+      class="error"
+      *ngIf="campoModel.errors?.['maxLength'] && (campoModel.touched || touched) "
+      >La longitud máxima es de
+      {{ campo.idDominioNavigation.longitudMaxima }} caracteres</label
+    >
+  </div>
+
+  <!-- Tipo Lista Simple -->
+
+  <div *ngIf="campo.idDominioNavigation.tipoCampo === 'Select'">
+    <label class="label-input required-label"
+      >{{ campo.descripcion }} {{ campo.requerido ? " *" : "" }}</label
+    >
+    <div>
+      <ng-select
+        #campoModel="ngModel"
+        name="campoName"
+        class="select-custom"
+        [items]="campo.idDominioNavigation.dominioDetalle"
+        bindLabel="valor"
+        bindValue="idDominioDetalle"
+        [(ngModel)]="campo.valor"
+        [placeholder]="placeHolderSelect"
+        [notFoundText]="placeHolderNoOptions"
+        [disabled]="campo.deshabilitado"
+      ></ng-select>
+      <label
+        class="error"
+        *ngIf="campoModel.errors?.['required'] && (campoModel.touched || touched) "
+        >El campo es requerido</label
+      >
+    </div>
+  </div>
+
+  <!-- Lista muliple -->
+  <div *ngIf="campo.idDominioNavigation.tipoCampo === 'Select Múltiple'">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label class="label-input required-label"
+          >{{ campo.descripcion }} {{ campo.requerido ? " *" : "" }}</label
+        >
+        <div>
+          <ng-select
+            #listaMultipleModel="ngModel"
+            name="listaMultipleName"
+            class="select-custom"
+            [items]="campo.idDominioNavigation.dominioDetalle"
+            bindLabel="valor"
+            bindValue="idDominioDetalle"
+            [(ngModel)]="campo.valor"
+            [placeholder]="placeHolderSelect"
+            [notFoundText]="placeHolderNoOptions"
+            [required]="campo.requerido"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            (change)="onSelectMultipleChange($event)"
+          >
+          </ng-select>
+          <label
+            class="error"
+            *ngIf="listaMultipleModel.errors?.['required'] && (listaMultipleModel.touched || touched) "
+            >El campo es requerido</label
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tipo Numerico -->
+  <div *ngIf="campo.idDominioNavigation.tipoCampo === 'Number'">
+    <label class="label-input required-label"
+      >{{ campo.descripcion }} {{ campo.requerido ? " *" : "" }}</label
+    >
+    <app-number-input
+      #campoNumberModel="ngModel"
+      name="campoNumberName"
+      [nameForm]="'campoNumberName'"
+      [(ngModel)]="campo.valor"
+      [(valor)]="campo.valor"
+      [max]="
+        campo.idDominioNavigation.permiteFueraDeRango
+          ? null
+          : campo.idDominioNavigation.valorMaximo
+      "
+      [min]="
+        campo.idDominioNavigation.permiteFueraDeRango
+          ? null
+          : campo.idDominioNavigation.valorMinimo
+      "
+      [required]="campo.requerido"
+      [deshabilitado]="campo.deshabilitado"
+      ngDefaultControl
+      [(touchedVar)]="touched"
+    ></app-number-input>
+    <!-- Los mensajes de error van contenidos en el componente number-input -->
+  </div>
+
+  <!-- Tipo Switch -->
+  <div
+    *ngIf="campo.idDominioNavigation.tipoCampo === 'Switch'"
+    [ngClass]="classSwitch"
+    class="campo-switch"
+  >
+    <div
+      class="label-input required-label"
+      [ngClass]="
+        par && classSwitch === 'divSwitchAlternativo' ? 'par' : 'impar'
+      "
+    >
+      {{ campo.descripcion }}
+    </div>
+    <label class="switch">
+      <input
+        #switchControl
+        type="checkbox"
+        [id]="campo.descripcion"
+        [checked]="campo.valor === 'true' ? true : false"
+        (change)="onSwitchChanged(switchControl.checked)"
+        [(ngModel)]="campo.valor"
+      />
+      <div class="slider round">
+        <span class="on">Si</span>
+        <span class="off">No</span>
+      </div>
+    </label>
+  </div>
+
+  <!-- Tipo Date -->
+  <div
+    *ngIf="
+      campo.idDominioNavigation.tipoCampo === 'Date' &&
+      campo.idDominioNavigation.fechaMaxima !== null &&
+      campo.idDominioNavigation.fechaMinima !== null
+    "
+  >
+    <label class="label-input required-label"
+      >{{ campo.descripcion }} {{ campo.requerido ? " *" : "" }}</label
+    >
+    <div class="calendario">
+      <input
+        #campoDate="ngModel"
+        type="text"
+        class="form-control"
+        autocomplete="off"
+        placeholder="dd/mm/aaaa"
+        [(ngModel)]="campo.valor"
+        [name]="campo.idSeccionCampo.toString()"
+        [required]="campo.requerido"
+        [bsConfig]="configDate"
+        [minDate]="campo.idDominioNavigation.fechaMinima"
+        [maxDate]="campo.idDominioNavigation.fechaMaxima"
+        [disabled]="campo.deshabilitado"
+        bsDatepicker
+        [ngClass]="{ 'ng-touched': touched }"
+        (ngModelChange)="cambioFecha()"
+      />
+    </div>
+    <label
+      class="error"
+      *ngIf="campoDate.errors?.['required'] && (campoDate.touched || touched) "
+      >La fecha es requerida</label
+    >
+    <label
+      class="error"
+      *ngIf="(campoDate.errors?.['maxDate'] || campoDate.errors?.['minDate'])"
+      >La fecha seleccionada no esta dentro del rango</label
+    >
+  </div>
+
+  <div
+    *ngIf="
+      campo.idDominioNavigation.tipoCampo === 'Date' &&
+      (campo.idDominioNavigation.fechaMaxima === null ||
+        campo.idDominioNavigation.fechaMinima === null)
+    "
+  >
+    <label class="label-input required-label"
+      >{{ campo.descripcion }} {{ campo.requerido ? " *" : "" }}</label
+    >
+    <div class="calendario">
+      <input
+        #campoDate="ngModel"
+        type="text"
+        class="form-control"
+        autocomplete="off"
+        placeholder="dd/mm/aaaa"
+        [(ngModel)]="campo.valor"
+        [name]="campo.idSeccionCampo.toString()"
+        [required]="campo.requerido"
+        [bsConfig]="configDate"
+        [disabled]="campo.deshabilitado"
+        bsDatepicker
+        [ngClass]="{ 'ng-touched': touched }"
+        (ngModelChange)="cambioFecha()"
+      />
+    </div>
+    <label
+      class="error"
+      *ngIf="campoDate.errors?.['required'] && (campoDate.touched || touched) "
+      >La fecha es requerida</label
+    >
+  </div>
+
+  <!-- Tipo time -->
+  <div *ngIf="campo.idDominioNavigation.tipoCampo === 'Time'">
+    <label class="label-input required-label"
+      >{{ campo.descripcion }} {{ campo.requerido ? " *" : "" }}</label
+    >
+    <div class="">
+      <input
+        #campoTime="ngModel"
+        type="time"
+        class="form-control"
+        autocomplete="off"
+        placeholder="HH/MM"
+        [(ngModel)]="campo.valor"
+        [name]="campo.idSeccionCampo.toString()"
+        [required]="campo.requerido"
+        [ngClass]="{ 'ng-touched': touched }"
+      />
+    </div>
+    <label
+      class="error"
+      *ngIf="campoTime.errors?.['required'] && (campoTime.touched || touched) "
+      >El tiempo es requerido</label
+    >
+  </div>
+
+  <!-- Tipo Radio Checkbox -->
+  <div *ngIf="campo.idDominioNavigation.tipoCampo === 'Checkbox'">
+    <label class="label-input required-label">{{ campo.descripcion }} </label>
+    <label
+      *ngFor="let opcion of campo.idDominioNavigation.dominioDetalle"
+      class="container-checkbox mt-2"
+    >
+      <span class="ml-2">{{ opcion.valor }}</span>
+      <input
+        [(ngModel)]="opcion.seleccionada"
+        class="mr-3"
+        type="checkbox"
+        [value]="opcion.valor"
+        [name]="opcion.valor"
+        [id]="opcion.valor"
+        (change)="onCheckboxSelected($event, opcion)"
+        [disabled]="campo.deshabilitado"
+      />
+      <span class="checkmark"></span>
+    </label>
+  </div>
+
+  <!-- Tipo Radio Button -->
+  <div *ngIf="campo.idDominioNavigation.tipoCampo === 'Radio Button'">
+    <div>
+      <label class="label-input required-label">{{ campo.descripcion }}</label>
+    </div>
+    <label
+      *ngFor="let opcion of campo.idDominioNavigation.dominioDetalle"
+      class="container-radio mr-3"
+    >
+      <input
+        [(ngModel)]="campo.valor"
+        type="radio"
+        [value]="opcion.valor"
+        [name]="opcion.idDominio.toString()"
+        (change)="onCheckboxSelected($event, opcion)"
+        [disabled]="campo.deshabilitado"
+      />
+      {{ opcion.valor }}
+      <span class="checkmark"></span>
+    </label>
+  </div>
+
+  <!-- Tipo Numerico General -->
+  <div *ngIf="campo.idDominioNavigation.tipoCampo === 'Numerico General'">
+    <label class="label-input required-label"
+      >{{ campo.descripcion }} {{ campo.requerido ? " *" : "" }}</label
+    >
+    <app-number-input
+      #campoNumberModel="ngModel"
+      name="campoNumberName"
+      [nameForm]="'campoNumberName'"
+      [(ngModel)]="campo.valor"
+      [(valor)]="campo.valor"
+      [max]="
+        campo.idDominioNavigation.permiteFueraDeRango
+          ? null
+          : campo.idDominioNavigation.valorMaximo
+      "
+      [min]="
+        campo.idDominioNavigation.permiteFueraDeRango
+          ? null
+          : campo.idDominioNavigation.valorMinimo
+      "
+      [permitirDecimales]="false"
+      [required]="campo.requerido"
+      ngDefaultControl
+      [(touchedVar)]="touched"
+      [deshabilitado]="campo.deshabilitado"
+    ></app-number-input>
+    <!-- Los mensajes de error van contenidos en el componente number-input -->
+  </div>
+
+  <!-- Tipo Decimal General -->
+  <div *ngIf="campo.idDominioNavigation.tipoCampo === 'Decimal General'">
+    <label class="label-input required-label"
+      >{{ campo.descripcion }} {{ campo.requerido ? " *" : "" }}</label
+    >
+    <app-number-input
+      #campoNumberModel="ngModel"
+      name="campoNumberName"
+      [nameForm]="'campoNumberName'"
+      [(ngModel)]="campo.valor"
+      [(valor)]="campo.valor"
+      [max]="
+        campo.idDominioNavigation.permiteFueraDeRango
+          ? null
+          : campo.idDominioNavigation.valorMaximo
+      "
+      [min]="
+        campo.idDominioNavigation.permiteFueraDeRango
+          ? null
+          : campo.idDominioNavigation.valorMinimo
+      "
+      [required]="campo.requerido"
+      [permitirDecimales]="true"
+      ngDefaultControl
+      [(touchedVar)]="touched"
+      [deshabilitado]="campo.deshabilitado"
+    ></app-number-input>
+    <!-- Los mensajes de error van contenidos en el componente number-input -->
+  </div>
+
+  <!-- Tipo Temperatura -->
+  <div *ngIf="campo.idDominioNavigation.tipoCampo === 'Temperatura'">
+    <label class="label-input required-label"
+      >{{ campo.descripcion }} {{ campo.requerido ? " *" : "" }}</label
+    >
+    <app-number-input
+      #campoNumberModel="ngModel"
+      name="campoNumberName"
+      [nameForm]="'campoNumberName'"
+      [(ngModel)]="campo.valor"
+      [(valor)]="campo.valor"
+      [max]="
+        campo.idDominioNavigation.permiteFueraDeRango
+          ? null
+          : campo.idDominioNavigation.valorMaximo
+      "
+      [min]="
+        campo.idDominioNavigation.permiteFueraDeRango
+          ? null
+          : campo.idDominioNavigation.valorMinimo
+      "
+      [required]="campo.requerido"
+      [permitirDecimales]="true"
+      ngDefaultControl
+      [(touchedVar)]="touched"
+      [deshabilitado]="campo.deshabilitado"
+    ></app-number-input>
+    <!-- Los mensajes de error van contenidos en el componente number-input -->
+  </div>
+</div>

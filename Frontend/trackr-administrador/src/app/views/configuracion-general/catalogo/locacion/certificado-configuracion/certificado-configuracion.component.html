@@ -1,0 +1,98 @@
+<div class="d-flex">
+    <div class="barra-lateral-modal"></div>
+    <div class="modal-content">
+
+    <!-- Header -->
+      <div class="modal-header">
+        <div>Configurar Certificados</div>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
+          <i class="far fa-times-circle"></i>
+        </button>
+      </div>
+      <form
+        (keydown.enter)="$event.preventDefault()"
+        #formulario="ngForm"
+        (ngSubmit)="enviarFormulario(formulario)"
+        novalidate="novalidate"
+      >
+
+    <!-- Body -->
+        <div class="cuerpo-contenedor" id="modal">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label-input required-label">Certificado (.cer)</label>
+                <div class="custom-file">
+                  <input
+                    type="file"
+                    class="custom-file-input"
+                    id="certificado"
+                    name="certificadoName"
+                    type="file"
+                    autocomplete="off"
+                    accept=".cer"
+                    (change)="fileChangeCertificado($event,'cer')"
+                  />
+                  <label class="custom-file-label" for="inputGroupFile04">{{
+                    this.certificadoLocacion.nombre
+                  }}</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label-input required-label">Clave privada (.key)</label>
+                <div class="custom-file">
+                  <input
+                    type="file"
+                    class="custom-file-input"
+                    id="clave"
+                    name="claveName"
+                    type="file"
+                    autocomplete="off"
+                    accept=".key"
+                    (change)="fileChangeCertificado($event,'key')"
+                  />
+                  <label class="custom-file-label" for="inputGroupFile04">{{
+                    this.clavePrivadaLocacion.nombre
+                  }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="label-input required-label">Contraseña de clave privada</label>
+                <div>
+                  <input
+                    #contrasena="ngModel"
+                    [(ngModel)]="clavePrivadaLocacion.contrasena"
+                    name="contrasenaName"
+                    class="form-control"
+                    type="password"
+                    maxlength="50"
+                    reversa="true"
+                    autocomplete="off"
+                    required="true"
+                  />
+                </div>
+                <div *ngIf="contrasena.errors?.['required'] && contrasena.touched" class="error">
+                  La contraseña es requerida
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    <!-- Footer -->
+        <div class="modal-footer">
+          <div class="text-right">
+            <button [disabled]="btnSubmit" type="submit" class="btn-primario btn-margin-left">
+              Guardar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

@@ -1,0 +1,45 @@
+<div class="grid-header" *ngIf="!disableHeader">
+  <div class="grid-images">
+    <img
+      *ngIf="!disableXLS"
+      class="grid-download"
+      (click)="downloadSelection()"
+      src="assets/img/svg/ico-15x15-Descargar.svg"
+      [title]="downloadActionTitle ? downloadActionTitle : 'Descargar Excel'"
+      />
+    <div
+      class="divImage"
+      *ngFor="let button of headerButtons"
+      (click)="headerButton(button)"
+      [ngClass]="button"
+    ><div *ngIf="manualButton" [innerHtml]="button"></div></div>
+  </div>
+</div>
+<div *ngIf="headerConfig" class="col-md-12 config-header header"></div>
+<ag-grid-angular
+  #agGrid
+  style="word-wrap: normal; width: 100%;"
+  class="ag-theme-balham"
+  (filterChange)="toggleFilter()"
+  (gridSizeChanged)="onGridSizeChanged($event)"
+  [gridOptions]="gridOptions"
+  (selectionChanged)="onSelectionChanged($event)"
+  (columnResized)="onColumnResized()"
+  (rowSelected)="onRowSelected($event)"
+  (viewportChanged)="filterModified($event)"
+>
+</ag-grid-angular>
+<div
+  class="grid-reg-pagina"
+  *ngIf="paginationPageSizeSection && !mostrarTodo"
+>
+  <ng-select
+    bindLabel="cant"
+    bindValue="id"
+    [items]="lstGridPageSize"
+    [(ngModel)]="pageSize"
+    (ngModelChange)="cambiarPaginado($event)"
+  >
+  </ng-select>
+
+</div>

@@ -1,0 +1,147 @@
+<div class="contenedor">
+  
+    <div class="modal-header">{{ titulo }} Perfil</div>
+    <div class="cuerpo-contenedor">
+      <form
+        (keydown.enter)="$event.preventDefault()"
+        #formulario="ngForm"
+        (ngSubmit)="enviarFormulario(formulario)"
+        novalidate="novalidate"
+      >
+        <div class="row justify-content-center">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Nombre</label>
+              <div>
+                <input
+                  #nombre="ngModel"
+                  [(ngModel)]="perfil.nombre"
+                  name="nombre"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                  maxlength="100"
+                  autocomplete="off"
+                />
+              </div>
+              <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
+                El nombre es requerido
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Jerarquía Acceso</label>
+              <div>
+                <ng-select
+                  #jerarquiaAccesoLst="ngModel"
+                  name="jerarquiaAccesoName"
+                  [required]="false"
+                  bindLabel="nombre"
+                  bindValue="idJerarquiaAcceso"
+                  [items]="jerarquiaAccesoList"
+                  [(ngModel)]="idJerarquiaAcceso"
+                  (ngModelChange)="consultarJerarquiaArbolEstructura($event)"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                ></ng-select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cuerpo-contenedor">
+        <div class="row justify-content-center mb-4">
+          <button type="button" class="btn-terceario" (click)="seleccionarTodo()">
+            Seleccionar Todos
+          </button>
+        </div>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="col-md-4">
+            <div class="form-group">
+
+              <!-- Arbol de Accesos Estándar -->
+              <div class="subtitulo-contenedor">Accesos</div>
+              <tree-root
+                #tree
+                *ngIf="!perfil.idJerarquiaAcceso"
+                [nodes]="accesoList"
+                [options]="options"
+              >
+                <ng-template #treeNodeWrapperTemplate let-node let-index="index">
+                  <div
+                    [ngClass]="'fondo-impar'"
+                    (dblclick)="node.mouseAction('dblClick', $event)"
+                    class="node-wrapper"
+                  >
+                    <tree-node-expander [node]="node"></tree-node-expander>
+                    <div [ngClass]="{ 'node-expander-virtual': node.isLeaf && !node.hasChildren }" class="checkbox mr-2">
+                      <label>
+                        <input
+                          name="checked"
+                          type="checkbox"
+                          [indeterminate]="node.isPartiallySelected"
+                          [checked]="node.isSelected"
+                          (click)="node.mouseAction('checkboxClick', $event); onClickCheckbox(node)"
+                        />
+                      </label>
+                    </div>
+                    <tree-node-content [node]="node" [index]="index"></tree-node-content>
+                  </div>
+                </ng-template>
+              </tree-root>
+
+              <!-- Arbol de Jerarquía Acceso -->
+              <tree-root
+                #tree
+                *ngIf="perfil.idJerarquiaAcceso"
+                [nodes]="jerarquiaArbolList"
+                [options]="optionsJerarquia"
+              >
+                <ng-template #treeNodeWrapperTemplate let-node let-index="index">
+                  <div
+                    [ngClass]="'fondo-impar'"
+                    (dblclick)="node.mouseAction('dblClick', $event)"
+                    class="node-wrapper"
+                  >
+                    <tree-node-expander [node]="node"></tree-node-expander>
+                    <div [ngClass]="{ 'node-expander-virtual': node.isLeaf && !node.hasChildren }" class="checkbox mr-2">
+                      <label>
+                        <input
+                          name="checked"
+                          type="checkbox"
+                          [indeterminate]="node.isPartiallySelected"
+                          [checked]="node.isSelected"
+                          (click)="node.mouseAction('checkboxClick', $event); onClickCheckbox(node)"
+                        />
+                      </label>
+                    </div>
+                    <tree-node-content [node]="node" [index]="index"></tree-node-content>
+                  </div>
+                </ng-template>
+              </tree-root>
+
+            </div>
+          </div>
+        </div>
+
+      <div class="modal-footer">
+        <div class="text-center mt-3">
+          <button type="button" class="btn-secundario mr-3" (click)="cancelar()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-primario ml-3" [disabled]="btnSubmit">
+            Guardar
+          </button>
+        </div>
+      </div>
+    </form>
+    </div>
+</div>
+
+<div id="loading-cdis" *ngIf="btnSubmit">
+  <img src="assets/img/spinner.gif" alt="Procesando..." />
+  <span>Procesando... por favor espere</span>
+</div>

@@ -1,0 +1,29 @@
+<div class="contenedor">
+	<div *ngIf="catalogoConfig.titulo" class="titulo-contenedor">{{ catalogoConfig.titulo }}</div>
+	<div class="cuerpo-contenedor">
+		<div class="row">
+			<div class="col-md-12">
+				<div
+					class="contenedor-agregar"
+					(click)="onAgregarClick()"
+					*ngIf="tieneAccesoAgregar"
+				>
+					<i class="fas fa-plus-circle"></i><span>Agregar</span>
+				</div>
+				<app-grid-general
+					#grid
+					[headerName]="crudConfig.nombreEntidad"
+					[data]="elementos"
+					[gridOptions]="catalogoConfig.gridOptions"
+					[children]="catalogoConfig.children"
+					(event)="onGridClick($event)"
+					[disableDelete]="disableDelete"
+					[disableEdit]="disableEdit"
+					[accesoEditar]="accesoEditar"
+					[accesoEliminar]="accesoEliminar"
+				>
+				</app-grid-general>
+			</div>
+		</div>
+	</div>
+</div>

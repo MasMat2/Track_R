@@ -12,7 +12,7 @@ export class AdministradorAuthGuard implements CanActivate {
 
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
     if (!this.authService.isAuthenticated()) {
-      this.router.navigate(['/login-administrador']);
+      this.router.navigate(['/login']);
       return false;
     }
 

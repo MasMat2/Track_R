@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MensajeService } from '../components/mensaje/mensaje.service';
-import { GeneralConstant } from '../general-constant';
+import { GeneralConstant } from '../utils/general-constant';
 
 @Injectable({
   providedIn: 'root',
@@ -28,10 +28,12 @@ export class FormularioService {
     Object.keys(formulario.controls).some((nombre) => {
       const control = formulario.controls[nombre];
 
-      if (control.errors && control.errors.required && control.invalid) {
+      if (control.errors && control.errors['required'] && control.invalid) {
         this.modalMensajeService.modalError(GeneralConstant.MENSAJE_REQUERIDOS);
         return true;
       }
+
+      return false;
     });
   }
 

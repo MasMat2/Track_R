@@ -1,0 +1,41 @@
+mat-sidenav-container{
+  height: 100vh;
+}
+
+mat-sidenav {
+  width: 110px;
+  height: 100vh;
+  background-color: var(--color-primario);
+}
+
+mat-sidenav-content {
+  background-color: #ffffff;
+}
+
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.lateral-inferior{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.logotipo {
+  position: fixed;
+  z-index: 2;
+  background: #F2F2F2;
+  height: 80px;
+}
+
+.imagen-usuario {
+  cursor: pointer;
+  border-radius: 100%;
+}

@@ -1,0 +1,49 @@
+.image-box {
+  display: flex;
+  margin-top: 25px;
+  padding-left: 15px;
+
+  justify-items: center;
+  align-items: center;
+}
+
+.custom-file-label::after {
+  text-align: center;
+}
+
+.img-ico {
+  width: 40px;
+}
+
+.pointer {
+  width: 15px;
+  cursor: pointer;
+}
+
+.barra-horizontal {
+  border-top: 1.3px solid #ff6c00;
+  padding-top: 10px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.icono-acceso {
+  padding: 9px;
+  padding-left: 0;
+  font-size: 22px;
+  color: #741798;
+}
+
+.form-control-textarea {
+  border: 1px #d9d9d9 solid;
+  color: #000000;
+  width: 100%;
+  padding: 10px;
+  height: 100px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control-textarea:focus {
+  outline: none !important;
+}

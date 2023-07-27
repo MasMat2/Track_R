@@ -1,0 +1,169 @@
+<div class="contenedor">
+  <div class="titulo-contenedor">Consulta de Usuarios</div>
+  <div class="cuerpo-contenedor">
+    <div [collapse]="isCollapsed" [isAnimated]="true">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Nombre</label>
+            <div>
+              <input
+                #nombreFiltro="ngModel"
+                [(ngModel)]="filtro.nombre"
+                name="nombre"
+                class="form-control"
+                type="text"
+                [required]="false"
+                maxlength="50"
+              />
+            </div>
+            <div *ngIf="nombreFiltro.errors?.['required'] && nombreFiltro.touched" class="error">
+              El nombre es requerido
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Tipo de Usuario</label>
+            <div>
+              <ng-select
+                #tipoUsuario="ngModel"
+                name="tipoUsuarioName"
+                bindLabel="nombre"
+                bindValue="idTipoUsuario"
+                [items]="tipoUsuarioList"
+                [required]="false"
+                [(ngModel)]="filtro.idTipoUsuario"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Username</label>
+            <div>
+              <input
+                #correo="ngModel"
+                [(ngModel)]="filtro.correo"
+                name="correo"
+                class="form-control"
+                type="text"
+                maxlength="100"
+                [required]="false"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Compañía</label>
+            <div>
+              <ng-select
+                #rolLst="ngModel"
+                name="companiaName"
+                [required]="false"
+                bindLabel="nombre"
+                bindValue="idCompania"
+                [disabled]="!esUsuarioCompaniaBase"
+                [items]="companiaList"
+                [(ngModel)]="filtro.idsCompania"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Perfil</label>
+            <div>
+              <ng-select
+                #perfilLst="ngModel"
+                name="perfilName"
+                [required]="false"
+                bindLabel="nombre"
+                bindValue="idPerfil`"
+                [items]="perfilList"
+                [(ngModel)]="filtro.idPerfil"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Rol</label>
+            <div>
+              <ng-select
+                #rolLst="ngModel"
+                name="rolName"
+                [required]="false"
+                bindLabel="nombre"
+                bindValue="idRol"
+                [multiple]="true"
+                [items]="rolList"
+                [(ngModel)]="filtro.idsRol"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Teléfono</label>
+            <div>
+              <input
+                #telefonoM="ngModel"
+                [(ngModel)]="filtro.telefonoMovil"
+                name="telefonoM"
+                class="form-control"
+                type="text"
+                maxlength="10"
+                [required]="false"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 mb-3 text-center">
+        <button type="button" class="btn-secundario ml-3" (click)="limpiar()">Limpiar</button>
+        <button type="submit" class="btn-primario" [disabled]="buscando" (click)="buscar()">{{ buscando ? 'Buscando...' : 'Buscar' }}</button>
+      </div>
+
+
+    </div>
+    <div class="form-row panel-busqueda mb-4">
+      <div (click)="isCollapsed = !isCollapsed" class="panel-carga-elementos center-element-vertically">
+        <span class="titulo-panel">Panel de Búsqueda</span>
+        <span class="arow-down-up">
+          <i *ngIf="isCollapsed" class="fa fa-chevron-down"></i>
+          <i *ngIf="!isCollapsed" class="fa fa-chevron-up"></i>
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="contenedor-agregar" (click)="agregar()" *ngIf="tieneAccesoAgregar">
+          <i class="fas fa-plus-circle"></i><span>Agregar</span>
+        </div>
+
+        <app-grid-filtro
+          #gridFiltro
+          (gridClick)="onGridClick($event)"
+          [gridConfig]="gridConfig"
+          [gridTabs]="gridTabs"
+          [gridData]="usuarioList"
+          >
+        </app-grid-filtro>
+      </div>
+    </div>
+  </div>
+</div>

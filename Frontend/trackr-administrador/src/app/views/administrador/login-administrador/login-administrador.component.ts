@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoginRequest } from 'src/app/models/seguridad/login-request';
-import { LoginResponse } from 'src/app/models/seguridad/login-response';
-import { LoginService } from 'src/app/shared/services/seguridad/login.service';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import * as Utileria from 'src/app/shared/utileria';
-import { GeneralConstant } from 'src/app/shared/general-constant';
+import { Router } from '@angular/router';
+import { LoginRequest } from '@models/seguridad/login-request';
+import { LoginResponse } from '@models/seguridad/login-response';
+import { UsuarioLocacion } from '@models/seguridad/usuario-locacion';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { LoginService } from '@services/seguridad/login.service';
+import { GeneralConstant } from '@utils/general-constant';
+import * as Utileria from '@utils/utileria';
 import { lastValueFrom } from 'rxjs';
 
 @Component({
@@ -14,22 +16,28 @@ import { lastValueFrom } from 'rxjs';
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    NgSelectModule
   ],
   templateUrl: './login-administrador.component.html',
   styleUrls: ['./login-administrador.component.scss']
 })
 export class LoginAdministradorComponent implements OnInit {
-  loginRequest: LoginRequest = new LoginRequest();
-  loginResponse: LoginResponse = new LoginResponse();
-  btnSubmit: boolean = false;
+  protected loginRequest: LoginRequest = new LoginRequest();
+  protected loginResponse: LoginResponse = new LoginResponse();
+  protected btnSubmit: boolean = false;
+  protected mostrarLocaciones: boolean = false;
+  protected locaciones: UsuarioLocacion[] = [];
+
+  protected readonly placeHolderSelect = GeneralConstant.PLACEHOLDER_DROPDOWN;
+  protected readonly placeHolderNoOptions = GeneralConstant.PLACEHOLDER_DROPDOWN_NO_OPTIONS;
+
   constructor(
     private loginService: LoginService,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
-
   }
 
   /**
@@ -51,7 +59,7 @@ export class LoginAdministradorComponent implements OnInit {
       return;
     }
 
-    this.autenticarPaciente();
+    this.autenticar();
     this.btnSubmit = false;
   }
 
@@ -59,17 +67,21 @@ export class LoginAdministradorComponent implements OnInit {
    * Realiza la autenticación del usuario utilizando el servicio de inicio de sesión y redirige a la página de pacientes.
    * Llama al método Authenticate de LoginService. Si es exitoso, guarda el LoginResponse Token en el localStorage y redirige a la página de pacientes.
    */
-  public async autenticarPaciente() {
+  public async autenticar() {
     this.loginRequest.claveTipoUsuario = GeneralConstant.CLAVE_USUARIO_ADMINISTRADOR;
     await lastValueFrom(this.loginService.authenticate(this.loginRequest))
-          .then((loginResponse: LoginResponse) => {
-            localStorage.setItem(GeneralConstant.TOKEN_KEY, loginResponse.token);
-            this.router.navigate(['/administrador']);
-          })
-          .catch(error => {
-            localStorage.removeItem(GeneralConstant.TOKEN_KEY);
-            this.btnSubmit = false;
-          });
-  }
+      .then((loginResponse: LoginResponse) => {
+        localStorage.setItem(GeneralConstant.TOKEN_KEY, loginResponse.token);
+        this.router.navigate(['/administrador']);
+      })
+      .catch(error => {
+        if (error.status === 400) {
+          this.mostrarLocaciones = true;
+          this.locaciones = error.error.locaciones;
+        }
 
+        localStorage.removeItem(GeneralConstant.TOKEN_KEY);
+        this.btnSubmit = false;
+      });
+  }
 }

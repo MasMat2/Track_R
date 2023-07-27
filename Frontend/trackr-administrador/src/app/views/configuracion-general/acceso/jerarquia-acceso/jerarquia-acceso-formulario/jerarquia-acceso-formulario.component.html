@@ -1,0 +1,199 @@
+
+<div class="d-flex">
+	<div class="barra-lateral-modal"><i class="fa fa-plus"></i></div>
+	<div class="modal-content">
+
+    <!-- Header -->
+		<div class="modal-header">
+			<div>{{ accion }} Jerarquía de Accesos</div>
+
+      <!-- Botón Cerrar -->
+			<button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
+				<i class="far fa-times-circle"></i>
+			</button>
+		</div>
+
+    <!-- Contenido -->
+    <form (keydown.enter)="$event.preventDefault()" #formulario="ngForm" (ngSubmit)="enviarFormulario(formulario)" novalidate="novalidate">
+
+		<div class="cuerpo-contenedor" id="modal">
+        <div class="container">
+
+          <!-- Campos de Jerarquía -->
+          <div class="row d-flex justify-content-center">
+
+            <!-- Nombre -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="label-input required-label">Nombre</label>
+                <div>
+                  <input
+                    #nombre="ngModel"
+                    [(ngModel)]="entidad.nombre"
+                    name="nombreName"
+                    class="form-control"
+                    type="text"
+                    maxlength="200"
+                    required="required"
+                    autocomplete="off"
+                  />
+
+                  <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
+                    El nombre es requerido
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tipo Compania -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="label-input required-label">Tipo Compania</label>
+                <div>
+                  <ng-select
+                    #tipoCompania="ngModel"
+                    name="tipoCompania"
+                    bindLabel="nombre"
+                    bindValue="idTipoCompania"
+                    [items]="tipoCompaniaList"
+                    [multiple]="true"
+                    [placeholder]="placeholderSelect"
+                    [notFoundText]="placeholderNoOptions"
+                    [(ngModel)]="entidad.idsTipoCompania"
+                    [required]="true"
+                ></ng-select>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- Estructura de Jerarquía -->
+          <div class="container" *ngIf="esEditar()">
+
+            <div class="separador"></div>
+
+            <div class="row">
+
+              <!-- Árbol de Jerarquía -->
+              <div class="col-md-6">
+                <div class="form-group contenedor-jerarquia">
+                  <span style="font-weight: 600;">Jerarquía</span>
+
+                  <tree-root #tree [nodes]="jerarquiaArbol" [options]="options">
+                    <ng-template #treeNodeWrapperTemplate let-node let-index="index">
+                      <div
+                        [ngClass]="'fondo-impar'"
+                        (dblclick)="node.mouseAction('dblClick', $event)"
+                        class="node-wrapper"
+                      >
+                        <!-- Toggle Expand -->
+                        <tree-node-expander [node]="node"></tree-node-expander>
+
+                        <!-- Delete Button -->
+                        <div *ngIf="node.data.tipoAcceso != 'Evento'" [ngClass]="{ 'node-expander-virtual': node.isLeaf && !node.hasChildren }" class="checkbox mr-1">
+                          <div type="button" class="delete" [class.delete-disabled]="disableSubmit" (click)="eliminarJerarquiaEstructura(node.data)"></div>
+                        </div>
+
+                        <!-- Node Content -->
+                        <tree-node-content (click)="seleccionarCuentaPadre(node.data)" [node]="node" [index]="index"></tree-node-content>
+                      </div>
+                    </ng-template>
+                  </tree-root>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="container">
+
+                  <div class="row">
+
+                    <!-- Selector de Jerarquía Padre -->
+                    <div class="col-md-12">
+                      <div class="form-group">
+
+                        <label class="label-input required-label">Acceso Padre</label>
+                        <ng-select
+                          #jerarquiaPadre="ngModel"
+                          name="jerarquiaPadreName"
+                          class="select-custom"
+                          [items]="jerarquiaSelectorList"
+                          bindLabel="cuenta"
+                          bindValue="idJerarquiaEstructura"
+                          [(ngModel)]="idJerarquiaPadre"
+                          [placeholder]="placeholderSelect"
+                          [notFoundText]="placeholderNoOptions"
+                        ></ng-select>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- Grid de Accesos -->
+                  <div class="row mb-4">
+                    <div class="col-md-12">
+                      <div class="subseccion">Accesos</div>
+                      <db-angular-tree-grid
+                        #angularGrid [data]="accesos"
+                        [configs]="configTree"
+                        (expand)="onExpand($event)"
+                        (rowselect)="onSelectionChange($event, true)"
+                        (rowdeselect)="onSelectionChange($event, false)"
+                        (rowselectall)="onSelectAll(true)"
+                        (rowdeselectall)="onSelectAll(false)"
+                      ></db-angular-tree-grid>
+                    </div>
+                  </div>
+
+                  <!-- Botón Agregar Estructura de Jerarquía -->
+                  <div class="row mb-4">
+                    <div class="col-md-12 d-flex justify-content-center">
+                      <button
+                        type="button"
+                        [disabled]="disableAgregar"
+                        (click)="onAgregarClick()"
+                        class="btn-terceario btn-margin-left">
+                        Agregar
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+			<div class="modal-footer">
+
+        <!-- Botón Cerrar -->
+				<div class="text-right">
+					<button type="button" (click)="cancelar()" class="btn-secundario btn-margin-left">
+						{{ esEditar() ? 'Cerrar' : 'Cancelar' }}
+					</button>
+				</div>
+
+        <!-- Botón Guardar -->
+				<div class="text-right">
+					<button [disabled]="disableSubmit" type="submit" class="btn-primario btn-margin-left">
+						Guardar
+					</button>
+				</div>
+
+			</div>
+    </form>
+
+  </div>
+</div>
+
+<div id="loading-cdis" *ngIf="loading">
+  <img src="assets/img/spinner.gif" alt="Procesando..." />
+  <span>Cargando... por favor espere</span>
+</div>
+
+<div id="loading-cdis" *ngIf="disableSubmit">
+  <img src="assets/img/spinner.gif" alt="Procesando..." />
+  <span>Procesando... por favor espere</span>
+</div>

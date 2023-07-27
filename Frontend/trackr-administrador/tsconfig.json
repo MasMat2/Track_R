@@ -3,6 +3,16 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "paths": {
+      "stream": ["./node_modules/readable-stream"],
+      "@http/*": ["src/app/shared/http/*"],
+      "@services/*": ["src/app/shared/services/*"],
+      "@models/*": ["src/app/shared/models/*"],
+      "@dtos/*": ["src/app/shared/dtos/*"],
+      "@sharedComponents/*": ["src/app/shared/components/*"],
+      "@utils/*": ["src/app/shared/utils/*"],
+      "@components/*": ["src/app/views/administrador/*"],
+    },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,

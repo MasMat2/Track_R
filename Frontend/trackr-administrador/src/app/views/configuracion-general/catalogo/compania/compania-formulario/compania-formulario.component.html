@@ -1,0 +1,22 @@
+<div class="contenedor">
+	<div class="titulo-contenedor">{{ accion }} Compañía</div>
+	<div class="cuerpo-contenedor" *ngIf="renderChildren">
+		<tabset>
+			<tab heading="Información General">
+				<app-compania-informacion-formulario
+					[idCompania]="idCompania"
+					[accion]="accion"
+					[desdeLogin]="false"
+				>
+				</app-compania-informacion-formulario>
+			</tab>
+
+			<tab heading="Vigencias" *ngIf="esEditar()">
+				<!-- <app-configuracion-vigencia
+					[idCompania]="idCompania"
+				>
+				</app-configuracion-vigencia> -->
+			</tab>
+		</tabset>
+	</div>
+</div>

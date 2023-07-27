@@ -1,43 +1,23 @@
+<!-- <c-sidebar
+  #appSidebar
+  placement="start"
+  [size]="'lg'"
+  [visible]="true"
+
+  >
+  (minimizedChange)="toggleMinimize($event)"
+  <c-sidebar-nav
+    [navItems]="navItems"
+    [attr.disabled]="appSidebar.visible"
+  ></c-sidebar-nav>
+</c-sidebar> -->
+
 <div class="contenedor">
-    <mat-sidenav-container>
-
-        <!-- Barra lateral -->
-        <mat-sidenav mode="side" opened>
-
-            <div class="lateral-superior">
-                <!--Imagen de Usuario -->
-                <div class="text-center pt-3 pb-4">
-                    <img 
-                        class="imagen-usuario"
-                        width="85px"
-                        height="85px"
-                        [src]="imagenUsuario"
-                        alt=""
-                    />
-                </div>
-                <!-- Items de Navegación -->
-                <div *ngFor="let item of navItems" class="item" [title]="item.nombre">
-                    <i [className]="item.claseIcono"></i>
-                </div>
-            </div>
-            <!-- Utilidades -->
-            <div class="lateral-inferior pt-5">
-                <div class="item">
-                    <i class="fas fa-magnifying-glass"></i>
-                </div>
-                <div class="item">
-                    <i class="fa-regular fa-bell"></i>
-                </div>
-            </div>
-                       
-        </mat-sidenav>
-
-        <!-- Contenido -->
-        <mat-sidenav-content>
-            <router-outlet></router-outlet>
-        </mat-sidenav-content>
-
-    </mat-sidenav-container>   
+  <app-nav-dropdown
+    [navItems]="navItems"
+    class="d-none d-sm-block"
+    (logoutRequest)="logout()"
+  >
+    <router-outlet></router-outlet>
+  </app-nav-dropdown>
 </div>
-
-

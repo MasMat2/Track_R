@@ -1,0 +1,661 @@
+<div class="contenedor">
+  <div class="modal-header">{{ accion }} Locación</div>
+  <div class="cuerpo-contenedor">
+    <form
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      novalidate="novalidate"
+    >
+      <div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">RFC</label>
+              <div>
+                <input
+                  #rfc="ngModel"
+                  [(ngModel)]="hospital.rfc"
+                  name="Rfc"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                  maxlength="13"
+                  appFormatoRfc
+                />
+              </div>
+              <div *ngIf="rfc.errors?.['required'] && rfc.touched" class="error">
+                El RFC es requerido
+              </div>
+              <div *ngIf="rfc.errors?.['formatoRfc']" class="error">
+                El RFC tiene un formato inválido
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              <label class="label-input required-label">Nombre</label>
+              <div>
+                <input
+                  #nombre="ngModel"
+                  [(ngModel)]="hospital.nombre"
+                  name="nombre"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                  maxlength="50"
+                />
+              </div>
+              <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
+                El nombre es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">País</label>
+              <div>
+                <ng-select
+                  #pais="ngModel"
+                  name="paisName"
+                  bindLabel="nombre"
+                  bindValue="idPais"
+                  [items]="paisList"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                  [(ngModel)]="campoPais"
+                  [required]="true"
+                  (ngModelChange)="onChangePais($event, [codigoPostal, estado, municipio, colonia])"
+                ></ng-select>
+                <div *ngIf="pais.errors?.['required'] && pais.touched" class="error">
+                  El país es requerido
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Código Postal</label>
+              <div >
+                <input
+                  #codigoPostal="ngModel"
+                  [(ngModel)]="hospital.codigoPostal"
+                  name="codigoPostalExtranjeroName"
+                  [typeahead]="suggestions$"
+                  [typeaheadAsync]="true"
+                  typeaheadOptionField="codigoPostal1"
+                  [typeaheadMinLength]="3"
+                  [typeaheadScrollable]="true"
+                  [typeaheadOptionsInScrollableView]="5"
+                  (change)="desactivarOnChange == true ? null : onChangeCodigoPostal($event, [estado, municipio, colonia])"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                  autocomplete="new-codigoPostal"
+                  [maxlength]="5"
+                  [minlength]="5"
+                  appFormatoCodigoPostal
+                  [adaptivePosition]="true"
+                />
+                <div *ngIf="codigoPostal.errors?.['required'] && codigoPostal.touched" class="error">
+                  El código postal es requerido
+                </div>
+                <div *ngIf="codigoPostal.errors?.['formatoCodigoPostal']" class="error">
+                  El código postal tiene un formato inválido
+                </div>
+                <div *ngIf="codigoPostal.errors?.['minlength']" class="error">
+                  El código postal debe de tener 5 caracteres
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Estado</label>
+              <div>
+                <ng-select
+                  #estado="ngModel"
+                  name="estadoName"
+                  bindLabel="nombre"
+                  bindValue="idEstado"
+                  [items]="estadoList"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                  [(ngModel)]="campoEstado"
+                  [required]="true"
+                  (ngModelChange)="desactivarOnChange == true ? null : onChangeEstado($event, [municipio, codigoPostal, colonia])"
+                ></ng-select>
+                <div *ngIf="estado.errors?.['required'] && estado.touched" class="error">
+                  El estado es requerido
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Municipio</label>
+              <div>
+                <ng-select
+                  #municipio="ngModel"
+                  name="municipioName"
+                  bindLabel="nombre"
+                  bindValue="idMunicipio"
+                  [items]="municipioList"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                  [(ngModel)]="campoMunicipio"
+                  [required]="true"
+                  (ngModelChange)="desactivarOnChange == true ? null : onChangeMunicipio($event, [codigoPostal, colonia])"
+                ></ng-select>
+                <div *ngIf="municipio.errors?.['required'] && municipio.touched" class="error">
+                  El municipio es requerido              </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Colonia</label>
+              <div>
+                <input
+                  #colonia="ngModel"
+                  [(ngModel)]="campoColonia"
+                  name="ccoloniaName"
+                  [typeahead]="codigoPostalList"
+                  typeaheadOptionField="colonia"
+                  [typeaheadScrollable]="true"
+                  [typeaheadMinLength]="0"
+                  [typeaheadOptionsInScrollableView]="5"
+                  (typeaheadOnSelect)="onChangeColonia($event.value)"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                  autocomplete="new-colonia"
+                  appFormatoAlfanumerico
+                />
+                <div *ngIf="colonia.errors?.['required'] && colonia.touched" class="error">
+                  La colonia es requerida
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Calle</label>
+              <div>
+                <input
+                  #calle="ngModel"
+                  [(ngModel)]="hospital.calle"
+                  name="calleName"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                  autocomplete="off"
+                  appFormatoAlfanumerico
+                />
+                <div *ngIf="calle.errors?.['required'] && calle.touched" class="error">
+                  La calle es requerida
+                </div>
+                <div *ngIf="calle.errors?.['formatoAlfanumerico']" class="error">
+                  La calle tiene un formato inválido
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="label-input required-label">Núm. Exterior</label>
+                  <div>
+                    <input
+                      #numExterior="ngModel"
+                      [(ngModel)]="hospital.numeroExterior"
+                      name="numExteriorName"
+                      class="form-control"
+                      type="text"
+                      autocomplete="off"
+                      [required]="true"
+                    />
+                    <div *ngIf="numExterior.errors?.['required'] && numExterior.touched" class="error">
+                      El núm. exterior es requerido
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="label-input required-label">Núm. Interior</label>
+                  <div>
+                    <input
+                      #numInterior="ngModel"
+                      [(ngModel)]="hospital.numeroInterior"
+                      name="numInteriorName"
+                      class="form-control"
+                      autocomplete="off"
+                      type="text"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Entre Calles</label>
+              <div>
+                <input
+                  #entreCalles="ngModel"
+                  [(ngModel)]="hospital.entreCalles"
+                  name="entreCallesName"
+                  class="form-control"
+                  type="text"
+                  autocomplete="off"
+                  appFormatoAlfanumerico
+                />
+                <div *ngIf="entreCalles.errors?.['formatoAlfanumerico']" class="error">
+                  El campo entre calles tiene un formato inválido
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Teléfono (10 dígitos)</label>
+              <div class="d-flex">
+                <ng-select
+                  class="lada-input"
+                  #ladaModel="ngModel"
+                  name="ladaName"
+                  bindLabel="claveNumero"
+                  bindValue="idLada"
+                  [items]="ladaList"
+                  [required]="true"
+                  [(ngModel)]="hospital.idLada"
+                  [placeholder]="placeHolderSelect"
+                ></ng-select>
+                <input
+                  #telefono="ngModel"
+                  [(ngModel)]="hospital.telefono"
+                  name="telefono"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                  maxlength="10"
+                  minlength="10"
+                  appFormatoTelefono
+                />
+              </div>
+              <div *ngIf="telefono.errors?.['formatoTelefono']" class="error">
+                El teléfono tiene un formato inválido
+              </div>
+              <div
+                *ngIf="
+                  (telefono.errors?.['required'] || telefono.errors?.['minlength'] || telefono.errors?.['maxlength']) &&
+                  telefono.touched
+                "
+                class="error"
+              >
+                El teléfono móvil es requerido (10 dígitos)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Correo Electrónico</label>
+              <div>
+                <input
+                  #correo="ngModel"
+                  [(ngModel)]="hospital.correo"
+                  name="correo"
+                  class="form-control"
+                  type="text"
+                  maxlength="50"
+                  appFormatoCorreo
+                />
+              </div>
+              <div *ngIf="correo.errors?.['formatoCorreo']" class="error">
+                El correo electrónico tiene un formato inválido
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Régimen Fiscal</label>
+              <div>
+                <ng-select
+                  #regimenFiscalLst="ngModel"
+                  name="regimenFiscalName"
+                  [required]="true"
+                  bindLabel="claveNombre"
+                  bindValue="idRegimenFiscal"
+                  [items]="regimenFiscalList"
+                  [(ngModel)]="hospital.idRegimenFiscal"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                ></ng-select>
+              </div>
+              <div *ngIf="regimenFiscalLst.errors?.['required'] && regimenFiscalLst.touched" class="error">
+                El régimen fiscal es requerido
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Compañía</label>
+              <div>
+                <ng-select
+                  #companialLst="ngModel"
+                  name="companiaName"
+                  [required]="true"
+                  bindLabel="nombre"
+                  bindValue="idCompania"
+                  [items]="companiaList"
+                  [(ngModel)]="hospital.IdCompania"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                ></ng-select>
+              </div>
+              <div *ngIf="regimenFiscalLst.errors?.['required'] && regimenFiscalLst.touched" class="error">
+                El régimen fiscal es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Gerente</label>
+              <div>
+                <ng-select
+                  #usuarioLst="ngModel"
+                  name="usuarioName"
+                  bindLabel="nombreCompleto"
+                  bindValue="idUsuario"
+                  [items]="usuarioList"
+                  [required]="true"
+                  [(ngModel)]="hospital.idUsuarioGerente"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                ></ng-select>
+              </div>
+              <div *ngIf="usuarioLst.errors?.['required'] && usuarioLst.touched" class="error">
+                El gerente es requerido
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Banco</label>
+              <div>
+                <ng-select
+                  #bancoLst="ngModel"
+                  name="bancoName"
+                  [required]="true"
+                  bindLabel="nombre"
+                  bindValue="idBanco"
+                  [items]="bancoList"
+                  [(ngModel)]="hospital.idBanco"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                ></ng-select>
+              </div>
+              <div *ngIf="bancoLst.errors?.['required'] && bancoLst.touched" class="error">
+                El banco es requerido
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Cuenta</label>
+              <div>
+                <input
+                  #cuenta="ngModel"
+                  [(ngModel)]="hospital.cuenta"
+                  name="cuenta"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                  maxlength="50"
+                  appFormatoNumerico
+                />
+              </div>
+              <div *ngIf="cuenta.errors?.['required'] && cuenta.touched" class="error">
+                La cuenta es requerida
+              </div>
+              <div *ngIf="cuenta.errors?.['formatoNumerico']" class="error">
+                La cuenta tiene un formato inválido
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">CLABE</label>
+              <div>
+                <input
+                  #clabe="ngModel"
+                  [(ngModel)]="hospital.clabe"
+                  name="clabe"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                  maxlength="50"
+                  appFormatoNumerico
+                />
+              </div>
+              <div *ngIf="clabe.errors?.['required'] && clabe.touched" class="error">
+                La CLABE es requerida
+              </div>
+              <div *ngIf="clabe.errors?.['formatoNumerico']" class="error">
+                La CLABE tiene un formato inválido
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              <label class="label-input required-label">Portal Web</label>
+              <div>
+                <input
+                  #portalWeb="ngModel"
+                  [(ngModel)]="hospital.portalWeb"
+                  name="portalWeb"
+                  class="form-control"
+                  type="text"
+                  [required]="true"
+                  maxlength="50"
+                  appFormatoUrl
+                />
+              </div>
+              <div *ngIf="portalWeb.errors?.['required'] && portalWeb.touched" class="error">
+                El portal web es requerido
+              </div>
+              <div *ngIf="portalWeb.errors?.['formatoUrl']" class="error">
+                El portal web tiene un formato inválido
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Lista de precios Default</label>
+              <div>
+                <ng-select
+                  #listaPrecioDefault="ngModel"
+                  name="listaPrecioDefaultName"
+                  [required]="false"
+                  bindLabel="nombre"
+                  bindValue="idListaPrecio"
+                  [items]="listaPrecioList"
+                  [(ngModel)]="hospital.idListaPrecioDefault"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                ></ng-select>
+              </div>
+              <div *ngIf="listaPrecioDefault.errors?.['required'] && listaPrecioDefault.touched" class="error">
+                La lista de precios default es requerida
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label">Lista de precios Compras en línea</label>
+              <div>
+                <ng-select
+                  #listaPrecioLinea="ngModel"
+                  name="listaPrecioLineaName"
+                  [required]="false"
+                  bindLabel="nombre"
+                  bindValue="idListaPrecio"
+                  [items]="listaPrecioList"
+                  [(ngModel)]="hospital.idListaPrecioLinea"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                ></ng-select>
+              </div>
+              <div *ngIf="listaPrecioLinea.errors?.['required'] && listaPrecioLinea.touched" class="error">
+                La lista de precios compras en línea es requerida
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="label-input required-label">Predeterminada</label>
+            <div class="form-group radion-bottom">
+              <label class="switch">
+                <input
+                  type="checkbox"
+                  #predeterminada="ngModel"
+                  [(ngModel)]="hospital.predeterminada"
+                  id="timbrado"
+                  name="timbradoName"
+                  class="form-control">
+                <div class="slider round">
+                  <span class="on">Sí</span>
+                  <span class="off">No</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12"><label class="subseccion">Logotipo de Locación</label></div>
+        </div>
+
+        <!-- Input -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <div>
+              <div class="custom-file">
+                <input
+                  #hospitalLogotipoInput
+                  type="file"
+                  class="custom-file-input"
+                  id="hospitalLogotipo"
+                  name="hospitalLogotipo"
+                  autocomplete="off"
+                  accept="image/jpeg,image/png"
+                  (change)="onFileChangeLogotipo($event)"
+                  [disabled]="hospitalLogotipo"
+                />
+                <label class="custom-file-label" for="hospitalLogotipo">
+                  {{ hospitalLogotipo?.nombreImagen }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="hospitalLogotipo?.imagenBase64 || hospitalLogotipo?.src">
+          <!-- Nombre -->
+          <div class="row mb-3">
+            <div
+              class="col-md-6 d-flex"
+              style="word-break:break-all; gap: 10px;"
+            >
+              {{ hospitalLogotipo?.nombreImagen }}
+              <img
+                style="cursor: pointer"
+                src="assets/img/svg/ico-15x15-Eliminar-gris.svg"
+                alt="Eliminar"
+                (click)="eliminarLogotipo()"
+              />
+            </div>
+          </div>
+
+          <!-- Imagen -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <img
+                [src]="hospitalLogotipo?.imagenBase64
+                  ? obtenerSrcLogotipo(hospitalLogotipo!)
+                  : urlBackend + hospitalLogotipo!.src"
+                alt="Logotipo Compania"
+                width="200px" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12"><label class="subseccion">Configuración de Áreas de Almacén</label></div>
+        </div>
+        <div class="row mb-3">
+          <div class="form-group col-md-6">
+            <label class="label-input required-label">Almacén Producción</label>
+            <ng-select
+              #almacenProduccionLst="ngModel"
+              name="almacenProduccionName"
+              bindLabel="nombre"
+              bindValue="idAlmacen"
+              [items]="almacenList"
+              [required]="true"
+              [(ngModel)]="hospital.idAlmacenProduccion"
+              [placeholder]="placeHolderSelect"
+              [notFoundText]="placeHolderNoOptions"
+            ></ng-select>
+            <div *ngIf="almacenProduccionLst.errors?.['required'] && almacenProduccionLst.touched" class="error">
+              El almacén es requerido
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label class="label-input required-label">Almacén Caduco</label>
+            <ng-select
+              #almacenCaducoLst="ngModel"
+              name="almacenCaducoName"
+              bindLabel="nombre"
+              bindValue="idAlmacen"
+              [items]="almacenList"
+              [required]="true"
+              [(ngModel)]="hospital.idAlmacenCaduco"
+              [placeholder]="placeHolderSelect"
+              [notFoundText]="placeHolderNoOptions"
+            ></ng-select>
+            <div *ngIf="almacenCaducoLst.errors?.['required'] && almacenCaducoLst.touched" class="error">
+              El almacén es requerido
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="this.hospital.idHospital > 0">
+          <div class="col-sm-12"><label class="subseccion">Configuración de Certificados</label></div>
+        </div>
+        <div class="row mb-3" *ngIf="this.hospital.idHospital > 0">
+          <div class="col-md-6">
+            <button type="button" (click)="configurarCertificados()" class="btn-terceario ml-3">Configurar</button>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-5">
+        <button type="button" (click)="regresar()" class="btn-secundario mr-3">&lang;&lang; Regresar</button>
+        <button type="submit" class="btn-primario ml-3" [disabled]="btnSubmit">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>

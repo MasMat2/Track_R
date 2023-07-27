@@ -1,6 +1,9 @@
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,11 +14,19 @@ using System.Net;
 using System.Text;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
+using TrackrAPI.Services.GestionEntidad;
 
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 // JwtSettings jwtSettings = new JwtSettings();
 // builder.Configuration.GetSection(JwtSettings.SectionName).Bind(jwtSettings);
+
+// TODO: 2023-05-09 -> Esta es una configuraci√≥n temporal para evitar
+// que se validen los modelos en los controladores migrados de ATI.
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+     options.SuppressModelStateInvalidFilter = true;
+});
 
 builder.Services.AddDbContext<TrackrContext>(options =>
 {
@@ -34,24 +45,33 @@ builder.Services.AddSignalR();
 builder.Services.AddScoped<SimpleAES>();
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddScoped<CorreoHelper>();
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+
 // IoC  - Inyeccion de dependencias para los Repositorys y Services
 builder.Services.Scan(scan => scan
     .FromAssemblyOf<Program>().AddClasses(c => c.InNamespaces("TrackrAPI.Repositorys")).AsImplementedInterfaces().WithTransientLifetime()
 );
 
 builder.Services.Scan(scan => scan
-    .FromAssemblyOf<Program>().AddClasses(c => c.InNamespaces("TrackrAPI.Services")).AsSelf().WithTransientLifetime()
+    .FromAssemblyOf<Program>()
+    .AddClasses(c => c.InNamespaces("TrackrAPI.Services")
+        // TODO: 2023-05-25 -> Implementar IService para evitar estas excepciones
+        .Where(type => !typeof(EntidadService.ActualizacionExpedienteParams).IsAssignableFrom(type))
+    )
+    .AsSelf()
+    .WithTransientLifetime()
 );
 
 // Crea una nueva instancia de JwtSettings y la configura con los valores del appsettings.json
 var jwtSettings = new JwtSettings();
 builder.Configuration.Bind(JwtSettings.SectionName, jwtSettings);
 
-// Registra la instancia de JwtSettings como un servicio Singleton en el contenedor de inyecciÛn de dependencias.
-// Crea una ˙nica instancia de JwtSettings que se comparte entre todos los objetos que lo soliciten a travÈs de inyecciÛn de dependencias.
+// Registra la instancia de JwtSettings como un servicio Singleton en el contenedor de inyecciÔøΩn de dependencias.
+// Crea una ÔøΩnica instancia de JwtSettings que se comparte entre todos los objetos que lo soliciten a travÔøΩs de inyecciÔøΩn de dependencias.
 builder.Services.AddSingleton(Options.Create(jwtSettings));
 
-// Habilita la autenticaciÛn y establece el esquema de autenticaciÛn predeterminado como JWT Bearer.
+// Habilita la autenticaciÔøΩn y establece el esquema de autenticaciÔøΩn predeterminado como JWT Bearer.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -103,7 +123,7 @@ app.UseExceptionHandler(builder =>
             }
             else
             {
-                string errorMessageDefault = "OcurriÛ un error inesperado, favor de contactar al administrador del sistema";
+                string errorMessageDefault = "OcurriÔøΩ un error inesperado, favor de contactar al administrador del sistema";
                 Logger.WriteError(exceptionHandlerPathFeature.Error, app.Environment);
 
                 context.Response.AddApplicationError(errorMessageDefault);
@@ -135,7 +155,7 @@ if (!app.Environment.IsDevelopment())
     app.UseEndpoints(endpoints =>
     {
         endpoints.MapControllers();
-        endpoints.MapFallbackToController("Index", "Fallback");
+        // endpoints.MapFallbackToController("Index", "Fallback");
     });
 }
 

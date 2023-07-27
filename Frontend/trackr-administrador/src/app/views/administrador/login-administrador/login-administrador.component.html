@@ -3,12 +3,12 @@
     <div class="logos mt-5 justify-content-center">
       <!-- Logo Christus -->
       <img
-        style="margin: 20px; width: 20%"
+        style="margin: 5px; width: 32%"
         src="assets/img/svg/Logo_christus_CEI.svg"
       />
       <!-- Logo TrackR -->
       <img
-        style="margin: 20px; width: 20%"
+        style="margin: 10px; width: 20%"
         src="assets/img/svg/svg-Logo-02-Trackr.svg"
       />
     </div>
@@ -24,90 +24,132 @@
 
     <!-- Contenedor Transparente -->
     <div class="sub-contenedor-login">
-      <form
-        #formulario="ngForm"
-        (ngSubmit)="enviarFormulario(formulario)"
-        novalidate="novalidate"
-      >
-        <div class="contenedor-form">
-          <!-- Imagen de Login -->
-          <div class="row justify-content-center">
-            <div class="acceso">
-              <img
-                class="imgLogin"
-                src="assets/img/svg/svg-Admvo_Login-Titulo.svg"
+      <div class="contenedor-form">
+        <!-- Imagen de Login -->
+        <div class="row justify-content-center">
+          <div class="acceso">
+            <img
+              class="imgLogin"
+              src="assets/img/svg/svg-Admvo_Login-Titulo.svg"
+            />
+          </div>
+        </div>
+
+        <form
+          #formulario="ngForm"
+          (ngSubmit)="enviarFormulario(formulario)"
+          novalidate="novalidate"
+        >
+          <div *ngIf="!mostrarLocaciones; then login; else selectorLocacion"></div>
+        </form>
+      </div>
+    </div>
+
+    <ng-template #login>
+      <!-- Usuario -->
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+          <div class="form-group">
+            <div>
+              <input
+                #usuario="ngModel"
+                [(ngModel)]="loginRequest.correo"
+                id="usuario"
+                name="usuario"
+                class="form-control"
+                type="text"
+                maxlength="50"
+                required="true"
+                autocomplete="off"
+                placeholder="Usuario"
               />
-            </div>
-          </div>
-
-          <!-- Usuario -->
-          <div class="row justify-content-center">
-            <div class="col-md-10">
-              <div class="form-group">
-                <div>
-                  <input
-                    #usuario="ngModel"
-                    [(ngModel)]="loginRequest.correo"
-                    id="usuario"
-                    name="usuario"
-                    class="form-control"
-                    type="text"
-                    maxlength="50"
-                    required="true"
-                    autocomplete="off"
-                    placeholder="Usuario"
-                  />
-                  <div
-                    *ngIf="usuario.errors?.['required'] && usuario.dirty"
-                    class="error"
-                  >
-                    El usuario es requerido
-                  </div>
-                </div>
+              <div
+                *ngIf="usuario.errors?.['required'] && usuario.dirty"
+                class="error"
+              >
+                El usuario es requerido
               </div>
-            </div>
-          </div>
-
-          <br />
-
-          <!-- Contraseña -->
-          <div class="row justify-content-center">
-            <div class="col-md-10">
-              <div class="form-group">
-                <div>
-                  <input
-                    #contrasena="ngModel"
-                    [(ngModel)]="loginRequest.contrasena"
-                    id="contrasena"
-                    name="contrasena"
-                    class="form-control fondoInput"
-                    type="password"
-                    maxlength="50"
-                    required="true"
-                    autocomplete="off"
-                    placeholder="Contraseña"
-                  />
-                  <div
-                    *ngIf="contrasena.errors?.['required'] && contrasena.dirty"
-                    class="error"
-                  >
-                    La contraseña es requerida
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row justify-content-center">
-            <div class="col-md-10 text-center">
-              <button [disabled]="btnSubmit" type="submit" class="btn-ingresar">
-                Entrar
-              </button>
             </div>
           </div>
         </div>
-      </form>
-    </div>
+      </div>
+
+      <br />
+
+      <!-- Contraseña -->
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+          <div class="form-group">
+            <div>
+              <input
+                #contrasena="ngModel"
+                [(ngModel)]="loginRequest.contrasena"
+                id="contrasena"
+                name="contrasena"
+                class="form-control fondoInput"
+                type="password"
+                maxlength="50"
+                required="true"
+                autocomplete="off"
+                placeholder="Contraseña"
+              />
+              <div
+                *ngIf="contrasena.errors?.['required'] && contrasena.dirty"
+                class="error"
+              >
+                La contraseña es requerida
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-10 text-center">
+          <button [disabled]="btnSubmit" type="submit" class="btn-ingresar">
+            Entrar
+          </button>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #selectorLocacion>
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+          <div class="form-group">
+            <label class="label-input required-label">Locación</label>
+            <div>
+              <ng-select
+                #locacion="ngModel"
+                name="locacion"
+                bindLabel="locacion"
+                bindValue="idLocacion"
+                [items]="locaciones"
+                [(ngModel)]="loginRequest.idLocacion"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+            </div>
+            <div *ngIf="locacion.errors?.['required'] && locacion.touched" class="error">
+              La locacion es requerida
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+          <button
+            [disabled]="!loginRequest.idLocacion || btnSubmit"
+            type="submit"
+            class="btn-ingresar"
+          >
+            Continuar
+          </button>
+        </div>
+      </div>
+    </ng-template>
+
 
     <div class="contenedor-footer d-flex mb-5">
       <div class="row">
@@ -117,10 +159,6 @@
               <div class="col-md-12">
                 <div class="footer-texto">
                   <p>
-                    <strong>Powered by</strong>
-                    <br />
-                    *Imagen CDIS*
-                    <br />
                     V1.0
                   </p>
                 </div>

@@ -1,0 +1,48 @@
+.switch-flex {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .textcolor {
+    color: #ff6c00;
+  }
+  
+  .seleccionable{
+    cursor: pointer;
+    padding:3px;
+  }
+  
+  .seleccionable:hover {
+    background-color: #fff2cc;
+  }
+  
+  .par {
+    background-color: #ffffff;
+  }
+  
+  .impar {
+    background-color: #e4e4e4;
+  }
+  
+  .producto{
+    height: 6vh;
+  }
+  
+  pagination {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .my-pagination::ng-deep .page-item.active .page-link {
+    z-index: 1;
+    color: #FFFFFF;
+    background-color: #531c78 !important;
+  }
+  
+  .text-truncate-container{
+    font-size: 0.8rem !important;
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }

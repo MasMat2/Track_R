@@ -1,0 +1,61 @@
+<!-- Acceso con Hijos -->
+<div *ngIf="item.children && item.children.length > 0;
+    then accesoPadre;
+    else accesoHoja">
+</div>
+
+<ng-template #accesoPadre>
+  <button
+    class="button-item"
+    mat-button
+    [ngClass]="{ 'active': menuTrigger.menuOpen }"
+    (click)="menuTrigger.openMenu()"
+    routerLinkActive="active"
+  >
+    <div class="d-flex justify-content-center w-100">
+      <i class="item mr-3 {{ item.icon }}"></i>
+    </div>
+
+    <i class="fas fa-caret-right" style="position: absolute; right: 20px; color: #ffffff;"></i>
+
+    <div
+      #menuTrigger="matMenuTrigger"
+      [matMenuTriggerFor]="menu.menuHijo"
+    ></div>
+  </button>
+
+  <!-- Componente para desplegar los elementos emergentes -->
+  <app-menu-anidado #menu [items]="item.children!"></app-menu-anidado>
+</ng-template>
+
+<ng-template #accesoHoja>
+  <div *ngIf="item.claveTipoAcceso != claveTipoAccesoSistema;
+    then accesoDirecto;
+    else accesoExterno"
+  >
+  </div>
+</ng-template>
+
+
+<ng-template #accesoDirecto>
+  <button
+    class="button-item d-flex justify-content-center"
+    mat-button
+    [routerLink]="item.url"
+    routerLinkActive="active"
+  >
+    <i class="item mr-3 {{ item.icon }}"></i>
+  </button>
+</ng-template>
+
+<ng-template #accesoExterno>
+  <a
+    class="button-item d-flex justify-content-center"
+    mat-button
+    [href]="item.url"
+  >
+    <i class="item mr-3 {{ item.icon }}"></i>
+  </a>
+</ng-template>
+
+

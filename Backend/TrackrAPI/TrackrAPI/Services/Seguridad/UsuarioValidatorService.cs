@@ -1,19 +1,291 @@
-﻿using TrackrAPI.Helpers;
+﻿using TrackrAPI.Dtos.Seguridad;
+using TrackrAPI.Helpers;
 using TrackrAPI.Models;
+using TrackrAPI.Repositorys.Catalogo;
+using TrackrAPI.Repositorys.GestionCaja;
 using TrackrAPI.Repositorys.Seguridad;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TrackrAPI.Services.Seguridad
 {
     public class UsuarioValidatorService
     {
-        private readonly IUsuarioRepository usuarioRepository;
+
+        private IUsuarioRepository usuarioRepository;
+        private IUsuarioRolRepository usuarioRolRepository;
+        private IMetodoPagoRepository metodoPagoRepository;
+        private IRolRepository rolRepository;
         private readonly SimpleAES simpleAES;
+
+
         public UsuarioValidatorService(
             IUsuarioRepository usuarioRepository,
-            SimpleAES simpleAES)
+            IUsuarioRolRepository usuarioRolRepository,
+            IMetodoPagoRepository metodoPagoRepository,
+            IRolRepository rolRepository,
+            SimpleAES simpleAES
+        )
         {
             this.usuarioRepository = usuarioRepository;
+            this.usuarioRolRepository = usuarioRolRepository;
+            this.metodoPagoRepository = metodoPagoRepository;
+            this.rolRepository = rolRepository;
             this.simpleAES = simpleAES;
+        }
+
+        private readonly string MensajeContrasenaRequerida = "La contraseña es requerida";
+        private readonly string MensajeNombreRequerido = "El nombre es requerido";
+        private readonly string MensajePerfilRequerido = "El perfil es requerido";
+        private readonly string MensajeTipoUsuarioRequerido = "El tipo de usuario es requerido";
+        private readonly string MensajeUsernameRequerido = "El username es requerido";
+        private readonly string MensajeCodigoPostalRequerido = "El código postal es requerido";
+        private readonly string MensajeRegimenFiscalRequerido = "El régimen fiscal es requerido";
+        private readonly string MensajePuntoVentaRequerido = "El punto de venta es requerido";
+        private readonly string MensajeCorreoRequerido = "El correo personal es requerido";
+        private readonly string MensajeClaveRequerida = "La clave es requerida";
+        private readonly string MensajeDiasPagoRequeridos = "Los días de pago son requeridos";
+
+        private readonly string MensajeFormatoCorreo = "El formato de correo electrónico es incorrecto";
+        private readonly string MensajeFormatoRfc = "El formato del RFC es incorrecto";
+        private readonly string MensajeFormatoNombre = "El formato del nombre es incorrecto";
+        private readonly string MensajeFormatoApellidoPaterno = "El formato del apellido paterno es incorrecto";
+        private readonly string MensajeFormatoApellidoMaterno = "El formato del apellido materno es incorrecto";
+        private readonly string MensajeFormatoTelefono = "El formato del teléfono móvil es incorrecto";
+
+        private static readonly int LongitudMaximaComun = 50;
+        private static readonly int LongitudMaximaCien = 100;
+        private static readonly int LongitudMaximaTelefono = 15;
+        private readonly string MensajeLongitudCorreo = $"La longitud máxima del correo electrónico son { LongitudMaximaCien } caracteres";
+        private readonly string MensajeLongitudNombre = $"La longitud máxima del nombre son { LongitudMaximaComun } caracteres";
+        private readonly string MensajeLongitudApellidoPaterno = $"La longitud máxima del apellido paterno son { LongitudMaximaComun } caracteres";
+        private readonly string MensajeLongitudApellidoMaterno = $"La longitud máxima del apellido materno son { LongitudMaximaComun } caracteres";
+        private readonly string MensajeLongitudTelefono = $"La longitud máxima del teléfono móvil son { LongitudMaximaTelefono } caracteres";
+        private readonly string MensajeLongitudCiudad = $"La longitud máxima de la ciudad son { LongitudMaximaCien } caracteres";
+
+        private readonly string MensajeRfcDuplicado = "El RFC ingresado ya se encuentra registrado";
+        private readonly string MensajeUsuarioExistencia = "El usuario no existe";
+        private readonly string MensajeCorreoExistencia = "El correo ingresado no se encuentra registrado";
+        private readonly string MensajeMedicoExistencia = "El médico no existe";
+        private readonly string MensajeMedicoDuplicado = "Ya existe un médio con la misma cédula";
+
+        private readonly string MensajeDependenciaOrdenCompra = "El usuario tiene asociada al menos una orden de compra activa y no se puede ";
+
+        public void ValidarAgregar(Usuario usuario, List<Rol> roles)
+        {
+            ValidarRequeridos(usuario, roles);
+            ValidarLongitudes(usuario);
+            ValidarFormatos(usuario);
+            ValidarDuplicados(usuario);
+        }
+
+        public void ValidarEditar(Usuario usuario, List<Rol> roles)
+        {
+            ValidarRequeridos(usuario, roles);
+            ValidarLongitudes(usuario);
+            ValidarFormatos(usuario);
+            ValidarDuplicados(usuario);
+
+            // Validar si el usuario fue eliminado desde el "switch" del formulario
+            Usuario usuarioDb = usuarioRepository.Consultar(usuario.IdUsuario);
+            if (usuarioDb.Habilitado && !usuario.Habilitado)
+            {
+                ValidarEliminar(usuario.IdUsuario);
+            }
+
+            if (roles != null)
+            {
+                List<Rol> rolesEliminados = ObtenerRolesEliminados(usuario, roles);
+                ValidarDependencias(usuario.IdUsuario, rolesEliminados, true);
+            }
+        }
+
+        public void ValidarEliminar(int idUsuario)
+        {
+            ValidarExistencia(idUsuario);
+
+            List<Rol> roles = usuarioRolRepository
+                .ConsultarPorUsuario(idUsuario)
+                .Select(usuarioRol => rolRepository.Consultar(usuarioRol.IdRol))
+                .ToList();
+
+            ValidarDependencias(idUsuario, roles, false);
+        }
+
+        public void ValidarDependencias(int idUsuario, List<Rol> roles, bool esEdicion)
+        {
+            string contexto = esEdicion
+                ? " eliminar el rol "
+                : " desactivar el usuario";
+
+            Usuario usuario = usuarioRepository.ConsultarDependencias(idUsuario);
+
+            if (roles.Any(rol => rol.Clave == GeneralConstant.ClaveRolProveedor))
+            {
+                contexto += esEdicion ? "proveedor" : "";
+
+                if (usuario.OrdenCompraIdUsuarioProveedorNavigation.Any(oc => oc.IdEstatusOrdenCompraNavigation.Clave == GeneralConstant.ClaveEstatusOrdenCompraPorSurtir))
+                {
+                    throw new CdisException(MensajeDependenciaOrdenCompra + contexto);
+                }
+            }
+        }
+
+        public void ValidarRequeridos(Usuario usuario, List<Rol> roles)
+        {
+            Validator.ValidarRequerido(usuario.Nombre, MensajeNombreRequerido);
+            Validator.ValidarRequerido(usuario.IdPerfil, MensajePerfilRequerido);
+            Validator.ValidarRequerido(usuario.IdTipoUsuario, MensajeTipoUsuarioRequerido);
+            Validator.ValidarRequerido(usuario.Correo, MensajeUsernameRequerido);
+            Validator.ValidarRequerido(usuario.CorreoPersonal, MensajeCorreoRequerido);
+
+            if (!string.IsNullOrEmpty(usuario.Rfc))
+            {
+                Validator.ValidarRequerido(usuario.CodigoPostal, MensajeCodigoPostalRequerido);
+                Validator.ValidarRequerido(usuario.IdRegimenFiscal, MensajeRegimenFiscalRequerido);
+            }
+
+            MetodoPago metodoPagoCredito = metodoPagoRepository.ConsultarPorClave(GeneralConstant.ClaveMetodoPagoCredito);
+            if (usuario.IdMetodoPago != null && usuario.IdMetodoPago == metodoPagoCredito.IdMetodoPago)
+            {
+                Validator.ValidarRequerido(usuario.DiasPago, MensajeDiasPagoRequeridos);
+            }
+
+            // Validación dependiente de los roles. Esta validación es opcional si roles es null
+            if (roles == null)
+            {
+                return;
+            }
+
+            if (roles.Any(rol => rol.Clave == GeneralConstant.ClaveRolVendedor))
+            {
+                Validator.ValidarRequerido(usuario.IdPuntoVenta, MensajePuntoVentaRequerido);
+            }
+        }
+
+        public void ValidarLongitudes(Usuario usuario)
+        {
+            Validator.ValidarLongitudMaximaString(usuario.Correo, LongitudMaximaCien, MensajeLongitudCorreo);
+            Validator.ValidarLongitudMaximaString(usuario.Nombre, LongitudMaximaComun, MensajeLongitudNombre);
+            Validator.ValidarLongitudMaximaString(usuario.ApellidoPaterno, LongitudMaximaComun, MensajeLongitudApellidoPaterno);
+            Validator.ValidarLongitudMaximaString(usuario.ApellidoMaterno, LongitudMaximaComun, MensajeLongitudApellidoMaterno);
+            Validator.ValidarLongitudMaximaString(usuario.TelefonoMovil, LongitudMaximaTelefono, MensajeLongitudTelefono);
+            Validator.ValidarLongitudMaximaString(usuario.Ciudad, LongitudMaximaCien, MensajeLongitudCiudad);
+
+            int diasMinimos = 0;
+            MetodoPago metodoPagoCredito = metodoPagoRepository.ConsultarPorClave(GeneralConstant.ClaveMetodoPagoCredito);
+            if (usuario.IdMetodoPago != null && usuario.IdMetodoPago == metodoPagoCredito.IdMetodoPago)
+            {
+                diasMinimos = 1;
+            }
+
+            Validator.ValidarRangoEntero(usuario.DiasPago, diasMinimos, 365, $"Los días de pago deben ser entre {diasMinimos} y 365");
+        }
+
+        public void ValidarFormatos(Usuario usuario)
+        {
+            Validator.ValidarNombreSinNumeros(usuario.Nombre, MensajeFormatoNombre);
+            Validator.ValidarNombreSinNumeros(usuario.ApellidoPaterno, MensajeFormatoApellidoPaterno);
+            Validator.ValidarNombreSinNumeros(usuario.ApellidoMaterno, MensajeFormatoApellidoMaterno);
+            Validator.ValidarCorreo(usuario.CorreoPersonal, MensajeFormatoCorreo);
+            Validator.ValidarTelefono(usuario.TelefonoMovil, MensajeFormatoTelefono);
+
+            if (!string.IsNullOrEmpty(usuario.Rfc))
+            {
+                Validator.ValidarRFC(usuario.Rfc, MensajeFormatoRfc);
+            }
+        }
+
+        public void ValidarDuplicados(Usuario usuario)
+        {
+            ValidarUsernameDuplicado(usuario);
+            ValidarRFCDuplicado(usuario);
+        }
+
+        public List<Rol> ObtenerRolesEliminados(Usuario usuario, List<Rol> nuevosRoles)
+        {
+            List<UsuarioRolDto> rolesDb = usuarioRolRepository.ConsultarPorUsuario(usuario.IdUsuario).ToList();
+
+            List<UsuarioRolDto> rolesEliminados = rolesDb
+                .Where(rolDb => !nuevosRoles.Any(rol => rol.IdRol == rolDb.IdRol))
+                .ToList();
+
+            return rolesEliminados.Select(rol => rolRepository.Consultar(rol.IdRol)).ToList();
+
+        }
+
+        public void ValidarDuplicadoMedico(UsuarioDto usuario)
+        {
+            var duplicado = usuarioRepository.ConsultarMedico(usuario.Cedula);
+
+            if (duplicado != null)
+            {
+                throw new CdisException(MensajeMedicoDuplicado);
+            }
+        }
+
+        public void ValidarUsernameDuplicado(Usuario usuario)
+        {
+            Usuario usuarioExistente = this.usuarioRepository.ConsultarPorCorreo(usuario.Correo);
+
+            if (usuarioExistente != null && usuario.IdUsuario != usuarioExistente.IdUsuario && usuario.Correo != null)
+            {
+                throw new CdisException($@"El usuario '{usuario.Correo}' ya se encuentra registrado");
+            }
+        }
+
+        public void ValidarRFCDuplicado(Usuario usuario)
+        {
+            Usuario usuarioExistente = this.usuarioRepository.ConsultarPorRFC(usuario.Rfc);
+
+            if (usuarioExistente != null && usuario.IdUsuario != usuarioExistente.IdUsuario && usuario.Rfc != null && usuario.IdCompania == usuarioExistente.IdCompania)
+            {
+                throw new CdisException(MensajeRfcDuplicado);
+            }
+        }
+
+        public void ValidarRestablecerContrasena(Usuario usuario)
+        {
+            Validator.ValidarRequerido(usuario.Correo, MensajeCorreoRequerido);
+            // Validator.ValidarCorreo(usuario.Correo, MensajeFormatoCorreo);
+        }
+
+        public void ValidarCorreoNoExistente(Usuario usuario)
+        {
+            Usuario usuarioExistente = this.usuarioRepository.ConsultarPorCorreo(usuario.Correo);
+
+            if (usuarioExistente == null)
+            {
+                 throw new CdisException(MensajeCorreoExistencia);
+            }
+        }
+
+        public void ValidarActualizarContrasena(UsuarioDto usuario)
+        {
+            Validator.ValidarRequerido(usuario.Correo, MensajeCorreoRequerido);
+            Validator.ValidarRequerido(usuario.Clave, MensajeClaveRequerida);
+        }
+
+        public void ValidarProcesarActualizacionContrasena(UsuarioDto usuario)
+        {
+            ValidarActualizarContrasena(usuario);
+            Validator.ValidarRequerido(usuario.ContrasenaActualizada, MensajeContrasenaRequerida);
+        }
+
+        public void ValidarExistencia(int idUsuario)
+        {
+            Usuario usuario = usuarioRepository.Consultar(idUsuario);
+            if (usuario == null)
+            {
+                throw new CdisException(MensajeUsuarioExistencia);
+            }
+        }
+        public void ValidarExistenciaMedico(UsuarioDto usuario)
+        {
+            if (usuario == null)
+            {
+                throw new CdisException(MensajeMedicoExistencia);
+            }
         }
 
         /// <summary>
@@ -40,5 +312,7 @@ namespace TrackrAPI.Services.Seguridad
             }
             return userFromRepo;
         }
+
+
     }
 }

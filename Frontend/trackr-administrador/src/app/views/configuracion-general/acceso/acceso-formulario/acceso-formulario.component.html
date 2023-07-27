@@ -1,0 +1,208 @@
+<div class="modal-content">
+  <div class="modal-header">
+    {{ titulo }} Acceso
+    <button *ngIf="esModal" type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
+      <i class="far fa-times-circle"></i>
+    </button>
+  </div>
+  <div class="cuerpo-contenedor">
+    <form
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      novalidate="novalidate"
+    >
+    <div class="cuerpo-contenedor">
+      <div class="row">
+        <div class="col-md-2"> 
+          <div class="form-group">
+            <label class="label-input required-label">Clave</label>
+            <div>
+              <input
+                #clave="ngModel"
+                [(ngModel)]="acceso.clave"
+                name="clave"
+                class="form-control"
+                type="text"
+                [required]="true"
+                maxlength="10"
+                autocomplete="off"
+              />
+            </div>
+            <div *ngIf="clave.errors?.['required'] && clave.touched" class="error">La clave es requerida</div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="label-input required-label">Nombre</label>
+            <div>
+              <input
+                #nombre="ngModel"
+                [(ngModel)]="acceso.nombre"
+                name="nombre"
+                class="form-control"
+                type="text"
+                [required]="true"
+                maxlength="50"
+                autocomplete="off"
+              />
+            </div>
+            <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">El nombre es requerido</div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="label-input required-label">Tipo Acceso</label>
+            <div>
+              <ng-select
+                #listaPrecioLst="ngModel"
+                name="listaPrecioName"
+                bindLabel="nombre"
+                bindValue="idTipoAcceso"
+                [items]="tipoAccesoList"
+                [required]="true"
+                [(ngModel)]="acceso.idTipoAcceso"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+                (ngModelChange)="onTipoAccesoChange($event)"
+              ></ng-select>
+            </div>
+            <div *ngIf="listaPrecioLst.errors?.['required'] && listaPrecioLst.touched" class="error">
+              El tipo acceso es requerido
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Acceso Padre</label>
+            <div>
+              <ng-select
+                #accesoLst="ngModel"
+                name="listaAccesoName"
+                bindLabel="nombre"
+                bindValue="idAcceso"
+                [items]="accesoList"
+                [(ngModel)]="acceso.idAccesoPadre"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="label-input required-label">Orden Menú</label>
+            <div>
+              <input
+                #orden="ngModel"
+                [(ngModel)]="acceso.ordenMenu"
+                name="orden"
+                class="form-control"
+                type="number"
+                appPermitirSoloNumeros
+                [permitirDecimales]="false"
+                [longitud]="3"
+                [value]="acceso.ordenMenu"
+                [disabled]="tipoAccesoEvento"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="label-input required-label">URL</label>
+            <div>
+              <input
+                #url="ngModel"
+                [(ngModel)]="acceso.url"
+                name="url"
+                class="form-control"
+                type="text"
+                maxlength="250"
+                autocomplete="off"
+                [disabled]="tipoAccesoMenu || tipoAccesoEvento"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="label-input required-label">Icono Menú</label>
+            <div class="d-flex">
+              <i
+                *ngIf="acceso.idIcono"
+                class="{{ acceso.claseIcono + ' icono-acceso' }}"
+              ></i>
+              <ng-select
+                #iconoLst="ngModel"
+                name="IconoName"
+                style="width: 100%"
+                bindLabel="nombre"
+                bindValue="idIcono"
+                [items]="iconoList"
+                [(ngModel)]="acceso.idIcono"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+                (ngModelChange)="onIconoChange($event)"
+                [disabled]="!!tipoAccesoEvento"
+              ></ng-select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label">Rol Acceso</label>
+            <div>
+              <ng-select
+                #RolAccesoLst="ngModel"
+                name="listaRolAccesoName"
+                bindLabel="nombre"
+                bindValue="idRolAcceso"
+                [items]="rolAccesoList"
+                [required]="true"
+                [(ngModel)]="acceso.idRolAcceso"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="label-input required-label">Descripción</label>
+            <div>
+              <textarea
+                #descripcion="ngModel"
+                [(ngModel)]="acceso.descripcion"
+                name="descripcionName"
+                class="form-control-textarea"
+                type="text"
+                maxlength="800"
+                autocomplete="off"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="row">
+        <button type="button" class="btn-terceario ml-3" *ngIf="acceso.idAcceso > 0" (click)="agregarAyuda(acceso.idAcceso)">Agregar Ayuda</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn-primario ml-3" [disabled]="btnSubmit">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="loading-cdis" *ngIf="btnSubmit">
+  <img src="assets/img/spinner.gif" alt="Procesando..." />
+  <span>Procesando... por favor espere</span>
+</div>

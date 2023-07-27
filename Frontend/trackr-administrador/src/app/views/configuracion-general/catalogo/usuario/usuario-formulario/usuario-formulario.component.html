@@ -1,0 +1,1043 @@
+<div class="d-flex">
+  <div class="barra-lateral-modal"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div>{{ titulo }} Usuario</div>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
+        <i class="far fa-times-circle"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <tabset>
+        <tab style="padding: 0;" heading="Información General">
+          <form
+            (keydown.enter)="$event.preventDefault()"
+            #formulario="ngForm"
+            (ngSubmit)="enviarFormulario(formulario)"
+            novalidate="novalidate"
+          >
+            <div class="row">
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Nombre</label>
+                  <div>
+                    <input
+                      #nombre="ngModel"
+                      [(ngModel)]="usuario.nombre"
+                      name="nombre"
+                      class="form-control"
+                      type="text"
+                      [required]="true"
+                      maxlength="50"
+                      appFormatoNombre
+                    />
+                  </div>
+                  <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
+                    El nombre es requerido
+                  </div>
+                  <div *ngIf="nombre.errors?.['formatoNombre'] && nombre.touched" class="error">
+                    El nombre tiene un formato inválido
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Apellido Paterno</label>
+                  <div>
+                    <input
+                      #apellidoP="ngModel"
+                      [(ngModel)]="usuario.apellidoPaterno"
+                      name="apellidoP"
+                      class="form-control"
+                      type="text"
+                      maxlength="50"
+                      appFormatoNombre
+                    />
+                  </div>
+                  <div *ngIf="apellidoP.errors?.['formatoNombre']" class="error">
+                    El apellido paterno tiene un formato inválido
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Apellido Materno</label>
+                  <div>
+                    <input
+                      #apellidoM="ngModel"
+                      [(ngModel)]="usuario.apellidoMaterno"
+                      name="apellidoM"
+                      class="form-control"
+                      type="text"
+                      maxlength="50"
+                      appFormatoNombre
+                    />
+                  </div>
+                  <div *ngIf="apellidoM.errors?.['formatoNombre']" class="error">
+                    El apellido materno tiene un formato inválido
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+
+              <div
+                  [class.col-md-4]="usuario.idUsuario > 0"
+                  [class.col-md-2]="!(usuario.idUsuario > 0)">
+                <div class="form-group">
+                  <label class="label-input required-label">Título</label>
+                  <div>
+                    <ng-select
+                      #tituloLst="ngModel"
+                      name="tituloName"
+                      bindLabel="nombre"
+                      bindValue="idTituloAcademico"
+                      [items]="tituloList"
+                      [(ngModel)]="usuario.idTituloAcademico"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                    ></ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-2" *ngIf="!(usuario.idUsuario > 0)">
+                <div class="form-group">
+                  <label class="label-input required-label">Perfil</label>
+                  <div>
+                    <ng-select
+                      #perfilDefaultLst="ngModel"
+                      name="perfilDefaultName"
+                      class="select-custom"
+                      [items]="perfilList"
+                      bindLabel="nombre"
+                      bindValue="idPerfil"
+                      [required]="true"
+                      [(ngModel)]="usuario.idPerfil"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                    ></ng-select>
+                  </div>
+                  <div *ngIf="perfilDefaultLst.errors?.['required'] && perfilDefaultLst.touched" class="error">
+                    El perfil es requerido
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Tipo de Usuario</label>
+                  <div>
+                    <ng-select
+                      #tipoUsuario="ngModel"
+                      name="tipoUsuarioName"
+                      bindLabel="nombre"
+                      bindValue="idTipoUsuario"
+                      [items]="tipoUsuarioList"
+                      [required]="true"
+                      [(ngModel)]="usuario.idTipoUsuario"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                      (ngModelChange)="onTipoUsuarioChange($event)"
+                    ></ng-select>
+                  </div>
+                  <div *ngIf="tipoUsuario.errors?.['required'] && tipoUsuario.touched" class="error">
+                    El tipo de usuario es requerido
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Rol</label>
+                  <div>
+                    <ng-select
+                      #rol="ngModel"
+                      name="rol"
+                      bindLabel="nombre"
+                      bindValue="idRol"
+                      [items]="rolList"
+                      [multiple]="true"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                      [(ngModel)]="rolSeleccionados"
+                      (ngModelChange)="onRolChange($event)"
+                      [required]="true"
+                    ></ng-select>
+                    <div *ngIf="rol.errors?.['required'] && rol.touched" class="error">
+                      El rol es requerido
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Username</label>
+                  <div>
+                    <input
+                      #correo="ngModel"
+                      [(ngModel)]="usuario.correo"
+                      (ngModelChange)="correoChange($event)"
+                      name="correo"
+                      class="form-control"
+                      type="text"
+                      maxlength="50"
+                      [required]="true"
+                    />
+                  </div>
+                  <div *ngIf="correo.errors?.['required'] && correo.touched" class="error">
+                    El username es requerido
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4" *ngIf="accesoContrasena">
+                <div class="form-group">
+                  <label class="label-input required-label">Contraseña</label>
+                  <div>
+                    <input
+                      #contrasena="ngModel"
+                      [(ngModel)]="usuario.contrasena"
+                      name="contrasenaName"
+                      class="form-control"
+                      type="text"
+                      maxlength="50"
+                      appFormatoContrasena
+                      appConfirmacionContrasena="confirmacionContrasenaName"
+                      reversa="true"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div *ngIf="contrasena.errors?.['formatoContrasena']?.longitud && contrasena.touched" class="error">
+                    La longitud mínima son {{ contrasena.errors?.['formatoContrasena'].longitud.size }} caracteres
+                  </div>
+                  <div *ngIf="contrasena.errors?.['formatoContrasena']?.numeros && contrasena.touched" class="error">
+                    La contraseña debe tener al menos un número
+                  </div>
+                  <div *ngIf="contrasena.errors?.['formatoContrasena']?.mayuscula && contrasena.touched" class="error">
+                    La contraseña debe tener al menos una mayúscula
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4" *ngIf="accesoContrasena">
+                <div class="form-group">
+                  <label class="label-input required-label">Confirmar Contraseña</label>
+                  <div>
+                    <input
+                      #confirmacionContrasena="ngModel"
+                      [(ngModel)]="confirmarContrasena"
+                      name="confirmacionContrasenaName"
+                      class="form-control"
+                      type="text"
+                      maxlength="50"
+                      appConfirmacionContrasena="contrasenaName"
+                      [required]="usuario.contrasena != '' && usuario.contrasena != null"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div *ngIf="confirmacionContrasena.errors?.['required'] && confirmacionContrasena.touched" class="error">
+                    La confirmación de contraseña es requerida
+                  </div>
+                  <div *ngIf="confirmacionContrasena.errors?.['confirmacionContrasena'] && confirmacionContrasena.touched" class="error">
+                    Las contraseñas no coinciden
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Punto de Venta</label>
+                  <div>
+                    <ng-select
+                      #puntoVenta="ngModel"
+                      name="puntoVentaName"
+                      bindLabel="nombre"
+                      bindValue="idPuntoVenta"
+                      [items]="puntoVentaList"
+                      [required]="tieneRolVendedor"
+                      [disabled]="!tieneRolVendedor"
+                      [(ngModel)]="usuario.idPuntoVenta"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                    ></ng-select>
+                  </div>
+                  <div *ngIf="puntoVenta.errors?.['required'] && puntoVenta.touched" class="error">
+                    El punto de venta es requerido
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Cédula Profesional</label>
+                  <div>
+                    <input
+                      #cedulaProfesional="ngModel"
+                      [(ngModel)]="usuario.cedula"
+                      name="cedulaProfesionalName"
+                      class="form-control"
+                      type="text"
+                      maxlength="50"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Área</label>
+                  <div>
+                    <ng-select
+                      #departamentoLst="ngModel"
+                      name="departamentoName"
+                      bindLabel="nombre"
+                      bindValue="idArea"
+                      [items]="areaList"
+                      [(ngModel)]="usuario.idArea"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                    ></ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">RFC</label>
+                  <div>
+                    <input
+                      #rfc="ngModel"
+                      [(ngModel)]="usuario.rfc"
+                      name="rfc"
+                      class="form-control"
+                      type="text"
+                      maxlength="100"
+                      appFormatoRfc
+                      (ngModelChange)="onRfcChange(rfc)"
+                    />
+                  </div>
+                  <div *ngIf="rfc.errors?.['formatoRfc'] && rfc.touched" class="error">
+                    El RFC no es válido
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Régimen Fiscal</label>
+                  <div>
+                    <ng-select
+                      #regimenFiscal="ngModel"
+                      name="regimenFiscalName"
+                      bindLabel="nombre"
+                      bindValue="idRegimenFiscal"
+                      [items]="regimenFiscalList"
+                      [(ngModel)]="usuario.idRegimenFiscal"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                      [required]="rfcValido"
+                    ></ng-select>
+                  </div>
+                  <div *ngIf="regimenFiscal.errors?.['required'] && regimenFiscal.touched" class="error">
+                    El régimen fiscal es requerido
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Sueldo Diario</label>
+                  <div>
+                    <input
+                      #sueldoDiario="ngModel"
+                      name = sueldoDiarioName
+                      [(ngModel)]="usuario.sueldoDiario"
+                      class="form-control"
+                      type="text"
+                      autocomplete="off"
+                      maxlength="6"
+                      [max]="999999"
+                      [permitirDecimales]="true"
+                      appPermitirSoloNumeros
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Núm. Licencia</label>
+                  <div>
+                    <input
+                      #numeroLicencia="ngModel"
+                      name = numeroLicenciaName
+                      [(ngModel)]="usuario.numeroLicencia"
+                      class="form-control"
+                      type="text"
+                      maxlength="50"
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4" *ngIf="esEdicion">
+                <div class="form-group">
+                  <div style="display: flex; flex-direction: column">
+                    <label class="label-input required-label">Activo</label>
+                    <label class="switch" for="estatus">
+                      <input
+                        #estatus="ngModel"
+                        name="estatusName"
+                        type="checkbox"
+                        id="estatus"
+                        [(ngModel)]="usuario.habilitado"
+                      />
+                      <div class="slider round">
+                        <span class="on">Si</span>
+                        <span class="off">No</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Datos de Contacto -->
+            <div class="subseccion">
+              Datos de Contacto
+            </div>
+
+            <div class="row">
+
+              <!-- Pais -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">País</label>
+                  <div>
+                    <ng-select
+                      #paisLst="ngModel"
+                      name="paisName"
+                      class="select-custom"
+                      [items]="paisList"
+                      bindLabel="nombre"
+                      bindValue="idPais"
+                      [(ngModel)]="usuario.idPais"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                      (ngModelChange)="onChangePais()"
+                    ></ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Código Postal -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Código Postal</label>
+                  <div>
+                    <input
+                    #codigoPostal="ngModel"
+                    [(ngModel)]="usuario.codigoPostal"
+                    name="codigoPostalName"
+                    class="form-control"
+                    type="text"
+                    [typeahead]="sugerenciasCodigoPostal$"
+                    [typeaheadAsync]="true"
+                    typeaheadOptionField="codigoPostal1"
+                    [typeaheadMinLength]="3"
+                    [typeaheadScrollable]="true"
+                    [typeaheadOptionsInScrollableView]="5"
+                    appFormatoCodigoPostal
+                    [esExtranjero]="esPaisExtranjero"
+                    [maxlength]="esPaisExtranjero ? null : 5"
+                    [minlength]="esPaisExtranjero ? null : 5"
+                    [required]="true"
+                    [disabled]="!usuario.idPais"
+                    (ngModelChange)="onChangeCodigoPostal()"
+                    autocomplete="off"
+                    />
+                    <div *ngIf="codigoPostal.errors?.['lengthError'] && codigoPostal.touched" class="error">
+                      El código debe tener 5 dígitos
+                    </div>
+                    <div *ngIf="codigoPostal.errors?.['required'] && codigoPostal.touched" class="error">
+                      El código postal es requerido
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Estado -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Estado</label>
+                  <div>
+                    <ng-select
+                      #estadoLst="ngModel"
+                      name="estadoName"
+                      class="select-custom"
+                      [items]="estadoList"
+                      bindLabel="nombre"
+                      bindValue="idEstado"
+                      [(ngModel)]="usuario.idEstado"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                      (ngModelChange)="onChangeEstado()"
+                      [disabled]="!usuario.idPais"
+                    ></ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Municipio -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Municipio</label>
+                  <div>
+                    <ng-select
+                      #municipio="ngModel"
+                      name="municipioName"
+                      class="select-custom"
+                      [items]="municipioList"
+                      bindLabel="nombre"
+                      bindValue="idMunicipio"
+                      [(ngModel)]="usuario.idMunicipio"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                      [disabled]="!usuario.idEstado"
+                    ></ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Localidad -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Localidad</label>
+                  <div>
+                    <ng-select
+                      #localidad="ngModel"
+                      name="localidadName"
+                      class="select-custom"
+                      [items]="localidadList"
+                      bindLabel="nombre"
+                      bindValue="idLocalidad"
+                      [(ngModel)]="usuario.idLocalidad"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                      [disabled]="!usuario.idEstado"
+                    ></ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Colonia -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Colonia</label>
+                  <div>
+                    <ng-select
+                      #colonia="ngModel"
+                      name="coloniaName"
+                      class="select-custom"
+                      [items]="coloniaList"
+                      bindLabel="nombre"
+                      bindValue="idColonia"
+                      [(ngModel)]="usuario.idColonia"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                      [disabled]="usuario.codigoPostal?.length != 5"
+                    ></ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Calle -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Calle</label>
+                  <div>
+                    <input
+                      #calle="ngModel"
+                      [(ngModel)]="usuario.calle"
+                      name="calleName"
+                      class="form-control"
+                      type="text"
+                      maxlength="50"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Número Exterior -->
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label class="label-input required-label">Núm. Exterior</label>
+                  <div>
+                    <input
+                      #numeroExterior="ngModel"
+                      [(ngModel)]="usuario.numeroExterior"
+                      name="numeroExteriorName"
+                      class="form-control"
+                      type="text"
+                      maxlength="10"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Número Interior -->
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label class="label-input required-label">Núm. Interior</label>
+                  <div>
+                    <input
+                      #numeroInterior="ngModel"
+                      [(ngModel)]="usuario.numeroInterior"
+                      name="numeroInteriorName"
+                      class="form-control"
+                      type="text"
+                      maxlength="10"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Teléfono -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Teléfono (10 dígitos)</label>
+                  <div>
+                    <input
+                      #telefonoM="ngModel"
+                      [(ngModel)]="usuario.telefonoMovil"
+                      name="telefonoM"
+                      class="form-control"
+                      type="text"
+                      maxlength="10"
+                      appFormatoTelefono
+                    />
+                  </div>
+                  <div *ngIf="telefonoM.errors?.['formatoTelefono'] && telefonoM.touched" class="error">
+                    El teléfono tiene un formato inválido
+                  </div>
+                </div>
+              </div>
+
+              <!-- Correo Personal -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Correo Personal</label>
+                  <div>
+                    <input
+                      #correoPersonal="ngModel"
+                      [(ngModel)]="usuario.correoPersonal"
+                      name="correoPersonalName"
+                      class="form-control"
+                      type="text"
+                      maxlength="100"
+                      [required]="true"
+                      appFormatoCorreo
+                    />
+                  </div>
+                  <div *ngIf="correoPersonal.errors?.['formatoCorreo']" class="error">
+                    El correo tiene un formato inválido
+                  </div>
+                  <div *ngIf="correoPersonal.errors?.['required'] && correoPersonal.touched" class="error">
+                    El correo es requerido
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Datos de Socio Comercial -->
+            <div class="subseccion" *ngIf="tieneRolCliente">
+              Datos de Socio Comercial
+            </div>
+
+            <div class="row" *ngIf="tieneRolCliente">
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Tipo de Socio</label>
+                  <div>
+                    <div>
+                      <ng-select
+                        #tipoCliente="ngModel"
+                        name="tipoClienteName"
+                        class="select-custom"
+                        [items]="tipoClienteList"
+                        bindLabel="descripcion"
+                        bindValue="idTipoCliente"
+                        [(ngModel)]="usuario.idTipoCliente"
+                        [placeholder]="placeHolderSelect"
+                        [notFoundText]="placeHolderNoOptions"
+                      ></ng-select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Lista de Precios</label>
+                  <div>
+                    <div>
+                      <ng-select
+                        #listaPrecio="ngModel"
+                        name="listaPrecioName"
+                        class="select-custom"
+                        [items]="listaPrecioList"
+                        bindLabel="nombre"
+                        bindValue="idListaPrecio"
+                        [(ngModel)]="usuario.idListaPrecio"
+                        [placeholder]="placeHolderSelect"
+                        [notFoundText]="placeHolderNoOptions"
+                      ></ng-select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Datos de Pago -->
+            <div class="subseccion">
+              Datos de Pago
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Método de Pago</label>
+                  <div>
+                    <ng-select
+                      #metodoPago="ngModel"
+                      name="metodoPagoName"
+                      class="select-custom"
+                      [items]="metodoPagoList"
+                      bindLabel="nombre"
+                      bindValue="idMetodoPago"
+                      [(ngModel)]="usuario.idMetodoPago"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                    ></ng-select>
+                  </div>
+
+                  <div *ngIf="metodoPago.errors?.['required'] && metodoPago.touched" class="error">
+                    El método de pago es requerido
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Días de Pago</label>
+                  <div>
+                    <input
+                      #diasPago="ngModel"
+                      name = diasPagoName
+                      [(ngModel)]="usuario.diasPago"
+                      class="form-control"
+                      type="text"
+                      autocomplete="off"
+                      [min]="usuario.idMetodoPago === metodoPagoCredito?.idMetodoPago ? 1 : 0"
+                      [max]="365"
+                      appPermitirSoloNumeros
+                      [permitirDecimales]="false"
+                      [required]="usuario.idMetodoPago === metodoPagoCredito?.idMetodoPago"
+                      maxlength="3"
+                    />
+                    <div *ngIf="diasPago.errors?.['required'] && diasPago.touched" class="error">
+                      Los días de pago son requeridos
+                    </div>
+                    <div *ngIf="(diasPago.errors?.['min'] || diasPago.errors?.['max']) && diasPago.touched" class="error">
+                      Los días de pago deben ser entre {{ usuario.idMetodoPago === metodoPagoCredito?.idMetodoPago ? 1 : 0 }} y 365
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Forma de Pago</label>
+                  <div>
+                    <ng-select
+                      #formaPago="ngModel"
+                      name="formaPagoName"
+                      class="select-custom"
+                      [items]="formaPagoList"
+                      bindLabel="nombre"
+                      bindValue="idSatFormaPago"
+                      [(ngModel)]="usuario.idSatFormaPago"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                    ></ng-select>
+                  </div>
+
+                  <div *ngIf="formaPago.errors?.['required'] && formaPago.touched" class="error">
+                    La forma de pago es requerida
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Imagen -->
+            <div class="subseccion">
+              Imagen
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div style="text-align: center; margin-top: 15px">
+                  <img *ngIf="url !== undefined" id="logo" [src]="url" height="200" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 text-center">
+                <div class="form-group">
+                  <div>
+                    <input
+                      #file="ngModel"
+                      [(ngModel)]="imagenBase64"
+                      id="imagen"
+                      name="imagen"
+                      class="form-control"
+                      type="file"
+                      autocomplete="off"
+                      (change)="fileChange($event)"
+                      style="display: none"
+                      accept="image/*"
+                    />
+                    <button
+                      onclick="document.getElementById('imagen').click()"
+                      type="button"
+                      class="btn-terceario"
+                    >
+                      Buscar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar</button>
+            <button type="submit" class="btn-primario ml-3" [disabled]="btnSubmit">Guardar</button>
+          </div>
+        </tab>
+
+        <tab [disabled]="!(usuario.idUsuario > 0)" style="padding: 0;" heading="Permisos">
+          <div class="cuerpo-contenedor">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Compañía</label>
+                  <div>
+                    <ng-select
+                      #companiaLst="ngModel"
+                      name="companiaName"
+                      class="select-custom"
+                      bindLabel="nombre"
+                      bindValue="idCompania"
+                      [items]="companiaList"
+                      [required]="!esExterno"
+                      [(ngModel)]="usuarioLocacion.idCompania"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                      (ngModelChange)="onCompaniaChange($event,false)"
+                    ></ng-select>
+                  </div>
+                  <!-- <div *ngIf="companiaLst.errors?.['required'] && companiaLst.touched" class="error">
+                    La compañía es requerida
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Locación</label>
+                  <div>
+                    <ng-select
+                      #hotelLst="ngModel"
+                      name="hotelName"
+                      class="select-custom"
+                      [items]="hospitalList"
+                      bindLabel="nombre"
+                      bindValue="idHospital"
+                      [required]="!esExterno"
+                      [(ngModel)]="usuarioLocacion.idLocacion"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                      [disabled]="esExterno"
+                    ></ng-select>
+                  </div>
+                  <!-- <div *ngIf="hotelLst.errors?.['required'] && hotelLst.touched" class="error">
+                    El hospital es requerido
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label-input required-label">Perfil</label>
+                  <div>
+                    <ng-select
+                      #perfilLst="ngModel"
+                      name="perfilName"
+                      class="select-custom"
+                      [items]="perfilList"
+                      bindLabel="nombre"
+                      bindValue="idPerfil"
+                      [required]="!esExterno"
+                      [(ngModel)]="usuarioLocacion.idPerfil"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                    ></ng-select>
+                  </div>
+                  <!-- <div *ngIf="perfilLst.errors?.['required'] && perfilLst.touched && !submit" class="error">
+                    El perfil es requerido
+                  </div> -->
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <app-grid-general
+                  #gridPermisos
+                  [headerName]="'Permisos'"
+                  [data]="permisosList"
+                  [children]="columns"
+                  (event)="onGridClick($event)"
+                >
+                </app-grid-general>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar</button>
+            <button (click)="guardarPermiso()" type="button" class="btn-primario ml-3">Guardar</button>
+          </div>
+        </tab>
+
+        <tab [disabled]="!(usuario.idUsuario > 0)" style="padding: 0;" heading="Afectación contable">
+          <form
+            (keydown.enter)="$event.preventDefault()"
+            #formularioAfectacion="ngForm"
+            novalidate="novalidate"
+          >
+            <div class="cuerpo-contenedor">
+              <div class="row">
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="label-input required-label">Rol</label>
+                    <div>
+                      <ng-select
+                        #acRolLst="ngModel"
+                        name="acRolName"
+                        class="select-custom"
+                        [items]="rolList"
+                        bindLabel="nombre"
+                        bindValue="idRol"
+                        [required]="true"
+                        [(ngModel)]="usuarioRol.idRol"
+                        [placeholder]="placeHolderSelect"
+                        [notFoundText]="placeHolderNoOptions"
+                      ></ng-select>
+                    </div>
+                    <div *ngIf="acRolLst.errors?.['required'] && acRolLst.touched" class="error">
+                      El rol es requerido
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="label-input required-label">Concepto</label>
+                    <div>
+                      <ng-select
+                        #conceptoLst="ngModel"
+                        name="conceptoName"
+                        class="select-custom"
+                        [items]="conceptoList"
+                        bindLabel="nombre"
+                        bindValue="idConcepto"
+                        [required]="usuarioRol.idCuentaContable > 0"
+                        [(ngModel)]="usuarioRol.idConcepto"
+                        [placeholder]="placeHolderSelect"
+                        [notFoundText]="placeHolderNoOptions"
+                        (ngModelChange)="onConceptoChange($event)"
+                      ></ng-select>
+                    </div>
+                    <div *ngIf="conceptoLst.errors?.['required'] && conceptoLst.touched" class="error">
+                      El concepto es requerido
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="label-input required-label">Cuenta Contable</label>
+                    <div>
+                      <ng-select
+                        #cuentaContable="ngModel"
+                        name="cuentaContableName"
+                        class="select-custom"
+                        [items]="cuentaContableList"
+                        bindLabel="nombre"
+                        bindValue="idCuentaContable"
+                        [required]="usuarioRol.idConcepto > 0"
+                        [(ngModel)]="usuarioRol.idCuentaContable"
+                        [placeholder]="placeHolderSelect"
+                        [notFoundText]="placeHolderNoOptions"
+                      ></ng-select>
+                    </div>
+                    <div *ngIf="cuentaContable.errors?.['required'] && cuentaContable.touched" class="error">
+                      La cuenta contable es requerida
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <app-grid-general
+                    #gridUsuarioRol
+                    [headerName]="'Afectación Contable'"
+                    [data]="usuarioRolList"
+                    [children]="columnsUsuarioRol"
+                    (event)="onGridClickUsuarioRol($event)"
+                  >
+                  </app-grid-general>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button"
+                class="btn-secundario mr-3"
+                (click)="cancelar()"
+                >Cancelar
+              </button>
+              <button
+                (click)="guardarAfectacionContable(formularioAfectacion)"
+                type="button" class="btn-primario ml-3"
+                >Guardar
+              </button>
+            </div>
+          </form>
+        </tab>
+      </tabset>
+    </div>
+
+  </div>
+</div>

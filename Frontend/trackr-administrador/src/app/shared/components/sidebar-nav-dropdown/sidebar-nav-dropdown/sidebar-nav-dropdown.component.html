@@ -1,0 +1,47 @@
+<mat-sidenav-container>
+  <!-- Barra lateral -->
+  <mat-sidenav mode="side" opened>
+    <div class="lateral-superior">
+      <!--Imagen de Usuario -->
+      <div class="text-center pt-3 pb-4">
+        <img *ngIf="urlImagen !== undefined" 
+          class="imagen-usuario" 
+          [src]="urlImagen" 
+          width="85px"
+          height="85px"
+          alt="Imagen de Usuario"
+          [matMenuTriggerFor]="menu"
+        />
+
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="logout()">Salir</button>
+        </mat-menu>
+      </div>
+
+      <!-- Items de Navegación -->
+      <div *ngFor="let item of navItems">
+        <app-menu-item
+          [item]="item"
+        ></app-menu-item>
+      </div>
+    </div>
+
+    <!-- Utilidades -->
+    <div class="lateral-inferior pt-5">
+      <app-menu-item
+        [item]="{ name: 'Buscar', icon: 'fas fa-magnifying-glass', url: 'administrador', claveTipoAcceso: '' }"
+      >
+      </app-menu-item>
+
+      <app-menu-item
+        [item]="{ name: 'Notificaciones', icon: 'fa-regular fa-bell', url: 'administrador', claveTipoAcceso: '' }"
+      >
+      </app-menu-item>
+    </div>
+  </mat-sidenav>
+
+  <!-- Contenido -->
+  <mat-sidenav-content>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

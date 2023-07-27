@@ -1,0 +1,49 @@
+<div class="d-flex">
+  <div class="modal-content">
+    <!-- Header -->
+    <div class="modal-header">
+      <div>Resultados de la Búsqueda</div>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
+        <i class="far fa-times-circle"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="container">
+      <!-- Elementos de búsqueda -->
+      <div *ngFor="let item of pageElements; let i = index"
+        (click)="seleccionar(item.idUsuario)"
+        class="row align-items-center producto seleccionable"
+        [ngClass]="i % 2 == 0 ? 'par' : 'impar'">
+
+        <div class="col-md-1 text-right textcolor">
+          {{ ((currentPage - 1) * itemsPerPage) + (i + 1) }}.-
+        </div>
+        <div class="col-md-4 text-left">
+          {{ item.correo }}
+        </div>
+        <div class="col-md-7 text-left text-truncate-container">
+          {{ item.nombreCompleto }}
+        </div>
+      </div>
+
+      <!-- Paginación -->
+      <div class="row justify-content-end">
+        <div class="col-md-12">
+          <pagination
+            [totalItems]="elementos.length"
+            previousText="Anterior"
+            nextText="Siguiente"
+            [(ngModel)]="currentPage"
+            [itemsPerPage]="itemsPerPage"
+            (pageChanged)="pageChanged($event)"
+            (numPages)="3"
+            [maxSize]="10"
+            class="my-pagination mt-2">
+          </pagination>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

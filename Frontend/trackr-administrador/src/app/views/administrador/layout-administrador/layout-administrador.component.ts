@@ -1,4 +1,17 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Acceso } from '@models/seguridad/acceso';
+import { map } from 'rxjs';
+import { AccesoService } from '../../../shared/http/seguridad/acceso.service';
+import { GeneralConstant } from '@utils/general-constant';
+import { Router } from '@angular/router';
+
+export interface NavItem {
+  name: string;
+  claveTipoAcceso: string;
+  url: string;
+  icon: string;
+  children?: NavItem[];
+};
 
 @Component({
   selector: 'app-layout-administrador',
@@ -6,34 +19,55 @@ import { Component, OnInit} from '@angular/core';
   styleUrls: ['./layout-administrador.component.css']
 })
 export class LayoutAdministradorComponent implements OnInit {
+  protected navItems: NavItem[];
 
-  public imagenUsuario = 'assets/img/pruebas/user-image.png';
-  public imagenLogotipo = 'assets/img/logo-trackr.png'
-
-  public navItems: any[] = [
-    {
-      nombre: 'Dashboard',
-      claseIcono: 'fas fa-house-medical'
-    },
-    {
-      nombre: 'Pacientes',
-      claseIcono: 'fa-regular fa-id-badge'
-    },
-    {
-      nombre: 'Agenda',
-      claseIcono: 'fa-regular fa-calendar-days'
-    },
-    {
-      nombre: 'Chat',
-      claseIcono: 'fa-regular fa-message'
-    },
-  ];
-
-  constructor() {
-
-  }
+  constructor(
+    private accesoService: AccesoService,
+    private router: Router,
+  ) {}
 
   public ngOnInit(): void {
+    this.consultarMenu();
+  }
+
+  public logout(): void {
+    localStorage.removeItem(GeneralConstant.TOKEN_KEY);
+    this.router.navigate(['/login']);
+  }
+
+  private consultarMenu(): void {
+    this.accesoService.consultarMenu()
+      .pipe(
+        map((accesos: Acceso[]) => {
+          return accesos.map((acceso: Acceso) => this.mapAccesoToNavItem(acceso))
+        })
+      )
+      .subscribe((navItems: NavItem[]) => {
+        this.navItems = navItems;
+      });
+  }
+
+  private mapAccesoToNavItem(acceso: Acceso): NavItem {
+    return {
+      name: acceso.nombre,
+      claveTipoAcceso: acceso.claveTipoAcceso,
+      // class: 'sidebar-boton-menu',
+      url: acceso.url === null ? '/a' : acceso.url,
+      icon: acceso.claseIcono,
+      children: this.generarHijos(acceso)
+    };
+  }
+
+  private generarHijos(acceso: Acceso): NavItem[] {
+    if (
+      acceso.hijos === undefined ||
+      acceso.hijos === null ||
+      acceso.hijos.length === 0
+    ) {
+      return [];
+    }
+
+    return acceso.hijos.map((acceso: Acceso) => this.mapAccesoToNavItem(acceso));
   }
 
 }

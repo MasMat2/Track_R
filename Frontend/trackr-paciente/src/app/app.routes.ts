@@ -1,23 +1,19 @@
 import { Routes } from '@angular/router';
-import { LayoutPacientePage } from './pages/paciente/layout-paciente/layout-paciente.page';
+import { AuthGuard } from './auth/auth-guard.service';
 
 export const routes: Routes = [
   {
-    path: 'paciente',
-    component: LayoutPacientePage,
-    loadChildren: () => import('./pages/paciente/paciente-routes')
+    path: 'home',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/home/home-routes')
   },
   {
-    path: 'home-slide',
-    loadComponent: () => import('./pages/home-slide/home-slide.page').then( m => m.HomeSlidePage)
-  },
-  {
-    path: 'login',
-    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
+    path: 'acceso',
+    loadChildren: () => import('./pages/acceso/acceso-routes')
   },
   {
     path: '**',
-    redirectTo: 'home-slide',
+    redirectTo: 'acceso',
     pathMatch: 'full',
   },
 

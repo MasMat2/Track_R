@@ -1,0 +1,27 @@
+<div class="contendor">
+
+  <div class="modal-header">
+    <div>{{ accion }} Expediente Administrativo</div>
+  </div>
+
+  <div class="cuerpo-contenedor" style="padding-bottom: 0;">
+    <app-tabulador-entidad
+      [claveEntidad]="claveEntidadExpedienteTrackr"
+      [idTabla]="idUsuario"
+      [externalTemplates] = "externalTemplates">
+    </app-tabulador-entidad>
+  </div>
+
+</div>
+
+<!-- Componentes Externos -->
+<!-- Información General del Expediente -->
+<ng-template #informacionGeneral>
+    <app-expediente-general-formulario>
+    </app-expediente-general-formulario>
+</ng-template>
+
+<ng-template #estudios>
+  <app-expediente-estudio>
+  </app-expediente-estudio>
+</ng-template>
