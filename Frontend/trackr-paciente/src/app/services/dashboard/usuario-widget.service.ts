@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { WidgetType, isWidgetType } from '@pages/home/dashboard/interfaces/widgets';
 import { Observable, map, tap } from 'rxjs';
-import { WidgetType, isWidgetType } from 'src/app/pages/paciente/dashboard/interfaces/widgets';
 
 @Injectable()
 export class UsuarioWidgetService {
