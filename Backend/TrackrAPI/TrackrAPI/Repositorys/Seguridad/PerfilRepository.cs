@@ -128,7 +128,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                 .ToList();
         }
 
-        public Perfil ConsultarUltimoAgregado(bool esCompaniaBase)
+        public Perfil ConsultarUltimoAgregado(bool esCompaniaBase, int idCompania)
         {
             if (esCompaniaBase)
             {
@@ -141,6 +141,7 @@ namespace TrackrAPI.Repositorys.Seguridad
             {
                 return context.Perfil
                     .Where(p => p.IdCompaniaNavigation.Clave != GeneralConstant.ClaveCompaniaBase && p.Clave.ToUpper().Contains("BASE") == false)
+                    .Where(p => p.IdCompania == idCompania)
                         .OrderByDescending(c => c.IdPerfil)
                         .FirstOrDefault();
             }

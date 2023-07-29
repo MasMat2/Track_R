@@ -17,6 +17,6 @@ namespace TrackrAPI.Repositorys.Seguridad
         IEnumerable<Perfil> ConsultarPorCompaniaBase(int idCompania);
         IEnumerable<Perfil> ConsultarPorTipoCompania(int idTipoCompania);
         public IEnumerable<PerfilDto> ConsultarTodosParaSelector(int idCompania);
-        Perfil ConsultarUltimoAgregado(bool esCompaniaBase);
+        Perfil ConsultarUltimoAgregado(bool esCompaniaBase, int idCompania);
     }
 }
