@@ -12,6 +12,7 @@ namespace TrackrAPI.Models
         public string? Valor { get; set; }
         public int? IdTabla { get; set; }
         public bool? FueraDeRango { get; set; }
+        public DateTime? FechaMuestra { get; set; }
 
         public virtual EntidadEstructura IdEntidadEstructuraNavigation { get; set; } = null!;
     }

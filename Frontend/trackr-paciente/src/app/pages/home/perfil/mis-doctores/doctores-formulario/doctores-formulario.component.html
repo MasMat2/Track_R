@@ -1,0 +1,10 @@
+<p>
+  doctores-formulario works!
+</p>
+
+<ion-item>
+  <ion-select aria-label="Food" placeholder="Select doctor" (ionChange)="handleChange($event)" okText="Agregar doctor">
+    <ion-select-option *ngFor="let doctor of doctoresSelector" [value]="doctor">{{ doctor.nombre}}
+      -{{doctor.ambito}}</ion-select-option>
+  </ion-select>
+</ion-item>
