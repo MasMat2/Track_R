@@ -1,1 +1,6 @@
 @import '../../styles/circle-container.scss';
+img{
+    position: relative; // Establecer la imagen como una posición absoluta para poder desplazarla dentro del contenedor.
+    transform: translateX(110px);
+    top: -95px;
+  }

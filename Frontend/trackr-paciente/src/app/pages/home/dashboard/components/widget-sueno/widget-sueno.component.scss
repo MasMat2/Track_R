@@ -1,0 +1,29 @@
+@import '../../styles/circle-container.scss';
+
+.counter {
+    color: var(--accent-color-green);
+  }
+  
+  .circle-container {
+    border-color: var(--accent-color-green);
+    display: flex;
+    place-items: center; 
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    padding-right: calc(var(--bs-gutter-x) * .5);
+    padding-left: calc(var(--bs-gutter-x) * .5);
+    margin-right: auto;
+    margin-left: auto;
+
+  }
+
+  img{
+    position: relative; // Establecer la imagen como una posición absoluta para poder desplazarla dentro del contenedor.
+    transform: translateX(170px);
+    top: -50px;
+  }
+  
+  div[class*=col-],
+  div[class^=col] {
+    padding: 0px;
+  }

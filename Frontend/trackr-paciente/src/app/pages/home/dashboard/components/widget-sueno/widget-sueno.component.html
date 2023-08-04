@@ -1,0 +1,54 @@
+<app-widget title="Sueño" iconClass="bed-outline">
+  <div class="container">
+    <div class="row">
+      <div class="col-6">
+        
+        <!--Porcentaje de calidad de sueño-->
+        <div class="circle-container">
+          <div><span class="valor">{{suenoActual | number}}</span>%</div> 
+         
+        </div> 
+        <img src="../../../../../../assets/img/widgets/sleeping.png" width="50" height="50">
+        <!----> 
+        
+        <div class="label">
+          <br>Calidad de Sueño
+        </div> 
+       
+      </div>
+      <div class="col-6 text-right">
+        <div class="d-flex flex-colum align-items-center gap-3">
+          <!--Horas de sueño obligatorias-->
+          <div class="text-center">
+            <div>
+              <span class="valor">
+                {{horasMinDiarias}}</span>
+              <span class="medida">hrs</span>
+            </div>
+            <div class="label">Horas minimas obligatorias</div>
+          <!--Tiempo dormido-->
+          <br>
+           <div class="text-center">
+            
+              <span class="valor">
+                {{tiempoDormido}}</span>
+              <span class="medida">hrs</span>
+            
+            <div class="label">Tiempo Dormido</div>
+          </div>
+          <!--Sueño Profundo-->
+          <br>
+          <div class="text-center">
+            <div>
+              <span class="valor">
+                {{suenoProfundo}}</span>
+              <span class="medida">hrs</span>
+            </div>
+            <div class="label">Sueno Profundo</div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-widget>

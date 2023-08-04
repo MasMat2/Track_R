@@ -4,7 +4,6 @@ import { IonicModule } from '@ionic/angular';
 import { Widget } from 'src/app/models/dashboard/widget';
 import { UsuarioWidgetService } from 'src/app/services/dashboard/usuario-widget.service';
 import { WidgetService } from 'src/app/services/dashboard/widget.service';
-import { WidgetType } from '../dashboard/interfaces/widgets';
 import { Observable, combineLatestWith, map, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
