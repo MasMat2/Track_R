@@ -4,21 +4,25 @@ iconClass="medkit-outline">
 
   <div class="container">
     <div class="row">
-      <div class="d-flex flex-column align-items-center gap-3">
+      <div class="d-flex flex-column align-items-center gap-3" >
         <!--Glucosa-->
-        <div class="text-center">
-          <span class="label">Glucosa</span>
+        <div class="text-center" >
+          <span style="right: 150px; top: 70px; position: relative;">
+          <span class="label">Glucosa<ion-icon name="water"></ion-icon></span>
           <span class="valor"><br>{{  glucosa }}</span>
-          <span class="label"><br>mg/dL</span>
+          <span class="label"><br>mg/dL</span></span>
         </div>
         <!--Insulina-->
-        <div class="text-center">
-          <span class="label">Insulina</span>
+        <div class="text-center" style="right: -150px; top: -1px; position: relative;" >
+          <span>
+          <span class="label">Insulina<ion-icon name="medkit-sharp"></ion-icon></span>
           <span class="valor"><br>{{  insulina }}U</span>
           <span class="label"><br>Humalog</span>
-          <span class="label"><br>Mix<span class="valor">{{plum}}</span>Plum</span>
+          <span class="label"><br>Mix<span class="valor">{{plum}}</span>Plum</span></span>
         </div>
       </div>
+      
     </div>
   </div>
+  
 </app-widget>

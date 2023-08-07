@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WidgetComponent } from '../widget/widget.component';
+import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,6 +11,7 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     WidgetComponent,
+    IonicModule,
   ]
 })
 export class WidgetDiabetesComponent  implements OnInit {

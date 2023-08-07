@@ -1,5 +1,10 @@
 
 :host ::ng-deep * {
+  .valor {
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 1;
+  }
   font-size: 12px;
 
   @media (max-width: 1000px) {
@@ -38,14 +43,14 @@ ion-card-content {
 }
 
 :host ::ng-deep {
-  .valor {
+ 
     font-size: 1.2em;
     font-weight: bold;
     line-height: 1;
   }
 
   .label {
-    font-size: 0.7em;
+    font-size: 1.2em;
     line-height: 1;
   }
 
@@ -53,4 +58,4 @@ ion-card-content {
     font-size: 0.9em;
     line-height: 1;
   }
-}
+

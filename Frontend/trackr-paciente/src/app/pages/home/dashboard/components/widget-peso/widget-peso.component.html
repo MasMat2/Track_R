@@ -3,16 +3,19 @@
   iconClass="scale-outline"
 >
   <div class="container">
+    <div class="text-center">
     <div class="circle-container">
-      <span class="valor">{{pesoPerdido}} kg</span>
-      <span>- {{pesoFaltante}} kg</span>
+      
+      <span class="valor-pesoperdido"><ion-icon name="caret-down-outline"></ion-icon>{{pesoPerdido}} kg</span>
+      <div><span class="medida">Restan {{pesoFaltante}} kg</span></div>
       <div>
-        <span class="valor">{{ pesoActual }}</span><span class="label">kg</span>
+        <span class="valor">{{ pesoActual }} kg</span>
         <div class="text-center">
         <span> {{dias}}</span><span class="label">d</span>
       </div>
     </div>
     </div>
-    <img src="../../../../../../assets/img/widgets/standing.png" width="55" height="90">
+    <img src="../../../../../../assets/img/widgets/standing.png" width="70" height="150">
   </div>
+</div>
 </app-widget>
