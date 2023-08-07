@@ -47,30 +47,53 @@
         <p style="color: purple">Histograma</p>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <!-- Select Variable -->
-    <ng-select
-      #variable="ngModel"
-      name="variableName"
-      class="select-custom"
-      [items]="variableList"
-      bindLabel="variable"
-      bindValue="clave"
-      (ngModelChange)="onChangeVariable($event)"
-      [(ngModel)]="claveVariable"
-      [placeholder]="placeHolderSelect"
-      [notFoundText]="placeHolderNoOptions"
-    ></ng-select>
+    <div class="row">
+      <div class="col-md-6">
+        <!-- Select Variable -->
+        <div class="row">
+          <ng-select
+            #variable="ngModel"
+            name="variableName"
+            class="select-custom"
+            [items]="variableList"
+            bindLabel="variable"
+            bindValue="clave"
+            (ngModelChange)="onChangeVariable($event)"
+            [(ngModel)]="claveVariable"
+            [placeholder]="placeHolderSelect"
+            [notFoundText]="placeHolderNoOptions"
+          ></ng-select>
+        </div>
 
-    <!-- Chip Opciones Filtrado -->
-    <!-- TODO: 2023-07-13 -> No funciona el Selector como debería -->
-
-    <!-- Gráfica / Histograma -->
-    <canvas
-      baseChart
-      [data]="barChartData"
-      [labels]="barChartLabels"
-      [type]="barChartType"
-    >
-    </canvas>
+        <!-- Chip Opciones Filtrado -->
+        <div class="row">
+          <div class="col-md-8">
+            <mat-chip-listbox
+              aria-label="Filtro Tiempo"
+              (ngModelChange)="onFiltroChange($event)"
+              [(ngModel)]="filtroTiempo"
+            >
+              <mat-chip-option value="Hoy">Hoy</mat-chip-option>
+              <mat-chip-option selected value="1 Semana">1 Semana</mat-chip-option>
+              <!-- <mat-chip-option>2 Semanas</mat-chip-option>
+              <mat-chip-option>3 Semanas</mat-chip-option>
+              <mat-chip-option>1 Mes</mat-chip-option>
+              <mat-chip-option>2 Meses</mat-chip-option> -->
+            </mat-chip-listbox>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <!-- Gráfica / Histograma -->
+        <canvas
+          baseChart
+          [data]="barChartData"
+          [labels]="barChartLabels"
+          [type]="barChartType"
+          [options]="barChartOptions"
+        >
+        </canvas>
+      </div>
+    </div>
   </mat-expansion-panel>
 </mat-accordion>
