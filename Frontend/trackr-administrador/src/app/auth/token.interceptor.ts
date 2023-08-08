@@ -1,9 +1,9 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { GeneralConstant } from '@utils/general-constant';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AdministradorAuthGuard } from './administrador-auth-guard.service';
 
@@ -37,6 +37,14 @@ export class TokenInterceptor implements HttpInterceptor {
     }
 
     return next.handle(newRequest).pipe(
+      map((value: HttpEvent<any>) => {
+        if (value instanceof HttpResponse) {
+          const body = value.body;
+          this.mapResponse(body);
+        }
+
+        return value;
+      }),
       catchError((error) => {
         // Excepciones controladas por el backend
         if (error.status === 409) {
@@ -78,5 +86,40 @@ export class TokenInterceptor implements HttpInterceptor {
         return throwError(() => error);
       })
     );
+  }
+
+  private isIsoDateString(value: any): boolean {
+    const ISO_DATE_FORMAT = /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d)/;
+
+    if (value === null || value === undefined) {
+      return false;
+    }
+
+    if (typeof value === 'string'){
+      return ISO_DATE_FORMAT.test(value);
+    }
+
+    return false;
+  }
+
+  private mapResponse(body: any){
+    if (body === null || body === undefined ) {
+      return body;
+    }
+
+    if (typeof body !== 'object' ){
+      return body;
+    }
+
+    for (const key of Object.keys(body)) {
+      const value = body[key];
+
+      if (this.isIsoDateString(value)) {
+        body[key] = new Date(value);
+      }
+      else if (typeof value === 'object') {
+        this.mapResponse(value);
+      }
+    }
   }
 }

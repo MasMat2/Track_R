@@ -74,13 +74,9 @@ export class ExamenFormularioComponent implements OnInit {
   ngOnInit(): void {
     this.submitting = true;
 
-    console.log(':o')
-
     this.route.queryParams.subscribe((params) => {
       this.examen.idExamen = this.encryptionService.readUrlParams(params).i;
       const revision = this.encryptionService.readUrlParams(params).revision;
-
-      console.log(':)')
 
       if (revision != null && revision != '1') {
         if (this.examen.idExamen > 0) {
