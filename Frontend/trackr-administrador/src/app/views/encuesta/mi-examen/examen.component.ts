@@ -117,11 +117,11 @@ export class ExamenComponent implements OnInit {
     this.examenService
       .consultarMiExamenIndividual(idExamen)
       .subscribe((examen) => {
-        if (!this.esFechaValida(examen)) {
-          const MENSAJE_NO_ACCESO: string = 'Aún no tiene acceso a este examen';
-          this.mensajeService.modalError(MENSAJE_NO_ACCESO);
-          return;
-        }
+        // if (!this.esFechaValida(examen)) {
+        //   const MENSAJE_NO_ACCESO: string = 'Aún no tiene acceso a este examen';
+        //   this.mensajeService.modalError(MENSAJE_NO_ACCESO);
+        //   return;
+        // }
 
         this.router.navigate(['/administrador/examen/examen/presentar'], {
           queryParams: this.encryptionService.generateURL({
@@ -134,26 +134,18 @@ export class ExamenComponent implements OnInit {
   }
 
   private esFechaValida(examen: Examen): boolean {
-    const fechaExamen = new Date(examen.fechaExamen);
-    fechaExamen.setHours(0, 0, 0, 0);
+    const fechaExamen = new Date(`${examen.fechaExamen.toDateString()} ${examen.horaExamen}`);
+    const fechaActual = new Date();
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const time = today.getHours() + ':' + today.getMinutes() + ':00';
-
-    if (fechaExamen.getTime() !== today.getTime()) {
+    if (fechaExamen.toDateString() !== fechaActual.toDateString()) {
       return false;
     }
 
-    const horaExamen = new Date('12/25/2021 ' + examen.horaExamen);
-    const currentTime = new Date('12/25/2021 ' + time);
+    const milisegundos = fechaExamen.getTime() - fechaActual.getTime();
 
-    const milisegundos = horaExamen.getTime() - currentTime.getTime();
-
-    const MS_IN_A_DAY: number = 86400000;
-    const MS_IN_AN_HOUR: number = 3600000;
-    const MS_IN_A_MINUTE: number = 60000;
+    const MS_IN_A_DAY: number = 86_400_000;
+    const MS_IN_AN_HOUR: number = 3_600_000;
+    const MS_IN_A_MINUTE: number = 60_000;
 
     const diferenciaMinutos = Math.round(
       ((milisegundos % MS_IN_A_DAY) % MS_IN_AN_HOUR) / MS_IN_A_MINUTE

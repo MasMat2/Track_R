@@ -12,14 +12,12 @@ const routes: Routes = [
     data: {
       title: 'Exámenes',
       acceso: ACCESO_MI_EXAMEN.Consultar,
-    },
-    children: [
-      {
-        path: 'presentar',
-        loadChildren: () => import('./examen-formulario/examen-formulario.module').then(m => m.ExamenFormularioModule),
-      }
-    ]
+    }
   },
+  {
+    path: 'presentar',
+    loadChildren: () => import('./examen-formulario/examen-formulario.module').then(m => m.ExamenFormularioModule),
+  }
 ];
 
 @NgModule({

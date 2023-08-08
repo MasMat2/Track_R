@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExamenFormularioComponent } from './examen-formulario.component';
-import { ExamenFormularioRoutingModule } from './examen-formulario-routing.module';
-import { TimerPipe } from './timer.pipe';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ExamenFormularioRoutingModule } from './examen-formulario-routing.module';
+import { ExamenFormularioComponent } from './examen-formulario.component';
+import { TimerPipe } from './timer.pipe';
 
 @NgModule({
   declarations: [
@@ -17,7 +17,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgSelectModule,
     ExamenFormularioRoutingModule,
   ],
-  exports: [],
+  exports: [ExamenFormularioComponent],
   providers: [],
 })
 export class ExamenFormularioModule {}

@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
-import { ExamenRoutingModule } from './examen.routing.module';
+import { EncuestaRoutingModule } from './encuesta.routing.module';
 
 @NgModule({
   imports: [
-    ExamenRoutingModule
+    EncuestaRoutingModule
   ],
   declarations: [
   ],
   entryComponents: [],
   providers: []
 })
-export class ExamenModule {}
+export class EncuestaModule {}

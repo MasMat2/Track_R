@@ -22,8 +22,8 @@ const routes: Routes = [
   {
     path: 'examen',
     loadChildren: () =>
-      import('src/app/views/examen/examen.module')
-      .then((m) => m.ExamenModule),
+      import('src/app/views/encuesta/encuesta.module')
+      .then((m) => m.EncuestaModule),
   }
 ];
 
