@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Acceso } from 'src/app/models/acceso';
+import { Acceso } from '@models/acceso';
 
 @Injectable({
   providedIn: 'root'
@@ -15,4 +15,7 @@ export class AccesoService {
     return this.http.get<Acceso>(this.dataUrl + `consultar/${idAcceso}`);
   }
 
+  public tieneAccesoLista(listaAccesos: string[]): Observable<Acceso[]> {
+    return this.http.post<Acceso[]>(this.dataUrl + `tieneAccesoLista/`, listaAccesos);
+  }
 }
