@@ -17,7 +17,17 @@
     </ng-template>
 
     <!-- Contenido -->
-    <ng-container *ngTemplateOutlet="element.template"> </ng-container>
+
+    <app-tab
+      [component]="element.component"
+      [args]="element.args"
+    >
+
+    </app-tab>
+
+    <!-- <div #contenido>
+      
+    </div> -->
 
     <!-- Botón de Guardar -->
     <!-- <div *ngIf="element.externalSubmit" class="contenedor-submit text-center">

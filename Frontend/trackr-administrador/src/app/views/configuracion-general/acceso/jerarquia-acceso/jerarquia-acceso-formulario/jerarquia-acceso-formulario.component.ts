@@ -1,6 +1,4 @@
-import { Location } from "@angular/common";
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { ITreeOptions, TREE_ACTIONS } from "@circlon/angular-tree-component";
 import { TipoCompaniaService } from '@http/catalogo/tipo-compania.service';
 import { AccesoService } from '@http/seguridad/acceso.service';
@@ -11,10 +9,12 @@ import { JerarquiaEstructuraArbol } from "@models/contabilidad/jerarquia-estruct
 import { Acceso } from '@models/seguridad/acceso';
 import { JerarquiaAcceso } from '@models/seguridad/jerarquia-acceso';
 import { JerarquiaAccesoEstructura } from "@models/seguridad/jerarquia-acceso-estructura";
-import { CrudFormularioBase } from '@sharedComponents/crud/components/crud-formulario-base';
+import { CrudFormularioBase } from '@sharedComponents/crud/crud-base/crud-formulario-base';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { GeneralConstant } from '@utils/general-constant';
 import { AngularTreeGridComponent } from "angular-tree-grid";
+import { Observable } from "rxjs";
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-jerarquia-acceso-formulario',
@@ -112,10 +112,8 @@ export class JerarquiaAccesoFormularioComponent extends CrudFormularioBase<Jerar
     private tipoCompaniaService: TipoCompaniaService,
     private accesoService: AccesoService,
     mensajeService: MensajeService,
-    router: Router,
-    location: Location,
   ) {
-    super(jerarquiaAccesoService, mensajeService, router, location);
+    super(mensajeService);
   }
 
   async ngOnInit(): Promise<void> {
@@ -127,7 +125,7 @@ export class JerarquiaAccesoFormularioComponent extends CrudFormularioBase<Jerar
   // ==== Consultas ==== //
   private async consultarArbol(): Promise<JerarquiaEstructuraArbol[]> {
     const jerarquiaEstructuras = await this.jerarquiaAccesoEstructuraService
-      .consultarArbol(this.idEntidad)
+      .consultarArbol(this.idEntidad!)
       .toPromise();
 
     return jerarquiaEstructuras ?? [];
@@ -135,7 +133,7 @@ export class JerarquiaAccesoFormularioComponent extends CrudFormularioBase<Jerar
 
   private async consultarSelector(): Promise<JerarquiaEstructuraArbol[]> {
     const jerarquiaEstructuras = await this.jerarquiaAccesoEstructuraService
-      .consultarPorJerarquiaParaSelector(this.idEntidad)
+      .consultarPorJerarquiaParaSelector(this.idEntidad!)
       .toPromise();
 
     return jerarquiaEstructuras ?? [];
@@ -269,7 +267,7 @@ export class JerarquiaAccesoFormularioComponent extends CrudFormularioBase<Jerar
   }
 
   public actualizarBotonAgregar(): void {
-    if (this.disableSubmit)
+    if (this.submitting)
       return;
 
     this.disableAgregar = this.elementosSeleccionados.length <= 0;
@@ -277,11 +275,11 @@ export class JerarquiaAccesoFormularioComponent extends CrudFormularioBase<Jerar
 
   public async onAgregarClick(): Promise<void> {
     this.disableAgregar = true;
-    this.disableSubmit = true;
+    this.submitting = true;
 
     await this.agregarNodosSeleccionados();
 
-    this.disableSubmit = false;
+    this.submitting = false;
     this.elementosSeleccionados = [];
     this.actualizarBotonAgregar();
   }
@@ -301,7 +299,7 @@ export class JerarquiaAccesoFormularioComponent extends CrudFormularioBase<Jerar
   }
 
   public async eliminarJerarquiaEstructura(jerarquia: JerarquiaEstructuraArbol): Promise<void> {
-    if (this.disableSubmit)
+    if (this.submitting)
       return;
 
     let cancel: boolean = false;
@@ -320,7 +318,7 @@ export class JerarquiaAccesoFormularioComponent extends CrudFormularioBase<Jerar
       return;
 
     this.disableAgregar = true;
-    this.disableSubmit = true;
+    this.submitting = true;
 
     this.jerarquiaAccesoEstructuraService.eliminar(jerarquia.idJerarquiaEstructura).toPromise()
       .then(async (data) => {
@@ -330,11 +328,23 @@ export class JerarquiaAccesoFormularioComponent extends CrudFormularioBase<Jerar
       .catch((error) => { })
       .finally(() => {
         this.disableAgregar = false;
-        this.disableSubmit = false;
+        this.submitting = false;
       });
   }
 
   public esEditar(): boolean {
     return this.accion == GeneralConstant.MODAL_ACCION_EDITAR;
+  }
+
+  protected agregar(jerarquiaAcceso: JerarquiaAcceso): Observable<void> {
+    return this.jerarquiaAccesoService.agregar(jerarquiaAcceso).pipe(map(() => undefined));
+  }
+
+  protected editar(jerarquiaAcceso: JerarquiaAcceso): Observable<void> {
+    return this.jerarquiaAccesoService.editar(jerarquiaAcceso);
+  }
+
+  protected consultar(idJerarquiaAcceso: number): Observable<JerarquiaAcceso> {
+    return this.jerarquiaAccesoService.consultar(idJerarquiaAcceso);
   }
 }

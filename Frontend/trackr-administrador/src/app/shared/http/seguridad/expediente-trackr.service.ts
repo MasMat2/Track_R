@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ExpedienteWrapper } from '@dtos/seguridad/expediente-wrapper';
 import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-grid-dto';
+import { UsuarioExpedienteSidebarDTO } from '@dtos/seguridad/usuario-expediente-sidebar-dto';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -27,6 +28,10 @@ export class ExpedienteTrackrService {
     public consultarParaGrid() {
         return this.http.get<UsuarioExpedienteGridDTO[]>(this.dataUrl + `consultarParaGrid/`);
     }
+    public consultaParaSidebar(idUsuario:number){
+        return this.http.get<UsuarioExpedienteSidebarDTO>(this.dataUrl + `sidebar/${idUsuario}`);
+    }
+
 
     public eliminar(idExpediente: number): Observable<void> {
         return this.http.delete<void>(this.dataUrl + `eliminar/${idExpediente}`);

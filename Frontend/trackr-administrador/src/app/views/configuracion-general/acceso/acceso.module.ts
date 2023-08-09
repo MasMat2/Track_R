@@ -11,6 +11,9 @@ import { SharedModule } from "src/app/shared/shared.module";
 import { AccesoFormularioComponent } from "./acceso-formulario/acceso-formulario.component";
 import { AccesoComponent } from "./acceso.component";
 import { AccesoRoutingModule } from "./acceso.routing.module";
+import { AyudaSeccionService } from '@http/seguridad/ayuda-seccion.service';
+import { AccesoAyudaService } from "@http/seguridad/acceso-ayuda.service";
+import { AccesoAyudaComponent } from "./acceso-ayuda/acceso-ayuda.component";
 
 
 @NgModule({
@@ -25,12 +28,15 @@ import { AccesoRoutingModule } from "./acceso.routing.module";
   declarations: [
     AccesoComponent,
     AccesoFormularioComponent,
+    AccesoAyudaComponent
   ],
   providers: [
     AccesoService,
     TipoAccesoService,
     IconoService,
-    RolAccesoService
+    RolAccesoService,
+    AccesoAyudaService,
+    AyudaSeccionService
   ],
   entryComponents: [AccesoFormularioComponent]
 })

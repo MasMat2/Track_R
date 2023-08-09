@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Helpers;
 using TrackrAPI.Models;
-
+using TrackrAPI.Helpers;
 namespace TrackrAPI.Repositorys.GestionExpediente
 {
     public class ExpedientePadecimientoRepository : Repository<ExpedientePadecimiento>, IExpedientePadecimientoRepository
@@ -18,8 +19,24 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                 {
                     IdExpedientePadecimiento = ep.IdExpedientePadecimiento,
                     IdPadecimiento = ep.IdPadecimiento,
-                    FechaDiagnostico = ep.FechaDiagnostico
+                    FechaDiagnostico = ep.FechaDiagnostico,
+                    NombrePadecimiento = ep.IdPadecimientoNavigation.Nombre
                 }).ToList();
+        }
+
+        public IEnumerable<ExpedientePadecimientoGridDTO> ConsultarParaGridPorUsuario(int idUsuario)
+        {
+            return context.ExpedientePadecimiento
+                .Where(ep => ep.IdExpedienteNavigation.IdUsuario == idUsuario)
+                .Select(ep => new ExpedientePadecimientoGridDTO
+                {
+                    IdExpedientePadecimiento = ep.IdExpedientePadecimiento,
+                    IdPadecimiento = ep.IdPadecimiento,
+                    FechaDiagnostico = ep.FechaDiagnostico,
+                    NombrePadecimiento = ep.IdPadecimientoNavigation.Nombre,
+                    NombreDoctor = ep.IdUsuarioDoctorNavigation.ObtenerNombreCompleto()
+
+                });
         }
 
         public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarParaSelector()
@@ -36,6 +53,22 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         {
             var padecimientos = context.ExpedientePadecimiento.Where(ep => ep.IdExpediente == idExpediente);
             context.ExpedientePadecimiento.RemoveRange(padecimientos);
+        }
+
+        public IEnumerable<PadecimientoFueraRangoDTO> ConsultarValoresFueraRango(int idPadecimiento, int idUsuario)
+        {
+            return context.ExpedientePadecimiento
+                .Where(ep => ep.IdPadecimiento == idPadecimiento
+                        && ep.IdExpedienteNavigation.IdUsuario == idUsuario)
+                .Select(pfrDTO => new PadecimientoFueraRangoDTO
+                {
+                    nombrePadecimiento = pfrDTO.IdPadecimientoNavigation.Nombre,
+                    nombreSeccion = pfrDTO.IdPadecimientoNavigation.IdSeccionNavigation.Nombre,
+                    descripcionSecionCampo = pfrDTO.IdPadecimientoNavigation.IdSeccionNavigation.SeccionCampo.FirstOrDefault().Descripcion,
+                    valorReferencia = pfrDTO.IdPadecimientoNavigation.IdSeccionNavigation.SeccionCampo.FirstOrDefault().IdDominioNavigation.ValorMinimo.ToString(),
+                    fechaMuestra = pfrDTO.IdPadecimientoNavigation.EntidadEstructuraTablaValor.FirstOrDefault().FechaMuestra.ToString(),
+                    valorEntidadEstructuraValor = pfrDTO.IdPadecimientoNavigation.EntidadEstructuraTablaValor.FirstOrDefault().Valor,
+                }).ToList();
         }
     }
 }

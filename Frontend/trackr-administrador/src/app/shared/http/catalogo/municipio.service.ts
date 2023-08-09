@@ -1,39 +1,44 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { MunicipioFormularioCapturaDto } from '@dtos/catalogo/municipio-formulario-captura-dto';
+import { MunicipioFormularioConsultaDto } from '@dtos/catalogo/municipio-formulario-consulta-dto';
+import { MunicipioGridDto } from '@dtos/catalogo/municipio-grid-dto';
+import { MunicipioSelectorDto } from '@dtos/catalogo/municipio-selector-dto';
 import { Observable } from 'rxjs';
-import { Municipio } from '@models/catalogo/municipio';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class MunicipioService {
-    private dataUrl = 'municipio/';
+  private dataUrl = 'municipio/';
 
-    constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient) {}
 
-    consultar(idMunicipio: number): Observable<Municipio> {
-       return this.http.get<Municipio>(this.dataUrl + `consultar/${idMunicipio}`);
-    }
+  public consultarParaFormulario(idMunicipio: number): Observable<MunicipioFormularioConsultaDto> {
+    return this.http.get<MunicipioFormularioConsultaDto>(this.dataUrl + `formulario/${idMunicipio}`);
+  }
 
-    consultarTodosParaGrid(): Observable<Municipio[]> {
-    return this.http.get<Municipio[]>(this.dataUrl + 'consultarTodosParaGrid');
-    }
+  public consultarParaGrid(): Observable<MunicipioGridDto[]> {
+    return this.http.get<MunicipioGridDto[]>(this.dataUrl + 'grid');
+  }
 
-    consultarPorEstadoParaSelector(idEstado: number): Observable<Municipio[]> {
-    return this.http.get<Municipio[]>(this.dataUrl + `consultarPorEstadoParaSelector/${idEstado}`);
-    }
+  public consultarParaSelector(): Observable<MunicipioSelectorDto[]> {
+    return this.http.get<MunicipioSelectorDto[]>(this.dataUrl + 'selector');
+  }
 
-    agregar(municipio: Municipio): Observable<void> {
-    return this.http.post<void>(this.dataUrl + 'agregar', municipio);
-    }
+  public consultarPorEstadoParaSelector(idEstado: number): Observable<MunicipioSelectorDto[]> {
+    return this.http.get<MunicipioSelectorDto[]>(this.dataUrl + `selector/estado/${idEstado}`);
+  }
 
-    editar(municipio: Municipio): Observable<void> {
-    return this.http.put<void>(this.dataUrl + 'editar', municipio);
-    }
+  public agregar(municipio: MunicipioFormularioCapturaDto): Observable<void> {
+    return this.http.post<void>(this.dataUrl, municipio);
+  }
 
-    eliminar(idEstado: number): Observable<void> {
-    return this.http.delete<void>(this.dataUrl + `eliminar/${idEstado}`);
-    }
+  public editar(municipio: MunicipioFormularioCapturaDto): Observable<void> {
+    return this.http.put<void>(this.dataUrl, municipio);
+  }
 
-    public consultarTodosParaSelector() {
-      return this.http.get<Municipio[]>(this.dataUrl + 'consultarTodosParaSelector');
-    }
+  public eliminar(idEstado: number): Observable<void> {
+    return this.http.delete<void>(this.dataUrl + `${idEstado}`);
+  }
 }

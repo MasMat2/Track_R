@@ -1,111 +1,102 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
+import { MunicipioFormularioCapturaDto } from '@dtos/catalogo/municipio-formulario-captura-dto';
+import { MunicipioFormularioConsultaDto } from '@dtos/catalogo/municipio-formulario-consulta-dto';
 import { EstadoService } from '@http/catalogo/estado.service';
 import { MunicipioService } from '@http/catalogo/municipio.service';
 import { PaisService } from '@http/catalogo/pais.service';
-import { Estado } from '@models/catalogo/estado';
-import { Municipio } from '@models/catalogo/municipio';
 import { Pais } from '@models/catalogo/pais';
-import { FormularioService } from '@services/formulario.service';
+import { CrudFormularioBase } from '@sharedComponents/crud/crud-base/crud-formulario-base';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
-import { GeneralConstant } from '@utils/general-constant';
+import { DROPDOWN_NO_OPTIONS, DROPDOWN_PLACEHOLDER } from '@utils/constants/constants';
+import { Observable, map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-municipio-formulario',
   templateUrl: './municipio-formulario.component.html',
 })
-export class MunicipioFormularioComponent implements OnInit {
+export class MunicipioFormularioComponent extends CrudFormularioBase<MunicipioFormularioCapturaDto> implements OnInit {
 
-  public placeHolderSelect: string;
-  public placeHolderNoOptions: string;
-  public onClose: any;
-  public accion: string;
-  public mensajeAgregar = 'El municipio ha sido agregado';
-  public mensajeEditar = 'El municipio ha sido modificado';
-  public btnSubmit = false;
-  public municipio = new Municipio();
-  public estadoList: EstadoSelectorDto[] = [];
-  public paisList: Pais[] = [];
+  public DROPDOWN_PLACEHOLDER: string = DROPDOWN_PLACEHOLDER;
+  public DROPDOWN_NO_OPTIONS: string = DROPDOWN_NO_OPTIONS;
+
+  public idPais?: number;
+  public paises$: Observable<Pais[]>;
+
+  public idEstado?: number;
+  public estados$: Observable<EstadoSelectorDto[]>;
 
   constructor(
-    private mensajeService: MensajeService,
-    private formularioService: FormularioService,
     private estadoService: EstadoService,
     private paisService: PaisService,
-    private municipioService: MunicipioService
-  ) { }
+    private municipioService: MunicipioService,
+    mensajeService: MensajeService,
+  ) {
+    super(mensajeService);
+  }
 
   public ngOnInit(): void {
+    super.onInit();
+
     this.consultarPaises();
-
-    console.log(this.municipio)
-
-    if (this.municipio.idPais) {
-      this.consultarEstados(this.municipio.idPais.toString());
-    }
   }
 
-  public consultarPaises(): void {
-    this.paisService.consultarGeneral().subscribe(
-      (data) => this.paisList = data
-    );
-  }
+  protected consultar(idMunicipio: number): Observable<MunicipioFormularioCapturaDto> {
+    return this.municipioService
+      .consultarParaFormulario(idMunicipio)
+      .pipe(
+        tap((municipio: MunicipioFormularioConsultaDto) => {
+          this.idEstado = municipio.idEstado;
 
-  public consultarEstados(idPais: string): void {
-    if (idPais !== '') {
-      this.estadoService.consultarPorPaisParaSelector(+idPais).subscribe(
-        (data) => {
-          this.estadoList = data
-          console.log(data);
-        }
+          this.estadoService
+            .consultar(this.idEstado)
+            .subscribe((estado) => {
+              this.idPais = estado.idPais;
+              this.consultarEstados(this.idPais);
+            });
+
+        }),
+        map((municipio: MunicipioFormularioConsultaDto) => {
+          const municipioCaptura = new MunicipioFormularioCapturaDto();
+          municipioCaptura.idMunicipio = municipio.idMunicipio;
+          municipioCaptura.clave = municipio.clave;
+          municipioCaptura.nombre = municipio.nombre;
+          municipioCaptura.idEstado = municipio.idEstado;
+
+          return municipioCaptura;
+        })
       );
-    } else {
-      this.estadoList = [];
+  }
+
+  protected agregar(municipio: MunicipioFormularioCapturaDto): Observable<void> {
+    return this.municipioService.agregar(municipio);
+  }
+
+  protected editar(municipio: MunicipioFormularioCapturaDto): Observable<void> {
+    return this.municipioService.editar(municipio);
+  }
+
+  protected override onSubmit(formulario: NgForm): void {
+    if (formulario.valid) {
+      this.entidad.idEstado = this.idEstado!;
+    }
+
+    super.onSubmit(formulario);
+  }
+
+  private consultarPaises(): void {
+    this.paises$ = this.paisService.consultarGeneral();
+  }
+
+  protected consultarEstados(idPais?: number): void {
+    if (!idPais) {
+      this.estados$ = new Observable<EstadoSelectorDto[]>();
+      this.idEstado = undefined;
+    }
+    else {
+      this.estados$ = this.estadoService.consultarPorPaisParaSelector(idPais)
+        .pipe(tap((estados) => console.log(estados)));
     }
   }
-
-  public enviarFormulario(formulario: NgForm): void {
-    this.btnSubmit = true;
-    if (!formulario.valid) {
-      this.formularioService.validarCamposRequeridos(formulario);
-      this.btnSubmit = false;
-      return;
-    }
-
-    if (this.accion === GeneralConstant.MODAL_ACCION_AGREGAR) {
-      this.agregar();
-    } else if (this.accion === GeneralConstant.MODAL_ACCION_EDITAR) {
-      this.editar();
-    }
-  }
-
-  public agregar(): void {
-    this.municipioService.agregar(this.municipio).subscribe(
-      (data) => {
-        this.mensajeService.modalExito(this.mensajeAgregar);
-        this.onClose(true);
-      },
-      (error) => {
-        this.btnSubmit = false;
-      }
-    );
-  }
-
-  public editar(): void {
-    this.municipioService.editar(this.municipio).subscribe(
-      (data) => {
-        this.mensajeService.modalExito(this.mensajeEditar);
-        this.onClose(true);
-      },
-      (error) => {
-        this.btnSubmit = false;
-      }
-    );
-  }
-
-  public cancelar(): void {
-    this.onClose(true);
-  }
-
 }

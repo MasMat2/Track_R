@@ -6,4 +6,5 @@ wwwroot
 .vs/
 Log
 TrackrAPI/Archivos/Usuario/*
-!TrackrAPI/Archivos/Usuario/default.svg
+!TrackrAPI/Archivos/Usuario/default.sv
+.config/

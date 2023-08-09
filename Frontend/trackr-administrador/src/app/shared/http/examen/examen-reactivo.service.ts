@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { ExamenReactivo } from '@models/examen/examen-reactivo';
 import { Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ExamenReactivoService {
   private dataUrl = 'examenReactivo/';
 

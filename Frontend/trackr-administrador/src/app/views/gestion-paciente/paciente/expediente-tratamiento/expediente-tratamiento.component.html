@@ -1,0 +1,14 @@
+<div
+  class="p-4 subtitulo-contenedor">
+  {{ HEADER_GRID }}
+</div>
+
+<app-grid-general
+  #gridTratamientos
+  [headerName]="HEADER_GRID"
+  [data]="tratamientos$ | async"
+  [children]="columns"
+  [disableDelete]="true"
+  [disableEdit]="true"
+>
+</app-grid-general>

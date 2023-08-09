@@ -12,3 +12,10 @@ export enum ACCESO_ESTADO {
   Editar = 'APESDO2000',
   Eliminar = 'APESDO3000',
 };
+
+export enum ACCESO_MUNICIPIO {
+  Consultar = 'APMUCP0000',
+  Agregar = 'APMUCP1000',
+  Editar = 'APMUCP2000',
+  Eliminar = 'APMUCP3000',
+}

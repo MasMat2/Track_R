@@ -1,130 +1,109 @@
-<div class="d-flex">
-  <div class="barra-lateral-modal"></div>
-  <div class="modal-content">
-    <!-- Header -->
-    <div class="modal-header">
-      <div>{{ accion }} Estado</div>
-      <button
-        type="button"
-        class="close pull-right"
-        aria-label="Close"
-        (click)="cancelar()"
-      >
-        <i class="far fa-times-circle"></i>
-      </button>
-    </div>
-
-    <!-- Body -->
-    <div class="modal-body" id="modal">
-      <form
-        #formulario="ngForm"
-        id="form"
-        novalidate="novalidate"
-        (keydown.enter)="$event.preventDefault()"
-        (ngSubmit)="enviarFormulario(formulario)"
-      >
-        <div class="container-fluid">
-          <div class="row">
-            <!-- Clave -->
-            <div class="col-12 col-md-5">
-              <div class="form-group">
-                <label class="label-input required-label">Clave</label>
-                <div>
-                  <input
-                    #clave="ngModel"
-                    [(ngModel)]="estado.clave"
-                    id="clave"
-                    name="claveName"
-                    class="form-control"
-                    type="text"
-                    maxlength="20"
-                    required="true"
-                    autocomplete="off"
-                    [disabled]="estado.idEstado > 0"
-                  />
-                  <div
-                    *ngIf="clave.errors?.['required'] && clave.touched"
-                    class="error"
-                  >
-                    La clave es requerida
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Nombre -->
-            <div class="col-12 col-md-7">
-              <div class="form-group">
-                <label class="label-input required-label">Estado</label>
-                <div>
-                  <input
-                    #nombre="ngModel"
-                    [(ngModel)]="estado.nombre"
-                    name="nombre"
-                    class="form-control"
-                    type="text"
-                    maxlength="50"
-                    autocomplete="off"
-                    required
-                  />
-                  <div
-                    *ngIf="nombre.errors?.['required'] && nombre.touched"
-                    class="error"
-                  >
-                    El nombre es requerido
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- País -->
-            <div class="col-12">
-              <div class="form-group">
-                <label class="label-input required-label">País</label>
-                <ng-select
-                  #paisLst="ngModel"
-                  name="paisName"
-                  bindLabel="nombre"
-                  bindValue="idPais"
-                  [items]="paises$ | async"
-                  [required]="true"
-                  [(ngModel)]="idPais"
-                  [placeholder]="DROPDOWN_PLACEHOLDER"
-                  [notFoundText]="DROPDOWN_NO_OPTIONS"
-                ></ng-select>
+<app-modal-base [titulo]="accion + ' ' + nombreEntidad">
+  <ng-template #modalBody>
+    <form
+      #formulario="ngForm"
+      id="form"
+      novalidate="novalidate"
+      (keydown.enter)="$event.preventDefault()"
+      (ngSubmit)="onSubmit(formulario)"
+    >
+      <div class="container-fluid">
+        <div class="row">
+          <!-- Clave -->
+          <div class="col-12 col-md-5">
+            <div class="form-group">
+              <label class="label-input required-label">Clave</label>
+              <div>
+                <input
+                  #clave="ngModel"
+                  [(ngModel)]="entidad.clave"
+                  id="clave"
+                  name="claveName"
+                  class="form-control"
+                  type="text"
+                  maxlength="20"
+                  required="true"
+                  autocomplete="off"
+                  [disabled]="entidad.idEstado > 0"
+                />
                 <div
-                  *ngIf="paisLst.errors?.['required'] && paisLst.touched"
+                  *ngIf="clave.errors?.['required'] && clave.touched"
                   class="error"
                 >
-                  El país es requerido
+                  La clave es requerida
                 </div>
               </div>
             </div>
           </div>
+          <!-- Nombre -->
+          <div class="col-12 col-md-7">
+            <div class="form-group">
+              <label class="label-input required-label">Estado</label>
+              <div>
+                <input
+                  #nombre="ngModel"
+                  [(ngModel)]="entidad.nombre"
+                  name="nombre"
+                  class="form-control"
+                  type="text"
+                  maxlength="50"
+                  autocomplete="off"
+                  required
+                />
+                <div
+                  *ngIf="nombre.errors?.['required'] && nombre.touched"
+                  class="error"
+                >
+                  El nombre es requerido
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- País -->
+          <div class="col-12">
+            <div class="form-group">
+              <label class="label-input required-label">País</label>
+              <ng-select
+                #paisLst="ngModel"
+                name="paisName"
+                bindLabel="nombre"
+                bindValue="idPais"
+                [items]="paises$ | async"
+                [required]="true"
+                [(ngModel)]="idPais"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+              <div
+                *ngIf="paisLst.errors?.['required'] && paisLst.touched"
+                class="error"
+              >
+                El país es requerido
+              </div>
+            </div>
+          </div>
         </div>
-      </form>
-    </div>
-
-    <!-- Footer -->
-    <div class="modal-footer">
-      <div class="d-flex flex-wrap-reverse justify-content-center gap-3">
-        <button
-          type="button"
-          class="btn-secundario mr-3"
-          (click)="cancelar()"
-        >
-          Cancelar
-        </button>
-
-        <button
-          type="submit"
-          class="btn-primario btn-margin-left"
-          [disabled]="submiting"
-          form="form"
-        >
-          Guardar
-        </button>
       </div>
-    </div>
-  </div>
-</div>
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <button
+      type="button"
+      class="btn-secundario mr-3"
+      (click)="cancelar()"
+    >
+      Cancelar
+    </button>
+
+    <button
+      type="submit"
+      class="btn-primario btn-margin-left"
+      [disabled]="submiting"
+      form="form"
+    >
+      Guardar
+    </button>
+  </ng-template>
+
+</app-modal-base>

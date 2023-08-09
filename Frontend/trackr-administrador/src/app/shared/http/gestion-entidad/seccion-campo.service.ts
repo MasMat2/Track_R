@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { SeccionCampo } from '@models/gestion-entidad/seccion-campo';
+import { ExpedienteColumnaSelectorDTO } from '@dtos/gestion-entidades/expediente-columna-selector-dto';
 
 @Injectable()
 export class SeccionCampoService {
@@ -13,6 +14,9 @@ export class SeccionCampoService {
   }
   consultarPorSeccion(idSeccion: number) {
     return this.http.get<any[]>(this.dataUrl + `consultarPorSeccion/${idSeccion}`);
+  }
+  consultarSeccionesPadecimientos(idPadecimiento: number) {
+    return this.http.get<ExpedienteColumnaSelectorDTO[]>(this.dataUrl + `seccionesPadecimientos/${idPadecimiento}`);
   }
   agregar(seccionCampo: SeccionCampo) {
     return this.http.post<void>(this.dataUrl + 'agregar', seccionCampo);

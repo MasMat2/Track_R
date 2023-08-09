@@ -1,0 +1,17 @@
+
+
+<ng-container #pacientesLista>
+    <app-grid-general
+      [headerName]="HEADER_GRID"
+      [data]="padecimientos$ | async"
+      [children]="columns"
+      [disableDelete]="true"
+      [disableEdit]="true"
+    >
+    </app-grid-general>
+</ng-container>
+
+
+
+
+

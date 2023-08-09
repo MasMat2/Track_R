@@ -28,6 +28,18 @@ namespace TrackrAPI.Controllers.GestionExpediente
             return expedientePadecimientoService.ConsultarPorUsuario(idUsuario);
         }
 
+        [HttpGet("valoresFueraRango/{idPadecimiento},{idUsuario}")]
+        public IEnumerable<PadecimientoFueraRangoDTO> ConsultarValoresFueraRango(int idPadecimiento, int idUsuario)
+        {
+            return expedientePadecimientoService.ConsultarValoresFueraRango(idPadecimiento, idUsuario);
+        }
+
+        [HttpGet("grid/usuario/{idUsuario}")]
+        public IEnumerable<ExpedientePadecimientoGridDTO> ConsultarParaGridPorUsuario(int idUsuario)
+        {
+            return expedientePadecimientoService.ConsultarParaGridPorUsuario(idUsuario);
+        }
+
 
     }
 }

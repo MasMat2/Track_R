@@ -15,6 +15,7 @@ import { CampoExpedienteModule } from '../campo-expediente/campo-expediente.modu
 import { SeccionTablaFormularioComponent } from './seccion-tabla-formulario/seccion-tabla-formulario.component';
 import { SeccionTablaComponent } from './seccion-tabla/seccion-tabla.component';
 import { TabuladorEntidadComponent } from './tabulador-entidad.component';
+import { TabModule } from './tab/tab.module';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { TabuladorEntidadComponent } from './tabulador-entidad.component';
     MatTabsModule,
     MatIconModule,
     TableModule,
-    ModalBaseModule
+    ModalBaseModule,
+    TabModule
   ],
   declarations: [
     TabuladorEntidadComponent,

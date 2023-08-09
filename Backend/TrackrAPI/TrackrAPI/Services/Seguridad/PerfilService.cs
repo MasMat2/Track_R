@@ -75,10 +75,10 @@ namespace TrackrAPI.Services.Seguridad
                 perfilValidatorService.ValidarAgregar(perfil);
                 perfilRepository.Agregar(perfil);
 
-                if (perfilDto.IdsAcceso.Length == 0)
+                /*if (perfilDto.IdsAcceso.Length == 0)
                 {
                     throw new CdisException("El perfil debe de tener por lo menos un acceso seleccionado");
-                }
+                }*/
 
                 foreach (var IdAcceso in perfilDto.IdsAcceso)
                 {
@@ -164,7 +164,7 @@ namespace TrackrAPI.Services.Seguridad
         private string GenerarClave(int idCompania)
         {
             var esCompaniaBase = companiaRepository.Consultar(idCompania).Clave.Contains(GeneralConstant.ClaveCompaniaBase);
-            var ultimoPerfil = perfilRepository.ConsultarUltimoAgregado(esCompaniaBase);
+            var ultimoPerfil = perfilRepository.ConsultarUltimoAgregado(esCompaniaBase, idCompania);
             string clavePerfil;
 
             if (ultimoPerfil == null && esCompaniaBase)

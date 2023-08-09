@@ -1,0 +1,38 @@
+<div class="d-flex">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div><span>Ayuda - </span>{{ acceso.nombre }}</div>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
+        <i class="far fa-times-circle"></i>
+      </button>
+    </div>
+    <div class="cuerpo-contenedor" id="modal">
+      <div *ngIf="urlVideoAyuda !== undefined && urlVideoAyuda != ''">
+        <iframe width="450px" height="300px" allowfullscreen [src]="urlVideoAyuda"> </iframe>
+      </div>
+
+      <div class="contenedor-ayuda d-flex">
+        <table class="grid-ayudas">
+          <div *ngFor="let ayuda of ayudas">
+            <tr>
+            <th  style="text-align: center" colspan="2">{{ ayuda.nombreAyudaSeccion }}</th>
+            </tr>
+          <tr *ngFor="let accesoAyuda of ayuda.accesoAyudas">
+            <td style="text-align: center">
+              <div class="icono-ayuda">
+
+                <div *ngIf="accesoAyuda.imagen != null" >
+                  <img [src]="transform(accesoAyuda.imagen)" height="25px" title="Inicio" />
+                </div>
+              </div>
+            </td>
+            <td style="width: 100%" >{{ accesoAyuda.descripcionAyuda }}</td>
+          </tr>
+        </div>
+        </table>
+      </div>
+
+
+    </div>
+  </div>
+</div>

@@ -21,7 +21,7 @@ const routes: Routes = [
     loadComponent: () =>
     import('./views/administrador/login-administrador/login-administrador.component')
     .then((m) => m.LoginAdministradorComponent)
-  }
+  },
 ];
 
 @NgModule({

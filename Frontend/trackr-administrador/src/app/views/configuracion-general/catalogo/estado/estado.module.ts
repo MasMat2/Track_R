@@ -6,6 +6,7 @@ import { DirectiveModule } from 'src/app/shared/directives/directive.module';
 import { EstadoFormularioModule } from './estado-formulario/estado-formulario.module';
 import { EstadoComponent } from './estado.component';
 import { EstadoRoutingModule } from './estado.routing.module';
+import { CatalogoBaseModule } from '@sharedComponents/crud/catalogo-base/catalogo-base.module';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { EstadoRoutingModule } from './estado.routing.module';
     GridGeneralModule,
     EstadoRoutingModule,
     EstadoFormularioModule,
+    CatalogoBaseModule
   ],
   declarations: [
     EstadoComponent,

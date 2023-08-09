@@ -27,8 +27,10 @@ namespace TrackrAPI.Models
             ExpedienteAdministrativoViajeIdUsuarioChoferNavigation = new HashSet<ExpedienteAdministrativoViaje>();
             ExpedienteAdministrativoViajeIdUsuarioDestinatarioNavigation = new HashSet<ExpedienteAdministrativoViaje>();
             ExpedienteBitacora = new HashSet<ExpedienteBitacora>();
+            ExpedientePadecimiento = new HashSet<ExpedientePadecimiento>();
             ExpedienteRecomendaciones = new HashSet<ExpedienteRecomendaciones>();
             ExpedienteTrackr = new HashSet<ExpedienteTrackr>();
+            ExpedienteTratamiento = new HashSet<ExpedienteTratamiento>();
             Factura = new HashSet<Factura>();
             FlujoDetalleAplicado = new HashSet<FlujoDetalleAplicado>();
             FlujoDetalleAplicadoResponsable = new HashSet<FlujoDetalleAplicadoResponsable>();
@@ -151,8 +153,10 @@ namespace TrackrAPI.Models
         public virtual ICollection<ExpedienteAdministrativoViaje> ExpedienteAdministrativoViajeIdUsuarioChoferNavigation { get; set; }
         public virtual ICollection<ExpedienteAdministrativoViaje> ExpedienteAdministrativoViajeIdUsuarioDestinatarioNavigation { get; set; }
         public virtual ICollection<ExpedienteBitacora> ExpedienteBitacora { get; set; }
+        public virtual ICollection<ExpedientePadecimiento> ExpedientePadecimiento { get; set; }
         public virtual ICollection<ExpedienteRecomendaciones> ExpedienteRecomendaciones { get; set; }
         public virtual ICollection<ExpedienteTrackr> ExpedienteTrackr { get; set; }
+        public virtual ICollection<ExpedienteTratamiento> ExpedienteTratamiento { get; set; }
         public virtual ICollection<Factura> Factura { get; set; }
         public virtual ICollection<FlujoDetalleAplicado> FlujoDetalleAplicado { get; set; }
         public virtual ICollection<FlujoDetalleAplicadoResponsable> FlujoDetalleAplicadoResponsable { get; set; }

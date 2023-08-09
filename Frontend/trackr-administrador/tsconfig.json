@@ -4,14 +4,30 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "stream": ["./node_modules/readable-stream"],
-      "@http/*": ["src/app/shared/http/*"],
-      "@services/*": ["src/app/shared/services/*"],
-      "@models/*": ["src/app/shared/models/*"],
-      "@dtos/*": ["src/app/shared/dtos/*"],
-      "@sharedComponents/*": ["src/app/shared/components/*"],
-      "@utils/*": ["src/app/shared/utils/*"],
-      "@components/*": ["src/app/views/administrador/*"],
+      "stream": [
+        "./node_modules/readable-stream"
+      ],
+      "@http/*": [
+        "src/app/shared/http/*"
+      ],
+      "@services/*": [
+        "src/app/shared/services/*"
+      ],
+      "@models/*": [
+        "src/app/shared/models/*"
+      ],
+      "@dtos/*": [
+        "src/app/shared/dtos/*"
+      ],
+      "@sharedComponents/*": [
+        "src/app/shared/components/*"
+      ],
+      "@utils/*": [
+        "src/app/shared/utils/*"
+      ],
+      "@components/*": [
+        "src/app/views/administrador/*"
+      ]
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
@@ -27,13 +43,17 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "strictPropertyInitialization": false,
-    "typeRoots": ["node_modules/@types", "src/app/shared/alertifytype.d.ts"],
-    "target": "es2020",
+    "typeRoots": [
+      "node_modules/@types",
+      "src/app/shared/alertifytype.d.ts"
+    ],
+    "target": "ES2022",
     "module": "es2020",
     "lib": [
       "es2020",
       "dom"
-    ]
+    ],
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

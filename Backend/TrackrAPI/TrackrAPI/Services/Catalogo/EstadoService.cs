@@ -80,10 +80,11 @@ namespace TrackrAPI.Services.Catalogo
             var estados = estadoRepository.ConsultarPorPais(idPais);
 
             var estadosDto = estados
-                .Select(e => new EstadoSelectorDto(
-                    e.IdEstado,
-                    e.Nombre
-                ));
+                .Select(e => new EstadoSelectorDto
+                {
+                    IdEstado = e.IdEstado,
+                    Nombre = e.Nombre
+                });
 
             return estadosDto;
         }
