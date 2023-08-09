@@ -1,36 +1,31 @@
 @import '../../styles/circle-container.scss';
 img{
-    position: relative; // Establecer la imagen como una posición absoluta para poder desplazarla dentro del contenedor.
-    transform: translateX(140px);
-    top: -110px;
-    padding: 10px;
-  }
+  transform: translate(50px, -70px);
+}
 
 
   .circle-container{
-    display:flex;
-    flex-direction: column;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-    border: 4px;
-    border-style: solid;
-    border-radius: 50%;
-    width: 170px;
-    aspect-ratio: 1/1;
-    overflow: hidden;
-    transform: translateX(180px);
-    border-color: var(--accent-color-green);
+    display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border: 4px;
+  border-style: solid;
+  border-radius: 70%;
+  //width: 80px;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-color: var(--accent-color-green);
     top: 55px;
     padding: 10px;
   }
 
   .valor-pesoperdido{
     color: var(--accent-color-green);
-    font-size: 1.2em;
+    font-size: 0.5em;
     font-weight: bold;
-    line-height: 1;
+    line-height: 0.5;
   }
 
 div[class*=col-],
@@ -40,7 +35,24 @@ div[class^=col] {
 
 ion-icon{
     color: var(--accent-color-green);
-    font-size: 1.2em;
+    font-size: 0.1em;
+    font-weight: bold;
+    line-height: 0.1;
+  }
+
+  .medida {
+    font-size: 0.4em;
+    font-weight: bold;
+    line-height: 0.5;
+  }
+  .valor{
+    font-size: 1.0em;
     font-weight: bold;
     line-height: 1;
+  }  
+
+  .label {
+    font-size: 0.4em;
+    font-weight: bold;
+    line-height: 0.5;
   }
