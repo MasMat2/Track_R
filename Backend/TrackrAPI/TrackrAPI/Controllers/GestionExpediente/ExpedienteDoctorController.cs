@@ -23,10 +23,10 @@ public class ExpedienteDoctorController : ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<ExpedienteDoctorCardsDTO> Consultar()
+    public IEnumerable<ExpedienteDoctorCardsDTO> ConsultarExpediente()
     {
         int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
-        return _expedienteDoctorService.Consultar(idUsuario);
+        return _expedienteDoctorService.ConsultarExpediente(idUsuario);
     }
 
     [HttpGet("selector")]

@@ -12,7 +12,7 @@ public class ExpedienteDoctorRepository : Repository<ExpedienteDoctor>, IExpedie
         base.context = context;
     }
 
-    public IEnumerable<ExpedienteDoctor> Consultar(int idExpediente)
+    public IEnumerable<ExpedienteDoctor> ConsultarExpediente(int idExpediente)
     {
         return context.ExpedienteDoctor
         .Include(ed => ed.IdUsuarioDoctorNavigation)
@@ -34,14 +34,13 @@ public class ExpedienteDoctorRepository : Repository<ExpedienteDoctor>, IExpedie
                 Ambito = ti.Usuario.IdCompaniaNavigation.Nombre,
                 Nombre = ti.Usuario.Nombre + " " + ti.Usuario.ApellidoPaterno + " " + ti.Usuario.ApellidoMaterno,
                 IdRol = ti.UsuarioRol.IdRol
-            })
-            .ToList();
+            });
     }
     public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarSelector(int idExpediente)
     {
-        var doctoresCompletos = ConsultarDoctores();
+        var doctoresCompletos = ConsultarDoctores().ToList();
 
-        var doctoresExpediente = Consultar(idExpediente).ToList();
+        var doctoresExpediente = ConsultarExpediente(idExpediente).ToList();
 
         var doctoresFaltantes = doctoresCompletos.Where(dc => !doctoresExpediente.Any(de => de.IdUsuarioDoctor == dc.IdUsuarioDoctor)).ToList();
 

@@ -8,19 +8,25 @@ public class ExpedienteDoctorService
 {
     private readonly IExpedienteDoctorRepository _expedienteDoctorRepository;
     private readonly IExpedienteTrackrRepository _expedienteTrackrRepository;
+    private readonly ExpedienteDoctorValidatorService _expedienteDoctorValidatorService;
 
-    public ExpedienteDoctorService(IExpedienteDoctorRepository expedienteDoctorRepository, IExpedienteTrackrRepository expedienteTrackrRepository)
+    public ExpedienteDoctorService(IExpedienteDoctorRepository expedienteDoctorRepository,
+                                     IExpedienteTrackrRepository expedienteTrackrRepository,
+                                     ExpedienteDoctorValidatorService expedienteDoctorValidatorService
+
+                                    )
     {
         _expedienteDoctorRepository = expedienteDoctorRepository;
         _expedienteTrackrRepository = expedienteTrackrRepository;
+        _expedienteDoctorValidatorService = expedienteDoctorValidatorService;
     }
 
-    public IEnumerable<ExpedienteDoctorCardsDTO> Consultar(int idUsuario)
+    public IEnumerable<ExpedienteDoctorCardsDTO> ConsultarExpediente(int idUsuario)
     {
         int idExpediente = _expedienteTrackrRepository.ConsultarPorUsuario(idUsuario).IdExpediente;
 
 
-        return _expedienteDoctorRepository.Consultar(idExpediente)
+        return _expedienteDoctorRepository.ConsultarExpediente(idExpediente)
         .Select(dto => new ExpedienteDoctorCardsDTO
         {
             IdExpediente = dto.IdExpediente,
@@ -40,6 +46,7 @@ public class ExpedienteDoctorService
     public void Eliminar(ExpedienteDoctorDTO expedienteDoctorDTO)
     {
 
+        _expedienteDoctorValidatorService.ValidarEliminar(expedienteDoctorDTO.IdUsuarioDoctor);
         var expedienteDoctor = new ExpedienteDoctor
         {
             IdUsuarioDoctor = expedienteDoctorDTO.IdUsuarioDoctor,
@@ -52,7 +59,9 @@ public class ExpedienteDoctorService
 
     public void Agregar(ExpedienteDoctorDTO expedienteDoctorDTO, int idUsuario)
     {
+
         int idExpediente = _expedienteTrackrRepository.ConsultarPorUsuario(idUsuario).IdExpediente;
+        _expedienteDoctorValidatorService.ValidarAgregar(idExpediente, expedienteDoctorDTO.IdUsuarioDoctor);
 
         var expedienteDoctor = new ExpedienteDoctor
         {
