@@ -3,9 +3,34 @@
 </ion-header>
 
 <ion-content>
-  <p>
-    perfil works!
-  </p>
+  <ion-tabs>
+    <ion-tab-bar slot="top">
+      
+      <div class="justify-content-center">
+        <ion-col>
+          <ion-button size="small" fill="outline" routerLink='' >
+            General
+          </ion-button>
+          <ion-button size="small" fill="outline" routerLink='' >
+            Mis tratamientos
+          </ion-button>
+        </ion-col>
+      </div>
 
-  <app-informacion-general></app-informacion-general>
+      <div class="justify-content-center">
+        <ion-col>
+          <ion-button size="small" fill="outline" routerLink='mis-doctores' >
+            Mis doctores
+          </ion-button>
+          <ion-button size="small" fill="outline" routerLink='' >
+            Mis estudios
+          </ion-button>
+        </ion-col>
+      </div>
+      
+  </ion-tab-bar>
+</ion-tabs>
+
+        
 </ion-content>
+  

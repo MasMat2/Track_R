@@ -14,7 +14,7 @@ export class MisDoctoresService {
   private url = 'expedienteDoctor/';
   constructor(public http: HttpClient) { }
 
-  consultarDoctores(): Observable<UsuarioDoctoresDto[]> {
+  consultarExpediente(): Observable<UsuarioDoctoresDto[]> {
     return this.http.get<UsuarioDoctoresDto[]>(this.url);
   }
 
