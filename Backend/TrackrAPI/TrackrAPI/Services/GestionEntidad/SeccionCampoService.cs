@@ -37,15 +37,12 @@ namespace TrackrAPI.Services.GestionEntidad
                 seccionesUnicas.Add(new ExpedienteColumnaSelectorDTO
                 {
                     Clave = seccion.Clave,
-                    Variable = seccion.Variable,
+                    Variable = seccion.Parametro,
                 });
             }
             
             // Agrupar por la Clave y seleccionar la primera instancia de cada grupo
-
-            return seccionesUnicas
-                .GroupBy(sc => sc.Clave)
-                .Select(g => g.First());
+            return seccionesUnicas;
         }
 
         public void Agregar(SeccionCampo seccionCampo)

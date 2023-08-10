@@ -58,5 +58,11 @@ namespace TrackrAPI.Controllers.GestionEntidad
         {
             return entidadEstructuraTablaValorService.ConsultarValores(idPadecimiento, idUsuario, null);
         }
+
+        [HttpGet("valoresPorClaveCampo/{claveCampo}/{idUsuario}/{filtroTiempo}")]
+        public Dictionary<string, List<ValoresHistogramaDTO>> ConsultarValoresPorClaveCampoFiltro(string claveCampo, int idUsuario, string filtroTiempo)
+        {
+            return entidadEstructuraTablaValorService.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, filtroTiempo);
+        }
     }
 }
