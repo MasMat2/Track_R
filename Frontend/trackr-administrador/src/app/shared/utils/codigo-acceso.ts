@@ -43,6 +43,15 @@ export class CodigoAcceso {
   public static EDITAR_PAIS = 'APPAIS2000';
   public static ELIMINAR_PAIS = 'APPAIS3000';
 
+<<<<<<< HEAD
+  //Genero
+=======
+>>>>>>> a871e4299abd973a0949004ca3fe85330f7e4b43
+  public static CONSULTAR_GENERO = 'APGENE0000';
+  public static AGREGAR_GENERO = 'APGENE1000';
+  public static EDITAR_GENERO = 'APGENE2000';
+  public static ELIMINAR_GENERO = 'APGENE3000';
+
   public static CONSULTAR_CAJA = 'APCAJA0000';
   public static AGREGAR_CAJA = 'APCAJA1000';
   public static EDITAR_CAJA = 'APCAJA2000';

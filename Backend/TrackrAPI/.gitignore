@@ -3,8 +3,9 @@ bin
 obj
 *.db
 wwwroot
-.vs/
+../.vs/
+../.vscode/
 Log
 TrackrAPI/Archivos/Usuario/*
-!TrackrAPI/Archivos/Usuario/default.sv
-.config/
+!TrackrAPI/Archivos/Usuario/default.svg
+
