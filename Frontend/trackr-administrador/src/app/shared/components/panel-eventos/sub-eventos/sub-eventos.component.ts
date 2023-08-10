@@ -8,6 +8,8 @@ import { EventoPanel } from '../evento-panel';
   styleUrls: ['./sub-eventos.component.scss']
 })
 export class SubEventosComponent implements OnInit {
+evento: EventoPanel;
+  
   public get modalRef(): BsModalRef {
     return this._modalRef;
   }

@@ -4,7 +4,7 @@ using TrackrAPI.Models;
 
 namespace TrackrAPI.Repositorys.Catalogo
 {
-    public class TipoCuentaContableRepository: Repository<TipoCuentaContable>, ITipoCuentaContableRepository
+    public class TipoCuentaContableRepository : Repository<TipoCuentaContable>, ITipoCuentaContableRepository
     {
 
         public TipoCuentaContableRepository(TrackrContext context) : base(context)
