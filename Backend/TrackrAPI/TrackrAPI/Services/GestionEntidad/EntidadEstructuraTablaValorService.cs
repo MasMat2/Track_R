@@ -5,6 +5,8 @@ using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionEntidad;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
+using System.Globalization;
 
 namespace TrackrAPI.Services.GestionEntidad
 {
@@ -194,5 +196,49 @@ namespace TrackrAPI.Services.GestionEntidad
 
             return padecimientos;
         }
+
+        public Dictionary<string, List<ValoresHistogramaDTO>> ConsultarValoresPorClaveCampo(string claveCampo, int idUsuario, string fechaFiltro)
+        {
+            DateTime fecha = DateTime.Now;
+
+            switch (fechaFiltro.ToLower())
+            {
+                case "hoy":
+                    fecha = fecha.AddHours(-24); // Desde las últimas 24 horas
+                    var valoresHoy = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return AgruparPorHoy(valoresHoy);
+                case "1 semana":
+                    fecha = fecha.AddDays(-7); // Desde los últimos 7 días
+                    var valoresSemana = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return AgruparPorSemana(valoresSemana);
+                default:
+                    throw new CdisException("Filtro de fecha no reconocido");
+            }
+        }
+        public static int ObtenerSemanaDelAnio(DateTime fecha)
+        {
+            DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(fecha);
+            if (day >= DayOfWeek.Monday && day <= DayOfWeek.Wednesday)
+            {
+                fecha = fecha.AddDays(3);
+            }
+            return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(fecha, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+        }
+        public Dictionary<string, List<ValoresHistogramaDTO>> AgruparPorSemana(IEnumerable<ValoresHistogramaDTO> valores)
+        {
+            var diasDeLaSemana = new[] { "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" };
+            return valores.GroupBy(v => diasDeLaSemana[(int)v.FechaMuestra.GetValueOrDefault().DayOfWeek])
+                          .ToDictionary(g => g.Key, g => g.ToList());
+        }
+        public Dictionary<string, List<ValoresHistogramaDTO>> AgruparPorHoy(IEnumerable<ValoresHistogramaDTO> valores)
+        {
+            return valores.GroupBy(v => $"{v.FechaMuestra.GetValueOrDefault().Hour / 3 * 3}:00 - {(v.FechaMuestra.GetValueOrDefault().Hour / 3 + 1) * 3}:00")
+                          .ToDictionary(g => g.Key, g => g.ToList());
+        }
+
+
+
+
+
     }
 }

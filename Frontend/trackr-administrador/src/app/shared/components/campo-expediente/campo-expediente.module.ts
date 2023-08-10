@@ -18,4 +18,4 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
   exports: [CampoExpedienteComponent],
   providers: [],
 })
-export class CampoExpedienteModule {}
+export class CampoExpedienteModule { }

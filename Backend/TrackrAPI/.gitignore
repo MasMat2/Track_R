@@ -4,7 +4,9 @@ obj
 *.db
 wwwroot
 .vs/
+../.vs/
+../.vscode/
 Log
 TrackrAPI/Archivos/Usuario/*
-!TrackrAPI/Archivos/Usuario/default.sv
+!TrackrAPI/Archivos/Usuario/default.svg
 .config/

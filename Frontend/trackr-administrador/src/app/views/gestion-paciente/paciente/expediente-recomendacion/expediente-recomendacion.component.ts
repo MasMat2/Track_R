@@ -147,6 +147,7 @@ export class ExpedienteRecomendacionComponent implements OnInit{
 
   protected editar() : Observable<void>
   { 
+    this.recomendacion.idUsuario = this.idUsuario;
    return this.expedienteRecomendacionService.editar(this.recomendacion);
   }
 

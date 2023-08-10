@@ -5,6 +5,7 @@ using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Helpers;
 using DocumentFormat.OpenXml.Office2016.Drawing;
 using Microsoft.EntityFrameworkCore;
+using TrackrAPI.Dtos.GestionEntidad;
 
 namespace TrackrAPI.Repositorys.GestionEntidad
 {
@@ -62,6 +63,20 @@ namespace TrackrAPI.Repositorys.GestionEntidad
 
             // Retorna el resultado de la consulta
             return queryValoresCampos;
+        }
+
+        public IEnumerable<ValoresHistogramaDTO> ConsultarValoresPorClaveCampo(string claveCampo, int idUsuario, DateTime fechaFiltro)
+        {
+            return context.EntidadEstructuraTablaValor
+                .Include(etv => etv.IdEntidadEstructuraNavigation)
+                .Where(etv => etv.ClaveCampo == claveCampo
+                    && etv.IdTabla == idUsuario
+                    && etv.FechaMuestra >= fechaFiltro)
+                .Select(etv => new ValoresHistogramaDTO
+                {
+                    FechaMuestra = etv.FechaMuestra ?? new DateTime(),
+                    Valor = int.Parse(etv.Valor)
+                });
         }
 
     }
