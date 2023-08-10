@@ -12,6 +12,7 @@
       <tabset>
         <tab style="padding: 0;" heading="Información General">
           <form
+            id="form"
             (keydown.enter)="$event.preventDefault()"
             #formulario="ngForm"
             (ngSubmit)="enviarFormulario(formulario)"
@@ -834,7 +835,7 @@
 
           <div class="modal-footer">
             <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar</button>
-            <button type="submit" class="btn-primario ml-3" [disabled]="btnSubmit">Guardar</button>
+            <button type="submit" form="form" class="btn-primario ml-3" [disabled]="btnSubmit">Guardar</button>
           </div>
         </tab>
 
