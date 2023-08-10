@@ -25,7 +25,7 @@ public class GeneroController : ControllerBase
         return _generoService.Consultar(idGenero);
     }
 
-    [HttpGet("{idGenero}")]
+    [HttpGet]
     public IEnumerable<GeneroDto> Consultar()
     {
         return _generoService.Consultar();
@@ -38,14 +38,14 @@ public class GeneroController : ControllerBase
     }
 
     [HttpPut]
-    
+
     public void Editar(GeneroDto generoDto)
     {
         _generoService.Editar(generoDto);
     }
 
     [HttpDelete("{idGenero}")]
-    
+
     public void Eliminar(int idGenero)
     {
         _generoService.Eliminar(idGenero);
