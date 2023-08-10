@@ -10,12 +10,16 @@ using TrackrAPI.Services.Inventario;
 using TrackrAPI.Repositorys.Inventario;
 using System.Collections.Generic;
 using CanalDistAPI.Dtos.Seguridad;
+using TrackrAPI.Dtos.Perfil;
+using TrackrAPI.Repositorys.GestionExpediente;
+using DocumentFormat.OpenXml.Office.CustomXsn;
 
 namespace TrackrAPI.Services.Seguridad
 {
     public class UsuarioService
     {
         private IUsuarioRepository usuarioRepository;
+        private IExpedienteTrackrRepository expedienteTrackrRepository;
         private IWebHostEnvironment hostingEnvironment;
         private ITipoUsuarioRepository tipoUsuarioRepository;
         private UsuarioValidatorService usuarioValidatorService;
@@ -604,6 +608,45 @@ namespace TrackrAPI.Services.Seguridad
         public IEnumerable<UsuarioDto> ConsultarPorNombre(string filtro)
         {
             return usuarioRepository.ConsultarPorNombre(filtro);
+        }
+
+        public InformacionGeneralDTO ConsultarInformacionGeneralTrackr(int idUsuario)
+        {
+            return usuarioRepository.ConsultarInformacionGeneralTrackr(idUsuario);
+        }
+
+        public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion, int idUsuario)
+        {
+            using TransactionScope scope = new TransactionScope();
+
+            var usuario = usuarioRepository.Consultar(idUsuario);
+            var expediente = expedienteTrackrRepository.ConsultarPorUsuario(idUsuario);
+
+            
+            usuario.Nombre = informacion.Nombre;
+            usuario.ApellidoPaterno = informacion.ApellidoPaterno;
+            usuario.ApellidoMaterno = informacion.ApellidoMaterno;
+            expediente.FechaNacimiento = informacion.FechaNacimiento;
+            expediente.IdGenero = informacion.IdGenero;
+            expediente.Peso = informacion.Peso;
+            expediente.Cintura = informacion.Cintura;
+            expediente.Estatura = informacion.Estatura;
+            usuario.Correo = informacion.Correo;
+            usuario.TelefonoMovil = informacion.TelefonoMovil;
+            usuario.IdEstado = informacion.IdEstado;
+            usuario.IdMunicipio = informacion.IdMunicipio;
+            usuario.IdLocalidad = informacion.IdLocalidad;
+            usuario.IdColonia = informacion.IdColonia;
+            usuario.CodigoPostal = informacion.CodigoPostal;
+            usuario.Calle = informacion.Calle;
+            usuario.NumeroInterior = informacion.NumeroInterior;
+            usuario.NumeroExterior = informacion.NumeroExterior;
+            
+
+            usuarioRepository.Editar(usuario);
+            expedienteTrackrRepository.Editar(expediente);
+
+            scope.Complete();
         }
     }
 }

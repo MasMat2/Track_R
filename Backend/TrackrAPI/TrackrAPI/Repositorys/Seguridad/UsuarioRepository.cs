@@ -6,6 +6,7 @@ using System.Linq;
 using TrackrAPI.Helpers;
 using TrackrAPI.Dtos.Seguridad;
 using System;
+using TrackrAPI.Dtos.Perfil;
 
 namespace TrackrAPI.Repositorys.Seguridad
 {
@@ -575,6 +576,53 @@ namespace TrackrAPI.Repositorys.Seguridad
                     Correo = u.Correo
                 })
                 .ToList();
+        }
+
+        public InformacionGeneralDTO ConsultarInformacionGeneralTrackr(int idUsuario)
+        {
+            var usuario = context.Usuario.
+                Where(u => u.IdUsuario == idUsuario)
+                    .Include(u=> u.ExpedienteTrackr)
+                    .Include(u => u.ExpedientePadecimiento)
+                    .FirstOrDefault();
+
+            var expediente = usuario.ExpedienteTrackr.FirstOrDefault();
+
+            var padecimientos = expediente.ExpedientePadecimiento;
+
+            var informacionGeneral = new InformacionGeneralDTO
+            {
+                Nombre = usuario.Nombre,
+                ApellidoPaterno = usuario.ApellidoPaterno,
+                ApellidoMaterno = usuario.ApellidoMaterno,
+                FechaNacimiento = expediente.FechaNacimiento,
+                IdGenero = expediente.IdGenero,
+                Peso = expediente.Peso,
+                Cintura = expediente.Cintura,
+                Estatura = expediente.Estatura,
+                Correo = usuario.Correo,
+                TelefonoMovil = usuario.TelefonoMovil,
+                IdPais = 1,
+                IdEstado = usuario.IdEstado,
+                IdMunicipio = usuario.IdMunicipio,
+                IdLocalidad = usuario.IdLocalidad,
+                IdColonia = usuario.IdColonia,
+                CodigoPostal = usuario.CodigoPostal,
+                Calle = usuario.Calle,
+                NumeroInterior = usuario.NumeroInterior,
+                NumeroExterior = usuario.NumeroExterior,
+                padecimientos = padecimientos.Select(p => new PadecimientoDTO
+                {
+                    IdPadecimiento = p.IdPadecimiento,
+                    IdExpedientePadecimiento = p.IdExpedientePadecimiento,
+                    NombrePadecimiento = p.IdPadecimientoNavigation.Nombre,
+                    NombreDoctor = p.IdUsuarioDoctorNavigation.Nombre,
+                    FechaDiagnostico = p.FechaDiagnostico
+                })
+            };
+
+            return informacionGeneral;
+
         }
     }
 }

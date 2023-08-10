@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrackrAPI.Dtos.Seguridad;
+using TrackrAPI.Dtos.Perfil;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Services.Seguridad;
@@ -253,6 +254,18 @@ namespace TrackrAPI.Controllers.Seguridad
         public IEnumerable<UsuarioDto> ConsultarPorNombre(string nombre)
         {
             return usuarioService.ConsultarPorNombre(nombre);
+        }
+
+        [HttpGet("consultarInformacionGeneral")]
+        public InformacionGeneralDTO ConsultarInformacionGeneral()
+        {
+            return usuarioService.ConsultarInformacionGeneralTrackr(Utileria.ObtenerIdUsuarioSesion(this));
+        }
+
+        [HttpPut("actualizarInformacionGeneral")]
+        public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion)
+        {
+            usuarioService.ActualizarInformacionGeneralTrackr(informacion, Utileria.ObtenerIdUsuarioSesion(this)); 
         }
     }
 }
