@@ -61,13 +61,8 @@ const routes: Routes = [
   {
     path: 'genero',
     loadChildren: () => import('./genero/genero.module').then((m) => m.GeneroModule)
-<<<<<<< HEAD
   }
-  ];
-=======
-  },
 ];
->>>>>>> a871e4299abd973a0949004ca3fe85330f7e4b43
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
