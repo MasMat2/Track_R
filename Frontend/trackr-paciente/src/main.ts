@@ -1,6 +1,6 @@
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { RouteReuseStrategy, provideRouter } from '@angular/router';
+import { RouteReuseStrategy, provideRouter, withHashLocation } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { routes } from './app/app.routes';
@@ -19,6 +19,6 @@ bootstrapApplication(AppComponent, {
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     importProvidersFrom(IonicModule.forRoot({})),
     importProvidersFrom(HttpClientModule),
-    provideRouter(routes),
+    provideRouter(routes, withHashLocation()),
   ],
 });
