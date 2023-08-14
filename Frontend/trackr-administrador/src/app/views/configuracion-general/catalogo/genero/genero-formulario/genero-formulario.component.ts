@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { GeneroService } from '@http/catalogo/genero.service';
-import { GeneroDto } from '@dtos/catalogos/GeneroDto';
+import { GeneroDto } from '@dtos/catalogo/generoDto';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { GeneralConstant } from '@utils/general-constant';
 import { BsModalRef } from 'ngx-bootstrap/modal';

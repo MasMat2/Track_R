@@ -256,3 +256,7 @@ export function validarFormatoCorreo(correo: string): boolean {
 
 }
 
+
+export function capitalizeFirstLetter(descripcion: string): string {
+  throw new Error('Function not implemented.');
+}

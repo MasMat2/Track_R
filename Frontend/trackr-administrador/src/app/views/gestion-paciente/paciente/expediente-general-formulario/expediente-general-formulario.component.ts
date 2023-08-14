@@ -19,10 +19,11 @@ import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { GeneralConstant } from '@utils/general-constant';
 import * as Utileria from '@utils/utileria';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { from, lastValueFrom, of } from 'rxjs';
+import { Observable, from, lastValueFrom, of } from 'rxjs';
 import { first } from 'rxjs/operators';
-import { GeneroSelectorDTO } from './genero-selector';
 import { UsuarioFormularioComponent } from 'src/app/views/configuracion-general/catalogo/usuario/usuario-formulario/usuario-formulario.component';
+import { Genero } from '@models/catalogo/genero';
+import { GeneroDto } from '@dtos/catalogo/generoDto';
 
 /**
  * Componente de formulario para el manejo de expedientes.
@@ -49,19 +50,20 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
 
   // Selectores
   public padecimientoList: ExpedientePadecimientoSelectorDTO[] = [];
-  public generoList: GeneroSelectorDTO[] = [];
+
 
   // Mensajes
   public MENSAJE_AGREGAR = 'El expediente ha sido agregado';
   public MENSAJE_EDITAR = 'El expediente ha sido modificado';
-  
+
   // Configuraciones
   public placeHolderSelect = GeneralConstant.PLACEHOLDER_DROPDOWN;
   public placeHolderNoOptions = GeneralConstant.PLACEHOLDER_DROPDOWN_NO_OPTIONS;
 
   public filtro: string;
   public btnSubmitBusqueda = false;
-
+  public generoService: any;
+generoList: any[]|null;
 
   constructor(
     private expedienteTrackrService: ExpedienteTrackrService,
@@ -80,7 +82,7 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
    * verifica si hay un usuario existente (si es Editar).
    * Si existe un usuario, consulta su expediente.
    */
-  public async ngOnInit(): Promise<void> { 
+  public async ngOnInit(): Promise<void> {
     await Promise.all([
       this.consultarGeneros(),
       this.consultarPadecimientos(),
@@ -96,20 +98,20 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
     const queryParams = await lastValueFrom(this.route.queryParams.pipe(first()));
     const params = this.encryptionService.readUrlParams(queryParams);
     this.idUsuario = Number(params.i);
-    if(this.idUsuario > 0){
+    if (this.idUsuario > 0) {
       this.consultarExpedienteWrapper()
       this.accion = GeneralConstant.MODAL_ACCION_EDITAR;
     }
-    else{
+    else {
       this.agregarPadecimiento()
       this.accion = GeneralConstant.MODAL_ACCION_AGREGAR
     }
   }
 
-  protected agregarUsuario(){
+  protected agregarUsuario() {
     this.bsModalRef = this.modalService.show(UsuarioFormularioComponent, {
-			...GeneralConstant.CONFIG_MODAL_LARGE,
-		});
+      ...GeneralConstant.CONFIG_MODAL_LARGE,
+    });
     this.bsModalRef.content.accion = GeneralConstant.MODAL_ACCION_AGREGAR;
     this.bsModalRef.content.onClose = (idUsuario: number) => {
       this.bsModalRef.hide();
@@ -119,7 +121,7 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
       }
     };
   }
-  
+
   /**
    * Envía el formulario, verifica si es válido y si no, valida los campos requeridos.
    * @param {NgForm} formulario - El formulario que se va a enviar.
@@ -138,10 +140,10 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
     this.expedienteWrapper.padecimientos = this.padecimientos;
     this.expedienteWrapper.paciente.idUsuario = this.paciente.idUsuario;
     if (this.accion === GeneralConstant.MODAL_ACCION_AGREGAR) {
-      if(this.expedienteWrapper.expediente.idExpediente > 0){
+      if (this.expedienteWrapper.expediente.idExpediente > 0) {
         this.editar();
       }
-      else{
+      else {
         this.agregar();
       }
     } else if (this.accion === GeneralConstant.MODAL_ACCION_EDITAR) {
@@ -155,28 +157,28 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
    */
   protected agregar(): void {
     lastValueFrom(this.expedienteTrackrService.agregarWrapper(this.expedienteWrapper))
-    .then((response) => {
-      if (response) {
-        this.modalMensajeService.modalExito(this.MENSAJE_AGREGAR);
-        this.btnSubmit = false;
-      }
-    });
+      .then((response) => {
+        if (response) {
+          this.modalMensajeService.modalExito(this.MENSAJE_AGREGAR);
+          this.btnSubmit = false;
+        }
+      });
     this.btnSubmit = false;
   }
-  
+
   /**
    * Envía una solicitud para editar un expediente existente.
    */
   protected editar(): void {
     lastValueFrom(this.expedienteTrackrService.editarWrapper(this.expedienteWrapper))
-    .then((response) => {
-      if (response) {
-        this.modalMensajeService.modalExito(this.MENSAJE_EDITAR);
-        this.btnSubmit = false;
-      }
-      
-    })
-    .catch((error) => {  });
+      .then((response) => {
+        if (response) {
+          this.modalMensajeService.modalExito(this.MENSAJE_EDITAR);
+          this.btnSubmit = false;
+        }
+
+      })
+      .catch((error) => { });
   }
 
   /**
@@ -189,29 +191,29 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
   /**
    * Agrega un nuevo padecimiento al expediente.
    */
-  protected agregarPadecimiento(){
+  protected agregarPadecimiento() {
     const padecimiento = new ExpedientePadecimientoDTO();
     padecimiento.idPadecimiento = 0;
     padecimiento.fechaDiagnostico = new Date();
-    this.padecimientos = [...this.padecimientos, padecimiento ];
+    this.padecimientos = [...this.padecimientos, padecimiento];
     // this.padecimientos.push(padecimiento); NO FUNCIONA
   }
 
   trackByFunction(index: number, item: ExpedientePadecimientoDTO): number {
     return index; // o item.id si existe tal propiedad
   }
-  
+
   /**
    * Elimina un padecimiento específico del expediente.
    * @param {number} index - El índice del padecimiento a eliminar.
    */
-  protected eliminarPadecimiento(index: number){
-    if(index < 0 || index >= this.padecimientos.length){
+  protected eliminarPadecimiento(index: number) {
+    if (index < 0 || index >= this.padecimientos.length) {
       return;
     }
     this.padecimientos.splice(index, 1);
 
-    if(this.padecimientos.length === 0){
+    if (this.padecimientos.length === 0) {
       this.agregarPadecimiento();
     }
   }
@@ -221,56 +223,56 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
    */
   private async consultarExpedienteWrapper() {
     lastValueFrom(this.expedienteTrackrService.consultarWrapperPorUsuario(this.idUsuario))
-    .then((expedienteWrapper: ExpedienteWrapper) => {
+      .then((expedienteWrapper: ExpedienteWrapper) => {
 
-      // Asigna el objeto al wrapper
-      this.paciente = expedienteWrapper.paciente || new Usuario();
-      this.domicilio = this.obtenerPacienteDomicilio(this.paciente);
-      this.expediente = this.obtenerExpediente(expedienteWrapper.expediente);
-      
-
-      this.padecimientos = expedienteWrapper.padecimientos.map(padecimiento => {
-        let padecimientoDTO = new ExpedientePadecimientoDTO();
-        padecimientoDTO.idExpedientePadecimiento = padecimiento.idExpedientePadecimiento;
-        padecimientoDTO.idPadecimiento = padecimiento.idPadecimiento;
-        padecimientoDTO.fechaDiagnostico = new Date(padecimiento.fechaDiagnostico);
-        
-        return padecimientoDTO;
-      });
+        // Asigna el objeto al wrapper
+        this.paciente = expedienteWrapper.paciente || new Usuario();
+        this.domicilio = this.obtenerPacienteDomicilio(this.paciente);
+        this.expediente = this.obtenerExpediente(expedienteWrapper.expediente);
 
 
-      // Calcular el campo edad
-      this.calcularEdad();
+        this.padecimientos = expedienteWrapper.padecimientos.map(padecimiento => {
+          let padecimientoDTO = new ExpedientePadecimientoDTO();
+          padecimientoDTO.idExpedientePadecimiento = padecimiento.idExpedientePadecimiento;
+          padecimientoDTO.idPadecimiento = padecimiento.idPadecimiento;
+          padecimientoDTO.fechaDiagnostico = new Date(padecimiento.fechaDiagnostico);
 
-      // Comprobar si tiene padecimientos, si no hay, agregar uno por default
-      if(this.padecimientos == null || this.padecimientos.length === 0){
-        this.agregarPadecimiento();
-      }
-    })
+          return padecimientoDTO;
+        });
+
+
+        // Calcular el campo edad
+        this.calcularEdad();
+
+        // Comprobar si tiene padecimientos, si no hay, agregar uno por default
+        if (this.padecimientos == null || this.padecimientos.length === 0) {
+          this.agregarPadecimiento();
+        }
+      })
   }
 
-  private obtenerExpediente(expediente: ExpedienteTrackR): ExpedienteTrackR{
-    if(expediente == null){
+  private obtenerExpediente(expediente: ExpedienteTrackR): ExpedienteTrackR {
+    if (expediente == null) {
       expediente = new ExpedienteTrackR();
     }
     let expedienteTrackR = expediente;
-    if(expediente.fechaNacimiento != null){
+    if (expediente.fechaNacimiento != null) {
       expedienteTrackR.fechaNacimiento = new Date(expediente.fechaNacimiento);
     }
-    else{
+    else {
       expedienteTrackR.fechaNacimiento = new Date();
     }
-    if(expediente.fechaAlta != null){
+    if (expediente.fechaAlta != null) {
       expedienteTrackR.fechaAlta = new Date(expediente.fechaAlta);
     }
-    else{
+    else {
       expedienteTrackR.fechaAlta = new Date();
     }
 
     return expedienteTrackR;
   }
 
-  private obtenerPacienteDomicilio(paciente: Usuario): Domicilio{
+  private obtenerPacienteDomicilio(paciente: Usuario): Domicilio {
     let domicilio = new Domicilio();
     domicilio.idPais = paciente.idPais;
     domicilio.codigoPostal = paciente.codigoPostal;
@@ -285,8 +287,8 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
     return domicilio;
   }
 
-  
-  protected calcularEdad(){
+
+  protected calcularEdad() {
     let fechaNacimiento = new Date(this.expediente.fechaNacimiento);
     let edadObject = Utileria.diferenciaFechas(fechaNacimiento, new Date());
     let edadString = edadObject.years + ' años, ' + edadObject.months + ' meses, ' + edadObject.days + ' días';
@@ -296,49 +298,47 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
   /**
    * Consulta los padecimientos para el selector. 
    */
-  private consultarPadecimientos(){
+  private consultarPadecimientos() {
     return lastValueFrom(this.entidadEstructuraService.consultarPadecimientosParaSelector())
-    .then((padecimientos: ExpedientePadecimientoSelectorDTO[]) => {
-      this.padecimientoList = padecimientos;
-    })
+      .then((padecimientos: ExpedientePadecimientoSelectorDTO[]) => {
+        this.padecimientoList = padecimientos;
+      })
   }
 
   /**
    * Consulta los géneros para el selector
    */
   private consultarGeneros() {
-    this.generoList = [
-      {
-        idGenero: 1,
-        nombre: "Hombre"
-      },
-      {
-        idGenero: 2,
-        nombre: "Mujer"
-      }
-    ];
+    return lastValueFrom(this.generoService.consulta())
+        .then((generos: GeneroDto[] | unknown) => {
+            if (Array.isArray(generos)) {
+                this.generoList = generos;
+            } else {
+                console.log('Error al obtener la lista de géneros');
+            }
+        })
+        .catch(error => {
+          console.log(`Error en consulta de géneros ${error}`);
+        });
+}
 
-    // NOTA: temporal para simular asincronidad mientras se implementa el catálogo
-    return lastValueFrom(of(this.generoList));
-  }
 
-  
   public async buscar(): Promise<void> {
     let resultadoUsuarios: Usuario[] = [];
 
     this.btnSubmitBusqueda = true;
 
     await lastValueFrom(
-    this.usuarioService.consultarPorNombre(this.filtro)).then(
-      (data) => { 
-        resultadoUsuarios = data != null ? data : [];
+      this.usuarioService.consultarPorNombre(this.filtro)).then(
+        (data) => {
+          resultadoUsuarios = data != null ? data : [];
         }
-    )
-    .catch(
-      (error) => {
-        this.btnSubmitBusqueda = false;
-      }
-    );
+      )
+      .catch(
+        (error) => {
+          this.btnSubmitBusqueda = false;
+        }
+      );
 
     if (resultadoUsuarios.length == 0) {
       this.modalMensajeService.modalError("No se encontraron resultados");

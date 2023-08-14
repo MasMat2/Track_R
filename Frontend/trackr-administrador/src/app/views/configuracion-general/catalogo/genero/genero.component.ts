@@ -7,7 +7,7 @@ import { CodigoAcceso } from '@utils/codigo-acceso';
 import { GeneralConstant } from '@utils/general-constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneroFormularioComponent } from './genero-formulario/genero-formulario.component';
-import { GeneroDto } from '@dtos/catalogos/GeneroDto';
+import { GeneroDto } from '@dtos/catalogo/generoDto';
 import { ColDef } from 'ag-grid-community/dist/lib/entities/colDef';
 
 @Component({
