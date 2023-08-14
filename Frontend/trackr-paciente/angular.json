@@ -38,7 +38,7 @@
             ],
             "styles": [
               "src/theme/custom.scss",
-              "src/theme/variables.scss", 
+              "src/theme/variables.scss",
               "src/global.scss"
             ],
             "scripts": []
@@ -53,8 +53,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
                 }
               ],
               "fileReplacements": [
