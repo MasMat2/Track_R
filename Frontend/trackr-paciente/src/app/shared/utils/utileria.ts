@@ -66,3 +66,12 @@ export function formatoMonto(monto: number): string {
 
   return ret;
 }
+
+
+export function normalizarString(texto: string): string {
+  return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+export function equalsNormalized(a: string, b: string): boolean {
+  return normalizarString(a.toLowerCase()) === normalizarString(b.toLowerCase());
+}

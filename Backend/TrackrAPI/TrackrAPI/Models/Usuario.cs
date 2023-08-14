@@ -116,6 +116,7 @@ namespace TrackrAPI.Models
         public int? IdListaPrecio { get; set; }
         public int? IdSatFormaPago { get; set; }
         public int? IdMetodoPago { get; set; }
+        public string? EntreCalles { get; set; }
 
         public virtual Area? IdAreaNavigation { get; set; }
         public virtual Colonia? IdColoniaNavigation { get; set; }

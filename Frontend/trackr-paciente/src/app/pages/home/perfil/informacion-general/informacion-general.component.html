@@ -295,7 +295,9 @@
               shape="round" 
               type="text"
               required="true"
-              maxlength="5"
+              [disabled]="!informacionUsuario.idPais"
+              [maxlength]="esPaisExtranjero ? null : 5"
+              [minlength]="esPaisExtranjero ? null : 5"
               placeholder="Código Postal"
               (ionChange)="onChangeCodigoPostal()"
               [(ngModel)]="informacionUsuario.codigoPostal">
@@ -319,6 +321,7 @@
               fill="outline"
               shape="round"
               required="true"
+              [disabled]="!informacionUsuario.idPais"
               (ionChange)="onChangeEstado()"
               [(ngModel)]="informacionUsuario.idEstado">
               <ion-select-option *ngFor="let estado of estadoList" [value]="estado.idEstado">{{ estado.nombre }}</ion-select-option>
@@ -333,7 +336,8 @@
               label-placement="floating" 
               fill="outline"
               shape="round"
-              required="true" 
+              required="true"
+              [disabled]="!informacionUsuario.idEstado" 
               [(ngModel)]="informacionUsuario.idMunicipio">
               <ion-select-option *ngFor="let municipio of municipioList" [value]="municipio.idMunicipio">{{ municipio.nombre }}</ion-select-option>
             </ion-select>
@@ -349,7 +353,8 @@
               label-placement="floating" 
               fill="outline"
               shape="round"
-              required="true" 
+              required="true"
+              [disabled]="!informacionUsuario.idEstado" 
               [(ngModel)]="informacionUsuario.idLocalidad">
               <ion-select-option *ngFor="let localidad of localidadList" [value]="localidad.idLocalidad">{{ localidad.nombre }}</ion-select-option>
             </ion-select>
@@ -363,7 +368,8 @@
               label-placement="floating" 
               fill="outline"
               shape="round"
-              required="true" 
+              required="true"
+              [disabled]="informacionUsuario.codigoPostal?.length != 5" 
               [(ngModel)]="informacionUsuario.idColonia">
               <ion-select-option *ngFor="let colonia of coloniaList" [value]="colonia.idColonia">{{ colonia.nombre }}</ion-select-option>
             </ion-select>
@@ -447,7 +453,6 @@
               fill="outline" 
               shape="round" 
               type="text"
-              value = "Entre calle 1 y calle 2"
               maxlength="50"
               autocomplete="off"
               placeholder="Entre calles"
@@ -461,30 +466,31 @@
             <ion-label class = "texto-seccion">Padecimientos</ion-label>
           </ion-col>
         </ion-row>
-        <div *ngFor="let padecimiento of informacionUsuario.padecimientos">
+        <div *ngFor="let padecimiento of informacionUsuario.padecimientos, let i = index">
           <ion-row>
             <ion-col size="6">
-              <ion-input
-                #tipoPadecimiento="ngModel"
-                id="tipoPadecimiento"
-                name="tipoPadecimiento" 
-                label="Tipo de padecimiento" 
-                label-placement="floating" 
-                fill="outline" 
-                shape="round" 
-                type="text"
-                [(ngModel)]="padecimiento.nombrePadecimiento">
-              </ion-input>
+              <ion-select
+              #tipoPadecimiento="ngModel"
+              id="tipoPadecimiento"
+              [name]="'tipoPadecimiento' + i"
+              label="Tipo de Padecimiento" 
+              label-placement="floating" 
+              fill="outline"
+              shape="round"
+              [(ngModel)]="padecimiento.idPadecimiento"
+              >
+                <ion-select-option *ngFor="let pad of padecimientoList" [value]="pad.idPadecimiento">{{ pad.nombre }}</ion-select-option>
+              </ion-select>
             </ion-col>
             <ion-col size="6">
               <ion-item class="custom-datetime">
-                <ion-datetime-button datetime="fechaDiagnostico"></ion-datetime-button>
+                <ion-datetime-button [datetime]="'fechaDiagnostico' + i"></ion-datetime-button>
                 <ion-modal [keepContentsMounted]="true">
                   <ng-template>
                     <ion-datetime
                       #fechaDiagnostico="ngModel" 
-                      id="fechaDiagnostico"
-                      name="fechaDiagnostico" 
+                      [id]="'fechaDiagnostico' + i"
+                      [name]="'fechaDiagnostico' + i" 
                       presentation="date" 
                       showDefaultButtons="true"
                       locale="es-ES"
@@ -500,7 +506,7 @@
               <ion-input
                 #doctor="ngModel"
                 id="doctor"
-                name="doctor" 
+                [name]="'doctor' + i" 
                 label="Doctor" 
                 label-placement="floating" 
                 fill="outline" 
@@ -511,7 +517,7 @@
             </ion-col>
             <ion-col size="6">
               <ion-item>
-                <ion-icon (click)="eliminarPadecimiento()" name="close-circle-outline" size="large"></ion-icon>
+                <ion-icon (click)="eliminarPadecimiento(i)" name="close-circle-outline" size="large"></ion-icon>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -519,17 +525,19 @@
 
         <ion-row>
           <ion-col size="6">
-            <ion-input
+            <ion-select
               #tipoPadecimiento="ngModel"
-              id="tipoPadecimiento"
-              name="tipoPadecimiento" 
-              label="Tipo de padecimiento" 
+              id="tipoNuevoPadecimiento"
+              name="tipoNuevoPadecimiento"
+              label="Tipo de Padecimiento" 
               label-placement="floating" 
-              fill="outline" 
-              shape="round" 
-              type="text"
-              [(ngModel)]="nuevoPadecimiento.nombrePadecimiento">
-            </ion-input>
+              fill="outline"
+              shape="round"
+              disabled="true"
+              [(ngModel)]="nuevoPadecimiento.idPadecimiento"
+              >
+                <ion-select-option *ngFor="let pad of padecimientoList" [value]="pad.idPadecimiento">{{ pad.nombre }}</ion-select-option>
+              </ion-select>
           </ion-col>
           <ion-col size="6">
             <ion-item class="custom-datetime">
@@ -543,6 +551,7 @@
                     presentation="date" 
                     showDefaultButtons="true"
                     locale="es-ES"
+                    disabled="true"
                     [(ngModel)]="nuevoPadecimiento.fechaDiagnostico">
                   </ion-datetime>
                 </ng-template>
@@ -561,6 +570,7 @@
               fill="outline" 
               shape="round" 
               type="text"
+              disabled="true"
               [(ngModel)]="nuevoPadecimiento.nombreDoctor">
             </ion-input>
           </ion-col>
@@ -578,7 +588,7 @@
         
         <ion-row>
           <ion-col>
-              <ion-button class="btn-enviar" expand="full" color="primary" type="submit">Submit</ion-button>
+              <ion-button [disabled]="btnSubmit" expand="full" color="primary" type="submit">Submit</ion-button>
           </ion-col>
         </ion-row>
 

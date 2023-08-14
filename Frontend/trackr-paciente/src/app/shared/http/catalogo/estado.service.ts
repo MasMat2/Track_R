@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EstadoSelectorDto } from '@models/catalogo/estado-selector-dto';
+import { EstadoSelectorDto } from 'src/app/shared/dtos/catalogo/estado-selector-dto';
 import { Observable } from 'rxjs';
 
 @Injectable({

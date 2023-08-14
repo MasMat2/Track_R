@@ -305,6 +305,8 @@ namespace TrackrAPI.Models
         public virtual DbSet<TituloAcademico> TituloAcademico { get; set; } = null!;
         public virtual DbSet<TraspasoMovimientoMaterial> TraspasoMovimientoMaterial { get; set; } = null!;
         public virtual DbSet<TraspasoMovimientoMaterialDetalle> TraspasoMovimientoMaterialDetalle { get; set; } = null!;
+        public virtual DbSet<TratamientoRecordatorio> TratamientoRecordatorio { get; set; } = null!;
+        public virtual DbSet<TratamientoToma> TratamientoToma { get; set; } = null!;
         public virtual DbSet<Turno> Turno { get; set; } = null!;
         public virtual DbSet<Ubicacion> Ubicacion { get; set; } = null!;
         public virtual DbSet<UbicacionVenta> UbicacionVenta { get; set; } = null!;
@@ -7543,6 +7545,38 @@ namespace TrackrAPI.Models
                     .HasConstraintName("FK__TraspasoM__IdUbi__4DD47EBD");
             });
 
+            modelBuilder.Entity<TratamientoRecordatorio>(entity =>
+            {
+                entity.HasKey(e => e.IdTratamientoRecordatorio)
+                    .HasName("PK__Tratamie__55A5A7F2349A34AD");
+
+                entity.ToTable("TratamientoRecordatorio", "Trackr");
+
+                entity.HasOne(d => d.IdExpedienteTratamientoNavigation)
+                    .WithMany(p => p.TratamientoRecordatorio)
+                    .HasForeignKey(d => d.IdExpedienteTratamiento)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Tratamien__IdExp__4BF72343");
+            });
+
+            modelBuilder.Entity<TratamientoToma>(entity =>
+            {
+                entity.HasKey(e => e.IdTomaTratamiento)
+                    .HasName("PK__Tratamie__93830D97D2170B82");
+
+                entity.ToTable("TratamientoToma", "Trackr");
+
+                entity.Property(e => e.FechaEnvio).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaToma).HasColumnType("datetime");
+
+                entity.HasOne(d => d.IdTratamientoRecordatorioNavigation)
+                    .WithMany(p => p.TratamientoToma)
+                    .HasForeignKey(d => d.IdTratamientoRecordatorio)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Tratamien__IdTra__4ED38FEE");
+            });
+
             modelBuilder.Entity<Turno>(entity =>
             {
                 entity.HasKey(e => e.IdTurno);
@@ -7673,6 +7707,8 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.CorreoPersonal).HasMaxLength(50);
 
                 entity.Property(e => e.Direccion).HasMaxLength(500);
+
+                entity.Property(e => e.EntreCalles).HasMaxLength(200);
 
                 entity.Property(e => e.ImagenTipoMime).HasMaxLength(50);
 

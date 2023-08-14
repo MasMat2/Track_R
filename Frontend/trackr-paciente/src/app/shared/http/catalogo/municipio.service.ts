@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { municipioSelectorDto } from '@models/catalogo/municipio-selector-dto';
+import { municipioSelectorDto } from 'src/app/shared/dtos/catalogo/municipio-selector-dto';
 import { Observable } from 'rxjs';
 
 @Injectable({

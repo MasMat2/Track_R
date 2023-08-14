@@ -7,6 +7,7 @@ using TrackrAPI.Helpers;
 using TrackrAPI.Dtos.Seguridad;
 using System;
 using TrackrAPI.Dtos.Perfil;
+using TrackrAPI.Dtos.GestionExpediente;
 
 namespace TrackrAPI.Repositorys.Seguridad
 {
@@ -583,7 +584,11 @@ namespace TrackrAPI.Repositorys.Seguridad
             var usuario = context.Usuario.
                 Where(u => u.IdUsuario == idUsuario)
                     .Include(u=> u.ExpedienteTrackr)
-                    .Include(u => u.ExpedientePadecimiento)
+                    .ThenInclude(u => u.ExpedientePadecimiento)
+                    .ThenInclude(ep => ep.IdPadecimientoNavigation)
+                    .Include(u => u.ExpedienteTrackr)
+                    .ThenInclude(u => u.ExpedientePadecimiento)
+                    .ThenInclude(ep => ep.IdUsuarioDoctorNavigation)
                     .FirstOrDefault();
 
             var expediente = usuario.ExpedienteTrackr.FirstOrDefault();
@@ -611,7 +616,8 @@ namespace TrackrAPI.Repositorys.Seguridad
                 Calle = usuario.Calle,
                 NumeroInterior = usuario.NumeroInterior,
                 NumeroExterior = usuario.NumeroExterior,
-                padecimientos = padecimientos.Select(p => new PadecimientoDTO
+                EntreCalles = usuario.EntreCalles,
+                padecimientos = padecimientos.Select(p => new ExpedientePadecimientoDTO
                 {
                     IdPadecimiento = p.IdPadecimiento,
                     IdExpedientePadecimiento = p.IdExpedientePadecimiento,

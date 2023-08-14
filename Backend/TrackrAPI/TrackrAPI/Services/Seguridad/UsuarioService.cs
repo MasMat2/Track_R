@@ -20,6 +20,7 @@ namespace TrackrAPI.Services.Seguridad
     {
         private IUsuarioRepository usuarioRepository;
         private IExpedienteTrackrRepository expedienteTrackrRepository;
+        private IExpedientePadecimientoRepository expedientePadecimientoRepository;
         private IWebHostEnvironment hostingEnvironment;
         private ITipoUsuarioRepository tipoUsuarioRepository;
         private UsuarioValidatorService usuarioValidatorService;
@@ -36,6 +37,8 @@ namespace TrackrAPI.Services.Seguridad
         private BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService;
 
         public UsuarioService(IUsuarioRepository usuarioRepository,
+            IExpedienteTrackrRepository expedienteTrackrRepository,
+            IExpedientePadecimientoRepository expedientePadecimientoRepository,
             IWebHostEnvironment hostingEnvironment,
             ITipoUsuarioRepository tipoUsuarioRepository,
             UsuarioValidatorService usuarioValidatorService,
@@ -53,6 +56,8 @@ namespace TrackrAPI.Services.Seguridad
             BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService)
         {
             this.usuarioRepository = usuarioRepository;
+            this.expedienteTrackrRepository = expedienteTrackrRepository;
+            this.expedientePadecimientoRepository = expedientePadecimientoRepository;
             this.simpleAES = simpleAES;
             this.usuarioValidatorService = usuarioValidatorService;
             this.hostingEnvironment = hostingEnvironment;
@@ -620,8 +625,7 @@ namespace TrackrAPI.Services.Seguridad
             using TransactionScope scope = new TransactionScope();
 
             var usuario = usuarioRepository.Consultar(idUsuario);
-            var expediente = expedienteTrackrRepository.ConsultarPorUsuario(idUsuario);
-
+            var expediente = expedienteTrackrRepository.ConsultarPorUsuario(usuario.IdUsuario);
             
             usuario.Nombre = informacion.Nombre;
             usuario.ApellidoPaterno = informacion.ApellidoPaterno;
@@ -641,7 +645,24 @@ namespace TrackrAPI.Services.Seguridad
             usuario.Calle = informacion.Calle;
             usuario.NumeroInterior = informacion.NumeroInterior;
             usuario.NumeroExterior = informacion.NumeroExterior;
-            
+
+            expedientePadecimientoRepository.EliminarPorExpediente(expediente.IdExpediente);
+            foreach (var padecimientoDTO in informacion.padecimientos)
+            {
+                var padecimiento = new ExpedientePadecimiento();
+
+                padecimiento.IdPadecimiento = padecimientoDTO.IdPadecimiento;
+                padecimiento.FechaDiagnostico = padecimientoDTO.FechaDiagnostico;
+                padecimiento.IdExpediente = expediente.IdExpediente;
+
+                if (padecimiento.IdPadecimiento == 0)
+                {
+                    continue;
+                }
+
+                expedientePadecimientoRepository.Agregar(padecimiento);
+
+            }
 
             usuarioRepository.Editar(usuario);
             expedienteTrackrRepository.Editar(expediente);

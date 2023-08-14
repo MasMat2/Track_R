@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LocalidadSelectorDto } from '@models/catalogo/localidad-selector-dto';
+import { LocalidadSelectorDto } from 'src/app/shared/dtos/catalogo/localidad-selector-dto';
 import { Observable } from 'rxjs';
 
 @Injectable({

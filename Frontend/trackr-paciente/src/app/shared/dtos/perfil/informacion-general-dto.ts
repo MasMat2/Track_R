@@ -1,4 +1,4 @@
-import {PadecimientoDto} from './padecimiento-dto'
+import {ExpedientePadecimientoDto} from '../seguridad/expediente-padecimiento-dto'
 
 export interface InformacionGeneralDto {
 
@@ -23,5 +23,5 @@ export interface InformacionGeneralDto {
     numeroInterior: string;
     numeroExterior: string;
 
-    padecimientos: PadecimientoDto[];
+    padecimientos: ExpedientePadecimientoDto[];
 }

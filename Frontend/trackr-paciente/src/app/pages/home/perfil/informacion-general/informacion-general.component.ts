@@ -3,22 +3,25 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '../../layout/header/header.component';
-import { InformacionGeneralDto } from '@models/perfil/informacion-general-dto';
+import { InformacionGeneralDto } from 'src/app/shared/dtos/perfil/informacion-general-dto';
 import { UsuarioService } from '@http/seguridad/usuario.service';
 import { Observable, lastValueFrom, of, tap } from 'rxjs';
-import { PaisSelectorDto } from '@models/catalogo/pais-selector-dto';
-import { EstadoSelectorDto } from '@models/catalogo/estado-selector-dto';
-import { municipioSelectorDto } from '@models/catalogo/municipio-selector-dto';
-import { LocalidadSelectorDto } from '@models/catalogo/localidad-selector-dto';
-import { ColoniaSelectorDto } from '@models/catalogo/colonia-selector-dto';
+import { PaisSelectorDto } from 'src/app/shared/dtos/catalogo/pais-selector-dto';
+import { EstadoSelectorDto } from 'src/app/shared/dtos/catalogo/estado-selector-dto';
+import { municipioSelectorDto } from 'src/app/shared/dtos/catalogo/municipio-selector-dto';
+import { LocalidadSelectorDto } from 'src/app/shared/dtos/catalogo/localidad-selector-dto';
+import { ColoniaSelectorDto } from 'src/app/shared/dtos/catalogo/colonia-selector-dto';
 import { PaisService } from '@http/catalogo/pais.service';
 import { EstadoService } from '@http/catalogo/estado.service';
 import { MunicipioService } from '@http/catalogo/municipio.service';
 import { LocalidadService } from '@http/catalogo/localidad.service';
 import { ColoniaService } from '@http/catalogo/colonia.service';
-import { PadecimientoDto } from '@models/perfil/padecimiento-dto';
+import { ExpedientePadecimientoDto} from 'src/app/shared/dtos/seguridad/expediente-padecimiento-dto';
+import {EntidadEstructuraService} from '@http/gestion-entidad/entidad-estructura.service';
+import { GeneroSelectorDto } from 'src/app/shared/dtos/catalogo/genero-selector-dto';
+import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import * as Utileria from '@utils/utileria';
-import { GeneroSelectorDto } from '@models/catalogo/genero-selector-dto';
+import { ExpedientePadecimientoSelectorDTO } from 'src/app/shared/dtos/seguridad/expediente-padecimiento-selector-dto';
 
 
 @Component({
@@ -39,23 +42,18 @@ export class InformacionGeneralComponent implements OnInit {
   protected informacionUsuario$: Observable<InformacionGeneralDto>;
   protected infoUsuario: InformacionGeneralDto;
   protected edadUsuario: string;
+  public btnSubmit = false;
+  public esPaisExtranjero: boolean = false;
+  public idPaisMexico: 1;
+  protected nuevoPadecimiento: ExpedientePadecimientoDto = new ExpedientePadecimientoDto();
 
-  protected nuevoPadecimiento: PadecimientoDto = new PadecimientoDto();
-
-   public paisList: PaisSelectorDto[] = [];
-   public estadoList: EstadoSelectorDto[] = [];
-   public municipioList: municipioSelectorDto[] = [];
-   public localidadList: LocalidadSelectorDto[] = [];
-   public coloniaList: ColoniaSelectorDto[] = [];
-   public generoList: GeneroSelectorDto[] = [];
-
-
-  public idPais: number = 0;
-  public idEstado: number = 0;
-  public idMunicipio: number = 0;
-  public idLocalidad: number = 0;
-  public idColonia: number = 0;
-  public codigoPostal: string = '';
+  public paisList: PaisSelectorDto[] = [];
+  public estadoList: EstadoSelectorDto[] = [];
+  public municipioList: municipioSelectorDto[] = [];
+  public localidadList: LocalidadSelectorDto[] = [];
+  public coloniaList: ColoniaSelectorDto[] = [];
+  public generoList: GeneroSelectorDto[] = [];
+  public padecimientoList: ExpedientePadecimientoSelectorDTO[] = [];
 
   constructor( 
     private usuarioService: UsuarioService,
@@ -64,41 +62,15 @@ export class InformacionGeneralComponent implements OnInit {
     private municipioService: MunicipioService,
     private localidadService: LocalidadService,
     private coloniaService: ColoniaService,
+    private codigoPostalService: CodigoPostalService,
+    private entidadEstructuraService: EntidadEstructuraService
   ) {  }
   
   ngOnInit(){
     this.consultarGeneros();
-    //this.consultarPadecimientos();
+    this.consultarPadecimientos();
     this.obtenerUsuario();
-  }
-
-  public async onChangePais() {
-    this.infoUsuario.idEstado = 0;
-    this.infoUsuario.codigoPostal = '';
-
-    await this.consultarEstados(this.infoUsuario.idPais);
-
-    this.onChangeEstado();
-  }
-
-  public async onChangeEstado() {
-    this.infoUsuario.idMunicipio = 0;
-    this.infoUsuario.idLocalidad = 0;
-    this.infoUsuario.idColonia = 0;
-
-
-    await Promise.all([
-      this.consultarMunicipios(this.infoUsuario.idEstado),
-      this.consultarLocalidades(this.infoUsuario.idEstado),
-      this.consultarColonias(this.infoUsuario.codigoPostal)
-
-    ]);
-  }
-
-  public async onChangeCodigoPostal() {
-    this.infoUsuario.idColonia = 0;
-
-    await this.consultarColonias(this.infoUsuario.codigoPostal);
+    this.consultarPaises();
   }
 
   private async consultarPaises(): Promise<void> {
@@ -141,6 +113,77 @@ export class InformacionGeneralComponent implements OnInit {
     this.coloniaList = colonias ?? [];
   }
 
+  protected async onChangePais() {
+    this.esPaisExtranjero = this.infoUsuario.idPais !== this.idPaisMexico;
+    this.infoUsuario.idEstado = 0;
+    await this.consultarEstados(this.infoUsuario.idPais);
+
+    this.onChangeEstado();
+  }
+
+  protected async onChangeEstado() {
+    this.infoUsuario.idMunicipio = 0;
+    this.infoUsuario.idLocalidad = 0;
+
+    await Promise.all([
+      this.consultarMunicipios(this.infoUsuario.idEstado),
+      this.consultarLocalidades(this.infoUsuario.idEstado),
+
+    ]);
+  }
+
+  protected async onChangeCodigoPostal() {
+    this.infoUsuario.idColonia = 0;
+
+    const codigoPostalValue: string = this.infoUsuario.codigoPostal;
+
+    if (codigoPostalValue.length !== 5) {
+      return;
+    }
+
+    await this.asignarValoresDeCodigoPostal(codigoPostalValue);
+
+  }
+
+
+  private async asignarValoresDeCodigoPostal(codigoPostalValue: string): Promise<void> {
+    const codigoPostal = await this.codigoPostalService
+      .consultarPorCodigoPostal(codigoPostalValue)
+      .toPromise()
+      .then((codigosPostales) => {
+        return codigosPostales && codigosPostales.length > 0
+          ? codigosPostales[0]
+          : null;
+      });
+
+    if (!codigoPostal) {
+      return;
+    }
+
+    this.infoUsuario.idEstado = codigoPostal.idEstado;
+
+    await Promise.all([
+      this.consultarMunicipios(codigoPostal.idEstado),
+      this.consultarLocalidades(codigoPostal.idEstado)
+    ]);
+    this.infoUsuario.idMunicipio = codigoPostal.idMunicipio;
+    this.infoUsuario.idLocalidad = 0
+
+    await this.consultarColonias(codigoPostalValue);
+    const colonia = this.coloniaList
+      .find((colonia) => Utileria.equalsNormalized(colonia.nombre, codigoPostal.colonia));
+
+    if (colonia) {
+      this.infoUsuario.idColonia = colonia.idColonia;
+    }
+  }
+
+  private async consultarPadecimientos(){
+    return lastValueFrom(this.entidadEstructuraService.consultarPadecimientosParaSelector())
+    .then((padecimientos: ExpedientePadecimientoSelectorDTO[]) => {
+      this.padecimientoList = padecimientos;
+    })
+  }
 
   private consultarGeneros() {
     this.generoList = [
@@ -161,13 +204,6 @@ export class InformacionGeneralComponent implements OnInit {
     return lastValueFrom(of(this.generoList));
   }
 
-  // private consultarPadecimientos(){
-  //   return lastValueFrom(this.entidadEstructuraService.consultarPadecimientosParaSelector())
-  //   .then((padecimientos: ExpedientePadecimientoSelectorDTO[]) => {
-  //     this.padecimientoList = padecimientos;
-  //   })
-  // } 
-
   private obtenerUsuario(){
 
     this.informacionUsuario$ = this.usuarioService.consultarInformacionGeneral().pipe(
@@ -175,7 +211,6 @@ export class InformacionGeneralComponent implements OnInit {
         (data) => {
           this.infoUsuario = data;
 
-          this.consultarPaises();
           this.consultarEstados(this.infoUsuario.idPais);
           this.consultarMunicipios(this.infoUsuario.idEstado);
           this.consultarLocalidades(this.infoUsuario.idEstado);
@@ -188,7 +223,9 @@ export class InformacionGeneralComponent implements OnInit {
   }
 
   private actualizarInformacionUsuario(informacion: InformacionGeneralDto){
-    this.usuarioService.actualizarInformacionGeneral(informacion);
+    this.usuarioService.actualizarInformacionGeneral(informacion).subscribe({
+      next: ()=> {} 
+    });
   }
   
   protected calcularEdad(){
@@ -199,20 +236,34 @@ export class InformacionGeneralComponent implements OnInit {
   }
 
   protected async enviarFormulario(formulario: NgForm){
+    this.btnSubmit = true;
 
     if(formulario.invalid){
       Utileria.validarCamposRequeridos(formulario);
+      this.btnSubmit = false;
+      return;
     }
     this.actualizarInformacionUsuario(this.infoUsuario);
   }
 
+  protected eliminarPadecimiento(index: number){
+    if(index < 0 || index >= this.infoUsuario.padecimientos.length){
+      return;
+    }
+    this.infoUsuario.padecimientos.splice(index, 1);
 
-  protected agregarPadecimiento(){
-    console.log('padecimiento agregado')
+    if(this.infoUsuario.padecimientos.length === 0){
+      this.agregarPadecimiento();
+    }
+
   }
 
-  protected eliminarPadecimiento(){
-    console.log('padecimiento eliminado')
+  protected agregarPadecimiento(){
+    const padecimiento = new ExpedientePadecimientoDto();
+    padecimiento.idPadecimiento = 0;
+    console.log(padecimiento)
+    this.infoUsuario.padecimientos = [...this.infoUsuario.padecimientos, padecimiento ];
+
   }
 
 

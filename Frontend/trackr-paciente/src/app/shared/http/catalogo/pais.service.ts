@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { PaisSelectorDto } from '@models/catalogo/pais-selector-dto';
+import { PaisSelectorDto } from 'src/app/shared/dtos/catalogo/pais-selector-dto';
 
 @Injectable({
   providedIn: 'root'

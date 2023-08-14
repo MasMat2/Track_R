@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { InformacionGeneralDto } from '@models/perfil/informacion-general-dto';
+import { InformacionGeneralDto } from 'src/app/shared/dtos/perfil/informacion-general-dto';
 import { Usuario } from '@models/usuario';
 import { Observable } from 'rxjs';
 
@@ -20,8 +20,8 @@ export class UsuarioService {
     return this.http.get<InformacionGeneralDto>(this.url + 'consultarInformacionGeneral');
   }
 
-  actualizarInformacionGeneral(informacion: InformacionGeneralDto): void{
-    this.http.put(this.url + 'actualizarInformacionGeneral', informacion);
+  actualizarInformacionGeneral(informacion: InformacionGeneralDto){
+    return this.http.put(this.url + 'actualizarInformacionGeneral', informacion);
   }
 
 }

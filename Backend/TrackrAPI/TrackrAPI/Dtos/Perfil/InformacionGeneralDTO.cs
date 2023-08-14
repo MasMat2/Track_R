@@ -1,4 +1,5 @@
-using TrackrAPI.Dtos.Seguridad;
+using TrackrAPI.Dtos;
+using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Models;
 
 namespace TrackrAPI.Dtos.Perfil
@@ -26,6 +27,6 @@ namespace TrackrAPI.Dtos.Perfil
         public string NumeroInterior { get; set; }
         public string NumeroExterior { get; set; } 
 
-        public IEnumerable<PadecimientoDTO> padecimientos {get; set;}
+        public IEnumerable<ExpedientePadecimientoDTO> padecimientos {get; set;}
     }
 }
