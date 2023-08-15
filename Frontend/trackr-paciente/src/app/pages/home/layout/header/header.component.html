@@ -26,3 +26,10 @@
   </ion-buttons>
 
 </ion-toolbar>
+
+<ion-toolbar *ngIf="mostrarTitulo">
+  <ion-buttons slot="start">
+    <ion-back-button defaultHref="/home/perfil"></ion-back-button>
+  </ion-buttons>
+  <ion-title>{{ titulo }}</ion-title>
+</ion-toolbar>

@@ -1,7 +1,9 @@
 @import "../../../../../theme/variables.scss";
 
 ion-toolbar {
+  &.seccion-titulo, &.navegacion {
     --background: var(--color-secundario);
+  }
 }
 
 ion-toolbar.seccion-titulo {

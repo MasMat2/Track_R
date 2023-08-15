@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 
 @Component({
@@ -13,6 +13,9 @@ import { IonicModule } from '@ionic/angular';
   ]
 })
 export class HeaderComponent implements OnInit {
+
+  @Input() mostrarTitulo: boolean = false;
+  @Input() titulo?: string;
 
   constructor() { }
 
