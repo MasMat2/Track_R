@@ -14,8 +14,16 @@ export default [
       {
         path: 'mis-doctores/agregar',
         loadComponent: () => import('./mis-doctores/doctores-formulario/doctores-formulario.page').then((m) => m.DoctoresFormularioPage)
-     
-      }
+      },
+      {
+        path: 'informacion-general',
+        loadComponent: () => import('./informacion-general/informacion-general.component').then((m) => m.InformacionGeneralComponent)
+      },
+      {
+        path: 'mis-tratamientos',
+        loadComponent: () => import('./mis-tratamientos/mis-tratamientos.component').then((m) => m.MisTratamientosComponent)
+      },
+      { path: '**', redirectTo: 'informacion-general', pathMatch: 'full' }
     ]
   },
 ]  as Route[];

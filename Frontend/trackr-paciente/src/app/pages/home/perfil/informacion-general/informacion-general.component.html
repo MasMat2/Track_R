@@ -1,7 +1,7 @@
 
-  
+
 <ion-content>
-  
+
   <div *ngIf="informacionUsuario$ | async as informacionUsuario">
     <form
       #formulario="ngForm"
@@ -20,12 +20,12 @@
           <ion-col size="12">
             <ion-input
               #nombres="ngModel"
-              id="nombre" 
+              id="nombre"
               name="nombre"
-              label="Nombres" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              label="Nombres"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               required="true"
               maxlength="50"
@@ -45,12 +45,12 @@
           <ion-col size="6">
             <ion-input
               #apellidoPaterno="ngModel"
-              id="apePaterno" 
+              id="apePaterno"
               name="apellidoPaterno"
-              label="Apellido Paterno" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              label="Apellido Paterno"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               required="true"
               maxlength="50"
@@ -68,12 +68,12 @@
           <ion-col size="6">
             <ion-input
               #apellidoMaterno="ngModel"
-              id="apeMaterno" 
+              id="apeMaterno"
               name="apellidoMaterno"
-              label="Apellido Materno" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              label="Apellido Materno"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               required="true"
               maxlength="50"
@@ -96,10 +96,10 @@
                 <ion-modal [keepContentsMounted]="true">
                   <ng-template>
                     <ion-datetime
-                      #fechaNacimiento="ngModel" 
-                      name="fechaNacimiento"  
-                      id="fechaNacimiento" 
-                      presentation="date" 
+                      #fechaNacimiento="ngModel"
+                      name="fechaNacimiento"
+                      id="fechaNacimiento"
+                      presentation="date"
                       showDefaultButtons="true"
                       locale="es-ES"
                       required="true"
@@ -113,11 +113,11 @@
           <ion-col size="6">
             <ion-input
               id="edad"
-              name="edad" 
-              label="Edad" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              name="edad"
+              label="Edad"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               readonly="true"
               disabled="true"
@@ -132,11 +132,11 @@
               #genero="ngModel"
               id="genero"
               name="genero"
-              label="Género" 
-              label-placement="floating" 
+              label="Género"
+              label-placement="floating"
               fill="outline"
               shape="round"
-              required="true" 
+              required="true"
               [(ngModel)]="informacionUsuario.idGenero"
             >
               <ion-select-option *ngFor="let genero of generoList" [value]="genero.idGenero">{{ genero.descripcion }}</ion-select-option>
@@ -146,11 +146,11 @@
             <ion-input
               #peso="ngModel"
               id="peso"
-              name="peso" 
-              label="Peso kg" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              name="peso"
+              label="Peso kg"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               required="true"
               autocomplete="off"
@@ -170,11 +170,11 @@
             <ion-input
               #cintura="ngModel"
               id="cintura"
-              name="cintura" 
-              label="Cintura cm" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              name="cintura"
+              label="Cintura cm"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               required="true"
               autocomplete="off"
@@ -192,11 +192,11 @@
             <ion-input
               #estatura="ngModel"
               id="estatura"
-              name="estatura" 
-              label="Estatura cm" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              name="estatura"
+              label="Estatura cm"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               required="true"
               autocomplete="off"
@@ -215,12 +215,12 @@
           <ion-col size="12">
             <ion-input
               #telefono="ngModel"
-              id="telefono" 
+              id="telefono"
               name="telefono"
-              label="Teléfono móvil" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              label="Teléfono móvil"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               required="true"
               maxlength="10"
@@ -241,11 +241,11 @@
             <ion-input
               #correo="ngModel"
               id="correo"
-              name="correo" 
-              label="Correo electrónico" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              name="correo"
+              label="Correo electrónico"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               required="true"
               maxlength="50"
@@ -274,11 +274,11 @@
               #pais="ngModel"
               id="pais"
               name="pais"
-              label="País" 
-              label-placement="floating" 
+              label="País"
+              label-placement="floating"
               fill="outline"
               shape="round"
-              required="true" 
+              required="true"
               (ionChange)="onChangePais()"
               [(ngModel)]="informacionUsuario.idPais">
               <ion-select-option *ngFor="let pais of paisList" [value]="pais.idPais">{{ pais.nombre }}</ion-select-option>
@@ -288,11 +288,11 @@
             <ion-input
               #codigoPostal="ngModel"
               id="codigoPostal"
-              name="codigoPostal" 
-              label="Código Postal" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              name="codigoPostal"
+              label="Código Postal"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               required="true"
               [disabled]="!informacionUsuario.idPais"
@@ -316,8 +316,8 @@
               #estado="ngModel"
               id="estado"
               name="estado"
-              label="Estado" 
-              label-placement="floating" 
+              label="Estado"
+              label-placement="floating"
               fill="outline"
               shape="round"
               required="true"
@@ -332,12 +332,12 @@
               #municipio="ngModel"
               id="municipio"
               name="municipio"
-              label="Municipio" 
-              label-placement="floating" 
+              label="Municipio"
+              label-placement="floating"
               fill="outline"
               shape="round"
               required="true"
-              [disabled]="!informacionUsuario.idEstado" 
+              [disabled]="!informacionUsuario.idEstado"
               [(ngModel)]="informacionUsuario.idMunicipio">
               <ion-select-option *ngFor="let municipio of municipioList" [value]="municipio.idMunicipio">{{ municipio.nombre }}</ion-select-option>
             </ion-select>
@@ -349,12 +349,12 @@
               #localidad="ngModel"
               id="localidad"
               name="localidad"
-              label="Localidad" 
-              label-placement="floating" 
+              label="Localidad"
+              label-placement="floating"
               fill="outline"
               shape="round"
               required="true"
-              [disabled]="!informacionUsuario.idEstado" 
+              [disabled]="!informacionUsuario.idEstado"
               [(ngModel)]="informacionUsuario.idLocalidad">
               <ion-select-option *ngFor="let localidad of localidadList" [value]="localidad.idLocalidad">{{ localidad.nombre }}</ion-select-option>
             </ion-select>
@@ -364,12 +364,12 @@
               #colonia="ngModel"
               id="colonia"
               name="colonia"
-              label="Colonia" 
-              label-placement="floating" 
+              label="Colonia"
+              label-placement="floating"
               fill="outline"
               shape="round"
               required="true"
-              [disabled]="informacionUsuario.codigoPostal?.length != 5" 
+              [disabled]="informacionUsuario.codigoPostal?.length !== 5"
               [(ngModel)]="informacionUsuario.idColonia">
               <ion-select-option *ngFor="let colonia of coloniaList" [value]="colonia.idColonia">{{ colonia.nombre }}</ion-select-option>
             </ion-select>
@@ -380,11 +380,11 @@
             <ion-input
               #calle="ngModel"
               id="calle"
-              name="calle" 
-              label="Calle" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              name="calle"
+              label="Calle"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               required="true"
               maxlength="50"
@@ -404,12 +404,12 @@
           <ion-col size="6">
             <ion-input
               #numExterior="ngModel"
-              id="numExterior"  
-              name="numExterior" 
-              label="Núm. exterior" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              id="numExterior"
+              name="numExterior"
+              label="Núm. exterior"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               required="true"
               maxlength="6"
@@ -428,11 +428,11 @@
             <ion-input
               #numInterior="ngModel"
               id="numInterior"
-              name="numInterior" 
-              label="Núm. Interior" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              name="numInterior"
+              label="Núm. Interior"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               required="true"
               maxlength="6"
@@ -447,11 +447,11 @@
             <ion-input
               #entreCalles="ngModel"
               id="entreCalles"
-              name="entreCalles" 
-              label="Entre calles" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              name="entreCalles"
+              label="Entre calles"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               maxlength="50"
               autocomplete="off"
@@ -473,8 +473,8 @@
               #tipoPadecimiento="ngModel"
               id="tipoPadecimiento"
               [name]="'tipoPadecimiento' + i"
-              label="Tipo de Padecimiento" 
-              label-placement="floating" 
+              label="Tipo de Padecimiento"
+              label-placement="floating"
               fill="outline"
               shape="round"
               [(ngModel)]="padecimiento.idPadecimiento"
@@ -488,10 +488,10 @@
                 <ion-modal [keepContentsMounted]="true">
                   <ng-template>
                     <ion-datetime
-                      #fechaDiagnostico="ngModel" 
+                      #fechaDiagnostico="ngModel"
                       [id]="'fechaDiagnostico' + i"
-                      [name]="'fechaDiagnostico' + i" 
-                      presentation="date" 
+                      [name]="'fechaDiagnostico' + i"
+                      presentation="date"
                       showDefaultButtons="true"
                       locale="es-ES"
                       [(ngModel)]="padecimiento.fechaDiagnostico">
@@ -506,11 +506,11 @@
               <ion-input
                 #doctor="ngModel"
                 id="doctor"
-                [name]="'doctor' + i" 
-                label="Doctor" 
-                label-placement="floating" 
-                fill="outline" 
-                shape="round" 
+                [name]="'doctor' + i"
+                label="Doctor"
+                label-placement="floating"
+                fill="outline"
+                shape="round"
                 type="text"
                 [(ngModel)]="padecimiento.nombreDoctor">
               </ion-input>
@@ -529,8 +529,8 @@
               #tipoPadecimiento="ngModel"
               id="tipoNuevoPadecimiento"
               name="tipoNuevoPadecimiento"
-              label="Tipo de Padecimiento" 
-              label-placement="floating" 
+              label="Tipo de Padecimiento"
+              label-placement="floating"
               fill="outline"
               shape="round"
               disabled="true"
@@ -545,10 +545,10 @@
               <ion-modal [keepContentsMounted]="true">
                 <ng-template>
                   <ion-datetime
-                    #fechaDiagnostico="ngModel" 
+                    #fechaDiagnostico="ngModel"
                     id="fechaDiagnostico"
-                    name="fechaDiagnostico" 
-                    presentation="date" 
+                    name="fechaDiagnostico"
+                    presentation="date"
                     showDefaultButtons="true"
                     locale="es-ES"
                     disabled="true"
@@ -564,11 +564,11 @@
             <ion-input
               #doctor="ngModel"
               id="doctor"
-              name="doctor" 
-              label="Doctor" 
-              label-placement="floating" 
-              fill="outline" 
-              shape="round" 
+              name="doctor"
+              label="Doctor"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
               type="text"
               disabled="true"
               [(ngModel)]="nuevoPadecimiento.nombreDoctor">
@@ -576,16 +576,16 @@
           </ion-col>
           <ion-col size="6">
             <ion-item>
-              <ion-icon 
-                (click)="agregarPadecimiento()" 
-                name="add-circle-outline" 
+              <ion-icon
+                (click)="agregarPadecimiento()"
+                name="add-circle-outline"
                 size="large">
               </ion-icon>
             </ion-item>
           </ion-col>
         </ion-row>
 
-        
+
         <ion-row>
           <ion-col>
               <ion-button [disabled]="btnSubmit" expand="full" color="primary" type="submit">Submit</ion-button>
@@ -595,5 +595,5 @@
       </ion-grid>
     </form>
   </div>
-  
+
 </ion-content>

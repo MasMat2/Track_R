@@ -1,28 +1,27 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { HeaderComponent } from '../../layout/header/header.component';
-import { InformacionGeneralDto } from 'src/app/shared/dtos/perfil/informacion-general-dto';
-import { UsuarioService } from '@http/seguridad/usuario.service';
-import { Observable, lastValueFrom, of, tap } from 'rxjs';
-import { PaisSelectorDto } from 'src/app/shared/dtos/catalogo/pais-selector-dto';
-import { EstadoSelectorDto } from 'src/app/shared/dtos/catalogo/estado-selector-dto';
-import { municipioSelectorDto } from 'src/app/shared/dtos/catalogo/municipio-selector-dto';
-import { LocalidadSelectorDto } from 'src/app/shared/dtos/catalogo/localidad-selector-dto';
-import { ColoniaSelectorDto } from 'src/app/shared/dtos/catalogo/colonia-selector-dto';
-import { PaisService } from '@http/catalogo/pais.service';
-import { EstadoService } from '@http/catalogo/estado.service';
-import { MunicipioService } from '@http/catalogo/municipio.service';
-import { LocalidadService } from '@http/catalogo/localidad.service';
-import { ColoniaService } from '@http/catalogo/colonia.service';
-import { ExpedientePadecimientoDto} from 'src/app/shared/dtos/seguridad/expediente-padecimiento-dto';
-import {EntidadEstructuraService} from '@http/gestion-entidad/entidad-estructura.service';
-import { GeneroSelectorDto } from 'src/app/shared/dtos/catalogo/genero-selector-dto';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
+import { ColoniaService } from '@http/catalogo/colonia.service';
+import { EstadoService } from '@http/catalogo/estado.service';
+import { LocalidadService } from '@http/catalogo/localidad.service';
+import { MunicipioService } from '@http/catalogo/municipio.service';
+import { PaisService } from '@http/catalogo/pais.service';
+import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
+import { UsuarioService } from '@http/seguridad/usuario.service';
+import { IonicModule } from '@ionic/angular';
 import * as Utileria from '@utils/utileria';
+import { Observable, lastValueFrom, of, tap } from 'rxjs';
+import { GeneroSelectorDto } from 'src/app/shared/dtos/catalogo/genero-selector-dto';
+import { ColoniaSelectorDto } from 'src/app/shared/dtos/catalogo/colonia-selector-dto';
+import { EstadoSelectorDto } from 'src/app/shared/dtos/catalogo/estado-selector-dto';
+import { LocalidadSelectorDto } from 'src/app/shared/dtos/catalogo/localidad-selector-dto';
+import { municipioSelectorDto } from 'src/app/shared/dtos/catalogo/municipio-selector-dto';
+import { PaisSelectorDto } from 'src/app/shared/dtos/catalogo/pais-selector-dto';
+import { InformacionGeneralDto } from 'src/app/shared/dtos/perfil/informacion-general-dto';
+import { ExpedientePadecimientoDto } from 'src/app/shared/dtos/seguridad/expediente-padecimiento-dto';
 import { ExpedientePadecimientoSelectorDTO } from 'src/app/shared/dtos/seguridad/expediente-padecimiento-selector-dto';
-
+import { HeaderComponent } from '../../layout/header/header.component';
 
 @Component({
   selector: 'app-informacion-general',
@@ -55,7 +54,7 @@ export class InformacionGeneralComponent implements OnInit {
   public generoList: GeneroSelectorDto[] = [];
   public padecimientoList: ExpedientePadecimientoSelectorDTO[] = [];
 
-  constructor( 
+  constructor(
     private usuarioService: UsuarioService,
     private paisService: PaisService,
     private estadoService: EstadoService,
@@ -65,7 +64,7 @@ export class InformacionGeneralComponent implements OnInit {
     private codigoPostalService: CodigoPostalService,
     private entidadEstructuraService: EntidadEstructuraService
   ) {  }
-  
+
   ngOnInit(){
     this.consultarGeneros();
     this.consultarPadecimientos();
@@ -224,10 +223,10 @@ export class InformacionGeneralComponent implements OnInit {
 
   private actualizarInformacionUsuario(informacion: InformacionGeneralDto){
     this.usuarioService.actualizarInformacionGeneral(informacion).subscribe({
-      next: ()=> {} 
+      next: ()=> {}
     });
   }
-  
+
   protected calcularEdad(){
     let fechaNacimiento = new Date(this.infoUsuario.fechaNacimiento);
     let edadObject = Utileria.diferenciaFechas(fechaNacimiento, new Date());

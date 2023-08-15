@@ -12,6 +12,6 @@ export class MunicipioService {
   constructor(public http: HttpClient) { }
 
   consultarPorEstadoParaSelector(idEstado: number): Observable<municipioSelectorDto[]> {
-    return this.http.get<municipioSelectorDto[]>(this.dataUrl + `consultarPorEstadoParaSelector/${idEstado}`);
-    }
+    return this.http.get<municipioSelectorDto[]>(this.dataUrl + `selector/estado/${idEstado}`);
+  }
 }
