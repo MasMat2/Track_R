@@ -78,7 +78,7 @@ generoList: any[]|null;
     public bsModalRef: BsModalRef,
   ) { }
   /**
-   * Inicializa el componente, configura los parámetros de la URL y 
+   * Inicializa el componente, configura los parámetros de la URL y
    * verifica si hay un usuario existente (si es Editar).
    * Si existe un usuario, consulta su expediente.
    */
@@ -296,7 +296,7 @@ generoList: any[]|null;
   }
 
   /**
-   * Consulta los padecimientos para el selector. 
+   * Consulta los padecimientos para el selector.
    */
   private consultarPadecimientos() {
     return lastValueFrom(this.entidadEstructuraService.consultarPadecimientosParaSelector())

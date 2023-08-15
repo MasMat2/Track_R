@@ -1,0 +1,17 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div>{{ nombre }} </div>
+    <ion-button fill="clear" size="small" class="close-button" (click)="cancelar()">
+      <ion-icon name="close-circle"></ion-icon>
+    </ion-button>
+  </div>
+  <ngx-extended-pdf-viewer
+    [base64Src]="archivo"
+    [filenameForDownload]="archivoNombre"
+    [useBrowserLocale]="true"
+    [zoom]="'page-actual'"
+    [height]="height"
+    [textLayer]="true"
+    [zoom]="'auto'"
+  ></ngx-extended-pdf-viewer>
+</div>

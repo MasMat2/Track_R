@@ -1,0 +1,141 @@
+@import "../../../shared/styles/variables.scss";
+
+.grid-header {
+  display: grid !important;
+  grid-template-columns: 65% 35%;
+}
+
+.grid-images {
+  grid-column: 2;
+}
+
+.grid-header img,
+.divImage {
+  float: right;
+  width: 15px;
+  height: 15px;
+  margin: 6px;
+  cursor: pointer;
+}
+
+.divImage i{
+  font-size: 18px;
+}
+
+.grid-download {
+  cursor: pointer;
+}
+
+:host ::ng-deep {
+  .ag-theme-balham {
+    color: $color-font !important;
+    font-size: 13px !important;
+
+    .ag-row-selected {
+      background-color: $color-terceario !important;
+    }
+
+    .ag-root {
+      border: 1px #ffffff solid;
+    }
+
+    .ag-row {
+      border: transparent;
+    }
+
+    .ag-paging-panel {
+      border-top: 0;
+    }
+
+    .ag-header {
+      border-top: 1px $color-secundario solid;
+    }
+  }
+
+  .ag-theme-balham .ag-header-cell::after,
+  .ag-theme-balham .ag-header-group-cell::after {
+    display: none !important;
+  }
+
+  .ag-root-wrapper {
+    border: none;
+  }
+
+  .ag-root,
+  .ag-row {
+    border: none !important;
+  }
+
+  .ag-header {
+    border-bottom: 1px $color-secundario solid;
+  }
+
+  .ag-body-viewport {
+    border-bottom: 1px $color-secundario solid;
+    // overflow-y: auto !important;
+  }
+
+  .ag-header .ag-header-cell-sortable,
+  .ag-pinned-left-header .ag-header-cell-sortable,
+  .ag-pinned-right-header .ag-header-cell-sortable,
+  .ag-cell {
+    padding-left: 10px;
+  }
+
+  .ag-root-wrapper-body.ag-layout-normal {
+    height: 100% !important;
+  }
+
+  .ag-header {
+    background: #ffffff !important;
+  }
+
+  .ag-row-even {
+    background: #ededed !important;
+  }
+
+  .ag-row-hover {
+    background: $color-terceario !important;
+  }
+
+  .ag-cell-edit-input {
+    text-align: center;
+    color: grey;
+    border: none !important;
+  }
+
+  .ag-floating-bottom .ag-row {
+    background: white !important;
+  }
+
+  .ag-cell {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.fa-exclamation-triangle {
+  color: #de3b39 !important;
+}
+
+.grid-reg-pagina .item {
+  padding-left: 3px !important;
+}
+
+.grid-reg-pagina .selectize-input {
+  padding: 2px !important;
+}
+
+.grid-reg-pagina {
+  width: 80px;
+  position: relative;
+  left: 5px;
+  bottom: 28px;
+}
+
+:host ::ng-deep .ng-select-container {
+  min-height: unset;
+  height: 25.5px !important;
+  font-size: 12px;
+  line-height: 12px;
+}

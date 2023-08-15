@@ -5,6 +5,11 @@ namespace TrackrAPI.Models
 {
     public partial class ExpedienteTratamiento
     {
+        public ExpedienteTratamiento()
+        {
+            TratamientoRecordatorio = new HashSet<TratamientoRecordatorio>();
+        }
+
         public int IdExpedienteTratamiento { get; set; }
         public int IdExpediente { get; set; }
         public string Farmaco { get; set; } = null!;
@@ -20,5 +25,6 @@ namespace TrackrAPI.Models
         public virtual ExpedienteTrackr IdExpedienteNavigation { get; set; } = null!;
         public virtual EntidadEstructura IdPadecimientoNavigation { get; set; } = null!;
         public virtual Usuario IdUsuarioDoctorNavigation { get; set; } = null!;
+        public virtual ICollection<TratamientoRecordatorio> TratamientoRecordatorio { get; set; }
     }
 }

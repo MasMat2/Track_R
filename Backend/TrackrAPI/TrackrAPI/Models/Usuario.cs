@@ -27,6 +27,7 @@ namespace TrackrAPI.Models
             ExpedienteAdministrativoViajeIdUsuarioChoferNavigation = new HashSet<ExpedienteAdministrativoViaje>();
             ExpedienteAdministrativoViajeIdUsuarioDestinatarioNavigation = new HashSet<ExpedienteAdministrativoViaje>();
             ExpedienteBitacora = new HashSet<ExpedienteBitacora>();
+            ExpedienteDoctor = new HashSet<ExpedienteDoctor>();
             ExpedientePadecimiento = new HashSet<ExpedientePadecimiento>();
             ExpedienteRecomendaciones = new HashSet<ExpedienteRecomendaciones>();
             ExpedienteTrackr = new HashSet<ExpedienteTrackr>();
@@ -115,6 +116,7 @@ namespace TrackrAPI.Models
         public int? IdListaPrecio { get; set; }
         public int? IdSatFormaPago { get; set; }
         public int? IdMetodoPago { get; set; }
+        public string? EntreCalles { get; set; }
 
         public virtual Area? IdAreaNavigation { get; set; }
         public virtual Colonia? IdColoniaNavigation { get; set; }
@@ -153,6 +155,7 @@ namespace TrackrAPI.Models
         public virtual ICollection<ExpedienteAdministrativoViaje> ExpedienteAdministrativoViajeIdUsuarioChoferNavigation { get; set; }
         public virtual ICollection<ExpedienteAdministrativoViaje> ExpedienteAdministrativoViajeIdUsuarioDestinatarioNavigation { get; set; }
         public virtual ICollection<ExpedienteBitacora> ExpedienteBitacora { get; set; }
+        public virtual ICollection<ExpedienteDoctor> ExpedienteDoctor { get; set; }
         public virtual ICollection<ExpedientePadecimiento> ExpedientePadecimiento { get; set; }
         public virtual ICollection<ExpedienteRecomendaciones> ExpedienteRecomendaciones { get; set; }
         public virtual ICollection<ExpedienteTrackr> ExpedienteTrackr { get; set; }

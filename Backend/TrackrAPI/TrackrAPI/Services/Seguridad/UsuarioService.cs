@@ -10,12 +10,17 @@ using TrackrAPI.Services.Inventario;
 using TrackrAPI.Repositorys.Inventario;
 using System.Collections.Generic;
 using CanalDistAPI.Dtos.Seguridad;
+using TrackrAPI.Dtos.Perfil;
+using TrackrAPI.Repositorys.GestionExpediente;
+using DocumentFormat.OpenXml.Office.CustomXsn;
 
 namespace TrackrAPI.Services.Seguridad
 {
     public class UsuarioService
     {
         private IUsuarioRepository usuarioRepository;
+        private IExpedienteTrackrRepository expedienteTrackrRepository;
+        private IExpedientePadecimientoRepository expedientePadecimientoRepository;
         private IWebHostEnvironment hostingEnvironment;
         private ITipoUsuarioRepository tipoUsuarioRepository;
         private UsuarioValidatorService usuarioValidatorService;
@@ -32,6 +37,8 @@ namespace TrackrAPI.Services.Seguridad
         private BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService;
 
         public UsuarioService(IUsuarioRepository usuarioRepository,
+            IExpedienteTrackrRepository expedienteTrackrRepository,
+            IExpedientePadecimientoRepository expedientePadecimientoRepository,
             IWebHostEnvironment hostingEnvironment,
             ITipoUsuarioRepository tipoUsuarioRepository,
             UsuarioValidatorService usuarioValidatorService,
@@ -49,6 +56,8 @@ namespace TrackrAPI.Services.Seguridad
             BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService)
         {
             this.usuarioRepository = usuarioRepository;
+            this.expedienteTrackrRepository = expedienteTrackrRepository;
+            this.expedientePadecimientoRepository = expedientePadecimientoRepository;
             this.simpleAES = simpleAES;
             this.usuarioValidatorService = usuarioValidatorService;
             this.hostingEnvironment = hostingEnvironment;
@@ -604,6 +613,61 @@ namespace TrackrAPI.Services.Seguridad
         public IEnumerable<UsuarioDto> ConsultarPorNombre(string filtro)
         {
             return usuarioRepository.ConsultarPorNombre(filtro);
+        }
+
+        public InformacionGeneralDTO ConsultarInformacionGeneralTrackr(int idUsuario)
+        {
+            return usuarioRepository.ConsultarInformacionGeneralTrackr(idUsuario);
+        }
+
+        public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion, int idUsuario)
+        {
+            using TransactionScope scope = new TransactionScope();
+
+            var usuario = usuarioRepository.Consultar(idUsuario);
+            var expediente = expedienteTrackrRepository.ConsultarPorUsuario(usuario.IdUsuario);
+            
+            usuario.Nombre = informacion.Nombre;
+            usuario.ApellidoPaterno = informacion.ApellidoPaterno;
+            usuario.ApellidoMaterno = informacion.ApellidoMaterno;
+            expediente.FechaNacimiento = informacion.FechaNacimiento;
+            expediente.IdGenero = informacion.IdGenero;
+            expediente.Peso = informacion.Peso;
+            expediente.Cintura = informacion.Cintura;
+            expediente.Estatura = informacion.Estatura;
+            usuario.Correo = informacion.Correo;
+            usuario.TelefonoMovil = informacion.TelefonoMovil;
+            usuario.IdEstado = informacion.IdEstado;
+            usuario.IdMunicipio = informacion.IdMunicipio;
+            usuario.IdLocalidad = informacion.IdLocalidad;
+            usuario.IdColonia = informacion.IdColonia;
+            usuario.CodigoPostal = informacion.CodigoPostal;
+            usuario.Calle = informacion.Calle;
+            usuario.NumeroInterior = informacion.NumeroInterior;
+            usuario.NumeroExterior = informacion.NumeroExterior;
+
+            expedientePadecimientoRepository.EliminarPorExpediente(expediente.IdExpediente);
+            foreach (var padecimientoDTO in informacion.padecimientos)
+            {
+                var padecimiento = new ExpedientePadecimiento();
+
+                padecimiento.IdPadecimiento = padecimientoDTO.IdPadecimiento;
+                padecimiento.FechaDiagnostico = padecimientoDTO.FechaDiagnostico;
+                padecimiento.IdExpediente = expediente.IdExpediente;
+
+                if (padecimiento.IdPadecimiento == 0)
+                {
+                    continue;
+                }
+
+                expedientePadecimientoRepository.Agregar(padecimiento);
+
+            }
+
+            usuarioRepository.Editar(usuario);
+            expedienteTrackrRepository.Editar(expediente);
+
+            scope.Complete();
         }
     }
 }

@@ -31,6 +31,11 @@
                 "output": "assets"
               },
               {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+              },
+              {
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
@@ -38,7 +43,7 @@
             ],
             "styles": [
               "src/theme/custom.scss",
-              "src/theme/variables.scss", 
+              "src/theme/variables.scss",
               "src/global.scss"
             ],
             "scripts": []
@@ -53,8 +58,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
                 }
               ],
               "fileReplacements": [

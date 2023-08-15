@@ -1,0 +1,599 @@
+
+
+<ion-content>
+
+  <div *ngIf="informacionUsuario$ | async as informacionUsuario">
+    <form
+      #formulario="ngForm"
+      novalidate="novalidate"
+      (ngSubmit)="enviarFormulario(formulario)"
+    >
+      <ion-grid>
+
+        <ion-row>
+          <ion-col>
+            <ion-label class = "texto-seccion">General</ion-label>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-input
+              #nombres="ngModel"
+              id="nombre"
+              name="nombre"
+              label="Nombres"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              required="true"
+              maxlength="50"
+              autocomplete="off"
+              placeholder="Nombres"
+              [(ngModel)]="informacionUsuario.nombre">
+            </ion-input>
+            <div
+              *ngIf="nombres.errors?.['required'] && (nombres.dirty || nombres.touched)"
+              class="error"
+            >
+              El nombre es requerido
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <ion-input
+              #apellidoPaterno="ngModel"
+              id="apePaterno"
+              name="apellidoPaterno"
+              label="Apellido Paterno"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              required="true"
+              maxlength="50"
+              autocomplete="off"
+              placeholder="Apellido Paterno"
+              [(ngModel)]="informacionUsuario.apellidoPaterno">
+            </ion-input>
+            <div
+              *ngIf="apellidoPaterno.errors?.['required'] && (apellidoPaterno.dirty || apellidoPaterno.touched)"
+              class="error"
+            >
+              El apellido paterno es requerido
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <ion-input
+              #apellidoMaterno="ngModel"
+              id="apeMaterno"
+              name="apellidoMaterno"
+              label="Apellido Materno"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              required="true"
+              maxlength="50"
+              autocomplete="off"
+              placeholder="Apellido Materno"
+              [(ngModel)]="informacionUsuario.apellidoMaterno">
+            </ion-input>
+            <div
+              *ngIf="apellidoMaterno.errors?.['required'] && (apellidoMaterno.dirty || apellidoMaterno.touched)"
+              class="error"
+            >
+              El apellido materno es requerido
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+              <ion-item class="custom-datetime">
+                <ion-datetime-button datetime="fechaNacimiento"></ion-datetime-button>
+                <ion-modal [keepContentsMounted]="true">
+                  <ng-template>
+                    <ion-datetime
+                      #fechaNacimiento="ngModel"
+                      name="fechaNacimiento"
+                      id="fechaNacimiento"
+                      presentation="date"
+                      showDefaultButtons="true"
+                      locale="es-ES"
+                      required="true"
+                      (ionChange)="calcularEdad()"
+                      [(ngModel)]="informacionUsuario.fechaNacimiento">
+                    </ion-datetime>
+                  </ng-template>
+                </ion-modal>
+              </ion-item>
+          </ion-col>
+          <ion-col size="6">
+            <ion-input
+              id="edad"
+              name="edad"
+              label="Edad"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              readonly="true"
+              disabled="true"
+              required="true"
+              [(ngModel)]="edadUsuario">
+            </ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <ion-select
+              #genero="ngModel"
+              id="genero"
+              name="genero"
+              label="Género"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              required="true"
+              [(ngModel)]="informacionUsuario.idGenero"
+            >
+              <ion-select-option *ngFor="let genero of generoList" [value]="genero.idGenero">{{ genero.descripcion }}</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="6">
+            <ion-input
+              #peso="ngModel"
+              id="peso"
+              name="peso"
+              label="Peso kg"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              required="true"
+              autocomplete="off"
+              placeholder="Peso kg"
+              [(ngModel)]="informacionUsuario.peso">
+            </ion-input>
+            <div
+              *ngIf="peso.errors?.['required'] && (peso.dirty || peso.touched)"
+              class="error"
+            >
+              El peso es requerido
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <ion-input
+              #cintura="ngModel"
+              id="cintura"
+              name="cintura"
+              label="Cintura cm"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              required="true"
+              autocomplete="off"
+              placeholder="Cintura cm"
+              [(ngModel)]="informacionUsuario.cintura">
+            </ion-input>
+            <div
+              *ngIf="cintura.errors?.['required'] && (cintura.dirty || cintura.touched)"
+              class="error"
+            >
+              La medida de cintura es requerida
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <ion-input
+              #estatura="ngModel"
+              id="estatura"
+              name="estatura"
+              label="Estatura cm"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              required="true"
+              autocomplete="off"
+              placeholder="Estatura cm"
+              [(ngModel)]="informacionUsuario.estatura">
+            </ion-input>
+            <div
+              *ngIf="estatura.errors?.['required'] && (estatura.dirty || estatura.touched)"
+              class="error"
+            >
+              La medida de estatura es requerida
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-input
+              #telefono="ngModel"
+              id="telefono"
+              name="telefono"
+              label="Teléfono móvil"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              required="true"
+              maxlength="10"
+              autocomplete="off"
+              placeholder="Teléfono móvil"
+              [(ngModel)]="informacionUsuario.telefonoMovil">
+            </ion-input>
+            <div
+              *ngIf="telefono.errors?.['required'] && (telefono.dirty || telefono.touched)"
+              class="error"
+            >
+              El número de teléfono es requerido
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-input
+              #correo="ngModel"
+              id="correo"
+              name="correo"
+              label="Correo electrónico"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              required="true"
+              maxlength="50"
+              autocomplete="off"
+              placeholder="Correo electrónico"
+              [(ngModel)]="informacionUsuario.correo">
+            </ion-input>
+            <div
+              *ngIf="correo.errors?.['required'] && (correo.dirty || correo.touched)"
+              class="error"
+            >
+              El correo electrónico es requerido
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <ion-label class = "texto-seccion">Domicilio</ion-label>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="6">
+            <ion-select
+              #pais="ngModel"
+              id="pais"
+              name="pais"
+              label="País"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              required="true"
+              (ionChange)="onChangePais()"
+              [(ngModel)]="informacionUsuario.idPais">
+              <ion-select-option *ngFor="let pais of paisList" [value]="pais.idPais">{{ pais.nombre }}</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="6">
+            <ion-input
+              #codigoPostal="ngModel"
+              id="codigoPostal"
+              name="codigoPostal"
+              label="Código Postal"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              required="true"
+              [disabled]="!informacionUsuario.idPais"
+              [maxlength]="esPaisExtranjero ? null : 5"
+              [minlength]="esPaisExtranjero ? null : 5"
+              placeholder="Código Postal"
+              (ionChange)="onChangeCodigoPostal()"
+              [(ngModel)]="informacionUsuario.codigoPostal">
+            </ion-input>
+            <div
+              *ngIf="codigoPostal.errors?.['required'] && (codigoPostal.dirty || codigoPostal.touched)"
+              class="error"
+            >
+              El código postal es requerido
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <ion-select
+              #estado="ngModel"
+              id="estado"
+              name="estado"
+              label="Estado"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              required="true"
+              [disabled]="!informacionUsuario.idPais"
+              (ionChange)="onChangeEstado()"
+              [(ngModel)]="informacionUsuario.idEstado">
+              <ion-select-option *ngFor="let estado of estadoList" [value]="estado.idEstado">{{ estado.nombre }}</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="6">
+            <ion-select
+              #municipio="ngModel"
+              id="municipio"
+              name="municipio"
+              label="Municipio"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              required="true"
+              [disabled]="!informacionUsuario.idEstado"
+              [(ngModel)]="informacionUsuario.idMunicipio">
+              <ion-select-option *ngFor="let municipio of municipioList" [value]="municipio.idMunicipio">{{ municipio.nombre }}</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <ion-select
+              #localidad="ngModel"
+              id="localidad"
+              name="localidad"
+              label="Localidad"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              required="true"
+              [disabled]="!informacionUsuario.idEstado"
+              [(ngModel)]="informacionUsuario.idLocalidad">
+              <ion-select-option *ngFor="let localidad of localidadList" [value]="localidad.idLocalidad">{{ localidad.nombre }}</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="6">
+            <ion-select
+              #colonia="ngModel"
+              id="colonia"
+              name="colonia"
+              label="Colonia"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              required="true"
+              [disabled]="informacionUsuario.codigoPostal?.length !== 5"
+              [(ngModel)]="informacionUsuario.idColonia">
+              <ion-select-option *ngFor="let colonia of coloniaList" [value]="colonia.idColonia">{{ colonia.nombre }}</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-input
+              #calle="ngModel"
+              id="calle"
+              name="calle"
+              label="Calle"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              required="true"
+              maxlength="50"
+              autocomplete="off"
+              placeholder="Calle"
+              [(ngModel)]="informacionUsuario.calle">
+            </ion-input>
+            <div
+              *ngIf="calle.errors?.['required'] && (calle.dirty || calle.touched)"
+              class="error"
+            >
+              La calle es requerida
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <ion-input
+              #numExterior="ngModel"
+              id="numExterior"
+              name="numExterior"
+              label="Núm. exterior"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              required="true"
+              maxlength="6"
+              autocomplete="off"
+              placeholder="Número Exterior"
+              [(ngModel)]="informacionUsuario.numeroExterior">
+            </ion-input>
+            <div
+              *ngIf="numExterior.errors?.['required'] && (numExterior.dirty || numExterior.touched)"
+              class="error"
+            >
+              El número exterior es requerido
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <ion-input
+              #numInterior="ngModel"
+              id="numInterior"
+              name="numInterior"
+              label="Núm. Interior"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              required="true"
+              maxlength="6"
+              autocomplete="off"
+              placeholder="Número Interior"
+              [(ngModel)]="informacionUsuario.numeroInterior">
+            </ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-input
+              #entreCalles="ngModel"
+              id="entreCalles"
+              name="entreCalles"
+              label="Entre calles"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              maxlength="50"
+              autocomplete="off"
+              placeholder="Entre calles"
+              [(ngModel)]="informacionUsuario.entreCalles">
+            </ion-input>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <ion-label class = "texto-seccion">Padecimientos</ion-label>
+          </ion-col>
+        </ion-row>
+        <div *ngFor="let padecimiento of informacionUsuario.padecimientos, let i = index">
+          <ion-row>
+            <ion-col size="6">
+              <ion-select
+              #tipoPadecimiento="ngModel"
+              id="tipoPadecimiento"
+              [name]="'tipoPadecimiento' + i"
+              label="Tipo de Padecimiento"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              [(ngModel)]="padecimiento.idPadecimiento"
+              >
+                <ion-select-option *ngFor="let pad of padecimientoList" [value]="pad.idPadecimiento">{{ pad.nombre }}</ion-select-option>
+              </ion-select>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item class="custom-datetime">
+                <ion-datetime-button [datetime]="'fechaDiagnostico' + i"></ion-datetime-button>
+                <ion-modal [keepContentsMounted]="true">
+                  <ng-template>
+                    <ion-datetime
+                      #fechaDiagnostico="ngModel"
+                      [id]="'fechaDiagnostico' + i"
+                      [name]="'fechaDiagnostico' + i"
+                      presentation="date"
+                      showDefaultButtons="true"
+                      locale="es-ES"
+                      [(ngModel)]="padecimiento.fechaDiagnostico">
+                    </ion-datetime>
+                  </ng-template>
+                </ion-modal>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6">
+              <ion-input
+                #doctor="ngModel"
+                id="doctor"
+                [name]="'doctor' + i"
+                label="Doctor"
+                label-placement="floating"
+                fill="outline"
+                shape="round"
+                type="text"
+                [(ngModel)]="padecimiento.nombreDoctor">
+              </ion-input>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item>
+                <ion-icon (click)="eliminarPadecimiento(i)" name="close-circle-outline" size="large"></ion-icon>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <ion-row>
+          <ion-col size="6">
+            <ion-select
+              #tipoPadecimiento="ngModel"
+              id="tipoNuevoPadecimiento"
+              name="tipoNuevoPadecimiento"
+              label="Tipo de Padecimiento"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              disabled="true"
+              [(ngModel)]="nuevoPadecimiento.idPadecimiento"
+              >
+                <ion-select-option *ngFor="let pad of padecimientoList" [value]="pad.idPadecimiento">{{ pad.nombre }}</ion-select-option>
+              </ion-select>
+          </ion-col>
+          <ion-col size="6">
+            <ion-item class="custom-datetime">
+              <ion-datetime-button datetime="fechaDiagnostico"></ion-datetime-button>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime
+                    #fechaDiagnostico="ngModel"
+                    id="fechaDiagnostico"
+                    name="fechaDiagnostico"
+                    presentation="date"
+                    showDefaultButtons="true"
+                    locale="es-ES"
+                    disabled="true"
+                    [(ngModel)]="nuevoPadecimiento.fechaDiagnostico">
+                  </ion-datetime>
+                </ng-template>
+              </ion-modal>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <ion-input
+              #doctor="ngModel"
+              id="doctor"
+              name="doctor"
+              label="Doctor"
+              label-placement="floating"
+              fill="outline"
+              shape="round"
+              type="text"
+              disabled="true"
+              [(ngModel)]="nuevoPadecimiento.nombreDoctor">
+            </ion-input>
+          </ion-col>
+          <ion-col size="6">
+            <ion-item>
+              <ion-icon
+                (click)="agregarPadecimiento()"
+                name="add-circle-outline"
+                size="large">
+              </ion-icon>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row>
+          <ion-col>
+              <ion-button [disabled]="btnSubmit" expand="full" color="primary" type="submit">Submit</ion-button>
+          </ion-col>
+        </ion-row>
+
+      </ion-grid>
+    </form>
+  </div>
+
+</ion-content>

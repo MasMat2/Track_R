@@ -1,0 +1,31 @@
+export class GridAction{
+    public static GRID_ACCION_EDITAR = 'edit';
+    public static GRID_ACCION_ELIMINAR = 'delete';
+    public static GRID_ACCION_COPIAR = 'copy';
+    public static GRID_ACCION_VER = 'see';
+    public static GRID_ACCION_AJUSTE = 'ajuste';
+    public static GRID_ACCION_REPORTE_INVENTARIO_FISICO = 'reporteInventarioFisico';
+    public static GRID_ACCION_RECETA = 'receta';
+    public static GRID_ACCION_AGREGAR = 'add';
+    public static GRID_ACCION_PAGAR = 'pago';
+    public static GRID_ACCION_NOTA_RESPONSIVA = 'nota';
+    public static GRID_ACCION_DESCUENTO = 'descuento';
+    public static GRID_ACCION_ESTUDIO = 'estudio';
+    public static GRID_ACCION_RECETASYORDENES = 'recetasOrdenes';
+    public static GRID_ACCION_SOMATOMETRIA = 'somatometria';
+    public static GRID_ACCION_VER_RECIBO = 'verRecibo';
+    public static GRID_ACCION_SELECCIONAR = 'seleccionar';
+    public static GRID_ACCION_IMPRIMIR = 'imprimir';
+    public static GRID_ACCION_ORDEN_SALIDA = 'orden';
+    public static GRID_ACCION_ORDEN_IMAGENOLOGIA = 'imagenologia';
+    public static GRID_ACCION_URGENCIA_SERVICIOS_APLICADADOS = 'serviciosAplicados';
+    public static GRID_ACCION_REGISTRAR_SALIDA_PERSONAL = 'registrarSalidaPersonal';
+    public static GRID_ACCION_DESGLOSAR = 'desglosar';
+    public static GRID_ACCION_REPORTE_COMISIONES = 'reporteComisiones';
+    public static GRID_ACCION_DESCARGAR_DOCUMENTOS = 'descargarDocumentos';
+    public static GRID_ACCION_TIMBRAR = 'timbrar';
+    public static GRID_ACCION_VER_POLIZA = 'verPoliza';
+    public static GRID_ACCION_CONCILIAR = 'conciliar';
+    public static GRID_ACCION_COMPLEMENTO = 'complementoPago';
+    public static GRID_ACCION_PDF_COMPLEMENTO = 'pdfComplemento';
+}

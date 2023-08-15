@@ -1,0 +1,75 @@
+<ion-header>
+  <app-header></app-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button>
+        <i class="fa-solid fa-arrow-left" (click)="cerrarModal()"></i>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Mis Estudios/Agregar Estudio</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form
+    (keydown.enter)="$event.preventDefault()"
+    #formulario="ngForm"
+    (ngSubmit)="enviarFormulario(formulario)"
+    novalidate="novalidate"
+  >
+    <ion-grid>
+      <ion-row>
+        <ion-col size="5">
+          <ion-label position="stacked" class="required-label">Fecha</ion-label>
+          <ion-input type="text" readonly="true" [value]="fecha | date: 'dd/MM/yyyy'"></ion-input>
+        </ion-col>
+        <ion-col size="7">
+          <ion-label position="stacked" class="required-label">Estudio</ion-label>
+          <div>
+            <ion-input
+              #nombre="ngModel"
+              [(ngModel)]="expedienteEstudio.Nombre"
+              name="estudioName"
+              type="text"
+              maxlength="200"
+              autocomplete="off"
+              required
+            ></ion-input>
+            <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
+              El estudio es requerido
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="7">
+          <ion-label position="stacked" class="required-label">Documento</ion-label>
+          <ion-input
+            type="text"
+            readonly="true"
+            [(ngModel)]="expedienteEstudio.ArchivoNombre"
+            name="ArchivoNombre"
+            #documento="ngModel"
+            required
+          ></ion-input>
+          <div *ngIf="documento.errors?.['required'] && documento.touched" class="error">
+            El documento es requerido
+          </div>
+        </ion-col>
+        <ion-col size="5" class="ion-align-self-end">
+          <ion-button (click)="agregarArchivo()" size="small">Seleccionar archivo <br><ion-icon name="document-outline"></ion-icon></ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <div class="ion-text-center ion-padding">
+      <ion-button
+             [disabled]="btnSubmit"
+             type="submit"
+             class="btn-primario btn-margin-left"
+             >Guardar</ion-button>
+    </div>
+    <div class="ion-text-center ion-padding">
+      <ion-button (click)="takePicture()" size="small">Cargar/Tomar fotografia <br><ion-icon name="camera-outline"></ion-icon></ion-button>
+      <br>
+    </div>
+  </form>
+</ion-content>

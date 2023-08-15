@@ -4,8 +4,13 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@shared/*": ["src/app/shared/*"],
-      "@pages/*": ["src/app/pages"]
+      "@sharedComponents/*": ["src/app/shared/components/*"],
+      "@http/*": ["src/app/shared/http/*"],
+      "@models/*": ["src/app/shared/models/*"],
+      "@services/*": ["src/app/shared/services/*"],
+      "@utils/*": ["src/app/shared/utils/*"],
+      "@pages/*": ["src/app/pages/*"],
+      "@dtos/*": ["src/app/shared/dtos/*"],
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,

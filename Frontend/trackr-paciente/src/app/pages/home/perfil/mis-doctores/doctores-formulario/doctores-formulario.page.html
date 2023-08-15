@@ -1,0 +1,32 @@
+<div class="container">
+  
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Agregar doctor/auxiliar</ion-card-title>
+    <ion-card-subtitle>Doctor/auxiliar</ion-card-subtitle>
+  </ion-card-header>
+
+
+  
+  <ion-card-content>
+    <ion-item>
+      <ion-select 
+         placeholder="Selecciona un doctor"
+        (ionChange)="seleccionDoctor($event)" 
+        labelPlacement="floating"
+        fill="outline"
+        interface="popover">
+        <ion-select-option
+         *ngFor="let doctor of doctoresSelector"
+          [value]="doctor"
+          >
+          {{ doctor.nombre}} - {{doctor.ambito}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-card-content>
+</ion-card>
+
+<ion-button (click)="agregar()">Guardar</ion-button>  
+
+</div>

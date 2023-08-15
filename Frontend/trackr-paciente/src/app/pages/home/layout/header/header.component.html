@@ -1,0 +1,35 @@
+<!-- Sección logotipo -->
+<ion-toolbar class="seccion-titulo">
+  <ion-title id="titulo" slot="start">
+    <span>t r a c k </span>
+    <span class="white">. r</span>
+  </ion-title>
+</ion-toolbar>
+
+<!-- Sección navegación -->
+<ion-toolbar class="navegacion">
+
+  <!-- Saludo -->
+  <ion-title size="small">
+    <span class="white">Hola </span>
+    <span>Paciente</span>
+  </ion-title>
+
+  <!-- Botónes de navegación -->
+  <ion-buttons slot="primary">
+    <ion-button>
+      <ion-icon fill="icon-only" name="notifications" color="light"></ion-icon>
+    </ion-button>
+    <ion-button>
+      <ion-icon fill="icon-only" name="menu" color="light" size="large"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+
+</ion-toolbar>
+
+<ion-toolbar *ngIf="mostrarTitulo">
+  <ion-buttons slot="start">
+    <ion-back-button defaultHref="/home/perfil"></ion-back-button>
+  </ion-buttons>
+  <ion-title>{{ titulo }}</ion-title>
+</ion-toolbar>

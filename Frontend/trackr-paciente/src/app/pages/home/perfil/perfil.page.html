@@ -1,0 +1,36 @@
+<ion-header>
+  <!-- TODO: 2023-08-15 -> Mostrar el título de la pantalla actual -->
+  <app-header></app-header>
+</ion-header>
+
+<ion-content>
+  <ion-tabs>
+    <ion-tab-bar slot="top">
+
+      <div class="justify-content-center">
+        <ion-col>
+          <ion-button size="small" fill="outline" routerLink='/home/perfil/informacion-general' >
+            General
+          </ion-button>
+          <ion-button size="small" fill="outline" routerLink='/home/perfil/mis-tratamientos' >
+            Mis tratamientos
+          </ion-button>
+        </ion-col>
+      </div>
+
+      <div class="justify-content-center">
+        <ion-col>
+          <ion-button size="small" fill="outline" routerLink='/home/perfil/mis-doctores' >
+            Mis doctores
+          </ion-button>
+          <ion-button size="small" fill="outline" routerLink='/home/perfil/mis-estudios' >
+            Mis estudios
+          </ion-button>
+        </ion-col>
+      </div>
+
+    </ion-tab-bar>
+  </ion-tabs>
+
+</ion-content>
+

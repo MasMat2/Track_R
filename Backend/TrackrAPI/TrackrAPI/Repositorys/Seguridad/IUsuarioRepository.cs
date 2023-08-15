@@ -1,5 +1,6 @@
 ﻿
 using TrackrAPI.Dtos.Seguridad;
+using TrackrAPI.Dtos.Perfil;
 using TrackrAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -40,5 +41,6 @@ namespace TrackrAPI.Repositorys.Seguridad
         public IEnumerable<Usuario> ConsultarParaReporteProductividad(int idCompania);
         public Usuario ConsultarDependencias(int idUsuario);
         public IEnumerable<UsuarioDto> ConsultarPorNombre(string filtro);
+        public InformacionGeneralDTO ConsultarInformacionGeneralTrackr(int idUsuario);
     }
 }
