@@ -26,9 +26,21 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                     IdExpedienteEstudio = ee.IdExpedienteEstudio,
                     IdExpediente = ee.IdExpediente,
                     FechaRealizacion = ee.FechaRealizacion,
-                    Nombre = ee.Nombre
+                    Nombre = ee.Nombre,
+                    ArchivoTipoMime=ee.ArchivoTipoMime
                 })
                 .ToList();
+        }
+        
+
+        public int ConsultarIdExpediente(int idUsuario)
+        {
+            var idExpediente = context.ExpedienteTrackr
+                .Where(ee => ee.IdUsuarioNavigation.IdUsuario == idUsuario)
+                .Select(ee => ee.IdExpediente)
+                .FirstOrDefault();
+
+            return idExpediente;
         }
     }
 }

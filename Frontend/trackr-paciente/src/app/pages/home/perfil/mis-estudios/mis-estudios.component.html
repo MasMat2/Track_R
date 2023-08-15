@@ -1,0 +1,52 @@
+<ion-header>
+  <app-header></app-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home/perfil"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Perfil/Mis Estudios</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  
+        <ion-button size="small" color="dark" (click)="agregar()">
+          Agregar Estudio
+          <ion-icon slot="end" name="add-circle-outline"></ion-icon>
+
+        </ion-button>
+
+<div style="color: grey; font-size: large;margin-top:30px;">Mis estudios</div>
+
+<p-table class="primeng-table" [value]="expedientes" [tableStyle]="{ 'min-width': '100%' }">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Num.</th>
+      <th>Estudio</th>
+      <th>Fecha</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-expediente>
+    <tr>
+      <td>{{ expediente.idExpedienteEstudio }}</td>
+      <td>{{ expediente.nombre }}</td>
+      <td>{{ expediente.fechaRealizacion | date: 'dd/MM/yyyy' }}</td>
+      <td>
+        <ng-container *ngIf="expediente.archivoTipoMime==='application/pdf'" >
+          <i class="far fa-file-pdf" (click)="onVer(expediente)"></i>
+        </ng-container>
+        <ng-container *ngIf="expediente.archivoTipoMime === 'image/png' || expediente.archivoTipoMime === 'image/jpeg' || expediente.archivoTipoMime === 'image/gif' ">
+          <i class="fas fa-file-image" (click)="onVerImagen(expediente)"></i>
+        </ng-container>
+      </td>
+      <td>
+        <i class="far fa-times-circle" (click)="eliminar(expediente)"></i>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+
+</ion-content>

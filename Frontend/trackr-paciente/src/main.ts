@@ -8,6 +8,7 @@ import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TokenInterceptor } from './app/auth/token.interceptor';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
 
 if (environment.production) {
   enableProdMode();
@@ -22,3 +23,4 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes, withHashLocation()),
   ],
 });
+defineCustomElements(window);
