@@ -192,7 +192,7 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
   protected agregarPadecimiento(){
     const padecimiento = new ExpedientePadecimientoDTO();
     padecimiento.idPadecimiento = 0;
-    padecimiento.fechaDiagnostico = new Date();
+    //padecimiento.fechaDiagnostico = new Date();
     this.padecimientos = [...this.padecimientos, padecimiento ];
     // this.padecimientos.push(padecimiento); NO FUNCIONA
   }
