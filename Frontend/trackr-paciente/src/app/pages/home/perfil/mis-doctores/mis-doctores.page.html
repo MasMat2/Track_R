@@ -1,0 +1,52 @@
+<div class="container">
+    
+  <h3>
+    Mis Doctores / Auxiliares
+  </h3>
+
+  <ion-list >
+    <ion-card *ngFor="let doctor of misDoctores">
+
+      <ion-card-header>
+        Doctor/especialidad/hospital
+      </ion-card-header>
+
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <ion-img alt="Doctor" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROegc2DSMNryzzDD55PqyX0ZBNG2hZOi1blw&usqp=CAU"
+            style="border-radius: 100px;">
+          </ion-img>
+        </ion-thumbnail>
+
+        <ion-label>
+          <ion-row>
+            {{doctor.nombre}}
+          </ion-row>
+
+          <ion-row>
+            {{doctor.ambito}}
+          </ion-row>
+
+          <ion-row>
+            {{doctor.hospital}}
+          </ion-row>
+        </ion-label>
+
+        <ion-button fill="outline" size="small" color="light" slot="end" (click)="eliminar(doctor)">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+
+      </ion-item>
+    </ion-card>
+  </ion-list>
+
+  <div class="justify-content-center">
+    <ion-button fill="outline">
+        <ion-tab-button size="default" tab ='mis-doctores/agregar'>
+          Agregar Doctor / Auxiliar
+        </ion-tab-button>
+    </ion-button>
+  </div>
+
+
+</div>

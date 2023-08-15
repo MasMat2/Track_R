@@ -75,6 +75,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<EntidadEstructuraTablaValor> EntidadEstructuraTablaValor { get; set; } = null!;
         public virtual DbSet<EntidadEstructuraValor> EntidadEstructuraValor { get; set; } = null!;
         public virtual DbSet<EntradaPersonal> EntradaPersonal { get; set; } = null!;
+        public virtual DbSet<Especialidad> Especialidad { get; set; } = null!;
         public virtual DbSet<Estado> Estado { get; set; } = null!;
         public virtual DbSet<EstadoCivil> EstadoCivil { get; set; } = null!;
         public virtual DbSet<EstadoProducto> EstadoProducto { get; set; } = null!;
@@ -119,6 +120,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<ExpedienteCampo> ExpedienteCampo { get; set; } = null!;
         public virtual DbSet<ExpedienteCampoValor> ExpedienteCampoValor { get; set; } = null!;
         public virtual DbSet<ExpedienteDatoSocial> ExpedienteDatoSocial { get; set; } = null!;
+        public virtual DbSet<ExpedienteDoctor> ExpedienteDoctor { get; set; } = null!;
         public virtual DbSet<ExpedienteEstudio> ExpedienteEstudio { get; set; } = null!;
         public virtual DbSet<ExpedientePacienteInformacion> ExpedientePacienteInformacion { get; set; } = null!;
         public virtual DbSet<ExpedientePadecimiento> ExpedientePadecimiento { get; set; } = null!;
@@ -2015,6 +2017,16 @@ namespace TrackrAPI.Models
                     .HasConstraintName("FK_EntradaPersonal_UsuarioBaja");
             });
 
+            modelBuilder.Entity<Especialidad>(entity =>
+            {
+                entity.HasKey(e => e.IdEspecialidad)
+                    .HasName("PK__Especial__693FA0AFC5C935E0");
+
+                entity.ToTable("Especialidad", "Trackr");
+
+                entity.Property(e => e.Nombre).HasMaxLength(150);
+            });
+
             modelBuilder.Entity<Estado>(entity =>
             {
                 entity.HasKey(e => e.IdEstado);
@@ -2796,6 +2808,26 @@ namespace TrackrAPI.Models
                     .WithMany(p => p.ExpedienteDatoSocial)
                     .HasForeignKey(d => d.IdServicio)
                     .HasConstraintName("FK_ExpedienteDatoSocial_Servicio");
+            });
+
+            modelBuilder.Entity<ExpedienteDoctor>(entity =>
+            {
+                entity.HasKey(e => e.IdExpedienteDoctor)
+                    .HasName("PK__Expedien__53EF564DC0EB4E2F");
+
+                entity.ToTable("ExpedienteDoctor", "Trackr");
+
+                entity.HasOne(d => d.IdExpedienteNavigation)
+                    .WithMany(p => p.ExpedienteDoctor)
+                    .HasForeignKey(d => d.IdExpediente)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Expedient__IdExp__463E49ED");
+
+                entity.HasOne(d => d.IdUsuarioDoctorNavigation)
+                    .WithMany(p => p.ExpedienteDoctor)
+                    .HasForeignKey(d => d.IdUsuarioDoctor)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Expedient__IdUsu__47326E26");
             });
 
             modelBuilder.Entity<ExpedienteEstudio>(entity =>

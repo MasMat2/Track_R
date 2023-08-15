@@ -15,8 +15,8 @@ export default [
       { path: 'muestras', component: MuestrasPage },
       { path: 'dashboard', component: DashboardPage },
       { path: 'cuestionarios', component: CuestionariosPage },
-      { path: 'perfil', component: PerfilPage },
-      { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'perfil', loadChildren: () => import('./perfil/perfil-routes') },
+      { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
 ] as Route[];
