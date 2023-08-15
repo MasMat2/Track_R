@@ -13,7 +13,8 @@
               <div class="form-group">
                 <ion-label class="label-input">Fecha</ion-label>
                 <ion-input class="form-control-readonly"
-                  [value]="formTratamiento.get('fechaRegistro')?.value | date: 'dd.MM.yyyy'" id="date" readonly></ion-input>
+                  [value]="formTratamiento.get('fechaRegistro')?.value | date: 'dd.MM.yyyy'" id="date"
+                  readonly></ion-input>
                 <ion-icon slot="end" name="calendar-outline"></ion-icon>
               </div>
             </ion-col>
@@ -36,11 +37,6 @@
               <div class="form-group">
                 <ion-label class="label-input">Unidad</ion-label>
                 <ion-input class="form-control" formControlName="unidad"></ion-input>
-                <!-- Validation Messages for Unidad -->
-                <!-- <div *ngIf="formTratamiento.get('unidad')?.errors && formTratamiento.get('unidad')?.touched">
-                  <ion-label *ngIf="formTratamiento.get('unidad')?.hasError('required')" color="danger">Unidad es
-                    requerida.</ion-label>
-                </div> -->
               </div>
             </ion-col>
           </ion-row>
@@ -148,24 +144,24 @@
             </ion-row>
 
             <div formArrayName="horas">
-            <ion-row *ngFor="let horaControl of horas.controls; let i = index; let isLast = last" class="mt-3">
-              <ion-col size="auto">
-                <div class="form-group mt-0">
-                  <ion-label class="label-input">Horario(h)</ion-label>
-                  <ion-input class="form-control" [value]="horaControl.value | date: 'HH:mm'" (click)="openTimeModal(i)"
-                    readonly></ion-input>
-                  <ion-icon slot="end" name="time-outline"></ion-icon>
-                </div>
-              </ion-col>
-              <ion-col size="auto">
-                <ion-button *ngIf="!isLast" (click)="removeHour(i)">
-                  <ion-icon name="close-outline"></ion-icon>
-                </ion-button>
-                <ion-button *ngIf="isLast" (click)="addHour()">
-                  <ion-icon name="add-outline"></ion-icon>
-                </ion-button>
-              </ion-col>
-            </ion-row>
+              <ion-row *ngFor="let horaControl of horas.controls; let i = index; let isLast = last" class="mt-3">
+                <ion-col size="auto">
+                  <div class="form-group mt-0">
+                    <ion-label class="label-input">Horario(h)</ion-label>
+                    <ion-input class="form-control" [value]="horaControl.value | date: 'HH:mm'"
+                      (click)="openTimeModal(i)" readonly></ion-input>
+                    <ion-icon slot="end" name="time-outline"></ion-icon>
+                  </div>
+                </ion-col>
+                <ion-col size="auto">
+                  <ion-button *ngIf="!isLast" (click)="removeHour(i)">
+                    <ion-icon name="close-outline"></ion-icon>
+                  </ion-button>
+                  <ion-button *ngIf="isLast" (click)="addHour()">
+                    <ion-icon name="add-outline"></ion-icon>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
             </div>
 
           </div>
@@ -199,3 +195,4 @@
         doneText="Confirmar" cancelText="Cancelar"></ion-datetime>
     </ng-template>
   </ion-modal>
+</ion-content>

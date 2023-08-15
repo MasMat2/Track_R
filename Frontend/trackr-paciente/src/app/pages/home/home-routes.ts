@@ -5,8 +5,9 @@ import { DashboardPage } from "./dashboard/dashboard.page";
 import { HomePage } from "./home.page";
 import { MuestrasPage } from "./muestras/muestras.page";
 import { PerfilPage } from "./perfil/perfil.page";
-import { MisTratamientosComponent } from "./perfil/mis-tratamientos/mis-tratamientos.component";
+import { MisTratamientosPage } from "./perfil/mis-tratamientos/mis-tratamientos.page";
 import { AgregarTratamientoPage } from './perfil/mis-tratamientos/agregar-tratamiento/agregar-tratamiento.page';
+
 
 export default [
   {
@@ -18,7 +19,7 @@ export default [
       { path: 'dashboard', component: DashboardPage },
       { path: 'cuestionarios', component: CuestionariosPage },
       { path: 'perfil', component: PerfilPage, pathMatch: 'full' },
-      { path: 'perfil/tratamientos', component: MisTratamientosComponent},
+      { path: 'perfil/tratamientos', component: MisTratamientosPage},
       { path: 'perfil/tratamientos/agregar', component: AgregarTratamientoPage },
       { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
     ]

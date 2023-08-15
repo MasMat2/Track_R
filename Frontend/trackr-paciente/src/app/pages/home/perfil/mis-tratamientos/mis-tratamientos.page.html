@@ -3,7 +3,6 @@
 </ion-header>
 
 <ion-content>
-
   <ion-list>
     <ion-button fill="outline" expand="block" button fill="outline" [routerLink]="['agregar']">
       Agregar tratamiento
@@ -11,7 +10,7 @@
     </ion-button>
 
     <div *ngFor="let tratamiento of tratamientos$ | async">
-      <ion-item lines="none" detail="false" (click)="toggleExpand(tratamiento)">
+      <ion-item lines="none" detail="false" (click)="toggleExpandido(tratamiento)">
         <ion-label class="label-input">{{tratamiento.farmaco}}</ion-label>
         <ion-icon slot="end" name="chevron-down-outline" *ngIf="!tratamiento.expandido"></ion-icon>
         <ion-icon slot="end" name="chevron-up-outline" *ngIf="tratamiento.expandido"></ion-icon>
@@ -67,7 +66,8 @@
 
           <ion-row>
             <ion-col>
-              <ion-label>Recordatorio de tomas - {{ tratamiento.recordatorioActivo ? 'Activado' : 'Desactivado' }}</ion-label>
+              <ion-label>Recordatorio de tomas - {{ tratamiento.recordatorioActivo ? 'Activado' : 'Desactivado'
+                }}</ion-label>
             </ion-col>
           </ion-row>
 
@@ -115,7 +115,7 @@
                     <ion-label>{{entry | date:'medium'}}</ion-label>
                   </ion-col>
                   <ion-col>
-                    <ion-label>{{entry}}</ion-label>
+                    <ion-label>{{ tratamiento.farmaco }}</ion-label>
                   </ion-col>
                 </ion-row>
               </ion-grid>

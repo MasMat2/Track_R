@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, FormGroup, FormArray, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
@@ -44,7 +45,8 @@ export class AgregarTratamientoPage implements OnInit {
   constructor(
     private perfilTratamientoService: PerfilTratamientoService,
     private fb: FormBuilder,
-    public photoService: PhotoService) { }
+    public photoService: PhotoService,
+    private router: Router) { }
 
   ngOnInit() {
     this.formTratamiento = this.fb.group({
@@ -59,8 +61,8 @@ export class AgregarTratamientoPage implements OnInit {
       fechaInicio: [(new Date()).toISOString(), Validators.required],
       fechaFin: [(new Date()).toISOString()],
       imagenBase64: [''],
-      recordatorioActivo: [true],
-      diaSemana: this.fb.array([true, true, false, false, false, false, false]),
+      recordatorioActivo: [false],
+      diaSemana: this.fb.array([false, false, false, false, false, false, false]),
       horas: this.fb.array([new Date().toISOString()])
     },
       { validators: this.validateDiaSemana() });
@@ -143,7 +145,6 @@ export class AgregarTratamientoPage implements OnInit {
     });
 
     const tratamientoDto: PerfilTratamientoDto = {
-      idExpediente: 9,  // Obtener idExpediente
       farmaco: formValues.farmaco,
       fechaRegistro: new Date(formValues.fechaRegistro), // Convertir string a Date
       cantidad: formValues.cantidad,
@@ -152,17 +153,19 @@ export class AgregarTratamientoPage implements OnInit {
       padecimiento: formValues.padecimiento,
       idPadecimiento: formValues.idPadecimiento,
       idUsuarioDoctor: formValues.idUsuarioDoctor,
-      imagenBase64: this.photo.base64String || "",
+      imagenBase64: this.photo?.base64String || "",
       recordatorioActivo: formValues.recordatorioActivo,
-      diaSemana: formValues.diaSemana,
-      horas: horasTiempos
+      diaSemana: formValues.recordatorioActivo ? formValues.diaSemana : null,
+      horas: formValues.recordatorioActivo ? horasTiempos : null
 
     };
 
     this.perfilTratamientoDto = tratamientoDto;
 
-
     this.agregar(this.perfilTratamientoDto);
+
+    this.router.navigateByUrl('/home/perfil/tratamientos');
+
   };
 
   protected agregar(perfilTratamientoDto: PerfilTratamientoDto): Promise<boolean> {

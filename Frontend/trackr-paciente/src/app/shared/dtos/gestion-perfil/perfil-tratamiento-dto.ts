@@ -1,5 +1,5 @@
 export class PerfilTratamientoDto{
-    idExpediente : number;
+    idExpediente?: number;
     farmaco : string;
     fechaRegistro : Date;
     cantidad: number
@@ -10,7 +10,7 @@ export class PerfilTratamientoDto{
     idUsuarioDoctor: number
     imagenBase64: string;
     recordatorioActivo: boolean; // Recordatorio de tomas
-    diaSemana: boolean[]; // Days of the week checkboxes
+    diaSemana: boolean[]; // Checkboxes dias de la semana
     horas: string[]; // Horario(h)
     bitacora?: Date[]; // Bitacora Consumo de Medicamentos
   
