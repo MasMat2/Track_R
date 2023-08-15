@@ -23,6 +23,10 @@ export default [
         path: 'mis-tratamientos',
         loadComponent: () => import('./mis-tratamientos/mis-tratamientos.component').then((m) => m.MisTratamientosComponent)
       },
+      {
+        path: 'mis-tratamientos/agregar',
+        loadComponent: () => import('./mis-tratamientos/agregar-tratamiento/agregar-tratamiento.page').then((m) => m.AgregarTratamientoPage)
+      },
       { path: '**', redirectTo: 'informacion-general', pathMatch: 'full' }
     ]
   },
