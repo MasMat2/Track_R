@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { InformacionGeneralComponent } from './informacion-general/informacion-general.component';
 import { HeaderComponent } from '../layout/header/header.component';
 import { MisDoctoresPage } from './mis-doctores/mis-doctores.page';
+import { MisTratamientosComponent } from './mis-tratamientos/mis-tratamientos.component';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -14,10 +15,12 @@ import { RouterModule } from '@angular/router';
   imports: [
     IonicModule,
     CommonModule,
+    RouterModule,
     InformacionGeneralComponent,
     HeaderComponent,
     MisDoctoresPage,
-    RouterModule
+    RouterModule,
+    MisTratamientosComponent
   ]
 })
 export class PerfilPage implements OnInit {
