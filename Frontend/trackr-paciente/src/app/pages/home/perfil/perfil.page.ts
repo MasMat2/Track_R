@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { InformacionGeneralComponent } from './informacion-general/informacion-general.component';
 import { HeaderComponent } from '../layout/header/header.component';
+import { MisTratamientosComponent } from './mis-tratamientos/mis-tratamientos.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
@@ -12,8 +14,10 @@ import { HeaderComponent } from '../layout/header/header.component';
   imports: [
     IonicModule,
     CommonModule,
+    RouterModule,
     InformacionGeneralComponent,
-    HeaderComponent
+    HeaderComponent,
+    MisTratamientosComponent
   ]
 })
 export class PerfilPage implements OnInit {
