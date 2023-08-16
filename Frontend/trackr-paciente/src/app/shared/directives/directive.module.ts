@@ -6,6 +6,7 @@ import { ConfirmacionContrasenaDirective } from './confirmacion-contrasena.direc
 import { FormatoNombreDirective } from './formato-nombre.directive';
 import { FormatoNumericoDirective } from './formato-numerico.directive';
 import { FormatoRfcDirective } from './formato-rfc.directive';
+import { PermitirSoloNumerosDirective } from './permitir-solo-numero.directive';
 
 
 
@@ -16,7 +17,8 @@ import { FormatoRfcDirective } from './formato-rfc.directive';
     ConfirmacionContrasenaDirective,
     FormatoNombreDirective,
     FormatoNumericoDirective,
-    FormatoRfcDirective
+    FormatoRfcDirective,
+    PermitirSoloNumerosDirective
   ],
   imports: [
     CommonModule
@@ -27,7 +29,8 @@ import { FormatoRfcDirective } from './formato-rfc.directive';
     ConfirmacionContrasenaDirective,
     FormatoNombreDirective,
     FormatoNumericoDirective,
-    FormatoRfcDirective
+    FormatoRfcDirective,
+    PermitirSoloNumerosDirective
   ]
 })
 export class DirectiveModule { }

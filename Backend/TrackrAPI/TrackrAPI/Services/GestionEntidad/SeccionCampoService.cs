@@ -71,13 +71,11 @@ namespace TrackrAPI.Services.GestionEntidad
                     seccionMuestraDTO.ClaveCampo = seccion.Key;
                     // Ponerle nombre a la seccion que agrupó
                     seccionMuestraDTO.NombreSeccionCampo = seccion.Where(x => x.ClaveSeccion == seccion.Key).FirstOrDefault().Variable;
-                    List<SeccionCampoMuestraDTO> seccionesCampoList = new List<SeccionCampoMuestraDTO>();
-                    foreach (var seccionCampo in seccion)
+                    List<SeccionCampo> seccionesCampoList = new List<SeccionCampo>();
+                    foreach (var seccionCampoDTO in seccion)
                     {
-                        var seccionCampoMuestraDTO = new SeccionCampoMuestraDTO();
-                        seccionCampoMuestraDTO.ClaveCampo = seccionCampo.ClaveCampo;
-                        seccionCampoMuestraDTO.NombreSeccionCampo = seccionCampo.Parametro;
-                        seccionesCampoList.Add(seccionCampoMuestraDTO);
+                        var seccionCampo = seccionCampoRepository.ConsultarPorClaveConDependencia(seccionCampoDTO.ClaveCampo);
+                        seccionesCampoList.Add(seccionCampo); //Cambiar a SeccionCampo
                     }
                     seccionMuestraDTO.SeccionesCampo = seccionesCampoList;
                     seccionesList.Add(seccionMuestraDTO);

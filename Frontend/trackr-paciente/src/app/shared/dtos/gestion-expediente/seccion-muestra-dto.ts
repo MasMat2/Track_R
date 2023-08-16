@@ -1,7 +1,7 @@
-import { SeccionCampoMuestraDTO } from "./seccion-campo-muestra-dto";
+import { SeccionCampo } from "@models/gestion-expediente/seccion-campo";
 
 export class SeccionMuestraDTO{
   claveCampo: string;
   nombreSeccionCampo: string;
-  seccionesCampo:SeccionCampoMuestraDTO[];
+  seccionesCampo:SeccionCampo[];
 }

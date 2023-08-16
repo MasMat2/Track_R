@@ -27,9 +27,9 @@
             "
           >
             <ion-accordion>
-              <ion-item slot="header" color="light">
+              <!-- <ion-item slot="header" color="light">
                 <ion-label>{{ seccion.nombreSeccionCampo }}</ion-label>
-              </ion-item>
+              </ion-item> -->
 
               <div class="ion-padding" slot="content">
 
@@ -37,11 +37,21 @@
                   <div
                     *ngFor="
                       let seccionCampo of seccion.seccionesCampo;
-                      let i = index
-                    "
+                      let i = index"
+                      [ngClass]="'col-md-' + seccionCampo.tamanoColumna"
                   >
-                  {{seccionCampo.nombreSeccionCampo}}
+                  <div class="form-group">
+                    <app-campo-expediente
+                      #campoModel="ngModel"
+                      [(ngModel)]="seccionCampo.valor"
+                      [name]="'campos' + i"
+                      [campo]="seccionCampo"
+                      [par]="i % 2 === 0"
+                    >
+                    </app-campo-expediente>
                   </div>
+                  </div>
+                  
                 </ion-accordion-group>
 
               </div>

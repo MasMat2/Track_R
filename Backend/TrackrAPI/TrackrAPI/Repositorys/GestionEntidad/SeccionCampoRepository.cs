@@ -31,6 +31,14 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Where(e => e.Clave == clave)
                 .FirstOrDefault();
         }
+        public SeccionCampo? ConsultarPorClaveConDependencia(string clave)
+        {
+            return context.SeccionCampo
+                .Where(e => e.Clave == clave)
+                .Include(e=> e.IdDominioNavigation)
+                .Include(e=> e.IdSeccionNavigation)
+                .FirstOrDefault();
+        }
 
         public SeccionCampo? ConsultarDuplicado(
             int orden,

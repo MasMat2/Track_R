@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { PadecimientoMuestraDTO } from '@dtos/gestion-expediente/padecimiento-muestra-dto';
 import { SeccionCampoService } from '@http/gestion-expediente/seccion-campo.service';
 import { IonicModule } from '@ionic/angular';
+import { CampoExpedienteModule } from '@sharedComponents/campo-expediente/campo-expediente.module';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 
 @Component({
@@ -14,7 +15,8 @@ import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
   imports: [
     FormsModule,
     IonicModule,
-    CommonModule],
+    CommonModule,
+    CampoExpedienteModule],
     providers: [SeccionCampoService]
 })
 export class MuestrasFormularioComponent implements OnInit {
@@ -24,11 +26,11 @@ export class MuestrasFormularioComponent implements OnInit {
   constructor(
     private seccionCampoService: SeccionCampoService) { }
 
-  ngOnInit() {
-    this.consultarArbol();
+  async ngOnInit() {
+    await this.consultarArbol();
   }
 
-  protected consultarArbol(){
+  protected async consultarArbol(){
     lastValueFrom(this.seccionCampoService.consultarPorSeccion())
     .then((arbolPadecimiento: PadecimientoMuestraDTO[]) => {
       console.log(arbolPadecimiento);

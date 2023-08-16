@@ -1,3 +1,4 @@
+import { SharedModule } from '@sharedComponents/shared.module';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -20,7 +21,8 @@ import { MuestrasFormularioComponent } from './muestras-formulario/muestras-form
     FormsModule,
     HeaderComponent,
     GridGeneralModule,
-    MuestrasFormularioComponent
+    MuestrasFormularioComponent,
+    SharedModule
   ],
   providers: [
     EntidadEstructuraTablaValorService,

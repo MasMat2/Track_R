@@ -1,0 +1,49 @@
+.form-control-textarea {
+  border: 1px #d9d9d9 solid;
+  color: #000000;
+  width: 100%;
+  padding: 10px;
+  height: 100px;
+}
+
+.form-control-textarea:focus {
+  outline: none !important;
+  border: 2px #ff6c00 solid;
+  box-shadow: none !important;
+}
+
+
+/* Estilos de switch */
+.divSwitch{
+  display: flex;
+  flex-direction: column;
+}
+
+.divSwitchAlternativo{
+  display: flex;
+  flex-direction: row;
+  height: 1;
+}
+
+.divSwitchAlternativo .switch{
+  text-align: right;
+  background-color: #fff;
+  float: right;
+  margin-left: 10px;
+}
+
+.divSwitchAlternativo .label-input{
+  width: 80%;
+}
+
+.par{
+  background-color: rgb(233, 233, 233);
+}
+
+.impar{
+  background-color: #fff;
+}
+
+.divSwitchNormal .label-input {
+  margin-bottom: 0.5rem;
+}
