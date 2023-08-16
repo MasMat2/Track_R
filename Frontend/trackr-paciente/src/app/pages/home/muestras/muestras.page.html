@@ -6,4 +6,22 @@
   <p>
     muestras works!
   </p>
+  <app-grid-general
+    [headerName]="HEADER_GRID"
+    [data]="valoresFueraRango"
+    [children]="columns"
+    [disableDelete]="true"
+    [disableEdit]="true"
+  >
+  </app-grid-general>
+
+  <ion-button 
+    class="btn-primario"
+    routerLink="agregar"
+  >
+    <ion-icon name="add-outline"></ion-icon>
+    Agregar Muestra
+  </ion-button>
+
+  <app-muestras-formulario></app-muestras-formulario>
 </ion-content>

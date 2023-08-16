@@ -3,6 +3,8 @@ using TrackrAPI.Dtos.GestionEntidad;
 using TrackrAPI.Models;
 using TrackrAPI.Services.GestionEntidad;
 using System.Collections.Generic;
+using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Controllers.GestionEntidad
 {
@@ -37,6 +39,15 @@ namespace TrackrAPI.Controllers.GestionEntidad
         {
             return seccionCampoService.ConsultarSeccionesPadecimientos(idPadecimiento);
         }
+
+        [HttpGet]
+        [Route("seccionesPadecimientosGeneral")]
+        public IEnumerable<PadecimientoMuestraDTO> ConsultarSeccionesPadecimientosGeneral()
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            return seccionCampoService.ConsultarSeccionesPadecimientosGeneral(idUsuario);
+        }
+
 
         [HttpPost]
         [Route("agregar")]

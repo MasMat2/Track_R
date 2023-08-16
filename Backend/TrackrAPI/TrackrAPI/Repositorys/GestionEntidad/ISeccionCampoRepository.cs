@@ -12,5 +12,6 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         SeccionCampo? ConsultarPorClave(string clave);
         SeccionCampo? ConsultarDuplicado(int orden, string? grupo, string clave, int idSeccion);
         public IEnumerable<ExpedienteColumnaDTO> ConsultarSeccionesPadecimientos(int idPadecimiento);
+        public IEnumerable<ExpedienteColumnaDTO> ConsultarSeccionesPadecimientosGeneral();
     }
 }

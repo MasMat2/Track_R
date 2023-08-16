@@ -2,19 +2,24 @@
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionEntidad;
 using System.Collections.Generic;
+using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Repositorys.GestionExpediente;
 
 namespace TrackrAPI.Services.GestionEntidad
 {
     public class SeccionCampoService
     {
-        private readonly ISeccionCampoRepository seccionCampoRepository;
         private readonly SeccionCampoValidatorService seccionCampoValidatorService;
+        private readonly ISeccionCampoRepository seccionCampoRepository;
+        private readonly IExpedientePadecimientoRepository expedientePadecimientoRepository;
 
         public SeccionCampoService(ISeccionCampoRepository seccionCampoRepository,
-            SeccionCampoValidatorService seccionCampoValidatorService)
+            SeccionCampoValidatorService seccionCampoValidatorService,
+            IExpedientePadecimientoRepository expedientePadecimientoRepository)
         {
             this.seccionCampoRepository = seccionCampoRepository;
             this.seccionCampoValidatorService = seccionCampoValidatorService;
+            this.expedientePadecimientoRepository = expedientePadecimientoRepository;
         }
         public SeccionCampo Consultar(int idSeccionCampo)
         {
@@ -36,7 +41,7 @@ namespace TrackrAPI.Services.GestionEntidad
             {
                 seccionesUnicas.Add(new ExpedienteColumnaSelectorDTO
                 {
-                    Clave = seccion.Clave,
+                    Clave = seccion.ClaveCampo,
                     Variable = seccion.Parametro,
                 });
             }
@@ -45,6 +50,43 @@ namespace TrackrAPI.Services.GestionEntidad
             return seccionesUnicas;
         }
 
+        public IEnumerable<PadecimientoMuestraDTO> ConsultarSeccionesPadecimientosGeneral(int idUsuario)
+        {
+            List<PadecimientoMuestraDTO> padecimientoMuestras = new List<PadecimientoMuestraDTO>();
+            // Obtener todos los padecimientos que tiene el Usuario
+            List<ExpedientePadecimientoDTO> padecimientos = expedientePadecimientoRepository.ConsultarPorUsuario(idUsuario).ToList();
+            foreach(var padecimiento in padecimientos)
+            {
+                var padecimientoMuestra = new PadecimientoMuestraDTO();
+                padecimientoMuestra.IdPadecimiento = padecimiento.IdPadecimiento;
+                padecimientoMuestra.NombrePadecimiento = padecimiento.NombrePadecimiento;
+                // Obtener cada sección del padecimiento actual
+                List<ExpedienteColumnaDTO> secciones = seccionCampoRepository.ConsultarSeccionesPadecimientos(padecimiento.IdPadecimiento).ToList();
+                List <SeccionMuestraDTO> seccionesList = new List<SeccionMuestraDTO>();
+                // Agrupar las secciones por su ClaveSeccion
+                var seccionesAgrupadas = secciones.GroupBy(x => x.ClaveSeccion);
+                foreach (var seccion in seccionesAgrupadas)
+                {
+                    var seccionMuestraDTO = new SeccionMuestraDTO();
+                    seccionMuestraDTO.ClaveCampo = seccion.Key;
+                    // Ponerle nombre a la seccion que agrupó
+                    seccionMuestraDTO.NombreSeccionCampo = seccion.Where(x => x.ClaveSeccion == seccion.Key).FirstOrDefault().Variable;
+                    List<SeccionCampoMuestraDTO> seccionesCampoList = new List<SeccionCampoMuestraDTO>();
+                    foreach (var seccionCampo in seccion)
+                    {
+                        var seccionCampoMuestraDTO = new SeccionCampoMuestraDTO();
+                        seccionCampoMuestraDTO.ClaveCampo = seccionCampo.ClaveCampo;
+                        seccionCampoMuestraDTO.NombreSeccionCampo = seccionCampo.Parametro;
+                        seccionesCampoList.Add(seccionCampoMuestraDTO);
+                    }
+                    seccionMuestraDTO.SeccionesCampo = seccionesCampoList;
+                    seccionesList.Add(seccionMuestraDTO);
+                }
+                padecimientoMuestra.SeccionMuestraDTOs = seccionesList;
+                padecimientoMuestras.Add(padecimientoMuestra);
+            }
+            return padecimientoMuestras;
+        }
         public void Agregar(SeccionCampo seccionCampo)
         {
             seccionCampoValidatorService.ValidarAgregar(seccionCampo);

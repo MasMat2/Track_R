@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Globalization;
+using TrackrAPI.Repositorys.GestionExpediente;
 
 namespace TrackrAPI.Services.GestionEntidad
 {
@@ -14,14 +15,17 @@ namespace TrackrAPI.Services.GestionEntidad
     {
         private readonly IEntidadEstructuraTablaValorRepository entidadEstructuraTablaValorRepository;
         private readonly ISeccionCampoRepository seccionCampoRepository;
+        private readonly IExpedientePadecimientoRepository expedientePadecimientoRepository;
 
         public EntidadEstructuraTablaValorService(
             IEntidadEstructuraTablaValorRepository entidadEstructuraTablaValorRepository,
-            ISeccionCampoRepository seccionCampoRepository
+            ISeccionCampoRepository seccionCampoRepository,
+            IExpedientePadecimientoRepository expedientePadecimientoRepository
             )
         {
             this.entidadEstructuraTablaValorRepository = entidadEstructuraTablaValorRepository;
             this.seccionCampoRepository = seccionCampoRepository;
+            this.expedientePadecimientoRepository = expedientePadecimientoRepository;
         }
 
         public List<RegistroTablaDto> ConsultarRegistroTablaPorTabulacion(int idEntidadEstructura, int idTabla)
@@ -165,7 +169,7 @@ namespace TrackrAPI.Services.GestionEntidad
         public IEnumerable<ValoresFueraRangoGridDTO> ConsultarValores(int idPadecimiento, int idUsuario, bool? fueraRango)
         {
             var columnas = this.seccionCampoRepository.ConsultarSeccionesPadecimientos(idPadecimiento);
-            var clavesCampos = columnas.Select(c => c.Clave).ToList();
+            var clavesCampos = columnas.Select(c => c.ClaveCampo).ToList();
 
             var valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorCampos(idUsuario, clavesCampos, fueraRango);
 
@@ -173,7 +177,7 @@ namespace TrackrAPI.Services.GestionEntidad
 
             foreach (var valor in valores)
             {
-                var columnaCorrespondiente = columnas.FirstOrDefault(c => c.Clave == valor.ClaveCampo);
+                var columnaCorrespondiente = columnas.FirstOrDefault(c => c.ClaveCampo == valor.ClaveCampo);
 
                 if (columnaCorrespondiente != null)
                 {
@@ -195,6 +199,22 @@ namespace TrackrAPI.Services.GestionEntidad
             }
 
             return padecimientos;
+        }
+
+        public IEnumerable<ValoresFueraRangoGridDTO> ConsultarValoresFueraRangoGeneral(int idUsuario)
+        {
+            var valoresFueraRangoGridDTOs = new List<ValoresFueraRangoGridDTO>();
+            var padecimientos = expedientePadecimientoRepository.ConsultarPorUsuario(idUsuario);
+
+            if(padecimientos == null)
+            {
+                return valoresFueraRangoGridDTOs;
+            }
+            foreach(var padecimiento in padecimientos)
+            {
+                valoresFueraRangoGridDTOs.AddRange(ConsultarValores(padecimiento.IdPadecimiento, idUsuario, true));
+            }
+            return valoresFueraRangoGridDTOs;
         }
 
         public Dictionary<string, List<ValoresHistogramaDTO>> ConsultarValoresPorClaveCampo(string claveCampo, int idUsuario, string fechaFiltro)
@@ -235,10 +255,6 @@ namespace TrackrAPI.Services.GestionEntidad
             return valores.GroupBy(v => $"{v.FechaMuestra.GetValueOrDefault().Hour / 3 * 3}:00 - {(v.FechaMuestra.GetValueOrDefault().Hour / 3 + 1) * 3}:00")
                           .ToDictionary(g => g.Key, g => g.ToList());
         }
-
-
-
-
 
     }
 }

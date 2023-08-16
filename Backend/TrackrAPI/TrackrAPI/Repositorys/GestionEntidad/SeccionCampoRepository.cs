@@ -87,7 +87,22 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Select(sc =>
                     new ExpedienteColumnaDTO {
                         Parametro = sc.Descripcion,
-                        Clave = "ME-" + sc.Clave,
+                        ClaveCampo = "ME-" + sc.Clave,
+                        ClaveSeccion = sc.IdSeccionNavigation.Clave,
+                        Variable = sc.IdSeccionNavigation.Nombre,
+                        ValorMinimo = sc.IdDominioNavigation.ValorMinimo,
+                        ValorMaximo = sc.IdDominioNavigation.ValorMaximo
+                    });
+        }
+
+        public IEnumerable<ExpedienteColumnaDTO> ConsultarSeccionesPadecimientosGeneral()
+        {
+            return context.SeccionCampo
+                .Select(sc =>
+                    new ExpedienteColumnaDTO
+                    {
+                        Parametro = sc.Descripcion,
+                        ClaveCampo = "ME-" + sc.Clave,
                         Variable = sc.IdSeccionNavigation.Nombre,
                         ValorMinimo = sc.IdDominioNavigation.ValorMinimo,
                         ValorMaximo = sc.IdDominioNavigation.ValorMaximo
