@@ -645,6 +645,7 @@ namespace TrackrAPI.Services.Seguridad
             usuario.Calle = informacion.Calle;
             usuario.NumeroInterior = informacion.NumeroInterior;
             usuario.NumeroExterior = informacion.NumeroExterior;
+            usuario.EntreCalles = informacion.EntreCalles;
 
             expedientePadecimientoRepository.EliminarPorExpediente(expediente.IdExpediente);
             foreach (var padecimientoDTO in informacion.padecimientos)

@@ -42,7 +42,7 @@ export class InformacionGeneralComponent implements OnInit {
   protected informacionUsuario$: Observable<InformacionGeneralDto>;
   protected infoUsuario: InformacionGeneralDto;
   protected edadUsuario: string;
-  public btnSubmit = false;
+  public btnSubmit = true;
   public esPaisExtranjero: boolean = false;
   public idPaisMexico: 1;
   protected nuevoPadecimiento: ExpedientePadecimientoDto = new ExpedientePadecimientoDto();
@@ -224,7 +224,7 @@ export class InformacionGeneralComponent implements OnInit {
 
   private actualizarInformacionUsuario(informacion: InformacionGeneralDto){
     this.usuarioService.actualizarInformacionGeneral(informacion).subscribe({
-      next: ()=> {} 
+      next: ()=> {console.log('información actualizada')},
     });
   }
   
