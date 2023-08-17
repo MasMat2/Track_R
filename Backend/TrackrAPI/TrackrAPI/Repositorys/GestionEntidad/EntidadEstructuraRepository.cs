@@ -21,6 +21,14 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .FirstOrDefault();
         }
 
+        public EntidadEstructura? ConsultarPorClave(string clave)
+        {
+            return context.EntidadEstructura
+                .Where(e => e.Clave == clave)
+                .FirstOrDefault();
+        }
+
+
         public EntidadEstructura? ConsultarTabulacionDuplicada(string clave, string nombre, int idEntidad)
         {
             return context.EntidadEstructura

@@ -43,7 +43,7 @@
                   <form
                   (keydown.enter)="$event.preventDefault()"
                   #formulario="ngForm"
-                  (ngSubmit)="enviarFormulario(formulario)"
+                  (ngSubmit)="enviarFormulario(formulario, seccionCampo)"
                   novalidate="novalidate"
                 >
                   <div class="form-group">
@@ -57,13 +57,13 @@
                     </app-campo-expediente>
                   </div>
                   
-                  <button
+                  <ion-button 
+                  class="btn-primario"
                     type="submit"
-                    class="btn btn-primario"
-                    [disabled]="submitting"
-                  >
-                    Guardar
-                  </button>
+                >
+                  <ion-icon name="add-outline"></ion-icon>
+                  Agregar Muestra
+                </ion-button>
                   </form>
                   </div>
 

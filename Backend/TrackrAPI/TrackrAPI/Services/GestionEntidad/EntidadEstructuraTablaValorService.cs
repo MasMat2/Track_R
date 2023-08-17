@@ -16,16 +16,19 @@ namespace TrackrAPI.Services.GestionEntidad
         private readonly IEntidadEstructuraTablaValorRepository entidadEstructuraTablaValorRepository;
         private readonly ISeccionCampoRepository seccionCampoRepository;
         private readonly IExpedientePadecimientoRepository expedientePadecimientoRepository;
+        private readonly IEntidadEstructuraRepository entidadEstructuraRepository;
 
         public EntidadEstructuraTablaValorService(
             IEntidadEstructuraTablaValorRepository entidadEstructuraTablaValorRepository,
             ISeccionCampoRepository seccionCampoRepository,
-            IExpedientePadecimientoRepository expedientePadecimientoRepository
+            IExpedientePadecimientoRepository expedientePadecimientoRepository,
+            IEntidadEstructuraRepository entidadEstructuraRepository
             )
         {
             this.entidadEstructuraTablaValorRepository = entidadEstructuraTablaValorRepository;
             this.seccionCampoRepository = seccionCampoRepository;
             this.expedientePadecimientoRepository = expedientePadecimientoRepository;
+            this.entidadEstructuraRepository = entidadEstructuraRepository;
         }
 
         public List<RegistroTablaDto> ConsultarRegistroTablaPorTabulacion(int idEntidadEstructura, int idTabla)
@@ -86,6 +89,35 @@ namespace TrackrAPI.Services.GestionEntidad
 
                 entidadEstructuraTablaValorRepository.Agregar(valor);
             }
+
+            ts.Complete();
+        }
+
+        public void AgregarMuestra(TablaValorMuestraDTO muestraDTO, int idUsuario)
+        {
+            using var ts = new TransactionScope();
+            var entidadEstructuraMuestra = entidadEstructuraRepository.ConsultarPorClave(GeneralConstant.ClaveEntidadEstructuraMuestra);
+            if(entidadEstructuraMuestra == null)
+            {
+                throw new CdisException("No existe la entidad estructura con clave 006");
+            }
+            var entidadEstructuraMuestraHijo = entidadEstructuraRepository.ConsultarHijos(entidadEstructuraMuestra.IdEntidadEstructura).FirstOrDefault();
+            if (entidadEstructuraMuestra == null)
+            {
+                throw new CdisException("No existe la entidad estructura hijo de la entidad estructura con clave 006");
+            }
+            var muestra = new EntidadEstructuraTablaValor()
+            {
+                IdEntidadEstructura = entidadEstructuraMuestraHijo.IdEntidadEstructura,
+                ClaveCampo = muestraDTO.ClaveCampo,
+                IdTabla = idUsuario,
+                Valor = muestraDTO.Valor,
+                FechaMuestra = DateTime.UtcNow,
+                FueraDeRango = muestraDTO.FueraDeRango
+            };
+            var ultimoRegistro = entidadEstructuraTablaValorRepository.ConsultarUltimoRegistro(muestra.IdEntidadEstructura, idUsuario);
+            muestra.Numero = ultimoRegistro + 1;
+            entidadEstructuraTablaValorRepository.Agregar(muestra);
 
             ts.Complete();
         }

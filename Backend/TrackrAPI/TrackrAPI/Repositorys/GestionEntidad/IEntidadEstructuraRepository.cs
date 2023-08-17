@@ -7,6 +7,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
     public interface IEntidadEstructuraRepository : IRepository<EntidadEstructura>
     {
         EntidadEstructura? Consultar(int idEntidadEstructura);
+        EntidadEstructura? ConsultarPorClave(string clave);
         EntidadEstructura? ConsultarTabulacionDuplicada(string clave, string nombre, int idEntidad);
         IEnumerable<EntidadEstructura> ConsultarPorEntidad(int idEntidad);
         IEnumerable<EntidadEstructura> ConsultarPorEntidadSeccion(int idEntidad, int idSeccion);

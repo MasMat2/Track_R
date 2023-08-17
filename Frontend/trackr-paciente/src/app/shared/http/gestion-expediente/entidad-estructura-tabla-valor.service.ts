@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EntidadTablaRegistroDto } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
+import { EntidadTablaRegistroDto, TablaValorMuestraDTO } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
 import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
 import { Observable } from 'rxjs';
 
@@ -12,6 +12,10 @@ export class EntidadEstructuraTablaValorService {
 
   public agregar(registro: EntidadTablaRegistroDto): Observable<void> {
     return this.http.post<void>(this.dataUrl, registro);
+  }
+
+  public agregarMuestra(registro: TablaValorMuestraDTO): Observable<void> {
+    return this.http.post<void>(this.dataUrl + 'agregarMuestra', registro);
   }
 
   // public editar(registro: EntidadTablaRegistroDto): Observable<void> {

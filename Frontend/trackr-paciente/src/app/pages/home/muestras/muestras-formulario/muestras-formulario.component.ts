@@ -1,8 +1,9 @@
+import { SharedModule } from '@sharedComponents/shared.module';
 import { EntidadEstructuraTablaValorService } from './../../../../shared/http/gestion-expediente/entidad-estructura-tabla-valor.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnChanges, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
-import { EntidadTablaRegistroDto, TablaValorDto } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
+import { EntidadTablaRegistroDto, TablaValorDto, TablaValorMuestraDTO } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
 import { PadecimientoMuestraDTO } from '@dtos/gestion-expediente/padecimiento-muestra-dto';
 import { SeccionCampoService } from '@http/gestion-expediente/seccion-campo.service';
 import { IonicModule } from '@ionic/angular';
@@ -20,6 +21,7 @@ import * as Utileria from '@utils/utileria';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
+    SharedModule,
     CommonModule,
     CampoExpedienteModule],
     providers: [SeccionCampoService]
@@ -50,7 +52,7 @@ export class MuestrasFormularioComponent implements OnInit {
     });
   }
 
-  public enviarFormulario(formulario: NgForm): void {
+  public enviarFormulario(formulario: NgForm, seccionCampo: SeccionCampo): void {
     this.submitting = true;
     console.log(formulario);
 
@@ -59,11 +61,18 @@ export class MuestrasFormularioComponent implements OnInit {
       Utileria.validarCamposRequeridos(formulario);
       return;
     }
-
-    this.agregar();
+    console.log(formulario, seccionCampo);
+    const campoAgregar: TablaValorMuestraDTO = {
+      claveCampo: seccionCampo.clave,
+      valor: seccionCampo.valor?.toString() ?? '',
+      fueraDeRango: this.estaFueraDeRango(seccionCampo)
+    };
+    console.log(campoAgregar);
+    this.agregar(campoAgregar);
   }
 
-  public agregar(): void {
+  public agregar(campoAgregar: TablaValorMuestraDTO): void {
+    this.entidadEstructuraTablaValorService.agregarMuestra(campoAgregar).subscribe();
     // const registro: EntidadTablaRegistroDto = {
     //   numero: 0,
     //   idEntidadEstructura: this.idPestanaSeccion,

@@ -11,3 +11,9 @@ export interface TablaValorDto {
     valor: string;
     fueraDeRango: boolean;
 }
+
+export interface TablaValorMuestraDTO {
+    claveCampo: string;
+    valor: string;
+    fueraDeRango: boolean;
+}
