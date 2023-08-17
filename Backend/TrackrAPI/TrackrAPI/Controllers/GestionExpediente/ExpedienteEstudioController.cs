@@ -30,7 +30,7 @@ namespace TrackrAPI.Controllers.GestionExpediente
             return expedienteEstudioService.Consultar(idExpedienteEstudio);
         }
  
-        [HttpPost("agregar")]
+        [HttpPost]
         public void Agregar(ExpedienteEstudioFormularioCapturaDTO expedienteEstudio)
         {
             int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);

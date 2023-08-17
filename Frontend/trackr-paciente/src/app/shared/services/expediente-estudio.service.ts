@@ -19,7 +19,7 @@ export class ExpedienteEstudioService {
   public agregarExpediente(
     expediente: ExpedienteEstudioFormularioCaptura
   ): Observable<void> {
-    return this.http.post<void>(this.dataUrl + `agregar`, expediente);
+    return this.http.post<void>(this.dataUrl, expediente);
   }
   public consultar(idExpedienteEstudio: number): Observable<ExpedienteEstudio> {
     return this.http.get<ExpedienteEstudio>(
