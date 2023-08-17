@@ -1,0 +1,40 @@
+.container {
+  position: relative;
+}
+
+.labels {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  .row {
+    height: 40px;
+
+    .col-3 {
+      justify-content: right;
+    }
+
+    & > * {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .label {
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .numero {
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  .texto {
+    font-size: 12px;
+    line-height: 14px;
+  }
+}

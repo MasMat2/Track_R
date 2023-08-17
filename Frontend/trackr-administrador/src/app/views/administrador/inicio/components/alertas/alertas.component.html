@@ -1,0 +1,22 @@
+<div class="tarjeta-contenedor d-flex gap-3">
+  <app-tarjeta
+    [claseIcono]="'fas fa-volume-up'"
+    [valor]="pacientesFueraDeRango.toString()"
+    [etiqueta]="'Alertas en Pacientes (Valores fuera de Rango)'"
+  >
+  </app-tarjeta>
+
+  <app-tarjeta
+    [claseIcono]="'fas fa-message'"
+    [valor]="solicitudesDeChat.toString()"
+    [etiqueta]="'Solicitudes a través de Chat'"
+  >
+  </app-tarjeta>
+
+  <app-tarjeta
+    [claseIcono]="'fas fa-video'"
+    [valor]="solicitudesDeVideo.toString()"
+    [etiqueta]="'Solicitudes de Videoconsultas'"
+  >
+  </app-tarjeta>
+</div>

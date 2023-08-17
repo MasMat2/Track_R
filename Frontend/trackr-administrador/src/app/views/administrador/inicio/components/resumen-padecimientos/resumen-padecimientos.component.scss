@@ -1,0 +1,26 @@
+.circle-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border: 2px;
+  border-style: solid;
+  border-radius: 50%;
+  border-color: #a6d0a6;
+  width: 40px;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.cantidad-pacientes {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.nombre-padecimiento {
+  color: gray;
+  font-size: 10px;
+  line-height: 12px;
+  text-align: center;
+}

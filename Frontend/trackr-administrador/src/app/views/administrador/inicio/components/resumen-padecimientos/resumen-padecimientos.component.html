@@ -1,0 +1,20 @@
+<div class="titulo-seccion">
+  Cantidad de Pacientes
+</div>
+
+<div class="card d-inline-flex p-3">
+  <div class="d-flex gap-3">
+    <div *ngFor="let padecimiento of padecimientos">
+      <div class="d-flex flex-column align-items-center gap-2" style="max-width: 80px;">
+        <div class="circle-container">
+          <span class="cantidad-pacientes">{{ padecimiento.cantidad }}</span>
+        </div>
+        <span class="nombre-padecimiento">{{ padecimiento.nombre }}</span>
+      </div>
+    </div>
+
+    <div class="align-self-center">
+      <i class="fas fa-filter"></i> Filtros
+    </div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+.card {
+  height: 100%;
+}
+
+.card-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 10px;
+  font-size: 20px;
+  color: gray;
+}
+
+.card-value {
+  font-size: 30px;
+  line-height: 30px;
+  font-weight: bold;
+}
+
+.card-text {
+  text-align: center;
+  color: gray;
+  font-size: 14px;
+
+}

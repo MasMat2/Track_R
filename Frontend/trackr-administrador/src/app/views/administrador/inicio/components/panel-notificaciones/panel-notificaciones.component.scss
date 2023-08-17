@@ -1,0 +1,45 @@
+.titulo {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.container {
+  background-color: #efede4;
+}
+
+.img-container {
+  flex-basis: 70px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 15px;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.nombre {
+  font-size: 12px;
+  line-height: 13px;
+  color: gray;
+}
+
+.mensaje {
+  font-size: 11px;
+  line-height: 12px;
+  color: #732f7f;
+}
+
+.fecha {
+  font-size: 10px;
+  line-height: 11px;
+  color: gray;
+}
+
+.chat {
+  font-size: 20px;
+  color: #732f7f;
+}

@@ -1,0 +1,29 @@
+<div class="contenedor" *ngIf="usuario$ | async; let usuario">
+  <div class="row">
+    <div class="col-8">
+      <div class="titulo-contenedor">
+        Bienvenido,
+        <span class="nombre-doctor">{{ usuario.nombreCompleto }}</span>
+      </div>
+
+      <div class="cuerpo-contenedor">
+        <div class="d-flex flex-column gap-5">
+          <app-alertas></app-alertas>
+          <app-resumen-padecimientos></app-resumen-padecimientos>
+          <div class="row">
+            <div class="col-6">
+              <app-grafica-pacientes></app-grafica-pacientes>
+            </div>
+            <div class="col-6">
+              <app-grafica-tratamientos></app-grafica-tratamientos>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-4">
+      <app-panel-notificaciones></app-panel-notificaciones>
+    </div>
+  </div>
+</div>
