@@ -75,6 +75,10 @@ namespace TrackrAPI.Services.GestionEntidad
                     foreach (var seccionCampoDTO in seccion)
                     {
                         var seccionCampo = seccionCampoRepository.ConsultarPorClaveConDependencia(seccionCampoDTO.ClaveCampo);
+                        if(seccionCampo == null)
+                        {
+                            continue;
+                        }
                         seccionesCampoList.Add(seccionCampo); //Cambiar a SeccionCampo
                     }
                     seccionMuestraDTO.SeccionesCampo = seccionesCampoList;

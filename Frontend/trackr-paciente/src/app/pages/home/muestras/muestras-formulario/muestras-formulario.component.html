@@ -27,19 +27,25 @@
             "
           >
             <ion-accordion>
-              <!-- <ion-item slot="header" color="light">
+              <ion-item slot="header" color="light">
                 <ion-label>{{ seccion.nombreSeccionCampo }}</ion-label>
-              </ion-item> -->
+              </ion-item>
 
               <div class="ion-padding" slot="content">
 
                 <ion-accordion-group>
                   <div
-                    *ngFor="
-                      let seccionCampo of seccion.seccionesCampo;
-                      let i = index"
-                      [ngClass]="'col-md-' + seccionCampo.tamanoColumna"
+                  *ngFor="
+                  let seccionCampo of seccion.seccionesCampo;
+                  let i = index"
+                  [ngClass]="'col-md-' + 12"
                   >
+                  <form
+                  (keydown.enter)="$event.preventDefault()"
+                  #formulario="ngForm"
+                  (ngSubmit)="enviarFormulario(formulario)"
+                  novalidate="novalidate"
+                >
                   <div class="form-group">
                     <app-campo-expediente
                       #campoModel="ngModel"
@@ -50,8 +56,17 @@
                     >
                     </app-campo-expediente>
                   </div>
-                  </div>
                   
+                  <button
+                    type="submit"
+                    class="btn btn-primario"
+                    [disabled]="submitting"
+                  >
+                    Guardar
+                  </button>
+                  </form>
+                  </div>
+
                 </ion-accordion-group>
 
               </div>
