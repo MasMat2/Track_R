@@ -440,6 +440,12 @@
               placeholder="Número Interior"
               [(ngModel)]="informacionUsuario.numeroInterior">
             </ion-input>
+            <div
+              *ngIf="numInterior.errors?.['required'] && (numInterior.dirty || numInterior.touched)"
+              class="error"
+            >
+              El número interior es requerido
+            </div>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -454,10 +460,17 @@
               shape="round"
               type="text"
               maxlength="50"
+              required="true"
               autocomplete="off"
               placeholder="Entre calles"
               [(ngModel)]="informacionUsuario.entreCalles">
             </ion-input>
+            <div
+              *ngIf="entreCalles.errors?.['required'] && (entreCalles.dirty || entreCalles.touched)"
+              class="error"
+            >
+              El campo entre calles es requerido
+            </div>
           </ion-col>
         </ion-row>
 
@@ -585,13 +598,13 @@
           </ion-col>
         </ion-row>
 
-
-        <ion-row>
+        <ion-row class="mt-4">
           <ion-col>
-              <ion-button [disabled]="btnSubmit" expand="full" color="primary" type="submit">Submit</ion-button>
+              <ion-button [disabled]="!btnSubmit" expand="full" color="primary" type="submit">Guardar</ion-button>
           </ion-col>
         </ion-row>
-
+        <br>
+        <br>
       </ion-grid>
     </form>
   </div>

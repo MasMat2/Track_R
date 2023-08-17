@@ -583,6 +583,7 @@ namespace TrackrAPI.Repositorys.Seguridad
         {
             var usuario = context.Usuario.
                 Where(u => u.IdUsuario == idUsuario)
+                    .Include(u => u.IdEstadoNavigation)
                     .Include(u=> u.ExpedienteTrackr)
                     .ThenInclude(u => u.ExpedientePadecimiento)
                     .ThenInclude(ep => ep.IdPadecimientoNavigation)
@@ -607,7 +608,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                 Estatura = expediente.Estatura,
                 Correo = usuario.Correo,
                 TelefonoMovil = usuario.TelefonoMovil,
-                IdPais = 1,
+                IdPais = usuario.IdEstadoNavigation.IdPais,
                 IdEstado = usuario.IdEstado,
                 IdMunicipio = usuario.IdMunicipio,
                 IdLocalidad = usuario.IdLocalidad,
