@@ -35,8 +35,13 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         public IEnumerable<EntidadEstructura> ConsultarPorEntidad(int idEntidad)
         {
             return context.EntidadEstructura
-                .Where(e => e.IdEntidad == idEntidad)
-                .ToList();
+                .Where(e => e.IdEntidad == idEntidad);
+        }
+
+        public IEnumerable<EntidadEstructura> ConsultarPorEntidad(string clave)
+        {
+            return context.EntidadEstructura
+                .Where(e => e.IdEntidadNavigation.Clave == clave);
         }
 
         public IEnumerable<EntidadEstructura> ConsultarPorEntidadSeccion(int idEntidad, int idSeccion)

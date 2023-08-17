@@ -11,6 +11,19 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         {
             base.context = context;
         }
+
+        public IEnumerable<ExpedientePadecimientoDTO> Consultar()
+        {
+            return context.ExpedientePadecimiento
+                .Select(ep => new ExpedientePadecimientoDTO
+                {
+                    IdExpedientePadecimiento = ep.IdExpedientePadecimiento,
+                    IdPadecimiento = ep.IdPadecimiento,
+                    FechaDiagnostico = ep.FechaDiagnostico,
+                    NombrePadecimiento = ep.IdPadecimientoNavigation.Nombre ?? string.Empty
+                }).ToList();
+        }
+
         public IEnumerable<ExpedientePadecimientoDTO> ConsultarPorUsuario(int idUsuario)
         {
             return context.ExpedientePadecimiento

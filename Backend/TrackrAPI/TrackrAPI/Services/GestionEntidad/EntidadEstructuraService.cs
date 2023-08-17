@@ -32,6 +32,21 @@ namespace TrackrAPI.Services.GestionEntidad
                    });
         }
 
+        public IEnumerable<EntidadEstructuraDto> ConsultarPorEntidad(string clave)
+        {
+            return entidadEstructuraRepository.ConsultarPorEntidad(clave)
+                .Select(e => new EntidadEstructuraDto
+                {
+                    IdEntidadEstructura = e.IdEntidadEstructura,
+                    Nombre = e.Nombre,
+                    Clave = e.Clave,
+                    Tabulacion = e.Tabulacion,
+                    IdEntidad = e.IdEntidad,
+                    IdSeccion = e.IdSeccion,
+                    IdEntidadEstructuraPadre = e.IdEntidadEstructuraPadre
+                });
+        }
+
         public IEnumerable<EntidadEstructuraDto> ConsultarParaTabulador(int idEntidad)
         {
             List<EntidadEstructuraDto> estructurasPadre = entidadEstructuraRepository.ConsultarPadres(idEntidad).ToList();

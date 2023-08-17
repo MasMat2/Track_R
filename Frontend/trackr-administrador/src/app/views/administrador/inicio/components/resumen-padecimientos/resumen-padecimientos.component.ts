@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { PadecimientoService } from '@http/padecimientos/padecimiento.service';
+import { Observable, tap } from 'rxjs';
+import { PacientesPorPadecimientoDTO } from '@dtos/padecimientos/pacientes-por-padecimiento-dto';
 
 @Component({
   selector: 'app-resumen-padecimientos',
@@ -7,17 +10,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResumenPadecimientosComponent implements OnInit {
 
-  protected padecimientos = [
-    {nombre: "Diabetes", cantidad: 50},
-    {nombre: "Hipertensión", cantidad: 300},
-    {nombre: "Cáncer", cantidad: 22},
-    {nombre: "Obesidad", cantidad: 12},
-    {nombre: "Enfermedades del corazón", cantidad: 11},
-  ];
+  protected padecimientos$: Observable<PacientesPorPadecimientoDTO[]>;
 
-  constructor() { }
+  constructor(
+    private padecimientoService: PadecimientoService
+  ) { }
 
   ngOnInit() {
+    this.padecimientos$ = this.padecimientoService.consultarPacientesPorPadecimiento()
+      .pipe(tap(padecimientos => console.log(padecimientos)));
   }
 
 }
