@@ -22,7 +22,7 @@ export default [
       },
       {
         path: 'mis-tratamientos',
-        loadComponent: () => import('./mis-tratamientos/mis-tratamientos.component').then((m) => m.MisTratamientosComponent)
+        loadComponent: () => import('./mis-tratamientos/mis-tratamientos.page').then((m) => m.MisTratamientosPage)
       },
       {
         path: 'mis-tratamientos/agregar',
