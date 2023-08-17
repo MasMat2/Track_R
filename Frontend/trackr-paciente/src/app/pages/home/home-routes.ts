@@ -4,9 +4,7 @@ import { CuestionariosPage } from "./cuestionarios/cuestionarios.page";
 import { DashboardPage } from "./dashboard/dashboard.page";
 import { HomePage } from "./home.page";
 import { MuestrasPage } from "./muestras/muestras.page";
-import { PerfilPage } from "./perfil/perfil.page";
-import { MisTratamientosComponent } from "./perfil/mis-tratamientos/mis-tratamientos.component";
-import { AgregarTratamientoPage } from './perfil/mis-tratamientos/agregar-tratamiento/agregar-tratamiento.page';
+
 
 export default [
   {

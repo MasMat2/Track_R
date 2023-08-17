@@ -1,6 +1,8 @@
-﻿using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Models;
 using Microsoft.EntityFrameworkCore;
+
+using System;
 
 namespace TrackrAPI.Repositorys.GestionExpediente;
 public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>, IExpedienteTratamientoRepository
@@ -34,15 +36,22 @@ public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>,
             .ToList();
     }
 
-    public IEnumerable<ExpedienteSelectorDto> SelectorDePadecimiento(int idUsuario)
+    public IEnumerable<ExpedienteTratamiento> ConsultarTratamientos(int idUsuario)
     {
 
-        var expedienteTratamiento = context.ExpedienteTratamiento
-            .Include(et => et.IdExpedienteNavigation)
-            .FirstOrDefault(et => et.IdExpedienteNavigation.IdUsuario == idUsuario);
+        return context.ExpedienteTratamiento
+            .Where(et => et.IdExpedienteNavigation.IdUsuario == idUsuario)
+            .Include(et => et.IdPadecimientoNavigation)
+            .Include(et => et.TratamientoRecordatorio)
+            .ThenInclude(tr => tr.TratamientoToma)
+            .ToList();
+    }
 
+
+    public IEnumerable<ExpedienteSelectorDto> SelectorDePadecimiento(int idUsuario)
+    {
         return context.ExpedienteTrackr
-        .Where(et => et.IdExpediente == expedienteTratamiento.IdExpediente)
+        .Where(et => et.IdUsuario == idUsuario)
         .SelectMany(et => et.ExpedientePadecimiento)
         .Select(ep => new ExpedienteSelectorDto
         {
@@ -51,6 +60,7 @@ public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>,
         }).ToList();
 
     }
+
 
     public IEnumerable<ExpedienteSelectorDto> SelectorDeDoctor(){
         return context.Usuario
@@ -63,18 +73,24 @@ public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>,
                 .ToList();
     }
 
+
     public int Agregar(ExpedienteTratamiento expedienteTratamiento)
     {
-
-
         var entry = context.ExpedienteTratamiento.Add(expedienteTratamiento);
         context.SaveChanges();
         return entry.Entity.IdExpedienteTratamiento;
     }
 
+
     public void AgregarRecordatorios(IEnumerable<TratamientoRecordatorio> recordatorios){
         context.TratamientoRecordatorio.AddRange(recordatorios);
         context.SaveChanges();
-
     }
+
+
 }
+
+
+
+
+

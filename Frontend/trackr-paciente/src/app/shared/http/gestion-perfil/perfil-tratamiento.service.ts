@@ -13,21 +13,21 @@ export class PerfilTratamientoService {
 
     constructor(public http: HttpClient) { }
 
-    agregar(perfilTratamientoDto: PerfilTratamientoDto) {
+    public consultarTratamientos(): Observable<PerfilTratamientoDto[]> {
+        return this.http.get<PerfilTratamientoDto[]>(this.dataUrl + ``);
+    }
+
+    public agregar(perfilTratamientoDto: PerfilTratamientoDto) {
         return this.http.post<number>(this.dataUrl + 'agregar', perfilTratamientoDto);
     }
 
-    consultarTratamientos(idUsuario: number): Observable<PerfilTratamientoDto[]> {
-        return this.http.get<PerfilTratamientoDto[]>(this.dataUrl + `usuario/${idUsuario}`);
-    }
-
-    selectorDeDoctor(): Observable<SelectorDto[]> {
+    public selectorDeDoctor(): Observable<SelectorDto[]> {
         return this.http.get<SelectorDto[]>(this.dataUrl + `selectorDeDoctor`);
     }
 
-    selectorPadecimeintos(): Observable<SelectorDto[]> {
+    public selectorPadecimeintos(): Observable<SelectorDto[]> {
 
-        return this.http.get<SelectorDto[]>(this.dataUrl + `selectorDePadecimiento/5315`);
+        return this.http.get<SelectorDto[]>(this.dataUrl + `selectorDePadecimiento`);
     }
 
 }
