@@ -8,6 +8,7 @@ import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { GeneralConstant } from '@utils/general-constant';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { SeccionTablaFormularioComponent } from '../seccion-tabla-formulario/seccion-tabla-formulario.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-seccion-tabla',
@@ -27,6 +28,7 @@ export class SeccionTablaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.entidadEstructuraSeccion.campos.sort((a, b) => a.orden - b.orden);
   }
 
   public seleccionar(registro: RegistroTabla): void {
@@ -46,10 +48,17 @@ export class SeccionTablaComponent implements OnInit {
 
   public obtenerValor(claveColumna: string, valores: EntidadEstructuraTablaValor[]): string {
     const valor = valores.find(v => v.claveCampo === claveColumna);
+    const campo = this.entidadEstructuraSeccion.campos.find(c => c.clave === claveColumna);
 
-    return valor
-      ? valor.valor
-      : '';
+    if (!valor) {
+      return '';
+    }
+
+    if(campo?.idDominioNavigation.tipoDato == 'Date') {
+      return moment(valor.valor).format('DD/MM/YYYY');
+    }
+
+    return valor.valor;
   }
 
   public agregar(): void {
