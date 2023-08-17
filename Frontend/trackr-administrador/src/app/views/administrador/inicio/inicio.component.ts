@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AlertasModule } from './components/alertas/alertas.module';
-import { GraficaPacientesModule } from './components/grafica-pacientes/grafica-pacientes.module';
+import { GraficaNotificacionesModule } from './components/grafica-notificaciones/grafica-notificaciones.module';
 import { GraficaTratamientosModule } from './components/grafica-tratamientos/grafica-tratamientos.module';
 import { ResumenPadecimientosModule } from './components/resumen-padecimientos/resumen-padecimientos.module';
 import { UsuarioService } from '../../../shared/http/seguridad/usuario.service';
@@ -18,7 +18,7 @@ import { PanelNotificacionesModule } from './components/panel-notificaciones/pan
     CommonModule,
     AlertasModule,
     ResumenPadecimientosModule,
-    GraficaPacientesModule,
+    GraficaNotificacionesModule,
     GraficaTratamientosModule,
     PanelNotificacionesModule
   ]

@@ -3,21 +3,20 @@ import { ChartConfiguration, ChartData, ChartOptions, ChartType } from 'chart.js
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 @Component({
-  selector: 'app-grafica-pacientes',
-  templateUrl: './grafica-pacientes.component.html',
-  styleUrls: ['./grafica-pacientes.component.scss']
+  selector: 'app-grafica-notificaciones',
+  templateUrl: './grafica-notificaciones.component.html',
+  styleUrls: ['./grafica-notificaciones.component.scss']
 })
-export class GraficaPacientesComponent implements OnInit {
+export class GraficaNotificacionesComponent implements OnInit {
 
-  private reporte: { riesgo: string, cantidad: number }[] = [
-    { riesgo: 'Bajo Riesgo', cantidad: 20 },
-    { riesgo: 'Riesgo Medio', cantidad: 10 },
-    { riesgo: 'Riesgo Alto', cantidad: 5 }
+  protected solicitudes: { tipo: string, cantidad: number }[] = [
+    { tipo: 'Solicitudes Atendidas', cantidad: 20 },
+    { tipo: 'Solicitudes Sin Atender', cantidad: 10 },
   ];
 
-  protected colors: string[] = ['#ff8b8b', '#ffc000', '#92d050'];
-  protected data = this.reporte.map((r) => r.cantidad);
-  private etiquetas = this.reporte.map((r) => r.riesgo);
+  protected colors: string[] = ['#92d050', '#ff8b8b'];
+  protected data = this.solicitudes.map((r) => r.cantidad);
+  private etiquetas = this.solicitudes.map((r) => r.tipo);
   private total: number = this.data.reduce((a, b) => a + b, 0);
 
   protected chartType: ChartConfiguration<'doughnut'>['type'] = 'doughnut';
@@ -26,7 +25,7 @@ export class GraficaPacientesComponent implements OnInit {
     labels: this.etiquetas,
     datasets: [
       {
-        label: "Pacientes",
+        label: "Solicitudes",
         data: this.data,
         backgroundColor: this.colors,
       }

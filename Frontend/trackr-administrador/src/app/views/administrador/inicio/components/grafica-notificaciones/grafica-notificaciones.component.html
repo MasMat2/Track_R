@@ -1,5 +1,5 @@
 <div class="titulo-seccion">
-  Mis Pacientes esta semana
+  Solicitudes
 </div>
 
 
@@ -16,10 +16,10 @@
   <div class="labels">
     <div class="row">
       <div class="col-3">
-        <span class="numero" [ngStyle]="{ color: colors[2] }">{{ data[2] }}</span>
+        <span class="numero" [ngStyle]="{ color: colors[0] }">{{ data[0] }}</span>
       </div>
       <div class="col-9">
-        <span class="texto">Pacientes con Bajo Riesgo</span>
+        <span class="texto">{{ solicitudes[0].tipo }}</span>
       </div>
     </div>
     <div class="row">
@@ -27,15 +27,7 @@
         <span class="numero" [ngStyle]="{ color: colors[1] }">{{ data[1] }}</span>
       </div>
       <div class="col-9">
-        <span class="texto">Pacientes con Riesgo Medio</span>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-3">
-        <span class="numero" [ngStyle]="{ color: colors[0] }">{{ data[0] }}</span>
-      </div>
-      <div class="col-9">
-        <span class="texto">Pacientes con Riesgo Alto</span>
+        <span class="texto">{{ solicitudes[1].tipo }}</span>
       </div>
     </div>
   </div>
