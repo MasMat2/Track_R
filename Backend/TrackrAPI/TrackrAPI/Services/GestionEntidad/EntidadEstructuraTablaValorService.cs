@@ -112,7 +112,7 @@ namespace TrackrAPI.Services.GestionEntidad
                 ClaveCampo = muestraDTO.ClaveCampo,
                 IdTabla = idUsuario,
                 Valor = muestraDTO.Valor,
-                FechaMuestra = DateTime.UtcNow,
+                FechaMuestra = muestraDTO.FechaMuestra,
                 FueraDeRango = muestraDTO.FueraDeRango
             };
             var ultimoRegistro = entidadEstructuraTablaValorRepository.ConsultarUltimoRegistro(muestra.IdEntidadEstructura, idUsuario);
@@ -244,8 +244,13 @@ namespace TrackrAPI.Services.GestionEntidad
             }
             foreach(var padecimiento in padecimientos)
             {
-                valoresFueraRangoGridDTOs.AddRange(ConsultarValores(padecimiento.IdPadecimiento, idUsuario, true));
+                valoresFueraRangoGridDTOs.AddRange(ConsultarValores(padecimiento.IdPadecimiento, idUsuario, true).Distinct());
             }
+            // Filtrar duplicados en función de propiedades específicas
+            valoresFueraRangoGridDTOs = valoresFueraRangoGridDTOs
+                .GroupBy(dto => new { dto.NombrePadecimiento, dto.Variable, dto.Parametro, dto.FechaHora, dto.ValorRegistrado })
+                .Select(group => group.First())
+                .ToList();
             return valoresFueraRangoGridDTOs;
         }
 

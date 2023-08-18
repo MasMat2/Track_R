@@ -36,10 +36,10 @@ export class MuestrasPage implements OnInit {
 
   // Configuración Columnas Data Grid
   protected columns = [
-    { headerName: 'Sección', field: 'variable', minWidth: 150 },
-    { headerName: 'Campo', field: 'parametro', minWidth: 150 },
-    { headerName: 'Fecha & Hora', field: 'fechaHora', minWidth: 150 },
-    { headerName: 'Valor', field: 'valorRegistrado', minWidth: 150 },
+    { headerName: 'Sección', field: 'variable', minWidth: 20 },
+    { headerName: 'Campo', field: 'parametro', minWidth: 10 },
+    { headerName: 'Fecha & Hora', field: 'fechaHora', minWidth: 10 },
+    { headerName: 'Valor', field: 'valorRegistrado', minWidth: 10 },
   ];
 
   constructor(

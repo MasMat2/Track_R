@@ -11,6 +11,7 @@ import { SeccionCampo } from '@models/gestion-expediente/seccion-campo';
 import { CampoExpedienteModule } from '@sharedComponents/campo-expediente/campo-expediente.module';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import * as Utileria from '@utils/utileria';
+import { SeccionMuestraDTO } from '@dtos/gestion-expediente/seccion-muestra-dto';
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -28,9 +29,10 @@ import * as Utileria from '@utils/utileria';
 })
 export class MuestrasFormularioComponent implements OnInit {
   protected recomendacion: any;
-  protected dateToday: Date = new Date();
+  protected dateToday: string = new Date().toISOString();
   public arbolPadecimiento: PadecimientoMuestraDTO[] = [];
   protected submitting: boolean = false;
+  protected fechaSeleccionada: string;
   constructor(
     private seccionCampoService: SeccionCampoService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
@@ -49,66 +51,38 @@ export class MuestrasFormularioComponent implements OnInit {
       //   }
       // }
       this.arbolPadecimiento = arbolPadecimiento;
+      console.log(this.arbolPadecimiento);
     });
   }
 
-  public enviarFormulario(formulario: NgForm, seccionCampo: SeccionCampo): void {
+  public enviarFormulario(seccion: SeccionMuestraDTO, fechaSeleccionada: string): void {
     this.submitting = true;
-    console.log(formulario);
-
-    if (!formulario.valid) {
+    const camposAgregados: TablaValorMuestraDTO[] = [];
+  
+    for (const seccionCampo of seccion.seccionesCampo) {
+      if (seccionCampo.valor) {
+        camposAgregados.push({
+          claveCampo: seccionCampo.clave,
+          valor: seccionCampo.valor.toString(),
+          fueraDeRango: this.estaFueraDeRango(seccionCampo),
+          fechaMuestra: new Date(fechaSeleccionada)
+        });
+      }
+    }
+  
+    if (camposAgregados.length === 0) {
       this.submitting = false;
-      Utileria.validarCamposRequeridos(formulario);
       return;
     }
-    console.log(formulario, seccionCampo);
-    const campoAgregar: TablaValorMuestraDTO = {
-      claveCampo: seccionCampo.clave,
-      valor: seccionCampo.valor?.toString() ?? '',
-      fueraDeRango: this.estaFueraDeRango(seccionCampo)
-    };
-    console.log(campoAgregar);
-    this.agregar(campoAgregar);
+
+    for(const campo of camposAgregados)
+    {
+      this.agregar(campo);
+    }
   }
 
   public agregar(campoAgregar: TablaValorMuestraDTO): void {
     this.entidadEstructuraTablaValorService.agregarMuestra(campoAgregar).subscribe();
-    // const registro: EntidadTablaRegistroDto = {
-    //   numero: 0,
-    //   idEntidadEstructura: this.idPestanaSeccion,
-    //   valores: [],
-    // };
-
-    // const camposAgregar = this.campos.filter(
-    //   (c) =>
-    //     !(c.idEntidadEstructuraValor > 0) &&
-    //     c.valor !== '' &&
-    //     c.valor &&
-    //     c.idDominioNavigation.tipoCampo !== 'Select Múltiple'
-    // );
-
-    // registro.valores = camposAgregar.map(
-    //   (campo: SeccionCampo) => {
-    //     const valor: TablaValorDto = {
-    //       idEntidadEstructuraTablaValor: 0,
-    //       claveCampo: campo.clave,
-    //       valor: campo.valor?.toString() ?? '',
-    //       fueraDeRango: this.estaFueraDeRango(campo)
-    //     };
-
-    //     return valor;
-    //   }
-    // );
-
-    // const subscription = this.entidadEstructuraTablaValorService
-    //   .agregar(registro)
-    //   .subscribe({
-    //     next: () => {
-    //       // this.mensajeService.modalExito('Se agregó el registro correctamente');
-    //       subscription.unsubscribe();
-    //     }
-    //   });
-    console.log(this.arbolPadecimiento);
   }
 
   private estaFueraDeRango(campo: SeccionCampo) {

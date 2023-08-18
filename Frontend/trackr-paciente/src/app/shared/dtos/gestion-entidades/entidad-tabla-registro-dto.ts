@@ -16,4 +16,5 @@ export interface TablaValorMuestraDTO {
     claveCampo: string;
     valor: string;
     fueraDeRango: boolean;
+    fechaMuestra: Date;
 }

@@ -1,74 +1,56 @@
-<div class="col-md-2 justify-content-between align-items-center">
-  <label class="label-input required-label">Fecha</label>
+<div class="titulo-contenedor">
+  <h3 style="text-align: center;">Agregar Muestra</h3>
 </div>
 
-<div>
-  <ion-datetime-button datetime="datetime"></ion-datetime-button>
-
-  <ion-modal [keepContentsMounted]="true">
-    <ng-template>
-      <ion-datetime id="datetime"></ion-datetime>
-    </ng-template>
-  </ion-modal>
+<div class="row">
+  <div class="col-md-12" style="text-align: center;">
+    <label class="label-input required-label" style="text-align: center;">Fecha & Hora</label>
+    <ion-datetime-button datetime="datetime">
+    </ion-datetime-button>
+  
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime
+          id="datetime"
+          [max]="dateToday"
+          [(ngModel)]="fechaSeleccionada"
+        >
+        </ion-datetime>
+      </ng-template>
+    </ion-modal>
+  </div>
 </div>
-
 <ion-accordion-group>
   <div *ngFor="let padecimiento of arbolPadecimiento; let i = index">
     <ion-accordion value="{{ padecimiento.idPadecimiento }}">
       <ion-item slot="header" color="light">
-        <ion-label>{{ padecimiento.nombrePadecimiento }}</ion-label>
+        <ion-label  class="subtitulo-muestra">{{ padecimiento.nombrePadecimiento }}</ion-label>
       </ion-item>
       <div class="ion-padding" slot="content">
         <ion-accordion-group>
-          <div
-            *ngFor="
-              let seccion of padecimiento.seccionMuestraDTOs;
-              let i = index
-            "
-          >
+          <div *ngFor="let seccion of padecimiento.seccionMuestraDTOs; let j = index">
             <ion-accordion>
               <ion-item slot="header" color="light">
-                <ion-label>{{ seccion.nombreSeccionCampo }}</ion-label>
+                <ion-label class="subtitulo-muestra">{{ seccion.nombreSeccionCampo }}</ion-label>
               </ion-item>
 
               <div class="ion-padding" slot="content">
-
-                <ion-accordion-group>
-                  <div
-                  *ngFor="
-                  let seccionCampo of seccion.seccionesCampo;
-                  let i = index"
-                  [ngClass]="'col-md-' + 12"
-                  >
-                  <form
-                  (keydown.enter)="$event.preventDefault()"
-                  #formulario="ngForm"
-                  (ngSubmit)="enviarFormulario(formulario, seccionCampo)"
-                  novalidate="novalidate"
-                >
-                  <div class="form-group">
+                <form (keydown.enter)="$event.preventDefault()">
+                  <div class="form-group" *ngFor="let seccionCampo of seccion.seccionesCampo; let k = index">
                     <app-campo-expediente
                       #campoModel="ngModel"
                       [(ngModel)]="seccionCampo.valor"
-                      [name]="'campos' + i"
+                      [name]="'campos' + k"
                       [campo]="seccionCampo"
-                      [par]="i % 2 === 0"
+                      [par]="k % 2 === 0"
                     >
                     </app-campo-expediente>
                   </div>
-                  
-                  <ion-button 
-                  class="btn-primario"
-                    type="submit"
-                >
+                </form>
+                <ion-button class="btn-primario" (click)="enviarFormulario(seccion, fechaSeleccionada)">
                   <ion-icon name="add-outline"></ion-icon>
-                  Agregar Muestra
+                  Guardar
                 </ion-button>
-                  </form>
-                  </div>
-
-                </ion-accordion-group>
-
               </div>
             </ion-accordion>
           </div>
