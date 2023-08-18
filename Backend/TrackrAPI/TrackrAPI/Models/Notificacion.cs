@@ -14,7 +14,9 @@ namespace TrackrAPI.Models
         public DateTime FechaAlta { get; set; }
         public string Descripcion { get; set; } = null!;
         public string? Origen { get; set; }
+        public int IdTipoNotificacion { get; set; }
 
+        public virtual TipoNotificacion IdTipoNotificacionNavigation { get; set; } = null!;
         public virtual ICollection<NotificacionUsuario> NotificacionUsuario { get; set; }
     }
 }

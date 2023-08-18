@@ -13,13 +13,11 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Text;
 using TrackrAPI.Helpers;
+using TrackrAPI.Hubs;
 using TrackrAPI.Models;
 using TrackrAPI.Services.GestionEntidad;
 
 var builder = WebApplication.CreateBuilder(args);
-var connection = builder.Configuration.GetConnectionString("DefaultConnection");
-// JwtSettings jwtSettings = new JwtSettings();
-// builder.Configuration.GetSection(JwtSettings.SectionName).Bind(jwtSettings);
 
 // TODO: 2023-05-09 -> Esta es una configuración temporal para evitar
 // que se validen los modelos en los controladores migrados de ATI.
@@ -28,6 +26,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
      options.SuppressModelStateInvalidFilter = true;
 });
 
+var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<TrackrContext>(options =>
 {
     options.UseSqlServer(connection);
@@ -42,9 +41,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(opt =>
 
 builder.Services.AddCors();
 builder.Services.AddSignalR();
-builder.Services.AddScoped<SimpleAES>();
 builder.Services.AddHttpContextAccessor();
-
+builder.Services.AddScoped<SimpleAES>();
 builder.Services.AddScoped<CorreoHelper>();
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
@@ -134,17 +132,20 @@ app.UseExceptionHandler(builder =>
 });
 
 app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
 app.UseCors(builder =>
 {
-    builder.AllowAnyOrigin()
-    .AllowAnyHeader()
-    .WithMethods("GET", "POST", "PUT", "DELETE");
+    builder
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials()
+        .WithOrigins("http://localhost:4200");;
 });
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+    endpoints.MapHub<NotificacionHub>("/api/hub/notificacion");
 });
 
 if (!app.Environment.IsDevelopment())

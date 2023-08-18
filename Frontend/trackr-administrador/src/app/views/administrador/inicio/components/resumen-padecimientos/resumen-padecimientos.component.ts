@@ -17,8 +17,7 @@ export class ResumenPadecimientosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.padecimientos$ = this.padecimientoService.consultarPacientesPorPadecimiento()
-      .pipe(tap(padecimientos => console.log(padecimientos)));
+    this.padecimientos$ = this.padecimientoService.consultarPacientesPorPadecimiento();
   }
 
 }

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NotificacionService } from '../../../../../shared/http/notificaciones/notificacion.service';
+import { NotificacionHubService } from '@services/notificacion-hub.service';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-panel-notificaciones',
@@ -7,26 +10,42 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PanelNotificacionesComponent implements OnInit {
 
-
-  protected notificaciones: {
+  protected notificaciones$: Observable<{
     id: number,
     paciente: string,
     mensaje: string,
     fecha: Date,
-    imagen?: string
-  }[] = [
-    // give me mock data for this interface
-    { id: 1, paciente: 'Juan López', mensaje: 'Fusce in faucibus mauris. Vivamus nisi lacus, pellentesque ac libero sed, varius posuere nisi. ', fecha: new Date(), imagen: undefined },
-    { id: 2, paciente: 'Roberto Hernández', mensaje: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ', fecha: new Date(), imagen: undefined },
-    { id: 3, paciente: 'Lucero Castro', mensaje: 'Ultrices tincidunt arcu non sodales neque sodales ut etiam.', fecha: new Date(), imagen: undefined },
-    { id: 4, paciente: 'Erick Villarreal', mensaje: 'Vitae et leo duis ut. Nibh praesent tristique magna sit amet purus gravida quis blandit.', fecha: new Date(), imagen: undefined },
-    { id: 5, paciente: 'Daniela Guadalupe', mensaje: 'Sed adipiscing diam donec adipiscing tristique. Semper eget duis at tellus at.', fecha: new Date(), imagen: undefined },
-    { id: 6, paciente: 'Gloria Martínez', mensaje: 'Massa id neque aliquam vestibulum morbi blandit cursus risus.', fecha: new Date(), imagen: undefined },
-  ];
+    imagen?: string,
+    visto: boolean
+  }[]>;
 
-  constructor() { }
+  constructor(
+    private notificacionService: NotificacionService,
+    private notificacionHubService: NotificacionHubService
+  ) { }
 
   ngOnInit() {
+    this.notificaciones$ = this.notificacionHubService.notificacion$
+      .pipe(
+        map(notificaciones => notificaciones.map((notificacion) => {
+          return {
+            id: notificacion.idNotificacionUsuario,
+            paciente: notificacion.origen,
+            mensaje: notificacion.descripcion,
+            fecha: notificacion.fechaAlta,
+            imagen: undefined,
+            visto: notificacion.visto
+          };
+        }))
+      );
+  }
+
+  protected notificar(): void {
+    this.notificacionService.notificar().subscribe();
+  }
+
+  protected marcarComoVista(idNotificacionUsuario: number) {
+    this.notificacionHubService.marcarComoVista(idNotificacionUsuario);
   }
 
 }

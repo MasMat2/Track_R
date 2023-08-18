@@ -2,8 +2,8 @@
   <div class="titulo mb-3">Notificaciones</div>
 
   <div class="d-flex flex-column gap-3">
-    <div *ngFor="let notificacion of notificaciones">
-      <div class="d-flex align-items-center gap-3">
+    <div *ngFor="let notificacion of notificaciones$ | async">
+      <div class="notificacion d-flex align-items-center gap-3" [ngClass]="{ 'vista': notificacion.visto }">
         <div class="img-container">
           <img [src]="notificacion.imagen ?? 'https://via.placeholder.com/150'">
         </div>
@@ -12,10 +12,15 @@
           <span class="mensaje">{{ notificacion.mensaje }}</span>
           <span class="fecha">{{ notificacion.fecha | date }}</span>
         </div>
-        <div class="chat ms-a">
-          <i class="fas fa-comment"></i>
+        <div class="ms-auto">
+          <button type="button" class="btn" (click)="marcarComoVista(notificacion.id)">
+            <i class="chat fas fa-comment"></i>
+          </button>
         </div>
       </div>
     </div>
+
+    <button type="button" (click)="notificar()" class="btn btn-primario">Enviar Notificacion</button>
   </div>
+
 </div>

@@ -87,10 +87,10 @@ namespace TrackrAPI.Models
         public int? IdEstado { get; set; }
         public int IdTipoUsuario { get; set; }
         public int? IdPerfil { get; set; }
-        public int? IdCompania { get; set; }
+        public int IdCompania { get; set; }
         public string? Username { get; set; }
         public string? ImagenTipoMime { get; set; }
-        public int? IdHospital { get; set; }
+        public int IdHospital { get; set; }
         public int? IdTituloAcademico { get; set; }
         public int? IdDepartamento { get; set; }
         public string? Calle { get; set; }
@@ -120,10 +120,10 @@ namespace TrackrAPI.Models
 
         public virtual Area? IdAreaNavigation { get; set; }
         public virtual Colonia? IdColoniaNavigation { get; set; }
-        public virtual Compania? IdCompaniaNavigation { get; set; }
+        public virtual Compania IdCompaniaNavigation { get; set; } = null!;
         public virtual Departamento? IdDepartamentoNavigation { get; set; }
         public virtual Estado? IdEstadoNavigation { get; set; }
-        public virtual Hospital? IdHospitalNavigation { get; set; }
+        public virtual Hospital IdHospitalNavigation { get; set; } = null!;
         public virtual ListaPrecio? IdListaPrecioNavigation { get; set; }
         public virtual Localidad? IdLocalidadNavigation { get; set; }
         public virtual MetodoPago? IdMetodoPagoNavigation { get; set; }

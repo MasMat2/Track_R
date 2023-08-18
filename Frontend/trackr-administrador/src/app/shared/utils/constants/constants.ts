@@ -1,3 +1,5 @@
+export const TOKEN_KEY = 'token-administrador';
+
 export enum FORM_ACTION {
     Agregar = 'Agregar',
     Editar = 'Editar',
