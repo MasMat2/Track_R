@@ -2,6 +2,7 @@
 using TrackrAPI.Models;
 
 namespace TrackrAPI.Repositorys.GestionExpediente
+
 {
     public interface IExpedienteEstudioRepository: IRepository<ExpedienteEstudio>
     {

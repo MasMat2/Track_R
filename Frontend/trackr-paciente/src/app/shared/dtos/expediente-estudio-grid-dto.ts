@@ -3,5 +3,6 @@ export interface ExpedienteEstudioGridDTO {
   idExpediente: number;
   nombre: string;
   fechaRealizacion: Date;
+  archivoTipoMime:string;
 
   }

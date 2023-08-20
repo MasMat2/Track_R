@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-namespace TrackrAPI.Dtos.GestionExpediente
+﻿namespace TrackrAPI.Dtos.GestionExpediente
+
 {
     public class ExpedienteEstudioFormularioCapturaDTO
     {
@@ -11,14 +10,9 @@ namespace TrackrAPI.Dtos.GestionExpediente
         public byte[] Archivo { get; set; } = null!;
         public string ArchivoTipoMime { get; set; } = null!;
         public string ArchivoNombre { get; set; } = null!;
+
     }
 }
 
 
-
-
-   
-       
-
- 
 

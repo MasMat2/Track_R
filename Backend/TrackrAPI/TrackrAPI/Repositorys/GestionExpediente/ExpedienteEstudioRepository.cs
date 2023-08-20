@@ -2,10 +2,11 @@
 using TrackrAPI.Models;
 
 namespace TrackrAPI.Repositorys.GestionExpediente
+
 {
-    public class ExpedienteEstudioRepositoy: Repository<ExpedienteEstudio>, IExpedienteEstudioRepository
+    public class ExpedienteEstudioRepository : Repository<ExpedienteEstudio>, IExpedienteEstudioRepository
     {
-        public ExpedienteEstudioRepositoy(TrackrContext context): base(context)
+        public ExpedienteEstudioRepository(TrackrContext context) : base(context)
         {
             base.context = context;
         }
@@ -31,7 +32,6 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                 })
                 .ToList();
         }
-        
 
         public int ConsultarIdExpediente(int idUsuario)
         {
@@ -42,5 +42,6 @@ namespace TrackrAPI.Repositorys.GestionExpediente
 
             return idExpediente;
         }
+
     }
 }

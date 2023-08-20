@@ -2,8 +2,8 @@
   <app-header></app-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button>
-        <i class="fa-solid fa-arrow-left" (click)="cerrarModal()"></i>
+      <ion-button routerLink="/home/perfil/mis-estudios">
+        <i class="fa-solid fa-arrow-left"></i>
       </ion-button>
     </ion-buttons>
     <ion-title>Mis Estudios/Agregar Estudio</ion-title>
@@ -27,7 +27,7 @@
           <div>
             <ion-input
               #nombre="ngModel"
-              [(ngModel)]="expedienteEstudio.Nombre"
+              [(ngModel)]="expedienteEstudio.nombre"
               name="estudioName"
               type="text"
               maxlength="200"
@@ -46,7 +46,7 @@
           <ion-input
             type="text"
             readonly="true"
-            [(ngModel)]="expedienteEstudio.ArchivoNombre"
+            [(ngModel)]="expedienteEstudio.archivoNombre"
             name="ArchivoNombre"
             #documento="ngModel"
             required

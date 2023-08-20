@@ -3,14 +3,15 @@ using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionExpediente;
 
 namespace TrackrAPI.Services.GestionExpediente
+
 {
     public class ExpedienteEstudioService
     {
-        private readonly IExpedienteEstudioRepository expedienteEstudioRepository;
-        
+        private readonly IExpedienteEstudioRepository _expedienteEstudioRepository;
+
         public ExpedienteEstudioService(IExpedienteEstudioRepository expedienteEstudioRepository)
         {
-            this.expedienteEstudioRepository = expedienteEstudioRepository;
+            _expedienteEstudioRepository = expedienteEstudioRepository;
         }
 
         /// <summary>
@@ -20,7 +21,7 @@ namespace TrackrAPI.Services.GestionExpediente
         /// <returns>Lista de Estudios</returns>
         public IEnumerable<ExpedienteEstudioGridDTO> ConsultarPorUsuario(int idUsuario)
         {
-            return expedienteEstudioRepository.ConsultarPorUsuario(idUsuario);
+            return _expedienteEstudioRepository.ConsultarPorUsuario(idUsuario);
         }
 
         /// <summary>
@@ -30,14 +31,12 @@ namespace TrackrAPI.Services.GestionExpediente
         /// <returns>Estudio Consultado</returns>
         public ExpedienteEstudio Consultar(int idExpedienteEstudio)
         {
-            return expedienteEstudioRepository.Consultar(idExpedienteEstudio);
+            return _expedienteEstudioRepository.Consultar(idExpedienteEstudio);
         }
 
-
         public void Agregar(ExpedienteEstudioFormularioCapturaDTO expedienteEstudioDTO, int idUsuario)
-
         {
-            int idExpediente = expedienteEstudioRepository.ConsultarIdExpediente(idUsuario);
+            int idExpediente = _expedienteEstudioRepository.ConsultarIdExpediente(idUsuario);
 
             var expedienteEstudio = new ExpedienteEstudio()
             {
@@ -48,14 +47,13 @@ namespace TrackrAPI.Services.GestionExpediente
                 ArchivoTipoMime = expedienteEstudioDTO.ArchivoTipoMime,
                 ArchivoNombre = expedienteEstudioDTO.ArchivoNombre
             };
-            expedienteEstudioRepository.Agregar(expedienteEstudio);
+            _expedienteEstudioRepository.Agregar(expedienteEstudio);
         }
+
         public void Eliminar(int idExpedienteEstudio)
         {
-            var expedienteEstudio = expedienteEstudioRepository.Consultar(idExpedienteEstudio);
-
-                expedienteEstudioRepository.Eliminar(expedienteEstudio);
-            
+            var expedienteEstudio = _expedienteEstudioRepository.Consultar(idExpedienteEstudio);
+            _expedienteEstudioRepository.Eliminar(expedienteEstudio);
         }
 
         /*public int Agregar()

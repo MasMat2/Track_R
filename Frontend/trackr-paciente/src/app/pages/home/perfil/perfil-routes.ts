@@ -1,8 +1,6 @@
 import { Routes, RouterModule, Route } from '@angular/router';
 import { PerfilPage } from './perfil.page';
 import { MisDoctoresPage } from './mis-doctores/mis-doctores.page';
-import { MisEstudiosFormularioComponent } from './mis-estudios/mis-estudios-formulario/mis-estudios-formulario.component';
-
 export default [
   {
     path: '',
@@ -30,11 +28,11 @@ export default [
       },
       {
         path: 'mis-estudios',
-        loadComponent: () => import('./mis-estudios/mis-estudios.component').then((m) => m.MisEstudiosComponent)
+        loadComponent: () => import('./mis-estudios/mis-estudios.component').then((m) => m.MisEstudiosPage)
       },
       {
         path: 'mis-estudios/agregar',
-        loadComponent: () => import('./mis-estudios/mis-estudios-formulario/mis-estudios-formulario.component').then((m) => m.MisEstudiosFormularioComponent)
+        loadComponent: () => import('./mis-estudios/mis-estudios-formulario/mis-estudios-formulario.component').then((m) => m.MisEstudiosFormularioPage)
       },
       { path: '**', redirectTo: 'informacion-general', pathMatch: 'full' }
     ]

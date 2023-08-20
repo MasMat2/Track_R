@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { PickedFile } from '@capawesome/capacitor-file-picker';
-import { AlertController, IonicModule, ModalController } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { ExpedienteEstudioService } from '@services/expediente-estudio.service';
 import { CapacitorUtils } from '@utils/capacitor-utils';
@@ -14,71 +14,62 @@ import { validarCamposRequeridos } from 'src/app/shared/utils/utileria';
   selector: 'app-mis-estudios-formulario',
   templateUrl: './mis-estudios-formulario.component.html',
   styleUrls: ['./mis-estudios-formulario.component.scss'],
-  standalone:true,
-  imports:[
+  standalone: true,
+  imports: [
     IonicModule,
     FormsModule,
     HeaderComponent,
     CommonModule,
     RouterModule,
   ],
-  providers:[
-    CapacitorUtils
-  ]
+  providers: [CapacitorUtils],
 })
-export class MisEstudiosFormularioComponent  implements OnInit {
 
-  public files: PickedFile[] = [];
-  isPictureTaken: boolean = false;
-
-  fecha = new Date();
-  image_src: string='';
-  mimeType: string = '';
-  public btnSubmit = false;
+export class MisEstudiosFormularioPage implements OnInit {
+  private files: PickedFile[] = [];
+  protected isPictureTaken: boolean = false;
+  protected fecha = new Date();
+  private image_src: string = '';
+  private mimeType: string = '';
+  protected btnSubmit = false;
 
   public expedienteEstudio = new ExpedienteEstudioFormularioCaptura();
   constructor(
     private capacitorUtil: CapacitorUtils,
     private alertController: AlertController,
-    private expedienteEstudioService:ExpedienteEstudioService,
-    private modalController:ModalController
+    private expedienteEstudioService: ExpedienteEstudioService,
+    private router: Router
   ) {}
 
   ngOnInit() {}
 
-  async takePicture() {
+  protected async takePicture() {
     this.isPictureTaken = true;
     this.image_src = await this.capacitorUtil.takePicture();
 
     const [, data] = this.image_src.split(',');
     const mimeType = this.image_src.split(':')[1].split(';')[0];
 
-    this.expedienteEstudio.Archivo = data;
-    this.expedienteEstudio.ArchivoTipoMime = mimeType;
-    this.expedienteEstudio.ArchivoNombre = this.generateFileName();
-
+    this.expedienteEstudio.archivo = data;
+    this.expedienteEstudio.archivoTipoMime = mimeType;
+    this.expedienteEstudio.archivoNombre = this.generateFileName();
   }
 
-
-
-  public enviarFormulario(formulario: NgForm): void {
-   this.btnSubmit = true;
+  protected enviarFormulario(formulario: NgForm) {
+    this.btnSubmit = true;
     if (!formulario.valid) {
       validarCamposRequeridos(formulario);
       this.btnSubmit = false;
       return;
     }
     this.agregarExpediente();
-    const modalData = { actualizarGrid: true };
-
-    this.modalController.dismiss(modalData);
   }
 
-  async agregarArchivo() {
+  protected async agregarArchivo() {
     this.files = await this.capacitorUtil.pickFiles();
-    this.expedienteEstudio.Archivo = this.files[0].data;
-    this.expedienteEstudio.ArchivoTipoMime = this.files[0].mimeType;
-    this.expedienteEstudio.ArchivoNombre = this.files[0].name;
+    this.expedienteEstudio.archivo = this.files[0].data;
+    this.expedienteEstudio.archivoTipoMime = this.files[0].mimeType;
+    this.expedienteEstudio.archivoNombre = this.files[0].name;
   }
 
   //temporal o de prueba del nombre de la fotografia cuando se toma o se selecciona
@@ -91,29 +82,22 @@ export class MisEstudiosFormularioComponent  implements OnInit {
     return `foto_${formattedDate}_${timestamp}.${extension}`;
   }
 
-  public agregarExpediente(): void {
-
+  private agregarExpediente() {
     const MENSAJE_EXITO: string = `El estudio ha sido agregado correctamente`;
-     const subscription=this.expedienteEstudioService.agregarExpediente(this.expedienteEstudio).subscribe({
-      next:()=>{
-        this.presentAlert(MENSAJE_EXITO)
-      },
-      error:()=>{
-        this.btnSubmit = false;
-      },
-      complete:()=>{
-        subscription.unsubscribe();
-      }
-    },
-      );
-
+    const subscription = this.expedienteEstudioService
+      .agregarExpediente(this.expedienteEstudio)
+      .subscribe({
+        next: () => {
+          this.presentAlert(MENSAJE_EXITO);
+          this.router.navigateByUrl('home/perfil/mis-estudios');
+        },
+        error: () => {
+          this.btnSubmit = false;
+        },
+      });
   }
 
-  async cerrarModal() {
-    await this.modalController.dismiss();
-  }
-
-  private async presentAlert(mensaje : string) {
+  private async presentAlert(mensaje: string) {
     const alert = await this.alertController.create({
       header: 'Mis Estudios',
       message: mensaje,
@@ -122,5 +106,4 @@ export class MisEstudiosFormularioComponent  implements OnInit {
 
     await alert.present();
   }
-
 }

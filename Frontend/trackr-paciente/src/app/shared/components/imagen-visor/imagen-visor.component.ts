@@ -11,11 +11,12 @@ import { IonicModule, ModalController } from '@ionic/angular';
     IonicModule
   ],
 })
+
 export class ImagenVisorComponent  implements OnInit {
   @Input() nombreEstudio:string='';
   @Input() archivo: string='';
   @Input() archivoTipoMime:string='';
-  imageSrc: SafeResourceUrl;
+  protected imageSrc: SafeResourceUrl;
 
   constructor(private sanitizer: DomSanitizer,private modalController:ModalController) {
   }
@@ -25,7 +26,7 @@ export class ImagenVisorComponent  implements OnInit {
     this.imageSrc = this.sanitizer.bypassSecurityTrustResourceUrl(`data:${this.archivoTipoMime};base64,${this.archivo}`);
 
   }
-  cancelar() {
+  protected cancelar() {
     this.modalController.dismiss();
   }
 

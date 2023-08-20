@@ -1,6 +1,6 @@
 export class ExpedienteEstudioFormularioCaptura {
-    Nombre: string='';
-    Archivo:any;
-    ArchivoTipoMime:string='';
-    ArchivoNombre:string='';
+    nombre: string='';
+    archivo:any;
+    archivoTipoMime:string='';
+    archivoNombre:string='';
   }

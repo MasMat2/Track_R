@@ -1,21 +1,22 @@
 <ion-content>
-  <ion-button size="small" color="dark" (click)="agregar()">
-    Agregar Estudio
-    <ion-icon slot="end" name="add-circle-outline"></ion-icon>
+  <ion-button fill="outline" expand="block" button fill="outline" routerLink="/home/perfil/mis-estudios/agregar">
+    Agregar tratamiento
+    <ion-icon name="add-outline" slot="end"></ion-icon>
   </ion-button>
 
   <div style="color: grey; font-size: large; margin-top: 30px">
     Mis estudios
   </div>
 
-  <p-table
+  <ng-container *ngIf="expedientes$ | async as data">
+    <p-table
     class="primeng-table"
-    [value]="expedientes"
+    [value]="data"
     [tableStyle]="{ 'min-width': '100%' }"
   >
     <ng-template pTemplate="header">
       <tr>
-        <th>Num.</th>
+        <th>Núm.</th>
         <th>Estudio</th>
         <th>Fecha</th>
         <th></th>
@@ -49,4 +50,6 @@
       </tr>
     </ng-template>
   </p-table>
+  </ng-container>
+
 </ion-content>

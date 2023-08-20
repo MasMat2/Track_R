@@ -1,2 +1,15 @@
 @import 'src/app/shared/styles/data-grid.scss';
 @import "~primeng/resources/primeng.min.css";
+
+.primeng-table th {
+    color: #651B73;
+  }
+
+  ion-button {
+
+    --color:black;
+    --border-color: #9BD8AC;
+
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+  }
