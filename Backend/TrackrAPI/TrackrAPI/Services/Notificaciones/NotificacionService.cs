@@ -1,7 +1,5 @@
 using System.Transactions;
-using Microsoft.AspNetCore.SignalR;
 using TrackrAPI.Dtos.Notificaciones;
-using TrackrAPI.Hubs;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Notificaciones;
 
@@ -10,91 +8,58 @@ namespace TrackrAPI.Services.Notificaciones;
 public class NotificacionService
 {
     private readonly INotificacionRepository notificacionRepository;
-    private readonly INotificacionUsuarioRepository notificacionUsuarioRepository;
-    private readonly IHubContext<NotificacionHub, INotificacionHub> hubContext;
+    private readonly NotificacionUsuarioService _notificacionUsuarioService;
 
     public NotificacionService(
         INotificacionRepository notificacionRepository,
-        INotificacionUsuarioRepository notificacionUsuarioRepository,
-        IHubContext<NotificacionHub, INotificacionHub> hubContext)
+        NotificacionUsuarioService notificacionUsuarioService)
     {
         this.notificacionRepository = notificacionRepository;
-        this.notificacionUsuarioRepository = notificacionUsuarioRepository;
-        this.hubContext = hubContext;
+        _notificacionUsuarioService = notificacionUsuarioService;
     }
 
-    private Notificacion AgregarNotificacion(string origen, string descripcion)
+    private NotificacionDTO Agregar(NotificacionCapturaDTO notificacionDto)
     {
         var notificacion = new Notificacion()
         {
-            Origen = origen,
-            Descripcion = descripcion,
-            FechaAlta = DateTime.Now,
-            IdTipoNotificacion = 1
+            Titulo = notificacionDto.Titulo,
+            Mensaje = notificacionDto.Mensaje,
+            FechaAlta = DateTime.UtcNow,
+            IdTipoNotificacion = notificacionDto.IdTipoNotificacion
         };
 
         notificacionRepository.Agregar(notificacion);
 
-        return notificacion;
+        return new NotificacionDTO(
+            notificacion.IdNotificacion,
+            notificacion.Titulo,
+            notificacion.Mensaje,
+            notificacion.FechaAlta,
+            notificacion.IdTipoNotificacion
+        );
     }
 
-    private NotificacionUsuario AgregarNotificacionUsuario(int idNotificacion, int idUsuario)
-    {
-        var notificacionUsuario = new NotificacionUsuario
-        {
-            IdNotificacion = idNotificacion,
-            IdUsuario = idUsuario,
-            Visto = false
-        };
-
-        notificacionUsuarioRepository.Agregar(notificacionUsuario);
-
-        return notificacionUsuario;
-    }
-
-    public async Task NotificarYGuardar(int idUsuario, string origen, string descripcion)
+    public NotificacionResultadoMultipleDTO Agregar(NotificacionCapturaDTO notificacionDto, List<int> idsUsuario)
     {
         using var ts = new TransactionScope();
 
-        var notificacion = AgregarNotificacion(origen, descripcion);
-        var notificacionUsuario = AgregarNotificacionUsuario(notificacion.IdNotificacion, idUsuario);
-
-        await EnviarNotificacion(notificacion, notificacionUsuario);
+        var notificacion = Agregar(notificacionDto);
+        var notificacionesUsuario = _notificacionUsuarioService.Agregar(notificacion.IdNotificacion, idsUsuario);
 
         ts.Complete();
+
+        return new NotificacionResultadoMultipleDTO(notificacion, notificacionesUsuario.ToList());
     }
 
-    public async Task NotificarYGuardar(List<int> idUsuarios, string origen, string descripcion)
+    public NotificacionResultadoDTO Agregar(NotificacionCapturaDTO notificacionDto, int idUsuario)
     {
         using var ts = new TransactionScope();
 
-        var notificacion = AgregarNotificacion(origen, descripcion);
-
-        // TODO: 2023-03-22 -> Hacer en paralelo
-        foreach (var idUsuario in idUsuarios)
-        {
-            var notificacionUsuario = AgregarNotificacionUsuario(notificacion.IdNotificacion, idUsuario);
-            await EnviarNotificacion(notificacion, notificacionUsuario);
-        }
+        var notificacion = Agregar(notificacionDto);
+        var notificacionUsuario = _notificacionUsuarioService.Agregar(notificacion.IdNotificacion, idUsuario);
 
         ts.Complete();
-    }
 
-    private async Task EnviarNotificacion(Notificacion notificacion, NotificacionUsuario notificacionUsuario)
-    {
-        var notificacionDto = new NotificacionUsuarioDto
-        {
-            IdUsuario = notificacionUsuario.IdUsuario,
-            IdNotificacion = notificacionUsuario.IdNotificacion,
-            Origen = notificacion.Origen,
-            Descripcion = notificacion.Descripcion,
-            FechaAlta = DateTime.Now,
-            Visto = false
-        };
-
-        var idUsuario = notificacionUsuario.IdUsuario.ToString();
-        var usuarioCliente = hubContext.Clients.User(idUsuario);
-
-        await usuarioCliente.NuevaNotificacion(notificacionDto);
+        return new NotificacionResultadoDTO(notificacion, notificacionUsuario);
     }
 }

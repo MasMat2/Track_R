@@ -1,25 +1,28 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using TrackrAPI.Repositorys.Notificaciones;
+using TrackrAPI.Services.Notificaciones;
 
 namespace TrackrAPI.Hubs;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class NotificacionHub : Hub<INotificacionHub>
+public class NotificacionDoctorHub : Hub<INotificacionDoctorHub>
 {
-    private readonly INotificacionUsuarioRepository _notificacionUsuarioRepository;
+    private readonly NotificacionDoctorService _notificacionDoctorService;
+    private readonly NotificacionUsuarioService _notificacionUsuarioService;
 
-    public NotificacionHub(INotificacionUsuarioRepository notificacionUsuarioRepository)
+    public NotificacionDoctorHub(
+        NotificacionDoctorService notificacionDoctorService,
+        NotificacionUsuarioService notificacionUsuarioService)
     {
-        _notificacionUsuarioRepository = notificacionUsuarioRepository;
+        _notificacionDoctorService = notificacionDoctorService;
+        _notificacionUsuarioService = notificacionUsuarioService;
     }
 
     public override async Task OnConnectedAsync()
     {
         var idUsuario = ObtenerIdUsuario();
-        var notificaciones = _notificacionUsuarioRepository.ConsultarParaSidebar(idUsuario);
+        var notificaciones = _notificacionDoctorService.ConsultarPorDoctor(idUsuario);
 
         await Clients.Caller.NuevaConexion(notificaciones);
         await base.OnConnectedAsync();
@@ -29,7 +32,7 @@ public class NotificacionHub : Hub<INotificacionHub>
     {
         var idUsuario = ObtenerIdUsuario();
 
-        _notificacionUsuarioRepository.MarcarComoVistas(idNotificacionesUsuario);
+        _notificacionUsuarioService.MarcarComoVistas(idNotificacionesUsuario);
         await Clients.User(idUsuario.ToString()).NotificarComoVistas(idNotificacionesUsuario);
     }
 

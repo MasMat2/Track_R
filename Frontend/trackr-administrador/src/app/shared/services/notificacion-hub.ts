@@ -1,32 +1,20 @@
-import { Injectable } from '@angular/core';
-import {
-  HttpTransportType,
-  HubConnection,
-  HubConnectionBuilder,
-  HubConnectionState,
-  IHttpConnectionOptions,
-  LogLevel
-} from '@microsoft/signalr';
-import { NotificacionUsuarioDTO } from '@dtos/notificaciones/notificacion-usuario-dto';
-import { BehaviorSubject } from 'rxjs';
-import { catchError, filter, take, timeout } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { Constants } from '@utils/constants/constants';
+import { HubConnectionState, HubConnection, IHttpConnectionOptions, HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { Constants } from "@utils/constants/constants";
+import { BehaviorSubject, filter, take, timeout, catchError } from "rxjs";
+import { environment } from "src/environments/environment";
+import { NotificacionUsuarioBaseDTO } from '../dtos/notificaciones/notificacion-usuario-base-dto';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class NotificacionHubService {
-  private connectionStatus = new BehaviorSubject<HubConnectionState>(HubConnectionState.Disconnected);
+export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
+  protected connectionStatus = new BehaviorSubject<HubConnectionState>(HubConnectionState.Disconnected);
 
-  private notificacionSubject = new BehaviorSubject<NotificacionUsuarioDTO[]>([]);
-  public notificacion$ = this.notificacionSubject.asObservable();
+  protected notificacionesSubject = new BehaviorSubject<T[]>([]);
+  public notificaciones$ = this.notificacionesSubject.asObservable();
 
-  private readonly endpoint = 'hub/notificacion';
+  protected connection: HubConnection;
 
-  private connection: HubConnection;
-
-  constructor() {
+  constructor(
+    protected endpoint: string
+  ) {
     this.iniciarConexion();
   }
 
@@ -48,18 +36,18 @@ export class NotificacionHubService {
     };
 
     this.connection = new HubConnectionBuilder()
-      .configureLogging(LogLevel.Debug)
+      .configureLogging(LogLevel.None)
       .withUrl(url, connectionConfig)
       .build();
 
     this.connection.on(
       'NuevaNotificacion',
-      (notificacion: NotificacionUsuarioDTO) => this.onNuevaNotificacion(notificacion)
+      (notificacion: T) => this.onNuevaNotificacion(notificacion)
     );
 
     this.connection.on(
       'NuevaConexion',
-      (notificaciones: NotificacionUsuarioDTO[]) => this.onNuevaConexion(notificaciones)
+      (notificaciones: T[]) => this.onNuevaConexion(notificaciones)
     );
 
     this.connection.on(
@@ -76,13 +64,13 @@ export class NotificacionHubService {
     this.connectionStatus.next(HubConnectionState.Disconnecting);
 
     await this.connection.stop();
-    this.notificacionSubject.next([]);
+    this.notificacionesSubject.next([]);
 
     this.connectionStatus.next(HubConnectionState.Disconnected);
   }
 
-  public obtenerNotificaciones(): NotificacionUsuarioDTO[] {
-    return this.notificacionSubject.value;
+  public obtenerNotificaciones(): T[] {
+    return this.notificacionesSubject.value;
   }
 
   public async marcarComoVista(id: number) {
@@ -100,8 +88,8 @@ export class NotificacionHubService {
     this.marcarComoVistas(ids);
   }
 
-  private obtenerNotificacionesNoVistas() {
-    const notificaciones = this.notificacionSubject.value;
+  protected obtenerNotificacionesNoVistas() {
+    const notificaciones = this.notificacionesSubject.value;
     const ids = notificaciones
       .filter((n) => n.visto == false)
       .map((n) => n.idNotificacionUsuario);
@@ -109,25 +97,25 @@ export class NotificacionHubService {
     return ids;
   }
 
-  private onNuevaNotificacion(notificacion: NotificacionUsuarioDTO): void {
+  protected onNuevaNotificacion(notificacion: T): void {
     notificacion.fechaAlta = new Date(notificacion.fechaAlta);
 
-    const notificaciones = this.notificacionSubject.value;
+    const notificaciones = this.notificacionesSubject.value;
     notificaciones.splice(0, 0, notificacion);
 
-    this.notificacionSubject.next(notificaciones);
+    this.notificacionesSubject.next(notificaciones);
   }
 
-  private onNuevaConexion(notificaciones: NotificacionUsuarioDTO[]): void {
+  protected onNuevaConexion(notificaciones: T[]): void {
     for (const notificacion of notificaciones) {
       notificacion.fechaAlta = new Date(notificacion.fechaAlta);
     }
 
-    this.notificacionSubject.next(notificaciones);
+    this.notificacionesSubject.next(notificaciones);
   }
 
-  private onNotificarComoVistas(ids: number[]): void {
-    const notificaciones = this.notificacionSubject.value.filter((n) =>
+  protected onNotificarComoVistas(ids: number[]): void {
+    const notificaciones = this.notificacionesSubject.value.filter((n) =>
       ids.includes(n.idNotificacionUsuario)
     );
 
@@ -136,10 +124,11 @@ export class NotificacionHubService {
     }
 
     for (const notificacion of notificaciones) {
-      notificacion.visto = true;
+      // TODO: 2023-08-21 -> Temporal
+      notificacion.visto = !notificacion.visto;
     }
 
-    this.notificacionSubject.next(this.notificacionSubject.value);
+    this.notificacionesSubject.next(this.notificacionesSubject.value);
   }
 
   private async ensureConnection(): Promise<void> {

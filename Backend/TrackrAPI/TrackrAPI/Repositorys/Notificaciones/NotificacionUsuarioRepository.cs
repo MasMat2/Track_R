@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TrackrAPI.Dtos.Notificaciones;
 using TrackrAPI.Models;
 
@@ -9,25 +10,48 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
     {
     }
 
-    public IEnumerable<NotificacionUsuarioDto> ConsultarParaSidebar(int idUsuario)
+    private IQueryable<NotificacionUsuario> ConsultarPorUsuario(int idUsuario)
     {
         const int limite = 10;
 
         return context.NotificacionUsuario
             .Where(n => n.IdUsuario == idUsuario)
             .OrderByDescending(n => n.IdNotificacionNavigation.FechaAlta)
-            .Take(limite)
-            .Select(n => new NotificacionUsuarioDto
-            {
-                IdNotificacionUsuario = n.IdNotificacionUsuario,
-                IdNotificacion = n.IdNotificacion,
-                IdUsuario = n.IdUsuario,
-                FechaAlta = n.IdNotificacionNavigation.FechaAlta,
-                Origen = n.IdNotificacionNavigation.Origen ?? string.Empty,
-                Descripcion = n.IdNotificacionNavigation.Descripcion,
-                Visto = n.Visto
-            })
-            .ToList();
+            .Take(limite);
+    }
+
+    public IEnumerable<NotificacionPacienteDTO> ConsultarPorPaciente(int idUsuario)
+    {
+        return ConsultarPorUsuario(idUsuario)
+            .Select(nu => new NotificacionPacienteDTO(
+                nu.IdNotificacionUsuario,
+                nu.IdNotificacion,
+                nu.IdUsuario,
+                nu.IdNotificacionNavigation.Titulo,
+                nu.IdNotificacionNavigation.Mensaje,
+                nu.IdNotificacionNavigation.FechaAlta,
+                nu.Visto
+            ));
+    }
+
+    public IEnumerable<NotificacionDoctorDTO> ConsultarPorDoctor(int idUsuario)
+    {
+        var notificacionesUsuario = ConsultarPorUsuario(idUsuario)
+            .Include(n => n.IdNotificacionNavigation.NotificacionDoctor)
+            .AsEnumerable();
+
+        return notificacionesUsuario
+            .Select(nu => new NotificacionDoctorDTO(
+                nu.IdNotificacionUsuario,
+                nu.IdNotificacion,
+                nu.IdUsuario,
+                nu.IdNotificacionNavigation.Titulo,
+                nu.IdNotificacionNavigation.Mensaje,
+                nu.IdNotificacionNavigation.FechaAlta,
+                nu.Visto,
+                nu.IdNotificacionNavigation.IdTipoNotificacion,
+                nu.IdNotificacionNavigation.NotificacionDoctor.FirstOrDefault()?.IdPaciente ?? 0
+            ));
     }
 
     public void MarcarComoVistas(List<int> idNotificacionUsuario)
@@ -38,7 +62,7 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
 
         foreach (var notificacionUsuario in notificacionesUsuario)
         {
-            notificacionUsuario.Visto = true;
+            notificacionUsuario.Visto = !notificacionUsuario.Visto;
             context.NotificacionUsuario.Update(notificacionUsuario);
         }
 

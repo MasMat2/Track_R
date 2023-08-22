@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NotificacionService } from '../../../../../shared/http/notificaciones/notificacion.service';
-import { NotificacionHubService } from '@services/notificacion-hub.service';
+import { NotificacionDoctorCapturaDTO } from '@dtos/notificaciones/notificacion-doctor-captura-dto';
+import { NotificacionService } from '@http/notificaciones/notificacion.service';
+import { UsuarioService } from '@http/seguridad/usuario.service';
+import { Usuario } from '@models/seguridad/usuario';
+import { NotificacionDoctorHubService } from '@services/notificacion-doctor-hub.service';
 import { Observable, map } from 'rxjs';
 
 @Component({
@@ -9,6 +12,17 @@ import { Observable, map } from 'rxjs';
   styleUrls: ['./panel-notificaciones.component.scss']
 })
 export class PanelNotificacionesComponent implements OnInit {
+
+  protected pacientes$: Observable<Usuario[]>;
+  protected tiposNotificacion: { idTipoNotificacion: number, nombre: string }[] = [
+    { idTipoNotificacion: 2, nombre: 'Chat' },
+    { idTipoNotificacion: 3, nombre: 'Video' },
+    { idTipoNotificacion: 4, nombre: 'Alerta' },
+  ];
+
+  protected idPaciente?: number;
+  protected idTipoNotificacion?: number;
+  protected mensaje: string;
 
   protected notificaciones$: Observable<{
     id: number,
@@ -21,17 +35,23 @@ export class PanelNotificacionesComponent implements OnInit {
 
   constructor(
     private notificacionService: NotificacionService,
-    private notificacionHubService: NotificacionHubService
+    private notificacionHubService: NotificacionDoctorHubService,
+    private usuarioService: UsuarioService
   ) { }
 
   ngOnInit() {
-    this.notificaciones$ = this.notificacionHubService.notificacion$
+    this.pacientes$ = this.usuarioService.consultarPorRol("014");
+    this.consultarNotificaciones();
+  }
+
+  private consultarNotificaciones(): void {
+    this.notificaciones$ = this.notificacionHubService.notificaciones$
       .pipe(
         map(notificaciones => notificaciones.map((notificacion) => {
           return {
             id: notificacion.idNotificacionUsuario,
-            paciente: notificacion.origen,
-            mensaje: notificacion.descripcion,
+            paciente: notificacion.nombrePaciente,
+            mensaje: notificacion.mensaje,
             fecha: notificacion.fechaAlta,
             imagen: undefined,
             visto: notificacion.visto
@@ -41,11 +61,18 @@ export class PanelNotificacionesComponent implements OnInit {
   }
 
   protected notificar(): void {
-    this.notificacionService.notificar().subscribe();
+    var dto: NotificacionDoctorCapturaDTO = {
+      idPaciente: this.idPaciente!,
+      idTipoNotificacion: this.idTipoNotificacion!,
+      mensaje: this.mensaje
+    };
+
+    this.notificacionService.notificar(dto).subscribe();
   }
 
-  protected marcarComoVista(idNotificacionUsuario: number) {
-    this.notificacionHubService.marcarComoVista(idNotificacionUsuario);
+  protected async marcarComoVista(idNotificacionUsuario: number) {
+    await this.notificacionHubService.marcarComoVista(idNotificacionUsuario);
+    this.consultarNotificaciones();
   }
 
 }

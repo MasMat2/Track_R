@@ -145,7 +145,8 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
-    endpoints.MapHub<NotificacionHub>("/api/hub/notificacion");
+    endpoints.MapHub<NotificacionPacienteHub>("/api/hub/notificacion-paciente");
+    endpoints.MapHub<NotificacionDoctorHub>("/api/hub/notificacion-doctor");
 });
 
 if (!app.Environment.IsDevelopment())

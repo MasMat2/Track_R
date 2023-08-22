@@ -1,4 +1,11 @@
+.notificacion {
+  padding: 10px;
+  border-radius: 15px;
+}
+
 .notificacion:not(.vista) {
+  background-color: #cfc9b2;
+
   .nombre {
     font-weight: bold;
   }
