@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
+import { map, Observable } from 'rxjs';
+
 import { PerfilTratamientoDto } from '@dtos/gestion-perfil/perfil-tratamiento-dto';
 import { PerfilTratamientoService } from '@http/gestion-perfil/perfil-tratamiento.service';
-import { Observable, map } from 'rxjs';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
-import { RouterModule } from '@angular/router';
 
 interface Tratamiento extends PerfilTratamientoDto {
   expandido: boolean;
@@ -17,7 +17,7 @@ interface Tratamiento extends PerfilTratamientoDto {
   templateUrl: './mis-tratamientos.page.html',
   styleUrls: ['./mis-tratamientos.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterModule, HeaderComponent],
+  imports: [IonicModule, CommonModule, RouterModule, HeaderComponent],
 })
 export class MisTratamientosPage implements OnInit {
 

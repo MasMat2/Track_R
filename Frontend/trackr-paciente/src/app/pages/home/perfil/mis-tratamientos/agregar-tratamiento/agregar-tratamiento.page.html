@@ -1,181 +1,219 @@
-<ion-header>
-  <app-header></app-header>
-</ion-header>
-
 <ion-content>
   <form [formGroup]="formTratamiento">
-    <ion-card>
-      <ion-card-content>
-        <ion-grid>
 
-          <ion-row>
-            <ion-col>
-              <div class="form-group">
-                <ion-label class="label-input">Fecha</ion-label>
-                <ion-input class="form-control-readonly"
-                  [value]="formTratamiento.get('fechaRegistro')?.value | date: 'dd.MM.yyyy'" id="date"
-                  readonly></ion-input>
-                <ion-icon slot="end" name="calendar-outline"></ion-icon>
-              </div>
-            </ion-col>
-            <ion-col>
-              <div class="form-group">
-                <ion-label class="label-input">Fármaco</ion-label>
-                <ion-input class="form-control" formControlName="farmaco"></ion-input>
-              </div>
-            </ion-col>
-          </ion-row>
-
-          <ion-row>
-            <ion-col>
-              <div class="form-group">
-                <ion-label class="label-input">Cantidad</ion-label>
-                <ion-input class="form-control" formControlName="cantidad" type="number"></ion-input>
-              </div>
-            </ion-col>
-            <ion-col>
-              <div class="form-group">
-                <ion-label class="label-input">Unidad</ion-label>
-                <ion-input class="form-control" formControlName="unidad"></ion-input>
-              </div>
-            </ion-col>
-          </ion-row>
-
-          <ion-row>
-            <ion-col>
-              <div class="form-group">
-                <ion-label class="label-input">Indicaciones</ion-label>
-                <ion-input class="form-control" formControlName="indicaciones"></ion-input>
-              </div>
-            </ion-col>
-          </ion-row>
-
-          <ion-row>
-            <ion-col>
-              <div class="form-group">
-                <ion-label class="label-input">Padecimiento Asociado</ion-label>
-                <ion-select class="form-control" formControlName="idPadecimiento" toggleIcon="caret-down-sharp"
-                  interface="popover" placeholder="Seleccionar">
-                  <ion-select-option *ngFor="let padecimiento of padecimientos$ | async"
-                    [value]="padecimiento.id">{{padecimiento.nombre}}</ion-select-option>
-                </ion-select>
-              </div>
-            </ion-col>
-          </ion-row>
-
-          <ion-row>
-            <ion-col>
-              <div class="form-group">
-                <ion-label class="label-input">Doctor</ion-label>
-                <ion-select class="form-control" formControlName="idUsuarioDoctor" toggleIcon="caret-down-sharp"
-                  interface="popover" placeholder="Seleccionar">
-                  <ion-select-option *ngFor="let doctor of doctores$ | async"
-                    [value]="doctor.id">{{doctor.nombre}}</ion-select-option>
-                </ion-select>
-              </div>
-            </ion-col>
-          </ion-row>
-
-
-          <ion-row>
-            <ion-col>
-              <ion-toggle formControlName="tratamientoPermanente">Tratamiento permanente</ion-toggle>
-            </ion-col>
-          </ion-row>
-
-          <ion-row>
-            <ion-col size="4">
-              <div class="form-group">
-                <ion-label class="label-input">Fecha Inicio</ion-label>
-                <ion-input class="form-control" [value]="formTratamiento.get('fechaInicio')?.value | date: 'dd.MM.yyyy'"
-                  id="date" (click)="openDateModal('fechaInicio')" readonly></ion-input>
-                <ion-icon slot="end" name="calendar-outline"></ion-icon>
-              </div>
-            </ion-col>
-            <ion-col size="4" [hidden]="formTratamiento.get('tratamientoPermanente')?.value">
-              <div class="form-group">
-                <ion-label class="label-input">Fecha Fin</ion-label>
-                <ion-input class="form-control" [value]="formTratamiento.get('fechaFin')?.value | date: 'dd.MM.yyyy'"
-                  id="date" (click)="openDateModal('fechaFin')" readonly></ion-input>
-                <ion-icon slot="end" name="calendar-outline"></ion-icon>
-              </div>
-            </ion-col>
-          </ion-row>
-
-
-          <ion-row>
-            <ion-col>
-              <div class="form-group form-group-camera">
-                <ion-label>Tomar Fotografía Fármaco</ion-label>
-                <ion-input class="form-control-camera" (click)="addPhotoToGallery()" readonly>
-                </ion-input>
-                <ion-icon slot="start" name="camera"></ion-icon>
-              </div>
-            </ion-col>
-          </ion-row>
-
-          <ion-row [hidden]="!photo" class="centered">
-            <ion-col size="2">
-              <ion-img [src]="'data:image/jpeg;base64,' + photo?.base64String"></ion-img>
-            </ion-col>
-          </ion-row>
-
-          <ion-row>
-            <ion-col>
-              <ion-toggle formControlName="recordatorioActivo">Activar Recordatorio de tomas</ion-toggle>
-            </ion-col>
-          </ion-row>
-
-          <div [hidden]="!formTratamiento.get('recordatorioActivo')?.value">
-
-            <ion-row>
-              <ion-col>
-                <ion-label>Días de la semana</ion-label>
-              </ion-col>
-            </ion-row>
-
-            <ion-row formArrayName="diaSemana">
-              <ion-col *ngFor="let day of weekDays; let i = index" class="center-items">
-                <div class="checkbox-container">
-                  <ion-checkbox [formControlName]="i"></ion-checkbox>
-                  <ion-label class="checkbox-label">{{day}}</ion-label>
-                </div>
-              </ion-col>
-            </ion-row>
-
-            <div formArrayName="horas">
-              <ion-row *ngFor="let horaControl of horas.controls; let i = index; let isLast = last" class="mt-3">
-                <ion-col size="auto">
-                  <div class="form-group mt-0">
-                    <ion-label class="label-input">Horario(h)</ion-label>
-                    <ion-input class="form-control" [value]="horaControl.value | date: 'HH:mm'"
-                      (click)="openTimeModal(i)" readonly></ion-input>
-                    <ion-icon slot="end" name="time-outline"></ion-icon>
-                  </div>
-                </ion-col>
-                <ion-col size="auto">
-                  <ion-button *ngIf="!isLast" (click)="removeHour(i)">
-                    <ion-icon name="close-outline"></ion-icon>
-                  </ion-button>
-                  <ion-button *ngIf="isLast" (click)="addHour()">
-                    <ion-icon name="add-outline"></ion-icon>
-                  </ion-button>
-                </ion-col>
-              </ion-row>
-            </div>
-
+    <ion-grid>
+      
+      <ion-row>
+        <ion-col>
+          <div class="form-group">
+            <ion-input
+              class="readonly"
+              [value]="formTratamiento.get('fechaRegistro')?.value | date: 'dd.MM.yyyy'" 
+              id="date"
+              readonly              
+              placeholder="Fecha"
+              label="Fecha"
+              label-placement="floating"
+              fill="outline"
+              shape="round">
+            </ion-input>
+            <ion-icon slot="end" name="calendar-outline"></ion-icon>
           </div>
+        </ion-col>
+        <ion-col class="form-group">
+          <ion-input 
+            formControlName="farmaco"
+            placeholder="Fármaco"
+            label="Fármaco"
+            label-placement="floating"
+            fill="outline"
+            shape="round">
+          </ion-input>
+        </ion-col>
+      </ion-row>
 
-          <ion-row>
-            <ion-col>
-              <ion-label>Se notificara 15 min antes de la hora establecida</ion-label>
-              <ion-button [disabled]="!formTratamiento.valid" (click)="submitForm()">Guardar</ion-button>
+      <ion-row>
+        <ion-col class="form-group">
+          <ion-input
+            formControlName="cantidad"
+            placeholder="Cantidad"
+            label="Cantidad"
+            label-placement="floating"
+            type="number"
+            fill="outline"
+            shape="round">
+          </ion-input>
+        </ion-col>
+        <ion-col class="form-group">
+          <ion-input 
+            formControlName="unidad"
+            placeholder="Unidad"
+            label="Unidad"
+            label-placement="floating"
+            fill="outline"
+            shape="round">
+          </ion-input>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col class="form-group">
+          <ion-input
+            formControlName="indicaciones"
+            placeholder="Indicaciones"
+            label="Indicaciones"
+            label-placement="floating"
+            fill="outline"
+            shape="round">
+          </ion-input>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col class="form-group">
+          <ion-select
+            formControlName="idPadecimiento" 
+            interface="popover"
+            placeholder="Seleccionar"
+            label="Padecimiento Asociado"
+            label-placement="floating"
+            fill="outline"
+            shape="round">
+            <ion-select-option *ngFor="let padecimiento of padecimientos$ | async"
+              [value]="padecimiento.id">{{padecimiento.nombre}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col class="form-group">
+          <ion-select 
+            formControlName="idUsuarioDoctor"
+            interface="popover"
+            placeholder="Seleccionar"
+            label="Doctor"
+            label-placement="floating"
+            fill="outline"
+            shape="round">
+            <ion-select-option *ngFor="let doctor of doctores$ | async"
+              [value]="doctor.id">{{doctor.nombre}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+
+
+      <ion-row>
+        <ion-col>
+          <ion-toggle formControlName="tratamientoPermanente">Tratamiento permanente</ion-toggle>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6">
+          <div class="form-group">
+            <ion-input
+              [value]="formTratamiento.get('fechaInicio')?.value | date: 'dd.MM.yyyy'"
+              id="date"
+              (click)="openDateModal('fechaInicio')"
+              readonly
+              label="Fecha Inicio"
+              label-placement="floating"
+              fill="outline"
+              shape="round">
+            </ion-input>
+            <ion-icon slot="end" name="calendar-outline"></ion-icon>
+          </div>
+        </ion-col>
+        <ion-col size="6" [hidden]="formTratamiento.get('tratamientoPermanente')?.value">
+          <div class="form-group">
+            <ion-input
+              [value]="formTratamiento.get('fechaFin')?.value | date: 'dd.MM.yyyy'"
+              id="date"
+              (click)="openDateModal('fechaFin')"
+              readonly
+              label="Fecha Fin"
+              label-placement="floating"
+              fill="outline"
+              shape="round">
+            </ion-input>
+            <ion-icon slot="end" name="calendar-outline"></ion-icon>
+          </div>
+        </ion-col>
+      </ion-row>
+
+
+      <ion-row>
+        <ion-col>
+          <div class="form-group form-group-camera">
+            <ion-label>Tomar Fotografía Fármaco</ion-label>
+            <ion-input (click)="addPhotoToGallery()" readonly></ion-input>
+            <ion-icon slot="start" name="camera"></ion-icon>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row [hidden]="!photo" class="centered">
+        <ion-col size="2">
+          <ion-img [src]="'data:image/jpeg;base64,' + photo?.base64String"></ion-img>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <ion-toggle formControlName="recordatorioActivo">Activar Recordatorio de tomas</ion-toggle>
+        </ion-col>
+      </ion-row>
+
+      <div [hidden]="!formTratamiento.get('recordatorioActivo')?.value">
+
+        <ion-row>
+          <ion-col>
+            <ion-label>Días de la semana</ion-label>
+          </ion-col>
+        </ion-row>
+
+        <ion-row formArrayName="diaSemana">
+          <ion-col *ngFor="let day of weekDays; let i = index" class="checkbox-container">
+            <ion-checkbox [formControlName]="i"></ion-checkbox>
+            <ion-label class="checkbox-label">{{day}}</ion-label>
+          </ion-col>
+        </ion-row>
+
+        <div formArrayName="horas">
+          <ion-row *ngFor="let horaControl of horas.controls; let i = index; let isLast = last" class="mt-3">
+            <ion-col size="auto" class="form-group mt-0">
+              <ion-input
+                [value]="horaControl.value | date: 'HH:mm'"
+                (click)="openTimeModal(i)"
+                readonly                      
+                label="Horario(h)"
+                label-placement="floating"
+                fill="outline"
+                shape="round">
+              </ion-input>
+              <ion-icon slot="end" name="time-outline"></ion-icon>
+            </ion-col>
+            <ion-col size="auto">
+              <ion-button *ngIf="!isLast" (click)="removeHour(i)">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+              <ion-button *ngIf="isLast" (click)="addHour()">
+                <ion-icon name="add-outline"></ion-icon>
+              </ion-button>
             </ion-col>
           </ion-row>
+        </div>
 
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
+      </div>
+
+      <ion-row>
+        <ion-col>
+          <ion-label>Se notificara 15 min. antes de la hora establecida.</ion-label>
+          <ion-button [disabled]="!formTratamiento.valid" (click)="submitForm()">Guardar</ion-button>
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
   </form>
 
   <ion-datetime-button datetime="timeModal" hidden></ion-datetime-button>
@@ -185,8 +223,6 @@
         doneText="Confirmar" cancelText="Cancelar"></ion-datetime>
     </ng-template>
   </ion-modal>
-
-
 
   <ion-datetime-button datetime="dateModal" hidden></ion-datetime-button>
   <ion-modal [keepContentsMounted]="true" [isOpen]="showDateModal" (didDismiss)="closeDateModal()">

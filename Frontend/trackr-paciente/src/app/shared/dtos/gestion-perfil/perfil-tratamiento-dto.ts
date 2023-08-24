@@ -13,5 +13,4 @@ export class PerfilTratamientoDto{
     diaSemana: boolean[]; // Checkboxes dias de la semana
     horas: string[]; // Horario(h)
     bitacora?: Date[]; // Bitacora Consumo de Medicamentos
-  
 }

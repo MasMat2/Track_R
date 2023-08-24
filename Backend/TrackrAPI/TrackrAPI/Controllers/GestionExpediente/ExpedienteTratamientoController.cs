@@ -7,9 +7,10 @@ using TrackrAPI.Services.GestionExpediente;
 
 namespace TrackrAPI.Controllers.GestionExpediente
 {
+    
     [Route("api/[controller]")]
     [ApiController]
-    public class ExpedienteTratamientoController: ControllerBase
+    public class ExpedienteTratamientoController : ControllerBase
     {
         private readonly ExpedienteTratamientoService expedienteTratamientoService;
 
@@ -18,25 +19,13 @@ namespace TrackrAPI.Controllers.GestionExpediente
             this.expedienteTratamientoService = expedienteTratamientoService;
         }
 
-        [HttpGet("{idExpedienteTratamiento}")]
-        public ExpedienteTratamientoDto? Consultar(int idExpedienteTratamiento)
-        {
-            return expedienteTratamientoService.Consultar(idExpedienteTratamiento);
-        }
-
-        [HttpGet("grid/usuario/{idUsuario}")]
+        [HttpGet("consultarParaGrid/{idUsuario}")]
         public IEnumerable<ExpedienteTratamientoGridDTO> ConsultarParaGrid(int idUsuario)
         {
             return expedienteTratamientoService.ConsultarParaGrid(idUsuario);
         }
 
-        [HttpGet("usuario/{idUsuario}")]
-        public IEnumerable<ExpedienteTratamientoDto> ConsultarPorUsuario(int idUsuario)
-        {
-            return expedienteTratamientoService.ConsultarPorUsuario(idUsuario);
-        }
-
-        [HttpGet("")]
+        [HttpGet("consultarTratamientos")]
         public IEnumerable<ExpedienteTratamientoDto> ConsultarTratamientos()
         {
             int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
@@ -49,7 +38,6 @@ namespace TrackrAPI.Controllers.GestionExpediente
             int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
             return expedienteTratamientoService.Agregar(expedienteTratamientoDto, idUsuario);
         }
-
 
         [HttpGet("selectorDeDoctor")]
         public IEnumerable<ExpedienteSelectorDto> SelectorDeDoctor()

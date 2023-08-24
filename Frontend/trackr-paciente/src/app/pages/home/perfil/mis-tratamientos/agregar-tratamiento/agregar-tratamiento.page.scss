@@ -1,47 +1,18 @@
-.form-control {
-  border: 1px #d9d9d9 solid;
-  color: #000000;
-  border-radius: 20px !important;
-  height: calc(1.5em + 0.75rem + 7px) !important;
-  opacity: 1;
+.input-fill-outline.input-shape-round {
+  --border-color: lightgrey;
+  border: 0px;
 }
 
-.form-control-readonly {
-  border: 1px #d9d9d9 solid;
-  color: #000000;
-  border-radius: 20px !important;
-  height: calc(1.5em + 0.75rem + 7px) !important;
-  background-color: #e9ecef;
-  opacity: 1;
+.readonly {
+  --background: #e9ecef;
 }
-
-ion-select::part(icon) {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1002
-}
-
 
 .form-group {
   position: relative;
-  margin-top: 25px;
-
-  .label-input {
-    position: absolute;
-    top: -11px;
-    left: 16px;
-    z-index: 1002;
-    background-color: white;
-    padding: 0 5px;
-    font-size: 13px;
-    color: gray;
-  }
 
   ion-icon {
     position: absolute;
-    right: 10px;
+    right: 20px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 1002
@@ -62,13 +33,9 @@ ion-select::part(icon) {
   }
 
   ion-icon {
-    left: 10px;
+    left: 20px;
   }
 
-}
-
-.form-control.ng-invalid.ng-touched {
-  border-color: red;
 }
 
 .checkbox-container {

@@ -14,7 +14,7 @@ export class PerfilTratamientoService {
     constructor(public http: HttpClient) { }
 
     public consultarTratamientos(): Observable<PerfilTratamientoDto[]> {
-        return this.http.get<PerfilTratamientoDto[]>(this.dataUrl + ``);
+        return this.http.get<PerfilTratamientoDto[]>(this.dataUrl + `consultarTratamientos`);
     }
 
     public agregar(perfilTratamientoDto: PerfilTratamientoDto) {

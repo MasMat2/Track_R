@@ -1,19 +1,18 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, FormGroup, FormArray, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
 
 import { Observable } from 'rxjs';
 
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { PerfilTratamientoDto } from '@dtos/gestion-perfil/perfil-tratamiento-dto';
 import { SelectorDto } from '@dtos/gestion-perfil/selector-dto';
 import { PerfilTratamientoService } from '@http/gestion-perfil/perfil-tratamiento.service';
+import { HeaderComponent } from '@pages/home/layout/header/header.component';
 
-import { PhotoService } from '@services/photo.service';
 import { Photo } from '@capacitor/camera';
+import { PhotoService } from '@services/photo.service';
 
 
 @Component({
@@ -29,14 +28,14 @@ export class AgregarTratamientoPage implements OnInit {
   protected perfilTratamientoDto: PerfilTratamientoDto;
 
   protected weekDays: string[] = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'];
-  photo: Photo;
+  protected photo?: Photo;
 
   // Helpers - DateTime modal
-  selectedDate = new Date().toISOString();
-  dateIndex: string;
-  showDateModal: boolean = false;
-  hourIndex: number;
-  showTimeModal: boolean = false;
+  protected selectedDate = new Date().toISOString();
+  protected dateIndex: string;
+  protected showDateModal: boolean = false;
+  protected hourIndex: number;
+  protected showTimeModal: boolean = false;
 
   // Selectores
   protected padecimientos$: Observable<SelectorDto[]>;
@@ -45,10 +44,10 @@ export class AgregarTratamientoPage implements OnInit {
   constructor(
     private perfilTratamientoService: PerfilTratamientoService,
     private fb: FormBuilder,
-    public photoService: PhotoService,
+    private photoService: PhotoService,
     private router: Router) { }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.formTratamiento = this.fb.group({
       fechaRegistro: [(new Date()).toISOString(), Validators.required],
       farmaco: ['', Validators.required],
@@ -65,7 +64,7 @@ export class AgregarTratamientoPage implements OnInit {
       diaSemana: this.fb.array([false, false, false, false, false, false, false]),
       horas: this.fb.array([new Date().toISOString()])
     },
-      { validators: this.validateDiaSemana() });
+      { validators: [this.validateDiaSemana(), this.compareDates()] });
 
     this.selectorPadecimeintos();
     this.selectorDoctor();
@@ -99,7 +98,6 @@ export class AgregarTratamientoPage implements OnInit {
   protected closeTimeModal() {
     this.horas.at(this.hourIndex).setValue(this.selectedDate);
     this.showTimeModal = false;
-
   }
 
   protected openDateModal(dateIndex: string) {
@@ -121,8 +119,23 @@ export class AgregarTratamientoPage implements OnInit {
     this.horas.push(this.fb.control(new Date().toISOString()));
   };
 
-
   // Validaciones
+  // Valida que la fechaFin sea mayor o igual a fechaInicio
+  protected compareDates(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const tratamientoPermanente = control.get('tratamientoPermanente')?.value;
+      const fechaInicio = new Date(control.get('fechaInicio')?.value);
+      const fechaFin = new Date(control.get('fechaFin')?.value);
+    
+      if (!tratamientoPermanente && fechaInicio && fechaFin && fechaInicio > fechaFin) {
+        return { 'fechaFinLessThanFechaInicio': true };
+      }
+    
+      return null;
+    }
+  }
+
+  // Valida que se seleccione al menos un dia para recordatorio
   protected validateDiaSemana(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const recordatorioActivo = control.get('recordatorioActivo')?.value;
@@ -132,9 +145,8 @@ export class AgregarTratamientoPage implements OnInit {
       }
       return null;
     };
-
-
   }
+
 
   // Enviar
   protected submitForm() {
@@ -164,8 +176,7 @@ export class AgregarTratamientoPage implements OnInit {
 
     this.agregar(this.perfilTratamientoDto);
 
-    this.router.navigateByUrl('/home/perfil/tratamientos');
-
+    this.router.navigateByUrl('/home/perfil/mis-tratamientos');
   };
 
   protected agregar(perfilTratamientoDto: PerfilTratamientoDto): Promise<boolean> {

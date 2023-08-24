@@ -1,11 +1,11 @@
-import { first } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ExpedienteTratamientoGridDto } from '@dtos/gestion-expediente/expediente-tratamiento-grid-dto';
 import { ExpedienteTratamientoService } from '@http/gestion-expediente/expediente-tratamiento.service';
 import { EncryptionService } from '@services/encryption.service';
-import { Observable, lastValueFrom } from 'rxjs';
 import { ColDef } from 'ag-grid-community';
+import { Observable, lastValueFrom } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-expediente-tratamiento',
@@ -41,15 +41,15 @@ export class ExpedienteTratamientoComponent implements OnInit {
     this.obtenerParametrosURL();
   }
 
-  protected consultarPorUsuario(): void{
-    this.tratamientos$ = this.expedienteTratamientoService.consultarPorUsuario(this.idUsuario)
+  protected consultarParaGrid(): void{
+    this.tratamientos$ = this.expedienteTratamientoService.consultarParaGrid(this.idUsuario)
   }
 
   private async obtenerParametrosURL(): Promise<void> {
     const queryParams = await lastValueFrom(this.route.queryParams.pipe(first()));
     const params = this.encryptionService.readUrlParams(queryParams);
     this.idUsuario = Number(params.i);
-    this.consultarPorUsuario();
+    this.consultarParaGrid();
   }
 
 }
