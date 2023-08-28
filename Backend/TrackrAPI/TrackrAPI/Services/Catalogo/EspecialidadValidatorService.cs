@@ -44,13 +44,12 @@ namespace TrackrAPI.Services.Catalogo
         public void ValidarEliminar(int idEspecialidad)
         {
             ValidarExistencia(idEspecialidad);
-            ValidarDependencia(idEspecialidad);
         }
 
         public void ValidarRequerido(EspecialidadFormularioCapturaDto especialidad)
         {
             Validator.ValidarRequerido(especialidad.Nombre, MensajeNombreRequerido);
-            Validator.ValidarRequerido(especialidad.IdEspecialidad, MensajePaisRequerido);
+            Validator.ValidarRequerido(especialidad.IdEspecialidad, MensajeIDRequerido);
         }
 
         public void ValidarRango(EspecialidadFormularioCapturaDto especialidad)
@@ -60,9 +59,9 @@ namespace TrackrAPI.Services.Catalogo
 
         public void ValidarExistencia(int idEspecialidad)
         {
-            var especialdiad = especialidadRepository.ConsultarDependencias(idEspecialidad);
+            var especialidad = especialidadRepository.Consultar(idEspecialidad);
 
-            if (idEspecialidad is null)
+            if (especialidad is null)
             {
                 throw new CdisException(MensajeExistencia);
             }
@@ -70,7 +69,7 @@ namespace TrackrAPI.Services.Catalogo
 
         public void ValidarDuplicado(EspecialidadFormularioCapturaDto especialidad)
         {
-            var especialidadDuplicado = especialidadRepository.Consultar(especialidad.Nombre, especialidad.IdEspecialidad);
+            var especialidadDuplicado = especialidadRepository.ConsultarPorNombre(especialidad.Nombre);
 
             if (especialidadDuplicado != null && especialidad.IdEspecialidad != especialidadDuplicado.IdEspecialidad)
             {

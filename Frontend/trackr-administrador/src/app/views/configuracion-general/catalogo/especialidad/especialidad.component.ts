@@ -13,18 +13,18 @@ import { Observable, Subject } from 'rxjs';
 import { EspecialidadFormularioComponent } from './especialidad-formulario/especialidad-formulario.component';
 
 @Component({
-  selector: 'app-especialidad',
   templateUrl: './especialidad.component.html',
 })
 export class EspecialidadComponent extends CrudBase<EspecialidadGridDto> implements OnInit {
   protected readonly HEADER_GRID: string = 'Especialidades';
+  
   private destroy$: Subject<void> = new Subject<void>();
 
-  public readonly NOMBRE_ESPECIALIDAD: string = "Especialidad";
+  public readonly NOMBRE_ENTIDAD: string = "Especialidad";
 
   override crudConfig: ICrudConfig =
   {
-    nombreEntidad: this.NOMBRE_ESPECIALIDAD,
+    nombreEntidad: this.NOMBRE_ENTIDAD,
     generoGramatical: "masc",
     nombrePropiedadId: "idEspecialidad",
     formConfig: {
@@ -45,8 +45,8 @@ export class EspecialidadComponent extends CrudBase<EspecialidadGridDto> impleme
 
   // Grid
   protected columns: ColDef[] = [
-    { headerName: 'ID', field: 'clave', minWidth: 150, width: 70 },
-    { headerName: 'Nombre', field: 'nombre', minWidth: 150 }
+    { headerName: 'ID', field: 'id', minWidth: 150, width: 70 },
+    { headerName: 'Especialidad', field: 'especialidad', minWidth: 150 }
   ];
 
   constructor(

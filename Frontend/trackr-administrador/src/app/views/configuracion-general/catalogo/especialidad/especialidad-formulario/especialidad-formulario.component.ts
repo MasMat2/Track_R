@@ -22,7 +22,7 @@ export class EspecialidadFormularioComponent extends CrudFormularioBase<Especial
 
   protected idEspecialidad?: number;
   protected especialidades$: Observable<Especialidad[]>;
-
+  
   protected submiting: boolean = false;
 
   constructor(
@@ -54,6 +54,7 @@ export class EspecialidadFormularioComponent extends CrudFormularioBase<Especial
           const capturaDto = new EspecialidadFormularioCapturaDto();
           capturaDto.idEspecialidad = especialidad.idEspecialidad;
           capturaDto.nombre = especialidad.nombre;
+          capturaDto.clave = especialidad.clave;
 
           return capturaDto;
         })

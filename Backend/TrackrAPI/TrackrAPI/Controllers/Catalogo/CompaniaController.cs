@@ -84,7 +84,7 @@ namespace TrackrAPI.Controllers.Catalogo
         public CompaniaDto ConsultarPorUsuario()
         {
             var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
-            int idCompania = ((usuario.IdCompania != null) ? usuario.IdCompania.Value : -1);
+            int idCompania = usuario.IdCompania;
 
             if (idCompania >= 0)
             {

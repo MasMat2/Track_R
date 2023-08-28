@@ -11,6 +11,7 @@ namespace TrackrAPI.Controllers.Catalogo
     public class EspecialidadController : ControllerBase
     {
         private readonly EspecialidadService especialidadService;
+        private EspecialidadFormularioCapturaDto especialidad;
 
         public EspecialidadController(EspecialidadService especialidadService)
         {
@@ -26,7 +27,7 @@ namespace TrackrAPI.Controllers.Catalogo
         [HttpGet("grid")]
         public IEnumerable<EspecialidadGridDto> Consultar()
         {
-            return especialdiadService.ConsultarParaGrid();
+            return especialidadService.ConsultarParaGrid();
         }
 
          [HttpPost]
@@ -36,7 +37,7 @@ namespace TrackrAPI.Controllers.Catalogo
         }
 
         [HttpPut]
-        public void Editar(EspecialdiadFormularioCapturaDto especialidadDto)
+        public void Editar(EspecialidadFormularioCapturaDto especialidadDto)
         {
             especialidadService.Editar(especialidad);
         }

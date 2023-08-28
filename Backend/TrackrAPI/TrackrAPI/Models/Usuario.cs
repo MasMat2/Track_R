@@ -27,6 +27,7 @@ namespace TrackrAPI.Models
             ExpedienteAdministrativoViajeIdUsuarioChoferNavigation = new HashSet<ExpedienteAdministrativoViaje>();
             ExpedienteAdministrativoViajeIdUsuarioDestinatarioNavigation = new HashSet<ExpedienteAdministrativoViaje>();
             ExpedienteBitacora = new HashSet<ExpedienteBitacora>();
+            ExpedienteDoctor = new HashSet<ExpedienteDoctor>();
             ExpedientePadecimiento = new HashSet<ExpedientePadecimiento>();
             ExpedienteRecomendaciones = new HashSet<ExpedienteRecomendaciones>();
             ExpedienteTrackr = new HashSet<ExpedienteTrackr>();
@@ -48,6 +49,7 @@ namespace TrackrAPI.Models
             NotaVentaDetalle = new HashSet<NotaVentaDetalle>();
             NotaVentaIdUsuarioAltaNavigation = new HashSet<NotaVenta>();
             NotaVentaIdUsuarioClienteNavigation = new HashSet<NotaVenta>();
+            NotificacionDoctor = new HashSet<NotificacionDoctor>();
             NotificacionUsuario = new HashSet<NotificacionUsuario>();
             OrdenCompraIdUsuarioCompradorNavigation = new HashSet<OrdenCompra>();
             OrdenCompraIdUsuarioProveedorNavigation = new HashSet<OrdenCompra>();
@@ -86,10 +88,10 @@ namespace TrackrAPI.Models
         public int? IdEstado { get; set; }
         public int IdTipoUsuario { get; set; }
         public int? IdPerfil { get; set; }
-        public int? IdCompania { get; set; }
+        public int IdCompania { get; set; }
         public string? Username { get; set; }
         public string? ImagenTipoMime { get; set; }
-        public int? IdHospital { get; set; }
+        public int IdHospital { get; set; }
         public int? IdTituloAcademico { get; set; }
         public int? IdDepartamento { get; set; }
         public string? Calle { get; set; }
@@ -115,13 +117,14 @@ namespace TrackrAPI.Models
         public int? IdListaPrecio { get; set; }
         public int? IdSatFormaPago { get; set; }
         public int? IdMetodoPago { get; set; }
+        public string? EntreCalles { get; set; }
 
         public virtual Area? IdAreaNavigation { get; set; }
         public virtual Colonia? IdColoniaNavigation { get; set; }
-        public virtual Compania? IdCompaniaNavigation { get; set; }
+        public virtual Compania IdCompaniaNavigation { get; set; } = null!;
         public virtual Departamento? IdDepartamentoNavigation { get; set; }
         public virtual Estado? IdEstadoNavigation { get; set; }
-        public virtual Hospital? IdHospitalNavigation { get; set; }
+        public virtual Hospital IdHospitalNavigation { get; set; } = null!;
         public virtual ListaPrecio? IdListaPrecioNavigation { get; set; }
         public virtual Localidad? IdLocalidadNavigation { get; set; }
         public virtual MetodoPago? IdMetodoPagoNavigation { get; set; }
@@ -153,6 +156,7 @@ namespace TrackrAPI.Models
         public virtual ICollection<ExpedienteAdministrativoViaje> ExpedienteAdministrativoViajeIdUsuarioChoferNavigation { get; set; }
         public virtual ICollection<ExpedienteAdministrativoViaje> ExpedienteAdministrativoViajeIdUsuarioDestinatarioNavigation { get; set; }
         public virtual ICollection<ExpedienteBitacora> ExpedienteBitacora { get; set; }
+        public virtual ICollection<ExpedienteDoctor> ExpedienteDoctor { get; set; }
         public virtual ICollection<ExpedientePadecimiento> ExpedientePadecimiento { get; set; }
         public virtual ICollection<ExpedienteRecomendaciones> ExpedienteRecomendaciones { get; set; }
         public virtual ICollection<ExpedienteTrackr> ExpedienteTrackr { get; set; }
@@ -174,6 +178,7 @@ namespace TrackrAPI.Models
         public virtual ICollection<NotaVentaDetalle> NotaVentaDetalle { get; set; }
         public virtual ICollection<NotaVenta> NotaVentaIdUsuarioAltaNavigation { get; set; }
         public virtual ICollection<NotaVenta> NotaVentaIdUsuarioClienteNavigation { get; set; }
+        public virtual ICollection<NotificacionDoctor> NotificacionDoctor { get; set; }
         public virtual ICollection<NotificacionUsuario> NotificacionUsuario { get; set; }
         public virtual ICollection<OrdenCompra> OrdenCompraIdUsuarioCompradorNavigation { get; set; }
         public virtual ICollection<OrdenCompra> OrdenCompraIdUsuarioProveedorNavigation { get; set; }

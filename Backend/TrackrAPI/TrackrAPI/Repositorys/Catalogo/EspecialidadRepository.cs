@@ -22,8 +22,7 @@ namespace TrackrAPI.Repositorys.Catalogo
 
         public IEnumerable<Especialidad> Consultar()
         {
-            return context.Especialidad
-                .Include(es => es.IdEspecialidad);
+            return context.Especialidad;
         }
 
         public Especialidad? ConsultarPorNombre(string nombre)

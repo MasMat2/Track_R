@@ -9,14 +9,14 @@
     >
       <div class="container-fluid">
         <div class="row">
-          <!-- Clave -->
+          <!-- ID -->
           <div class="col-12 col-md-5">
             <div class="form-group">
-              <label class="label-input required-label">Clave</label>
+              <label class="label-input required-label">ID</label>
               <div>
                 <input
                   #clave="ngModel"
-                  [(ngModel)]="entidad.idEspecialidad"
+                  [(ngModel)]="entidad.clave"
                   id="clave"
                   name="claveName"
                   class="form-control"
@@ -35,7 +35,7 @@
               </div>
             </div>
           </div>
-          <!-- Nombre -->
+          <!-- Especialidad -->
           <div class="col-12 col-md-7">
             <div class="form-group">
               <label class="label-input required-label">Especialidad</label>
@@ -43,7 +43,7 @@
                 <input
                   #nombre="ngModel"
                   [(ngModel)]="entidad.nombre"
-                  name="nombre"
+                  name="especialidad"
                   class="form-control"
                   type="text"
                   maxlength="50"
@@ -54,7 +54,7 @@
                   *ngIf="nombre.errors?.['required'] && nombre.touched"
                   class="error"
                 >
-                  El nombre es requerido
+                  La especialidad es requerida
                 </div>
               </div>
             </div>

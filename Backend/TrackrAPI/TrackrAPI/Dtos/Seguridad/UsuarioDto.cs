@@ -21,8 +21,8 @@ namespace TrackrAPI.Dtos.Seguridad
         public string TelefonoMovil { get; set; }
         public string ContrasenaActualizada { get; set; }
         public int? IdPerfil { get; set; }
-        public int? IdHospital { get; set; }
-        public int? IdCompania { get; set; }
+        public int IdHospital { get; set; }
+        public int IdCompania { get; set; }
         public int IdTipoUsuario { get; set; }
         public string Username { get; set; }
         public string ImagenBase64 { get; set; }

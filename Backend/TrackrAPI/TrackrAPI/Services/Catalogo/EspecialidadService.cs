@@ -10,7 +10,7 @@ namespace TrackrAPI.Services.Catalogo
         private readonly IEspecialidadRepository especialidadRepository;
         private readonly EspecialidadValidatorService especialidadValidatorService;
 
-        public EspecialdiadService(
+        public EspecialidadService(
             IEspecialidadRepository especialidadRepository,
             EspecialidadValidatorService especialidadValidatorService)
         {
@@ -22,7 +22,7 @@ namespace TrackrAPI.Services.Catalogo
         {
             var especialidad = especialidadRepository.Consultar(idEspecialidad);
 
-            if (idEspecialidad is null)
+            if (especialidad is null)
             {
                 return null;
             }
@@ -38,17 +38,19 @@ namespace TrackrAPI.Services.Catalogo
 
         public IEnumerable<EspecialidadGridDto> ConsultarParaGrid()
         {
-            var especialidad = especialidadRepository.ConsultarParaGrid();
+            var especialidades = especialidadRepository.Consultar();
 
             var especialidadesDto = especialidades
                 .OrderBy(es => es.Nombre)
                 .Select(es => new EspecialidadGridDto
                 {
+                    
+                    Clave = es.Clave ?? string.Empty,
                     IdEspecialidad = es.IdEspecialidad,
                     Nombre = es.Nombre
                 });
 
-            return especialidadDto;
+            return especialidadesDto;
         }
 
         public void Agregar(EspecialidadFormularioCapturaDto especialidadDto)
@@ -57,7 +59,8 @@ namespace TrackrAPI.Services.Catalogo
 
             var especialidad = new Especialidad
             {
-                IdEspecialidad = especialidadDto.idEspecialidad,
+                Clave = especialidadDto.Clave,
+                IdEspecialidad = especialidadDto.IdEspecialidad,
                 Nombre = especialidadDto.Nombre
             };
 
@@ -66,9 +69,9 @@ namespace TrackrAPI.Services.Catalogo
 
         public void Editar(EspecialidadFormularioCapturaDto especialidadDto)
         {
-            especialidadValidatorService.ValidarEditar(especialdiadDto);
+            especialidadValidatorService.ValidarEditar(especialidadDto);
 
-            var especialidad = especialdiadRepository.Consultar(especialidadDto.IdEspecialidad)!;
+            var especialidad = especialidadRepository.Consultar(especialidadDto.IdEspecialidad)!;
 
             especialidad.Nombre = especialidadDto.Nombre;
             especialidad.IdEspecialidad = especialidadDto.IdEspecialidad;
@@ -80,9 +83,9 @@ namespace TrackrAPI.Services.Catalogo
         {
             especialidadValidatorService.ValidarEliminar(idEspecialidad);
 
-            var especialdiad = especialidadRepository.Consultar(idEspecialidad)!;
+            var especialidad = especialidadRepository.Consultar(idEspecialidad)!;
 
-            especialidadRepository.Eliminar(especialdiad);
+            especialidadRepository.Eliminar(especialidad!);
         }
     }
 }

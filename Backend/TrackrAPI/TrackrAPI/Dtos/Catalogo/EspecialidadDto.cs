@@ -1,6 +1,6 @@
 namespace TrackrAPI.Dtos.Catalogo
 {
-    public class EspecialidadGridDto
+    public class EspecialidadDto
     {
         public int IdEspecialidad { get; set; }
         public string Nombre { get; set; } = string.Empty;
