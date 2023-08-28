@@ -1,9 +1,9 @@
 <div class="container p-4">
   <div class="titulo mb-3">Notificaciones</div>
 
-  <div class="d-flex flex-column gap-3">
-    <div *ngFor="let notificacion of notificaciones">
-      <div class="d-flex align-items-center gap-3">
+  <div class="d-flex flex-column gap-2">
+    <div *ngFor="let notificacion of notificaciones$ | async">
+      <div class="notificacion d-flex align-items-center gap-3" [ngClass]="{ 'vista': notificacion.visto }">
         <div class="img-container">
           <img [src]="notificacion.imagen ?? 'https://via.placeholder.com/150'">
         </div>
@@ -12,10 +12,64 @@
           <span class="mensaje">{{ notificacion.mensaje }}</span>
           <span class="fecha">{{ notificacion.fecha | date }}</span>
         </div>
-        <div class="chat ms-a">
-          <i class="fas fa-comment"></i>
+        <div class="ms-auto">
+          <button type="button" class="btn chat" (click)="marcarComoVista(notificacion.id)">
+            <i class="chat fas fa-comment"></i>
+          </button>
         </div>
       </div>
     </div>
+
+
+    <form (ngSubmit)="notificar()">
+      <div class="d-flex flex-column align-items-center p-3 mt-2" style="background-color: #ffffff; border-radius: 15px;">
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group">
+              <label class="label-input" for="tipoNotificacion">Tipo de Notificación</label>
+              <ng-select
+                #tipoNotificacion="ngModel"
+                name="tipoNotificacion"
+                class="select-custom"
+                [items]="tiposNotificacion"
+                bindLabel="nombre"
+                bindValue="idTipoNotificacion"
+                [(ngModel)]="idTipoNotificacion"
+              ></ng-select>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-group">
+              <label class="label-input" for="paciente">Paciente</label>
+              <ng-select
+                #paciente="ngModel"
+                name="paciente"
+                class="select-custom"
+                [items]="pacientes$ | async"
+                bindLabel="nombreCompleto"
+                bindValue="idUsuario"
+                [(ngModel)]="idPaciente"
+              ></ng-select>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-group">
+              <label class="label-input" for="mensaje">Mensaje</label>
+              <textarea
+                #mensajeInput="ngModel"
+                name="mensaje"
+                id="mensaje"
+                class="form-control"
+                rows="3"
+                [(ngModel)]="mensaje"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primario mt-4">Enviar Notificacion</button>
+      </div>
+    </form>
   </div>
+
 </div>

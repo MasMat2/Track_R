@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { NotificacionDoctorCapturaDTO } from '@dtos/notificaciones/notificacion-doctor-captura-dto';
+import { NotificacionService } from '@http/notificaciones/notificacion.service';
+import { UsuarioService } from '@http/seguridad/usuario.service';
+import { Usuario } from '@models/seguridad/usuario';
+import { NotificacionDoctorHubService } from '@services/notificacion-doctor-hub.service';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-panel-notificaciones',
@@ -7,26 +13,66 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PanelNotificacionesComponent implements OnInit {
 
+  protected pacientes$: Observable<Usuario[]>;
+  protected tiposNotificacion: { idTipoNotificacion: number, nombre: string }[] = [
+    { idTipoNotificacion: 2, nombre: 'Chat' },
+    { idTipoNotificacion: 3, nombre: 'Video' },
+    { idTipoNotificacion: 4, nombre: 'Alerta' },
+  ];
 
-  protected notificaciones: {
+  protected idPaciente?: number;
+  protected idTipoNotificacion?: number;
+  protected mensaje: string;
+
+  protected notificaciones$: Observable<{
     id: number,
     paciente: string,
     mensaje: string,
     fecha: Date,
-    imagen?: string
-  }[] = [
-    // give me mock data for this interface
-    { id: 1, paciente: 'Juan López', mensaje: 'Fusce in faucibus mauris. Vivamus nisi lacus, pellentesque ac libero sed, varius posuere nisi. ', fecha: new Date(), imagen: undefined },
-    { id: 2, paciente: 'Roberto Hernández', mensaje: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ', fecha: new Date(), imagen: undefined },
-    { id: 3, paciente: 'Lucero Castro', mensaje: 'Ultrices tincidunt arcu non sodales neque sodales ut etiam.', fecha: new Date(), imagen: undefined },
-    { id: 4, paciente: 'Erick Villarreal', mensaje: 'Vitae et leo duis ut. Nibh praesent tristique magna sit amet purus gravida quis blandit.', fecha: new Date(), imagen: undefined },
-    { id: 5, paciente: 'Daniela Guadalupe', mensaje: 'Sed adipiscing diam donec adipiscing tristique. Semper eget duis at tellus at.', fecha: new Date(), imagen: undefined },
-    { id: 6, paciente: 'Gloria Martínez', mensaje: 'Massa id neque aliquam vestibulum morbi blandit cursus risus.', fecha: new Date(), imagen: undefined },
-  ];
+    imagen?: string,
+    visto: boolean
+  }[]>;
 
-  constructor() { }
+  constructor(
+    private notificacionService: NotificacionService,
+    private notificacionHubService: NotificacionDoctorHubService,
+    private usuarioService: UsuarioService
+  ) { }
 
   ngOnInit() {
+    this.pacientes$ = this.usuarioService.consultarPorRol("014");
+    this.consultarNotificaciones();
+  }
+
+  private consultarNotificaciones(): void {
+    this.notificaciones$ = this.notificacionHubService.notificaciones$
+      .pipe(
+        map(notificaciones => notificaciones.map((notificacion) => {
+          return {
+            id: notificacion.idNotificacionUsuario,
+            paciente: notificacion.nombrePaciente,
+            mensaje: notificacion.mensaje,
+            fecha: notificacion.fechaAlta,
+            imagen: undefined,
+            visto: notificacion.visto
+          };
+        }))
+      );
+  }
+
+  protected notificar(): void {
+    var dto: NotificacionDoctorCapturaDTO = {
+      idPaciente: this.idPaciente!,
+      idTipoNotificacion: this.idTipoNotificacion!,
+      mensaje: this.mensaje
+    };
+
+    this.notificacionService.notificar(dto).subscribe();
+  }
+
+  protected async marcarComoVista(idNotificacionUsuario: number) {
+    await this.notificacionHubService.marcarComoVista(idNotificacionUsuario);
+    this.consultarNotificaciones();
   }
 
 }

@@ -198,6 +198,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<NotaVenta> NotaVenta { get; set; } = null!;
         public virtual DbSet<NotaVentaDetalle> NotaVentaDetalle { get; set; } = null!;
         public virtual DbSet<Notificacion> Notificacion { get; set; } = null!;
+        public virtual DbSet<NotificacionDoctor> NotificacionDoctor { get; set; } = null!;
         public virtual DbSet<NotificacionUsuario> NotificacionUsuario { get; set; } = null!;
         public virtual DbSet<OpcionVenta> OpcionVenta { get; set; } = null!;
         public virtual DbSet<OrdenCompra> OrdenCompra { get; set; } = null!;
@@ -291,6 +292,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<TipoMuestra> TipoMuestra { get; set; } = null!;
         public virtual DbSet<TipoNotaGasto> TipoNotaGasto { get; set; } = null!;
         public virtual DbSet<TipoNotaVenta> TipoNotaVenta { get; set; } = null!;
+        public virtual DbSet<TipoNotificacion> TipoNotificacion { get; set; } = null!;
         public virtual DbSet<TipoPago> TipoPago { get; set; } = null!;
         public virtual DbSet<TipoPermisoTransporte> TipoPermisoTransporte { get; set; } = null!;
         public virtual DbSet<TipoPoliza> TipoPoliza { get; set; } = null!;
@@ -5154,11 +5156,35 @@ namespace TrackrAPI.Models
                 entity.HasKey(e => e.IdNotificacion)
                     .HasName("PK__Notifica__F6CA0A850829CF10");
 
-                entity.Property(e => e.Descripcion).HasMaxLength(500);
-
                 entity.Property(e => e.FechaAlta).HasColumnType("datetime");
 
-                entity.Property(e => e.Origen).HasMaxLength(200);
+                entity.Property(e => e.Mensaje).HasMaxLength(500);
+
+                entity.Property(e => e.Titulo).HasMaxLength(1000);
+
+                entity.HasOne(d => d.IdTipoNotificacionNavigation)
+                    .WithMany(p => p.Notificacion)
+                    .HasForeignKey(d => d.IdTipoNotificacion)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TipoNotificacion_Notificacion");
+            });
+
+            modelBuilder.Entity<NotificacionDoctor>(entity =>
+            {
+                entity.HasKey(e => e.IdNotificacionDoctor)
+                    .HasName("PK__Notifica__09846837BF6B6039");
+
+                entity.HasOne(d => d.IdNotificacionNavigation)
+                    .WithMany(p => p.NotificacionDoctor)
+                    .HasForeignKey(d => d.IdNotificacion)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Notificac__IdNot__548C6944");
+
+                entity.HasOne(d => d.IdPacienteNavigation)
+                    .WithMany(p => p.NotificacionDoctor)
+                    .HasForeignKey(d => d.IdPaciente)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Notificac__IdPac__55808D7D");
             });
 
             modelBuilder.Entity<NotificacionUsuario>(entity =>
@@ -7332,6 +7358,16 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.Nombre).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<TipoNotificacion>(entity =>
+            {
+                entity.HasKey(e => e.IdTipoNotificacion)
+                    .HasName("PK__TipoNoti__0ECE0435F8C7AA48");
+
+                entity.Property(e => e.IdTipoNotificacion).ValueGeneratedNever();
+
+                entity.Property(e => e.Nombre).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<TipoPago>(entity =>
             {
                 entity.HasKey(e => e.IdTipoPago)
@@ -7743,6 +7779,7 @@ namespace TrackrAPI.Models
                 entity.HasOne(d => d.IdCompaniaNavigation)
                     .WithMany(p => p.Usuario)
                     .HasForeignKey(d => d.IdCompania)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Usuario_Compania");
 
                 entity.HasOne(d => d.IdDepartamentoNavigation)
@@ -7758,6 +7795,7 @@ namespace TrackrAPI.Models
                 entity.HasOne(d => d.IdHospitalNavigation)
                     .WithMany(p => p.Usuario)
                     .HasForeignKey(d => d.IdHospital)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Usuario_Hospital");
 
                 entity.HasOne(d => d.IdListaPrecioNavigation)

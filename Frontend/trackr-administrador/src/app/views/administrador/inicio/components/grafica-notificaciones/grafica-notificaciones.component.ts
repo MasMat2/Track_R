@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ChartConfiguration, ChartData, ChartOptions, ChartType } from 'chart.js';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NotificacionDoctorDTO } from '@dtos/notificaciones/notificacion-doctor-dto';
+import { NotificacionDoctorHubService } from '@services/notificacion-doctor-hub.service';
+import { ChartConfiguration, ChartData } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-grafica-notificaciones',
@@ -9,18 +12,16 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 })
 export class GraficaNotificacionesComponent implements OnInit {
 
-  protected solicitudes: { tipo: string, cantidad: number }[] = [
-    { tipo: 'Solicitudes Atendidas', cantidad: 20 },
-    { tipo: 'Solicitudes Sin Atender', cantidad: 10 },
-  ];
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
   protected colors: string[] = ['#92d050', '#ff8b8b'];
-  protected data = this.solicitudes.map((r) => r.cantidad);
-  private etiquetas = this.solicitudes.map((r) => r.tipo);
-  private total: number = this.data.reduce((a, b) => a + b, 0);
+  protected etiquetas: string[] = ['Solicitudes Atendidas', 'Solicitudes Sin Atender'];
+  protected data: number[] = [0, 0];
+  private total: number = 0;
 
   protected chartType: ChartConfiguration<'doughnut'>['type'] = 'doughnut';
   protected chartPlugins = [ChartDataLabels];
+
   protected chartData: ChartData<'doughnut'> = {
     labels: this.etiquetas,
     datasets: [
@@ -31,6 +32,7 @@ export class GraficaNotificacionesComponent implements OnInit {
       }
     ],
   };
+
   protected chartOptions: ChartConfiguration<'doughnut'>['options'] = {
     cutout: '80%',
     plugins: {
@@ -38,15 +40,31 @@ export class GraficaNotificacionesComponent implements OnInit {
       datalabels: {
         color: 'black',
         formatter: (value: number) => {
+          if (this.total === 0) return (0).toFixed(0) + '%';
           return (value / this.total * 100).toFixed(0) + '%';
         }
       }
     }
   };
 
-  constructor() { }
+  constructor(
+    private notificacionHubService: NotificacionDoctorHubService
+  ) { }
 
   ngOnInit() {
+    this.notificacionHubService.notificaciones$
+      .subscribe((notificaciones) => this.actualizarGrafica(notificaciones));
+  }
+
+  private actualizarGrafica(notificaciones: NotificacionDoctorDTO[]) {
+    const atendidas = notificaciones.filter((n) => n.visto).length;
+    const sinAtender = notificaciones.length - atendidas;
+
+    this.data = [atendidas, sinAtender];
+    this.total = this.data.reduce((a, b) => a + b, 0);
+
+    this.chartData.datasets[0].data = this.data;
+    this.chart?.update();
   }
 
 }
