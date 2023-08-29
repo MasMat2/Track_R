@@ -40,7 +40,7 @@ public class NotificacionPacienteService
         return _notificacionUsuarioService.ConsultarPorPaciente(idUsuario);
     }
 
-    public async Task Notificar(NotificacionCapturaDTO notificacionDto, int idUsuario)
+    public async Task<NotificacionPacienteDTO> Notificar(NotificacionCapturaDTO notificacionDto, int idUsuario)
     {
         using var ts = new TransactionScope();
 
@@ -49,6 +49,7 @@ public class NotificacionPacienteService
         await EnviarNotificacion(notificacionPaciente);
 
         ts.Complete();
+        return  notificacionPaciente;
     }
 
     public async Task Notificar(NotificacionCapturaDTO notificacionDto, List<int> idUsuarios)
