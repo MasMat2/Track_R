@@ -65,7 +65,7 @@ public class ExpedienteRecomendacionService
             5
         );
 
-        var notificacionHecha = await _notificacionPacienteService.Notificar(notificacion , expedienteRecomendacionFormDTO.IdUsuario);
+        var notificacionInsertada = await _notificacionPacienteService.Notificar(notificacion , expedienteRecomendacionFormDTO.IdUsuario);
 
         var recomendacion = new ExpedienteRecomendaciones
         {
@@ -73,7 +73,7 @@ public class ExpedienteRecomendacionService
             FechaRealizacion = DateTime.UtcNow,
             IdExpediente = idExpediente,
             IdUsuarioDoctor = expedienteRecomendacionFormDTO.IdDoctor,
-            IdNotificacion = notificacionHecha.IdNotificacion
+            IdNotificacion = notificacionInsertada.IdNotificacion
         };
         _expedienteRecomendacionRepository.Agregar(recomendacion);
     }
