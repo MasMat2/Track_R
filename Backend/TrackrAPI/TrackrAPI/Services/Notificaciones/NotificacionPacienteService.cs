@@ -31,13 +31,27 @@ public class NotificacionPacienteService
             notificacionDto.Titulo,
             notificacionDto.Mensaje,
             notificacionDto.FechaAlta,
-            notificacionUsuarioDto.Visto
+            notificacionUsuarioDto.Visto,
+            notificacionDto.IdTipoNotificacion
         );
     }
 
     public IEnumerable<NotificacionPacienteDTO> ConsultarPorPaciente(int idUsuario)
     {
         return _notificacionUsuarioService.ConsultarPorPaciente(idUsuario);
+    }
+
+    public IEnumerable<NotificacionPacientePopOverDto> ConsultarPorPacienteDto(int idUsuario)
+    {
+        return _notificacionUsuarioService.ConsultarPorPaciente(idUsuario)
+        .Select(n => new NotificacionPacientePopOverDto {
+            FechaAlta = n.FechaAlta,
+            IdNotificacion = n.IdNotificacion,
+            IdTipoNotificacion = n.IdTipoNotificacion,
+            Mensaje = n.Mensaje,
+            Titulo = n.Titulo,
+            Visto = n.Visto
+        });
     }
 
     public async Task<NotificacionPacienteDTO> Notificar(NotificacionCapturaDTO notificacionDto, int idUsuario)
@@ -49,6 +63,7 @@ public class NotificacionPacienteService
         await EnviarNotificacion(notificacionPaciente);
 
         ts.Complete();
+
         return  notificacionPaciente;
     }
 

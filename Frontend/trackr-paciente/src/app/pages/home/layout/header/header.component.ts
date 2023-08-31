@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { NotificacionesComponent } from './notificaciones/notificaciones.component';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +10,8 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [
     CommonModule,
-    IonicModule
+    IonicModule,
+    NotificacionesComponent
   ]
 })
 export class HeaderComponent implements OnInit {

@@ -30,7 +30,8 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
                 nu.IdNotificacionNavigation.Titulo,
                 nu.IdNotificacionNavigation.Mensaje,
                 nu.IdNotificacionNavigation.FechaAlta,
-                nu.Visto
+                nu.Visto,
+                nu.IdNotificacionNavigation.IdTipoNotificacion
             ));
     }
 

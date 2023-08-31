@@ -21,6 +21,8 @@ namespace TrackrAPI.Models
         public int IdUsuarioDoctor { get; set; }
         public byte[]? Imagen { get; set; }
         public string? ImagenTipoMime { get; set; }
+        public DateTime FechaInicio { get; set; }
+        public DateTime? FechaFin { get; set; }
 
         public virtual ExpedienteTrackr IdExpedienteNavigation { get; set; } = null!;
         public virtual EntidadEstructura IdPadecimientoNavigation { get; set; } = null!;

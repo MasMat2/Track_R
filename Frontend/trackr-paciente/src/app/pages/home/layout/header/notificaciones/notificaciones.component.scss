@@ -1,0 +1,24 @@
+.notificacion{
+    color: #671E75;
+}
+
+.popover-button-with-badge {
+    position: relative;
+    align-items: center;
+  }
+
+ .badge-on-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    font-size: 0.6em;
+    width: 1.5em;
+    height: 1.5em;
+    padding: 0.1em;
+  }
+
+.visto-celeste {
+    background-color: lightblue;
+  }
+  
