@@ -45,8 +45,8 @@ export class EspecialidadComponent extends CrudBase<EspecialidadGridDto> impleme
 
   // Grid
   protected columns: ColDef[] = [
-    { headerName: 'ID', field: 'id', minWidth: 150, width: 70 },
-    { headerName: 'Especialidad', field: 'especialidad', minWidth: 150 }
+    { headerName: 'ID', field: 'idEspecialidad', minWidth: 150, width: 70 },
+    { headerName: 'Especialidad', field: 'nombre', minWidth: 150 }
   ];
 
   constructor(

@@ -7,6 +7,5 @@ namespace TrackrAPI.Models
     {
         public int IdEspecialidad { get; set; }
         public string Nombre { get; set; } = null!;
-        public string? Clave { get; set; }
     }
 }

@@ -45,7 +45,6 @@ namespace TrackrAPI.Services.Catalogo
                 .Select(es => new EspecialidadGridDto
                 {
                     
-                    Clave = es.Clave ?? string.Empty,
                     IdEspecialidad = es.IdEspecialidad,
                     Nombre = es.Nombre
                 });
@@ -59,7 +58,6 @@ namespace TrackrAPI.Services.Catalogo
 
             var especialidad = new Especialidad
             {
-                Clave = especialidadDto.Clave,
                 IdEspecialidad = especialidadDto.IdEspecialidad,
                 Nombre = especialidadDto.Nombre
             };

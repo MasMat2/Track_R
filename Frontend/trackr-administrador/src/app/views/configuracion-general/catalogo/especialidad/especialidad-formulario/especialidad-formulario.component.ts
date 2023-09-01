@@ -54,7 +54,6 @@ export class EspecialidadFormularioComponent extends CrudFormularioBase<Especial
           const capturaDto = new EspecialidadFormularioCapturaDto();
           capturaDto.idEspecialidad = especialidad.idEspecialidad;
           capturaDto.nombre = especialidad.nombre;
-          capturaDto.clave = especialidad.clave;
 
           return capturaDto;
         })

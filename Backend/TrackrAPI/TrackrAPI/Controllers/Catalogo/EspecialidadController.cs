@@ -13,11 +13,6 @@ namespace TrackrAPI.Controllers.Catalogo
         private readonly EspecialidadService especialidadService;
         private EspecialidadFormularioCapturaDto especialidad;
 
-        public EspecialidadController(EspecialidadService especialidadService)
-        {
-            this.especialidadService = especialidadService;
-        }
-
         [HttpGet("formulario/{idEspecialidad}")]
         public EspecialidadFormularioConsultaDto? ConsultarParaFormulario(int idEspecialidad)
         {
@@ -35,6 +30,7 @@ namespace TrackrAPI.Controllers.Catalogo
         {
             especialidadService.Agregar(especialidad);
         }
+
 
         [HttpPut]
         public void Editar(EspecialidadFormularioCapturaDto especialidadDto)
