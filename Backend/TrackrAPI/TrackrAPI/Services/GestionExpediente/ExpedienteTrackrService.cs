@@ -140,6 +140,8 @@ public class ExpedienteTrackrService
                     byte[] imageArray = File.ReadAllBytes(filePath);
                     expediente.ImagenBase64 = Convert.ToBase64String(imageArray);
                 }
+                expediente.DosisNoTomadas = _expedienteTrackrRepository.DosisNoTomadas(expediente.IdExpedienteTrackr);
+                expediente.VariablesFueraRango = _expedienteTrackrRepository.VariablesFueraRango(expediente.IdUsuario);
             }
 
         }

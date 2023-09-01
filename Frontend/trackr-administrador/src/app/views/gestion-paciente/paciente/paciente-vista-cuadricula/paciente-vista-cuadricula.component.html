@@ -28,8 +28,8 @@
       <th class="px-0 text-center">Fotografía</th>
       <th class="text-center">Paciente</th>
       <th class="text-center">Patologías</th>
-      <th class="text-center">Glucosa</th>
-      <th class="text-center">Presión</th>
+      <th class="text-center">Dosis por tomar</th>
+      <th class="text-center">Valores fuera de rango</th>
       <th class="text-center"></th>
     </tr>
   </ng-template>
@@ -77,11 +77,11 @@
       <!-- TODO: Arreglar las bolitas de colores que muestran los signos -->
       <td style="">
         <div class="green-dot"></div>
-        <div class="d-flex justify-content-center align-items-center">{{ paciente.glucosa }}</div>
+        <div class="d-flex justify-content-center align-items-center">{{ paciente.dosisNoTomadas }}</div>
       </td>
       <td style="">
         <div class="green-dot"></div>
-        <div class="d-flex justify-content-center align-items-center">{{ paciente.presionSistolica }}/{{ paciente?.presionAsistolica }}</div>
+        <div class="d-flex justify-content-center align-items-center">{{ paciente.variablesFueraRango}}</div>
       </td>
       <td class="botones-acciones text-center px-0">
         <button 

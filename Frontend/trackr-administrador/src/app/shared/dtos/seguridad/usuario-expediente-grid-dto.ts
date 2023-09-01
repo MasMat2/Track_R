@@ -5,7 +5,8 @@ export class UsuarioExpedienteGridDTO {
     imagenBase64?: string;
     tipoMime?: string;
     patologias: string[];
-    glucosa: number;
+    dosisNoTomadas: number;
+    variablesFueraRango: number;
     presionSistolica: number;
     presionAsistolica: number;
     edad: string;
