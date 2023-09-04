@@ -10,10 +10,10 @@
     title="Descargar Excel"
     class="grid-download"
     >
-      <img 
+      <img
       src="assets/img/svg/ico-15x15-Descargar.svg"/>
     </i>
-  
+
   </button>
 </div>
 <p-table
@@ -28,8 +28,8 @@
       <th class="px-0 text-center">Fotografía</th>
       <th class="text-center">Paciente</th>
       <th class="text-center">Patologías</th>
-      <th class="text-center">Dosis por tomar</th>
-      <th class="text-center">Valores fuera de rango</th>
+      <th class="text-center">Dosis sin tomar</th>
+      <th class="text-center">Variables fuera de rango</th>
       <th class="text-center"></th>
     </tr>
   </ng-template>
@@ -44,9 +44,9 @@
               : 'assets/img/default-user.jpg'
           "
         />
-<!-- 
-        <img *ngIf="paciente.imagenBase64 !== undefined" 
-          class="imagen-usuario" 
+<!--
+        <img *ngIf="paciente.imagenBase64 !== undefined"
+          class="imagen-usuario"
           [src]="paciente.imagenBase64 != undefined
           ? (paciente.imagenBase64 | urlImagen : paciente?.tipoMime)
           : 'assets/img/default-user.jpg'"
@@ -62,7 +62,7 @@
         {{ paciente.nombreCompleto }}
         <p class="edad">{{ paciente.edad }}</p>
       </td>
-      
+
       <td>
         <div class="d-flex">
           <span
@@ -84,8 +84,8 @@
         <div class="d-flex justify-content-center align-items-center">{{ paciente.variablesFueraRango}}</div>
       </td>
       <td class="botones-acciones text-center px-0">
-        <button 
-          type="button" 
+        <button
+          type="button"
           class="btn"
           (click)="onVer(paciente)"
           title="Ver"
@@ -100,7 +100,7 @@
         >
           <i class="fa fa-lg fa-pen-to-square icono-primario"></i>
         </button>
-        
+
         <button
           type="button"
           class="btn"
