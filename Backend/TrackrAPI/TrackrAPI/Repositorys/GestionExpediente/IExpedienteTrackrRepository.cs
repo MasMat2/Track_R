@@ -12,5 +12,7 @@ namespace TrackrAPI.Repositorys.GestionExpediente
 
         public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid();
         public UsuarioExpedienteSidebarDTO ConsultarParaSidebar(int idUsuario);
+        public int DosisNoTomadas(int idExpediente);
+        public int VariablesFueraRango(int idUsuario);
     }
 }

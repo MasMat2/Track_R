@@ -53,6 +53,36 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
             })
             .ToList();
     }
+    public int VariablesFueraRango(int idUsuario)
+    {
+        var currentDateUtc = DateTime.UtcNow;
+        var maxDate = currentDateUtc.AddDays(-2);
+
+        return context.EntidadEstructuraTablaValor
+            .Where(eetv => eetv.IdTabla == idUsuario && eetv.FueraDeRango == true && eetv.FechaMuestra >= maxDate)
+            .Count();
+    }
+
+    public int DosisNoTomadas(int idExpediente)
+    {
+        var expediente =  context.TratamientoToma
+            .Join(
+            context.TratamientoRecordatorio,
+            tt => tt.IdTratamientoRecordatorio,
+            tr => tr.IdTratamientoRecordatorio,
+            (tt, tr) => new {TratamientoToma = tt ,  TratamientoRecordatorio = tr}
+            )
+            .Join(
+                context.ExpedienteTratamiento,
+                temp => temp.TratamientoRecordatorio.IdExpedienteTratamiento,
+                et => et.IdExpedienteTratamiento,
+                (temp , et) => new { temp.TratamientoToma , ExpedienteTratamiento = et}
+            )
+            .Where( x => x.ExpedienteTratamiento.IdExpediente == idExpediente  && x.TratamientoToma.FechaToma == null );
+
+            return expediente.Count();
+    }
+
     public UsuarioExpedienteSidebarDTO ConsultarParaSidebar(int idUsuario)
     {
         var expedienteSidebarDTO = context.ExpedienteTrackr
