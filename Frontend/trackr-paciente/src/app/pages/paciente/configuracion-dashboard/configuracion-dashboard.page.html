@@ -1,0 +1,14 @@
+<div>
+  <div *ngFor="let widget of widgets">
+    <ion-checkbox
+      labelPlacement="end"
+      [(ngModel)]="widget.seleccionado"
+      [checked]="widget.seleccionado"
+    >
+      {{ widget.nombre }}
+    </ion-checkbox>
+
+  </div>
+</div>
+
+<button type="button" class="btn btn-primario" (click)="onAceptar()">Aceptar</button>

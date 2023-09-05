@@ -319,6 +319,8 @@ namespace TrackrAPI.Models
         public virtual DbSet<UsuarioAlmacen> UsuarioAlmacen { get; set; } = null!;
         public virtual DbSet<UsuarioLocacion> UsuarioLocacion { get; set; } = null!;
         public virtual DbSet<UsuarioRol> UsuarioRol { get; set; } = null!;
+        public virtual DbSet<UsuarioWidget> UsuarioWidget { get; set; } = null!;
+        public virtual DbSet<Widget> Widget { get; set; } = null!;
         public virtual DbSet<Vehiculo> Vehiculo { get; set; } = null!;
         public virtual DbSet<VehiculoMantenimiento> VehiculoMantenimiento { get; set; } = null!;
         public virtual DbSet<VersionPoliza> VersionPoliza { get; set; } = null!;
@@ -8026,6 +8028,34 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.Cargo).HasColumnType("decimal(38, 2)");
 
                 entity.Property(e => e.CuentaContable).HasMaxLength(521);
+            });
+
+            modelBuilder.Entity<UsuarioWidget>(entity =>
+            {
+                entity.HasKey(e => e.IdUsuarioWidget)
+                    .HasName("PK__UsuarioW__E3280363ADFCEDB8");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.UsuarioWidget)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UsuarioWi__IdUsu__5FB337D6");
+
+                entity.HasOne(d => d.IdWidgetNavigation)
+                    .WithMany(p => p.UsuarioWidget)
+                    .HasForeignKey(d => d.IdWidget)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UsuarioWi__IdWid__5EBF139D");
+            });
+
+            modelBuilder.Entity<Widget>(entity =>
+            {
+                entity.HasKey(e => e.IdWidget)
+                    .HasName("PK__Widget__F7931B71C3F9EB29");
+
+                entity.Property(e => e.Clave).HasMaxLength(20);
+
+                entity.Property(e => e.Nombre).HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);

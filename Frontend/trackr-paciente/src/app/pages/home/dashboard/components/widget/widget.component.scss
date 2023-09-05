@@ -1,0 +1,63 @@
+
+:host ::ng-deep * {
+  .valor {
+    font-size: 0.8em;
+    font-weight: bold;
+    line-height: 1;
+  }
+  font-size: 12px;
+
+  @media (max-width: 1000px) {
+    font-size: calc(14px + .8vw);
+  }
+}
+
+
+ion-card {
+  margin-inline: 0px;
+  margin: 0px;
+  border-radius: 15px;
+  height: 100%;
+  padding: 8px 10px;
+  background-color: #f1f1f1f0;
+  color: #000000;
+  box-shadow: #00000033 4px 4px 4px;
+}
+
+ion-card-header,
+ion-card-content {
+  padding: 0px;
+}
+
+ion-card-title {
+  color: #7d1e9d;
+  font-size: 18px;
+
+  ion-icon {
+    font-size: 20px;
+  }
+}
+
+ion-card-content {
+  font-size: 25px;
+}
+
+:host ::ng-deep {
+ 
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 1;
+  }
+
+  .label {
+    font-size: 0.4em;
+    font-weight: bold;
+    line-height: 1;
+  }
+
+  .medida {
+    font-size: 0.4em;
+    font-weight: bold;
+    line-height: 0.5;
+  }
+

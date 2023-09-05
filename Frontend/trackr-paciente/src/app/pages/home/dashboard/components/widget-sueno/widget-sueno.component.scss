@@ -1,0 +1,65 @@
+@import '../../styles/circle-container.scss';
+
+.counter {
+    color: var(--accent-color-green);
+  }
+  
+  .circle-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    border: 4px;
+    border-style: solid;
+    border-radius: 50%;
+    width: 75px;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-color: var(--accent-color-green);
+    position:relative;
+    top:30px;
+  }
+
+  img{
+    position: relative; // Establecer la imagen como una posición absoluta para poder desplazarla dentro del contenedor.
+    transform: translateX(0.5px);
+    top: 0px;
+  }
+  
+  .valor{
+    font-size: 1em;
+    font-weight: bold;
+    line-height: 2;
+    color: var(--accent-color-green);
+  }
+
+  .text-middle{
+    transform: translateX(30px);
+  }
+  
+  div[class*=col-],
+  div[class^=col] {
+    padding: 0px;
+  }
+
+  .valor-tiempo{
+    font-size: 0.8em;
+    font-weight: bold;
+    line-height: 1;
+    color: var(--accent-color-black);
+  }
+
+  .medida{
+    font-size: 0.4em;
+    font-weight: bold;
+    line-height: 0.5;
+  }
+
+  .label {
+    font-size: 0.4em;
+    font-weight: bold;
+    line-height: 0.5;
+  }
+
+  

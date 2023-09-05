@@ -74,6 +74,7 @@ namespace TrackrAPI.Models
             UsuarioAlmacen = new HashSet<UsuarioAlmacen>();
             UsuarioLocacion = new HashSet<UsuarioLocacion>();
             UsuarioRol = new HashSet<UsuarioRol>();
+            UsuarioWidget = new HashSet<UsuarioWidget>();
         }
 
         public int IdUsuario { get; set; }
@@ -203,5 +204,6 @@ namespace TrackrAPI.Models
         public virtual ICollection<UsuarioAlmacen> UsuarioAlmacen { get; set; }
         public virtual ICollection<UsuarioLocacion> UsuarioLocacion { get; set; }
         public virtual ICollection<UsuarioRol> UsuarioRol { get; set; }
+        public virtual ICollection<UsuarioWidget> UsuarioWidget { get; set; }
     }
 }
