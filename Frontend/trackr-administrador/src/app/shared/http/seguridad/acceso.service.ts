@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Acceso } from '@models/seguridad/acceso';
+import { AccesoMenuDto } from '@dtos/seguridad/acceso-menu-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +23,20 @@ export class AccesoService {
     return this.http.get<Acceso>(this.dataUrl + `consultarPorClave/${claveAcceso}`);
   }
 
-  public consultarMenuPorAccesoPadre(claveAccesoPadre: string) {
-    return this.http.get<Acceso[]>(this.dataUrl + `consultarMenuPorAccesoPadre/${claveAccesoPadre}`);
+  public tieneAcceso(codigoAcceso: string): Observable<boolean> {
+    return this.http.get<boolean>(this.dataUrl + `tieneAcceso/${codigoAcceso}`);
+  }
+
+  public tieneAccesoLista(listaAccesos: string[]): Observable<Acceso[]> {
+    return this.http.post<Acceso[]>(this.dataUrl + `tieneAccesoLista/`, listaAccesos);
+  }
+
+  public consultarParaReporteArbol(idRolAcceso: number): Observable<Acceso[]> {
+    return this.http.get<Acceso[]>(this.dataUrl + `consultarParaReporteArbol/${idRolAcceso}`);
+  }
+
+  public consultarMenu(): Observable<AccesoMenuDto[]> {
+    return this.http.get<Acceso[]>(this.dataUrl + `consultarMenu`);
   }
 
   public agregar(acceso: Acceso): Observable<void> {
@@ -38,27 +51,4 @@ export class AccesoService {
     return this.http.delete<void>(this.dataUrl + `eliminar/${idAcceso}`);
   }
 
-  public consultarMenu(): Observable<Acceso[]> {
-    return this.http.get<Acceso[]>(this.dataUrl + `consultarMenu`);
-  }
-
-  public consultarArbol(): Observable<Acceso[]> {
-    return this.http.get<Acceso[]>(this.dataUrl + `consultarArbol`);
-  }
-
-  public tieneAcceso(codigoAcceso: string): Observable<boolean> {
-    return this.http.get<boolean>(this.dataUrl + `tieneAcceso/${codigoAcceso}`);
-  }
-
-  public tieneAccesoLista(listaAccesos: string[]): Observable<Acceso[]> {
-    return this.http.post<Acceso[]>(this.dataUrl + `tieneAccesoLista/`, listaAccesos);
-  }
-
-  public consultarPorRolAcceso(idRolAcceso: number): Observable<Acceso[]> {
-    return this.http.get<Acceso[]>(this.dataUrl + `consultarPorRolAcceso/${idRolAcceso}`);
-  }
-
-  public consultarParaReporteArbol(idRolAcceso: number): Observable<Acceso[]> {
-    return this.http.get<Acceso[]>(this.dataUrl + `consultarParaReporteArbol/${idRolAcceso}`);
-  }
 }

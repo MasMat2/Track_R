@@ -3,7 +3,6 @@ using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Services.Seguridad;
-using System.Collections.Generic;
 
 namespace TrackrAPI.Controllers.Seguridad
 {
@@ -36,7 +35,15 @@ namespace TrackrAPI.Controllers.Seguridad
         [Route("consultarGeneral")]
         public IEnumerable<AccesoGridDto> ConsultarGeneral()
         {
-            return accesoService.ConsultarGeneral();
+            return accesoService.ConsultarParaGrid();
+        }
+
+        [HttpGet]
+        [Route("consultarMenu")]
+        public IEnumerable<AccesoMenuDto> ConsultarMenu()
+        {
+            int idUsuarioSesion = Utileria.ObtenerIdUsuarioSesion(this);
+            return accesoService.ConsultarMenu(idUsuarioSesion);
         }
 
         [HttpPost]
@@ -58,35 +65,6 @@ namespace TrackrAPI.Controllers.Seguridad
         public void Eliminar(int idAcceso)
         {
             accesoService.Eliminar(idAcceso);
-        }
-
-        [HttpGet]
-        [Route("consultarMenu")]
-        public IEnumerable<AccesoMenuDto> ConsultarMenu()
-        {
-            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
-            return accesoService.ConsultarMenu(idUsuario);
-        }
-
-        [HttpGet]
-        [Route("consultarMenuPorAccesoPadre/{claveAccesoPadre}")]
-        public IEnumerable<AccesoMenuDto> ConsultarMenuPorAccesoPadre(string claveAccesoPadre)
-        {
-            return accesoService.ConsultarMenuPorAccesoPadre(claveAccesoPadre, Utileria.ObtenerIdUsuarioSesion(this));
-        }
-
-        [HttpGet]
-        [Route("consultarPorPerfil/{idPerfil}")]
-        public IEnumerable<AccesoDto> ConsultarPorPerfil(int idPerfil)
-        {
-            return accesoService.ConsultarPorPerfil(idPerfil);
-        }
-
-        [HttpGet]
-        [Route("consultarArbol")]
-        public IEnumerable<AccesoMenuDto> ConsultarArbol()
-        {
-            return accesoService.ConsultarArbol(Utileria.ObtenerIdUsuarioSesion(this));
         }
 
         [HttpGet]
@@ -112,13 +90,6 @@ namespace TrackrAPI.Controllers.Seguridad
                 accesoList.Add(accesoDto);
             }
             return accesoList;
-        }
-
-        [HttpGet]
-        [Route("consultarPorRolAcceso/{idRolAcceso}")]
-        public IEnumerable<AccesoGridDto> ConsultarPorRolAcceso(int idRolAcceso)
-        {
-            return accesoService.ConsultarPorRolAcceso(idRolAcceso);
         }
 
         [HttpGet]

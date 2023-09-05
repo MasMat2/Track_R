@@ -31,23 +31,6 @@ namespace TrackrAPI.Repositorys.Seguridad
                 .ToList();
         }
 
-        public IEnumerable<AccesoGridDto> ConsultarPorRolAcceso(int idRolAcceso)
-        {
-            return
-                context.Acceso
-                .Where(a => a.IdRolAcceso == idRolAcceso)
-                .Select(a => new AccesoGridDto
-                {
-                    IdAcceso = a.IdAcceso,
-                    Clave = a.Clave,
-                    Nombre = a.Nombre,
-                    Url = a.Url,
-                    AccesoPadre = a.IdAccesoPadreNavigation.Nombre,
-                    TipoAcceso = a.IdTipoAccesoNavigation.Nombre,
-                })
-                .ToList();
-        }
-
         public AccesoDto ConsultarDto(int idAcceso)
         {
             return
@@ -102,63 +85,6 @@ namespace TrackrAPI.Repositorys.Seguridad
             return accesoList.FirstOrDefault();
         }
 
-        public IEnumerable<AccesoMenuDto> ConsultarPadrePorUsuario(int idUsuario)
-        {
-            var perfil =
-                from up in context.Usuario
-                where up.IdUsuario == idUsuario
-                select up.IdPerfil;
-
-            var accesoList =
-                from ap in context.AccesoPerfil
-                where
-                (perfil.Contains(ap.IdPerfil)
-                && ap.IdAccesoNavigation.IdAccesoPadre == null
-                && (ap.IdAccesoNavigation.IdTipoAccesoNavigation.Clave == GeneralConstant.ClaveTipoAccesoMenu ||
-                    ap.IdAccesoNavigation.IdTipoAccesoNavigation.Clave == GeneralConstant.ClaveTipoAccesoSistema)
-                && ap.IdAccesoNavigation.IdRolAccesoNavigation.Clave == GeneralConstant.ClaveRolAccesoATI)
-                orderby ap.IdAccesoNavigation.OrdenMenu ascending
-                select new AccesoMenuDto
-                {
-                    IdAcceso = ap.IdAccesoNavigation.IdAcceso,
-                    Nombre = ap.IdAccesoNavigation.Nombre,
-                    Clave = ap.IdAccesoNavigation.Clave,
-                    Url = ap.IdAccesoNavigation.Url,
-                    ClaseIcono = ap.IdAccesoNavigation.IdIconoNavigation.Clase,
-                    ClaveRolAcceso = ap.IdAccesoNavigation.IdRolAccesoNavigation.Clave,
-                    ClaveTipoAcceso = ap.IdAccesoNavigation.IdTipoAccesoNavigation.Clave
-                };
-
-            return accesoList;
-        }
-
-        public IEnumerable<AccesoMenuDto> ConsultarMenuPorAccesoPadre(string claveAccesoPadre, int idUsuario)
-        {
-            var perfil =
-                context.Usuario
-                .Where(up => up.IdUsuario == idUsuario)
-                .Select(up => up.IdPerfil);
-
-            var accesoList =
-                context.AccesoPerfil
-                .Where(ap => perfil.Contains(ap.IdPerfil)
-                    && (ap.IdAccesoNavigation.IdTipoAccesoNavigation.Clave == GeneralConstant.ClaveTipoAccesoMenu ||
-                        ap.IdAccesoNavigation.IdTipoAccesoNavigation.Clave == GeneralConstant.ClaveTipoAccesoComponente)
-                    && ap.IdAccesoNavigation.IdAccesoPadreNavigation.Clave == claveAccesoPadre
-                )
-                .OrderBy(ap =>  ap.IdAccesoNavigation.OrdenMenu)
-                .Select(ap => new AccesoMenuDto
-                {
-                    IdAcceso = ap.IdAccesoNavigation.IdAcceso,
-                    Nombre = ap.IdAccesoNavigation.Nombre,
-                    Url = ap.IdAccesoNavigation.Url,
-                    ClaseIcono = ap.IdAccesoNavigation.IdIconoNavigation.Clase
-                })
-                .ToList();
-
-            return accesoList;
-        }
-
         public IEnumerable<AccesoDto> ConsultarPorPerfil(int idPerfil)
         {
             return
@@ -179,174 +105,23 @@ namespace TrackrAPI.Repositorys.Seguridad
         }
 
 
-        public IEnumerable<AccesoMenuDto> ConsultarPadre(int idUsuarioSesion)
+
+
+        public IEnumerable<AccesoMenuDto> ConsultarPorPerfilParaMenu(int idPerfil)
         {
-            var compania = context.Usuario
-                .Include(u => u.IdCompaniaNavigation)
-                .Where(u => u.IdUsuario == idUsuarioSesion)
-                .FirstOrDefault().IdCompaniaNavigation;
-
-            if (compania.Clave == GeneralConstant.ClaveCompaniaBase)
-            {
-                return
-                from a in context.Acceso
-                where a.IdAccesoPadre == null
-                orderby a.OrdenMenu
-                select new AccesoMenuDto
+            return context.AccesoPerfil
+                .Where(ap => ap.IdPerfil == idPerfil)
+                .Select(ap => new AccesoMenuDto
                 {
-                    IdAcceso = a.IdAcceso,
-                    Nombre = a.Nombre,
-                    Url = a.Url,
-                    ClaseIcono = a.IdIconoNavigation.Clase
-                };
-            }
-
-            var perfilAdministrador = context.Perfil
-                .Where(p => p.IdCompaniaNavigation.Clave == GeneralConstant.ClaveCompaniaBase
-                    && p.IdTipoCompania == compania.IdTipoCompania
-                    && p.Nombre.ToLower().Contains("administrador"))
-                .FirstOrDefault();
-
-            return
-                (from a in context.AccesoPerfil
-                where a.IdAccesoNavigation.IdAccesoPadre == null
-                && a.IdPerfil == perfilAdministrador.IdPerfil
-                orderby a.IdAccesoNavigation.OrdenMenu
-                select new AccesoMenuDto
-                {
-                    IdAcceso = a.IdAcceso,
-                    Nombre = a.IdAccesoNavigation.Nombre,
-                    Url = a.IdAccesoNavigation.Url,
-                    ClaseIcono = a.IdAccesoNavigation.IdIconoNavigation.Clase
-                }).ToList();
-        }
-
-
-        public IEnumerable<AccesoMenuDto> ConsultarHijosPorUsuario(int idPerfil, int idAccesoPadre)
-        {
-            var accesoList =
-                from ap in context.AccesoPerfil
-                where ap.IdPerfil == idPerfil
-                && ap.IdAccesoNavigation.IdAccesoPadre == idAccesoPadre
-                && (ap.IdAccesoNavigation.IdTipoAccesoNavigation.Clave == GeneralConstant.ClaveTipoAccesoMenu ||
-                    ap.IdAccesoNavigation.IdTipoAccesoNavigation.Clave == GeneralConstant.ClaveTipoAccesoComponente)
-                orderby ap.IdAccesoNavigation.OrdenMenu ascending
-                select new AccesoMenuDto
-                {
-                    IdAcceso = ap.IdAccesoNavigation.IdAcceso,
+                    IdAcceso = ap.IdAcceso,
                     Nombre = ap.IdAccesoNavigation.Nombre,
-                    Url = ap.IdAccesoNavigation.Url,
-                    ClaseIcono = ap.IdAccesoNavigation.IdIconoNavigation.Clase
-                };
-
-            return accesoList;
-        }
-
-        public IEnumerable<AccesoMenuDto> ConsultarTodosPorPerfil(int idPerfil)
-        {
-            var accesoList =
-                from ap in context.AccesoPerfil
-                where ap.IdPerfil == idPerfil &&
-                (ap.IdAccesoNavigation.IdTipoAccesoNavigation.Clave == GeneralConstant.ClaveTipoAccesoMenu ||
-                 ap.IdAccesoNavigation.IdTipoAccesoNavigation.Clave == GeneralConstant.ClaveTipoAccesoComponente) &&
-                 ap.IdAccesoNavigation.IdRolAccesoNavigation.Clave == GeneralConstant.ClaveRolAccesoATI
-                orderby ap.IdAccesoNavigation.OrdenMenu ascending
-                select new AccesoMenuDto
-                {
-                    IdAcceso = ap.IdAccesoNavigation.IdAcceso,
-                    Nombre = ap.IdAccesoNavigation.Nombre,
+                    Clave = ap.IdAccesoNavigation.Clave,
                     Url = ap.IdAccesoNavigation.Url,
                     ClaseIcono = ap.IdAccesoNavigation.IdIconoNavigation.Clase,
-                    IdAccesoPadre = ap.IdAccesoNavigation.IdAccesoPadre,
+                    Hijos = new List<AccesoMenuDto>(),
                     ClaveRolAcceso = ap.IdAccesoNavigation.IdRolAccesoNavigation.Clave,
                     ClaveTipoAcceso = ap.IdAccesoNavigation.IdTipoAccesoNavigation.Clave
-                };
-
-            return accesoList;
-        }
-
-        public IEnumerable<Acceso> ConsultarHijosPorPerfil(int idPerfil, int idAccesoPadre)
-        {
-            var accesoList =
-                from ap in context.AccesoPerfil
-                where ap.IdPerfil == idPerfil
-                && ap.IdAccesoNavigation.IdAccesoPadre == idAccesoPadre
-                select ap.IdAccesoNavigation;
-
-            return accesoList.ToList();
-        }
-
-        public IEnumerable<AccesoMenuDto> ConsultarHijos(int idAccesoPadre)
-        {
-            var accesoList =
-                from a in context.Acceso
-                where a.IdAccesoPadre == idAccesoPadre
-                select new AccesoMenuDto
-                {
-                    IdAcceso = a.IdAcceso,
-                    Nombre = a.Nombre,
-                    Url = a.Url,
-                    ClaseIcono = a.IdIconoNavigation.Clase,
-                };
-
-            return accesoList.ToList();
-        }
-
-        public IEnumerable<AccesoMenuDto> ConsultarTodos()
-        {
-            var accesoList =
-                from a in context.Acceso
-                select new AccesoMenuDto
-                {
-                    IdAcceso = a.IdAcceso,
-                    Nombre = a.Nombre,
-                    Url = a.Url,
-                    ClaseIcono = a.IdIconoNavigation.Clase,
-                    IdAccesoPadre = a.IdAccesoPadre
-                };
-
-            return accesoList.ToList();
-        }
-
-        public IEnumerable<AccesoMenuDto> ConsultarTodosPorUsuario(int idUsuario)
-        {
-            var compania = context.Usuario
-              .Include(u => u.IdCompaniaNavigation)
-              .Where(u => u.IdUsuario == idUsuario)
-              .FirstOrDefault().IdCompaniaNavigation;
-
-            if (compania.Clave == GeneralConstant.ClaveCompaniaBase)
-            {
-                return
-                (from a in context.Acceso
-                 select new AccesoMenuDto
-                 {
-                     IdAcceso = a.IdAcceso,
-                     Nombre = a.Nombre,
-                     Url = a.Url,
-                     ClaseIcono = a.IdIconoNavigation.Clase,
-                     IdAccesoPadre = a.IdAccesoPadre
-                 }).ToList();
-            }
-
-            var perfilAdministrador = context.Perfil
-                .Where(p => p.IdCompaniaNavigation.Clave == GeneralConstant.ClaveCompaniaBase
-                    && p.IdTipoCompania == compania.IdTipoCompania
-                    && p.Nombre.ToLower().Contains("administrador"))
-                .FirstOrDefault();
-
-
-            return
-                (from a in context.AccesoPerfil
-                where a.IdPerfil == perfilAdministrador.IdPerfil
-                select new AccesoMenuDto
-                {
-                    IdAcceso = a.IdAcceso,
-                    Nombre = a.IdAccesoNavigation.Nombre,
-                    Url = a.IdAccesoNavigation.Url,
-                    ClaseIcono = a.IdAccesoNavigation.IdIconoNavigation.Clase,
-                    IdAccesoPadre = a.IdAccesoNavigation.IdAccesoPadre
-                }).ToList();
+                });
         }
 
         public IEnumerable<AccesoGridDto> ConsultarParaReporteArbol(string claveAccesoRol)

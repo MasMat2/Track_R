@@ -3,9 +3,6 @@ using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Catalogo;
 using TrackrAPI.Repositorys.Seguridad;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Transactions;
 
 namespace TrackrAPI.Services.Seguridad
@@ -17,12 +14,14 @@ namespace TrackrAPI.Services.Seguridad
         private ICompaniaRepository companiaRepository;
         private PerfilValidatorService perfilValidatorService;
         private AccesoService accesoService;
+        private IJerarquiaAccesoEstructuraRepository jerarquiaAccesoEstructuraRepository;
 
         public PerfilService(IPerfilRepository perfilRepository,
             IAccesoPerfilRepository accesoPerfilRepository,
             ICompaniaRepository companiaRepository,
             PerfilValidatorService perfilValidatorService,
-            AccesoService accesoService)
+            AccesoService accesoService,
+            IJerarquiaAccesoEstructuraRepository jerarquiaAccesoEstructuraRepository)
         {
 
             this.perfilRepository = perfilRepository;
@@ -30,6 +29,7 @@ namespace TrackrAPI.Services.Seguridad
             this.companiaRepository = companiaRepository;
             this.perfilValidatorService = perfilValidatorService;
             this.accesoService = accesoService;
+            this.jerarquiaAccesoEstructuraRepository = jerarquiaAccesoEstructuraRepository;
         }
 
         public IEnumerable<PerfilDto> ConsultarGeneral(int idCompania)
@@ -96,54 +96,68 @@ namespace TrackrAPI.Services.Seguridad
 
         public void Editar(PerfilDto perfilDto)
         {
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+            using var scope = new TransactionScope(
+                TransactionScopeOption.Required,
+                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+
+            var perfil = new Perfil
             {
-                var perfil = new Perfil();
-                perfil.IdPerfil = perfilDto.IdPerfil;
-                perfil.Nombre = perfilDto.Nombre;
-                perfil.IdCompania = perfilDto.IdCompania;
-                perfil.IdTipoCompania = perfilDto.IdTipoCompania;
-                perfil.Clave = perfilDto.Clave;
-                perfil.IdJerarquiaAcceso = perfilDto.IdJerarquiaAcceso;
+                IdPerfil = perfilDto.IdPerfil,
+                Nombre = perfilDto.Nombre,
+                IdCompania = perfilDto.IdCompania,
+                IdTipoCompania = perfilDto.IdTipoCompania,
+                Clave = perfilDto.Clave,
+                IdJerarquiaAcceso = perfilDto.IdJerarquiaAcceso
+            };
 
-                perfilValidatorService.ValidarEditar(perfil);
+            perfilValidatorService.ValidarEditar(perfil);
+            perfilRepository.Editar(perfil);
 
-                var accesoList = perfilDto.IdsAcceso.ToList();
+            var accesosJerarquia = jerarquiaAccesoEstructuraRepository
+                .ConsultarPorJerarquiaArbol((int)perfilDto.IdJerarquiaAcceso)
+                .Select(j => j.IdAcceso)
+                .ToList();
+            var idsAccesoFormulario = perfilDto.IdsAcceso
+                .Where(idAcceso => accesosJerarquia.Contains(idAcceso))
+                .ToList();
 
-                perfilRepository.Editar(perfil);
+            // Se consultan los accesos que actualmente están guardados
+            IEnumerable<AccesoPerfil> accesosActuales = accesoPerfilRepository
+                .ConsultarPorPerfil(perfil.IdPerfil)
+                .ToList();
 
-                // Se consultan los accesos que actualmente estan guardados
-                IEnumerable<AccesoPerfil> accesoPerfilActualList = accesoPerfilRepository.ConsultarPorPerfil(perfil.IdPerfil);
+            var idsAccesoActuales = accesosActuales
+                .Select(accesoPerfil => accesoPerfil.IdAcceso)
+                .ToList();
 
+            // Se eliminan los accesos de la base de datos que no se encuentran en el formulario
+            var accesosEliminados = idsAccesoActuales
+                .Where(idAcceso => !idsAccesoFormulario.Contains(idAcceso))
+                .ToList();
 
-                // Elimina los registros que el usuario elimino
-                foreach (AccesoPerfil accesoPerfil in accesoPerfilActualList)
-                {
-                    var accesoEncontrado = accesoList.Any(idAcceso => idAcceso == accesoPerfil.IdAcceso);
-
-                    if (!accesoEncontrado)
-                    {
-                        accesoPerfilRepository.Eliminar(accesoPerfil);
-                    }
-                }
-
-                // Agrega los registros
-                foreach (int idAcceso in accesoList)
-                {
-
-                    AccesoPerfil accesoPerfil = accesoPerfilRepository.Consultar(perfil.IdPerfil, idAcceso);
-
-                    if (accesoPerfil == null)
-                    {
-                        accesoPerfil = new AccesoPerfil();
-                        accesoPerfil.IdPerfil = perfil.IdPerfil;
-                        accesoPerfil.IdAcceso = idAcceso;
-                        accesoPerfilRepository.Agregar(accesoPerfil);
-                    }
-                }
-
-                scope.Complete();
+            foreach (int idAcceso in accesosEliminados)
+            {
+                AccesoPerfil accesoPerfil = accesosActuales.FirstOrDefault(accesoPerfil => accesoPerfil.IdAcceso == idAcceso);
+                accesoPerfilRepository.Eliminar(accesoPerfil);
             }
+
+            // Se agregan los accesos del formulario que no se encuentran en la base de datos
+            var accesosNuevos = idsAccesoFormulario
+                .Where(idAcceso => !idsAccesoActuales.Contains(idAcceso))
+                .ToList();
+
+            foreach (int idAcceso in accesosNuevos)
+            {
+                var accesoPerfil = new AccesoPerfil
+                {
+                    IdPerfil = perfil.IdPerfil,
+                    IdAcceso = idAcceso
+                };
+
+                accesoPerfilRepository.Agregar(accesoPerfil);
+            }
+
+            scope.Complete();
         }
 
         public void Eliminar(int idPerfil)

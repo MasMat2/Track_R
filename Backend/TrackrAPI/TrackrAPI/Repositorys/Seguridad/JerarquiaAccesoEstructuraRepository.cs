@@ -25,8 +25,7 @@ namespace TrackrAPI.Repositorys.Seguridad
         public IEnumerable<JerarquiaAccesoEstructura> ConsultarPorJerarquiaAcceso(int idJerarquiaAcceso)
         {
             return context.JerarquiaAccesoEstructura
-                .Where(je => je.IdJerarquiaAcceso == idJerarquiaAcceso)
-                .ToList();
+                .Where(je => je.IdJerarquiaAcceso == idJerarquiaAcceso);
         }
 
         public IEnumerable<JerarquiaEstructuraArbolDto> ConsultarPorJerarquiaArbol(int idJerarquia)

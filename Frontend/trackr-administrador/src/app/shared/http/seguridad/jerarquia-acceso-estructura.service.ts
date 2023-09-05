@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { JerarquiaEstructuraArbol } from '@models/contabilidad/jerarquia-estructura-arbol';
 import { JerarquiaAccesoEstructura } from '@models/seguridad/jerarquia-acceso-estructura';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class JerarquiaAccesoEstructuraService {
@@ -16,7 +16,7 @@ export class JerarquiaAccesoEstructuraService {
   public consultarPorJerarquiaParaSelector(idJerarquia: number): Observable<JerarquiaEstructuraArbol[]> {
     return this.http.get<JerarquiaEstructuraArbol[]>(this.dataUrl + `consultarPorJerarquiaParaSelector/${idJerarquia}`);
   }
-  
+
   public consultarArbol(idJerarquia: number): Observable<JerarquiaEstructuraArbol[]> {
     return this.http.get<JerarquiaEstructuraArbol[]>(this.dataUrl + `consultarArbol/${idJerarquia}`);
   }

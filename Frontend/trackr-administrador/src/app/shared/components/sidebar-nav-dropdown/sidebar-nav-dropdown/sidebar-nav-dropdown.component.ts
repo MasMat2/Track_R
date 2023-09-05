@@ -1,17 +1,16 @@
-import { AccesoService } from '@http/seguridad/acceso.service';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NavItem } from '@components/layout-administrador/layout-administrador.component';
-import { ArchivoService } from '@http/catalogo/archivo.service';
+import { AccesoAyudaService } from '@http/seguridad/acceso-ayuda.service';
+import { AccesoService } from '@http/seguridad/acceso.service';
 import { Acceso } from '@models/seguridad/acceso';
 import { AccesoAyudaSeccionado } from '@models/seguridad/acceso-ayuda-seccionado';
 import { UsuarioImagenService } from '@services/usuario-imagen.service';
 import { GeneralConstant } from '@utils/general-constant';
-import { filter, map, Observable, Subscription } from 'rxjs';
-import { AccesoAyudaService } from '@http/seguridad/acceso-ayuda.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Subscription, filter } from 'rxjs';
 import { AyudaModalComponent } from './ayuda-modal/ayuda-modal.component';
-import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav-dropdown',
@@ -45,7 +44,7 @@ export class SidebarNavDropdownComponent implements OnInit {
     private route: ActivatedRoute,
     private bsModalRef: BsModalRef,
   ) { }
-  
+
   ngOnInit() {
     this.usuarioImagenService.consultarImagen();
 
@@ -80,7 +79,7 @@ export class SidebarNavDropdownComponent implements OnInit {
   public logout() {
     this.logoutRequest.emit();
     this.usuarioImagenService.actualizarImagen('');
-    
+
   }
 
   public consultarAcceso() {

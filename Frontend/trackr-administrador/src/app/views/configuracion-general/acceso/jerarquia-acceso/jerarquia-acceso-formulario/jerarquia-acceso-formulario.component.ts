@@ -229,8 +229,6 @@ export class JerarquiaAccesoFormularioComponent extends CrudFormularioBase<Jerar
         this.elementosSeleccionados.push(displayData[index]);
       else
         this.elementosSeleccionados = this.elementosSeleccionados.filter(e => e.idAcceso != accesoSeleccion.idAcceso);
-        if (accesoSeleccion.tipoAcceso === "Evento")
-          this.angularGrid.store.display_data[index].selection_disabled = true;
     }
     this.actualizarBotonAgregar();
   }
@@ -238,7 +236,7 @@ export class JerarquiaAccesoFormularioComponent extends CrudFormularioBase<Jerar
   public onExpand(event: any): void {
     if (!this.deshabilitacionEventos) {
       this.deshabilitacionEventos = true;
-      this.deshabilitarEventos();
+      // this.deshabilitarEventos();
     }
   }
 

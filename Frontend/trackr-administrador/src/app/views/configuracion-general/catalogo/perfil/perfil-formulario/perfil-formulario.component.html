@@ -1,5 +1,5 @@
 <div class="contenedor">
-  
+
     <div class="modal-header">{{ titulo }} Perfil</div>
     <div class="cuerpo-contenedor">
       <form
@@ -64,34 +64,6 @@
 
               <!-- Arbol de Accesos Estándar -->
               <div class="subtitulo-contenedor">Accesos</div>
-              <tree-root
-                #tree
-                *ngIf="!perfil.idJerarquiaAcceso"
-                [nodes]="accesoList"
-                [options]="options"
-              >
-                <ng-template #treeNodeWrapperTemplate let-node let-index="index">
-                  <div
-                    [ngClass]="'fondo-impar'"
-                    (dblclick)="node.mouseAction('dblClick', $event)"
-                    class="node-wrapper"
-                  >
-                    <tree-node-expander [node]="node"></tree-node-expander>
-                    <div [ngClass]="{ 'node-expander-virtual': node.isLeaf && !node.hasChildren }" class="checkbox mr-2">
-                      <label>
-                        <input
-                          name="checked"
-                          type="checkbox"
-                          [indeterminate]="node.isPartiallySelected"
-                          [checked]="node.isSelected"
-                          (click)="node.mouseAction('checkboxClick', $event); onClickCheckbox(node)"
-                        />
-                      </label>
-                    </div>
-                    <tree-node-content [node]="node" [index]="index"></tree-node-content>
-                  </div>
-                </ng-template>
-              </tree-root>
 
               <!-- Arbol de Jerarquía Acceso -->
               <tree-root

@@ -89,7 +89,6 @@ export class PerfilFormularioComponent implements OnInit {
 
     await Promise.all([
       this.consultarJerarquiaArbolEstructura(idJerarquiaAcceso),
-      this.consultarArbolAccesoBase(),
     ]);
 
     this.consultarPerfil();
@@ -99,14 +98,6 @@ export class PerfilFormularioComponent implements OnInit {
   private consultarJerarquiasAcceso() {
     this.jerarquiaAccesoService.consultarParaSelector().subscribe((data) => {
       this.jerarquiaAccesoList = data;
-    });
-  }
-
-  private async consultarArbolAccesoBase(): Promise<void> {
-    return this.accesoService.consultarArbol()
-    .toPromise()
-    .then((data) => {
-      this.accesoList = data ?? [];
     });
   }
 

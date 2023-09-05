@@ -4,6 +4,7 @@ import { map } from 'rxjs';
 import { AccesoService } from '../../../shared/http/seguridad/acceso.service';
 import { GeneralConstant } from '@utils/general-constant';
 import { Router } from '@angular/router';
+import { AccesoMenuDto } from '@dtos/seguridad/acceso-menu-dto';
 
 export interface NavItem {
   name: string;
@@ -35,39 +36,23 @@ export class LayoutAdministradorComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  private consultarMenu(): void {
-    this.accesoService.consultarMenu()
-      .pipe(
-        map((accesos: Acceso[]) => {
-          return accesos.map((acceso: Acceso) => this.mapAccesoToNavItem(acceso))
-        })
-      )
-      .subscribe((navItems: NavItem[]) => {
-        this.navItems = navItems;
+  public consultarMenu(): void {
+    this.accesoService
+      .consultarMenu()
+      .subscribe((accesos: AccesoMenuDto[]) => {
+        this.navItems = accesos.map((acceso: AccesoMenuDto) => this.mapearAcceso(acceso));
       });
   }
 
-  private mapAccesoToNavItem(acceso: Acceso): NavItem {
+  private mapearAcceso(acceso: AccesoMenuDto): any {
     return {
       name: acceso.nombre,
       claveTipoAcceso: acceso.claveTipoAcceso,
-      // class: 'sidebar-boton-menu',
-      url: acceso.url === null ? '/a' : acceso.url,
+      class: 'sidebar-boton-menu',
+      url: acceso.url === null ? '/acceso' : acceso.url,
       icon: acceso.claseIcono,
-      children: this.generarHijos(acceso)
+      children: acceso.hijos.map((hijo: AccesoMenuDto) => this.mapearAcceso(hijo))
     };
-  }
-
-  private generarHijos(acceso: Acceso): NavItem[] {
-    if (
-      acceso.hijos === undefined ||
-      acceso.hijos === null ||
-      acceso.hijos.length === 0
-    ) {
-      return [];
-    }
-
-    return acceso.hijos.map((acceso: Acceso) => this.mapAccesoToNavItem(acceso));
   }
 
 }

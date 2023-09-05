@@ -11,7 +11,7 @@ namespace TrackrAPI.Controllers.Seguridad
     [ApiController]
     public class JerarquiaAccesoEstructuraController : ControllerBase
     {
-        private JerarquiaAccesoEstructuraService jerarquiaAccesoEstructuraService;
+        private readonly JerarquiaAccesoEstructuraService jerarquiaAccesoEstructuraService;
         public JerarquiaAccesoEstructuraController(JerarquiaAccesoEstructuraService jerarquiaAccesoEstructuraService)
         {
             this.jerarquiaAccesoEstructuraService = jerarquiaAccesoEstructuraService;

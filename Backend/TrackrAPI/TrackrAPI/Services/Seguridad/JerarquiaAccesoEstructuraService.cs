@@ -33,6 +33,10 @@ namespace TrackrAPI.Services.Seguridad
         {
             return jerarquiaAccesoEstructuraRepository.ConsultarPorJerarquiaParaSelector(idJerarquia);
         }
+        public IEnumerable<JerarquiaAccesoEstructura> ConsultarPorJerarquiaAcceso(int idJerarquiaAcceso)
+        {
+            return jerarquiaAccesoEstructuraRepository.ConsultarPorJerarquiaAcceso(idJerarquiaAcceso);
+        }
 
         public IEnumerable<JerarquiaEstructuraArbolDto> ConsultarArbol(int idJerarquia)
         {
