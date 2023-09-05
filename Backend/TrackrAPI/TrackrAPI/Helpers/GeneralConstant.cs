@@ -6,6 +6,7 @@
         // public const string ClaveTipoUsuarioPaciente = "002";
 
         public const string ClaveCompaniaBase = "000";
+        public static readonly string ClaveEntidadEstructuraMuestra = "006";
 
         public static readonly int UsuarioMaestroAtisc = 1;
         public static readonly int IdPerfilAdministradorDefault = 1;

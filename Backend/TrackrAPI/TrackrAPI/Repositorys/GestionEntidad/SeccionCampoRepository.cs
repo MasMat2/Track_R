@@ -31,6 +31,14 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Where(e => e.Clave == clave)
                 .FirstOrDefault();
         }
+        public SeccionCampo? ConsultarPorClaveConDependencia(string clave)
+        {
+            return context.SeccionCampo
+                .Where(e => e.Clave == clave)
+                .Include(e=> e.IdDominioNavigation)
+                .Include(e=> e.IdSeccionNavigation)
+                .FirstOrDefault();
+        }
 
         public SeccionCampo? ConsultarDuplicado(
             int orden,
@@ -87,7 +95,22 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Select(sc =>
                     new ExpedienteColumnaDTO {
                         Parametro = sc.Descripcion,
-                        Clave = "ME-" + sc.Clave,
+                        ClaveCampo = "ME-" + sc.Clave,
+                        ClaveSeccion = sc.IdSeccionNavigation.Clave,
+                        Variable = sc.IdSeccionNavigation.Nombre,
+                        ValorMinimo = sc.IdDominioNavigation.ValorMinimo,
+                        ValorMaximo = sc.IdDominioNavigation.ValorMaximo
+                    });
+        }
+
+        public IEnumerable<ExpedienteColumnaDTO> ConsultarSeccionesPadecimientosGeneral()
+        {
+            return context.SeccionCampo
+                .Select(sc =>
+                    new ExpedienteColumnaDTO
+                    {
+                        Parametro = sc.Descripcion,
+                        ClaveCampo = "ME-" + sc.Clave,
                         Variable = sc.IdSeccionNavigation.Nombre,
                         ValorMinimo = sc.IdDominioNavigation.ValorMinimo,
                         ValorMaximo = sc.IdDominioNavigation.ValorMaximo

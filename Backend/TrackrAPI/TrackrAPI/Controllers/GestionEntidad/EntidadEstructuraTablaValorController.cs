@@ -2,6 +2,7 @@
 using TrackrAPI.Dtos.GestionEntidad;
 using TrackrAPI.Services.GestionEntidad;
 using System.Collections.Generic;
+using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Controllers.GestionEntidad
 {
@@ -35,6 +36,13 @@ namespace TrackrAPI.Controllers.GestionEntidad
             entidadEstructuraTablaValorService.Agregar(registro);
         }
 
+        [HttpPost("agregarMuestra")]
+        public void AgregarMuestra(TablaValorMuestraDTO muestra)
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            entidadEstructuraTablaValorService.AgregarMuestra(muestra, idUsuario);
+        }
+
         [HttpPut]
         public void Editar(EntidadTablaRegistroDto registro)
         {
@@ -51,6 +59,13 @@ namespace TrackrAPI.Controllers.GestionEntidad
         public IEnumerable<ValoresFueraRangoGridDTO> ConsultarValoresFueraRango(int idPadecimiento, int idUsuario)
         {
             return entidadEstructuraTablaValorService.ConsultarValores(idPadecimiento, idUsuario, true);
+        }
+        
+        [HttpGet("valoresFueraRangoGeneral/usuarioSesion")]
+        public IEnumerable<ValoresFueraRangoGridDTO> ConsultarValoresFueraRangoUsuarioSesion()
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            return entidadEstructuraTablaValorService.ConsultarValoresFueraRangoGeneral(idUsuario);
         }
 
         [HttpGet("valoresTodasVariables/{idPadecimiento}/{idUsuario}")]

@@ -3,7 +3,25 @@
 </ion-header>
 
 <ion-content>
-  <p>
-    muestras works!
-  </p>
+  <div class="contenedor">
+  <div class="titulo-contenedor">
+    <h3 style="text-align: center;">Registro de Muestra</h3>
+  </div>
+  <div class="cuerpo-contenedor">
+
+    <label class="subtitulo-muestra">Valores Fuera de Rango</label>
+    <app-grid-general
+      [headerName]="HEADER_GRID"
+      [data]="valoresFueraRango"
+      [children]="columns"
+      [disableDelete]="true"
+      [disableEdit]="true"
+      [disableXLS]="true"
+    >
+    </app-grid-general>
+  
+    <app-muestras-formulario></app-muestras-formulario>
+    </div>
+  </div>
+    
 </ion-content>
