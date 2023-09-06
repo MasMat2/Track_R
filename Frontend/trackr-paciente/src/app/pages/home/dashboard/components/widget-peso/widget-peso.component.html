@@ -2,20 +2,32 @@
   title="Peso"
   iconClass="scale-outline"
 >
-  <div class="container">
-    <div class="text-center">
-    <div class="circle-container">
-      
-      <span class="valor-pesoperdido"><ion-icon name="caret-down-outline"></ion-icon>{{pesoPerdido}} kg</span>
-      <div><span class="medida">Restan {{pesoFaltante}} kg</span></div>
-      <div>
-        <span class="valor">{{ pesoActual }} kg</span>
-        <div class="text-center">
-        <span> {{dias}}</span><span class="label">d</span>
+  <div class="container d-flex justify-content-center align-items-center">
+    <div class="circle-container d-flex flex-column align-items-center">
+      <div class="peso-perdido">
+        <ion-icon name="caret-down-outline" size="medium"></ion-icon>
+        <span class="valor">{{pesoPerdido}}</span>
+        <span class="unidad">kg</span>
+      </div>
+
+      <div class="peso-restante">
+        <span class="label">Restan </span>
+        <span class="valor">{{pesoFaltante}} </span>
+        <span class="unidad">kg</span>
+      </div>
+
+      <div class="peso-actual">
+        <span class="valor">{{ pesoActual }}</span>
+        <span class="unidad">kg</span>
+      </div>
+
+      <div class="dias">
+        <span class="valor">{{ dias }}</span>
+        <span class="unidad">d</span>
       </div>
     </div>
+    <div class="img-container">
+      <img src="/assets/img/widgets/standing.png">
     </div>
-    <img src="../../../../../../assets/img/widgets/standing.png" width="25" height="70">
   </div>
-</div>
 </app-widget>

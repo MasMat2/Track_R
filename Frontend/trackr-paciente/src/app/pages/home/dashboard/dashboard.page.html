@@ -8,20 +8,30 @@
     <div class="cuerpo-contenedor">
       <ion-grid>
         <ion-row>
-          <ion-col [size]="5">
+          <ion-col [size]="4">
             <app-widget-frecuencia></app-widget-frecuencia>
           </ion-col>
-          <ion-col [size]="7">
+          <ion-col [size]="8">
             <app-widget-pasos></app-widget-pasos>
           </ion-col>
-          <ion-col [size]="7">
+          <ion-col [size]="8">
               <app-widget-sueno></app-widget-sueno>
           </ion-col>
-          <ion-col [size]="5">
+          <ion-col [size]="4">
             <app-widget-peso></app-widget-peso>
           </ion-col>
           <ion-col>
-            <app-widget-diabetes></app-widget-diabetes>
+            <app-widget-seguimiento
+              nombrePadecimiento="Diabetees"
+              nombreVariable="Glucosa"
+              valorVariable="120"
+              unidadVariable="mg/dL"
+              claseVariable="water-outline"
+              nombreTratamiento="Insulina"
+              valorTratamiento="2U"
+              unidadTratamiento="Humalog Mix 25 Plum"
+              claseTratamiento="eyedrop-outline"
+            ></app-widget-seguimiento>
           </ion-col>
         </ion-row>
       </ion-grid>

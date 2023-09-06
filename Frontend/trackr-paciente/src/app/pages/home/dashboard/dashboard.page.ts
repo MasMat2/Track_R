@@ -8,7 +8,7 @@ import { WidgetPasosComponent } from './components/widget-pasos/widget-pasos.com
 import { WidgetPesoComponent } from './components/widget-peso/widget-peso.component';
 import { WidgetSuenoComponent } from './components/widget-sueno/widget-sueno.component';
 import { WidgetFrecuenciaComponent } from './components/widget-frecuencia/widget-frecuencia.component';
-import { WidgetDiabetesComponent } from './components/widget-diabetes/widget-diabetes.component';
+import { WidgetSeguimientoComponent } from './components/widget-seguimiento/widget-seguimiento.component';
 
 
 @Component({
@@ -25,7 +25,7 @@ import { WidgetDiabetesComponent } from './components/widget-diabetes/widget-dia
     WidgetPesoComponent,
     WidgetSuenoComponent,
     WidgetFrecuenciaComponent,
-    WidgetDiabetesComponent
+    WidgetSeguimientoComponent
   ],
   providers: [
     UsuarioWidgetService,

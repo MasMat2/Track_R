@@ -1,43 +1,38 @@
-<app-widget
-  title="Pasos"
-  iconClass="footsteps-outline"
->
-  <div class="container">
-    <div class="row">
-      <div class="col-6">
-        <div class="counter d-flex flex-column align-items-center">
-          <!-- Contador -->
-          <div class="circle-container">
-            <div class="valor">{{ pasos | number }}</div>
-            <div class="label">pasos</div>
-            
-          </div>
-          
-          <!-- Meta -->
-          <div class="label">de <span class="valor">{{ meta | number }}</span> pasos</div>
-        </div>
+<app-widget title="Pasos" iconClass="footsteps-outline">
+  <div class="container d-flex align-items-center gap-2">
+    <div class="counter d-flex flex-column align-items-center">
+      <!-- Contador -->
+      <div class="circle-container">
+        <div class="valor">{{ pasos | number }}</div>
+        <div class="label">pasos</div>
       </div>
 
-      <div class="col-6">
-        <div class="d-flex flex-column align-items-center gap-3">
-          <div class="text-center"> 
-          <!-- Distancia -->
-          <div class="text-center">
-            
-            <div class="distancia-value"><span class="valor">{{ metros | number }}</span><span class="medida">m</span></div>
-            <div class="label">caminados</div>
-          </div>
+      <!-- Meta -->
+      <div class="meta text-center mt-2">
+        de <span class="valor">{{ meta | number }}</span> pasos
+      </div>
+    </div>
 
-          <!-- Tiempo -->
-          <div class="text-center">
-             <span class="valor">{{ horas }}</span><span class="medida">h</span>
-              <span class="valor">{{ minutos }}</span><span class="medida">min</span>
+    <div class="img-container">
+      <img src="/assets/img/widgets/walking.png"/>
+    </div>
 
-            <div class="label">caminados</div>
-          </div>
+    <div class="values d-flex flex-column align-items-center gap-3">
+      <!-- Distancia -->
+      <div class="text-center">
+        <div class="value">
+          <span class="valor">{{ metros | number }}</span><span class="medida">m</span>
         </div>
-          <img src="../../../../../../assets/img/widgets/walking.png" width="25" height="55">
+        <div class="label">caminados</div>
+      </div>
+
+      <!-- Tiempo -->
+      <div class="text-center">
+        <div class="value">
+          <span class="valor">{{ horas }}</span><span class="medida">h</span>
+          <span class="valor">{{ minutos }}</span><span class="medida">min</span>
         </div>
+        <div class="label">caminados</div>
       </div>
     </div>
   </div>

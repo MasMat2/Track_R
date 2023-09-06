@@ -1,0 +1,35 @@
+
+.dato {
+  position: relative;
+  width: 28vw;
+  font-size: 4vw;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 0.8em;
+
+  .icono {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .nombre {
+    align-self: flex-start;
+    font-size: 0.6em;
+  }
+
+  .icono {
+    font-size: 1.6em;
+  }
+
+  .valor {
+    font-size: 2em;
+    font-weight: bold;
+  }
+
+  .unidad {
+    font-size: 1;
+  }
+}

@@ -1,51 +1,54 @@
 <app-widget title="Sueño" iconClass="bed-outline">
-  <div class="container">
-    <div class="row">
-      <div class="col-6">
-        
-        <!--Porcentaje de calidad de sueño-->
+  <div class="container d-flex justify-content-center align-items-center">
+    <div class="seccion-porcentaje text-center">
+      <div class="relative-container">
         <div class="circle-container">
-          <div class="valor"><span class="valor">{{suenoActual | number}}</span>%</div> 
-         
-        </div> 
-        <img src="../../../../../../assets/img/widgets/sleeping.png" width="30" height="45">
-        <!----> 
-        
-        <div class="label">
-          <br>Calidad de Sueño
-        </div> 
-       
+          <span class="valor">{{ suenoActual | number }}%</span>
+        </div>
+        <div class="img-container">
+          <img src="/assets/img/widgets/sleeping.png"/>
+        </div>
       </div>
-      <div class="col-6 text-right">
-        <div class="d-flex flex-colum align-items-center gap-3">
-          <!--Sueño REM-->
-          <div class="text-center">
-            <div>
-              <span class="valor-tiempo">{{horasMinDiarias}}</span>
-              <span class="medida">h</span>
-              <span class="valor-tiempo">{{minutosMinDiarias}}</span>
-              <span class="medida">min</span>
-            </div>
-            <div class="label">Sueño Rem</div>
-          <!--Tiempo dormido-->
-          <br>
-           <div class="text-middle">
-              <span class="valor-tiempo">{{suenoProfundo}}</span>
-              <span class="medida">h</span>
-              <span class="valor-tiempo">{{minsuenoProfundo}}</span>
-              <span class="medida">min</span>
-            <div class="label">Sueno Profundo</div>
-          </div>
-          <!--Sueño Profundo-->
-          <br>
-          <div class="text-center">
-            <span class="valor-tiempo">{{tiempoDormido}}</span>
-              <span class="medida">h</span>
-              <span class="valor-tiempo">{{minutostiempoDormido}}</span>
-              <span class="medida">min</span>
-            <div class="label">Tiempo Dormido</div>
-          </div>
-          </div>
+      <div class="label mt-2">Calidad de Sueño</div>
+    </div>
+
+    <div class="seccion-valores d-flex flex-column gap-2">
+      <!--Sueño REM-->
+      <div class="sueno-rem">
+        <div>
+          <span class="valor">{{ horasMinDiarias }}</span>
+          <span class="unidad">h</span>
+          <span class="valor">{{ minutosMinDiarias }}</span>
+          <span class="unidad">min</span>
+        </div>
+        <div>
+          <span class="label">Sueño Rem</span>
+        </div>
+      </div>
+
+      <!--Tiempo dormido-->
+      <div class="sueno-profundo align-self-end">
+        <div>
+          <span class="valor">{{ suenoProfundo }}</span>
+          <span class="unidad">h</span>
+          <span class="valor">{{ minsuenoProfundo }}</span>
+          <span class="unidad">min</span>
+        </div>
+        <div>
+          <span class="label">Sueño Profundo</span>
+        </div>
+      </div>
+
+      <!--Sueño Profundo-->
+      <div class="tiempo-dormido">
+        <div>
+          <span class="valor">{{ tiempoDormido }}</span>
+          <span class="unidad">h</span>
+          <span class="valor">{{ minutostiempoDormido }}</span>
+          <span class="unidad">min</span>
+        </div>
+        <div>
+          <span class="label">Tiempo Dormido(a)</span>
         </div>
       </div>
     </div>

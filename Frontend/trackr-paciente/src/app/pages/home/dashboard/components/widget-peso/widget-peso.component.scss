@@ -1,58 +1,118 @@
-@import '../../styles/circle-container.scss';
-img{
-  transform: translate(50px, -70px);
+@import "../../styles/circle-container.scss";
+
+.container {
+  padding: 0;
 }
 
+.container.d-flex {
+  gap: 5px;
 
-  .circle-container{
-    display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #ffffff;
-  border: 4px;
-  border-style: solid;
-  border-radius: 70%;
-  //width: 80px;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  border-color: var(--accent-color-green);
-    top: 55px;
-    padding: 10px;
+  .circle-container {
+    flex: 80;
   }
 
-  .valor-pesoperdido{
-    color: var(--accent-color-green);
-    font-size: 0.5em;
-    font-weight: bold;
-    line-height: 0.5;
+  .img-container {
+    flex: 20;
   }
-
-div[class*=col-],
-div[class^=col] {
-  padding: 50px;
 }
 
-ion-icon{
-    color: var(--accent-color-green);
-    font-size: 0.1em;
+.circle-container {
+  font-size: 3vw;
+  line-height: 1;
+}
+
+.img-container {
+  height: 100%;
+  object-fit: contain;
+
+  img {
+    height: 100%;
+  }
+}
+
+.peso-perdido {
+  color: var(--accent-color-green);
+  // display: flex;
+  // align-items: center;
+  font-size: 1em;
+
+  .valor {
+    font-size: 1.1em;
     font-weight: bold;
-    line-height: 0.1;
   }
 
-  .medida {
-    font-size: 0.4em;
-    font-weight: bold;
-    line-height: 0.5;
+  .unidad {
+    font-size: 0.8em;
   }
-  .valor{
-    font-size: 1.0em;
-    font-weight: bold;
-    line-height: 1;
-  }  
+
+  ion-icon {
+    font-size: 1em;
+  }
+}
+
+.peso-restante {
+  font-size: 1em;
 
   .label {
-    font-size: 0.4em;
-    font-weight: bold;
-    line-height: 0.5;
+    font-size: 0.6em;
   }
+
+  .valor {
+    font-size: 0.9em;
+    font-weight: bold;
+  }
+
+  .unidad {
+    font-size: 0.8em;
+  }
+}
+
+.peso-actual {
+  font-size: 1em;
+
+  .valor {
+    font-size: 1.9em;
+    font-weight: bold;
+  }
+
+  .unidad {
+    font-size: 1em;
+  }
+}
+
+.dias {
+  font-size: 1em;
+
+  .valor {
+    font-size: 1.1em;
+  }
+}
+
+// div[class*="col-"],
+// div[class^="col"] {
+//   padding: 50px;
+// }
+
+// ion-icon {
+//   color: var(--accent-color-green);
+//   font-size: 0.1em;
+//   font-weight: bold;
+//   line-height: 0.1;
+// }
+
+// .medida {
+//   font-size: 0.4em;
+//   font-weight: bold;
+//   line-height: 0.5;
+// }
+// .valor {
+//   font-size: 1em;
+//   font-weight: bold;
+//   line-height: 1;
+// }
+
+// .label {
+//   font-size: 0.4em;
+//   font-weight: bold;
+//   line-height: 0.5;
+// }

@@ -1,0 +1,20 @@
+<app-widget
+  title="Seguimiento de {{ nombrePadecimiento }}"
+  iconClass="medkit-outline"
+>
+  <div class="container d-flex justify-content-center gap-4">
+    <div class="dato">
+      <span class="icono"><ion-icon [name]="claseVariable"></ion-icon></span>
+      <span class="nombre">{{ nombreVariable }}</span>
+      <span class="valor">{{ valorVariable }}</span>
+      <span class="unidad">{{ unidadVariable }}</span>
+    </div>
+
+    <div class="dato">
+      <span class="icono"><ion-icon [name]="claseTratamiento"></ion-icon></span>
+      <span class="nombre">{{ nombreTratamiento }}</span>
+      <span class="valor">{{ valorTratamiento }}</span>
+      <span class="unidad">{{ unidadTratamiento }}</span>
+    </div>
+  </div>
+</app-widget>

@@ -1,46 +1,73 @@
 @import '../../styles/circle-container.scss';
 
+.container.d-flex {
+  padding: 0;
+
+  .counter {
+    flex: 40;
+  }
+
+  .img-container {
+    flex: 20;
+  }
+
+  .values {
+    flex: 40;
+  }
+}
+
 .counter {
   color: var(--accent-color-green);
+
+  .circle-container {
+    width: 20vw;
+    font-size: 5.5vw;
+
+    .valor {
+      font-size: 1em;
+      font-weight: bold;
+    }
+
+    .label {
+      font-size: 0.5em;
+    }
+  }
+
+  .meta {
+    font-size: 2vw;
+
+    .valor {
+      font-size: 1.6em;
+      font-weight: bold;
+    }
+  }
 }
 
-.circle-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #ffffff;
-  border: 4px;
-  border-style: solid;
-  border-radius: 50%;
-  width: 55px;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  border-color: var(--accent-color-green);
+.img-container {
+  object-fit: contain;
+
+  img{
+    width: 100%;
+  }
 }
 
-img{
-  position: absolute; // Establecer la imagen como una posición absoluta para poder desplazarla dentro del contenedor.
-  z-index: 9;
-  transform: translateX(-40px);
-  top: 0px;
-  transition: transform 1.0s ease;
-}
+.values .text-center {
+  font-size: 4vw;
 
-div[class*=col-],
-div[class^=col] {
-  padding: 0px;
-}
+  .value {
+    font-size: 1em;
 
-.label {
-  font-size: 0.4em;
-  font-weight: bold;
-  line-height: 0.5;
-}
+    .valor {
+      font-size: 1em;
+      font-weight: bold;
+    }
 
-.medida {
-  font-size: 0.4em;
-  font-weight: bold;
-  line-height: 0.5;
-}
+    .medida {
+      font-size: 0.7em;
+    }
+  }
 
+  .label {
+    font-size: 0.5em;
+  }
+}

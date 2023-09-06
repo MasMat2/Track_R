@@ -1,65 +1,85 @@
-@import '../../styles/circle-container.scss';
+@import "../../styles/circle-container.scss";
 
-.counter {
-    color: var(--accent-color-green);
-  }
-  
-  .circle-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-    border: 4px;
-    border-style: solid;
-    border-radius: 50%;
-    width: 75px;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-    border-color: var(--accent-color-green);
-    position:relative;
-    top:30px;
+.container {
+  padding: 0;
+}
+
+.container.d-flex {
+  gap: 10px;
+
+  .seccion-porcentaje {
+    flex: 40;
   }
 
-  img{
-    position: relative; // Establecer la imagen como una posición absoluta para poder desplazarla dentro del contenedor.
-    transform: translateX(0.5px);
-    top: 0px;
+  .seccion-valores {
+    flex: 60;
   }
-  
-  .valor{
-    font-size: 1em;
-    font-weight: bold;
-    line-height: 2;
-    color: var(--accent-color-green);
-  }
+}
 
-  .text-middle{
-    transform: translateX(30px);
-  }
-  
-  div[class*=col-],
-  div[class^=col] {
-    padding: 0px;
-  }
+.seccion-porcentaje {
+  .relative-container {
+    position: relative;
+    width: 100%;
 
-  .valor-tiempo{
-    font-size: 0.8em;
-    font-weight: bold;
-    line-height: 1;
-    color: var(--accent-color-black);
-  }
+    .circle-container {
+      width: 100%;
 
-  .medida{
-    font-size: 0.4em;
-    font-weight: bold;
-    line-height: 0.5;
+      .valor {
+        font-size: 6vw;
+        color: var(--accent-color-green);
+      }
+    }
+
+    .img-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+
+      object-fit: contain;
+      height: 8vw;
+
+      img {
+        height: 100%;
+      }
+    }
   }
 
   .label {
-    font-size: 0.4em;
+    font-size: 1.8vw;
     font-weight: bold;
-    line-height: 0.5;
+    color: var(--accent-color-green);
   }
+}
 
-  
+.seccion-valores {
+  font-size: 2.8vw;
+
+  .sueno-rem,
+  .sueno-profundo,
+  .tiempo-dormido {
+    font-size: 1em;
+
+    div {
+      font-size: 1em;
+
+      .valor {
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+
+      .unidad {
+        font-size: 0.8em;
+      }
+    }
+
+    div {
+      font-size: 1em;
+
+      .label {
+        font-size: 0.7em;
+      }
+    }
+
+
+  }
+}
