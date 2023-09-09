@@ -15,6 +15,7 @@ namespace TrackrAPI.Repositorys.Seguridad
         public Usuario ConsultarPorCorreo(string correo);
         public Usuario ConsultarPorUsuario(string usuario);
         public Usuario Consultar(int idUsuario);
+                 
         public UsuarioDto ConsultarDto(int idUsuario);
         public UsuarioEncabezadoDto ConsultarEncabezado(int idUsuario);
         public UsuarioEncabezadoDto ConsultarEncabezado(int idUsuario, string empresa);
@@ -42,5 +43,7 @@ namespace TrackrAPI.Repositorys.Seguridad
         public Usuario ConsultarDependencias(int idUsuario);
         public IEnumerable<UsuarioDto> ConsultarPorNombre(string filtro);
         public InformacionGeneralDTO ConsultarInformacionGeneralTrackr(int idUsuario);
+       
+       public UsuarioDomicilioDto ConsultaDomicilioPorId(int? idUsuario);
     }
 }

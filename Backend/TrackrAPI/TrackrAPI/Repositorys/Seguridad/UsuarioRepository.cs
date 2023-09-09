@@ -13,6 +13,7 @@ namespace TrackrAPI.Repositorys.Seguridad
 {
     public class UsuarioRepository : Repository<Usuario>, IUsuarioRepository
     {
+
         public UsuarioRepository(TrackrContext context) : base(context)
         {
             base.context = context;
@@ -288,6 +289,10 @@ namespace TrackrAPI.Repositorys.Seguridad
                 })
                 .FirstOrDefault();
         }
+
+
+
+
 
         public UsuarioEncabezadoDto ConsultarEncabezado(int idUsuario, string empresa)
         {
@@ -630,6 +635,34 @@ namespace TrackrAPI.Repositorys.Seguridad
 
             return informacionGeneral;
 
+        }
+      public IEnumerable<UsuarioDto> ConsultarParaEncabezado(int idUsuario)
+        {
+            return context.Usuario
+            .Where(u => u.IdUsuario == idUsuario)
+            .Select(u => new UsuarioDto
+            {
+                IdUsuario = u.IdUsuario,
+                NombreCompleto = u.ObtenerNombreCompleto(),
+                Correo = u.Correo,
+            
+            }).ToList();
+        }
+
+        public UsuarioDomicilioDto ConsultaDomicilioPorId(int? idUsuario)
+        {
+            var usuario = context.Usuario.
+            Where(u => u.IdUsuario == idUsuario)
+            .Include(u => u.IdEstadoNavigation)
+            .FirstOrDefault();
+
+            var usuarioDomicilio = new UsuarioDomicilioDto
+            {
+                
+                Estado = usuario.IdEstadoNavigation.Nombre
+            };
+
+            return usuarioDomicilio;
         }
     }
 }

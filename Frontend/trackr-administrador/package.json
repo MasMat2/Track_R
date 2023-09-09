@@ -26,6 +26,7 @@
     "@coreui/icons-angular": "~4.4",
     "@fortawesome/fontawesome-free": "^6.4.0",
     "@ng-select/ng-select": "^10.0.4",
+    "@types/chart.js": "^2.9.37",
     "ag-grid-angular": "^29.3.3",
     "ag-grid-community": "^29.3.3",
     "alertifyjs": "^1.13.1",

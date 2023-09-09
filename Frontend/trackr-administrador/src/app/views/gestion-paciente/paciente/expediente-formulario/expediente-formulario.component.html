@@ -1,3 +1,41 @@
+<div>
+  <div class="bg-white bg-white d-flex align-items-center gap-2">
+    <div class="img-container">
+      <img [src]="url" alt="Imagen de Usuario" />
+    </div>
+    <div class="bg-white">
+      <div style="font-weight: 550; font-size:medium;">
+        Paciente:
+      </div>
+      <div style="
+    font-weight: bolder;
+    font-size: larger;
+  ">
+        {{nombreCompleto}}
+      </div>
+    </div>
+    <div class="modal-header" style="color: #7F7F7F;
+    font-family: Inter;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  transform: translate(650px, 0px);">
+  <div>
+      {{edad}} años
+      <br>
+      {{colonia}}
+      <br>
+      {{ciudad}}
+      <br>
+      {{estado}}
+      <br>
+      {{idHospital}}
+    </div>
+    </div>
+  </div>
+</div>
+
 <div class="contendor">
 
   <div class="modal-header">
@@ -5,10 +43,8 @@
   </div>
 
   <div class="cuerpo-contenedor" style="padding-bottom: 0;">
-    <app-tabulador-entidad
-      [claveEntidad]="claveEntidadExpedienteTrackr"
-      [idTabla]="idUsuario"
-      [externalTemplates] = "externalTemplates">
+    <app-tabulador-entidad [claveEntidad]="claveEntidadExpedienteTrackr" [idTabla]="idUsuario"
+      [externalTemplates]="externalTemplates">
     </app-tabulador-entidad>
   </div>
 

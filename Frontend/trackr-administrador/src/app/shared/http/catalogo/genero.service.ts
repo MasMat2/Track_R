@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 import { GeneroDto } from '@dtos/catalogo/generoDto';
 
 
-@Injectable()
+@Injectable({
+    providedIn: "root"
+})
 export class GeneroService {
     private dataUrl = "genero/";  // URL to web api
 

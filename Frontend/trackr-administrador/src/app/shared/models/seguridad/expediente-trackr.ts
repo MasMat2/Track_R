@@ -9,6 +9,7 @@ export class ExpedienteTrackR {
     edad: string;
     fechaAlta: Date;
     idGenero: number;
+  static IdGenero: any;
 
     constructor() {
         this.idExpediente = 0;

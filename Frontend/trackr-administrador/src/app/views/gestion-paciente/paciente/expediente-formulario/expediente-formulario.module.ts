@@ -11,6 +11,7 @@ import { ExpedienteTratamientoModule } from '../expediente-tratamiento/expedient
 import { ExpedienteGeneralFormularioModule } from './../expediente-general-formulario/expediente-general-formulario.module';
 import { ExpedienteFormularioComponent } from './expediente-formulario.component';
 
+
 @NgModule({
   imports: [
     CommonModule,

@@ -5,6 +5,8 @@ namespace TrackrAPI.Dtos.Seguridad
 {
     public class UsuarioDto
     {
+        
+
         public int IdUsuario { get; set; }
         public string Clave { get; set; }
         public string Nombre { get; set; }
@@ -57,5 +59,6 @@ namespace TrackrAPI.Dtos.Seguridad
         public List<int> IdsRol { get; set; }
         public List<int> IdsCompania { get; set; }
         public string Contrasena { get; set; }
+        public string? Pais { get; internal set; }
     }
 }

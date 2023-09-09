@@ -1,9 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-grid-dto';
+import { ExpedienteTrackR } from '@models/seguridad/expediente-trackr';
 import { Usuario } from '@models/seguridad/usuario';
+import { UsuarioDomicilio } from '@models/seguridad/usuario-domicilio';
 import { UsuarioEncabezado } from '@models/seguridad/usuario-encabezado';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -133,6 +136,10 @@ export class UsuarioService {
 
   consultarPorNombre(nombre: string) {
     return this.http.get<Usuario[]>(this.url + `consultarPorNombre/${nombre}`);
+  }
+
+  consultaDomicilioPorId(idUsuario: number){
+    return  this.http.get<UsuarioDomicilio>(this.url + `consultaDomicilioPorId/${idUsuario}`);
   }
 
 }
