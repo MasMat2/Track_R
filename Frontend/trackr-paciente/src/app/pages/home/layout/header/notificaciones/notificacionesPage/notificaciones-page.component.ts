@@ -3,7 +3,7 @@ import { IonicModule, PopoverController } from '@ionic/angular';
 import { NotificacionesComponent } from '../notificaciones.component';
 import { NotificacionPacienteHubService } from '@services/notificacion-paciente-hub.service';
 import { Observable, map } from 'rxjs';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { NotificacionPacientePopOverDto } from 'src/app/shared/Dtos/notificaciones/notificacion-paciente-popover-dto';
 
 @Component({
@@ -13,7 +13,8 @@ import { NotificacionPacientePopOverDto } from 'src/app/shared/Dtos/notificacion
   standalone : true,
   imports : [
     IonicModule,
-    CommonModule
+    CommonModule,
+    NgIf
   ]
 })
 export class NotificacionesPageComponent implements OnInit
