@@ -1,24 +1,17 @@
-.notificacion{
-    color: #671E75;
+.visto-celeste {
+    --background-color: lightblue;
 }
 
-.popover-button-with-badge {
-    position: relative;
-    align-items: center;
-  }
+.notification-item{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 
- .badge-on-icon {
-    position: absolute;
-    top: 0;
-    right: 0;
-    transform: translate(50%, -50%);
-    font-size: 0.6em;
-    width: 1.5em;
-    height: 1.5em;
-    padding: 0.1em;
-  }
+.ion-item{
+  --background: #edf2fb;
+}
 
-.visto-celeste {
-    background-color: lightblue;
-  }
-  
+.notificacion{
+  color: #671E75;
+  font-weight: bold;
+}

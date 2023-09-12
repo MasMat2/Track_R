@@ -1,32 +1,21 @@
-<ion-button id="popover-button" class="popover-button-with-badge">
-  <ion-icon fill="icon-only" name="notifications" color="light"></ion-icon>
-  <ion-badge color="danger" class="badge-on-icon">{{ notificaciones ? notificaciones.length : 0 }}</ion-badge>
-</ion-button>
+<ion-list lines="full">
 
-<ion-popover trigger="popover-button" [dismissOnSelect]="true" (ionPopoverDidPresent)="imprimirNotificaciones()">
-  <ng-template>
-    <ion-content>
-      <ion-list>
-        <ion-label>
-          <h2>Notificaciones</h2>
-        </ion-label>
-        <ion-item *ngFor="let notificacion of notificaciones" [button]="true" [detail]="false" (click)="imprimirIdNotificacion(notificacion.idNotificacion)">
-          <div [ngClass]="{ 'visto-celeste': notificacion.visto }">
-            <i [class]="iconMappings[notificacion.idTipoNotificacion]?.class" [style.color]="iconMappings[notificacion.idTipoNotificacion]?.color"></i>
-            <ion-label >
-              <h3 class="notificacion">
-                {{ notificacion.titulo }}
-              </h3>
-              <p>
-                {{ notificacion.mensaje }}
-              </p>
-              <p>
-                {{ notificacion.fechaAlta }}
-              </p>
-            </ion-label>
-          </div >
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </ng-template>
-</ion-popover>
+  <ion-item>
+    <ion-label>
+      Notificaciones
+    </ion-label>
+  </ion-item>
+
+  <ion-item *ngFor="let notificacion of notificaciones$ | async" [ngClass]="{ 'ion-item': !notificacion.visto }" [button]="true" [detail]="false"  (click)="marcarComoVista(notificacion.id , notificacion.visto)">
+    <ion-icon  [class]="iconMappings[notificacion.idTipoNotificacion]?.class" [style.color]="iconMappings[notificacion.idTipoNotificacion]?.color" slot="start"></ion-icon>
+    <div  class="notification-item">
+      <ion-label >
+        <h3 class="notificacion">{{ notificacion.titulo }}</h3>
+        <p>{{ notificacion.mensaje }}</p>
+        <p>{{ notificacion.fecha | date }}</p>
+      </ion-label>
+    </div>
+  </ion-item>
+
+
+</ion-list>

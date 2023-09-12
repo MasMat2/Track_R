@@ -63,7 +63,7 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
 
         foreach (var notificacionUsuario in notificacionesUsuario)
         {
-            notificacionUsuario.Visto = !notificacionUsuario.Visto;
+            notificacionUsuario.Visto = true;
             context.NotificacionUsuario.Update(notificacionUsuario);
         }
 

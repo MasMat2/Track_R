@@ -1,9 +1,9 @@
-import { NgClass, NgFor } from '@angular/common';
+import { CommonModule, NgClass, NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
-import { NotificacionPacienteService } from '../../../../../shared/http/gestion-perfil/notificacion-paciente.service';
-import { NotificacionPacientePopOverDto } from 'src/app/shared/Dtos/perfil/notificacion-paciente-dto';
-
+import { IonicModule} from '@ionic/angular';
+import { NotificacionPacienteHubService } from '@services/notificacion-paciente-hub.service';
+import { Observable , map} from 'rxjs';
+import { NotificacionPacientePopOverDto } from '../../../../../shared/Dtos/notificaciones/notificacion-paciente-popover-dto';
 
 @Component({
   selector: 'app-notificaciones',
@@ -13,27 +13,43 @@ import { NotificacionPacientePopOverDto } from 'src/app/shared/Dtos/perfil/notif
   imports : [
     IonicModule,
     NgFor,
-    NgClass
+    NgClass,
+    CommonModule
   ]
 })
 export class NotificacionesComponent  implements OnInit 
 {
-  protected notificaciones: NotificacionPacientePopOverDto[];
-
-  constructor(
-    private notificacionPacienteService : NotificacionPacienteService
-  ){}
+  protected notificaciones$: Observable<NotificacionPacientePopOverDto[]>;
+  
+  constructor(private notificacionHubService : NotificacionPacienteHubService
+              ){}
 
   ngOnInit() 
   {
-    this.notificacionPacienteService.consultarPopOverPaciente().subscribe((data) => {
-      this.notificaciones = data;
-    })
+    this.consultarNotificaciones();
   }
-  
-  private consultarNotificaciones() : void
-  {
-   
+
+  private consultarNotificaciones(): void {
+    this.notificaciones$ = this.notificacionHubService.notificaciones$.pipe(
+      map((notificaciones) =>
+        notificaciones.map((notificacion) => ({
+          idTipoNotificacion: notificacion.idTipoNotificacion,
+          id: notificacion.idNotificacionUsuario,
+          titulo: notificacion.titulo,
+          mensaje: notificacion.mensaje,
+          fecha: notificacion.fechaAlta,
+          visto: notificacion.visto,
+        } as NotificacionPacientePopOverDto)) 
+      )
+    );
+  }
+
+  protected async marcarComoVista(idNotificacionUsuario: number  , visto : boolean) {
+    if(!visto)
+    {
+      await this.notificacionHubService.marcarComoVista(idNotificacionUsuario);
+      this.consultarNotificaciones();
+    }
   }
 
   iconMappings: any = {
@@ -41,25 +57,4 @@ export class NotificacionesComponent  implements OnInit
     5: { class: 'fa-regular fa-circle-user', color: '#671e75' },
     6: { class: 'fa-solid fa-capsules', color: '#671e75' }
   };
-
-  imprimirNotificaciones() {
-    console.log(this.notificaciones);
-  }
-
-  async imprimirIdNotificacion(idNotificacion: number) {
-    console.log(idNotificacion);
-    /* try {
-      await this.notificacionHubService.marcaVista(idNotificacion);
-      this.consultarNotificaciones();
-      console.log(`Notificación con ID ${idNotificacion} marcada como vista`);
-    } catch (error) {
-      console.error('Error al marcar notificación como vista', error);
-    } */
-  }
-  
-
-
-
-  
-
 }
