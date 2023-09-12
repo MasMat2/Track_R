@@ -33,6 +33,7 @@
     "@ionic/angular": "^7.0.0",
     "@ionic/cli": "^7.1.1",
     "@ionic/pwa-elements": "^3.2.2",
+    "@microsoft/signalr": "^7.0.10",
     "@ng-select/ng-select": "^10.0.4",
     "ag-grid-angular": "^30.0.6",
     "ag-grid-community": "^30.0.6",

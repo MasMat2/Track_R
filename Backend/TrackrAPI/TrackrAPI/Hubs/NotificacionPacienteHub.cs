@@ -22,7 +22,7 @@ public class NotificacionPacienteHub : Hub<INotificacionPacienteHub>
     public override async Task OnConnectedAsync()
     {
         var idUsuario = ObtenerIdUsuario();
-        var notificaciones = _notificacionPacienteService.ConsultarPorPaciente(idUsuario);
+        var notificaciones = _notificacionPacienteService.ConsultarPorPaciente(idUsuario).ToList();
 
         await Clients.Caller.NuevaConexion(notificaciones);
         await base.OnConnectedAsync();

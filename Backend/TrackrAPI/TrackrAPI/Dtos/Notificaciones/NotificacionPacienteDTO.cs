@@ -7,5 +7,6 @@ public record NotificacionPacienteDTO(
     string Titulo,
     string Mensaje,
     DateTime FechaAlta,
-    bool Visto
+    bool Visto,
+    int IdTipoNotificacion
 );

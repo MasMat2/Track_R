@@ -10,8 +10,10 @@ namespace TrackrAPI.Models
         public DateTime FechaRealizacion { get; set; }
         public string? Descripcion { get; set; }
         public int IdUsuarioDoctor { get; set; }
+        public int? IdNotificacion { get; set; }
 
         public virtual ExpedienteTrackr IdExpedienteNavigation { get; set; } = null!;
+        public virtual Notificacion? IdNotificacionNavigation { get; set; }
         public virtual Usuario IdUsuarioDoctorNavigation { get; set; } = null!;
     }
 }

@@ -2970,6 +2970,11 @@ namespace TrackrAPI.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ExpedienteRecomendaciones_ExpedienteTrackr");
 
+                entity.HasOne(d => d.IdNotificacionNavigation)
+                    .WithMany(p => p.ExpedienteRecomendaciones)
+                    .HasForeignKey(d => d.IdNotificacion)
+                    .HasConstraintName("FK__Expedient__IdNot__5674B1B6");
+
                 entity.HasOne(d => d.IdUsuarioDoctorNavigation)
                     .WithMany(p => p.ExpedienteRecomendaciones)
                     .HasForeignKey(d => d.IdUsuarioDoctor)
@@ -3043,6 +3048,10 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.Cantidad).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.Farmaco).HasMaxLength(200);
+
+                entity.Property(e => e.FechaFin).HasColumnType("date");
+
+                entity.Property(e => e.FechaInicio).HasColumnType("date");
 
                 entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
 

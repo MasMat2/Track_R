@@ -1,0 +1,10 @@
+
+<ion-button (click)="_openPopover($event)">
+
+  <ion-icon fill="icon-only" name="notifications" color="light"></ion-icon>
+  <ion-badge color="danger" class="badge-on-icon">{{ (notificaciones$ | async)?.length || 0 }}</ion-badge>
+
+</ion-button>
+
+
+
