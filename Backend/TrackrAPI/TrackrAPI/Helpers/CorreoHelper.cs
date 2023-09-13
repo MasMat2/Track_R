@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Net.Mail;
 using System.Text;
+using System.Net.Mime;
+using DocumentFormat.OpenXml.Spreadsheet;
+
 
 namespace TrackrAPI.Helpers
 {
@@ -35,9 +38,21 @@ namespace TrackrAPI.Helpers
                 {
                     return;
                 }
-
+                
                 SmtpClient cliente = new SmtpClient(Host, Puerto);
                 MailMessage mailMessage = new MailMessage();
+                if (correo.EsMensajeHtml = true)
+                {
+                    AlternateView htmlView = AlternateView.CreateAlternateViewFromString(
+                    correo.Mensaje,  Encoding.UTF8, MediaTypeNames.Text.Html);
+
+                    foreach (var imagen in correo.Imagenes)
+                    {
+                        htmlView.LinkedResources.Add(imagen);
+                    }
+
+                    mailMessage.AlternateViews.Add(htmlView);
+                }
                 mailMessage.From = new MailAddress(Emisor, Alias);
                 mailMessage.BodyEncoding = Encoding.UTF8;
                 mailMessage.To.Add(correo.Receptor);
@@ -84,7 +99,8 @@ namespace TrackrAPI.Helpers
             }
         }
 
-        public async void EnviarAdjuntosAsync(Correo correo, List<Attachment> adjuntos)
+       
+        public async Task EnviarAdjuntosAsync(Correo correo, List<Attachment> adjuntos)
         {
             if (!string.IsNullOrWhiteSpace(correo.Receptor))
             {

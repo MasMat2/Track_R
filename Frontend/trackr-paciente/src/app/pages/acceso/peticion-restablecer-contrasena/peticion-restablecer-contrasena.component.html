@@ -1,0 +1,85 @@
+<div class="background-restablecer"></div>
+
+<div class="contenedor-restablecer">
+  <div>
+    <div class="row">
+      <div class="col-md-12 font-weight-bold text-center">¿Olvidaste tu contraseña?</div>
+    </div>
+    <form
+      *ngIf="!recuperacionCorrecta"
+      #recuperarContrasenaForm="ngForm"
+      novalidate="novalidate"
+      (ngSubmit)="recuperarContrasena(recuperarContrasenaForm)"
+    >
+      <div class="sub-contenedor-login">
+        <div class="row">
+          <div class="col-md-12 titulo-5 mt-3 mb-3">
+            Confirma tu Nombre de Usuario y recibirás un enlace a tu Correo Electrónico para
+            restablecer la contraseña.
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 mt-2">
+            <div class="form-group">
+              <label class="label-input required-label"
+                >Nombre de Usuario</label
+              >
+              <div>
+                <input
+                  #correoModel="ngModel"
+                  [(ngModel)]="usuario.correo"
+                  name="correoRecuperacion"
+                  class="form-control"
+                  type="text"
+                  maxlength="100"
+                  required="required"
+                  autocomplete="off"
+                />
+                <div
+                  *ngIf="correoModel.errors && correoModel.touched"
+                  class="error"
+                >
+                <div *ngIf="correoModel.errors['required']">El nombre de usuario es requerido</div>
+                <div *ngIf="correoModel.errors['formatoCorreo']">
+                  El formato del correo electrónico es incorrecto
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 btn-continuar">
+            <ion-button
+              style="width: 100% !important"
+              [disabled]="btnSubmit"
+              type="submit"
+              class="btn-primario"
+            >
+              Confirmar
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div *ngIf="recuperacionCorrecta">
+      <div class="sub-contenedor-login">
+        <div class="row">
+          <div class="col-md-12 mt-3">Consulta tu Bandeja de Entrada.</div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 titulo-5">
+            Acabamos de enviarte un Correo Electrónico a
+            <b>{{ usuario.correoPersonal }}</b> con un enlace para reestablecer la
+            contraseña.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <ion-button fill="clear" routerLink="/acceso/login">Regresar</ion-button>
+    </div>
+  </div>
+</div>
