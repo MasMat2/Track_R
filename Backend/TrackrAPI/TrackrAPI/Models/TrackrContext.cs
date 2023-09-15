@@ -304,6 +304,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<TipoUsuario> TipoUsuario { get; set; } = null!;
         public virtual DbSet<TipoVehiculo> TipoVehiculo { get; set; } = null!;
         public virtual DbSet<TipoVigencia> TipoVigencia { get; set; } = null!;
+        public virtual DbSet<TipoWidget> TipoWidget { get; set; } = null!;
         public virtual DbSet<TituloAcademico> TituloAcademico { get; set; } = null!;
         public virtual DbSet<TraspasoMovimientoMaterial> TraspasoMovimientoMaterial { get; set; } = null!;
         public virtual DbSet<TraspasoMovimientoMaterialDetalle> TraspasoMovimientoMaterialDetalle { get; set; } = null!;
@@ -1663,6 +1664,11 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.Nombre).HasMaxLength(50);
 
+                entity.HasOne(d => d.IdAreaNavigation)
+                    .WithMany(p => p.Departamento)
+                    .HasForeignKey(d => d.IdArea)
+                    .HasConstraintName("FK_Departamento_Area");
+
                 entity.HasOne(d => d.IdCompaniaNavigation)
                     .WithMany(p => p.Departamento)
                     .HasForeignKey(d => d.IdCompania)
@@ -1937,6 +1943,16 @@ namespace TrackrAPI.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Nombre).HasMaxLength(50);
+
+                entity.HasOne(d => d.IdIconoNavigation)
+                    .WithMany(p => p.Entidad)
+                    .HasForeignKey(d => d.IdIcono)
+                    .HasConstraintName("FK_Entidad_Icono");
+
+                entity.HasOne(d => d.IdTipoWidgetNavigation)
+                    .WithMany(p => p.Entidad)
+                    .HasForeignKey(d => d.IdTipoWidget)
+                    .HasConstraintName("FK_Entidad_TipoWidget");
             });
 
             modelBuilder.Entity<EntidadEstructura>(entity =>
@@ -7500,6 +7516,16 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.Clave).HasMaxLength(20);
 
                 entity.Property(e => e.Nombre).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<TipoWidget>(entity =>
+            {
+                entity.HasKey(e => e.IdTipoWidget)
+                    .HasName("PK__TipoWidg__D8FA44A275CEC789");
+
+                entity.ToTable("TipoWidget", "Trackr");
+
+                entity.Property(e => e.Descripcion).HasMaxLength(50);
             });
 
             modelBuilder.Entity<TituloAcademico>(entity =>

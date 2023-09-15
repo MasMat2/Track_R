@@ -13,6 +13,10 @@ import { GeneralConstant } from '@utils/general-constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, map } from "rxjs";
 import { SeccionCampoModalComponent } from './seccion-campo-modal/seccion-campo-modal.component';
+import { IconoService } from '@http/catalogo/icono.service';
+import { Icono } from '@models/catalogo/icono';
+import { WidgetService } from '@http/gestion-entidad/widgets-service';
+import { TipoWidget } from '@models/gestion-entidad/tipo-widget';
 
 @Component({
   selector: 'app-configuracion-entidad-formulario',
@@ -43,6 +47,11 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
     },
     GeneralConstant.CONFIG_COLUMN_ACTION
   );
+
+  
+  protected iconoList: Icono[] = [];
+  protected widgetList : TipoWidget[] = [];
+  public placeHolderSelect = GeneralConstant.PLACEHOLDER_DROPDOWN;
 
   public columnaCheckbox = {
     headerName: '',
@@ -109,6 +118,8 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
     private bsModalRef: BsModalRef,
 		private bsModalService: BsModalService,
     mensajeService: MensajeService,
+    private iconoService: IconoService,
+    private widgetService : WidgetService
   ) {
     super(mensajeService);
   }
@@ -116,6 +127,8 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
   async ngOnInit(): Promise<void> {
     await super.onInit();
     this.actualizarInformacion();
+    this.consultarIconos();
+    this.consultarWidgets();
   }
 
   // #region Consultas
@@ -353,4 +366,27 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
   protected consultar(idEntidad: number): Observable<Entidad> {
     return this.entidadService.consultar(idEntidad);
   }
-}
+
+  protected consultarIconos() {
+    this.iconoService.consultarGeneral().subscribe((data) => {
+      console.log(data);
+      this.iconoList = data;
+    });
+  }
+
+  consultarWidgets()
+  {
+    this.widgetService.consultar().subscribe((data) => {
+      console.log(data);
+      this.widgetList = data;
+    })
+  }
+
+  getIconClass(selectedId: number): string 
+  {
+    const selectedIcono = this.iconoList.find(icono => icono.idIcono === selectedId);
+    return selectedIcono ? selectedIcono.clase + ' icono-acceso' : '';
+  }
+
+}  
+

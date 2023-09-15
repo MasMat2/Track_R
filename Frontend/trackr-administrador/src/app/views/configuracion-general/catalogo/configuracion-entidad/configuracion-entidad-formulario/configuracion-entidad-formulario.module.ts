@@ -11,6 +11,8 @@ import { DirectiveModule } from "src/app/shared/directives/directive.module";
 import { SharedModule } from "src/app/shared/shared.module";
 import { ConfiguracionEntidadFormularioComponent } from "./configuracion-entidad-formulario.component";
 import { SeccionCampoModalComponent } from "./seccion-campo-modal/seccion-campo-modal.component";
+import { IconoService } from "@http/catalogo/icono.service";
+import { WidgetService } from "@http/gestion-entidad/widgets-service";
 
 @NgModule({
     declarations: [ConfiguracionEntidadFormularioComponent, SeccionCampoModalComponent],
@@ -28,7 +30,9 @@ import { SeccionCampoModalComponent } from "./seccion-campo-modal/seccion-campo-
         EntidadService,
         EntidadEstructuraService,
         SeccionCampoService,
-        SeccionService
+        SeccionService,
+        IconoService,
+        WidgetService
     ]
 })
 export class ConfiguracionEntidadFormularioModule {}

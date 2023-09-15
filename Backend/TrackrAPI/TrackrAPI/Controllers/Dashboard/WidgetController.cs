@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TrackrAPI.Models;
 using TrackrAPI.Services.Dashboard;
 
 namespace TrackrAPI.Controllers.Dashboard;
@@ -19,5 +20,11 @@ public class WidgetController : ControllerBase
     {
         var widgets = _widgetService.Consultar();
         return Ok(widgets);
+    }
+
+    [HttpGet("tipo")]
+    public IEnumerable<TipoWidget> ConsultarTipo()
+    {
+        return _widgetService.ConsultarTipo();
     }
 }
