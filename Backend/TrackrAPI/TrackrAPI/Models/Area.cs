@@ -8,6 +8,7 @@ namespace TrackrAPI.Models
         public Area()
         {
             Cita = new HashSet<Cita>();
+            Departamento = new HashSet<Departamento>();
             FlujoDetalle = new HashSet<FlujoDetalle>();
             Pedido = new HashSet<Pedido>();
             PedidoPresentacion = new HashSet<PedidoPresentacion>();
@@ -23,6 +24,7 @@ namespace TrackrAPI.Models
 
         public virtual Compania? IdCompaniaNavigation { get; set; }
         public virtual ICollection<Cita> Cita { get; set; }
+        public virtual ICollection<Departamento> Departamento { get; set; }
         public virtual ICollection<FlujoDetalle> FlujoDetalle { get; set; }
         public virtual ICollection<Pedido> Pedido { get; set; }
         public virtual ICollection<PedidoPresentacion> PedidoPresentacion { get; set; }

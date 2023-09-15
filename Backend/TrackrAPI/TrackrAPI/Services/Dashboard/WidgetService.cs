@@ -1,4 +1,5 @@
 using TrackrAPI.DTOs.Dashboard;
+using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Dashboard;
 
 namespace TrackrAPI.Services.Dashboard;
@@ -20,5 +21,10 @@ public class WidgetService
                 Clave: w.Clave,
                 Nombre: w.Nombre
             ));
+    }
+
+    public IEnumerable<TipoWidget> ConsultarTipo()
+    {
+        return _widgetRepository.ConsultarTipo();
     }
 }

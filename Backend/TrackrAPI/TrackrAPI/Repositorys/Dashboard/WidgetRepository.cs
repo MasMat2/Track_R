@@ -18,4 +18,8 @@ public class WidgetRepository : Repository<Widget>, IWidgetRepository
         return context.Widget
             .FirstOrDefault(w => w.Clave == clave);
     }
+    public IEnumerable<TipoWidget> ConsultarTipo()
+    {
+        return context.TipoWidget.ToList();
+    }
 }
