@@ -125,11 +125,11 @@ export class ExpedienteRecomendacionComponent implements OnInit{
       }, 
       complete: () => {
         this.consultarGrid();
-        this.limpiarCampos();
         this.esAgregar = true;
         this.submiting = false;
         subscription.unsubscribe();
         formulario.reset();
+        this.limpiarCampos();
       }
     })
   }
