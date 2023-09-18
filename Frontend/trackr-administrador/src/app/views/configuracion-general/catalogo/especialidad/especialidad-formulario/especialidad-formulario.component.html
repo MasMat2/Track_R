@@ -9,34 +9,8 @@
     >
       <div class="container-fluid">
         <div class="row">
-          <!-- ID -->
-          <div class="col-12 col-md-5">
-            <div class="form-group">
-              <label class="label-input required-label">ID</label>
-              <div>
-                <input
-                  #clave="ngModel"
-                  [(ngModel)]="entidad.clave"
-                  id="clave"
-                  name="claveName"
-                  class="form-control"
-                  type="text"
-                  maxlength="20"
-                  required="true"
-                  autocomplete="off"
-                  [disabled]="entidad.idEspecialidad > 0"
-                />
-                <div
-                  *ngIf="clave.errors?.['required'] && clave.touched"
-                  class="error"
-                >
-                  El ID es requerido
-                </div>
-              </div>
-            </div>
-          </div>
           <!-- Especialidad -->
-          <div class="col-12 col-md-7">
+          <div class="col-12 col-md-12">
             <div class="form-group">
               <label class="label-input required-label">Especialidad</label>
               <div>

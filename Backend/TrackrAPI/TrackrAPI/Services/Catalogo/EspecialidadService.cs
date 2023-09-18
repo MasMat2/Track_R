@@ -29,7 +29,6 @@ namespace TrackrAPI.Services.Catalogo
 
             var especialidadDto = new EspecialidadFormularioConsultaDto
             {
-                IdEspecialidad = especialidad.IdEspecialidad,
                 Nombre = especialidad.Nombre
             };
 
@@ -44,7 +43,6 @@ namespace TrackrAPI.Services.Catalogo
                 .OrderBy(es => es.Nombre)
                 .Select(es => new EspecialidadGridDto
                 {
-                    
                     IdEspecialidad = es.IdEspecialidad,
                     Nombre = es.Nombre
                 });
@@ -52,13 +50,13 @@ namespace TrackrAPI.Services.Catalogo
             return especialidadesDto;
         }
 
-        public void Agregar(EspecialidadFormularioCapturaDto especialidadDto)
+         public void Agregar(EspecialidadFormularioCapturaDto especialidadDto)
         {
             especialidadValidatorService.ValidarAgregar(especialidadDto);
 
             var especialidad = new Especialidad
             {
-                IdEspecialidad = especialidadDto.IdEspecialidad,
+               /*  IdEspecialidad = especialidadDto.IdEspecialidad, */
                 Nombre = especialidadDto.Nombre
             };
 
@@ -69,19 +67,16 @@ namespace TrackrAPI.Services.Catalogo
         {
             especialidadValidatorService.ValidarEditar(especialidadDto);
 
-            var especialidad = especialidadRepository.Consultar(especialidadDto.IdEspecialidad)!;
+            var especialidad = especialidadRepository.ConsultarPorNombre(especialidadDto.Nombre)!;
 
             especialidad.Nombre = especialidadDto.Nombre;
-            especialidad.IdEspecialidad = especialidadDto.IdEspecialidad;
-
             especialidadRepository.Editar(especialidad);
         }
 
-        public void Eliminar(int idEspecialidad)
+        public void Eliminar(string nombre)
         {
-            especialidadValidatorService.ValidarEliminar(idEspecialidad);
 
-            var especialidad = especialidadRepository.Consultar(idEspecialidad)!;
+            var especialidad = especialidadRepository.ConsultarPorNombre(nombre)!;
 
             especialidadRepository.Eliminar(especialidad!);
         }

@@ -16,16 +16,13 @@ namespace TrackrAPI.Services.Catalogo
             this.especialidadRepository = especialidadRepository;
         }
 
-        private readonly string MensajeNombreRequerido = "El nombre es requerido";
-        private readonly string MensajeIDRequerido = "El ID es requerido";
-        private readonly string MensajeExistencia = "El ID no existe";
-        private readonly string MensajeDuplicado = "El ID ya existe";
-
+        private readonly string MensajeNombreRequerido = "La especialidad es requerida";
+        private readonly string MensajeDuplicado = "La especialidad ya existe";
 
         private static readonly int LongitudNombre = 50;
 
-        private readonly string MensajeNombreLongitud = $"La longitud máxima del nombre son {LongitudNombre } caracteres";
-
+        private readonly string MensajeNombreLongitud = $"La longitud máxima del nombre son {LongitudNombre} caracteres";
+        
         public void ValidarAgregar(EspecialidadFormularioCapturaDto especialidad)
         {
             ValidarRequerido(especialidad);
@@ -33,23 +30,17 @@ namespace TrackrAPI.Services.Catalogo
             ValidarDuplicado(especialidad);
         }
 
-        public void ValidarEditar(EspecialidadFormularioCapturaDto especialidad)
+       public void ValidarEditar(EspecialidadFormularioCapturaDto especialidad)
         {
-            ValidarExistencia(especialidad.IdEspecialidad);
             ValidarRequerido(especialidad);
             ValidarRango(especialidad);
             ValidarDuplicado(especialidad);
         }
 
-        public void ValidarEliminar(int idEspecialidad)
-        {
-            ValidarExistencia(idEspecialidad);
-        }
 
-        public void ValidarRequerido(EspecialidadFormularioCapturaDto especialidad)
+       public void ValidarRequerido(EspecialidadFormularioCapturaDto especialidad)
         {
             Validator.ValidarRequerido(especialidad.Nombre, MensajeNombreRequerido);
-            Validator.ValidarRequerido(especialidad.IdEspecialidad, MensajeIDRequerido);
         }
 
         public void ValidarRango(EspecialidadFormularioCapturaDto especialidad)
@@ -57,21 +48,11 @@ namespace TrackrAPI.Services.Catalogo
             Validator.ValidarLongitudRangoString(especialidad.Nombre, LongitudNombre, MensajeNombreLongitud);
         }
 
-        public void ValidarExistencia(int idEspecialidad)
-        {
-            var especialidad = especialidadRepository.Consultar(idEspecialidad);
-
-            if (especialidad is null)
-            {
-                throw new CdisException(MensajeExistencia);
-            }
-        }
-
         public void ValidarDuplicado(EspecialidadFormularioCapturaDto especialidad)
         {
             var especialidadDuplicado = especialidadRepository.ConsultarPorNombre(especialidad.Nombre);
 
-            if (especialidadDuplicado != null && especialidad.IdEspecialidad != especialidadDuplicado.IdEspecialidad)
+            if (especialidadDuplicado != null && especialidad.Nombre != especialidadDuplicado.Nombre)
             {
                 throw new CdisException(MensajeDuplicado);
             }

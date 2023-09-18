@@ -24,6 +24,7 @@ export class EspecialidadFormularioComponent extends CrudFormularioBase<Especial
   protected especialidades$: Observable<Especialidad[]>;
   
   protected submiting: boolean = false;
+  nombre: string;
 
   constructor(
     private especialidadService: EspecialidadService,
@@ -52,16 +53,19 @@ export class EspecialidadFormularioComponent extends CrudFormularioBase<Especial
         }),
         map((especialidad: EspecialidadFormularioConsultaDto) => {
           const capturaDto = new EspecialidadFormularioCapturaDto();
-          capturaDto.idEspecialidad = especialidad.idEspecialidad;
           capturaDto.nombre = especialidad.nombre;
 
           return capturaDto;
         })
       );
+
   }
+  
 
   protected override agregar(especialidad: EspecialidadFormularioCapturaDto): Observable<void> {
-    return this.especialidadService.agregar(especialidad);
+    console.log(especialidad);
+    console.log(this.especialidadService.agregar(especialidad));
+    return this.especialidadService.editar(especialidad);
   }
 
   protected override editar(especialidad: EspecialidadFormularioCapturaDto): Observable<void> {
@@ -69,9 +73,14 @@ export class EspecialidadFormularioComponent extends CrudFormularioBase<Especial
   }
 
   protected override onSubmit(formulario: NgForm): void {
-    this.entidad.idEspecialidad = this.idEspecialidad!;
-
+    // Verifica si this.idEspecialidad es undefined
+    if (typeof this.idEspecialidad !== 'undefined') {
+      this.entidad.nombre = this.nombre;
+    }
+  
     super.onSubmit(formulario);
+
+  
   }
   private consultarEspecialidades(): void {
     this.especialidades$ = this.especialidadService.consultarParaGrid();

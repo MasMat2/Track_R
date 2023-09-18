@@ -11,6 +11,7 @@ import { ColDef } from 'ag-grid-community';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, Subject } from 'rxjs';
 import { EspecialidadFormularioComponent } from './especialidad-formulario/especialidad-formulario.component';
+import { EspecialidadFormularioCapturaDto } from '@dtos/catalogo/especialidad-formulario-captura-dto';
 
 @Component({
   templateUrl: './especialidad.component.html',
@@ -30,6 +31,7 @@ export class EspecialidadComponent extends CrudBase<EspecialidadGridDto> impleme
     formConfig: {
       ComponenteFormulario: EspecialidadFormularioComponent,
       modalConfig: MODAL_CONFIG.Default,
+
       configAgregar: {
           acceso: ACCESO_ESPECIALIDAD.Agregar,
       },

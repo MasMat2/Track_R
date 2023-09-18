@@ -1,5 +1,4 @@
-export class EspecialidadFormularioCapturaDto {
-    public idEspecialidad: number;
+export class EspecialidadFormularioCapturaDto 
+  {
     public nombre: string;
-  clave: any;
   }

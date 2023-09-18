@@ -8,10 +8,17 @@ namespace TrackrAPI.Controllers.Catalogo
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class EspecialidadController : ControllerBase
-    {
+{
         private readonly EspecialidadService especialidadService;
         private EspecialidadFormularioCapturaDto especialidad;
+
+        public EspecialidadController(EspecialidadService especialidadService)
+        {
+            this.especialidadService = especialidadService;
+            this.especialidad = new EspecialidadFormularioCapturaDto();
+        }
 
         [HttpGet("formulario/{idEspecialidad}")]
         public EspecialidadFormularioConsultaDto? ConsultarParaFormulario(int idEspecialidad)
@@ -25,12 +32,12 @@ namespace TrackrAPI.Controllers.Catalogo
             return especialidadService.ConsultarParaGrid();
         }
 
-         [HttpPost]
+        [HttpPost]
         public void Agregar(EspecialidadFormularioCapturaDto especialidadDto)
         {
-            especialidadService.Agregar(especialidad);
+            Console.Write("Aqui: " + especialidadDto.Nombre);
+            especialidadService.Agregar(especialidadDto);
         }
-
 
         [HttpPut]
         public void Editar(EspecialidadFormularioCapturaDto especialidadDto)
@@ -39,9 +46,9 @@ namespace TrackrAPI.Controllers.Catalogo
         }
 
         [HttpDelete("{idEspecialidad}")]
-        public void Eliminar(int idEspecialidad)
+        public void Eliminar(string Nombre)
         {
-            especialidadService.Eliminar(idEspecialidad);
+            especialidadService.Eliminar(Nombre);
         }
     }
 }

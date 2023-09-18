@@ -22,10 +22,17 @@ export class EspecialidadService {
     return this.http.get<EspecialidadGridDto[]>(this.dataUrl + 'grid');
   }
 
-  agregar(especialidad: EspecialidadFormularioCapturaDto): Observable<void> {
+  agregar(especialidad: EspecialidadFormularioCapturaDto): Observable<void>
+  {
+    console.log(especialidad);
     return this.http.post<void>(this.dataUrl, especialidad);
-  }
+  } 
 
+  /* agregar(especialidad: EspecialidadFormularioCapturaDto): Observable<number>
+  {
+    return this.http.post<number>(this.dataUrl, 35);
+  } */
+  
   editar(especialidad: EspecialidadFormularioCapturaDto): Observable<void> {
     return this.http.put<void>(this.dataUrl, especialidad);
   }
