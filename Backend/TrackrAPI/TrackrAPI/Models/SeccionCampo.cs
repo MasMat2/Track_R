@@ -16,8 +16,11 @@ namespace TrackrAPI.Models
         public bool? Deshabilitado { get; set; }
         public string? Grupo { get; set; }
         public int? Fila { get; set; }
+        public int? IdIcono { get; set; }
+        public bool? MostrarDashboard { get; set; }
 
         public virtual Dominio IdDominioNavigation { get; set; } = null!;
+        public virtual Icono? IdIconoNavigation { get; set; }
         public virtual Seccion IdSeccionNavigation { get; set; } = null!;
     }
 }

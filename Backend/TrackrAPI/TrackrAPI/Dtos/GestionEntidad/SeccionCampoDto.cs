@@ -27,5 +27,6 @@ namespace TrackrAPI.Dtos.GestionEntidad
         public string NombreDominio { get; set; }
         public string? Grupo { get; set; }
         public int? Fila { get; set; }
+        public bool MostrarDashboard { get ; set; }
     }
 }

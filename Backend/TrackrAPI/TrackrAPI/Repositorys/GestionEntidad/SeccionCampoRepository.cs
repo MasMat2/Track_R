@@ -83,6 +83,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                     NombreDominio = es.IdDominioNavigation.Nombre,
                     Grupo = es.Grupo,
                     Fila = es.Fila,
+                    MostrarDashboard = es.MostrarDashboard ?? false
                 };
             return secciones;
         }
