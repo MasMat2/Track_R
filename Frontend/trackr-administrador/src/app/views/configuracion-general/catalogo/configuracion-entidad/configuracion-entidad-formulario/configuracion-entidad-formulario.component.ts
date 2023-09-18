@@ -369,7 +369,6 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
 
   protected consultarIconos() {
     this.iconoService.consultarGeneral().subscribe((data) => {
-      console.log(data);
       this.iconoList = data;
     });
   }
@@ -377,7 +376,6 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
   consultarWidgets()
   {
     this.widgetService.consultar().subscribe((data) => {
-      console.log(data);
       this.widgetList = data;
     })
   }

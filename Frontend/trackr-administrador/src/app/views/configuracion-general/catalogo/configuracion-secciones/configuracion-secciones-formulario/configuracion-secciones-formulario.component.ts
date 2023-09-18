@@ -9,6 +9,8 @@ import { SeccionCampo } from '@models/gestion-entidad/seccion-campo';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { GeneralConstant } from '@utils/general-constant';
 import * as Utileria from '@utils/utileria';
+import { IconoService } from '@http/catalogo/icono.service';
+import { Icono } from '@models/catalogo/icono';
 
 @Component({
   selector: 'app-configuracion-secciones-formulario',
@@ -31,6 +33,7 @@ export class ConfiguracionSeccionesFormularioComponent implements OnInit {
   public onClose: (actualizarGrid: boolean) => void;
   public seccion = new Seccion();
   public campo = new SeccionCampo();
+  protected iconoList: Icono[] = [];
 
   // Grid Campos
   public HEADER_GRID_CAMPOS = 'Campos';
@@ -43,6 +46,12 @@ export class ConfiguracionSeccionesFormularioComponent implements OnInit {
     { headerName: 'Requerido', field: 'requerido', minWidth: 30, valueGetter: (params: any) => this.convertirSiNo(params.data)},
     { headerName: 'Sección', field: 'grupo', minWidth: 30 },
     { headerName: 'Fila', field: 'fila', minWidth: 30 },
+    { 
+      headerName: 'Mostrar dashboard',
+      field: 'mostrarDashboard',
+      minWidth: 30,
+      valueFormatter: (params: any) => params.value ? 'Si' : 'No', // Muestra "Si" o "No"
+    }
   ];
 
   // DropDown Dominio
@@ -52,11 +61,13 @@ export class ConfiguracionSeccionesFormularioComponent implements OnInit {
     private dominioService: DominioService,
     private seccionCampoService: SeccionCampoService,
     private seccionService: SeccionService,
-    private mensajeService: MensajeService
+    private mensajeService: MensajeService,
+    private iconoService: IconoService
   ) { }
 
   public ngOnInit(): void {
     this.consultarDominios();
+    this.consultarIconos();
   }
 
   private consultarDominios(): void {
@@ -122,7 +133,6 @@ export class ConfiguracionSeccionesFormularioComponent implements OnInit {
 
   public async enviarFormularioCampo(formulario: NgForm): Promise<void> {
     this.disableSubmit = true;
-
     if (!formulario.valid) {
       Utileria.validarCamposRequeridos(formulario);
       return;
@@ -199,6 +209,10 @@ export class ConfiguracionSeccionesFormularioComponent implements OnInit {
     this.campo.requerido = value;
   }
 
+  public onMostrarChanged(value: boolean): void {
+    this.campo.mostrarDashboard = value;
+  }
+
   public onDeshbilitadoChanged(value: boolean): void {
     this.campo.deshabilitado = value;
   }
@@ -216,5 +230,17 @@ export class ConfiguracionSeccionesFormularioComponent implements OnInit {
 
   private convertirSiNo(valor: SeccionCampo): string {
     return valor.requerido ? 'Sí' : 'No';
+  }
+
+  protected consultarIconos() {
+    this.iconoService.consultarGeneral().subscribe((data) => {
+      this.iconoList = data;
+    });
+  }
+  
+  getIconClass(selectedId: number): string 
+  {
+    const selectedIcono = this.iconoList.find(icono => icono.idIcono === selectedId);
+    return selectedIcono ? selectedIcono.clase + ' icono-acceso' : '';
   }
 }

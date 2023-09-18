@@ -6932,11 +6932,18 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.Grupo).HasMaxLength(50);
 
+                entity.Property(e => e.MostrarDashboard).HasColumnName("mostrarDashboard");
+
                 entity.HasOne(d => d.IdDominioNavigation)
                     .WithMany(p => p.SeccionCampo)
                     .HasForeignKey(d => d.IdDominio)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__SeccionCa__IdDom__6F7569AA");
+
+                entity.HasOne(d => d.IdIconoNavigation)
+                    .WithMany(p => p.SeccionCampo)
+                    .HasForeignKey(d => d.IdIcono)
+                    .HasConstraintName("SeccionCampo_Icono");
 
                 entity.HasOne(d => d.IdSeccionNavigation)
                     .WithMany(p => p.SeccionCampo)

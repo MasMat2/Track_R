@@ -15,6 +15,8 @@ export class SeccionCampo {
     public valor?: number[] | boolean | string | Date | number;
     public grupo: string;
     public fila: number;
+    public idIcono: number;
+    public mostrarDashboard : boolean;
 
     // Extras - Utilerias
     public idDominioNavigation: Dominio;

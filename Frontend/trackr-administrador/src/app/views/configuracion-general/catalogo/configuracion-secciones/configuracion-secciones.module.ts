@@ -9,6 +9,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ConfiguracionSeccionesFormularioComponent } from './configuracion-secciones-formulario/configuracion-secciones-formulario.component';
 import { ConfiguracionSeccionesComponent } from './configuracion-secciones.component';
 import { ConfiguracionSeccionesRoutingModule } from './configuracion-secciones.routing.module';
+import { IconoService } from '@http/catalogo/icono.service';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -16,7 +18,8 @@ import { ConfiguracionSeccionesRoutingModule } from './configuracion-secciones.r
     SharedModule,
     DirectiveModule,
     ModalModule.forChild(),
-    ConfiguracionSeccionesRoutingModule
+    ConfiguracionSeccionesRoutingModule,
+    FormsModule
   ],
   declarations: [
     ConfiguracionSeccionesComponent,
@@ -28,7 +31,8 @@ import { ConfiguracionSeccionesRoutingModule } from './configuracion-secciones.r
   providers: [
     SeccionCampoService,
     SeccionService,
-    DominioService
+    DominioService,
+    IconoService
   ]
 })
 export class ConfiguracionSeccionesModule { }
