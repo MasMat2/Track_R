@@ -73,10 +73,10 @@ namespace TrackrAPI.Services.Catalogo
             especialidadRepository.Editar(especialidad);
         }
 
-        public void Eliminar(string nombre)
+        public void Eliminar(int idEspecialidad)
         {
 
-            var especialidad = especialidadRepository.ConsultarPorNombre(nombre)!;
+            var especialidad = especialidadRepository.Consultar(idEspecialidad)!;
 
             especialidadRepository.Eliminar(especialidad!);
         }

@@ -46,9 +46,9 @@ namespace TrackrAPI.Controllers.Catalogo
         }
 
         [HttpDelete("{idEspecialidad}")]
-        public void Eliminar(string Nombre)
+        public void Eliminar(int idEspecialidad)
         {
-            especialidadService.Eliminar(Nombre);
+            especialidadService.Eliminar(idEspecialidad);
         }
     }
 }
