@@ -51,6 +51,4 @@ export class PeticionRestablecerContrasenaComponent implements OnInit {
         (error) => (this.btnSubmit = false)
       );
   }
-
-  volverInicio() {}
 }

@@ -247,7 +247,6 @@ namespace TrackrAPI.Services.Seguridad
         public void ValidarRestablecerContrasena(RestablecerContrasenaDto usuario)
         {
             Validator.ValidarRequerido(usuario.Correo, MensajeCorreoRequerido);
-            // Validator.ValidarCorreo(usuario.Correo, MensajeFormatoCorreo);
         }
 
         public void ValidarCorreoNoExistente(RestablecerContrasenaDto usuario)
