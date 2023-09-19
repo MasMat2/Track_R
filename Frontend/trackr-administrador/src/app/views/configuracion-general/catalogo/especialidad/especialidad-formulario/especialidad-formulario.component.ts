@@ -65,7 +65,7 @@ export class EspecialidadFormularioComponent extends CrudFormularioBase<Especial
   protected override agregar(especialidad: EspecialidadFormularioCapturaDto): Observable<void> {
     console.log(especialidad);
     console.log(this.especialidadService.agregar(especialidad));
-    return this.especialidadService.editar(especialidad);
+    return this.especialidadService.agregar(especialidad);
   }
 
   protected override editar(especialidad: EspecialidadFormularioCapturaDto): Observable<void> {
