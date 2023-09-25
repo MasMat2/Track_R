@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Services.Dashboard;
 
@@ -16,12 +18,13 @@ public class WidgetController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public IEnumerable<UsuarioPadecimientosDTO> WidgetsPorUsuario()
     {
-        var widgets = _widgetService.Consultar();
-        return Ok(widgets);
-    }
+        int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+        return _widgetService.Consultar(idUsuario);
 
+    }
+ 
     [HttpGet("tipo")]
     public IEnumerable<TipoWidget> ConsultarTipo()
     {

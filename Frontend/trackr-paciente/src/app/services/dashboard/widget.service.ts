@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap, throwError } from 'rxjs';
+import { Observable, tap, throwError } from 'rxjs';/* 
 import { Widget } from 'src/app/models/dashboard/widget';
-import { isWidgetType } from 'src/app/pages/paciente/dashboard/interfaces/widgets';
+import { isWidgetType } from 'src/app/pages/paciente/dashboard/interfaces/widgets'; */
+import { UsuarioPadecimientosDTO } from 'src/app/shared/Dtos/gestion-expediente/usuario-padecimientos-dto';
 
 @Injectable()
 export class WidgetService {
@@ -12,7 +13,7 @@ export class WidgetService {
     private http: HttpClient
   ) { }
 
-  public consultar(): Observable<Widget[]> {
+ /*  public consultar(): Observable<Widget[]> {
     return this.http.get<Widget[]>(this.dataUrl)
       .pipe(
         tap(widgets => {
@@ -23,5 +24,9 @@ export class WidgetService {
           }
         })
       );
+  } */
+
+  public consultarPadecimientos() :  Observable<UsuarioPadecimientosDTO[]>{
+    return this.http.get<UsuarioPadecimientosDTO[]>(this.dataUrl);
   }
 }

@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
 export class WidgetSeguimientoComponent  implements OnInit {
 
   @Input() nombrePadecimiento: string;
+  @Input() tipoWidget : number;
 
   @Input() nombreVariable: string;
   @Input() valorVariable: string;
