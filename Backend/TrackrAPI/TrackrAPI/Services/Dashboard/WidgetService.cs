@@ -1,3 +1,4 @@
+using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.DTOs.Dashboard;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Dashboard;
@@ -13,15 +14,10 @@ public class WidgetService
         _widgetRepository = widgetRepository;
     }
 
-    public IEnumerable<WidgetDto> Consultar()
+    public IEnumerable<UsuarioPadecimientosDTO> Consultar(int idUsuario)
     {
-        return _widgetRepository.Consultar()
-            .Select(w => new WidgetDto(
-                IdWidget: w.IdWidget,
-                Clave: w.Clave,
-                Nombre: w.Nombre
-            ));
-    }
+        return _widgetRepository.ConsultarPorUsuario(idUsuario);
+    } 
 
     public IEnumerable<TipoWidget> ConsultarTipo()
     {

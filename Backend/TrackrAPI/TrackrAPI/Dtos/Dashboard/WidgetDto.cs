@@ -2,6 +2,11 @@ namespace TrackrAPI.DTOs.Dashboard;
 
 public record WidgetDto(
     int IdWidget,
-    string Clave,
-    string Nombre
+    int IdExpediente,
+    int IdUsuario,
+    int IdPadecimiento,
+    string Descripcion,
+    string TipoWidget,
+    bool? MostrarDashboard
 );
+

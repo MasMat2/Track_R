@@ -9,7 +9,9 @@ import { WidgetPesoComponent } from './components/widget-peso/widget-peso.compon
 import { WidgetSuenoComponent } from './components/widget-sueno/widget-sueno.component';
 import { WidgetFrecuenciaComponent } from './components/widget-frecuencia/widget-frecuencia.component';
 import { WidgetSeguimientoComponent } from './components/widget-seguimiento/widget-seguimiento.component';
-
+import { WidgetService } from 'src/app/services/dashboard/widget.service';
+import { UsuarioPadecimientosDTO } from 'src/app/shared/Dtos/gestion-expediente/usuario-padecimientos-dto';
+import { PadecimientoDTO } from 'src/app/shared/Dtos/gestion-expediente/padecimiento-dto';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,13 +31,25 @@ import { WidgetSeguimientoComponent } from './components/widget-seguimiento/widg
   ],
   providers: [
     UsuarioWidgetService,
+    WidgetService
   ]
 })
 export class DashboardPage implements OnInit {
 
-  constructor() { }
+  protected padecimientosUsuarioList : UsuarioPadecimientosDTO[];
+  protected padecimientosList : PadecimientoDTO[];
+
+  constructor(
+    private widgetService : WidgetService
+  ) { }
 
   public ngOnInit(): void {
+    this.widgetService.consultarPadecimientos().subscribe((data) => {
+      this.padecimientosUsuarioList = data;
+      this.padecimientosList = this.padecimientosUsuarioList[0].secciones;
+    });
+
   }
+
 
 }
