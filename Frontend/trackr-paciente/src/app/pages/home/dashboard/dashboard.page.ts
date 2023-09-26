@@ -44,6 +44,10 @@ export class DashboardPage implements OnInit {
   ) { }
 
   public ngOnInit(): void {
+  
+  }
+
+  public ionViewDidEnter() : void {
     this.widgetService.consultarPadecimientos().subscribe((data) => {
       this.padecimientosUsuarioList = data;
       this.padecimientosList = this.padecimientosUsuarioList[0].secciones;

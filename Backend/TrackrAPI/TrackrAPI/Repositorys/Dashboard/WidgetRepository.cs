@@ -33,7 +33,7 @@ public class WidgetRepository : Repository<Widget>, IWidgetRepository
                     .Include(ee => ee.IdEntidadNavigation)
                     .Include(ee => ee.IdSeccionNavigation)
                     .Include(ee => ee.EntidadEstructuraTablaValor)
-                        .Where(ee => ee.IdEntidadEstructuraPadre != null && ee.IdSeccionNavigation.SeccionCampo.Any())
+                        .Where(ee => ee.IdEntidadEstructuraPadre != null )
                         .GroupBy(ee => ee.IdEntidadEstructuraPadre)
                     .Select(group => new
                     {
