@@ -278,7 +278,6 @@
               label-placement="floating"
               fill="outline"
               shape="round"
-              required="true"
               (ionChange)="onChangePais()"
               [(ngModel)]="informacionUsuario.idPais">
               <ion-select-option *ngFor="let pais of paisList" [value]="pais.idPais">{{ pais.nombre }}</ion-select-option>
@@ -294,7 +293,6 @@
               fill="outline"
               shape="round"
               type="text"
-              required="true"
               [disabled]="!informacionUsuario.idPais"
               [maxlength]="esPaisExtranjero ? null : 5"
               [minlength]="esPaisExtranjero ? null : 5"
@@ -302,12 +300,7 @@
               (ionChange)="onChangeCodigoPostal()"
               [(ngModel)]="informacionUsuario.codigoPostal">
             </ion-input>
-            <div
-              *ngIf="codigoPostal.errors?.['required'] && (codigoPostal.dirty || codigoPostal.touched)"
-              class="error"
-            >
-              El código postal es requerido
-            </div>
+            
           </ion-col>
         </ion-row>
         <ion-row>
@@ -320,7 +313,6 @@
               label-placement="floating"
               fill="outline"
               shape="round"
-              required="true"
               [disabled]="!informacionUsuario.idPais"
               (ionChange)="onChangeEstado()"
               [(ngModel)]="informacionUsuario.idEstado">
@@ -336,7 +328,6 @@
               label-placement="floating"
               fill="outline"
               shape="round"
-              required="true"
               [disabled]="!informacionUsuario.idEstado"
               [(ngModel)]="informacionUsuario.idMunicipio">
               <ion-select-option *ngFor="let municipio of municipioList" [value]="municipio.idMunicipio">{{ municipio.nombre }}</ion-select-option>
@@ -353,7 +344,6 @@
               label-placement="floating"
               fill="outline"
               shape="round"
-              required="true"
               [disabled]="!informacionUsuario.idEstado"
               [(ngModel)]="informacionUsuario.idLocalidad">
               <ion-select-option *ngFor="let localidad of localidadList" [value]="localidad.idLocalidad">{{ localidad.nombre }}</ion-select-option>
@@ -368,7 +358,6 @@
               label-placement="floating"
               fill="outline"
               shape="round"
-              required="true"
               [disabled]="informacionUsuario.codigoPostal?.length !== 5"
               [(ngModel)]="informacionUsuario.idColonia">
               <ion-select-option *ngFor="let colonia of coloniaList" [value]="colonia.idColonia">{{ colonia.nombre }}</ion-select-option>
@@ -386,18 +375,12 @@
               fill="outline"
               shape="round"
               type="text"
-              required="true"
               maxlength="50"
               autocomplete="off"
               placeholder="Calle"
               [(ngModel)]="informacionUsuario.calle">
             </ion-input>
-            <div
-              *ngIf="calle.errors?.['required'] && (calle.dirty || calle.touched)"
-              class="error"
-            >
-              La calle es requerida
-            </div>
+          
           </ion-col>
         </ion-row>
         <ion-row>
@@ -411,18 +394,12 @@
               fill="outline"
               shape="round"
               type="text"
-              required="true"
               maxlength="6"
               autocomplete="off"
               placeholder="Número Exterior"
               [(ngModel)]="informacionUsuario.numeroExterior">
             </ion-input>
-            <div
-              *ngIf="numExterior.errors?.['required'] && (numExterior.dirty || numExterior.touched)"
-              class="error"
-            >
-              El número exterior es requerido
-            </div>
+            
           </ion-col>
           <ion-col size="6">
             <ion-input
@@ -434,18 +411,12 @@
               fill="outline"
               shape="round"
               type="text"
-              required="true"
               maxlength="6"
               autocomplete="off"
               placeholder="Número Interior"
               [(ngModel)]="informacionUsuario.numeroInterior">
             </ion-input>
-            <div
-              *ngIf="numInterior.errors?.['required'] && (numInterior.dirty || numInterior.touched)"
-              class="error"
-            >
-              El número interior es requerido
-            </div>
+         
           </ion-col>
         </ion-row>
         <ion-row>
@@ -460,17 +431,11 @@
               shape="round"
               type="text"
               maxlength="50"
-              required="true"
               autocomplete="off"
               placeholder="Entre calles"
               [(ngModel)]="informacionUsuario.entreCalles">
             </ion-input>
-            <div
-              *ngIf="entreCalles.errors?.['required'] && (entreCalles.dirty || entreCalles.touched)"
-              class="error"
-            >
-              El campo entre calles es requerido
-            </div>
+           
           </ion-col>
         </ion-row>
 
