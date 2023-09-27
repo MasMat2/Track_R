@@ -24,7 +24,7 @@ public class WidgetController : ControllerBase
         return _widgetService.Consultar(idUsuario);
 
     }
- 
+
     [HttpGet("tipo")]
     public IEnumerable<TipoWidget> ConsultarTipo()
     {

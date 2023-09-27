@@ -127,6 +127,7 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
   async ngOnInit(): Promise<void> {
     await super.onInit();
     this.actualizarInformacion();
+
     this.consultarIconos();
     this.consultarWidgets();
   }
