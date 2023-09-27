@@ -3,7 +3,7 @@
     <div class="counter d-flex flex-column align-items-center">
       <!-- Contador -->
       <div class="circle-container">
-        <div class="valor">{{ pasos | number }}</div>
+        <div class="valor">{{ pasos?.value | number }}</div>
         <div class="label">pasos</div>
       </div>
 
@@ -21,7 +21,7 @@
       <!-- Distancia -->
       <div class="text-center">
         <div class="value">
-          <span class="valor">{{ metros | number }}</span><span class="medida">m</span>
+          <span class="valor">{{ distancia | number }}</span><span class="medida">m</span>
         </div>
         <div class="label">caminados</div>
       </div>
