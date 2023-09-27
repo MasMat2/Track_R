@@ -1,5 +1,5 @@
 <div class="titulo-contenedor">
-  <h3 style="text-align: center;">Agregar Muestra</h3>
+  <h3 style="text-align: center;">Registro de muestra</h3>
 </div>
 
 <div class="row">
@@ -23,14 +23,14 @@
 <ion-accordion-group>
   <div *ngFor="let padecimiento of arbolPadecimiento; let i = index">
     <ion-accordion value="{{ padecimiento.idPadecimiento }}">
-      <ion-item slot="header" color="light">
-        <ion-label  class="subtitulo-muestra">{{ padecimiento.nombrePadecimiento }}</ion-label>
+      <ion-item slot="header" color = "dark">
+        <ion-label class="subtitulo-muestra">{{ padecimiento.nombrePadecimiento }}</ion-label>
       </ion-item>
       <div class="ion-padding" slot="content">
         <ion-accordion-group>
           <div *ngFor="let seccion of padecimiento.seccionMuestraDTOs; let j = index">
             <ion-accordion>
-              <ion-item slot="header" color="light">
+              <ion-item slot="header" color = "dark">
                 <ion-label class="subtitulo-muestra">{{ seccion.nombreSeccionCampo }}</ion-label>
               </ion-item>
 
@@ -48,7 +48,6 @@
                   </div>
                 </form>
                 <ion-button class="btn-primario" (click)="enviarFormulario(seccion, fechaSeleccionada)">
-                  <ion-icon name="add-outline"></ion-icon>
                   Guardar
                 </ion-button>
               </div>
