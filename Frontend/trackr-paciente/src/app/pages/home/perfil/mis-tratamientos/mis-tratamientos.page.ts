@@ -32,6 +32,11 @@ export class MisTratamientosPage implements OnInit {
     this.consultarTratamientos();
   }
 
+  public ionViewWillEnter() : void
+  {
+    this.consultarTratamientos();
+  }
+
   protected consultarTratamientos(): void {
     this.tratamientos$ = this.perfilTratamientoService.consultarTratamientos().pipe(
       map(tratamientos =>

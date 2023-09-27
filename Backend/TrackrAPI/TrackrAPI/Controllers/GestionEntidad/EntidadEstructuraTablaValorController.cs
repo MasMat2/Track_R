@@ -37,7 +37,7 @@ namespace TrackrAPI.Controllers.GestionEntidad
         }
 
         [HttpPost("agregarMuestra")]
-        public void AgregarMuestra(TablaValorMuestraDTO muestra)
+        public void AgregarMuestra(TablaValorMuestraDTO[] muestra)
         {
             int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
             entidadEstructuraTablaValorService.AgregarMuestra(muestra, idUsuario);

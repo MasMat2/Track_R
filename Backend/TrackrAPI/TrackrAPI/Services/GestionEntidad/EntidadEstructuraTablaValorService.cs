@@ -93,7 +93,7 @@ namespace TrackrAPI.Services.GestionEntidad
             ts.Complete();
         }
 
-        public void AgregarMuestra(TablaValorMuestraDTO muestraDTO, int idUsuario)
+        public void AgregarMuestra(TablaValorMuestraDTO[] muestraDTO, int idUsuario)
         {
             using var ts = new TransactionScope();
             var entidadEstructuraMuestra = entidadEstructuraRepository.ConsultarPorClave(GeneralConstant.ClaveEntidadEstructuraMuestra);
@@ -106,19 +106,22 @@ namespace TrackrAPI.Services.GestionEntidad
             {
                 throw new CdisException("No existe la entidad estructura hijo de la entidad estructura con clave 006");
             }
-            var muestra = new EntidadEstructuraTablaValor()
-            {
-                IdEntidadEstructura = entidadEstructuraMuestraHijo.IdEntidadEstructura,
-                ClaveCampo = muestraDTO.ClaveCampo,
-                IdTabla = idUsuario,
-                Valor = muestraDTO.Valor,
-                FechaMuestra = muestraDTO.FechaMuestra,
-                FueraDeRango = muestraDTO.FueraDeRango
-            };
-            var ultimoRegistro = entidadEstructuraTablaValorRepository.ConsultarUltimoRegistro(muestra.IdEntidadEstructura, idUsuario);
-            muestra.Numero = ultimoRegistro + 1;
-            entidadEstructuraTablaValorRepository.Agregar(muestra);
+            foreach (var muestra in muestraDTO){
 
+                var muestraAAgregar = new EntidadEstructuraTablaValor()
+                {
+                    IdEntidadEstructura = entidadEstructuraMuestraHijo.IdEntidadEstructura,
+                    ClaveCampo = muestra.ClaveCampo,
+                    IdTabla = idUsuario,
+                    Valor = muestra.Valor,
+                    FechaMuestra = muestra.FechaMuestra,
+                    FueraDeRango = muestra.FueraDeRango
+                };
+            var ultimoRegistro = entidadEstructuraTablaValorRepository.ConsultarUltimoRegistro(muestraAAgregar.IdEntidadEstructura, idUsuario);
+            muestraAAgregar.Numero = ultimoRegistro + 1;
+            entidadEstructuraTablaValorRepository.Agregar(muestraAAgregar);
+
+            }
             ts.Complete();
         }
 
