@@ -61,7 +61,7 @@ const routes: Routes = [
   {
     path: 'genero',
     loadChildren: () => import('./genero/genero.module').then((m) => m.GeneroModule)
-  }
+  },
   {
     path: 'especialidad',
     loadChildren: () => import('./especialidad/especialidad.module').then((m) => m.EspecialidadModule)
