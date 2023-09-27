@@ -25,6 +25,8 @@ export class TokenInterceptor implements HttpInterceptor {
     return from(this.gestionarPeticion(request, next));
   }
 
+ 
+
   /**
    * Método auxiliar para gestionar la petición interceptada
    */

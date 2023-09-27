@@ -19,3 +19,10 @@ export enum ACCESO_MUNICIPIO {
   Editar = 'APMUCP2000',
   Eliminar = 'APMUCP3000',
 }
+
+export enum ACCESO_ESPECIALIDAD {
+  Consultar = 'APESPE0000',
+  Agregar = 'APESPE1000',
+  Editar = 'APESPE2000',
+  Eliminar = 'APESPE3000',
+}

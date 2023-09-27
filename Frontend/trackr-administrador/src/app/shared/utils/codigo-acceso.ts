@@ -54,6 +54,11 @@ export class CodigoAcceso {
   public static EDITAR_CAJA = 'APCAJA2000';
   public static ELIMINAR_CAJA = 'APCAJA3000';
 
+  public static CONSULTAR_ESPECIALIDAD = 'APESPE0000';
+  public static AGREGAR_ESPECIALIDAD = 'APESPE1000';
+  public static EDITAR_ESPECIALIDAD = 'APESPE2000';
+  public static ELIMINAR_ESPECIALIDAD = 'APESPE3000';
+
   public static CONSULTAR_ESTADO = 'APESDO0000';
   public static AGREGAR_ESTADO = 'APESDO1000';
   public static EDITAR_ESTADO = 'APESDO2000';
