@@ -14,7 +14,7 @@ export class EntidadEstructuraTablaValorService {
     return this.http.post<void>(this.dataUrl, registro);
   }
 
-  public agregarMuestra(registro: TablaValorMuestraDTO): Observable<void> {
+  public agregarMuestra(registro: TablaValorMuestraDTO[]): Observable<void> {
     return this.http.post<void>(this.dataUrl + 'agregarMuestra', registro);
   }
 

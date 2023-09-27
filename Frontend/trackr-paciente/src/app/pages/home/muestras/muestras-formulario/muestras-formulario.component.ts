@@ -1,7 +1,7 @@
 import { SharedModule } from '@sharedComponents/shared.module';
 import { EntidadEstructuraTablaValorService } from './../../../../shared/http/gestion-expediente/entidad-estructura-tabla-valor.service';
 import { CommonModule } from '@angular/common';
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnChanges, OnInit, Output } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { EntidadTablaRegistroDto, TablaValorDto, TablaValorMuestraDTO } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
 import { PadecimientoMuestraDTO } from '@dtos/gestion-expediente/padecimiento-muestra-dto';
@@ -28,11 +28,13 @@ import { SeccionMuestraDTO } from '@dtos/gestion-expediente/seccion-muestra-dto'
     providers: [SeccionCampoService]
 })
 export class MuestrasFormularioComponent implements OnInit {
+
+  @Output() consultarValoresFueraRango = new EventEmitter<void>();
   protected recomendacion: any;
   protected dateToday: string = new Date().toISOString();
   public arbolPadecimiento: PadecimientoMuestraDTO[] = [];
   protected submitting: boolean = false;
-  protected fechaSeleccionada: string;
+  protected fechaSeleccionada: string = this.dateToday;
   constructor(
     private seccionCampoService: SeccionCampoService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
@@ -51,7 +53,6 @@ export class MuestrasFormularioComponent implements OnInit {
       //   }
       // }
       this.arbolPadecimiento = arbolPadecimiento;
-      console.log(this.arbolPadecimiento);
     });
   }
 
@@ -75,14 +76,17 @@ export class MuestrasFormularioComponent implements OnInit {
       return;
     }
 
-    for(const campo of camposAgregados)
-    {
-      this.agregar(campo);
-    }
+   this.agregar(camposAgregados);
   }
 
-  public agregar(campoAgregar: TablaValorMuestraDTO): void {
-    this.entidadEstructuraTablaValorService.agregarMuestra(campoAgregar).subscribe();
+  public agregar(campoAgregar: TablaValorMuestraDTO[]): void {
+    this.entidadEstructuraTablaValorService.agregarMuestra(campoAgregar).subscribe(
+      {
+        complete : () => {
+          this.consultarValoresFueraRango.emit();
+        }
+      }
+    );
   }
 
   private estaFueraDeRango(campo: SeccionCampo) {
