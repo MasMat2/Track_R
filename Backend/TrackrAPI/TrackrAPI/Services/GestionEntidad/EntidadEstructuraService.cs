@@ -85,7 +85,9 @@ namespace TrackrAPI.Services.GestionEntidad
                 Tabulacion = estructuraDto.Tabulacion,
                 IdEntidad = estructuraDto.IdEntidad,
                 IdSeccion = estructuraDto.IdSeccion,
-                IdEntidadEstructuraPadre = estructuraDto.IdEntidadEstructuraPadre
+                IdEntidadEstructuraPadre = estructuraDto.IdEntidadEstructuraPadre,
+                IdIcono = estructuraDto.IdIcono,
+                IdTipoWidget = estructuraDto.IdTipoWidget
             };
 
             entidadEstructuraValidatorService.ValidarAgregar(entidadEstructura);

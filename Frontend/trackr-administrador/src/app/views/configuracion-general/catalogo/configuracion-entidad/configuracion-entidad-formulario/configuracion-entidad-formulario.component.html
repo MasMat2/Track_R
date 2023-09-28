@@ -237,11 +237,12 @@
                               <label class="label-input required-label">Icono Menú</label>
                               <div class="d-flex">
                                 <i
-                                  *ngIf=""
-                                  class=""
+                                  *ngIf="entidadEstructura.idIcono"
+                                  class="{{ getIconClass (entidadEstructura.idIcono) }} + 'icono-acceso'"
                                 ></i>
                                 <ng-select
                                   name="IconoName"
+                                  [(ngModel)]="entidadEstructura.idIcono"
                                   style="width: 100%"
                                   bindLabel="nombre"
                                   bindValue="idIcono"
@@ -258,10 +259,11 @@
                               <label class="label-input required-label">Tipo de widget</label>
                               <div class="d-flex">
                                 <ng-select
-                                  name="widgetName"
+                                  name="WidgetName"
+                                  [(ngModel)]="entidadEstructura.idTipoWidget"
                                   style="width: 100%"
                                   bindLabel="descripcion"
-                                  bindValue="idWidget"
+                                  bindValue="idTipoWidget"
                                   [items]="widgetList"
                                   [placeholder]="placeHolderSelect"
                                 ></ng-select>
