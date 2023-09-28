@@ -1967,10 +1967,20 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdEntidadEstructuraPadre)
                     .HasConstraintName("FK__EntidadEs__IdEnt__780AAFAB");
 
+                entity.HasOne(d => d.IdIconoNavigation)
+                    .WithMany(p => p.EntidadEstructura)
+                    .HasForeignKey(d => d.IdIcono)
+                    .HasConstraintName("FK_EntidadEstructura_Icono");
+
                 entity.HasOne(d => d.IdSeccionNavigation)
                     .WithMany(p => p.EntidadEstructura)
                     .HasForeignKey(d => d.IdSeccion)
                     .HasConstraintName("FK__EntidadEs__IdSec__77168B72");
+
+                entity.HasOne(d => d.IdTipoWidgetNavigation)
+                    .WithMany(p => p.EntidadEstructura)
+                    .HasForeignKey(d => d.IdTipoWidget)
+                    .HasConstraintName("FK_EntidadEstructura_TipoWidget");
             });
 
             modelBuilder.Entity<EntidadEstructuraTablaValor>(entity =>

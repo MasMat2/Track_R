@@ -8,6 +8,7 @@ namespace TrackrAPI.Models
         public Icono()
         {
             Acceso = new HashSet<Acceso>();
+            EntidadEstructura = new HashSet<EntidadEstructura>();
             SeccionCampo = new HashSet<SeccionCampo>();
         }
 
@@ -16,6 +17,7 @@ namespace TrackrAPI.Models
         public string Nombre { get; set; } = null!;
 
         public virtual ICollection<Acceso> Acceso { get; set; }
+        public virtual ICollection<EntidadEstructura> EntidadEstructura { get; set; }
         public virtual ICollection<SeccionCampo> SeccionCampo { get; set; }
     }
 }

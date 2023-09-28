@@ -21,10 +21,14 @@ namespace TrackrAPI.Models
         public int IdEntidad { get; set; }
         public int? IdSeccion { get; set; }
         public int? IdEntidadEstructuraPadre { get; set; }
+        public int? IdIcono { get; set; }
+        public int? IdTipoWidget { get; set; }
 
         public virtual EntidadEstructura? IdEntidadEstructuraPadreNavigation { get; set; }
         public virtual Entidad IdEntidadNavigation { get; set; } = null!;
+        public virtual Icono? IdIconoNavigation { get; set; }
         public virtual Seccion? IdSeccionNavigation { get; set; }
+        public virtual TipoWidget? IdTipoWidgetNavigation { get; set; }
         public virtual ICollection<EntidadEstructuraTablaValor> EntidadEstructuraTablaValor { get; set; }
         public virtual ICollection<EntidadEstructuraValor> EntidadEstructuraValor { get; set; }
         public virtual ICollection<ExpedientePadecimiento> ExpedientePadecimiento { get; set; }
