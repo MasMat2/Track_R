@@ -24,6 +24,7 @@ import { first } from 'rxjs/operators';
 import { UsuarioFormularioComponent } from 'src/app/views/configuracion-general/catalogo/usuario/usuario-formulario/usuario-formulario.component';
 import { Genero } from '@models/catalogo/genero';
 import { GeneroDto } from '@dtos/catalogo/generoDto';
+import { GeneroService } from '@http/catalogo/genero.service';
 
 /**
  * Componente de formulario para el manejo de expedientes.
@@ -50,6 +51,7 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
 
   // Selectores
   public padecimientoList: ExpedientePadecimientoSelectorDTO[] = [];
+  public generoList: GeneroDto[] = [];
 
 
   // Mensajes
@@ -62,8 +64,7 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
 
   public filtro: string;
   public btnSubmitBusqueda = false;
-  public generoService: any;
-generoList: any[]|null;
+
 
   constructor(
     private expedienteTrackrService: ExpedienteTrackrService,
@@ -76,6 +77,7 @@ generoList: any[]|null;
     private modalService: BsModalService,
     private modalMensajeService: MensajeService,
     public bsModalRef: BsModalRef,
+    private generoService: GeneroService
   ) { }
   /**
    * Inicializa el componente, configura los parámetros de la URL y
@@ -309,18 +311,18 @@ generoList: any[]|null;
    * Consulta los géneros para el selector
    */
   private consultarGeneros() {
-    return lastValueFrom(this.generoService.consulta())
-        .then((generos: GeneroDto[] | unknown) => {
-            if (Array.isArray(generos)) {
-                this.generoList = generos;
-            } else {
-                console.log('Error al obtener la lista de géneros');
-            }
-        })
-        .catch(error => {
-          console.log(`Error en consulta de géneros ${error}`);
-        });
-}
+    lastValueFrom(this.generoService.consulta())
+      .then((generos: GeneroDto[] | unknown) => {
+        if (Array.isArray(generos)) {
+          this.generoList = generos;
+        } else {
+          console.log('Error al obtener la lista de géneros');
+        }
+      })
+      .catch(error => {
+        console.log(`Error en consulta de géneros ${error}`);
+      });
+  }
 
 
   public async buscar(): Promise<void> {

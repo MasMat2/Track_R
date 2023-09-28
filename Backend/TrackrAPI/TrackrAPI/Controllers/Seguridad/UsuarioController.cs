@@ -17,6 +17,8 @@ namespace TrackrAPI.Controllers.Seguridad
     {
         private UsuarioService usuarioService;
 
+        public object idUsuario { get; private set; }
+
         public UsuarioController(UsuarioService usuarioService)
         {
             this.usuarioService = usuarioService;
@@ -266,6 +268,13 @@ namespace TrackrAPI.Controllers.Seguridad
         public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion)
         {
             usuarioService.ActualizarInformacionGeneralTrackr(informacion, Utileria.ObtenerIdUsuarioSesion(this)); 
+        }
+
+        [HttpGet("consultaDomicilioPorId/{idUsuario}")]
+        
+        public UsuarioDomicilioDto ConsultaDomicilioPorId(int idUsuario)
+        {
+            return usuarioService.ConsultaDomicilioPorId(idUsuario);
         }
     }
 }

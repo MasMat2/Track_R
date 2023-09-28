@@ -327,6 +327,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<VersionPoliza> VersionPoliza { get; set; } = null!;
         public virtual DbSet<ViaAdministracion> ViaAdministracion { get; set; } = null!;
         public virtual DbSet<VistaBalanzaComprobacion> VistaBalanzaComprobacion { get; set; } = null!;
+        public IEnumerable<object> UsuarioDomicilioDto { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

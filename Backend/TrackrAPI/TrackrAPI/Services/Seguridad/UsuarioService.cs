@@ -36,6 +36,7 @@ namespace TrackrAPI.Services.Seguridad
         private RolService rolService;
         private BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService;
 
+
         public UsuarioService(IUsuarioRepository usuarioRepository,
             IExpedienteTrackrRepository expedienteTrackrRepository,
             IExpedientePadecimientoRepository expedientePadecimientoRepository,
@@ -669,6 +670,12 @@ namespace TrackrAPI.Services.Seguridad
             expedienteTrackrRepository.Editar(expediente);
 
             scope.Complete();
+        }
+
+
+        public UsuarioDomicilioDto ConsultaDomicilioPorId(int idUsuario)
+        {
+           return usuarioRepository.ConsultaDomicilioPorId(idUsuario);
         }
     }
 }
