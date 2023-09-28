@@ -1943,16 +1943,6 @@ namespace TrackrAPI.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Nombre).HasMaxLength(50);
-
-                entity.HasOne(d => d.IdIconoNavigation)
-                    .WithMany(p => p.Entidad)
-                    .HasForeignKey(d => d.IdIcono)
-                    .HasConstraintName("FK_Entidad_Icono");
-
-                entity.HasOne(d => d.IdTipoWidgetNavigation)
-                    .WithMany(p => p.Entidad)
-                    .HasForeignKey(d => d.IdTipoWidget)
-                    .HasConstraintName("FK_Entidad_TipoWidget");
             });
 
             modelBuilder.Entity<EntidadEstructura>(entity =>
