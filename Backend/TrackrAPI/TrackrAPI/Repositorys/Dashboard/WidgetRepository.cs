@@ -41,9 +41,9 @@ public class WidgetRepository : Repository<Widget>, IWidgetRepository
                         idPadecimiento = group.Key,
                         nombrePadecimiento = group.First().IdEntidadEstructuraPadreNavigation.Nombre,
                         idEntidad = group.First().IdEntidadEstructuraPadreNavigation.IdEntidad,
-                        descripcionWidget = group.First().IdEntidadNavigation.IdTipoWidgetNavigation.Descripcion,
-                        idWidgetEntidad = group.First().IdEntidadNavigation.IdTipoWidget,
-                        iconoEntidad = group.First().IdEntidadNavigation.IdIconoNavigation.Clase,
+                        /*descripcionWidget = group.First().IdEntidadNavigation.IdTipoWidgetNavigation.Descripcion, */
+                        /*idWidgetEntidad = group.First().IdEntidadNavigation.IdTipoWidget,
+                        iconoEntidad = group.First().IdEntidadNavigation.IdIconoNavigation.Clase, */
                         idSeccion = group.First().IdSeccionNavigation.IdSeccion,
                         nombreSeccion = group.First().IdSeccionNavigation.Nombre,
                         seccionClave = group.First().IdSeccionNavigation.Clave,
@@ -66,12 +66,12 @@ public class WidgetRepository : Repository<Widget>, IWidgetRepository
             .SelectMany(usuario => usuario.expedientePadecimientos, (usuario, padecimiento) => new
             {
                 idExpediente = usuario.idExpediente,
-                idPadecimiento = padecimiento.idPadecimiento,
-                iconoClase = variablesPadecimiento.FirstOrDefault( vp => vp.idPadecimiento == padecimiento.idPadecimiento).iconoEntidad,
-                nombrePadecimiento = padecimiento.nombrePadecimiento,
-                idWidgetPadecimiento = variablesPadecimiento
-                                            .FirstOrDefault( vp => vp.idPadecimiento == padecimiento.idPadecimiento).idWidgetEntidad,
-                descripcion = variablesPadecimiento.FirstOrDefault( vp => vp.idPadecimiento == padecimiento.idPadecimiento).descripcionWidget,
+                idPadecimiento = padecimiento.idPadecimiento
+                /* ,iconoClase = variablesPadecimiento.FirstOrDefault( vp => vp.idPadecimiento == padecimiento.idPadecimiento).iconoEntidad */,
+                nombrePadecimiento = padecimiento.nombrePadecimiento
+                /* idWidgetPadecimiento = variablesPadecimiento
+                                            .FirstOrDefault( vp => vp.idPadecimiento == padecimiento.idPadecimiento).idWidgetEntidad */,
+                /*  descripcion = variablesPadecimiento.FirstOrDefault( vp => vp.idPadecimiento == padecimiento.idPadecimiento).descripcionWidget, */
                 variables = variablesPadecimiento.FirstOrDefault(vp => vp.idPadecimiento == padecimiento.idPadecimiento)?.variables
             })
             .GroupBy(result => result.idExpediente )
@@ -83,9 +83,9 @@ public class WidgetRepository : Repository<Widget>, IWidgetRepository
                     IdPadecimiento = item.idPadecimiento,
                     NombrePadecimiento = item.nombrePadecimiento,
                     Variables = item.variables,
-                    IdWidget = item.idWidgetPadecimiento,
-                    DescripcionWidget = item.descripcion,
-                    IconoClase = item.iconoClase
+/*                     IdWidget = item.idWidgetPadecimiento, */
+                    /* DescripcionWidget = item.descripcion, */
+                   /*  IconoClase = item.iconoClase */
                 }).ToList()
             })
             .ToList();
@@ -93,11 +93,6 @@ public class WidgetRepository : Repository<Widget>, IWidgetRepository
           return infoWidgetUsuario ;
     }
 
-    public Widget? ConsultarPorClave(string clave)
-    {
-        return context.Widget
-            .FirstOrDefault(w => w.Clave == clave);
-    }
     public IEnumerable<TipoWidget> ConsultarTipo()
     {
         return context.TipoWidget.ToList();
