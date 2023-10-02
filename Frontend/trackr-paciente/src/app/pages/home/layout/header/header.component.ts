@@ -34,7 +34,6 @@ export class HeaderComponent implements OnInit {
   protected consultarMiUsuario(){
     this.usuarioService.consultarMiUsuario().subscribe((data) => {
       this.miUsuario = data;
-      console.log(data);
     });
   }
 
