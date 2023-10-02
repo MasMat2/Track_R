@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, tap, throwError } from 'rxjs';/* 
 import { Widget } from 'src/app/models/dashboard/widget';
 import { isWidgetType } from 'src/app/pages/paciente/dashboard/interfaces/widgets'; */
-import { UsuarioPadecimientosDTO } from 'src/app/shared/Dtos/gestion-expediente/usuario-padecimientos-dto';
+import { UsuarioPadecimientosDTO } from 'src/app/shared/dtos/gestion-expediente/usuario-padecimientos-dto';
 
 @Injectable()
 export class WidgetService {
