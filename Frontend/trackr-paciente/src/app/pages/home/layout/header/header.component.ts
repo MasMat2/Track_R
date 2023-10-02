@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit {
   @Input() mostrarTitulo: boolean = false;
   @Input() titulo?: string;
 
-  protected miUsuario : UsuarioDto;
+  public miUsuario : UsuarioDto;
 
   constructor(
     private usuarioService : UsuarioService
