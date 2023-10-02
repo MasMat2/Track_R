@@ -93,6 +93,7 @@
                           [ngClass]="'fondo-impar'"
                           (dblclick)="node.mouseAction('dblClick', $event)"
                           class="node-wrapper"
+                          (click) = "seleccionarCuentaPadre(node.data)"
                         >
                           <!-- Toggle Expand -->
                           <tree-node-expander [node]="node"></tree-node-expander>
@@ -103,7 +104,7 @@
                           </div>
 
                           <!-- Node Content -->
-                          <tree-node-content (click)="seleccionarCuentaPadre(node.data)" [node]="node" [index]="index"></tree-node-content>
+                          <tree-node-content  [node]="node" [index]="index"></tree-node-content>
                         </div>
                       </ng-template>
                     </tree-root>
@@ -122,6 +123,7 @@
                           <label class="label-input required-label">Pestaña Padre</label>
                           <ng-select
                             #jerarquiaPadre="ngModel"
+                            disabled
                             name="jerarquiaPadreName"
                             class="select-custom"
                             [items]="entidadList"
