@@ -7,6 +7,6 @@ namespace TrackrAPI.Repositorys.Dashboard;
 public interface IWidgetRepository : IRepository<Widget>
 {
     public IEnumerable<UsuarioPadecimientosDTO> ConsultarPorUsuario(int idUsuario);
-    public Widget? ConsultarPorClave(string clave);
+
     public IEnumerable<TipoWidget> ConsultarTipo();
 }

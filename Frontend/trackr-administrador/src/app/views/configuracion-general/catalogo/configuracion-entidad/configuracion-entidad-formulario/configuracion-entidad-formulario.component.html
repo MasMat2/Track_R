@@ -25,7 +25,7 @@
             <div class="row">
 
               <!-- Clave -->
-              <div class="col-md-3">
+              <div class="col-md-6">
                   <div class="form-group">
                     <label class="label-input required-label">Clave</label>
                     <div>
@@ -48,7 +48,7 @@
                 </div>
 
               <!-- Nombre -->
-              <div class="col-md-3">
+              <div class="col-md-6">
                 <div class="form-group">
                   <label class="label-input required-label">Nombre</label>
                   <div>
@@ -70,47 +70,9 @@
                 </div>
               </div>
 
-                 <!-- Icono -->
-                 <div class="col-md-3">
-                  <div class="form-group">
-                    <label class="label-input required-label">Icono Menú</label>
-                    <div class="d-flex">
-                      <i
-                        *ngIf="entidad.idIcono"
-                        class="{{ getIconClass(entidad.idIcono)  + ' icono-acceso' }}"
-                      ></i>
-                      <ng-select
-                        #iconoLst="ngModel"
-                        name="IconoName"
-                        style="width: 100%"
-                        bindLabel="nombre"
-                        bindValue="idIcono"
-                        [items]="iconoList"
-                        [(ngModel)]="entidad.idIcono"
-                        [placeholder]="placeHolderSelect"
-                      ></ng-select>
-                    </div>
-                  </div>
-                </div>
+                
 
-                   <!-- Tipo Widget -->
-               <div class="col-md-3">
-                <div class="form-group">
-                  <label class="label-input required-label">Tipo de widget</label>
-                  <div class="d-flex">
-                    <ng-select
-                      #iconoLst="ngModel"
-                      name="widgetName"
-                      style="width: 100%"
-                      bindLabel="descripcion"
-                      bindValue="idTipoWidget"
-                      [items]="widgetList"
-                      [(ngModel)]="entidad.idTipoWidget"
-                      [placeholder]="placeHolderSelect"
-                    ></ng-select>
-                  </div>
-                </div>
-              </div>
+              
 
             </div>
             <!-- Estructura de Entidad -->
@@ -131,6 +93,7 @@
                           [ngClass]="'fondo-impar'"
                           (dblclick)="node.mouseAction('dblClick', $event)"
                           class="node-wrapper"
+                          (click) = "seleccionarCuentaPadre(node.data)"
                         >
                           <!-- Toggle Expand -->
                           <tree-node-expander [node]="node"></tree-node-expander>
@@ -141,7 +104,7 @@
                           </div>
 
                           <!-- Node Content -->
-                          <tree-node-content (click)="seleccionarCuentaPadre(node.data)" [node]="node" [index]="index"></tree-node-content>
+                          <tree-node-content  [node]="node" [index]="index"></tree-node-content>
                         </div>
                       </ng-template>
                     </tree-root>
@@ -160,6 +123,7 @@
                           <label class="label-input required-label">Pestaña Padre</label>
                           <ng-select
                             #jerarquiaPadre="ngModel"
+                            disabled
                             name="jerarquiaPadreName"
                             class="select-custom"
                             [items]="entidadList"
@@ -275,17 +239,16 @@
                               <label class="label-input required-label">Icono Menú</label>
                               <div class="d-flex">
                                 <i
-                                  *ngIf="entidad.idIcono"
-                                  class="{{ getIconClass(entidad.idIcono)  + ' icono-acceso' }}"
+                                  *ngIf="entidadEstructura.idIcono"
+                                  class="{{ getIconClass (entidadEstructura.idIcono) }} + 'icono-acceso'"
                                 ></i>
                                 <ng-select
-                                  #iconoLst="ngModel"
                                   name="IconoName"
+                                  [(ngModel)]="entidadEstructura.idIcono"
                                   style="width: 100%"
                                   bindLabel="nombre"
                                   bindValue="idIcono"
                                   [items]="iconoList"
-                                  [(ngModel)]="entidad.idIcono"
                                   [placeholder]="placeHolderSelect"
                                 ></ng-select>
                               </div>
@@ -298,13 +261,12 @@
                               <label class="label-input required-label">Tipo de widget</label>
                               <div class="d-flex">
                                 <ng-select
-                                  #iconoLst="ngModel"
-                                  name="widgetName"
+                                  name="WidgetName"
+                                  [(ngModel)]="entidadEstructura.idTipoWidget"
                                   style="width: 100%"
                                   bindLabel="descripcion"
-                                  bindValue="idWidget"
+                                  bindValue="idTipoWidget"
                                   [items]="widgetList"
-                                  [(ngModel)]="entidad.idTipoWidget"
                                   [placeholder]="placeHolderSelect"
                                 ></ng-select>
                               </div>

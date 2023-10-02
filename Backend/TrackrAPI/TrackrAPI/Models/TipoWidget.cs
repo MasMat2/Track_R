@@ -7,12 +7,12 @@ namespace TrackrAPI.Models
     {
         public TipoWidget()
         {
-            Entidad = new HashSet<Entidad>();
+            EntidadEstructura = new HashSet<EntidadEstructura>();
         }
 
         public int IdTipoWidget { get; set; }
         public string? Descripcion { get; set; }
 
-        public virtual ICollection<Entidad> Entidad { get; set; }
+        public virtual ICollection<EntidadEstructura> EntidadEstructura { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 import { VariablesPadecimientoDTO } from "./variables-padecimiento-dto";
 
+
 export class PadecimientoDTO
 {
     iconoClase : string;

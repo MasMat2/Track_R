@@ -202,10 +202,17 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
   }
 
   public seleccionarCuentaPadre(node: EntidadEstructura): void {
-    if (node.idEntidadEstructuraPadre === undefined) {
+
+    if (node.idEntidadEstructuraPadre == null) 
+    {
       this.idJerarquiaPadre = node.idEntidadEstructura;
+    }else{
+      this.idJerarquiaPadre = node.idEntidadEstructuraPadre
     }
+    this.consultarGrid();
   }
+
+  
 
   private verCamposSeccion(idSeccion: number): void{
     const initialState = {
