@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { NotificacionesPageComponent } from './notificaciones/notificacionesPage/notificaciones-page.component';
+import { UsuarioService } from '@services/usuario.service';
+import { UsuarioDto } from '@dtos/perfil/usuario-dto';
 
 @Component({
   selector: 'app-header',
@@ -19,8 +21,21 @@ export class HeaderComponent implements OnInit {
   @Input() mostrarTitulo: boolean = false;
   @Input() titulo?: string;
 
-  constructor() { }
+  protected miUsuario : UsuarioDto;
 
-  ngOnInit() {}
+  constructor(
+    private usuarioService : UsuarioService
+  ) { }
+
+  ngOnInit() {
+    this.consultarMiUsuario();
+  }
+
+  protected consultarMiUsuario(){
+    this.usuarioService.consultarMiUsuario().subscribe((data) => {
+      this.miUsuario = data;
+      console.log(data);
+    });
+  }
 
 }
