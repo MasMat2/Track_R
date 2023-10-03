@@ -24,6 +24,11 @@ export class WidgetSeguimientoComponent  implements OnInit {
   @Input() unidadVariable: string;
   @Input() claseVariable: string;
 
+  @Input() nombreVariable2: string;
+  @Input() valorVariable2: string;
+  @Input() unidadVariable2: string;
+  @Input() claseVariable2: string;
+
   @Input() nombreTratamiento: string;
   @Input() valorTratamiento: string;
   @Input() unidadTratamiento: string;

@@ -20,7 +20,7 @@
             <ion-col [size]="4">
               <app-widget-peso></app-widget-peso>
             </ion-col>
-            <ion-col *ngFor="let padecimiento of padecimientosList">
+            <ion-col [size] = "12" *ngFor="let padecimiento of padecimientosList">
                 <app-widget-seguimiento
                     [tipoWidget] = "padecimiento.idWidget"
                     nombrePadecimiento="{{ padecimiento.nombrePadecimiento }}"
@@ -29,6 +29,12 @@
                     valorVariable="{{padecimiento.variables[0].valorVariable}}"
                     unidadVariable="mg/dL"
                     claseVariable="{{ padecimiento.variables[0].iconoClase }} + icono-seguimiento"
+
+                    nombreVariable2="{{padecimiento.variables[1].descripcion}}"
+                    valorVariable2="{{padecimiento.variables[1].valorVariable}}"
+                    unidadVariable2="mg/dL"
+                    claseVariable2="{{ padecimiento.variables[1].iconoClase }} + icono-seguimiento"
+
 
                     nombreTratamiento="Apego diario Medicamento"
                     valorTratamiento="2U"
