@@ -1,4 +1,4 @@
-
+@import '../../styles/circle-container.scss';
 .dato {
   position: relative;
   width: 28vw;
@@ -41,3 +41,31 @@
   color: #741798;
 }
 
+
+.counter {
+  color: black;
+
+  .circle-container {
+    width: 20vw;
+    font-size: 5.5vw;
+    border-color: #B0D8FB;
+
+    .valor {
+      font-size: 1em;
+      font-weight: bold;
+    }
+
+    .label {
+      font-size: 0.5em;
+    }
+  }
+
+  .meta {
+    font-size: 2vw;
+
+    .valor {
+      font-size: 1.6em;
+      font-weight: bold;
+    }
+  }
+}
