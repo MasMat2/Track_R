@@ -4,5 +4,5 @@ export class VariablesPadecimientoDTO
     descripcion : string;
     mostrarDashboard : boolean;
     iconoClase : string;
-    valorVariable : number;
+    valorVariable : string;
 }

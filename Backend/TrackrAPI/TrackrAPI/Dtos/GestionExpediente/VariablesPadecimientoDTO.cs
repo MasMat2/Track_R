@@ -7,5 +7,5 @@ public class VariablesPadecimientoDTO
     public string Descripcion { get; set; }
     public bool? MostrarDashboard { get; set; }
     public string? IconoClase { get; set; }
-    public int ValorVariable { get; set; }
+    public string? ValorVariable { get; set; }
 }
