@@ -659,7 +659,7 @@ namespace TrackrAPI.Repositorys.Seguridad
             var usuarioDomicilio = new UsuarioDomicilioDto
             {
                 
-                Estado = usuario.IdEstadoNavigation.Nombre
+                Estado = usuario.IdEstadoNavigation?.Nombre
             };
 
             return usuarioDomicilio;

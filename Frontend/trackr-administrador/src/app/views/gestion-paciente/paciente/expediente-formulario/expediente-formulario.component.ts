@@ -85,7 +85,7 @@ ciudad: string
 
   public ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      if (this.encryptionService.readUrlParams(params).a == 'esAgregar') {
+      if (this.encryptionService.readUrlParams(params).i == null) {
         this.accion = GeneralConstant.COMPONENT_ACCION_AGREGAR;
       } else {
         this.accion = GeneralConstant.COMPONENT_ACCION_EDITAR;
@@ -100,7 +100,6 @@ ciudad: string
         this.usuarioService.consultar(idUsuario).subscribe
           ({
             next: (data) => {
-              console.log(data);
               this.nombreCompleto = data.nombre + " " + data.apellidoPaterno + " " + data.apellidoMaterno;
               this.idHospital = data.idHospital;
               this.ciudad = data.ciudad,
@@ -111,16 +110,13 @@ ciudad: string
           this.expedienteTrackrService.consultaParaSidebar(idUsuario)
   .subscribe({
     next: (data) => {
-      console.log(data);
       setTimeout(() => {
         this.edad = data.edad;
       });
     }
   });
-
           this.usuarioService.consultaDomicilioPorId(idUsuario).subscribe({
             next: (data) => {
-              console.log(data);
               this.estado =data.estado
             }
           });
