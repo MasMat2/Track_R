@@ -208,6 +208,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                     Nombre = u.Nombre,
                     ApellidoPaterno = u.ApellidoPaterno,
                     ApellidoMaterno = u.ApellidoMaterno,
+                    TituloAcademico = u.IdTituloAcademicoNavigation.Nombre,
                     Correo = u.Correo,
                     CorreoPersonal = u.CorreoPersonal,
                     Calle = u.Calle,
