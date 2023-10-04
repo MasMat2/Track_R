@@ -1,19 +1,19 @@
-<div class="container"> 
-  <div class="subseccion">
-    <div>Recomendaciones</div>
+<div class="modal-content"> 
+  <div class="modal-header">
+    <div>Notificaciones</div>
   </div>
-<form
-  #formulario="ngForm"
-  (ngSubmit)="enviarFormulario(formulario)"
-  (keydown.enter)="$event.preventDefault()"
-  novalidate="novalidate"
->
-  <div class="modal-content">
-    <div class="container">
-        <div class="row justify-content-center">
+
+  <form
+    #formulario="ngForm"
+    (ngSubmit)="enviarFormulario(formulario)"
+    (keydown.enter)="$event.preventDefault()"
+    novalidate="novalidate"
+  >
+    <div class="modal-contenedor">
+      <div class="row">
         <div class="col-md-8">
             <div class="form-group">
-              <label style="color: gray;" >Recomendacion</label>
+              <label class="label-input required-label" style="color: gray;" >Recomendación</label>
               <div>
                 <textarea
                   #descripcion="ngModel"
@@ -28,14 +28,14 @@
                   required
                 ></textarea>
                 <div *ngIf="(descripcion.errors?.['required'] && descripcion.touched )" class="error">
-                  La descripcion es requerida
+                  La descripción es requerida
                 </div>
               </div>
             </div>
           </div>
 
-      <div class="col-md-2 justify-content-between align-items-center ">
-          <label class="label-input required-label">Fecha</label>
+        <div class="col-md-2 justify-content-between align-items-center ">
+          <label class="label-input required-label" style="color: gray;">Fecha</label>
         <div>
           <input
             [(ngModel)] = "recomendacion.fecha"
@@ -75,18 +75,16 @@
           </button>
         </ng-template>
       </div>
-    
-
     </div> 
   </div>
-</div>
-</form>
+  </form>
  
-<div class="row">
-  <div class="col-md-12">
-    <div style="color: gray;">Bitacora Recomendaciones</div>
+  <div class="modal-contenedor">  
+  <div class="row">
+    <div class="col-md-12">
+      <div style="color: purple; margin-top: 20px; margin-bottom: 0px;">Bitácora Recomendaciones</div>
 
-          <app-grid-general 
+        <app-grid-general 
           #gridRecomendacion
           [headerName]="HEADER_GRID"
           [children]="columns"
@@ -98,4 +96,5 @@
 
     </div>
   </div>
+</div>
 </div>

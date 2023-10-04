@@ -1,9 +1,4 @@
 
-
-  <div class="modal-header">
-    <div></div>
-  </div>
-
   <form
     (keydown.enter)="$event.preventDefault()"
     #formulario="ngForm"
@@ -11,6 +6,7 @@
     novalidate="novalidate"
   >
     <div class="cuerpo-contenedor" id="modal">
+      <div class="subseccion">Información General</div>
       <div class="row">
         <div class="col-md-4">
           <div class="form-group">
@@ -394,14 +390,7 @@
       <!-- Padecimientos -->
 
       <div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="section-title">
-              <label for="">Padecimientos</label>
-            </div>
-          </div>
-        </div>
-
+        <div class="subseccion">Padecimientos</div>
         <div class="row" *ngFor="let pad of padecimientos; let i = index">
           <div class="col-md-4">
             <div class="form-group">

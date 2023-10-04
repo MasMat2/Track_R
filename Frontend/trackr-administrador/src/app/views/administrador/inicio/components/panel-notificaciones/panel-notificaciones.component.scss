@@ -13,14 +13,15 @@
 
 .titulo {
   font-size: 30px;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .container {
   background-color: #efede4;
+  height: 80vh;
 }
 
-.img-container {
+.img-container { 
   flex-basis: 70px;
   flex-grow: 0;
   flex-shrink: 0;
