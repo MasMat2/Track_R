@@ -103,7 +103,7 @@
   padding: 1rem;
   color: $color-primario;
   font-weight: 500;
-  background-color: #eeeeee;
+  background-color: white;
 }
 
 .modal-content .close {
@@ -192,4 +192,10 @@
 .modal-content {
    max-height: 90vh;
    border-radius: 0 !important;
+}
+
+.modal-contenedor {
+  max-height: 90vh;
+  border-radius: 0 !important;
+  margin: 1%;
 }

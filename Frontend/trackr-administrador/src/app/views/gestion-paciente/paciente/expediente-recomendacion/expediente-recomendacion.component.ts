@@ -30,10 +30,10 @@ export class ExpedienteRecomendacionComponent implements OnInit{
   public gridOptions : GridOptions;
   public HEADER_GRID = 'Recomendaciones';
   public columns = [
-    { headerName: 'Num', valueGetter: (params: any) => params.node.rowIndex + 1, maxWidth: 90 },
+    { headerName: 'Num', valueGetter: (params: any) => params.node.rowIndex + 1, maxWidth: 70 },
     { headerName: 'Fecha', field: 'fecha', maxWidth: 90},
     { headerName: 'Recomendacion', field: 'descripcion', minWidth: 150 },
-    { headerName: 'Doctor', field: 'doctor', minWidth: 150 },
+    { headerName: 'Doctor', field: 'doctor', minWidth: 80 },
   ];
   public recomendacionesList$: Observable<ExpedienteRecomendacionGridDTO[]>;
   

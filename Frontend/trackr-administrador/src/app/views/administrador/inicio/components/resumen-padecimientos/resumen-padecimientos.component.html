@@ -2,10 +2,10 @@
   Cantidad de Pacientes
 </div>
 
-<div class="card d-inline-flex p-3">
+<div class="card d-inline-flex shadow p-4">
   <div class="d-flex gap-3">
     <div *ngFor="let padecimiento of padecimientos$ | async">
-      <div class="d-flex flex-column align-items-center gap-2" style="max-width: 80px;">
+      <div class="d-flex flex-column align-items-center gap-3" style="max-width: 80px;">
         <div class="circle-container">
           <span class="cantidad-pacientes">{{ padecimiento.cantidadPacientes }}</span>
         </div>

@@ -1,6 +1,6 @@
 <div class="contenedor" *ngIf="usuario$ | async; let usuario">
   <div class="row">
-    <div class="col-8">
+    <div class="col-9">
       <div class="titulo-contenedor">
         Bienvenido,
         <span class="nombre-doctor">{{ usuario.nombreCompleto }}</span>
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="col-4">
+    <div class="col-3">
       <app-panel-notificaciones></app-panel-notificaciones>
     </div>
   </div>

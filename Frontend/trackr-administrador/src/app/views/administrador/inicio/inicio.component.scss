@@ -1,14 +1,17 @@
 .nombre-doctor {
-  font-weight: bold;
+  font-weight: 500;
+  font-size: 34px;
 }
 
 :host ::ng-deep {
   .titulo-seccion {
     margin-bottom: 10px;
-    color: gray;
+    color: rgb(78, 78, 78);
+    font-size: 16px;
   }
 
   .card {
     border-radius: 20px;
+    height: 100%;
   }
 }
