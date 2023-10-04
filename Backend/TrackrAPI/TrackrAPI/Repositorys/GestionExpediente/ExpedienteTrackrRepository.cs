@@ -36,23 +36,37 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
             .FirstOrDefault();
     }
 
-    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid()
+    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(int idDoctor)
     {
         return context.ExpedienteTrackr
             .Include(et => et.IdUsuarioNavigation)
             .Include(et => et.ExpedientePadecimiento)
             .ThenInclude(ep => ep.IdPadecimientoNavigation)
-            .Select(et => new UsuarioExpedienteGridDTO
+            .Join(
+                context.ExpedienteDoctor,
+                et => et.IdExpediente,
+                ed => ed.IdExpediente,
+                (et, ed) => new
+                {
+                    Expediente = et,
+                    DoctorId = ed.IdUsuarioDoctor
+                }
+                )
+            .Where(joinResult =>
+                            joinResult.Expediente.IdUsuarioNavigation.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioPaciente  &&
+                            joinResult.DoctorId == idDoctor )
+            .Select(joinResult => new UsuarioExpedienteGridDTO
             {
-                IdExpedienteTrackr = et.IdExpediente,
-                IdUsuario = et.IdUsuario,
-                NombreCompleto = et.IdUsuarioNavigation.ObtenerNombreCompleto(),
-                Patologias = et.ExpedientePadecimiento.ObtenerPadecimientos(),
-                Edad = (DateTime.Today.Year - et.FechaNacimiento.Year).ToString() + " años",
-                TipoMime = et.IdUsuarioNavigation.ImagenTipoMime
+                IdExpedienteTrackr = joinResult.Expediente.IdExpediente,
+                IdUsuario = joinResult.Expediente.IdUsuario,
+                NombreCompleto = joinResult.Expediente.IdUsuarioNavigation.ObtenerNombreCompleto(),
+                Patologias = joinResult.Expediente.ExpedientePadecimiento.ObtenerPadecimientos(),
+                Edad = (DateTime.Today.Year - joinResult.Expediente.FechaNacimiento.Year).ToString() + " años",
+                TipoMime = joinResult.Expediente.IdUsuarioNavigation.ImagenTipoMime
             })
             .ToList();
     }
+
     public int VariablesFueraRango(int idUsuario)
     {
         var currentDateUtc = DateTime.UtcNow;

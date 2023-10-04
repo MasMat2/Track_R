@@ -127,9 +127,9 @@ public class ExpedienteTrackrService
         }
     }
 
-    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid()
+    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(int idDoctor)
     {
-        IEnumerable<UsuarioExpedienteGridDTO> expedientes = _expedienteTrackrRepository.ConsultarParaGrid();
+        IEnumerable<UsuarioExpedienteGridDTO> expedientes = _expedienteTrackrRepository.ConsultarParaGrid(idDoctor);
         foreach(UsuarioExpedienteGridDTO expediente in expedientes)
         {
             if (!string.IsNullOrWhiteSpace(expediente.TipoMime))
