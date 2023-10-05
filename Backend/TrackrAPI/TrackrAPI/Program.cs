@@ -95,6 +95,9 @@ builder.Services.AddMvc(options =>
     options.Filters.Add(new AuthorizeFilter(policy));
 });
 
+// Agregar procesos de fondo
+builder.Services.AddHostedService<RecordatorioTomasService>();
+
 var app = builder.Build();
 
 app.UseExceptionHandler(builder =>
