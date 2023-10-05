@@ -11,10 +11,11 @@ namespace TrackrAPI.Repositorys.Dashboard
 
     public IEnumerable<UsuarioWidget> ConsultarPorUsuario(int usuarioId)
     {
-      return context.UsuarioWidget
-        .Where(uw => uw.IdUsuario == usuarioId)
-        .Include(uw => uw.IdUsuarioNavigation)
-        .Include(uw => uw.IdWidgetNavigation);
+    //   return context.UsuarioWidget
+    //     .Where(uw => uw.IdUsuario == usuarioId)
+    //     .Include(uw => uw.IdUsuarioNavigation)
+    //     .Include(uw => uw.IdWidgetNavigation);
+        return new List<UsuarioWidget>();
     }
   }
 }
