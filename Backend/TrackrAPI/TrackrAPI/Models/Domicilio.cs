@@ -54,6 +54,5 @@ namespace TrackrAPI.Models
         public virtual ICollection<OrdenCompra> OrdenCompra { get; set; }
         public virtual ICollection<Pedido> Pedido { get; set; }
         public virtual ICollection<Remision> Remision { get; set; }
-        public bool Activo { get; internal set; }
     }
 }
