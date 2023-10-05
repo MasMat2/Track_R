@@ -13,6 +13,7 @@ export class Usuario {
   public idLocalidad: number;
   public idColonia: number;
   public idTituloAcademico: number;
+  public tituloAcademico : string;
   public idDepartamento: number;
   public idArea: number;
   public ciudad: string;

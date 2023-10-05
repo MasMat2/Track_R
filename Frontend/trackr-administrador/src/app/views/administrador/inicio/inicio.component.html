@@ -3,7 +3,7 @@
     <div class="col-9">
       <div class="titulo-contenedor">
         Bienvenido,
-        <span class="nombre-doctor">{{ usuario.nombreCompleto }}</span>
+        <span class="nombre-doctor">{{ usuario.tituloAcademico }} {{ usuario.nombreCompleto }}</span>
       </div>
 
       <div class="cuerpo-contenedor">
@@ -22,8 +22,8 @@
       </div>
     </div>
 
-    <div class="col-3">
-      <app-panel-notificaciones></app-panel-notificaciones>
+    <div class="col-3 scrollable-panel" >
+      <app-panel-notificaciones ></app-panel-notificaciones>
     </div>
   </div>
 </div>
