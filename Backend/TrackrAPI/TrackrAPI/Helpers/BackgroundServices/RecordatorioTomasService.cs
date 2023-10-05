@@ -11,11 +11,11 @@ public class RecordatorioTomasService : IHostedService, IDisposable
     private readonly IServiceScopeFactory _scopeFactory;
     private Timer _timer;
 
-    private int waitTime = 1;
+    private int waitTime = 5;
 
     public RecordatorioTomasService(IServiceScopeFactory scopeFactory)
     {
-        Console.WriteLine("constructor");
+        
         _scopeFactory = scopeFactory;
     }
 
@@ -28,11 +28,11 @@ public class RecordatorioTomasService : IHostedService, IDisposable
 
     private void ProcesoDeFondo(object state)
     {
-        Console.WriteLine("proceso de fondo");
+        
+        Console.WriteLine(DateTime.Now);
         // Crear scope para acceder a TrackrContext
         using (var scope = _scopeFactory.CreateScope())
         {
-            Console.WriteLine("inside scope");
             var context = scope.ServiceProvider.GetRequiredService<TrackrContext>();
 
             // Obtener DistributedLock para RecordatorioTomas
@@ -45,7 +45,7 @@ public class RecordatorioTomasService : IHostedService, IDisposable
             // Actualizar DistributedLock solo en el siguiente cuarto de hora y ejecutar proceso
             if(dLock != null && EsSiguienteCuartoHora(dLock.LastUpdated)){
                 context.DistributedLocks.Attach(dLock);
-                dLock.LastUpdated = DateTime.UtcNow;
+                dLock.LastUpdated = DateTime.Now;
                 context.SaveChanges();
                 
                 ActualizarContador(context);
@@ -70,11 +70,8 @@ public class RecordatorioTomasService : IHostedService, IDisposable
     // Helpers
     public bool EsSiguienteCuartoHora(DateTime lastUpdated)
     {
-        DateTime nextQuarterDateTime = lastUpdated.AddMinutes(waitTime - (lastUpdated.Minute % waitTime));
-        Console.WriteLine("EsSiguienteCuartoHora");
-        Console.WriteLine(DateTime.UtcNow);
-        Console.WriteLine(nextQuarterDateTime);
-        return DateTime.UtcNow > nextQuarterDateTime;
+        DateTime nextQuarterDateTime = lastUpdated.AddMinutes(15 - (lastUpdated.Minute % 15));
+        return DateTime.Now > nextQuarterDateTime;
     }
 
     // Procesos
@@ -85,15 +82,12 @@ public class RecordatorioTomasService : IHostedService, IDisposable
             context.DistributedLocks.Attach(dl);
             int.TryParse(dl.Resource, out x);
             dl.Resource = (x+1).ToString();
-            Console.WriteLine(dl.Resource);
             context.SaveChanges();
         }
     }
 
     public void CrearTratamientoTomas(TrackrContext context){
-        Console.WriteLine("Crear tratamiento tomas");
-        // DateTime now = DateTime.Now;
-        DateTime now = DateTime.Today.AddHours(21).AddMinutes((48 + DateTime.Now.TimeOfDay.Minutes - 38) % 60);
+        DateTime now = DateTime.Now;
         Console.WriteLine(now);
         int currentDay = ((int)now.DayOfWeek + 6) % 7; // Monday = 0, ..., Saturday = 5, Sunday = 6
         TimeSpan currentTime = now.TimeOfDay;
@@ -119,7 +113,6 @@ public class RecordatorioTomasService : IHostedService, IDisposable
                 FechaEnvio = now
             };
             
-            Console.WriteLine(toma.IdTratamientoRecordatorio);
             context.TratamientoToma.Add(toma);
         }
 
