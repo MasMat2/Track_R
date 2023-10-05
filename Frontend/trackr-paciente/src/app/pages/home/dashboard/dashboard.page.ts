@@ -10,8 +10,8 @@ import { WidgetSuenoComponent } from './components/widget-sueno/widget-sueno.com
 import { WidgetFrecuenciaComponent } from './components/widget-frecuencia/widget-frecuencia.component';
 import { WidgetSeguimientoComponent } from './components/widget-seguimiento/widget-seguimiento.component';
 import { WidgetService } from 'src/app/services/dashboard/widget.service';
-import { UsuarioPadecimientosDTO } from 'src/app/shared/dtos/gestion-expediente/usuario-padecimientos-dto';
-import { PadecimientoDTO } from 'src/app/shared/dtos/gestion-expediente/padecimiento-dto';
+import { UsuarioPadecimientosDTO } from 'src/app/shared/Dtos/gestion-expediente/usuario-padecimientos-dto';
+import { PadecimientoDTO } from 'src/app/shared/Dtos/gestion-expediente/padecimiento-dto';
 
 @Component({
   selector: 'app-dashboard',

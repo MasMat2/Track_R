@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { NotificacionesPageComponent } from './notificaciones/notificacionesPage/notificaciones-page.component';
 import { UsuarioService } from '@services/usuario.service';
-import { UsuarioDto } from '@dtos/perfil/usuario-dto';
+import { UsuarioDto } from 'src/app/shared/Dtos/perfil/usuario-dto';
 
 @Component({
   selector: 'app-header',
