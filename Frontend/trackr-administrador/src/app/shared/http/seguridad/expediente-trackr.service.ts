@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ApegoTomaMedicamentoDto } from '@dtos/gestion-expediente/apego-toma-medicamento-dto';
 import { ExpedienteWrapper } from '@dtos/seguridad/expediente-wrapper';
 import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-grid-dto';
 import { UsuarioExpedienteSidebarDTO } from '@dtos/seguridad/usuario-expediente-sidebar-dto';
@@ -35,6 +36,9 @@ export class ExpedienteTrackrService {
 
     public eliminar(idExpediente: number): Observable<void> {
         return this.http.delete<void>(this.dataUrl + `eliminar/${idExpediente}`);
+    }
+    public apegoTratamientos() :  Observable<ApegoTomaMedicamentoDto[]> {
+        return this.http.get<ApegoTomaMedicamentoDto[]>(this.dataUrl + 'apegoMedicamentoUsuarios');
     }
 
 }

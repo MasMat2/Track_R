@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ApegoTomaMedicamentoDto } from '@dtos/gestion-expediente/apego-toma-medicamento-dto';
+import { ExpedienteTrackrService } from '@http/seguridad/expediente-trackr.service';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-grafica-tratamientos',
@@ -9,16 +12,11 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 })
 export class GraficaTratamientosComponent implements OnInit {
 
-  private tratamientos: { padecimiento: string, apego: number }[] = [
-    { padecimiento: 'Diabetes', apego: 85 },
-    { padecimiento: 'Hipertensión', apego: 90 },
-    { padecimiento: 'Renal', apego: 75 },
-    { padecimiento: 'Obesidad', apego: 40 },
-    { padecimiento: 'Enfermedad Coronaria', apego: 65 },
-  ];
 
-  private data: number[] = this.tratamientos.map(t => t.apego);
-  private etiquetas: string[] = this.tratamientos.map(t => t.padecimiento);
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+  protected tratamientos: ApegoTomaMedicamentoDto[] = [];
+  private data: number[] = [];
+  private etiquetas: string[] = [];
   private colors: string[] = ['#70ad47', '#5b9bd5', '#ffc000', '#a5a5a5', '#ed7d31'];
 
   protected chartPlugins = [ChartDataLabels]
@@ -53,9 +51,27 @@ export class GraficaTratamientosComponent implements OnInit {
     }
   };
 
-  constructor() { }
+  constructor(
+    private expedienteTrackrService : ExpedienteTrackrService
+  ) { }
 
-  ngOnInit() {
+  ngOnInit()
+  {
+    this.expedienteTrackrService.apegoTratamientos()
+          .subscribe((data) => this.actualizarGrafica(data));
   }
+
+  private actualizarGrafica( apegoTratamientoData : ApegoTomaMedicamentoDto[])
+  {
+    this.tratamientos = apegoTratamientoData;
+    this.etiquetas = apegoTratamientoData.map(t => t.padecimientoNombre)
+    this.data = apegoTratamientoData.map( t => Math.ceil(t.apego));
+
+    this.chartData.labels = this.etiquetas;
+    this.chartData.datasets[0].data = this.data;
+
+    this.chart?.update();
+  }
+
 
 }
