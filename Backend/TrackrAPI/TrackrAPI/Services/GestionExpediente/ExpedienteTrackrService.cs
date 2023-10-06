@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Transactions;
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Dtos.Seguridad;
+using TrackrAPI.DTOs.Dashboard;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionExpediente;
 using TrackrAPI.Repositorys.Inventario;
@@ -169,6 +170,10 @@ public class ExpedienteTrackrService
     {
         return _expedienteTrackrRepository.ConsultarParaSidebar(idUsuario);
 
+    }
+    public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor)
+    {
+        return _expedienteTrackrRepository.ApegoMedicamentoUsuarios(idDoctor);
     }
 
 }

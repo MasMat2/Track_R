@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Dtos.Seguridad;
+using TrackrAPI.DTOs.Dashboard;
 using TrackrAPI.Helpers;
 using TrackrAPI.Services.GestionExpediente;
 
@@ -53,6 +54,13 @@ public class ExpedienteTrackrController : ControllerBase
     public UsuarioExpedienteSidebarDTO ConsultarParaSidebar(int idUsuario)
     {
         return _expedienteTrackrService.ConsultarParaSidebar(idUsuario);
+    }
+
+    [HttpGet("apegoMedicamentoUsuarios")]
+    public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios()
+    {
+        int idDoctor = Utileria.ObtenerIdUsuarioSesion(this);
+        return _expedienteTrackrService.ApegoMedicamentoUsuarios(idDoctor);
     }
 
 }

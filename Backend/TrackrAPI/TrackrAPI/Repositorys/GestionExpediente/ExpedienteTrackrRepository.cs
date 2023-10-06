@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Dtos.Seguridad;
+using TrackrAPI.DTOs.Dashboard;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 
@@ -95,6 +96,25 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
             .Where( x => x.ExpedienteTratamiento.IdExpediente == idExpediente  && x.TratamientoToma.FechaToma == null );
 
             return expediente.Count();
+    }
+
+   
+  public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor)
+    {
+        DateTime fechaInicioSemanaPasada = DateTime.Today.AddDays(-7);
+
+        return context.TratamientoToma
+            .Include(tt => tt.IdTratamientoRecordatorioNavigation)
+                .ThenInclude(tr => tr.IdExpedienteTratamientoNavigation)
+            .Where(tt => tt.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdUsuarioDoctor == idDoctor
+                && tt.FechaEnvio >= fechaInicioSemanaPasada)
+            .GroupBy(tt => tt.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdPadecimiento)
+            .Select(group => new ApegoTomaMedicamentoDto
+            {
+                PadecimientoNombre = group.Select( item => item.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdPadecimientoNavigation.Nombre ).First(),
+                Apego = (decimal) group.Count(tt => tt.FechaToma != null) / group.Count() * 100
+            })
+            .ToList();
     }
 
     public UsuarioExpedienteSidebarDTO ConsultarParaSidebar(int idUsuario)
