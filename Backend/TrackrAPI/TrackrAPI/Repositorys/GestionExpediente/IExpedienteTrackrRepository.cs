@@ -1,5 +1,6 @@
 ﻿using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Dtos.Seguridad;
+using TrackrAPI.DTOs.Dashboard;
 using TrackrAPI.Models;
 
 namespace TrackrAPI.Repositorys.GestionExpediente
@@ -14,5 +15,6 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         public UsuarioExpedienteSidebarDTO ConsultarParaSidebar(int idUsuario);
         public int DosisNoTomadas(int idExpediente);
         public int VariablesFueraRango(int idUsuario);
+        public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor);
     }
 }
