@@ -1,9 +1,6 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using System.Net;
-using System.Net.Mail;
-using System.Net.Mime;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
+using MimeKit;
 using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
@@ -84,53 +81,55 @@ namespace TrackrAPI.Services.Seguridad
             throw new CdisException("Ha ocurrido un error al intentar actualizar la contraseña. El tiempo de validación se ha agotado.");
         }
 
-        public void EnviarCorreo(string correoUsuario, string clave)
+        public async Task EnviarCorreo(string correoUsuario, string clave)
         {
             var usuarioCompleto = _usuarioRepository.ConsultarPorCorreo(correoUsuario);
 
             string correoEncriptado = _simpleAES.EncryptToString(usuarioCompleto.Correo);
             string urlFrontEnd = _config.GetSection("AppSettings:UrlFrontEndMovil").Value;
 
+            var logotipoCdis = await DescargarLogo(urlFrontEnd + "assets/img/logotipo-cdis.png", "logo");
+            var logotipoHospital = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-H_C_CEIC.png", "logohospital");
 
-            string urlLogotipoCdis = urlFrontEnd + "assets/img/logotipo-cdis.png";
-            WebClient webClient = new WebClient();
-            byte[] imageData = webClient.DownloadData(urlLogotipoCdis);
-            LinkedResource logotipo_cdis = new LinkedResource(new MemoryStream(imageData), "image/png")
-            {
-                ContentId = "logo"
-            };
-
-            string urlLogotipoHospital = urlFrontEnd + "assets/img/png-Logo-H_C_CEIC.png";
-            byte[] imageData1 = webClient.DownloadData(urlLogotipoHospital);
-            LinkedResource logotipo_hospital = new LinkedResource(new MemoryStream(imageData1), "image/png")
-            {
-                ContentId = "logohospital"
-            };
-
-
-            var correo = new Correo
-            {
-                Receptor = usuarioCompleto.CorreoPersonal,
-                Asunto = "ATISC: Restablecimiento de contraseña",
-                Mensaje = $@"
+            var mensaje = $@"
         <div>
             <span><img src=""cid:logo"" style='max-width:100%; height:auto;'></span>
             <span><img src=""cid:logohospital"" style='max-width:100%; height:auto;' align='right'></span>
         </div>
         <hr style='border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;'>
-        <p>Da clic en el siguiente link para restablecer tu contraseña: 
+        <p>Da clic en el siguiente link para restablecer tu contraseña:
             <a href='{urlFrontEnd}#/acceso/restablecer-contrasena?id={correoEncriptado}&tkn={clave}' target='_blank'>
                 Restablecer mi contraseña
             </a>
         </p>
         <hr style='border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;'>
-    ",
+    ";
+
+            var correo = new Correo
+            {
+                Receptor = usuarioCompleto.CorreoPersonal,
+                Asunto = "ATISC: Restablecimiento de contraseña",
+                Mensaje = mensaje,
                 EsMensajeHtml = true,
-                Imagenes = new List<LinkedResource> { logotipo_cdis, logotipo_hospital }
+                Imagenes = new List<MimePart> { logotipoCdis, logotipoHospital }
             };
 
             _correoHelper.Enviar(correo);
+        }
+        private async Task<MimePart> DescargarLogo(string imageUrl, string contentId)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                byte[] imageData = await httpClient.GetByteArrayAsync(imageUrl);
 
+                return new MimePart("image", "png")
+                {
+                    ContentId = contentId,
+                    Content = new MimeContent(new MemoryStream(imageData), ContentEncoding.Default),
+                    ContentDisposition = new ContentDisposition(ContentDisposition.Inline),
+                    ContentTransferEncoding = ContentEncoding.Base64,
+                };
+            }
         }
 
 

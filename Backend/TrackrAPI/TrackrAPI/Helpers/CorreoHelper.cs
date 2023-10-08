@@ -1,149 +1,114 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Net.Mail;
-using System.Text;
-using System.Net.Mime;
-using DocumentFormat.OpenXml.Spreadsheet;
+﻿
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
 
 
-namespace TrackrAPI.Helpers
+namespace TrackrAPI.Helpers;
+
+public class CorreoHelper
 {
-    public class CorreoHelper
+    private string Host;
+    private int Puerto;
+    private string Emisor;
+    private string Contrasena;
+    private string Alias;
+
+    public CorreoHelper(IConfiguration config)
     {
-        private string Host;
-        private int Puerto;
-        private string Emisor;
-        private string Contrasena;
-        private string Alias;
-
-        public CorreoHelper(IConfiguration config)
+        var smtp = config.GetSection("SMTP");
+        if (smtp != null)
         {
-            var smtp = config.GetSection("SMTP");
-            if (smtp != null)
-            {
-                Host = smtp.GetSection("Host").Value;
-                Puerto = StringToIntPort(smtp.GetSection("Puerto").Value);
-                Emisor = smtp.GetSection("Emisor").Value;
-                Contrasena = smtp.GetSection("Contrasena").Value;
-                Alias = smtp.GetSection("Alias").Value;
-            }
+            Host = smtp.GetSection("Host").Value;
+            Puerto = StringToIntPort(smtp.GetSection("Puerto").Value);
+            Emisor = smtp.GetSection("Emisor").Value;
+            Contrasena = smtp.GetSection("Contrasena").Value;
+            Alias = smtp.GetSection("Alias").Value;
+        }
+    }
+
+    public void Enviar(Correo correo)
+    {
+        if (string.IsNullOrWhiteSpace(correo.Receptor) || correo.Receptor.Trim().StartsWith('.'))
+            return;
+
+        var message = new MimeMessage();
+        message.From.Add(new MailboxAddress(Alias, Emisor));
+        message.To.Add(MailboxAddress.Parse(correo.Receptor));
+        message.Subject = correo.Asunto;
+
+        if (correo.EsMensajeHtml)
+        {
+            var builder = new BodyBuilder { HtmlBody = correo.Mensaje };
+
+            foreach (var imagen in correo.Imagenes)
+                builder.LinkedResources.Add(imagen);
+
+            message.Body = builder.ToMessageBody();
+        }
+        else
+        {
+            message.Body = new TextPart("plain") { Text = correo.Mensaje };
         }
 
-        public void Enviar(Correo correo)
+        using (var client = new SmtpClient())
         {
-            if (!string.IsNullOrWhiteSpace(correo.Receptor))
-            {
-                if (correo.Receptor.Trim().StartsWith('.'))
-                {
-                    return;
-                }
-                
-                SmtpClient cliente = new SmtpClient(Host, Puerto);
-                MailMessage mailMessage = new MailMessage();
-                if (correo.EsMensajeHtml = true)
-                {
-                    AlternateView htmlView = AlternateView.CreateAlternateViewFromString(
-                    correo.Mensaje,  Encoding.UTF8, MediaTypeNames.Text.Html);
+            client.Connect(Host, Puerto, SecureSocketOptions.StartTls);
+            client.Authenticate(Emisor, Contrasena);
+            client.Send(message);
+            client.Disconnect(true);
+        }
+    }
 
-                    foreach (var imagen in correo.Imagenes)
-                    {
-                        htmlView.LinkedResources.Add(imagen);
-                    }
-
-                    mailMessage.AlternateViews.Add(htmlView);
-                }
-                mailMessage.From = new MailAddress(Emisor, Alias);
-                mailMessage.BodyEncoding = Encoding.UTF8;
-                mailMessage.To.Add(correo.Receptor);
-                mailMessage.Body = correo.Mensaje;
-                mailMessage.Subject = correo.Asunto;
-                mailMessage.IsBodyHtml = correo.EsMensajeHtml;
-                cliente.EnableSsl = true;
-                cliente.UseDefaultCredentials = false;
-                cliente.Credentials = new System.Net.NetworkCredential(Emisor, Contrasena);
-                cliente.Send(mailMessage);
-            }
+    public void EnviarAdjuntos(Correo correo, List<MimePart> adjuntos)
+    {
+        if (string.IsNullOrWhiteSpace(correo.Receptor) || correo.Receptor.Trim().StartsWith('.'))
+        {
+            return;
         }
 
-        public void EnviarAdjuntos(Correo correo, List<Attachment> adjuntos)
+        var message = new MimeMessage();
+        message.From.Add(new MailboxAddress(Alias, Emisor));
+
+        var receptores = correo.Receptor.Replace(";", ",");
+        foreach (var receptor in receptores.Split(','))
         {
-            if (!string.IsNullOrWhiteSpace(correo.Receptor))
-            {
-                if (correo.Receptor.Trim().StartsWith('.'))
-                {
-                    return;
-                }
-
-                SmtpClient cliente = new SmtpClient(Host, Puerto);
-                MailMessage mailMessage = new MailMessage();
-
-                foreach (Attachment adjunto in adjuntos)
-                {
-                    if (adjunto != null) mailMessage.Attachments.Add(adjunto);
-                }
-
-                string receptores = correo.Receptor.Replace(";", ",");
-
-                mailMessage.From = new MailAddress(Emisor, Alias);
-                mailMessage.BodyEncoding = Encoding.UTF8;
-                mailMessage.To.Add(receptores);
-                mailMessage.Body = correo.Mensaje;
-                mailMessage.Subject = correo.Asunto;
-                mailMessage.IsBodyHtml = correo.EsMensajeHtml;
-                cliente.EnableSsl = true;
-                cliente.UseDefaultCredentials = false;
-                cliente.Credentials = new System.Net.NetworkCredential(Emisor, Contrasena);
-
-                cliente.Send(mailMessage);
-            }
+            message.To.Add(new MailboxAddress("", receptor.Trim()));
         }
 
-       
-        public async Task EnviarAdjuntosAsync(Correo correo, List<Attachment> adjuntos)
+        message.Subject = correo.Asunto;
+
+        var bodyBuilder = new BodyBuilder
         {
-            if (!string.IsNullOrWhiteSpace(correo.Receptor))
-            {
-                if (correo.Receptor.Trim().StartsWith('.'))
-                {
-                    return;
-                }
+            TextBody = correo.Mensaje,
+            HtmlBody = correo.EsMensajeHtml ? correo.Mensaje : null
+        };
 
-                MailMessage mailMessage = new MailMessage();
-
-                foreach (Attachment adjunto in adjuntos)
-                {
-                    if (adjunto != null) mailMessage.Attachments.Add(adjunto);
-                }
-
-                string receptores = correo.Receptor.Replace(";", ",");
-
-                mailMessage.From = new MailAddress(Emisor, Alias);
-                mailMessage.BodyEncoding = Encoding.UTF8;
-                mailMessage.To.Add(receptores);
-                mailMessage.Body = correo.Mensaje;
-                mailMessage.Subject = correo.Asunto;
-                mailMessage.IsBodyHtml = correo.EsMensajeHtml;
-
-                using (var smtpClient = new SmtpClient(Host, Puerto))
-                {
-                    smtpClient.EnableSsl = true;
-                    smtpClient.UseDefaultCredentials = false;
-                    smtpClient.Credentials = new System.Net.NetworkCredential(Emisor, Contrasena);
-                    await smtpClient.SendMailAsync(mailMessage);
-                }
-            }
+        foreach (var adjunto in adjuntos)
+        {
+            bodyBuilder.Attachments.Add(adjunto);
         }
 
-        private int StringToIntPort(string puerto)
-        {
-            int i = 0;
-            if (!Int32.TryParse(puerto, out i))
-            {
-                i = -1;
-            }
+        message.Body = bodyBuilder.ToMessageBody();
 
-            return i;
+        using (var client = new SmtpClient())
+        {
+            client.Connect(Host, Puerto, SecureSocketOptions.StartTls);
+            client.Authenticate(Emisor, Contrasena);
+            client.Send(message);
+            client.Disconnect(true);
         }
+    }
+
+
+    private int StringToIntPort(string puerto)
+    {
+        int i = 0;
+        if (!int.TryParse(puerto, out i))
+        {
+            i = -1;
+        }
+
+        return i;
     }
 }
