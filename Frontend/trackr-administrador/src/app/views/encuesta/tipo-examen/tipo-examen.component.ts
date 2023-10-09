@@ -26,7 +26,7 @@ export class TipoExamenComponent implements OnInit {
   protected tieneAccesoAgregar: boolean = false;
   protected readonly EDITAR_TIPO_EXAMEN: string = ACCESO_TIPO_EXAMEN.Editar;
   protected readonly ELIMINAR_TIPO_EXAMEN: string = ACCESO_TIPO_EXAMEN.Eliminar;
-
+ 
   // Grid
   public tipoExamenList: TipoExamen[] = [];
 
@@ -177,9 +177,9 @@ export class TipoExamenComponent implements OnInit {
   }
 
   private eliminar(tipoExamen: TipoExamen) {
-    const MENSAJE_EXITO: string = 'El tipo de examen ha sido eliminado';
-    const TITULO_MODAL: string = 'Eliminar Tipo de Examen';
-    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar el tipo de examen: <strong>${tipoExamen.nombre}</strong>?`;
+    const MENSAJE_EXITO: string = 'El tipo de cuestionario ha sido eliminado';
+    const TITULO_MODAL: string = 'Eliminar Tipo de Cuestionario';
+    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar el tipo de cuestionario: <strong>${tipoExamen.nombre}</strong>?`;
 
     this.mensajeService
       .modalConfirmacion(

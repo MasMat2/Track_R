@@ -1,0 +1,72 @@
+<div class="contenedor">
+    <div class="titulo-contenedor">
+        Reporte de Árbol de Accesos
+    </div>
+    <div class="cuerpo-contenedor">
+        <form 
+            (keydown.enter)="$event.preventDefault()"
+            #formulario="ngForm" 
+            (ngSubmit)="enviarFormulario(formulario)"
+            novalidate="novalidate"
+        >
+            <div [collapse]="isCollapsed" [isAnimated]="true">
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="label-input required-label">Proyecto</label>
+                            <ng-select
+                                #rolAccesoLst="ngModel"
+                                name="rolAccesoName"
+                                class="select-custom"
+                                [items]="rolAccesoList"
+                                bindLabel="nombre"
+                                bindValue="idRolAcceso"
+                                [(ngModel)]="filtro.idRolAcceso"
+                                required="true"
+                                [placeholder]="placeHolderSelect"
+                                [notFoundText]="placeHolderNoOptions"
+                            ></ng-select>
+                            <div *ngIf="rolAccesoLst.errors?.['required'] && rolAccesoLst.touched" class="error">
+                                El proyecto es requerido
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4 mb-4">
+                    <div class="col-md-12 text-center">
+                        <button type="submit" class="btn-primario ml-4" [disabled]="buscando">
+                            {{ buscando ? 'Buscando...' : 'Buscar' }}
+                        </button>
+                        <button (click)="limpiar()" type="button" class="btn-secundario limpiar mr-4">
+                            Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="form-row panel-busqueda mb-4">
+            <div (click)="seleccionoPanel()" class="panel-carga-elementos center-element-vertically">
+              <span class="titulo-panel">Panel de Búsqueda</span>
+              <span class="arow-down-up">
+                <i *ngIf="isCollapsed" class="fa fa-chevron-down"></i>
+                <i *ngIf="!isCollapsed" class="fa fa-chevron-up"></i>
+              </span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-12">
+              <button class="btn-terceario" (click)="collapseAll()">Colapsar todo</button>
+              <button class="btn-terceario ml-3" (click)="expandAll()">Expandir todo</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mt-4">
+                <db-angular-tree-grid
+                #angularGrid [data]="accesoList"
+                [configs]="configTree"
+                (cellclick)="onCellClick($event)"
+                ></db-angular-tree-grid>
+            </div>
+        </div>
+    </div>
+</div>

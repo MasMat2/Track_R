@@ -3,7 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ExpedienteTratamientoGridDto } from '@dtos/gestion-expediente/expediente-tratamiento-grid-dto';
 import { ExpedienteTratamientoService } from '@http/gestion-expediente/expediente-tratamiento.service';
 import { EncryptionService } from '@services/encryption.service';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, ICellRendererParams, ValueGetterParams } from 'ag-grid-community';
+import * as moment from 'moment';
 import { Observable, lastValueFrom } from 'rxjs';
 import { first } from 'rxjs/operators';
 
@@ -21,14 +22,34 @@ export class ExpedienteTratamientoComponent implements OnInit {
   protected readonly HEADER_GRID: string = 'Tratamientos';
   protected tratamientos$: Observable<ExpedienteTratamientoGridDto[]>;
   protected columns: ColDef[] = [
-    { headerName: 'Núm.', field: 'idExpedienteTratamiento', minWidth: 150 },
-    { headerName: 'Farmaco', field: 'farmaco', minWidth: 150 },
-    { headerName: 'Cantidad', field: 'cantidad', minWidth: 150 },
-    { headerName: 'Unidad', field: 'unidad', minWidth: 150 },
+    { headerName: 'Núm.', field: 'idExpedienteTratamiento', minWidth: 50 },
+    { headerName: 'Fármaco', field: 'farmaco', minWidth: 150 },
+    { headerName: 'Cantidad', field: 'cantidad', minWidth: 50 },
+    { headerName: 'Unidad', field: 'unidad', minWidth: 50 },
     { headerName: 'Indicaciones', field: 'indicaciones', minWidth: 150 },
     { headerName: 'Padecimiento', field: 'padecimiento', minWidth: 150 },
-    { headerName: 'Días', field: 'fechaRegistro', minWidth: 150 },
-    { headerName: 'Horario (h)', field: 'fechaRegistro', minWidth: 150 }
+    { 
+      headerName: 'Días', 
+      field: 'fechaRegistro',  
+      minWidth: 50,
+      cellRenderer: (params: ICellRendererParams) => {
+        return moment(params.data.fechaRegistro).format('DD/MM/YYYY');
+      },
+      valueGetter: (params: ValueGetterParams) => {
+        return moment(params.data.fechaRegistro).format('DD/MM/YYYY');
+      },
+     },
+    { 
+      headerName: 'Horario (h)', 
+      field: 'fechaRegistro', 
+      minWidth: 50,
+      cellRenderer: (params: ICellRendererParams) => {
+        return moment(params.data.fechaRegistro, 'HH:mm:ss').format('LT');
+      },
+      valueGetter: (params: ValueGetterParams) => {
+        return moment(params.data.fechaRegistro, 'HH:mm:ss').format('LT');
+      },
+     }
   ];
 
   constructor(

@@ -10,7 +10,7 @@ const routes: Routes = [
     component: ContenidoExamenComponent,
     canActivate: [AdministradorAuthGuard],
     data: {
-      title: 'Contenido de Examen',
+      title: 'Contenido de Cuestionario',
       acceso: ACCESO_TIPO_EXAMEN.Consultar
     }
   }

@@ -2,7 +2,7 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>{{ accion }} Programación de Examen</div>
+      <div>{{ accion }} Programación de Cuestionario</div>
       <button
         type="button"
         class="close pull-right"
@@ -74,7 +74,7 @@
 
           <div class="col-md-5">
             <div class="form-group">
-              <label class="label-input required-label">Tipo de Examen</label>
+              <label class="label-input required-label">Tipo de Cuestionario</label>
               <div>
                 <ng-select
                   #tipoExamenLst="ngModel"
@@ -93,7 +93,7 @@
                 *ngIf="tipoExamenLst.errors?.['required'] && tipoExamenLst.touched"
                 class="error"
               >
-                El tipo de examen es requerido
+                El tipo de cuestionario es requerido
               </div>
             </div>
           </div>
@@ -145,7 +145,7 @@
 
           <div class="col-md-3">
             <div class="form-group">
-              <label class="label-input required-label">Fecha del Examen</label>
+              <label class="label-input required-label">Fecha del Cuestionario</label>
               <div class="calendario">
                 <input
                   #fechaExamenName="ngModel"
@@ -165,14 +165,14 @@
                 "
                 class="error"
               >
-                La fecha del examen es requerida
+                La fecha del cuestionario es requerida
               </div>
             </div>
           </div>
 
           <div class="col-md-3">
             <div class="form-group">
-              <label class="label-input required-label">Hora del Examen</label>
+              <label class="label-input required-label">Hora del Cuestionario</label>
               <div>
                 <input
                   #horaExamen="ngModel"
@@ -187,7 +187,7 @@
                 *ngIf="horaExamen.errors?.['required'] && horaExamen.touched"
                 class="error"
               >
-                La hora del examen es requerida
+                La hora del cuestionario es requerida
               </div>
             </div>
           </div>
@@ -256,6 +256,11 @@
 
       <div class="modal-footer">
         <div class="text-right">
+          <button type ="button" 
+            class="btn-secundario mr-3"
+            (click)="cancelar();"
+            >Cancelar
+          </button>
           <button
             [disabled]="submitting"
             type="submit"

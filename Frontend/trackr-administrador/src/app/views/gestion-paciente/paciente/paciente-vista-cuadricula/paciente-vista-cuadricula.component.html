@@ -1,20 +1,11 @@
 <!-- Botón Descargar Excel -->
 <div
-  class="d-flex justify-content-end">
-  <button
-  type="button"
-  class="btn"
-  (click)="descargarExcel()"
-  >
-    <i
-    title="Descargar Excel"
-    class="grid-download"
-    >
-      <img
-      src="assets/img/svg/ico-15x15-Descargar.svg"/>
-    </i>
-
-  </button>
+    class="d-flex justify-content-end">
+    <button type="button" class="btn" (click)="descargarExcel()" >
+      <i title="Descargar Excel" class="grid-download">
+        <img src="assets/img/svg/ico-15x15-Descargar.svg"/>
+      </i>
+    </button>
 </div>
 <p-table
   class="primeng-table grid-cuadricula"
@@ -67,7 +58,7 @@
         <div class="d-flex">
           <span
             *ngFor="let patologia of paciente.patologias"
-            style="background-color: #ededed"
+            style="background-color: white"
             class="m-1 p-1"
           >
             {{ patologia }}

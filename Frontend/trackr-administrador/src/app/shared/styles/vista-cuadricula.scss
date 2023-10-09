@@ -29,13 +29,12 @@
         color: var(--color-primario) !important;
         background-color: #ffffff !important;
         text-align: center;
+
         // font-weight: 600;
     }
 
     tr td:not(:last-child)  {
-        
-        
-        
+
         // box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         background-clip: padding-box;
         margin: 100px !important;  // Añade margen entre las celdas
@@ -54,9 +53,7 @@
         border: none !important;
         background: transparent !important;
     }
-
-    
-    
+   
 }
 
 ::ng-deep .ui-table-caption {

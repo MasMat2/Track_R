@@ -11,7 +11,7 @@
           (click)="onAgregarClick()"
           *ngIf="tieneAccesoAgregar$ | async"
         >
-          <i class="fas fa-plus-circle"></i><span>Agregar</span>
+          <button class="btn-agregar">Agregar {{ tituloBoton }} </button>
         </div>
         <app-grid-general
           #grid

@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <div></div>
+  </div>
+  <mat-accordion multi="true">
+    <mat-expansion-panel expanded="true"> 
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <p style="color: purple">{{ HEADER_GRID }}</p>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+      <div class="cuerpo-contenedor" style="padding-bottom: 0; padding-top: 0;">
+        <app-grid-general
+          #gridConsumos
+          [headerName]="HEADER_GRID"
+          [data]="consumoMedicamento$ | async"
+          [children]="columns"
+          [disableEdit]="false"
+          [disableDelete]="true"
+        >
+        </app-grid-general>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>

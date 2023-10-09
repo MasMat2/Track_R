@@ -4,7 +4,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.module';
-import { ExpedienteTratamientoComponent } from './expediente-tratamiento.component';
+import { ExpedienteConsumoMedicamentoComponent } from './expediente-consumo-medicamento.component';
 
 @NgModule({
   imports: [
@@ -14,7 +14,7 @@ import { ExpedienteTratamientoComponent } from './expediente-tratamiento.compone
     PipesModule,
     GridGeneralModule
   ],
-  declarations: [ExpedienteTratamientoComponent],
-  exports: [ExpedienteTratamientoComponent]
+  declarations: [ExpedienteConsumoMedicamentoComponent],
+  exports: [ExpedienteConsumoMedicamentoComponent]
 })
-export class ExpedienteTratamientoModule { }
+export class ExpedienteConsumoMedicamentoModule { }

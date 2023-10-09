@@ -10,6 +10,8 @@ import { GeneralConstant } from '@utils/general-constant';
 import { ChartData, ChartOptions, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { last, lastValueFrom } from 'rxjs';
+import { ColDef, ICellRendererParams, ValueGetterParams } from 'ag-grid-community';
+import * as moment from 'moment';
 
 
 @Component({
@@ -41,7 +43,17 @@ export class DashboardPadecimientoComponent implements OnInit {
   public columns = [
     { headerName: 'Variable', field: 'variable', minWidth: 150 },
     { headerName: 'Parámetro', field: 'parametro', minWidth: 150 },
-    { headerName: 'Fecha & Hora', field: 'fechaHora', minWidth: 150 },
+    { 
+      headerName: 'Fecha & Hora',
+      field: 'fechaHora', 
+      minWidth: 150,
+      cellRenderer: (params: ICellRendererParams) => {
+        return moment(params.data.fechaHora).format('DD/MM/YYYY') + '   ' + moment(params.data.fechaHora, 'HH:mm:ss').format('LT');
+      },
+      valueGetter: (params: ValueGetterParams) => {
+        return moment(params.data.fechaHora).format('DD/MM/YYYY') + '   ' + moment(params.data.fechaHora, 'HH:mm:ss').format('LT');
+      },
+    },
     { headerName: 'Valor Registrado', field: 'valorRegistrado', minWidth: 150 },
     { headerName: 'Valor de Referencia (min-máx)', field: 'valorReferencia', minWidth: 150 },
   ];
