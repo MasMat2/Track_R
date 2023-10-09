@@ -13,7 +13,7 @@ export default [
     children: [
       { path: 'chat', component: ChatPage },
       { path: 'muestras', component: MuestrasPage },
-      { path: 'dashboard', component: DashboardPage },
+      { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard-routes') },
       { path: 'cuestionarios', component: CuestionariosPage },
       { path: 'perfil', loadChildren: () => import('./perfil/perfil-routes') },
       { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }

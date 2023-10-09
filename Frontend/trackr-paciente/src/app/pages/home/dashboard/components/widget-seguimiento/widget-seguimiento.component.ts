@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { WidgetComponent } from '../widget/widget.component';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-widget-seguimiento',
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     WidgetComponent,
     IonicModule,
+    RouterModule
   ]
 })
 export class WidgetSeguimientoComponent  implements OnInit {

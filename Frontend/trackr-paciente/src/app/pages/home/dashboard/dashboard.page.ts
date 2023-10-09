@@ -12,7 +12,8 @@ import { WidgetSeguimientoComponent } from './components/widget-seguimiento/widg
 import { WidgetService } from 'src/app/services/dashboard/widget.service';
 import { UsuarioPadecimientosDTO } from 'src/app/shared/Dtos/gestion-expediente/usuario-padecimientos-dto';
 import { PadecimientoDTO } from 'src/app/shared/Dtos/gestion-expediente/padecimiento-dto';
-
+import { Router, RouterModule } from '@angular/router'; 
+import { SeguimientoPadecimientoComponent } from './components/seguimiento-padecimiento/seguimiento-padecimiento.component';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -27,7 +28,9 @@ import { PadecimientoDTO } from 'src/app/shared/Dtos/gestion-expediente/padecimi
     WidgetPesoComponent,
     WidgetSuenoComponent,
     WidgetFrecuenciaComponent,
-    WidgetSeguimientoComponent
+    WidgetSeguimientoComponent,
+    RouterModule,
+    SeguimientoPadecimientoComponent
   ],
   providers: [
     UsuarioWidgetService,
@@ -40,7 +43,8 @@ export class DashboardPage implements OnInit {
   protected padecimientosList : PadecimientoDTO[];
 
   constructor(
-    private widgetService : WidgetService
+    private widgetService : WidgetService,
+    private router: Router
   ) { }
 
   public ngOnInit(): void {
@@ -53,6 +57,10 @@ export class DashboardPage implements OnInit {
       this.padecimientosList = this.padecimientosUsuarioList[0].secciones;
     });
 
+  }
+
+  public mostrarSeguimiento(idPadecimiento: any){
+    this.router.navigate(['home/perfil/seguimiento', idPadecimiento]);
   }
 
 
