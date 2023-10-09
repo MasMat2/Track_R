@@ -1,7 +1,10 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
+using TrackrAPI.Dtos.Notificaciones;
 using TrackrAPI.Models;
+using TrackrAPI.Services.Notificaciones;
 
 
 namespace TrackrAPI.Helpers;
@@ -10,13 +13,17 @@ public class RecordatorioTomasService : IHostedService, IDisposable
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private Timer _timer;
+    private readonly NotificacionPacienteServiceFactory _notificacionPacienteServiceFactory;
 
     private int waitTime = 5;
 
-    public RecordatorioTomasService(IServiceScopeFactory scopeFactory)
+    public RecordatorioTomasService(IServiceScopeFactory scopeFactory ,
+                                  NotificacionPacienteServiceFactory notificacionPacienteServiceFactory 
+    )
     {
         
         _scopeFactory = scopeFactory;
+        _notificacionPacienteServiceFactory = notificacionPacienteServiceFactory;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -86,7 +93,7 @@ public class RecordatorioTomasService : IHostedService, IDisposable
         }
     }
 
-    public void CrearTratamientoTomas(TrackrContext context){
+    public async Task CrearTratamientoTomas(TrackrContext context){
         DateTime now = DateTime.Now;
         Console.WriteLine(now);
         int currentDay = ((int)now.DayOfWeek + 6) % 7; // Monday = 0, ..., Saturday = 5, Sunday = 6
@@ -95,6 +102,7 @@ public class RecordatorioTomasService : IHostedService, IDisposable
         DateTime time15MinutesAgo = now - TimeSpan.FromMinutes(15);
 
         var recordatoriosToProcess = context.TratamientoRecordatorio
+        .Include( tr => tr.IdExpedienteTratamientoNavigation)
         .Where(tr => 
             tr.IdExpedienteTratamientoNavigation.FechaInicio <= now &&
             (tr.IdExpedienteTratamientoNavigation.FechaFin == null || tr.IdExpedienteTratamientoNavigation.FechaFin >= now) &&
@@ -104,13 +112,23 @@ public class RecordatorioTomasService : IHostedService, IDisposable
             !tr.TratamientoToma.Any(toma => toma.FechaEnvio > time15MinutesAgo) // Asegura que no se ha creado un TratamientoToma para el TratamientoRecordatorio en los últimos 15 minutos
         )
         .ToList();
-
+        var notificacionPacienteService = _notificacionPacienteServiceFactory.CreateScopedInstance();
         foreach (var recordatorio in recordatoriosToProcess)
         {
+            var notificacion = new NotificacionCapturaDTO
+            (
+                recordatorio.IdExpedienteTratamientoNavigation.Farmaco,
+                recordatorio.IdExpedienteTratamientoNavigation.Cantidad.ToString() + ' ' +  recordatorio.IdExpedienteTratamientoNavigation.Unidad,
+                6
+            );
+
+            var notificacionInsertada = await notificacionPacienteService.Notificar(notificacion , recordatorio.IdExpedienteTratamientoNavigation.IdExpedienteNavigation.IdUsuario);
+
             var toma = new TratamientoToma
             {
                 IdTratamientoRecordatorio = recordatorio.IdTratamientoRecordatorio,
-                FechaEnvio = now
+                FechaEnvio = now,
+                IdNotificacion = notificacionInsertada.IdNotificacion 
             };
             
             context.TratamientoToma.Add(toma);
