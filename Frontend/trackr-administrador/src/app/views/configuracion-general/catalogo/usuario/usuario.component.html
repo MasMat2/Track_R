@@ -1,5 +1,5 @@
 <div class="contenedor">
-  <div class="titulo-contenedor">Consulta de Usuarios</div>
+  <div class="titulo-contenedor">Usuarios</div>
   <div class="cuerpo-contenedor">
     <div [collapse]="isCollapsed" [isAnimated]="true">
       <div class="row">
@@ -152,7 +152,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="contenedor-agregar" (click)="agregar()" *ngIf="tieneAccesoAgregar">
-          <i class="fas fa-plus-circle"></i><span>Agregar</span>
+          <button class="btn-agregar">Agregar usuario</button>
         </div>
 
         <app-grid-filtro

@@ -17,6 +17,7 @@ export class CatalogoBaseComponent implements OnInit {
     // Variables de Entrada
     @Input() public columns: ColDef[];
     @Input() public titulo: string;
+    @Input() public tituloBoton: string;
     @Input() public gridOptions?: GridOptions;
     @Input() public crudConfig: ICrudConfig;
     @Input() public elementos$: Observable<any[]>;

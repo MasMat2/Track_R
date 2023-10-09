@@ -21,15 +21,22 @@
   color: gray;
   font-style: italic;
 }
+
+.text-filtro{
+  display: flex;
+  justify-content: end;
+  margin-right: 15vh;
+  color: gray;
+  font-size: .5rem;
+}
+
 .mat-sidenav {
   min-width: 220px;
   max-width: 300px;
   width:100%;
   background-color: #EFEDE4;
-  border-left: 2px solid rgba(134, 132, 132, 0.747);
+  border-left: 0.5px solid rgba(247, 246, 246, 0.747);
 }
-
-
 
 .mat-sidenav-content {
   padding: 20px;
@@ -41,12 +48,10 @@
   margin-left: 10px;
 }
 
-
 .contenedor {
  transition: margin-right 0.6s ease-out;
   margin-right: 0;
 }
-
 
 .img-container {
   aspect-ratio: 1/1;

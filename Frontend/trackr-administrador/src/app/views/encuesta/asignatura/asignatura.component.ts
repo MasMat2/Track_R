@@ -17,7 +17,7 @@ import { AsignaturaFormularioComponent } from './asignatura-formulario/asignatur
   templateUrl: './asignatura.component.html',
 })
 export class AsignaturaComponent implements OnInit {
-  protected readonly NOMBRE_ENTIDAD: string = 'Asignaturas';
+  protected readonly NOMBRE_ENTIDAD: string = 'Cuestionarios';
 
   // Accesos
   protected tieneAccesoAgregar: boolean = false;
@@ -34,7 +34,7 @@ export class AsignaturaComponent implements OnInit {
       minWidth: 150,
     },
     {
-      headerName: 'Descripción',
+      headerName: 'Cuestionario',
       field: 'descripcion',
       minWidth: 150,
     },
@@ -130,9 +130,9 @@ export class AsignaturaComponent implements OnInit {
   }
 
   private eliminar(asignatura: Asignatura): void {
-    const MENSAJE_EXITO: string = 'La asignatura ha sido eliminada';
-    const TITULO_MODAL: string = 'Eliminar Asignatura';
-    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar la asignatura: <strong>${asignatura.descripcion}</strong>?`;
+    const MENSAJE_EXITO: string = 'El Cuestionariobha sido eliminado';
+    const TITULO_MODAL: string = 'Eliminar Cuestionario';
+    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar el Cuestionario: <strong>${asignatura.descripcion}</strong>?`;
 
     this.mensajeService
       .modalConfirmacion(

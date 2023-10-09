@@ -1,10 +1,10 @@
 <div class="contenedor">
-  <div class="titulo-contenedor">Catálogo de Roles</div>
+  <div class="titulo-contenedor">Roles</div>
   <div class="cuerpo-contenedor">
     <div class="row">
       <div class="col-md-12">
         <div class="contenedor-agregar" (click)="agregar()" *ngIf="tieneAccesoAgregar">
-          <i class="fas fa-plus-circle"></i><span>Agregar</span>
+          <button class="btn-agregar">Agregar Rol</button>
         </div>
         <app-grid-general
           [headerName]="HEADER_GRID"

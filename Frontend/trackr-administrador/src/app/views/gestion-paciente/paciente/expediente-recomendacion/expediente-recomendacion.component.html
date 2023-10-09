@@ -35,7 +35,7 @@
           </div>
 
         <div class="col-md-2 justify-content-between align-items-center ">
-          <label class="label-input required-label" style="color: gray;">Fecha</label>
+          <label class="label-input required-label">Fecha</label>
         <div>
           <input
             [(ngModel)] = "recomendacion.fecha"
@@ -76,14 +76,18 @@
         </ng-template>
       </div>
     </div> 
-  </div>
+   </div>
   </form>
- 
-  <div class="modal-contenedor">  
-  <div class="row">
-    <div class="col-md-12">
-      <div style="color: purple; margin-top: 20px; margin-bottom: 0px;">Bitácora Recomendaciones</div>
+</div>
 
+<mat-accordion multi="true">
+  <mat-expansion-panel expanded="true"> 
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <p style="color: purple">Bitácora Recomendaciones</p>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="col-md-12">
         <app-grid-general 
           #gridRecomendacion
           [headerName]="HEADER_GRID"
@@ -93,8 +97,7 @@
           (event)="onGridClick($event)"
           >
           </app-grid-general>
-
     </div>
-  </div>
-</div>
-</div>
+  </mat-expansion-panel>
+</mat-accordion>
+ 

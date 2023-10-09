@@ -1,14 +1,24 @@
-<div
-  class="p-4 subtitulo-contenedor">
-  {{ HEADER_GRID }}
+<div class="modal-header">
+  <div></div>
 </div>
+<mat-accordion multi="true">
+  <mat-expansion-panel expanded="true"> 
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <p style="color: purple">{{ HEADER_GRID }}</p>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
 
-<app-grid-general
-  #gridTratamientos
-  [headerName]="HEADER_GRID"
-  [data]="tratamientos$ | async"
-  [children]="columns"
-  [disableDelete]="true"
-  [disableEdit]="true"
->
-</app-grid-general>
+    <div class="cuerpo-contenedor" style="padding-bottom: 0; padding-top: 0;">
+      <app-grid-general
+        #gridTratamientos
+        [headerName]="HEADER_GRID"
+        [data]="tratamientos$ | async"
+        [children]="columns"
+        [disableDelete]="true"
+        [disableEdit]="true"
+      >
+      </app-grid-general>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

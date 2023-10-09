@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdministradorAuthGuard } from 'src/app/auth/administrador-auth-guard.service';
 import { CodigoAcceso } from 'src/app/shared/utils/codigo-acceso';
 import { AccesoAyudaComponent } from './acceso-ayuda/acceso-ayuda.component';
+import { ReporteArbolAccesoComponent } from './reporte-arbol-acceso/reporte-arbol-acceso.component';
 
 const routes: Routes = [
   {
@@ -61,6 +62,14 @@ const routes: Routes = [
         component: AccesoAyudaComponent,
         canActivate: [AdministradorAuthGuard],
         // TODO: Accesos de Agregar Ayuda
+      },
+      {
+        path: 'reporte-arbol-acceso',
+        component: ReporteArbolAccesoComponent,
+        canActivate: [AdministradorAuthGuard],
+        data: {
+          acceso: CodigoAcceso.REPORTE_ARBOL_ACCESO
+        }
       }
     ]
   }

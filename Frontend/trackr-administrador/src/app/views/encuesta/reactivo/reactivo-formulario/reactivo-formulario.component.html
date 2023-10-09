@@ -310,6 +310,11 @@
 
       <div class="modal-footer">
         <div class="text-right">
+          <button type ="button" 
+            class="btn-secundario mr-3"
+            (click)="cancelar();"
+            >Cancelar
+          </button>
           <button
             [disabled]="submitting"
             type="submit"

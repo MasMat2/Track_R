@@ -14,12 +14,12 @@ import { ExpedienteTratamientoModule } from './expediente-tratamiento/expediente
 import { PacienteRoutingModule } from './paciente-routing.module';
 import { PacienteVistaCuadriculaComponent } from './paciente-vista-cuadricula/paciente-vista-cuadricula.component';
 import { PacienteComponent } from './paciente.component';
+import { ExpedienteConsumoMedicamentoModule } from './expediente-consumo-medicamento/expediente-consumo-medicamento.module';
 
 @NgModule({
   declarations: [
     PacienteComponent,
     PacienteVistaCuadriculaComponent,
-
   ],
   imports: [
     SharedModule,
@@ -33,7 +33,8 @@ import { PacienteComponent } from './paciente.component';
     ExpedientePadecimientoModule,
     MatSidenavModule,
     MatIconModule,
-    ExpedienteTratamientoModule
+    ExpedienteTratamientoModule,
+    ExpedienteConsumoMedicamentoModule
   ],
   entryComponents: [
     PacienteVistaCuadriculaComponent,

@@ -11,8 +11,8 @@ import { FormularioService } from 'src/app/shared/services/formulario.service';
   templateUrl: './tipo-examen-formulario.component.html',
 })
 export class TipoExamenFormularioComponent implements OnInit {
-  private readonly MENSAJE_AGREGAR: string = 'El tipo de examen ha sido agregado';
-  private readonly MENSAJE_EDITAR: string = 'El tipo de examen ha sido modificado';
+  private readonly MENSAJE_AGREGAR: string = 'El tipo de cuestionario ha sido agregado';
+  private readonly MENSAJE_EDITAR: string = 'El tipo de cuestionario ha sido modificado';
 
   public accion: string;
   public esEdicion = false;

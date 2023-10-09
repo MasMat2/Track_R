@@ -22,7 +22,7 @@ import { ICONO } from '@utils/constants/font-awesome-icons';
   templateUrl: './contenido-examen.component.html',
 })
 export class ContenidoExamenComponent implements OnInit {
-  protected readonly HEADER_GRID: string = 'Contenido de Examen';
+  protected readonly HEADER_GRID: string = 'Contenido de Cuestionario';
 
   // Inputs
   public idTipoExamen: number;
@@ -48,7 +48,7 @@ export class ContenidoExamenComponent implements OnInit {
       minWidth: 150,
     },
     {
-      headerName: 'Nivel de Examen',
+      headerName: 'Nivel de Cuestionario',
       field: 'nivelExamen',
       minWidth: 150,
     },

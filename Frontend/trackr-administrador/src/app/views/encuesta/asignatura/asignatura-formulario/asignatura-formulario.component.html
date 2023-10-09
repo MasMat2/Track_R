@@ -2,7 +2,7 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>{{ accion }} Asignatura</div>
+      <div>{{ accion }} Cuestionario</div>
       <button
         type="button"
         class="close pull-right"
@@ -48,7 +48,7 @@
         <div class="row justify-content-md-center">
           <div class="col-md-6">
             <div class="form-group">
-              <label class="label-input required-label">Descripción</label>
+              <label class="label-input required-label">Cuestionario</label>
               <div>
                 <input
                   #descripcion="ngModel"
@@ -64,7 +64,7 @@
                 *ngIf="descripcion.errors?.['required'] && descripcion.touched"
                 class="error"
               >
-                La descripción es requerida
+                El Cuestionario es requerido
               </div>
             </div>
           </div>

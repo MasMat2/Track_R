@@ -26,6 +26,7 @@ import { Usuario } from '@models/seguridad/usuario';
 import { UsuarioImagenService } from '@services/usuario-imagen.service';
 import { Genero } from '@models/catalogo/genero';
 import { ExpedienteTrackrService } from '@http/seguridad/expediente-trackr.service';
+import { ExpedienteConsumoMedicamentoComponent } from '../expediente-consumo-medicamento/expediente-consumo-medicamento.component';
 
 @Component({
   selector: 'app-expediente-formulario',
@@ -135,6 +136,7 @@ ciudad: string
     this.agregarTabEstudios();
     await this.agregarTabsDashboardPadecimiento();
     this.agregarTabTratamientos();
+    this.agregarTabConsumoMedicamento();
     this.agregarTabRecomendaciones();
   }
 
@@ -208,6 +210,19 @@ ciudad: string
     const tratamientos: ExternalTemplate = {
       component: ExpedienteTratamientoComponent,
       label: 'Tratamientos',
+      args: {},
+      enabled: this.idUsuario != null ? true : false,
+      externalSubmit: true,
+      submitControl: false
+    };
+
+    this.externalTemplates.push(tratamientos);
+  }
+
+  private agregarTabConsumoMedicamento(): void {
+    const tratamientos: ExternalTemplate = {
+      component: ExpedienteConsumoMedicamentoComponent,
+      label: 'Consumo Medicamentos',
       args: {},
       enabled: this.idUsuario != null ? true : false,
       externalSubmit: true,

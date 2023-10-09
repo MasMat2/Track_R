@@ -14,7 +14,8 @@ import { AccesoRoutingModule } from "./acceso.routing.module";
 import { AyudaSeccionService } from '@http/seguridad/ayuda-seccion.service';
 import { AccesoAyudaService } from "@http/seguridad/acceso-ayuda.service";
 import { AccesoAyudaComponent } from "./acceso-ayuda/acceso-ayuda.component";
-
+import { ReporteArbolAccesoComponent } from "./reporte-arbol-acceso/reporte-arbol-acceso.component";
+import { AngularTreeGridModule } from "angular-tree-grid";
 
 @NgModule({
   imports: [
@@ -23,12 +24,14 @@ import { AccesoAyudaComponent } from "./acceso-ayuda/acceso-ayuda.component";
     GridGeneralModule,
     DirectiveModule,
     CollapseModule,
+    AngularTreeGridModule,
     ModalModule.forChild()
   ],
   declarations: [
     AccesoComponent,
     AccesoFormularioComponent,
-    AccesoAyudaComponent
+    AccesoAyudaComponent,
+    ReporteArbolAccesoComponent
   ],
   providers: [
     AccesoService,
