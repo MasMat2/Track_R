@@ -1,22 +1,21 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Security.Cryptography;
+using System.Text;
+using MimeKit;
 using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Seguridad;
-using System;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace TrackrAPI.Services.Seguridad
 {
     public class RestablecerContrasenaService
     {
-        private IUsuarioRepository usuarioRepository;
-        private IRestablecerContrasenaRepository restablecerContrasenaRepository;
-        private UsuarioValidatorService usuarioValidatorService;
-        private CorreoHelper correoHelper;
-        private SimpleAES simpleAES;
-        private IConfiguration config;
+        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IRestablecerContrasenaRepository _restablecerContrasenaRepository;
+        private readonly UsuarioValidatorService _usuarioValidatorService;
+        private readonly CorreoHelper _correoHelper;
+        private readonly SimpleAES _simpleAES;
+        private readonly IConfiguration _config;
 
         public RestablecerContrasenaService(IUsuarioRepository usuarioRepository,
             IRestablecerContrasenaRepository restablecerContrasenaRepository,
@@ -25,26 +24,26 @@ namespace TrackrAPI.Services.Seguridad
             SimpleAES simpleAES,
             IConfiguration config)
         {
-            this.usuarioRepository = usuarioRepository;
-            this.restablecerContrasenaRepository = restablecerContrasenaRepository;
-            this.usuarioValidatorService = usuarioValidatorService;
-            this.correoHelper = correoHelper;
-            this.simpleAES = simpleAES;
-            this.config = config;
+            _usuarioRepository = usuarioRepository;
+            _restablecerContrasenaRepository = restablecerContrasenaRepository;
+            _usuarioValidatorService = usuarioValidatorService;
+            _correoHelper = correoHelper;
+            _simpleAES = simpleAES;
+            _config = config;
         }
 
-        public void RestablecerContrasena(Usuario usuario)
+        public void RestablecerContrasena(RestablecerContrasenaDto usuario)
         {
-            usuarioValidatorService.ValidarRestablecerContrasena(usuario);
-            usuarioValidatorService.ValidarCorreoNoExistente(usuario);
+            _usuarioValidatorService.ValidarRestablecerContrasena(usuario);
+            _usuarioValidatorService.ValidarCorreoNoExistente(usuario);
 
             string clave = GenerarClaveRestablecimiento();
-            var usuarioCompleto = usuarioRepository.ConsultarPorCorreo(usuario.Correo);
+            var usuarioCompleto = _usuarioRepository.ConsultarPorCorreo(usuario.Correo);
 
             var modeloRestablecer = new RestablecerContrasena
             {
                 IdUsuario = usuarioCompleto.IdUsuario,
-                Clave = simpleAES.EncryptToString(clave),
+                Clave = _simpleAES.EncryptToString(clave),
                 FechaAlta = Utileria.ObtenerFechaActual()
             };
 
@@ -53,10 +52,10 @@ namespace TrackrAPI.Services.Seguridad
             EnviarCorreo(usuarioCompleto.Correo, clave);
         }
 
-        public bool ValidarActualizarContrasena(UsuarioDto usuarioDto)
+        public bool ValidarActualizarContrasena(RestablecerContrasenaDto usuarioDto)
         {
-            usuarioValidatorService.ValidarActualizarContrasena(usuarioDto);
-            Usuario usuario = usuarioRepository.ConsultarPorCorreo(simpleAES.DecryptString(usuarioDto.Correo));
+            _usuarioValidatorService.ValidarActualizarContrasena(usuarioDto);
+            Usuario usuario = _usuarioRepository.ConsultarPorCorreo(_simpleAES.DecryptString(usuarioDto.Correo));
 
             if (usuario != null && ValidarClaveRestablecimiento(usuario.IdUsuario, usuarioDto.Clave))
             {
@@ -66,49 +65,73 @@ namespace TrackrAPI.Services.Seguridad
             return false;
         }
 
-        public void ProcesarActualizacionContrasena(UsuarioDto usuarioDto)
+        public void ProcesarActualizacionContrasena(RestablecerContrasenaDto usuarioDto)
         {
-            usuarioValidatorService.ValidarProcesarActualizacionContrasena(usuarioDto);
+            _usuarioValidatorService.ValidarProcesarActualizacionContrasena(usuarioDto);
 
-            var usuario = usuarioRepository.ConsultarPorCorreo(simpleAES.DecryptString(usuarioDto.Correo));
+            var usuario = _usuarioRepository.ConsultarPorCorreo(_simpleAES.DecryptString(usuarioDto.Correo));
 
             if (usuario != null && ValidarClaveRestablecimiento(usuario.IdUsuario, usuarioDto.Clave))
             {
-                usuario.Contrasena = simpleAES.EncryptToString(usuarioDto.ContrasenaActualizada);
-                usuarioRepository.Editar(usuario);
+                usuario.Contrasena = _simpleAES.EncryptToString(usuarioDto.ContrasenaActualizada);
+                _usuarioRepository.Editar(usuario);
                 return;
             }
 
             throw new CdisException("Ha ocurrido un error al intentar actualizar la contraseña. El tiempo de validación se ha agotado.");
         }
 
-        private void EnviarCorreo(string correoUsuario, string clave)
+        public async Task EnviarCorreo(string correoUsuario, string clave)
         {
-            var usuarioCompleto = usuarioRepository.ConsultarPorCorreo(correoUsuario);
+            var usuarioCompleto = _usuarioRepository.ConsultarPorCorreo(correoUsuario);
 
-            string correoEncriptado = simpleAES.EncryptToString(usuarioCompleto.Correo);
-            string urlFrontEnd = config.GetSection("AppSettings:UrlFrontEnd").Value;
+            string correoEncriptado = _simpleAES.EncryptToString(usuarioCompleto.Correo);
+            string urlFrontEnd = _config.GetSection("AppSettings:UrlFrontEndMovil").Value;
 
-            string logotipo = config.GetSection("AppSettings:UrlFrontEnd").Value + "assets/img/logotipo.png";
-            string logotipo2 = config.GetSection("AppSettings:UrlFrontEnd").Value + "assets/img/atencion-express.png";
+            var logotipoCdis = await DescargarLogo(urlFrontEnd + "assets/img/logotipo-cdis.png", "logo");
+            var logotipoHospital = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-H_C_CEIC.png", "logohospital");
+
+            var mensaje = $@"
+        <div>
+            <span><img src=""cid:logo"" style='max-width:100%; height:auto;'></span>
+            <span><img src=""cid:logohospital"" style='max-width:100%; height:auto;' align='right'></span>
+        </div>
+        <hr style='border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;'>
+        <p>Da clic en el siguiente link para restablecer tu contraseña:
+            <a href='{urlFrontEnd}#/acceso/restablecer-contrasena?id={correoEncriptado}&tkn={clave}' target='_blank'>
+                Restablecer mi contraseña
+            </a>
+        </p>
+        <hr style='border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;'>
+    ";
 
             var correo = new Correo
             {
                 Receptor = usuarioCompleto.CorreoPersonal,
                 Asunto = "ATISC: Restablecimiento de contraseña",
-                Mensaje =
-               @$"<div>
-                        <span><img src='{logotipo}' style='width: 200px; height: 45px;'></span>
-                        <span><img src='{logotipo2}'  style='width: 130px; height: 48px;' align='right'></span>
-                    </div>
-                    <hr style='border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;'>
-                    <p>Da clic en el siguiente link para restablecer tu contraseña: <a href='{urlFrontEnd}#/restablecer-contrasena?id={correoEncriptado}&tkn={clave}' target='_blank'>  Restablecer mi contraseña </a></p>
-                    <hr style='border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;'>",
-                EsMensajeHtml = true
+                Mensaje = mensaje,
+                EsMensajeHtml = true,
+                Imagenes = new List<MimePart> { logotipoCdis, logotipoHospital }
             };
 
-            correoHelper.Enviar(correo);
+            _correoHelper.Enviar(correo);
         }
+        private async Task<MimePart> DescargarLogo(string imageUrl, string contentId)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                byte[] imageData = await httpClient.GetByteArrayAsync(imageUrl);
+
+                return new MimePart("image", "png")
+                {
+                    ContentId = contentId,
+                    Content = new MimeContent(new MemoryStream(imageData), ContentEncoding.Default),
+                    ContentDisposition = new ContentDisposition(ContentDisposition.Inline),
+                    ContentTransferEncoding = ContentEncoding.Base64,
+                };
+            }
+        }
+
 
         private string GenerarClaveRestablecimiento()
         {
@@ -133,13 +156,13 @@ namespace TrackrAPI.Services.Seguridad
 
         private RestablecerContrasena Agregar(RestablecerContrasena restablecerContrasena)
         {
-            return restablecerContrasenaRepository.Agregar(restablecerContrasena);
+            return _restablecerContrasenaRepository.Agregar(restablecerContrasena);
         }
 
         private bool ValidarClaveRestablecimiento(int idUsuario, string clave)
         {
-            string claveEncriptada = simpleAES.EncryptToString(clave);
-            RestablecerContrasena resultado = restablecerContrasenaRepository.ConsultarPorUsuario(idUsuario);
+            string claveEncriptada = _simpleAES.EncryptToString(clave);
+            RestablecerContrasena resultado = _restablecerContrasenaRepository.ConsultarPorUsuario(idUsuario);
             if (resultado != null && resultado.Clave.Equals(claveEncriptada))
             {
                 DateTime fechaActual = Utileria.ObtenerFechaActual();

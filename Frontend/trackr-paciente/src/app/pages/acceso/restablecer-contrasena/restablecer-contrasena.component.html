@@ -1,0 +1,162 @@
+<div class="background-restablecer"></div>
+
+<div class="contenedor-restablecer">
+  <div>
+    <div class="contenedor-login">
+      <form
+        #contrasenasForm="ngForm"
+        novalidate="novalidate"
+        (ngSubmit)="restablecerPassword(contrasenasForm)"
+      >
+        <div
+          *ngIf="!contrasenaRestablecida && validacionCorrecta"
+          class="sub-contenedor-login mb-0"
+        >
+          <div class="row">
+            <div class="col-md-12 font-weight-bold text-center">
+              Restablecer contraseña.
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 mt-3 mb-3">
+              Establece tu nueva contraseña.
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 mt-2">
+              <div class="form-group">
+                <label class="label-input required-label">Contraseña</label>
+                <div>
+                  <input
+                    #contrasenaModel="ngModel"
+                    [(ngModel)]="usuario.contrasenaActualizada"
+                    name="contrasena"
+                    class="form-control"
+                    type="password"
+                    maxlength="50"
+                    required="required"
+                    autocomplete="off"
+                    appFormatoContrasena
+                    appConfirmacionContrasena="confirmacionContrasena"
+                    reversa="true"
+                  />
+                  <div
+                    *ngIf="contrasenaModel.errors && contrasenaModel.touched"
+                    class="error"
+                  >
+                    <div *ngIf="contrasenaModel.errors['required']">
+                      La contraseña es requerida
+                    </div>
+                    <div *ngIf="contrasenaModel.errors['formatoContrasena']">
+                      <div
+                        *ngIf="
+                          contrasenaModel.errors['formatoContrasena'].longitud
+                            ?.invalid
+                        "
+                      >
+                        La contraseña debe tener un mínimo de
+                        {{
+                          contrasenaModel.errors["formatoContrasena"].longitud
+                            ?.size
+                        }}
+                        caracteres
+                      </div>
+                      <div
+                        *ngIf="
+                          contrasenaModel.errors['formatoContrasena'].numeros
+                        "
+                      >
+                        La contraseña debe tener al menos un número
+                      </div>
+                      <div
+                        *ngIf="
+                          contrasenaModel.errors['formatoContrasena'].mayuscula
+                        "
+                      >
+                        La contraseña debe tener al menos una letra mayuscula
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="label-input required-label"
+                  >Confirmar Contraseña</label
+                >
+                <div>
+                  <input
+                    #contrasenaConfirmacionModel="ngModel"
+                    [(ngModel)]="confirmacionContrasena"
+                    name="confirmacionContrasena"
+                    class="form-control"
+                    type="password"
+                    maxlength="50"
+                    required="required"
+                    autocomplete="off"
+                    appConfirmacionContrasena="contrasena"
+                  />
+                  <div
+                    *ngIf="
+                      contrasenaConfirmacionModel.errors &&
+                      contrasenaConfirmacionModel.touched
+                    "
+                    class="error"
+                  >
+                    <div *ngIf="contrasenaConfirmacionModel.errors['required']">
+                      La confirmación de la contraseña es requerida
+                    </div>
+                    <div
+                      *ngIf="
+                        contrasenaConfirmacionModel.errors[
+                          'confirmacionContrasena'
+                        ] && !contrasenaConfirmacionModel.errors['required']
+                      "
+                    >
+                      La contraseña no coincide
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 btn-continuar titulo-4 text-center">
+              <button
+                [disabled]="false"
+                type="submit"
+                class="btn-primario"
+                style="width: 100% !important"
+              >
+                Restablecer Contraseña
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="contrasenaRestablecida">
+          <div class="sub-contenedor-login">
+            <div class="row">
+              <div class="col-md-12 font-weight-bold text-center">
+                Restablecer contraseña.
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 titulo-5 mb-3 mt-3">
+                Tu contraseña ha sido restablecida correctamente, ahora ya
+                podrás reiniciar tu acceso para iniciar sesión.
+              </div>
+            </div>
+
+            <div class="text-center mt-4">
+              <ion-button routerLink="/acceso/login">Regresar</ion-button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

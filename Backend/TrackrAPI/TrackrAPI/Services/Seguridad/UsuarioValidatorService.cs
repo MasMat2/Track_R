@@ -244,13 +244,12 @@ namespace TrackrAPI.Services.Seguridad
             }
         }
 
-        public void ValidarRestablecerContrasena(Usuario usuario)
+        public void ValidarRestablecerContrasena(RestablecerContrasenaDto usuario)
         {
             Validator.ValidarRequerido(usuario.Correo, MensajeCorreoRequerido);
-            // Validator.ValidarCorreo(usuario.Correo, MensajeFormatoCorreo);
         }
 
-        public void ValidarCorreoNoExistente(Usuario usuario)
+        public void ValidarCorreoNoExistente(RestablecerContrasenaDto usuario)
         {
             Usuario usuarioExistente = this.usuarioRepository.ConsultarPorCorreo(usuario.Correo);
 
@@ -260,13 +259,13 @@ namespace TrackrAPI.Services.Seguridad
             }
         }
 
-        public void ValidarActualizarContrasena(UsuarioDto usuario)
+        public void ValidarActualizarContrasena(RestablecerContrasenaDto usuario)
         {
             Validator.ValidarRequerido(usuario.Correo, MensajeCorreoRequerido);
             Validator.ValidarRequerido(usuario.Clave, MensajeClaveRequerida);
         }
 
-        public void ValidarProcesarActualizacionContrasena(UsuarioDto usuario)
+        public void ValidarProcesarActualizacionContrasena(RestablecerContrasenaDto usuario)
         {
             ValidarActualizarContrasena(usuario);
             Validator.ValidarRequerido(usuario.ContrasenaActualizada, MensajeContrasenaRequerida);
