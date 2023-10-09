@@ -46,7 +46,7 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   protected variableList: ExpedienteColumnaSelectorDTO[];
   protected claveVariable: string;
   protected nombreVariable: string;
-  protected filtroTiempo: string = "hoy";
+  protected filtroTiempo: string = "hoy" ?? "1 semana";
   protected valoresCampo: any
 
   // Configuración Columnas Data Grid
