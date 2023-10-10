@@ -25,6 +25,7 @@ public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>,
             .Include(et => et.IdPadecimientoNavigation)
             .Include(et => et.TratamientoRecordatorio)
             .ThenInclude(tr => tr.TratamientoToma)
+            .AsSplitQuery()
             .ToList();
     }
 
