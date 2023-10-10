@@ -1,5 +1,5 @@
  <!-- 1 Variable -->
- <div *ngIf="tipoWidget === 1">
+ <div *ngIf="tipoWidget === 1" class="widget-hover">
   <app-widget
   title="Seguimiento de {{ nombrePadecimiento }}"
   iconClass="medkit-outline"
@@ -21,7 +21,7 @@
 </app-widget>
 </div>
 <!-- 2 Variables -->
-<div *ngIf="tipoWidget === 2">
+<div *ngIf="tipoWidget === 2"  class="widget-hover">
   <app-widget
   title="Seguimiento de {{ nombrePadecimiento }}"
   iconClass="medkit-outline"
@@ -53,25 +53,26 @@
 </app-widget>
 </div>
 <!-- 1 Variable y un circlo-->
-<div *ngIf="tipoWidget === 3">
+<div *ngIf="tipoWidget === 3"  class="widget-hover">
   <app-widget
   title="Seguimiento de {{ nombrePadecimiento }}"
   iconClass="medkit-outline"
 >
     <div class="container d-flex align-items-center gap-2">
-      <div class="counter d-flex flex-column align-items-center">
-        <!-- Contador -->
-        <div class="circle-container">
-          <div class="valor">{{ valorVariable | number }}</div>
-          <div class="label">{{unidadVariable}}</div>
+      <div class="dato">
+        <div class="counter d-flex flex-column align-items-center">
+          <div class="circle-container">
+            <div class="valor">{{ valorVariable | number }}</div>
+            <div class="label">{{unidadVariable}}</div>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <div class="dato">
-      <span class="icono"><ion-icon class="{{claseTratamiento}}"></ion-icon></span>
-      <span class="nombre">{{ nombreTratamiento }}</span>
-      <span class="valor">2 de 4</span>
-    </div>
+      <div class="dato">
+        <span class="icono"><ion-icon class="{{claseTratamiento}}"></ion-icon></span>
+        <span class="nombre">{{ nombreTratamiento }}</span>
+        <span class="valor">2 de 4</span>
+      </div>
     </div>
 
 
