@@ -40,6 +40,8 @@
                     valorTratamiento="2U"
                     unidadTratamiento="Humalog Mix 25 Plum"
                     claseTratamiento="{{ padecimiento.iconoClase }} + icono-seguimiento"
+
+                    (click) = "mostrarSeguimiento(padecimiento.idPadecimiento)"
                 ></app-widget-seguimiento>
             </ion-col>
           </ion-row>
@@ -47,3 +49,5 @@
       </div>
     </div>
   </ion-content>
+
+  

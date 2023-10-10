@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { EntidadTablaRegistroDto, TablaValorMuestraDTO } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
 import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
 import { Observable } from 'rxjs';
+import { ValoresPorClaveCampo } from '../../Dtos/gestion-expediente/valores-clave-campo';
 
 @Injectable()
 export class EntidadEstructuraTablaValorService {
@@ -33,5 +34,13 @@ export class EntidadEstructuraTablaValorService {
   // public consultarValoresTodasVariables(idPadecimiento: number, idUsuario: number) {
   //   return this.http.get<ValoresFueraRangoGridDTO[]>(this.dataUrl + `valoresTodasVariables/${idPadecimiento}/${idUsuario}`);
   // }
-  
+
+  public consultarValoresPorClaveCampoUsuarioSesion(claveCampo: string, filtroTiempo: string): Observable<ValoresPorClaveCampo> {
+    return this.http.get<ValoresPorClaveCampo>(this.dataUrl + `valoresPorClaveCampo/usuarioSesion/${claveCampo}/${filtroTiempo}`);
+  }
+
+  public consultarValoresPorClaveCampoParaGridUsuarioSesion(claveCampo: string, filtroTiempo: string): Observable<any> {
+    return this.http.get<any>(this.dataUrl + `valoresPorClaveCampoParaGrid/usuarioSesion/${claveCampo}/${filtroTiempo}`);
+  }
+
 }

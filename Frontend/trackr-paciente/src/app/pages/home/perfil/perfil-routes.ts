@@ -34,6 +34,10 @@ export default [
         path: 'mis-estudios/agregar',
         loadComponent: () => import('./mis-estudios/mis-estudios-formulario/mis-estudios-formulario.component').then((m) => m.MisEstudiosFormularioPage)
       },
+      {
+        path: 'seguimiento/:id',
+        loadComponent: () => import('../dashboard/components/seguimiento-padecimiento/seguimiento-padecimiento.component').then((m) => m.SeguimientoPadecimientoComponent)
+      },
       { path: '**', redirectTo: 'informacion-general', pathMatch: 'full' }
     ]
   },

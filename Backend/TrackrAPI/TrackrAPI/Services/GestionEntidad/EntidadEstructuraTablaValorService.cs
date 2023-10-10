@@ -271,10 +271,62 @@ namespace TrackrAPI.Services.GestionEntidad
                     fecha = fecha.AddDays(-7); // Desde los últimos 7 días
                     var valoresSemana = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
                     return AgruparPorSemana(valoresSemana);
+                case "2 semanas":
+                    fecha = fecha.AddDays(-14); // Desde los últimos 14 días
+                    var valoresDosSemanas = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return AgruparPorSemana(valoresDosSemanas);
+                case "3 semanas":
+                    fecha = fecha.AddDays(-21); // Desde las últimas 3 semanas
+                    var valoresTresSemanas = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return AgruparPorSemana(valoresTresSemanas);
+                case "1 mes":
+                    fecha = fecha.AddMonths(-1); // Desde el último mes
+                    var valoresUnMes = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return AgruparPorSemana(valoresUnMes);
+                case "2 meses":
+                    fecha = fecha.AddMonths(-2); // Desde los últimos 2 meses
+                    var valoresDosMeses = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return AgruparPorSemana(valoresDosMeses);
                 default:
                     throw new CdisException("Filtro de fecha no reconocido");
             }
         }
+
+        public IEnumerable<ValoresHistogramaDTO> ConsultarValoresPorClaveCampoParaGrid(string claveCampo, int idUsuario, string fechaFiltro)
+        {
+            DateTime fecha = DateTime.Now;
+
+            switch (fechaFiltro.ToLower())
+            {
+                case "hoy":
+                    fecha = fecha.AddHours(-24); // Desde las últimas 24 horas
+                    var valoresHoy = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresHoy;
+                case "1 semana":
+                    fecha = fecha.AddDays(-7); // Desde los últimos 7 días
+                    var valoresSemana = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresSemana;
+                case "2 semanas":
+                    fecha = fecha.AddDays(-14); // Desde los últimos 14 días
+                    var valoresDosSemanas = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresDosSemanas;
+                case "3 semanas":
+                    fecha = fecha.AddDays(-21); // Desde las últimas 3 semanas
+                    var valoresTresSemanas = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresTresSemanas;
+                case "1 mes":
+                    fecha = fecha.AddDays(-30); // Desde el último mes
+                    var valoresUnMes = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresUnMes;
+                case "2 meses":
+                    fecha = fecha.AddDays(-60); // Desde los últimos 2 meses
+                    var valoresDosMeses = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresDosMeses;
+                default:
+                    throw new CdisException("Filtro de fecha no reconocido");
+            }
+        }
+
         public static int ObtenerSemanaDelAnio(DateTime fecha)
         {
             DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(fecha);

@@ -79,5 +79,19 @@ namespace TrackrAPI.Controllers.GestionEntidad
         {
             return entidadEstructuraTablaValorService.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, filtroTiempo);
         }
+
+        [HttpGet("valoresPorClaveCampo/usuarioSesion/{claveCampo}/{filtroTiempo}")]
+        public Dictionary<string, List<ValoresHistogramaDTO>> ConsultarValoresPorClaveCampoFiltroUsuarioSesion(string claveCampo, string filtroTiempo)
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            return entidadEstructuraTablaValorService.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, filtroTiempo);
+        }
+
+        [HttpGet("valoresPorClaveCampoParaGrid/usuarioSesion/{claveCampo}/{filtroTiempo}")]
+        public IEnumerable<ValoresHistogramaDTO> ConsultarValoresPorClaveCampoParaGridUsuarioSesion(string claveCampo, string filtroTiempo)
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            return entidadEstructuraTablaValorService.ConsultarValoresPorClaveCampoParaGrid(claveCampo, idUsuario, filtroTiempo);
+        }
     }
 }
