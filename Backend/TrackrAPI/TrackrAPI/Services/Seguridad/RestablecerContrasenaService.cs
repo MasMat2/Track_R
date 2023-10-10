@@ -86,7 +86,7 @@ namespace TrackrAPI.Services.Seguridad
             var usuarioCompleto = _usuarioRepository.ConsultarPorCorreo(correoUsuario);
 
             string correoEncriptado = _simpleAES.EncryptToString(usuarioCompleto.Correo);
-            string urlFrontEnd = _config.GetSection("AppSettings:UrlFrontEndMovil").Value;
+            string urlFrontEnd = _config.GetSection("AppSettings:UrlFrontEnd").Value;
 
             var logotipoCdis = await DescargarLogo(urlFrontEnd + "assets/img/logotipo-cdis.png", "logo");
             var logotipoHospital = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-H_C_CEIC.png", "logohospital");
@@ -114,23 +114,31 @@ namespace TrackrAPI.Services.Seguridad
                 Imagenes = new List<MimePart> { logotipoCdis, logotipoHospital }
             };
 
-            _correoHelper.Enviar(correo);
+            await _correoHelper.Enviar(correo);
         }
         private async Task<MimePart> DescargarLogo(string imageUrl, string contentId)
         {
-            using (var httpClient = new HttpClient())
+            try
             {
-                byte[] imageData = await httpClient.GetByteArrayAsync(imageUrl);
-
-                return new MimePart("image", "png")
+                using (var httpClient = new HttpClient())
                 {
-                    ContentId = contentId,
-                    Content = new MimeContent(new MemoryStream(imageData), ContentEncoding.Default),
-                    ContentDisposition = new ContentDisposition(ContentDisposition.Inline),
-                    ContentTransferEncoding = ContentEncoding.Base64,
-                };
+                    byte[] imageData = await httpClient.GetByteArrayAsync(imageUrl);
+
+                    return new MimePart("image", "png")
+                    {
+                        ContentId = contentId,
+                        Content = new MimeContent(new MemoryStream(imageData), ContentEncoding.Default),
+                        ContentDisposition = new ContentDisposition(ContentDisposition.Inline),
+                        ContentTransferEncoding = ContentEncoding.Base64,
+                    };
+                }
+            }
+            catch (Exception)
+            {
+                throw new CdisException("Ocurrió un error al enviar el correo");
             }
         }
+
 
 
         private string GenerarClaveRestablecimiento()

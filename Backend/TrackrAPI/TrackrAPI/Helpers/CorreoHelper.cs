@@ -27,37 +27,47 @@ public class CorreoHelper
         }
     }
 
-    public void Enviar(Correo correo)
+    public async Task Enviar(Correo correo)
     {
-        if (string.IsNullOrWhiteSpace(correo.Receptor) || correo.Receptor.Trim().StartsWith('.'))
-            return;
-
-        var message = new MimeMessage();
-        message.From.Add(new MailboxAddress(Alias, Emisor));
-        message.To.Add(MailboxAddress.Parse(correo.Receptor));
-        message.Subject = correo.Asunto;
-
-        if (correo.EsMensajeHtml)
+        try
         {
-            var builder = new BodyBuilder { HtmlBody = correo.Mensaje };
 
-            foreach (var imagen in correo.Imagenes)
-                builder.LinkedResources.Add(imagen);
+            if (string.IsNullOrWhiteSpace(correo.Receptor) || correo.Receptor.Trim().StartsWith('.'))
+                return;
 
-            message.Body = builder.ToMessageBody();
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(Alias, Emisor));
+            message.To.Add(MailboxAddress.Parse(correo.Receptor));
+            message.Subject = correo.Asunto;
+
+            if (correo.EsMensajeHtml)
+            {
+                var builder = new BodyBuilder { HtmlBody = correo.Mensaje };
+
+                foreach (var imagen in correo.Imagenes)
+                    builder.LinkedResources.Add(imagen);
+
+                message.Body = builder.ToMessageBody();
+            }
+            else
+            {
+                message.Body = new TextPart("plain") { Text = correo.Mensaje };
+            }
+
+            using (var client = new SmtpClient())
+            {
+                await client.ConnectAsync(Host, Puerto, SecureSocketOptions.StartTls);
+                await client.AuthenticateAsync(Emisor, Contrasena);
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
+            }
+
         }
-        else
+        catch (Exception)
         {
-            message.Body = new TextPart("plain") { Text = correo.Mensaje };
+            throw new CdisException("Ocurrió un error al enviar el correo");
         }
 
-        using (var client = new SmtpClient())
-        {
-            client.Connect(Host, Puerto, SecureSocketOptions.StartTls);
-            client.Authenticate(Emisor, Contrasena);
-            client.Send(message);
-            client.Disconnect(true);
-        }
     }
 
     public void EnviarAdjuntos(Correo correo, List<MimePart> adjuntos)
