@@ -15,7 +15,7 @@ public class RecordatorioTomasService : IHostedService, IDisposable
     private Timer _timer;
     private readonly NotificacionPacienteServiceFactory _notificacionPacienteServiceFactory;
 
-    private int waitTime = 5;
+    private int waitTime = 1;
 
     public RecordatorioTomasService(IServiceScopeFactory scopeFactory ,
                                   NotificacionPacienteServiceFactory notificacionPacienteServiceFactory 
@@ -29,11 +29,14 @@ public class RecordatorioTomasService : IHostedService, IDisposable
     public Task StartAsync(CancellationToken cancellationToken)
     {
         // Start the timer to run the ProcesoDeFondo method every 15 minutes
-        _timer = new Timer(ProcesoDeFondo, null, TimeSpan.Zero, TimeSpan.FromMinutes(waitTime));
+         _timer = new Timer(async state =>
+        {
+            await ProcesoDeFondo(state);
+        }, null, TimeSpan.Zero, TimeSpan.FromMinutes(waitTime));
         return Task.CompletedTask;
     }
 
-    private void ProcesoDeFondo(object state)
+    private async Task ProcesoDeFondo(object state)
     {
         
         Console.WriteLine(DateTime.Now);
@@ -56,7 +59,7 @@ public class RecordatorioTomasService : IHostedService, IDisposable
                 context.SaveChanges();
                 
                 ActualizarContador(context);
-                CrearTratamientoTomas(context);
+                await CrearTratamientoTomas(context);
 
             }
         }
@@ -96,16 +99,15 @@ public class RecordatorioTomasService : IHostedService, IDisposable
     public async Task CrearTratamientoTomas(TrackrContext context){
         DateTime now = DateTime.Now;
         Console.WriteLine(now);
-        int currentDay = ((int)now.DayOfWeek + 6) % 7; // Monday = 0, ..., Saturday = 5, Sunday = 6
+        int currentDay = ((int)now.DayOfWeek + 7) % 7; // Monday = 0, ..., Saturday = 5, Sunday = 6
         TimeSpan currentTime = now.TimeOfDay;
         TimeSpan timeIn15Minutes = currentTime + TimeSpan.FromMinutes(15);
         DateTime time15MinutesAgo = now - TimeSpan.FromMinutes(15);
 
         var recordatoriosToProcess = context.TratamientoRecordatorio
         .Include( tr => tr.IdExpedienteTratamientoNavigation)
+            .ThenInclude( et => et.IdExpedienteNavigation)
         .Where(tr => 
-            tr.IdExpedienteTratamientoNavigation.FechaInicio <= now &&
-            (tr.IdExpedienteTratamientoNavigation.FechaFin == null || tr.IdExpedienteTratamientoNavigation.FechaFin >= now) &&
             tr.Dia == currentDay &&
             tr.Hora >= currentTime &&
             tr.Hora <= timeIn15Minutes &&
