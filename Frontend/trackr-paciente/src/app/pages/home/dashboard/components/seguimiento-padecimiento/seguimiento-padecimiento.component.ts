@@ -16,6 +16,8 @@ import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera
 import { ValoresPorClaveCampo } from 'src/app/shared/Dtos/gestion-expediente/valores-clave-campo';
 import { GridGeneralComponent } from '@sharedComponents/grid-general/grid-general.component';
 import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.module';
+import { ColDef, ValueGetterParams } from 'ag-grid-community';
+import {format} from 'date-fns'
 
 
 @Component({
@@ -46,15 +48,30 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   protected variableList: ExpedienteColumnaSelectorDTO[];
   protected claveVariable: string;
   protected nombreVariable: string;
-  protected filtroTiempo: string = "hoy";
-  protected valoresCampo: any
+  protected filtroTiempo: string = "hoy" ?? "1 semana";
+  protected valoresCampo: any;
+  protected valorMin: number | null;
+  protected valorMax: number | null;
+  protected fechaMin: string;
+  protected fechaMax: string;
+
 
   // Configuración Columnas Data Grid
-  protected columns = [
-    { headerName: 'Fecha', field: 'fechaMuestra', minWidth: 10 },
-    { headerName: 'Valor', field: 'valor', minWidth: 10 },
+  protected columns: ColDef[] = [
+    { headerName: 'Fecha', field: 'fechaMuestra', minWidth: 15, 
+      valueGetter: (params: ValueGetterParams) => {
+        const fecha = new Date(params.data.fechaMuestra);
+        return format(fecha, 'dd/MM/yyyy');
+      }
+    },
+    { headerName: 'Hora', field: 'fechaMuestra', minWidth: 15,
+      valueGetter: (params: ValueGetterParams) => {
+        const hora = new Date(params.data.fechaMuestra);
+        return format(hora, 'HH:mm')
+      }
+    },
+    { headerName: 'Valor', field: 'valor', minWidth: 15 },
   ];
-
 
   //Configuracion colores para histograma
   private readonly backgroundColor = [
@@ -84,7 +101,6 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
     labels: this.barChartLabels,
     datasets: [
       {
-        label: "Niveles de Glucosa",
         data: [],
         backgroundColor: this.backgroundColor,
         borderColor: this.borderColor,
@@ -113,17 +129,18 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
 
   protected onChangeVariable(event: Event): void {
     if(event != null && this.filtroTiempo != null){
-      this.actualizarHistograma(event.toString(), this.filtroTiempo);
+      this.actualizarDatos(event.toString(), this.filtroTiempo);
     }
   }
 
   protected onFiltroChange(event: MatChipListboxChange): void {
     if(this.claveVariable != null && event != null){
-      this.actualizarHistograma(this.claveVariable, event.toString());
+      this.actualizarDatos(this.claveVariable, event.toString());
     }
   }
 
-  private actualizarHistograma(filtroClave: string, filtroTiempo: string): void {
+  private actualizarDatos(filtroClave: string, filtroTiempo: string): void {
+
     lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresPorClaveCampoUsuarioSesion(filtroClave, filtroTiempo))
       .then((valoresPorClaveCampo) => {
         // Transforma los datos para usar en la gráfica
@@ -151,9 +168,43 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
       this.chart?.update();
       });
 
+      //Consulta los valores para Grid y Max/Min
       lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresPorClaveCampoParaGridUsuarioSesion(filtroClave, filtroTiempo))
       .then((response) => {
         this.valoresCampo = response;
+        console.log(this.valoresCampo);
+
+        //Max
+        const { maxValor, fechaMax } = this.valoresCampo.reduce(
+          (acc: any, data: any) => (data.valor > acc.maxValor ? { maxValor: data.valor, fechaMax: data.fechaMuestra } : acc),
+          { maxValor: -Infinity, fechaMax: null }
+        );
+        if(maxValor !== -Infinity)
+          this.valorMax = maxValor;
+        else
+          this.valorMax = null;
+
+        this.fechaMax = format(new Date(fechaMax), 'dd/MM/yyyy')
+
+        //Min
+        const { minValor, fechaMin } = this.valoresCampo.reduce(
+          (acc: any, data: any) => (data.valor < acc.minValor ? { minValor: data.valor, fechaMin: data.fechaMuestra } : acc),
+          { minValor: Infinity, fechaMin: null }
+        );
+        if(minValor !== Infinity)
+          this.valorMin = minValor
+        else
+          this.valorMin = null;
+        
+        this.fechaMin = format(new Date(fechaMin), 'dd/MM/yyyy')
+        
+
+        
+
+        console.log('This Valor máximo:', this.valorMax);
+        console.log('This Fecha de valor maximo:', this.fechaMax);
+        console.log('This Valor mínimo:', this.valorMin);
+        console.log('This Fecha de valor minimo:', this.fechaMin);
       }
     );
   }

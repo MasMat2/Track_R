@@ -6,7 +6,7 @@ export default [
     component: DashboardPage,
     children: [
       {
-        path: 'seguimiento-padecimiento',
+        path: 'seguimiento/:id',
         loadComponent: () => import('./components/seguimiento-padecimiento/seguimiento-padecimiento.component').then((m) => m.SeguimientoPadecimientoComponent)
       },
       { path: '**', redirectTo: '', pathMatch: 'full' }

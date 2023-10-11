@@ -25,6 +25,7 @@
 
     <!-- Chip Opciones Filtrado -->
     <div class="contenedor-filtro">
+      <div>
       <mat-chip-listbox
         aria-label="Filtro Tiempo"
         (ngModelChange)="onFiltroChange($event)"
@@ -45,9 +46,59 @@
         </ion-col>
       </ion-row>
       </mat-chip-listbox>
+      </div>
     </div>
 
-    <div>
+    <ion-row class="etiqueta-extremos">
+      <span>Valor más Bajo - Más alto</span>
+    </ion-row>
+
+    <!--Valor más alto y más bajo-->
+    <ion-row>
+      <ion-col size="6" class="circulo">
+        <div class="contenedor-label-valores-extremos">
+          <ion-label class="label-valores-extremos">
+            <ion-row>
+              <div class="etiqueta">Más bajo</div>
+            </ion-row>
+            <ion-row>
+              <div class="fecha">{{fechaMin}}</div>
+            </ion-row>
+          </ion-label>
+        </div>
+        <div class="circle-container d-flex flex-column align-items-center">
+ 
+          <div class="valores-extremos">
+            <span class="valor">{{valorMin}}</span>
+            <span class="unidad">mg/dL</span>
+          </div>
+
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div class="contenedor-label-valores-extremos">
+          <ion-label class="label-valores-extremos">
+            <ion-row>
+              <div class="etiqueta">Más alto</div>
+            </ion-row>
+            <ion-row>
+              <div class="fecha">{{fechaMax}}</div>
+            </ion-row>
+          </ion-label>
+        </div>
+        <div class="circle-container d-flex flex-column align-items-center">
+
+          <div class="valores-extremos">
+            <span class="valor">{{valorMax}}</span>
+            <span class="unidad">mg/dL</span>
+          </div>
+
+        </div>
+      </ion-col>
+    </ion-row>
+
+
+    <div class="histograma">
       <!-- Gráfica / Histograma -->
       <canvas
         baseChart
@@ -58,8 +109,9 @@
       >
       </canvas>
     </div>
-
-
+    <ion-row class="etiqueta-extremos">
+      <span>Bitácora de muestras</span>
+    </ion-row>
     <app-grid-general
         [headerName]="HEADER_GRID"
         [data]="valoresCampo"
