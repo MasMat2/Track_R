@@ -7664,6 +7664,11 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.FechaToma).HasColumnType("datetime");
 
+                entity.HasOne(d => d.IdNotificacionNavigation)
+                    .WithMany(p => p.TratamientoToma)
+                    .HasForeignKey(d => d.IdNotificacion)
+                    .HasConstraintName("FK__Tratamien__IdNot__61E66462");
+
                 entity.HasOne(d => d.IdTratamientoRecordatorioNavigation)
                     .WithMany(p => p.TratamientoToma)
                     .HasForeignKey(d => d.IdTratamientoRecordatorio)
