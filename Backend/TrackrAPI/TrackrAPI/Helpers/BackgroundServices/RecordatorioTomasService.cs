@@ -13,17 +13,14 @@ public class RecordatorioTomasService : IHostedService, IDisposable
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private Timer _timer;
-    private readonly NotificacionPacienteServiceFactory _notificacionPacienteServiceFactory;
 
-    private int waitTime = 1;
+    private readonly int waitTime = 5;
 
-    public RecordatorioTomasService(IServiceScopeFactory scopeFactory ,
-                                  NotificacionPacienteServiceFactory notificacionPacienteServiceFactory 
+    public RecordatorioTomasService(IServiceScopeFactory scopeFactory
     )
     {
         
         _scopeFactory = scopeFactory;
-        _notificacionPacienteServiceFactory = notificacionPacienteServiceFactory;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -44,6 +41,7 @@ public class RecordatorioTomasService : IHostedService, IDisposable
         using (var scope = _scopeFactory.CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<TrackrContext>();
+            var notificacionPacienteService = scope.ServiceProvider.GetRequiredService<NotificacionPacienteService>();
 
             // Obtener DistributedLock para RecordatorioTomas
             // Este registro de la base de datos nos permite conocer 
@@ -59,7 +57,7 @@ public class RecordatorioTomasService : IHostedService, IDisposable
                 context.SaveChanges();
                 
                 ActualizarContador(context);
-                await CrearTratamientoTomas(context);
+                await CrearTratamientoTomas(context , notificacionPacienteService);
 
             }
         }
@@ -96,7 +94,7 @@ public class RecordatorioTomasService : IHostedService, IDisposable
         }
     }
 
-    public async Task CrearTratamientoTomas(TrackrContext context){
+    public async Task CrearTratamientoTomas(TrackrContext context , NotificacionPacienteService notificacionPacienteService){
         DateTime now = DateTime.Now;
         Console.WriteLine(now);
         int currentDay = ((int)now.DayOfWeek + 7) % 7; // Monday = 0, ..., Saturday = 5, Sunday = 6
@@ -114,13 +112,15 @@ public class RecordatorioTomasService : IHostedService, IDisposable
             !tr.TratamientoToma.Any(toma => toma.FechaEnvio > time15MinutesAgo) // Asegura que no se ha creado un TratamientoToma para el TratamientoRecordatorio en los últimos 15 minutos
         )
         .ToList();
-        var notificacionPacienteService = _notificacionPacienteServiceFactory.CreateScopedInstance();
         foreach (var recordatorio in recordatoriosToProcess)
         {
+
+            var mensajeNotificacion = $"Tomar {recordatorio.IdExpedienteTratamientoNavigation.Cantidad} {recordatorio.IdExpedienteTratamientoNavigation.Unidad} , {recordatorio.Hora} ";
+
             var notificacion = new NotificacionCapturaDTO
             (
                 recordatorio.IdExpedienteTratamientoNavigation.Farmaco,
-                recordatorio.IdExpedienteTratamientoNavigation.Cantidad.ToString() + ' ' +  recordatorio.IdExpedienteTratamientoNavigation.Unidad,
+                mensajeNotificacion,
                 6
             );
 
