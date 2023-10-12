@@ -15,6 +15,7 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         public IEnumerable<ExpedientePadecimientoDTO> Consultar()
         {
             return context.ExpedientePadecimiento
+            .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioPaciente)
                 .Select(ep => new ExpedientePadecimientoDTO
                 {
                     IdExpedientePadecimiento = ep.IdExpedientePadecimiento,
