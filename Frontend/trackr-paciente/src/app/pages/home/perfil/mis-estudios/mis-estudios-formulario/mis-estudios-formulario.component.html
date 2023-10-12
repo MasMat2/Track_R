@@ -1,75 +1,82 @@
-<!-- <ion-header>
-  <app-header></app-header>
-</ion-header> -->
-<ion-toolbar>
-  <ion-buttons slot="start">
-    <ion-button routerLink="/home/perfil/mis-estudios">
-      <i class="fa-solid fa-arrow-left"></i>
-    </ion-button>
-  </ion-buttons>
-  <ion-title>Mis Estudios/Agregar Estudio</ion-title>
-</ion-toolbar>
-<ion-content>
-  <form
-    (keydown.enter)="$event.preventDefault()"
-    #formulario="ngForm"
-    (ngSubmit)="enviarFormulario(formulario)"
-    novalidate="novalidate"
-  >
-    <ion-grid>
-      <ion-row>
-        <ion-col size="5">
-          <ion-label position="stacked" class="required-label">Fecha</ion-label>
-          <ion-input type="text" readonly="true" [value]="fecha | date: 'dd/MM/yyyy'"></ion-input>
-        </ion-col>
-        <ion-col size="7">
-          <ion-label position="stacked" class="required-label">Estudio</ion-label>
-          <div>
+<div class="container">
+    <form
+      (keydown.enter)="$event.preventDefault()"
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      novalidate="novalidate"
+    >
+      <ion-grid>
+        <ion-row>
+          <ion-col size="5">
             <ion-input
-              #nombre="ngModel"
-              [(ngModel)]="expedienteEstudio.nombre"
-              name="estudioName"
-              type="text"
-              maxlength="200"
-              autocomplete="off"
-              required
-            ></ion-input>
-            <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
-              El estudio es requerido
+             type="text"
+             readonly="true"
+             [value]="fecha | date: 'dd/MM/yyyy'"
+             label="Fecha"
+             labelPlacement="floating"
+             shape="round"
+             fill="outline"
+             >
+            </ion-input>
+          </ion-col>
+          <ion-col size="7">
+            <div>
+              <ion-input
+                #nombre="ngModel"
+                [(ngModel)]="expedienteEstudio.nombre"
+                name="estudioName"
+                type="text"
+                maxlength="200"
+                autocomplete="off"
+                required
+                label="Estudio"
+                labelPlacement="floating"
+                shape="round"
+                fill="outline"
+              ></ion-input>
+              <div *ngIf="nombre.errors?.['required'] && nombre.touched" class="error">
+                El estudio es requerido
+              </div>
             </div>
-          </div>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size="7">
-          <ion-label position="stacked" class="required-label">Documento</ion-label>
-          <ion-input
-            type="text"
-            readonly="true"
-            [(ngModel)]="expedienteEstudio.archivoNombre"
-            name="ArchivoNombre"
-            #documento="ngModel"
-            required
-          ></ion-input>
-          <div *ngIf="documento.errors?.['required'] && documento.touched" class="error">
-            El documento es requerido
-          </div>
-        </ion-col>
-        <ion-col size="5" class="ion-align-self-end">
-          <ion-button (click)="agregarArchivo()" size="small">Seleccionar archivo <br><ion-icon name="document-outline"></ion-icon></ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-    <div class="ion-text-center ion-padding">
-      <ion-button
-             [disabled]="btnSubmit"
-             type="submit"
-             class="btn-primario btn-margin-left"
-             >Guardar</ion-button>
-    </div>
-    <div class="ion-text-center ion-padding">
-      <ion-button (click)="takePicture()" size="small">Cargar/Tomar fotografia <br><ion-icon name="camera-outline"></ion-icon></ion-button>
-      <br>
-    </div>
-  </form>
-</ion-content>
+          </ion-col>
+        </ion-row>
+        <ion-row class="d-flex align-items-center">
+          <ion-col size="7">
+            <ion-input
+              type="text"
+              readonly="true"
+              [(ngModel)]="expedienteEstudio.archivoNombre"
+              name="ArchivoNombre"
+              #documento="ngModel"
+              required
+              label="Documento"
+              labelPlacement="floating"
+              shape="round"
+              fill="outline"
+            ></ion-input >
+            <div *ngIf="documento.errors?.['required'] && documento.touched" class="error">
+              El documento es requerido
+            </div>
+          </ion-col>
+          <ion-col size="5" class="ion-align-self-end">
+            <label class="label-input required-label">&nbsp;</label>
+            <ion-button (click)="agregarArchivo()" size="small" class="boton-cargar">Cargar <br><ion-icon name="document-outline"></ion-icon></ion-button>
+            <label class="">&nbsp;</label>
+          </ion-col>
+        </ion-row>
+
+        <ion-button class="boton-agregar" fill="outline" (click)="takePicture()" size="small">
+          <ion-icon name="camera-outline" slot="start"></ion-icon>
+          
+          Tomar fotografia
+        
+        </ion-button>
+
+        <ion-button [disabled]="btnSubmit" type="submit" class="boton-guardar">Guardar</ion-button>
+      </ion-grid>
+
+ 
+ 
+   
+    </form>
+</div>  

@@ -1,0 +1,35 @@
+.container{
+    box-shadow: 3px 3px 3px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+ion-input{
+    border: 0px;
+}
+
+ion-button{
+    font-weight: 500;
+}
+
+.boton-agregar{
+    --color: black; 
+    --border-color: #9BD8AC;
+}
+
+.boton-guardar{
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    --color : black;
+    --background: #9BD8AC;
+}
+
+.boton-cargar{
+    --color: black;
+    --background : #9ED1FE;
+}
+
+ion-row{
+    align-items: center;
+}

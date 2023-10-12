@@ -446,7 +446,7 @@
         </ion-row>
         <div *ngFor="let padecimiento of informacionUsuario.padecimientos, let i = index">
           <ion-row>
-            <ion-col size="6">
+            <ion-col size="7">
               <ion-select
               #tipoPadecimiento="ngModel"
               id="tipoPadecimiento"
@@ -460,7 +460,7 @@
                 <ion-select-option *ngFor="let pad of padecimientoList" [value]="pad.idPadecimiento">{{ pad.nombre }}</ion-select-option>
               </ion-select>
             </ion-col>
-            <ion-col size="6">
+            <ion-col size="5">
               <ion-item class="custom-datetime">
                 <ion-datetime-button [datetime]="'fechaDiagnostico' + i"></ion-datetime-button>
                 <ion-modal [keepContentsMounted]="true">
@@ -480,7 +480,7 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="6">
+            <ion-col size="8">
               <ion-input
                 #doctor="ngModel"
                 id="doctor"
@@ -493,16 +493,16 @@
                 [(ngModel)]="padecimiento.nombreDoctor">
               </ion-input>
             </ion-col>
-            <ion-col size="6">
+            <ion-col size="4">
               <ion-item>
-                <ion-icon (click)="eliminarPadecimiento(i)" name="close-circle-outline" size="large"></ion-icon>
+                <ion-icon (click)="eliminarPadecimiento(i)" name="close-circle-outline" size="large"></ion-icon> <!-- buscar una tacha blanca y circulo gris -->
               </ion-item>
             </ion-col>
           </ion-row>
         </div>
 
         <ion-row>
-          <ion-col size="6">
+          <ion-col size="7">
             <ion-select
               #tipoPadecimiento="ngModel"
               id="tipoNuevoPadecimiento"
@@ -517,7 +517,7 @@
                 <ion-select-option *ngFor="let pad of padecimientoList" [value]="pad.idPadecimiento">{{ pad.nombre }}</ion-select-option>
               </ion-select>
           </ion-col>
-          <ion-col size="6">
+          <ion-col size="5">
             <ion-item class="custom-datetime">
               <ion-datetime-button datetime="fechaDiagnostico"></ion-datetime-button>
               <ion-modal [keepContentsMounted]="true">
@@ -538,7 +538,7 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col size="6">
+          <ion-col size="8">
             <ion-input
               #doctor="ngModel"
               id="doctor"
@@ -552,7 +552,7 @@
               [(ngModel)]="nuevoPadecimiento.nombreDoctor">
             </ion-input>
           </ion-col>
-          <ion-col size="6">
+          <ion-col size="4">
             <ion-item>
               <ion-icon
                 (click)="agregarPadecimiento()"
@@ -565,7 +565,7 @@
 
         <ion-row class="mt-4">
           <ion-col>
-              <ion-button [disabled]="!btnSubmit" expand="full" color="primary" type="submit">Guardar</ion-button>
+              <ion-button [disabled]="!btnSubmit"  type="submit">Guardar</ion-button>
           </ion-col>
         </ion-row>
         <br>

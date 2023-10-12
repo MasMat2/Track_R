@@ -7,6 +7,7 @@ import { map, Observable } from 'rxjs';
 import { PerfilTratamientoDto } from '@dtos/gestion-perfil/perfil-tratamiento-dto';
 import { PerfilTratamientoService } from '@http/gestion-perfil/perfil-tratamiento.service';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 interface Tratamiento extends PerfilTratamientoDto {
   expandido: boolean;
