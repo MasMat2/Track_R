@@ -279,7 +279,8 @@ namespace TrackrAPI.Repositorys.Seguridad
 
             return context.Usuario
                 .Where(u => u.IdUsuario == idUsuario)
-                .Select(u => new UsuarioEncabezadoDto {
+                .Select(u => new UsuarioEncabezadoDto
+                {
                     Nombre = u.IdTituloAcademicoNavigation != null
                         ? u.IdTituloAcademicoNavigation.Nombre + " " + u.ObtenerNombreCompleto()
                         : u.ObtenerNombreCompleto(),
@@ -590,7 +591,7 @@ namespace TrackrAPI.Repositorys.Seguridad
             var usuario = context.Usuario.
                 Where(u => u.IdUsuario == idUsuario)
                     .Include(u => u.IdEstadoNavigation)
-                    .Include(u=> u.ExpedienteTrackr)
+                    .Include(u => u.ExpedienteTrackr)
                     .ThenInclude(u => u.ExpedientePadecimiento)
                     .ThenInclude(ep => ep.IdPadecimientoNavigation)
                     .Include(u => u.ExpedienteTrackr)
@@ -614,7 +615,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                 Estatura = expediente.Estatura,
                 Correo = usuario.Correo,
                 TelefonoMovil = usuario.TelefonoMovil,
-                IdPais = usuario.IdEstadoNavigation.IdPais,
+                IdPais = usuario.IdEstadoNavigation?.IdPais,
                 IdEstado = usuario.IdEstado,
                 IdMunicipio = usuario.IdMunicipio,
                 IdLocalidad = usuario.IdLocalidad,
@@ -628,7 +629,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                 {
                     IdPadecimiento = p.IdPadecimiento,
                     IdExpedientePadecimiento = p.IdExpedientePadecimiento,
-                    NombrePadecimiento = p.IdPadecimientoNavigation.Nombre,
+                    NombrePadecimiento = p.IdPadecimientoNavigation?.Nombre,
                     NombreDoctor = p.IdUsuarioDoctorNavigation.Nombre,
                     FechaDiagnostico = p.FechaDiagnostico
                 })
@@ -637,7 +638,7 @@ namespace TrackrAPI.Repositorys.Seguridad
             return informacionGeneral;
 
         }
-      public IEnumerable<UsuarioDto> ConsultarParaEncabezado(int idUsuario)
+        public IEnumerable<UsuarioDto> ConsultarParaEncabezado(int idUsuario)
         {
             return context.Usuario
             .Where(u => u.IdUsuario == idUsuario)
@@ -646,7 +647,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                 IdUsuario = u.IdUsuario,
                 NombreCompleto = u.ObtenerNombreCompleto(),
                 Correo = u.Correo,
-            
+
             }).ToList();
         }
 
@@ -659,7 +660,7 @@ namespace TrackrAPI.Repositorys.Seguridad
 
             var usuarioDomicilio = new UsuarioDomicilioDto
             {
-                
+
                 Estado = usuario.IdEstadoNavigation?.Nombre
             };
 
