@@ -30,10 +30,10 @@
                     unidadVariable="mg/dL"
                     claseVariable="{{ padecimiento.variables[0].iconoClase }} + icono-seguimiento"
 
-                    nombreVariable2="{{padecimiento.variables[1].descripcion}}"
-                    valorVariable2="{{padecimiento.variables[1].valorVariable}}"
+                    nombreVariable2="{{padecimiento.variables[1]?.descripcion}}"
+                    valorVariable2="{{padecimiento.variables[1]?.valorVariable}}"
                     unidadVariable2="mg/dL"
-                    claseVariable2="{{ padecimiento.variables[1].iconoClase }} + icono-seguimiento"
+                    claseVariable2="{{ padecimiento.variables[1]?.iconoClase }} + icono-seguimiento"
 
 
                     nombreTratamiento="Medicamento"
