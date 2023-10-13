@@ -7,8 +7,8 @@
         <img *ngIf="urlImagen !== undefined" 
           class="imagen-usuario" 
           [src]="urlImagen" 
-          width="85px"
-          height="85px"
+          width="100px"
+          height="100px"
           alt="Imagen de Usuario"
           [matMenuTriggerFor]="menu"
         />
@@ -16,6 +16,35 @@
         <mat-menu #menu="matMenu">
           <button mat-menu-item (click)="logout()">Salir</button>
         </mat-menu>
+       <br>
+      </div>
+    </div>
+
+    <div class="lateral-superior">
+        <app-menu-item
+          [item]="{ name: 'Inicio', icon: 'fas fa-home', url: '/administrador', claveTipoAcceso: '' }"
+        >
+        </app-menu-item>
+        <br>
+        
+        <app-menu-item
+         [item]="{ name: 'PacientesTrack', icon: 'fas fa-id-card-alt', url: '/administrador/gestion-paciente/paciente', claveTipoAcceso: '' }"
+        >
+        </app-menu-item>
+        <br>
+
+        <app-menu-item
+          [item]="{ name: 'Cuestionarios', icon: 'fas fa-list-ul', url: '/administrador/examen/examen', claveTipoAcceso: '' }"
+        >
+       </app-menu-item>
+       <br>
+
+       <app-menu-item
+         [item]="{ name: 'VideoChat', icon: 'fas fa-comment', url: '', claveTipoAcceso: '' }"
+        >
+        </app-menu-item>
+        <br>
+
       </div>
 
       <!-- Items de Navegación -->
@@ -24,10 +53,11 @@
           [item]="item"
         ></app-menu-item>
       </div>
-    </div>
+
 
     <!-- Utilidades -->
     <div class="lateral-inferior pt-5">
+
       <app-menu-item
         [item]="{ name: 'Buscar', icon: 'fas fa-magnifying-glass', url: 'administrador', claveTipoAcceso: '' }"
       >
@@ -37,7 +67,6 @@
         [item]="{ name: 'Notificaciones', icon: 'fa-regular fa-bell', url: 'administrador', claveTipoAcceso: '' }"
       >
       </app-menu-item>
-      
 
       <button
         *ngIf="ayudas.length > 0 || acceso?.urlVideoAyuda"
