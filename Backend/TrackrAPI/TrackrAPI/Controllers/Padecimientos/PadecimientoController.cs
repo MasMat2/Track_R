@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TrackrAPI.Dtos.Padecimientos;
+using TrackrAPI.Helpers;
 using TrackrAPI.Services.Padecimientos;
 
 namespace TrackrAPI.Controllers.Padecimientos;
@@ -18,6 +19,7 @@ public class PadecimientoController : ControllerBase
     [HttpGet("pacientesPorPadecimiento")]
     public IEnumerable<PacientesPorPadecimientoDTO> ConsultarPacientesPorPadecimiento()
     {
-        return _padecimientoService.ConsultarPacientesPorPadecimiento();
+        int idDoctor = Utileria.ObtenerIdUsuarioSesion(this);
+        return _padecimientoService.ConsultarPacientesPorPadecimiento(idDoctor);
     }
 }

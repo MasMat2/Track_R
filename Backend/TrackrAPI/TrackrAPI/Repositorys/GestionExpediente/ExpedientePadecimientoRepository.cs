@@ -12,10 +12,10 @@ namespace TrackrAPI.Repositorys.GestionExpediente
             base.context = context;
         }
 
-        public IEnumerable<ExpedientePadecimientoDTO> Consultar()
+        public IEnumerable<ExpedientePadecimientoDTO> Consultar(int idDoctor)
         {
             return context.ExpedientePadecimiento
-            .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioPaciente)
+            .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioPaciente && ep.IdUsuarioDoctor == idDoctor)
                 .Select(ep => new ExpedientePadecimientoDTO
                 {
                     IdExpedientePadecimiento = ep.IdExpedientePadecimiento,

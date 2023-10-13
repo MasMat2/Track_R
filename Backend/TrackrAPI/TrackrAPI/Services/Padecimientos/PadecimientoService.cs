@@ -18,10 +18,10 @@ public class PadecimientoService
         _expedientePadecimientoService = expedientePadecimientoService;
     }
 
-    public IEnumerable<PacientesPorPadecimientoDTO> ConsultarPacientesPorPadecimiento()
+    public IEnumerable<PacientesPorPadecimientoDTO> ConsultarPacientesPorPadecimiento(int idDoctor)
     {
         var padecimientos = ConsultarPadecimientos();
-        var expedientes = _expedientePadecimientoService.Consultar();
+        var expedientes = _expedientePadecimientoService.Consultar(idDoctor);
 
         return padecimientos.Select(p => new PacientesPorPadecimientoDTO(
             p.IdPadecimiento,

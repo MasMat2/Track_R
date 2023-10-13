@@ -15,9 +15,9 @@ namespace TrackrAPI.Services.GestionExpediente
 
         }
 
-        public IEnumerable<ExpedientePadecimientoDTO> Consultar()
+        public IEnumerable<ExpedientePadecimientoDTO> Consultar(int idDoctor)
         {
-            return expedientePadecimientoRepository.Consultar();
+            return expedientePadecimientoRepository.Consultar(idDoctor);
         }
 
         public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarParaSelector()
