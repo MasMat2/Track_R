@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Dtos.Seguridad;
@@ -39,31 +39,21 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
 
     public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(int idDoctor)
     {
-        return context.ExpedienteTrackr
-            .Include(et => et.IdUsuarioNavigation)
-            .Include(et => et.ExpedientePadecimiento)
+        return context.ExpedientePadecimiento
+            .Include(ep => ep.IdExpedienteNavigation)
+            .Include(et => et.IdExpedienteNavigation.ExpedientePadecimiento)
             .ThenInclude(ep => ep.IdPadecimientoNavigation)
-            .Join(
-                context.ExpedienteDoctor,
-                et => et.IdExpediente,
-                ed => ed.IdExpediente,
-                (et, ed) => new
-                {
-                    Expediente = et,
-                    DoctorId = ed.IdUsuarioDoctor
-                }
-                )
-            .Where(joinResult =>
-                            joinResult.Expediente.IdUsuarioNavigation.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioPaciente  &&
-                            joinResult.DoctorId == idDoctor )
-            .Select(joinResult => new UsuarioExpedienteGridDTO
+                .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioPaciente &&
+                       ep.IdUsuarioDoctor == idDoctor)
+                .GroupBy(ep => ep.IdExpedienteNavigation.IdUsuario)
+                .Select(group => new UsuarioExpedienteGridDTO
             {
-                IdExpedienteTrackr = joinResult.Expediente.IdExpediente,
-                IdUsuario = joinResult.Expediente.IdUsuario,
-                NombreCompleto = joinResult.Expediente.IdUsuarioNavigation.ObtenerNombreCompleto(),
-                Patologias = joinResult.Expediente.ExpedientePadecimiento.ObtenerPadecimientos(),
-                Edad = (DateTime.Today.Year - joinResult.Expediente.FechaNacimiento.Year).ToString() + " años",
-                TipoMime = joinResult.Expediente.IdUsuarioNavigation.ImagenTipoMime
+                IdExpedienteTrackr = group.Key,
+                IdUsuario = group.Key,
+                NombreCompleto = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ObtenerNombreCompleto(),
+                Patologias = group.FirstOrDefault().IdExpedienteNavigation.ExpedientePadecimiento.ObtenerPadecimientos(),
+                Edad = (DateTime.Today.Year - group.FirstOrDefault().IdExpedienteNavigation.FechaNacimiento.Year).ToString() + " años",
+                TipoMime = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ImagenTipoMime
             })
             .ToList();
     }
