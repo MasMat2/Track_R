@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TrackrAPI.Dtos.GestionExpediente.ExpedienteDoctor;
+using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 
 
@@ -27,7 +28,7 @@ public class ExpedienteDoctorRepository : Repository<ExpedienteDoctor>, IExpedie
                 usuario => usuario.IdUsuario,
                 usuarioRol => usuarioRol.IdUsuario,
                 (usuario, usuarioRol) => new { Usuario = usuario, UsuarioRol = usuarioRol })
-            .Where(ti => ti.UsuarioRol.IdRol == 2)
+            .Where(ti => ti.UsuarioRol.IdRolNavigation.Clave == GeneralConstant.ClaveTipoUsuarioMedicoExterno)
             .Select(ti => new ExpedienteDoctorSelectorDTO
             {
                 IdUsuarioDoctor = ti.Usuario.IdUsuario,
