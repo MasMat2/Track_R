@@ -654,6 +654,7 @@ namespace TrackrAPI.Services.Seguridad
                 var padecimiento = new ExpedientePadecimiento();
 
                 padecimiento.IdPadecimiento = padecimientoDTO.IdPadecimiento;
+                padecimiento.IdUsuarioDoctor = padecimientoDTO.IdUsuarioDoctor;
                 padecimiento.FechaDiagnostico = padecimientoDTO.FechaDiagnostico;
                 padecimiento.IdExpediente = expediente.IdExpediente;
 

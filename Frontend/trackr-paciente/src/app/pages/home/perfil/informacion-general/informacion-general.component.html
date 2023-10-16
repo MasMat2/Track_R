@@ -481,17 +481,20 @@
           </ion-row>
           <ion-row>
             <ion-col size="8">
-              <ion-input
+              <ion-select
                 #doctor="ngModel"
                 id="doctor"
                 [name]="'doctor' + i"
-                label="Doctor"
-                label-placement="floating"
+                label="Doctor" 
+                labelPlacement="floating"
                 fill="outline"
                 shape="round"
-                type="text"
-                [(ngModel)]="padecimiento.nombreDoctor">
-              </ion-input>
+                required="true"
+                [(ngModel)]="padecimiento.idUsuarioDoctor">
+                <ion-select-option *ngFor="let doctor of misDoctores" [value]="doctor.idUsuarioDoctor">
+                    {{ doctor.nombre}} - {{doctor.ambito}}
+                </ion-select-option>
+              </ion-select>
             </ion-col>
             <ion-col size="4">
               <ion-item>
