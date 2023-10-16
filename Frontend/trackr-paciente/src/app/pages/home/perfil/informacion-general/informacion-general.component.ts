@@ -22,6 +22,9 @@ import { InformacionGeneralDto } from 'src/app/shared/dtos/perfil/informacion-ge
 import { ExpedientePadecimientoDto } from 'src/app/shared/dtos/seguridad/expediente-padecimiento-dto';
 import { ExpedientePadecimientoSelectorDTO } from 'src/app/shared/dtos/seguridad/expediente-padecimiento-selector-dto';
 import { HeaderComponent } from '../../layout/header/header.component';
+import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
+import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores-selector-dto';
+import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
 
 @Component({
   selector: 'app-informacion-general',
@@ -40,11 +43,13 @@ export class InformacionGeneralComponent implements OnInit {
 
   protected informacionUsuario$: Observable<InformacionGeneralDto>;
   protected infoUsuario: InformacionGeneralDto;
+  protected misDoctores: UsuarioDoctoresDto[];
   protected edadUsuario: string;
   public btnSubmit = true;
   public esPaisExtranjero: boolean = false;
   public idPaisMexico: 1;
   protected nuevoPadecimiento: ExpedientePadecimientoDto = new ExpedientePadecimientoDto();
+  
 
   public paisList: PaisSelectorDto[] = [];
   public estadoList: EstadoSelectorDto[] = [];
@@ -62,7 +67,8 @@ export class InformacionGeneralComponent implements OnInit {
     private localidadService: LocalidadService,
     private coloniaService: ColoniaService,
     private codigoPostalService: CodigoPostalService,
-    private entidadEstructuraService: EntidadEstructuraService
+    private entidadEstructuraService: EntidadEstructuraService,
+    private doctoresService: MisDoctoresService,
   ) {  }
 
   ngOnInit(){
@@ -184,6 +190,14 @@ export class InformacionGeneralComponent implements OnInit {
     })
   }
 
+  consultarDoctores() {
+    this.doctoresService.consultarExpediente().subscribe((data => {
+      this.misDoctores = data;
+    }));
+  }
+
+
+
   private consultarGeneros() {
     this.generoList = [
       {
@@ -214,6 +228,7 @@ export class InformacionGeneralComponent implements OnInit {
           this.consultarMunicipios(this.infoUsuario.idEstado);
           this.consultarLocalidades(this.infoUsuario.idEstado);
           this.consultarColonias(this.infoUsuario.codigoPostal);
+          this.consultarDoctores();
           this.calcularEdad();
         }
       )

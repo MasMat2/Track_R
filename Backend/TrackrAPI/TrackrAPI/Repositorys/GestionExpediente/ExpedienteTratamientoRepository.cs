@@ -1,6 +1,7 @@
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Repositorys.GestionExpediente;
 
@@ -48,7 +49,7 @@ public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>,
                 .Select(u => new ExpedienteSelectorDto
                 {
                     Id = u.IdUsuario,
-                    Nombre = u.Nombre
+                    Nombre = u.ObtenerNombreCompleto()
                 })
                 .ToList();
     }

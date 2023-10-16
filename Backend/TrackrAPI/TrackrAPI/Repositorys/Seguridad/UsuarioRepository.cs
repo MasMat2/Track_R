@@ -630,6 +630,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                     IdPadecimiento = p.IdPadecimiento,
                     IdExpedientePadecimiento = p.IdExpedientePadecimiento,
                     NombrePadecimiento = p.IdPadecimientoNavigation?.Nombre,
+                    IdUsuarioDoctor = p.IdUsuarioDoctor,
                     NombreDoctor = p.IdUsuarioDoctorNavigation.Nombre,
                     FechaDiagnostico = p.FechaDiagnostico
                 })

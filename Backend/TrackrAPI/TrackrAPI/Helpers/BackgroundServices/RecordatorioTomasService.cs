@@ -96,7 +96,6 @@ public class RecordatorioTomasService : IHostedService, IDisposable
 
     public async Task CrearTratamientoTomas(TrackrContext context , NotificacionPacienteService notificacionPacienteService){
         DateTime now = DateTime.Now;
-        Console.WriteLine(now);
         int currentDay = ((int)now.DayOfWeek + 7) % 7; // Monday = 0, ..., Saturday = 5, Sunday = 6
         TimeSpan currentTime = now.TimeOfDay;
         TimeSpan timeIn15Minutes = currentTime + TimeSpan.FromMinutes(15);
