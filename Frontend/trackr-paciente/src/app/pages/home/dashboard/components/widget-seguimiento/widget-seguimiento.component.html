@@ -3,7 +3,7 @@
   <app-widget
   title="Seguimiento de {{ nombrePadecimiento }}"
 >
-  <div class="container d-flex justify-content-center gap-4">
+  <div class="container d-flex justify-content-center gap-5">
     <div class="dato">
       <span class="icono"><ion-icon class="{{claseVariable}}"></ion-icon></span>
       <span class="nombre">{{ nombreVariable }}</span>
@@ -24,23 +24,53 @@
   <app-widget
   title="Seguimiento de {{ nombrePadecimiento }}"
 >
-  <div class="container d-flex justify-content-center gap-4">
+  <div class="d-flex justify-content-center gap-5">
     <div class="col">
       <div class="dato">
-        <span class="icono"><ion-icon class="{{claseVariable}}"></ion-icon></span>
-        <span class="nombre">{{ nombreVariable }}</span>
-        <div class="d-flex">
-          <span class="valor">{{ valorVariable }}</span>
-          <span class="unidad">{{ unidadVariable }}</span>
+        <div class="container">
+          <div class="row test">
+            <!-- Primera columna -->
+            <div class="col-6 align-items-center">
+              <span class="valor valor-2">{{ valorVariable }}</span>
+            </div>
+            <!-- Segunda columna -->
+            <div class="col-6">
+              <div class="row">
+                <!-- Fila 1 en la segunda columna -->
+                <div class="col-12">
+                  <span class="nombre">{{ nombreVariable }}</span>
+                </div>
+                <!-- Fila 2 en la segunda columna -->
+                <div class="col-12">
+                  <span class="unidad">{{ unidadVariable }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
   
       <div class="dato">
-        <span class="icono"><ion-icon class="{{claseVariable2}}"></ion-icon></span>
-        <span class="nombre">{{ nombreVariable2 }}</span>
-        <div class="d-flex">
-          <span class="valor">{{ valorVariable2 }}</span>
-          <span class="unidad">{{ unidadVariable2 }}</span>
+        <div class="container">
+          <div class="row test">
+            <!-- Primera columna -->
+            <div class="col-6 align-items-center">
+              <span class="valor valor-2">{{ valorVariable2 }}</span>
+            </div>
+            <!-- Segunda columna -->
+            <div class="col-6">
+              <div class="row">
+                <!-- Fila 1 en la segunda columna -->
+                <div class="col-12">
+                  <span class="nombre">{{ nombreVariable2 }}</span>
+                </div>
+                <!-- Fila 2 en la segunda columna -->
+                <div class="col-12">
+                  <span class="unidad">{{ unidadVariable2 }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
