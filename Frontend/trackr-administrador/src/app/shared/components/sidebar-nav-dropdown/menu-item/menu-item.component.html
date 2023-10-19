@@ -45,6 +45,7 @@
     [routerLink]="item.url"
     style="height: 60px;"
     routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
   >
     <i class="item mr-3 {{ item.icon }}"></i>
   </button>
