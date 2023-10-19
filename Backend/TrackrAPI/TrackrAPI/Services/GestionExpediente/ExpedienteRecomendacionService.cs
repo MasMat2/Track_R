@@ -73,7 +73,8 @@ public class ExpedienteRecomendacionService
             FechaRealizacion = DateTime.UtcNow,
             IdExpediente = idExpediente,
             IdUsuarioDoctor = expedienteRecomendacionFormDTO.IdDoctor,
-            IdNotificacion = notificacionInsertada.IdNotificacion
+            IdNotificacion = notificacionInsertada.IdNotificacion,
+            RecomendacionGeneral = false
         };
         _expedienteRecomendacionRepository.Agregar(recomendacion);
     }

@@ -11,6 +11,7 @@ namespace TrackrAPI.Models
         public string? Descripcion { get; set; }
         public int IdUsuarioDoctor { get; set; }
         public int? IdNotificacion { get; set; }
+        public bool? RecomendacionGeneral { get; set; }
 
         public virtual ExpedienteTrackr IdExpedienteNavigation { get; set; } = null!;
         public virtual Notificacion? IdNotificacionNavigation { get; set; }

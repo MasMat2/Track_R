@@ -16,7 +16,7 @@ public class ExpedienteRecomendacionRepository : Repository<ExpedienteRecomendac
     {
         return context.ExpedienteRecomendaciones
         .Include(us => us.IdUsuarioDoctorNavigation)
-        .Where(er => er.IdExpedienteNavigation.IdUsuario == idUsuario)
+        .Where(er => er.IdExpedienteNavigation.IdUsuario == idUsuario && er.RecomendacionGeneral == false)
         .Select(x => new ExpedienteRecomendacionGridDTO
         {
             IdExpedienteRecomendacion = x.IdExpedienteRecomendaciones,
