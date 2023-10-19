@@ -47,11 +47,6 @@ export class MuestrasFormularioComponent implements OnInit {
   protected consultarArbol(){
     lastValueFrom(this.seccionCampoService.consultarPorSeccion())
     .then((arbolPadecimiento: PadecimientoMuestraDTO[]) => {
-      // for (let padecimiento of arbolPadecimiento) {
-      //   for (let seccion of padecimiento.seccionMuestraDTOs) {
-      //     seccion.seccionesCampo = seccion.seccionesCampo.filter(x => x != null);
-      //   }
-      // }
       this.arbolPadecimiento = arbolPadecimiento;
     });
   }

@@ -53,7 +53,6 @@ export class MuestrasPage implements OnInit {
   public consultarValoresFueraRango(): void {
     lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresFueraRangoUsuarioSesion())
       .then((valoresFueraRango: ValoresFueraRangoGridDTO[]) => {
-        console.log(valoresFueraRango);
         this.valoresFueraRango = valoresFueraRango;
       }
     );

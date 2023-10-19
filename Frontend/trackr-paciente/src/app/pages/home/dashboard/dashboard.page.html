@@ -25,8 +25,8 @@
                     [tipoWidget] = "padecimiento.idWidget"
                     nombrePadecimiento="{{ padecimiento.nombrePadecimiento }}"
 
-                    nombreVariable="{{padecimiento.variables[0].descripcion}}"
-                    valorVariable="{{padecimiento.variables[0].valorVariable}}"
+                    nombreVariable="{{padecimiento.variables[0]?.descripcion}}"
+                    valorVariable="{{padecimiento.variables[0]?.valorVariable}}"
                     unidadVariable="mg/dL"
                     claseVariable="{{ padecimiento.variables[0].iconoClase }} + icono-seguimiento"
 
