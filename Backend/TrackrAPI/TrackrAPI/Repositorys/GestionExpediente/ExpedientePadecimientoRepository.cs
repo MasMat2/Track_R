@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
@@ -34,7 +34,8 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                     IdExpedientePadecimiento = ep.IdExpedientePadecimiento,
                     IdPadecimiento = ep.IdPadecimiento,
                     FechaDiagnostico = ep.FechaDiagnostico,
-                    NombrePadecimiento = ep.IdPadecimientoNavigation.Nombre
+                    IdExpediente = ep.IdExpediente,
+                    NombrePadecimiento = ep.IdPadecimientoNavigation.Nombre,
                 }).ToList();
         }
 

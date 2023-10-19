@@ -1,4 +1,4 @@
-﻿namespace TrackrAPI.Dtos.GestionEntidad
+namespace TrackrAPI.Dtos.GestionEntidad
 {
     // Hace referencia a un SeccionCampo
     public class ExpedienteColumnaDTO
@@ -9,6 +9,7 @@
         public string ClaveSeccion { get; set; }
         public string Variable { get; set;}
         public decimal? ValorMinimo { get; set; }
-        public decimal? ValorMaximo { get;set; }
+        public decimal? ValorMaximo { get; set; }
+        public bool? MostrarDashboard { get; set; }
     }
 }

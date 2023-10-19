@@ -1,4 +1,4 @@
-﻿namespace TrackrAPI.Dtos.GestionExpediente
+namespace TrackrAPI.Dtos.GestionExpediente
 {
     public class ExpedientePadecimientoDTO
     {
@@ -8,5 +8,6 @@
         public string NombreDoctor { get; set; }
         public string NombrePadecimiento { get; set; }
         public DateTime FechaDiagnostico { get; set; }
+        public int IdExpediente { get; set; }
     }
 }

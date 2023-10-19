@@ -3,6 +3,7 @@ using TrackrAPI.Dtos.GestionEntidad;
 using TrackrAPI.Models;
 using TrackrAPI.Helpers;
 using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Dtos.Padecimientos;
 
 namespace TrackrAPI.Repositorys.GestionEntidad
 {
@@ -63,7 +64,8 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         {
             return context.EntidadEstructura
                 .Where(e => e.IdEntidad == idEntidad && e.Tabulacion == true)
-                .Select(e => new EntidadEstructuraDto {
+                .Select(e => new EntidadEstructuraDto
+                {
                     IdEntidadEstructura = e.IdEntidadEstructura,
                     Nombre = e.Nombre,
                     Clave = e.Clave,
@@ -157,6 +159,46 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 {
                     IdPadecimiento = e.IdEntidadEstructura,
                     Nombre = e.Nombre ?? string.Empty,
+                });
+        }
+
+        //Dado un idUsuario, devuelve el valor mas reciente de las variables que mostrarDashboard = true de sus respectivos padecimientos
+        public IEnumerable<PadecimientoVariablesDTO> ValoresVariablesPadecimiento(int idUsuario)
+        {
+            return context.EntidadEstructura
+                .Include(ee => ee.IdEntidadEstructuraPadreNavigation)
+                .Include(ee => ee.IdEntidadNavigation)
+                .Include(ee => ee.IdSeccionNavigation)
+                .Include(ee => ee.EntidadEstructuraTablaValor)
+                    .Where(ee => ee.IdEntidadEstructuraPadre != null)
+                    .GroupBy(ee => ee.IdEntidadEstructuraPadre)
+                .Select(group => new PadecimientoVariablesDTO
+                {
+                    IdEntidadEstructura = group.First().IdEntidadEstructura,
+                    IdPadecimiento = group.Key,
+                    NombrePadecimiento = group.First().IdEntidadEstructuraPadreNavigation.Nombre,
+                    IdEntidad = group.First().IdEntidadEstructuraPadreNavigation.IdEntidad,
+                    DescripcionWidget = group.First().IdEntidadEstructuraPadreNavigation.IdTipoWidgetNavigation.Descripcion,
+                    IdWidgetEntidad = group.First().IdEntidadEstructuraPadreNavigation.IdTipoWidget,
+                    IconoEntidad = group.First().IdEntidadEstructuraPadreNavigation.IdIconoNavigation.Clase,
+                    IdSeccion = group.First().IdSeccionNavigation.IdSeccion,
+                    NombreSeccion = group.First().IdSeccionNavigation.Nombre,
+                    SeccionClave = group.First().IdSeccionNavigation.Clave,
+                    Variables = group.SelectMany(ee => ee.IdSeccionNavigation.SeccionCampo
+                                                        .Where(sC => context.EntidadEstructuraTablaValor.Any(eetv => eetv.IdTabla == idUsuario && eetv.ClaveCampo == "ME-" + sC.Clave))
+                                                        .Select(sC => new VariableDTO
+                                                        {
+                                                            VariableClave = sC.Clave,
+                                                            Descripcion = sC.Descripcion,
+                                                            MostrarDashboard = sC.MostrarDashboard,
+                                                            IconoClase = sC.IdIconoNavigation.Clase,
+                                                            ValorVariable = context.EntidadEstructuraTablaValor
+                                                                .Where(eetv => eetv.IdTabla == idUsuario && eetv.ClaveCampo == "ME-" + sC.Clave)
+                                                                .OrderByDescending(eetv => eetv.FechaMuestra)
+                                                                .Take(1).FirstOrDefault().Valor // Tomar solo la muestra más reciente
+                                                        })
+                                                        .Take(2)
+                                                        ).ToList()
                 });
         }
     }

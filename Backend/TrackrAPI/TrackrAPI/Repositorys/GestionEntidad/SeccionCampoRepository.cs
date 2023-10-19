@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TrackrAPI.Dtos.GestionEntidad;
 using TrackrAPI.Models;
 using System.Collections.Generic;
@@ -100,13 +100,15 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                         ClaveSeccion = sc.IdSeccionNavigation.Clave,
                         Variable = sc.IdSeccionNavigation.Nombre,
                         ValorMinimo = sc.IdDominioNavigation.ValorMinimo,
-                        ValorMaximo = sc.IdDominioNavigation.ValorMaximo
+                        ValorMaximo = sc.IdDominioNavigation.ValorMaximo,
+                        MostrarDashboard = sc.MostrarDashboard
                     });
         }
 
         public IEnumerable<ExpedienteColumnaDTO> ConsultarSeccionesPadecimientosGeneral()
         {
             return context.SeccionCampo
+                .Where(sC => sC.MostrarDashboard == true)
                 .Select(sc =>
                     new ExpedienteColumnaDTO
                     {
