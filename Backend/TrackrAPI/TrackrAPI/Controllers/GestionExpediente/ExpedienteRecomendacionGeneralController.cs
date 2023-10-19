@@ -1,0 +1,25 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Services.GestionExpediente;
+
+namespace TrackrAPI.Controllers.GestionExpediente;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ExpedienteRecomendacionGeneralController : ControllerBase
+{
+    private readonly ExpedienteRecomendacionGeneralService _expedienteRecomendacionGeneralService;
+
+    public ExpedienteRecomendacionGeneralController(
+        ExpedienteRecomendacionGeneralService expedienteRecomendacionGeneralService)
+    {
+        _expedienteRecomendacionGeneralService = expedienteRecomendacionGeneralService;
+    }
+
+    [HttpPost]
+    public void AgregarTodos(ExpedienteRecomendacionGeneralFormDTO expedienteRecomendacionGeneralFormDTO)
+    {
+        _expedienteRecomendacionGeneralService.AgregarTodos(expedienteRecomendacionGeneralFormDTO);
+    }
+}
+

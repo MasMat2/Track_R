@@ -52,5 +52,19 @@ public class ExpedienteRecomendacionValidatorService
             throw new CdisException(MensajeExistencia);
         }
     }
+    public void ValidarAgregarGeneral(ExpedienteRecomendacionGeneralFormDTO recomendacion)
+    {
+        ValidarRequeridoGeneral(recomendacion);
+        ValidarRangoGeneral(recomendacion);
+    }
+    public void ValidarRangoGeneral(ExpedienteRecomendacionGeneralFormDTO recomendacion)
+    {
+        Validator.ValidarLongitudRangoString(recomendacion.Descripcion, LongitudRecomendacion, MensajeRecomendacionLongitud);
+    }
+
+    public void ValidarRequeridoGeneral(ExpedienteRecomendacionGeneralFormDTO recomendacion)
+    {
+        Validator.ValidarRequerido(recomendacion.Descripcion, MensajeRecomendacionRequerida);
+    }
 
 }
