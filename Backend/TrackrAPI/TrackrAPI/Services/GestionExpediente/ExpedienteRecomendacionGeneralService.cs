@@ -33,31 +33,37 @@ public class ExpedienteRecomendacionGeneralService
         _expedientePadecimientoRepository = expedientePadecimientoRepository;
     }
 
-    public async Task Agregar(ExpedienteRecomendacionFormDTO expedienteRecomendacionFormDTO)
+    public async Task AgregarPacientes(ExpedienteRecomendacionGeneralFormDTO expedienteRecomendacionGeneralFormDTO)
     {
-        _expedienteRecomendacionValidator.ValidarAgregar(expedienteRecomendacionFormDTO);
-        int idExpediente = _expedienteTrackrRepository.ConsultarPorUsuario(expedienteRecomendacionFormDTO.IdUsuario).IdExpediente;
-        var doctor = _usuarioRepository.Consultar(expedienteRecomendacionFormDTO.IdDoctor);
-
-        var notificacion = new NotificacionCapturaDTO
-        (
-            doctor.Nombre,
-            expedienteRecomendacionFormDTO.Descripcion ?? string.Empty,
-            1
-        );
-
-        var notificacionInsertada = await _notificacionPacienteService.Notificar(notificacion, expedienteRecomendacionFormDTO.IdUsuario);
-
-        var recomendacion = new ExpedienteRecomendaciones
+        _expedienteRecomendacionValidator.ValidarAgregarGeneral(expedienteRecomendacionGeneralFormDTO);
+        foreach (var usuario in expedienteRecomendacionGeneralFormDTO.Paciente)
         {
-            Descripcion = expedienteRecomendacionFormDTO.Descripcion ?? string.Empty,
-            FechaRealizacion = DateTime.UtcNow,
-            IdExpediente = idExpediente,
-            IdUsuarioDoctor = expedienteRecomendacionFormDTO.IdDoctor,
-            IdNotificacion = notificacionInsertada.IdNotificacion,
-            RecomendacionGeneral = true
-        };
-        _expedienteRecomendacionRepository.Agregar(recomendacion);
+            int idExpediente = _expedienteTrackrRepository.ConsultarPorUsuario(usuario).IdExpediente;
+            var doctor = _usuarioRepository.Consultar(expedienteRecomendacionGeneralFormDTO.IdDoctor);
+
+            var notificacion = new NotificacionCapturaDTO
+            (
+                doctor.Nombre,
+                expedienteRecomendacionGeneralFormDTO.Descripcion ?? string.Empty,
+                1
+            );
+
+            var notificacionInsertada = await _notificacionPacienteService.Notificar(notificacion, usuario);
+
+            var recomendacion = new ExpedienteRecomendaciones
+            {
+                Descripcion = expedienteRecomendacionGeneralFormDTO.Descripcion ?? string.Empty,
+                FechaRealizacion = DateTime.UtcNow,
+                IdExpediente = idExpediente,
+                IdUsuarioDoctor = expedienteRecomendacionGeneralFormDTO.IdDoctor,
+                IdNotificacion = notificacionInsertada.IdNotificacion,
+                RecomendacionGeneral = true
+            };
+            _expedienteRecomendacionRepository.Agregar(recomendacion);
+
+        }
+
+        
     }
 
     public async Task AgregarTodos(ExpedienteRecomendacionGeneralFormDTO expedienteRecomendacionGeneralFormDTO)

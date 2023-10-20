@@ -5,4 +5,5 @@ public class ExpedienteRecomendacionGeneralFormDTO
     public int IdDoctor { get; set; }
     public DateTime Fecha { get; set; }
     public int? IdPadecimiento { get; set; }
+    public List<int>? Paciente { get; set;}
 }
