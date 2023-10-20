@@ -35,6 +35,11 @@ public class ExpedienteRecomendacionService
         return _expedienteRecomendacionRepository.ConsultarGridPorUsuario(idUsuario);
     }
 
+    public IEnumerable<ExpedienteRecomendacionGridDTO> ConsultarGridPorUsuarioRecomendacionGeneral(int idUsuario)
+    {
+        return _expedienteRecomendacionRepository.ConsultarGridPorUsuarioRecomendacionGeneral(idUsuario);
+    }
+
     public ExpedienteRecomendacionFormDTO Consultar(int idExpedienteRecomendacion)
     {
         var recomendacionModel = _expedienteRecomendacionRepository.Consultar(idExpedienteRecomendacion);
