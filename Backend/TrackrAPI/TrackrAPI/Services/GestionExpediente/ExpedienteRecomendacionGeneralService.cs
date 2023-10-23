@@ -42,11 +42,18 @@ public class ExpedienteRecomendacionGeneralService
     public async Task AgregarPacientes(ExpedienteRecomendacionGeneralFormDTO expedienteRecomendacionGeneralFormDTO)
     {
         _expedienteRecomendacionValidator.ValidarAgregarGeneral(expedienteRecomendacionGeneralFormDTO);
+        var doctor = _usuarioRepository.Consultar(expedienteRecomendacionGeneralFormDTO.IdDoctor);
+        var recomendacionGeneral = new ExpedienteRecomendacionesGenerales
+        {
+            Descripcion = expedienteRecomendacionGeneralFormDTO.Descripcion,
+            FechaRealizacion = DateTime.UtcNow,
+            IdAdministrador = expedienteRecomendacionGeneralFormDTO.IdDoctor,
+        };
+        _expedienteRecomendacionGeneralRepository.Agregar(recomendacionGeneral);
+
         foreach (var usuario in expedienteRecomendacionGeneralFormDTO.Paciente)
         {
             int idExpediente = _expedienteTrackrRepository.ConsultarPorUsuario(usuario).IdExpediente;
-            var doctor = _usuarioRepository.Consultar(expedienteRecomendacionGeneralFormDTO.IdDoctor);
-
             var notificacion = new NotificacionCapturaDTO
             (
                 doctor.Nombre,
@@ -55,20 +62,15 @@ public class ExpedienteRecomendacionGeneralService
             );
 
             var notificacionInsertada = await _notificacionPacienteService.Notificar(notificacion, usuario);
-
-            var recomendacion = new ExpedienteRecomendaciones
+            var detalleRecomendacionGeneral = new DetalleExpedienteRecomendacionesGenerales
             {
-                Descripcion = expedienteRecomendacionGeneralFormDTO.Descripcion ?? string.Empty,
-                FechaRealizacion = DateTime.UtcNow,
                 IdExpediente = idExpediente,
-                IdUsuarioDoctor = expedienteRecomendacionGeneralFormDTO.IdDoctor,
-                IdNotificacion = notificacionInsertada.IdNotificacion
+                IdNotificacion = notificacionInsertada.IdNotificacion,
+                IdExpedienteRecomendacionesGenerales = recomendacionGeneral.IdExpedienteRecomendacionesGenerales
             };
-            _expedienteRecomendacionRepository.Agregar(recomendacion);
 
+            _detalleExpedienteRecomendacionGeneral.Agregar(detalleRecomendacionGeneral);
         }
-
-
     }
 
     public async Task AgregarTodos(ExpedienteRecomendacionGeneralFormDTO expedienteRecomendacionGeneralFormDTO)
