@@ -7,6 +7,8 @@ import { GeneralConstant } from '@utils/general-constant';
 import { lastValueFrom } from 'rxjs';
 
 import { UsuarioExpedienteSidebarDTO } from '@dtos/seguridad/usuario-expediente-sidebar-dto';
+import { EntidadEstructuraTablaValorService } from '@http/gestion-entidad/entidad-estructura-tabla-valor.service';
+import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
 
 @Component({
   selector: 'app-paciente',
@@ -58,6 +60,14 @@ export class PacienteComponent implements OnInit {
     GeneralConstant.CONFIG_COLUMN_ACTION
   );
 
+  
+  protected valoresFueraRango: ValoresFueraRangoGridDTO[];
+  protected columnsVariableFueraRango = [
+    { headerName: 'Campo', field: 'parametro', minWidth: 10, resizable : false},
+    { headerName: 'Valor', field: 'valorRegistrado', maxWidth: 100, resizable : false },
+  ];
+
+
   public columns = [
     { headerName: 'Paciente', field: 'nombreCompleto', minWidth: 150 },
     this.columnaEditar,
@@ -66,7 +76,8 @@ export class PacienteComponent implements OnInit {
   constructor(
     private router: Router,
     private encryptionService: EncryptionService,
-    private expedienteTrackrService: ExpedienteTrackrService
+    private expedienteTrackrService: ExpedienteTrackrService,
+    private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService
   ) {}
 
   ngOnInit(): void {
@@ -90,6 +101,7 @@ export class PacienteComponent implements OnInit {
       .consultaParaSidebar(idUsuario)
       .subscribe((data) => {
         this.paciente = data;
+        this.consultarValoresFueraRango(data.idUsuario);
       });
   }
 
@@ -146,5 +158,13 @@ export class PacienteComponent implements OnInit {
     } else if ((gridData.accion = GeneralConstant.GRID_ACCION_VER)) {
       this.ver(gridData.data.idUsuario);
     }
+  }
+
+  public consultarValoresFueraRango(idUsuario : number): void {
+    lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresFueraRangoUsuario(idUsuario))
+      .then((valoresFueraRango: ValoresFueraRangoGridDTO[]) => {
+        this.valoresFueraRango = valoresFueraRango;
+      }
+    );
   }
 }

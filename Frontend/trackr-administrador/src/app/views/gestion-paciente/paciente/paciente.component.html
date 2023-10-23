@@ -88,6 +88,27 @@
         </div>
       </div>
     </div>
+
+          <div class="p-3">
+            <label 
+              class="font-weight-normal"
+              style="
+              font-weight: 400;
+              font-size: .9rem;
+              color: gray;
+            ">Valores Fuera de Rango</label>
+            
+            <app-grid-general
+              [headerName]="HEADER_GRID"
+              [data]="valoresFueraRango"
+              [children]="columnsVariableFueraRango"
+              [disableDelete]="true"
+              [disableEdit]="true"
+              [disableXLS]="true"
+              
+            >
+            </app-grid-general>
+          </div>
   </mat-sidenav>
   
   <mat-sidenav-content>

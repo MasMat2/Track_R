@@ -43,4 +43,7 @@ export class EntidadEstructuraTablaValorService {
     return this.http.get<ValoresPorClaveCampo>(this.dataUrl + `valoresPorClaveCampo/${claveCampo}/${idUsuario}/${filtroTiempo}`);
   }
   
+  public consultarValoresFueraRangoUsuario(idUsuario : number) {
+    return this.http.get<ValoresFueraRangoGridDTO[]>(this.dataUrl + `valoresFueraRangoGeneral/usuario/` + idUsuario);
+  }
 }
