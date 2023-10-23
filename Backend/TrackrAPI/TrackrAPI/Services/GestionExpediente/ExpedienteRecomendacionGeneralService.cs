@@ -48,6 +48,7 @@ public class ExpedienteRecomendacionGeneralService
             Descripcion = expedienteRecomendacionGeneralFormDTO.Descripcion,
             FechaRealizacion = DateTime.UtcNow,
             IdAdministrador = expedienteRecomendacionGeneralFormDTO.IdDoctor,
+            Tipo = 3
         };
         _expedienteRecomendacionGeneralRepository.Agregar(recomendacionGeneral);
 
@@ -84,6 +85,7 @@ public class ExpedienteRecomendacionGeneralService
             Descripcion = expedienteRecomendacionGeneralFormDTO.Descripcion,
             FechaRealizacion = DateTime.UtcNow,
             IdAdministrador = expedienteRecomendacionGeneralFormDTO.IdDoctor,
+            Tipo = 1
         };
         _expedienteRecomendacionGeneralRepository.Agregar(recomendacionGeneral);
         foreach (var expediente in expedientes)
@@ -121,6 +123,7 @@ public class ExpedienteRecomendacionGeneralService
             Descripcion = expedienteRecomendacionGeneralFormDTO.Descripcion,
             FechaRealizacion = DateTime.UtcNow,
             IdAdministrador = expedienteRecomendacionGeneralFormDTO.IdDoctor,
+            Tipo = 2
         };
         _expedienteRecomendacionGeneralRepository.Agregar(recomendacionGeneral);
 
@@ -142,5 +145,10 @@ public class ExpedienteRecomendacionGeneralService
             };
             _detalleExpedienteRecomendacionGeneral.Agregar(detalleRecomendacionGeneral);
         }
+    }
+
+    public IEnumerable<ExpedienteRecomendacionGeneralGridDTO> obtenerGrid()
+    {
+        return _expedienteRecomendacionGeneralRepository.ConsultarGrid();
     }
 }

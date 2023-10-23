@@ -10,16 +10,24 @@ public class ExpedienteRecomendacionGeneralRepository : Repository<ExpedienteRec
         base.context = context;
     }
 
-    public IEnumerable<ExpedienteRecomendacionGridDTO> ConsultarGrid()
+    public IEnumerable<ExpedienteRecomendacionGeneralGridDTO> ConsultarGrid()
     {
+        var tipoMapping = new Dictionary<int, string>
+        {
+            { 1, "Todos" },
+            { 2, "Paciente por padecimiento" },
+            { 3, "Pacientes" }
+        };
         return context.ExpedienteRecomendacionesGenerales
         .Include(us => us.IdAdministradorNavigation)
-        .Select(x => new ExpedienteRecomendacionGridDTO
+        .Select(x => new ExpedienteRecomendacionGeneralGridDTO
         {
             IdExpedienteRecomendacion = x.IdExpedienteRecomendacionesGenerales,
             Fecha = x.FechaRealizacion.ToShortDateString(),
             Descripcion = x.Descripcion,
-            Doctor = x.IdAdministradorNavigation.Nombre
+            Doctor = x.IdAdministradorNavigation.Nombre,
+            Tipo = tipoMapping.ContainsKey((int)x.Tipo) ? tipoMapping[(int)x.Tipo] : "Desconocido"
+
         })
         .ToList();
     }

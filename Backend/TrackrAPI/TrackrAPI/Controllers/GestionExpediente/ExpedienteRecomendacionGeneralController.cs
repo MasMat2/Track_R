@@ -33,5 +33,12 @@ public class ExpedienteRecomendacionGeneralController : ControllerBase
     {
         _expedienteRecomendacionGeneralService.AgregarPacientes(expedienteRecomendacionGeneralFormDTO);
     }
+
+    [HttpGet]
+    public IEnumerable<ExpedienteRecomendacionGeneralGridDTO> ConsultarGrid()
+    {
+        return _expedienteRecomendacionGeneralService.obtenerGrid();
+        
+    }
 }
 
