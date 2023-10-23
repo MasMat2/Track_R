@@ -28,10 +28,10 @@ public class ExpedienteRecomendacionGeneralController : ControllerBase
         _expedienteRecomendacionGeneralService.AgregarPorPadecimiento(expedienteRecomendacionGeneralFormDTO);
     }
 
-    [HttpPost("porPaciente")]
+    /*[HttpPost("porPaciente")]
     public void AgregarPorPaciente(ExpedienteRecomendacionGeneralFormDTO expedienteRecomendacionGeneralFormDTO)
     {
         _expedienteRecomendacionGeneralService.AgregarPacientes(expedienteRecomendacionGeneralFormDTO);
-    }
+    }*/
 }
 
