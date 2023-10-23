@@ -35,6 +35,8 @@ public class ExpedienteRecomendacionGeneralService
         _notificacionPacienteService = notificacionPacienteService;
         _usuarioRepository = usuarioRepository;
         _expedientePadecimientoRepository = expedientePadecimientoRepository;
+        _expedienteRecomendacionGeneralRepository = expedienteRecomendacionGeneralRepository;
+        _detalleExpedienteRecomendacionGeneral = detalleExpedienteRecomendacionGeneral;
     }
 
     public async Task AgregarPacientes(ExpedienteRecomendacionGeneralFormDTO expedienteRecomendacionGeneralFormDTO)
@@ -82,12 +84,9 @@ public class ExpedienteRecomendacionGeneralService
             IdAdministrador = expedienteRecomendacionGeneralFormDTO.IdDoctor,
         };
         _expedienteRecomendacionGeneralRepository.Agregar(recomendacionGeneral);
-
-
         foreach (var expediente in expedientes)
         {
             var idUsuario = expediente.IdUsuario;
-
             var notificacion = new NotificacionCapturaDTO
             (
                 doctor.Nombre,
@@ -96,9 +95,6 @@ public class ExpedienteRecomendacionGeneralService
             );
 
             var notificacionInsertada = await _notificacionPacienteService.Notificar(notificacion, idUsuario);
-
-            Console.WriteLine(recomendacionGeneral.IdExpedienteRecomendacionesGenerales);
-
             var detalleRecomendacionGeneral = new DetalleExpedienteRecomendacionesGenerales
             {
                 IdExpediente = expediente.IdExpediente,
@@ -117,10 +113,18 @@ public class ExpedienteRecomendacionGeneralService
                           .ConsultarPorPadecimiento(expedienteRecomendacionGeneralFormDTO.IdPadecimiento)
                           .Select(exp => exp.IdExpedienteNavigation)
                           .ToList();
+        var doctor = _usuarioRepository.Consultar(expedienteRecomendacionGeneralFormDTO.IdDoctor);
+        var recomendacionGeneral = new ExpedienteRecomendacionesGenerales
+        {
+            Descripcion = expedienteRecomendacionGeneralFormDTO.Descripcion,
+            FechaRealizacion = DateTime.UtcNow,
+            IdAdministrador = expedienteRecomendacionGeneralFormDTO.IdDoctor,
+        };
+        _expedienteRecomendacionGeneralRepository.Agregar(recomendacionGeneral);
+
         foreach (var expediente in expedientes)
         {
             var idUsuario = expediente.IdUsuario;
-            var doctor = _usuarioRepository.Consultar(expedienteRecomendacionGeneralFormDTO.IdDoctor);
             var notificacion = new NotificacionCapturaDTO
             (
                 doctor.Nombre,
@@ -128,17 +132,13 @@ public class ExpedienteRecomendacionGeneralService
                 1
             );
             var notificacionInsertada = await _notificacionPacienteService.Notificar(notificacion, idUsuario);
-            var recomendacion = new ExpedienteRecomendaciones
+            var detalleRecomendacionGeneral = new DetalleExpedienteRecomendacionesGenerales
             {
-                Descripcion = expedienteRecomendacionGeneralFormDTO.Descripcion ?? string.Empty,
-                FechaRealizacion = DateTime.UtcNow,
                 IdExpediente = expediente.IdExpediente,
-                IdUsuarioDoctor = expedienteRecomendacionGeneralFormDTO.IdDoctor,
-                IdNotificacion = notificacionInsertada.IdNotificacion
+                IdNotificacion = notificacionInsertada.IdNotificacion,
+                IdExpedienteRecomendacionesGenerales = recomendacionGeneral.IdExpedienteRecomendacionesGenerales
             };
-
-            _expedienteRecomendacionRepository.Agregar(recomendacion);
+            _detalleExpedienteRecomendacionGeneral.Agregar(detalleRecomendacionGeneral);
         }
-
     }
 }
