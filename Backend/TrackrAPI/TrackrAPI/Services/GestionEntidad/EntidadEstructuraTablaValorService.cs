@@ -1,4 +1,4 @@
-﻿using System.Transactions;
+using System.Transactions;
 using TrackrAPI.Dtos.GestionEntidad;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
@@ -226,7 +226,7 @@ namespace TrackrAPI.Services.GestionEntidad
                         NombrePadecimiento = valor.IdEntidadEstructuraNavigation.Nombre,
                         Variable = columnaCorrespondiente.Variable,
                         Parametro = columnaCorrespondiente.Parametro,
-                        FechaHora = valor.FechaMuestra,
+                        FechaHora = valor.FechaMuestra.ToString(),
                         ValorRegistrado = valor.Valor,
                         ValorReferencia = valorReferencia
                     });

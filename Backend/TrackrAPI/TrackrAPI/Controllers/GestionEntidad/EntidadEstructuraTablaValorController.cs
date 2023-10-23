@@ -60,11 +60,17 @@ namespace TrackrAPI.Controllers.GestionEntidad
         {
             return entidadEstructuraTablaValorService.ConsultarValores(idPadecimiento, idUsuario, true);
         }
-        
+
         [HttpGet("valoresFueraRangoGeneral/usuarioSesion")]
         public IEnumerable<ValoresFueraRangoGridDTO> ConsultarValoresFueraRangoUsuarioSesion()
         {
             int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            return entidadEstructuraTablaValorService.ConsultarValoresFueraRangoGeneral(idUsuario);
+        }
+
+        [HttpGet("valoresFueraRangoGeneral/usuario/{idUsuario}")]
+        public IEnumerable<ValoresFueraRangoGridDTO> ConsultarValoresFueraRangoUsuario(int idUsuario)
+        {
             return entidadEstructuraTablaValorService.ConsultarValoresFueraRangoGeneral(idUsuario);
         }
 
