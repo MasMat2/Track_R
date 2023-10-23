@@ -226,7 +226,7 @@ namespace TrackrAPI.Services.GestionEntidad
                         NombrePadecimiento = valor.IdEntidadEstructuraNavigation.Nombre,
                         Variable = columnaCorrespondiente.Variable,
                         Parametro = columnaCorrespondiente.Parametro,
-                        FechaHora = valor.FechaMuestra.ToString(),
+                        FechaHora = valor.FechaMuestra,
                         ValorRegistrado = valor.Valor,
                         ValorReferencia = valorReferencia
                     });

@@ -61,10 +61,9 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
     public int VariablesFueraRango(int idUsuario)
     {
         var currentDateUtc = DateTime.UtcNow;
-        var maxDate = currentDateUtc.AddDays(-2);
 
         return context.EntidadEstructuraTablaValor
-            .Where(eetv => eetv.IdTabla == idUsuario && eetv.FueraDeRango == true && eetv.FechaMuestra >= maxDate)
+            .Where(eetv => eetv.IdTabla == idUsuario && eetv.FueraDeRango == true)
             .Count();
     }
 
