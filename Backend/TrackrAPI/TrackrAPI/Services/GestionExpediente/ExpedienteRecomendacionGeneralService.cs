@@ -56,8 +56,7 @@ public class ExpedienteRecomendacionGeneralService
                 FechaRealizacion = DateTime.UtcNow,
                 IdExpediente = idExpediente,
                 IdUsuarioDoctor = expedienteRecomendacionGeneralFormDTO.IdDoctor,
-                IdNotificacion = notificacionInsertada.IdNotificacion,
-                RecomendacionGeneral = true
+                IdNotificacion = notificacionInsertada.IdNotificacion
             };
             _expedienteRecomendacionRepository.Agregar(recomendacion);
 
@@ -90,8 +89,7 @@ public class ExpedienteRecomendacionGeneralService
                 FechaRealizacion = DateTime.UtcNow,
                 IdExpediente = expediente.IdExpediente,
                 IdUsuarioDoctor = expedienteRecomendacionGeneralFormDTO.IdDoctor,
-                IdNotificacion = notificacionInsertada.IdNotificacion,
-                RecomendacionGeneral = true
+                IdNotificacion = notificacionInsertada.IdNotificacion
             };
 
             _expedienteRecomendacionRepository.Agregar(recomendacion);
@@ -122,8 +120,7 @@ public class ExpedienteRecomendacionGeneralService
                 FechaRealizacion = DateTime.UtcNow,
                 IdExpediente = expediente.IdExpediente,
                 IdUsuarioDoctor = expedienteRecomendacionGeneralFormDTO.IdDoctor,
-                IdNotificacion = notificacionInsertada.IdNotificacion,
-                RecomendacionGeneral = true
+                IdNotificacion = notificacionInsertada.IdNotificacion
             };
 
             _expedienteRecomendacionRepository.Agregar(recomendacion);

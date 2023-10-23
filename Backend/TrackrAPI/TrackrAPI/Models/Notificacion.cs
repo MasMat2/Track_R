@@ -7,6 +7,7 @@ namespace TrackrAPI.Models
     {
         public Notificacion()
         {
+            DetalleExpedienteRecomendacionesGenerales = new HashSet<DetalleExpedienteRecomendacionesGenerales>();
             ExpedienteRecomendaciones = new HashSet<ExpedienteRecomendaciones>();
             NotificacionDoctor = new HashSet<NotificacionDoctor>();
             NotificacionUsuario = new HashSet<NotificacionUsuario>();
@@ -20,6 +21,7 @@ namespace TrackrAPI.Models
         public int IdTipoNotificacion { get; set; }
 
         public virtual TipoNotificacion IdTipoNotificacionNavigation { get; set; } = null!;
+        public virtual ICollection<DetalleExpedienteRecomendacionesGenerales> DetalleExpedienteRecomendacionesGenerales { get; set; }
         public virtual ICollection<ExpedienteRecomendaciones> ExpedienteRecomendaciones { get; set; }
         public virtual ICollection<NotificacionDoctor> NotificacionDoctor { get; set; }
         public virtual ICollection<NotificacionUsuario> NotificacionUsuario { get; set; }

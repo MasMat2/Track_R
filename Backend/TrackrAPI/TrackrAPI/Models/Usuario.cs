@@ -30,6 +30,7 @@ namespace TrackrAPI.Models
             ExpedienteDoctor = new HashSet<ExpedienteDoctor>();
             ExpedientePadecimiento = new HashSet<ExpedientePadecimiento>();
             ExpedienteRecomendaciones = new HashSet<ExpedienteRecomendaciones>();
+            ExpedienteRecomendacionesGenerales = new HashSet<ExpedienteRecomendacionesGenerales>();
             ExpedienteTrackr = new HashSet<ExpedienteTrackr>();
             ExpedienteTratamiento = new HashSet<ExpedienteTratamiento>();
             Factura = new HashSet<Factura>();
@@ -74,6 +75,7 @@ namespace TrackrAPI.Models
             UsuarioAlmacen = new HashSet<UsuarioAlmacen>();
             UsuarioLocacion = new HashSet<UsuarioLocacion>();
             UsuarioRol = new HashSet<UsuarioRol>();
+            UsuarioWidget = new HashSet<UsuarioWidget>();
         }
 
         public int IdUsuario { get; set; }
@@ -159,6 +161,7 @@ namespace TrackrAPI.Models
         public virtual ICollection<ExpedienteDoctor> ExpedienteDoctor { get; set; }
         public virtual ICollection<ExpedientePadecimiento> ExpedientePadecimiento { get; set; }
         public virtual ICollection<ExpedienteRecomendaciones> ExpedienteRecomendaciones { get; set; }
+        public virtual ICollection<ExpedienteRecomendacionesGenerales> ExpedienteRecomendacionesGenerales { get; set; }
         public virtual ICollection<ExpedienteTrackr> ExpedienteTrackr { get; set; }
         public virtual ICollection<ExpedienteTratamiento> ExpedienteTratamiento { get; set; }
         public virtual ICollection<Factura> Factura { get; set; }
@@ -203,5 +206,6 @@ namespace TrackrAPI.Models
         public virtual ICollection<UsuarioAlmacen> UsuarioAlmacen { get; set; }
         public virtual ICollection<UsuarioLocacion> UsuarioLocacion { get; set; }
         public virtual ICollection<UsuarioRol> UsuarioRol { get; set; }
+        public virtual ICollection<UsuarioWidget> UsuarioWidget { get; set; }
     }
 }
