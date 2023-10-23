@@ -14,6 +14,8 @@ import { ExpedienteRecomendacionFormDTO } from '@dtos/gestion-expediente/expedie
 import { CommonModule } from '@angular/common';
 import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.module';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { ExpedienteRecomendacionGeneralDTO } from '@dtos/gestion-expediente/expediente-recomendacion-general/expediente-recomendacion-general-form-dto';
+import { ExpedienteRecomendacionGeneralService } from '../../../shared/http/gestion-expediente/expediente-recomendacion-general.service';
 
 @Component({
   selector: 'app-recomendacion-general',
@@ -44,6 +46,7 @@ export class RecomendacionGeneralComponent {
   
   constructor(
     private expedienteRecomendacionService : ExpedienteRecomendacionService,
+    private expedienteRecomendacionGeneralService: ExpedienteRecomendacionGeneralService,
     private encryptionService: EncryptionService,
     private route: ActivatedRoute,
     private mensajeService : MensajeService,
@@ -141,7 +144,7 @@ export class RecomendacionGeneralComponent {
 
   private consultarGrid()
   {
-    this.recomendacionesList$ = this.expedienteRecomendacionService.consultarGridPorUsuarioRecomendacionGeneral(this.idUsuario);
+    this.recomendacionesList$ = this.expedienteRecomendacionGeneralService.consultarGrid();
   }
   
   private limpiarCampos() : void
