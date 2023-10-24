@@ -127,6 +127,16 @@
             [(ngModel)]="recomendacion.idPadecimiento"
             *ngIf="recomendacion.tipo == 2">
           </ng-select>
+
+          <ng-select
+            name="padecimientoSelect"
+            [items]="expedientes"
+            [multiple]="true"
+            bindLabel="nombreCompleto"
+            bindValue="idExpedienteTrackr"
+            [(ngModel)]="recomendacion.paciente"
+            *ngIf="recomendacion.tipo == 3">
+          </ng-select>
         </div>
         
       </div> 

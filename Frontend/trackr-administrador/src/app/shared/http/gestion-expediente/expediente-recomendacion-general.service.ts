@@ -36,4 +36,8 @@ export class ExpedienteRecomendacionGeneralService {
   public agregarPadecimiento(expedienteRecomendacionGeneralFormDTO:ExpedienteRecomendacionGeneralFormDTO):Observable<void>{
     return this.http.post<void>(this.dataUrl+'porPadecimiento/',expedienteRecomendacionGeneralFormDTO)
   }
+  
+  public agregarPaciente(expedienteRecomendacionGeneralFormDTO:ExpedienteRecomendacionGeneralFormDTO):Observable<void>{
+    return this.http.post<void>(this.dataUrl+'porPaciente/',expedienteRecomendacionGeneralFormDTO);
+  }
 }

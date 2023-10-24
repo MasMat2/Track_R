@@ -22,6 +22,8 @@ import { EntidadEstructuraService } from '../../../shared/http/gestion-entidad/e
 import { PadecimientoDTO } from '../../../../../../trackr-paciente/src/app/shared/Dtos/gestion-expediente/padecimiento-dto';
 import { ExpedientePadecimientoDTO } from '@dtos/seguridad/expediente-padecimiento-dto';
 import { ExpedientePadecimientoSelectorDTO } from '../../../shared/dtos/seguridad/expediente-padecimiento-selector-dto';
+import { ExpedienteTrackrService } from '../../../shared/http/seguridad/expediente-trackr.service';
+import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-grid-dto';
 
 @Component({
   selector: 'app-recomendacion-general',
@@ -52,6 +54,8 @@ export class RecomendacionGeneralComponent {
   public recomendacionesList$: Observable<ExpedienteRecomendacionGridDTO[]>;
   protected padecimientos: ExpedientePadecimientoSelectorDTO[];
   protected radio: number;
+  protected expedientes: UsuarioExpedienteGridDTO[];
+  protected data:any;
   
   constructor(
     private expedienteRecomendacionService : ExpedienteRecomendacionService,
@@ -60,7 +64,8 @@ export class RecomendacionGeneralComponent {
     private route: ActivatedRoute,
     private mensajeService : MensajeService,
     private formularioService : FormularioService,
-    private entidadEstructuraService:EntidadEstructuraService
+    private entidadEstructuraService:EntidadEstructuraService,
+    private expedienteTrackrService:ExpedienteTrackrService
     ) 
   {}
 
@@ -71,6 +76,11 @@ export class RecomendacionGeneralComponent {
     this.entidadEstructuraService.consultarPadecimientosParaSelector().subscribe(res => {
       this.padecimientos = res
     })
+    this.expedienteTrackrService.consultarParaGrid().subscribe(res =>{
+      this.expedientes = res;
+      console.log(this.expedientes)
+    })
+    
    }
 
   private async obtenerParametrosURL(): Promise<void>
@@ -123,6 +133,7 @@ export class RecomendacionGeneralComponent {
 
   public async enviarFormulario(formulario : NgForm) : Promise<void>
   {
+    console.log(this.data);
     this.submiting = true;
 
     if(!formulario.valid){
@@ -178,6 +189,9 @@ export class RecomendacionGeneralComponent {
     }
     else if(this.recomendacion.tipo == 2){
       return this.expedienteRecomendacionGeneralService.agregarPadecimiento(this.recomendacion);
+    }
+    else if(this.recomendacion.tipo == 3){
+      return this.expedienteRecomendacionGeneralService.agregarPaciente(this.recomendacion);
     }
     //return this.expedienteRecomendacionGeneralService.editarRecomendacionGeneral(this.recomendacion);
   }
