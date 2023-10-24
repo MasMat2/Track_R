@@ -1,5 +1,6 @@
 export class ExpedienteRecomendacionGeneralFormDTO{
     public idExpedienteRecomendacionGeneral ?: number;
+    public tipo: number;
     public descripcion : string;
     public idDoctor ?: number;
     public fecha : Date;

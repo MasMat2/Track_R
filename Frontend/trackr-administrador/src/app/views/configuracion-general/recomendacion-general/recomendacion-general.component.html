@@ -75,6 +75,60 @@
             </button>
           </ng-template>
         </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <label class="label-input required-label" style="color: gray;" >A quién se enviará el mensaje</label>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-check">
+            <input type="radio"
+                   class="form-check-input"
+                   name="destinatario"
+                   id="todos"
+                   value="1"
+                   [(ngModel)]="recomendacion.tipo">
+            <label for="todos" class="form-check-label">Todos</label>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-check">
+            <input type="radio"
+                   class="form-check-input"
+                   name="destinatario"
+                   id="padecimiento"
+                   value="2"
+                   [(ngModel)]="recomendacion.tipo">
+            <label for="padecimiento" class="form-check-label">Pacientes por padecimiento</label>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-check">
+            <input type="radio"
+                   class="form-check-input"
+                   name="destinatario"
+                   id="pacientes"
+                   value="3"
+                   [(ngModel)]="recomendacion.tipo">
+            <label for="pacientes" class="form-check-label">Pacientes</label>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <ng-select
+            name="padecimientoSelect"
+            [items]="padecimientos"
+            bindLabel="nombre"
+            bindValue="idPadecimiento"
+            [(ngModel)]="recomendacion.idPadecimiento"
+            *ngIf="recomendacion.tipo == 2">
+          </ng-select>
+        </div>
+        
       </div> 
      </div>
     </form>

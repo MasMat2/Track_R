@@ -16,11 +16,17 @@ import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.m
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ExpedienteRecomendacionGeneralFormDTO } from '@dtos/gestion-expediente/expediente-recomendacion-general/expediente-recomendacion-general-form-dto';
 import { ExpedienteRecomendacionGeneralService } from '../../../shared/http/gestion-expediente/expediente-recomendacion-general.service';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { EntidadService } from '../../../shared/http/gestion-entidad/entidad.service';
+import { EntidadEstructuraService } from '../../../shared/http/gestion-entidad/entidad-estructura.service';
+import { PadecimientoDTO } from '../../../../../../trackr-paciente/src/app/shared/Dtos/gestion-expediente/padecimiento-dto';
+import { ExpedientePadecimientoDTO } from '@dtos/seguridad/expediente-padecimiento-dto';
+import { ExpedientePadecimientoSelectorDTO } from '../../../shared/dtos/seguridad/expediente-padecimiento-selector-dto';
 
 @Component({
   selector: 'app-recomendacion-general',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatExpansionModule, GridGeneralModule],
+  imports: [CommonModule, FormsModule, MatExpansionModule, GridGeneralModule, NgSelectModule],
   templateUrl: './recomendacion-general.component.html',
   styleUrls: ['./recomendacion-general.component.scss']
 })
@@ -44,6 +50,8 @@ export class RecomendacionGeneralComponent {
     { headerName: 'Administrador', field: 'doctor', minWidth: 80 },
   ];
   public recomendacionesList$: Observable<ExpedienteRecomendacionGridDTO[]>;
+  protected padecimientos: ExpedientePadecimientoSelectorDTO[];
+  protected radio: number;
   
   constructor(
     private expedienteRecomendacionService : ExpedienteRecomendacionService,
@@ -51,7 +59,8 @@ export class RecomendacionGeneralComponent {
     private encryptionService: EncryptionService,
     private route: ActivatedRoute,
     private mensajeService : MensajeService,
-    private formularioService : FormularioService
+    private formularioService : FormularioService,
+    private entidadEstructuraService:EntidadEstructuraService
     ) 
   {}
 
@@ -59,6 +68,9 @@ export class RecomendacionGeneralComponent {
    {
     this.obtenerParametrosURL();
     this.recomendacion.fecha = new Date();
+    this.entidadEstructuraService.consultarPadecimientosParaSelector().subscribe(res => {
+      this.padecimientos = res
+    })
    }
 
   private async obtenerParametrosURL(): Promise<void>
@@ -150,7 +162,7 @@ export class RecomendacionGeneralComponent {
   
   private limpiarCampos() : void
   {
-    this.recomendacion  = new ExpedienteRecomendacionFormDTO;
+    this.recomendacion  = new ExpedienteRecomendacionGeneralFormDTO;
     this.recomendacion.fecha = new Date();
   }
 
@@ -159,10 +171,15 @@ export class RecomendacionGeneralComponent {
    return this.expedienteRecomendacionGeneralService.editarRecomendacionGeneral(this.recomendacion);
   }
 
-  protected agregar() : Observable<void>
+  protected agregar() : any
   {
-    
-    return this.expedienteRecomendacionGeneralService.editarRecomendacionGeneral(this.recomendacion);
+    if(this.recomendacion.tipo == 1){
+      return this.expedienteRecomendacionGeneralService.agregarTodos(this.recomendacion);
+    }
+    else if(this.recomendacion.tipo == 2){
+      return this.expedienteRecomendacionGeneralService.agregarPadecimiento(this.recomendacion);
+    }
+    //return this.expedienteRecomendacionGeneralService.editarRecomendacionGeneral(this.recomendacion);
   }
 
 }

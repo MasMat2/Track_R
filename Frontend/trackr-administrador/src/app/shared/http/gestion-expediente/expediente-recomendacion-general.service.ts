@@ -28,4 +28,12 @@ export class ExpedienteRecomendacionGeneralService {
   public eliminar(idExpedienteRecomendacionGeneral: number): Observable<void>{
     return this.http.delete<void>(this.dataUrl+idExpedienteRecomendacionGeneral);
   }
+
+  public agregarTodos(expedienteRecomendacionGeneralFormDTO:ExpedienteRecomendacionGeneralFormDTO): Observable<void>{
+    return this.http.post<void>(this.dataUrl,expedienteRecomendacionGeneralFormDTO);
+  }
+
+  public agregarPadecimiento(expedienteRecomendacionGeneralFormDTO:ExpedienteRecomendacionGeneralFormDTO):Observable<void>{
+    return this.http.post<void>(this.dataUrl+'porPadecimiento/',expedienteRecomendacionGeneralFormDTO)
+  }
 }

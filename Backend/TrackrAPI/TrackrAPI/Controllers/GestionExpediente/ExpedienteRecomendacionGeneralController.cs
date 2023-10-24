@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Helpers;
 using TrackrAPI.Services.GestionExpediente;
 
 namespace TrackrAPI.Controllers.GestionExpediente;
@@ -19,18 +20,24 @@ public class ExpedienteRecomendacionGeneralController : ControllerBase
     [HttpPost]
     public void AgregarTodos(ExpedienteRecomendacionGeneralFormDTO expedienteRecomendacionGeneralFormDTO)
     {
+        int IdDoctor = Utileria.ObtenerIdUsuarioSesion(this);
+        expedienteRecomendacionGeneralFormDTO.IdDoctor = IdDoctor;
         _expedienteRecomendacionGeneralService.AgregarTodos(expedienteRecomendacionGeneralFormDTO);
     }
 
     [HttpPost("porPadecimiento")]
     public void AgregarPorPadecimiento(ExpedienteRecomendacionGeneralFormDTO expedienteRecomendacionGeneralFormDTO)
     {
+        int IdDoctor = Utileria.ObtenerIdUsuarioSesion(this);
+        expedienteRecomendacionGeneralFormDTO.IdDoctor = IdDoctor;
         _expedienteRecomendacionGeneralService.AgregarPorPadecimiento(expedienteRecomendacionGeneralFormDTO);
     }
 
     [HttpPost("porPaciente")]
     public void AgregarPorPaciente(ExpedienteRecomendacionGeneralFormDTO expedienteRecomendacionGeneralFormDTO)
     {
+        int IdDoctor = Utileria.ObtenerIdUsuarioSesion(this);
+        expedienteRecomendacionGeneralFormDTO.IdDoctor = IdDoctor;
         _expedienteRecomendacionGeneralService.AgregarPacientes(expedienteRecomendacionGeneralFormDTO);
     }
 
