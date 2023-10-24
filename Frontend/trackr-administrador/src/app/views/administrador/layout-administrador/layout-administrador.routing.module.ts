@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { InicioComponent } from '../inicio/inicio.component';
+import { ChatComponent } from '../../chat/chat.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('src/app/views/encuesta/encuesta.module')
       .then((m) => m.EncuestaModule),
+  },
+  {
+    path: 'chat',
+    component: ChatComponent
   }
 ];
 

@@ -57,11 +57,11 @@ namespace TrackrAPI.Services.Seguridad
         private void ValidarNivelComponentes(JerarquiaAccesoEstructura jerarquiaAccesoEstructura)
         {
             Acceso acceso = accesoRepository.Consultar((int)jerarquiaAccesoEstructura.IdAcceso);
-
+            /* 
             if (jerarquiaAccesoEstructura.IdJerarquiaAccesoEstructuraPadre == null && acceso.IdTipoAccesoNavigation.Clave == GeneralConstant.ClaveTipoAccesoComponente)
             {
                 throw new CdisException("No debe de asignar componentes en el primer nivel");
-            }
+            } */
         }
     }
 }

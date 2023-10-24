@@ -2,14 +2,16 @@
   <mat-sidenav #sidenav mode="side" [opened]="mostrarSidebar" position="end" [fixedInViewport]="true">
     <div class="container-fluid">
       <div class="d-flex justify-content-end">
-        <button
-          type="button"
-          class="close"
-          aria-label="Close"
-          (click)="toggleSidebar()"
-        >
-          <i class="far fa-times-circle"></i>
-        </button>
+        <div class="button">
+
+          <button
+            type="button"
+            aria-label="Close"
+            (click)="toggleSidebar()"
+          >
+            <i class="far fa-times-circle"></i>
+          </button>
+        </div>
       </div>
       <div *ngIf="paciente">
         <div class="bg-white d-flex align-items-center gap-2">

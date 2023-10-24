@@ -20,33 +20,6 @@
       </div>
     </div>
 
-    <div class="lateral-superior">
-        <app-menu-item
-          [item]="{ name: 'Inicio', icon: 'fas fa-home', url: '/administrador', claveTipoAcceso: '' }"
-        >
-        </app-menu-item>
-        <br>
-        
-        <app-menu-item
-         [item]="{ name: 'PacientesTrack', icon: 'fas fa-id-card-alt', url: '/administrador/gestion-paciente/paciente', claveTipoAcceso: '' }"
-        >
-        </app-menu-item>
-        <br>
-
-        <app-menu-item
-          [item]="{ name: 'Cuestionarios', icon: 'fas fa-list-ul', url: '/administrador/examen/examen', claveTipoAcceso: '' }"
-        >
-       </app-menu-item>
-       <br>
-
-       <app-menu-item
-         [item]="{ name: 'VideoChat', icon: 'fas fa-comment', url: '/administrador/configuracion-general/catalogo/usuario', claveTipoAcceso: '' }"
-        >
-        </app-menu-item>
-        <br>
-
-      </div>
-
       <!-- Items de Navegación -->
       <div *ngFor="let item of navItems">
         <app-menu-item
