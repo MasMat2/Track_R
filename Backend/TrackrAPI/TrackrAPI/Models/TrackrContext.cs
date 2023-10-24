@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -39,6 +39,9 @@ namespace TrackrAPI.Models
         public virtual DbSet<Categoria> Categoria { get; set; } = null!;
         public virtual DbSet<CategoriaImagen> CategoriaImagen { get; set; } = null!;
         public virtual DbSet<CertificadoLocacion> CertificadoLocacion { get; set; } = null!;
+        public virtual DbSet<Chat> Chat { get; set; } = null!;
+        public virtual DbSet<ChatMensaje> ChatMensaje { get; set; } = null!;
+        public virtual DbSet<ChatPersona> ChatPersona { get; set; } = null!;
         public virtual DbSet<Cie> Cie { get; set; } = null!;
         public virtual DbSet<Cierre> Cierre { get; set; } = null!;
         public virtual DbSet<Cita> Cita { get; set; } = null!;
@@ -271,6 +274,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<TipoArticulo> TipoArticulo { get; set; } = null!;
         public virtual DbSet<TipoAuxiliar> TipoAuxiliar { get; set; } = null!;
         public virtual DbSet<TipoCambio> TipoCambio { get; set; } = null!;
+        public virtual DbSet<TipoChatPersona> TipoChatPersona { get; set; } = null!;
         public virtual DbSet<TipoCliente> TipoCliente { get; set; } = null!;
         public virtual DbSet<TipoComision> TipoComision { get; set; } = null!;
         public virtual DbSet<TipoComisionDetalle> TipoComisionDetalle { get; set; } = null!;
@@ -972,6 +976,66 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdLocacion)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Certifica__IdLoc__615C547D");
+            });
+
+            modelBuilder.Entity<Chat>(entity =>
+            {
+                entity.HasKey(e => e.IdChat)
+                    .HasName("PK__Chat__3817F38CDAF94781");
+
+                entity.ToTable("Chat", "Trackr");
+
+                entity.Property(e => e.Fecha).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<ChatMensaje>(entity =>
+            {
+                entity.HasKey(e => e.IdChatMensaje)
+                    .HasName("PK__ChatMens__CE49C95E3E6B4469");
+
+                entity.ToTable("ChatMensaje", "Trackr");
+
+                entity.Property(e => e.Fecha).HasColumnType("datetime");
+
+                entity.Property(e => e.Mensaje).HasMaxLength(700);
+
+                entity.HasOne(d => d.IdChatNavigation)
+                    .WithMany(p => p.ChatMensaje)
+                    .HasForeignKey(d => d.IdChat)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ChatMensa__IdCha__0AE879F5");
+
+                entity.HasOne(d => d.IdPersonaNavigation)
+                    .WithMany(p => p.ChatMensaje)
+                    .HasForeignKey(d => d.IdPersona)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ChatMensa__IdPer__0BDC9E2E");
+
+                entity.HasOne(d => d.IdPersonaVistoNavigation)
+                    .WithMany(p => p.ChatMensaje)
+                    .HasForeignKey(d => d.IdPersonaVisto)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ChatMensa__IdPer__0CD0C267");
+            });
+
+            modelBuilder.Entity<ChatPersona>(entity =>
+            {
+                entity.HasKey(e => e.IdChatPersona)
+                    .HasName("PK__ChatPers__54BD8486EA0D1448");
+
+                entity.ToTable("ChatPersona", "Trackr");
+
+                entity.HasOne(d => d.IdPersonaNavigation)
+                    .WithMany(p => p.ChatPersona)
+                    .HasForeignKey(d => d.IdPersona)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ChatPerso__IdPer__0717E911");
+
+                entity.HasOne(d => d.IdTipoNavigation)
+                    .WithMany(p => p.ChatPersona)
+                    .HasForeignKey(d => d.IdTipo)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ChatPerso__IdTip__080C0D4A");
             });
 
             modelBuilder.Entity<Cie>(entity =>
@@ -7087,6 +7151,18 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdMoneda)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__TipoCambi__IdMon__51FA155C");
+            });
+
+            modelBuilder.Entity<TipoChatPersona>(entity =>
+            {
+                entity.HasKey(e => e.IdTipoChatPersona)
+                    .HasName("PK__TipoChat__08BEEFFADFBF89A1");
+
+                entity.ToTable("TipoChatPersona", "Trackr");
+
+                entity.Property(e => e.Clave).HasMaxLength(3);
+
+                entity.Property(e => e.Nombre).HasMaxLength(50);
             });
 
             modelBuilder.Entity<TipoCliente>(entity =>
