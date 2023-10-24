@@ -14,7 +14,7 @@ import { ExpedienteRecomendacionFormDTO } from '@dtos/gestion-expediente/expedie
 import { CommonModule } from '@angular/common';
 import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.module';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { ExpedienteRecomendacionGeneralDTO } from '@dtos/gestion-expediente/expediente-recomendacion-general/expediente-recomendacion-general-form-dto';
+import { ExpedienteRecomendacionGeneralFormDTO } from '@dtos/gestion-expediente/expediente-recomendacion-general/expediente-recomendacion-general-form-dto';
 import { ExpedienteRecomendacionGeneralService } from '../../../shared/http/gestion-expediente/expediente-recomendacion-general.service';
 
 @Component({
@@ -31,7 +31,7 @@ export class RecomendacionGeneralComponent {
 
   //Variables relacionadas con la consulta de datos y la interaccion con el servicio
   protected idUsuario : number;
-  protected recomendacion : ExpedienteRecomendacionFormDTO = new ExpedienteRecomendacionFormDTO;
+  protected recomendacion : ExpedienteRecomendacionGeneralFormDTO = new ExpedienteRecomendacionGeneralFormDTO;
 
   //Configuraciones y datos del grid
   public gridOptions : GridOptions;
@@ -40,7 +40,8 @@ export class RecomendacionGeneralComponent {
     { headerName: 'Num', valueGetter: (params: any) => params.node.rowIndex + 1, maxWidth: 70 },
     { headerName: 'Fecha', field: 'fecha', maxWidth: 90},
     { headerName: 'Recomendacion', field: 'descripcion', minWidth: 150 },
-    { headerName: 'Doctor', field: 'doctor', minWidth: 80 },
+    { headerName: 'A quien se enviará el mensaje', field: 'tipo', maxwidth: 90},
+    { headerName: 'Administrador', field: 'doctor', minWidth: 80 },
   ];
   public recomendacionesList$: Observable<ExpedienteRecomendacionGridDTO[]>;
   
@@ -79,7 +80,7 @@ export class RecomendacionGeneralComponent {
       MENSAJE_CONFIRMACION,
       TITULO_MODAL
     ).then(() => {
-      this.expedienteRecomendacionService.eliminar(idExpedienteRecomendacion).subscribe(() => {
+      this.expedienteRecomendacionGeneralService.eliminar(idExpedienteRecomendacion).subscribe(() => {
         this.mensajeService.modalExito(MENSAJE_EXITO);
         this.consultarGrid();
         this.esAgregar = true;
@@ -94,7 +95,7 @@ export class RecomendacionGeneralComponent {
     const acciones = {
       [GRID_ACTION.Eliminar as string] : () => this.eliminar(recomendacionGrid.idExpedienteRecomendacion),
       [GRID_ACTION.Editar as string] : () => {
-        this.expedienteRecomendacionService.consultar(recomendacionGrid.idExpedienteRecomendacion)
+        this.expedienteRecomendacionGeneralService.consultar(recomendacionGrid.idExpedienteRecomendacion)
         .subscribe(recomendacion => {
         
           this.recomendacion = recomendacion;
@@ -155,14 +156,13 @@ export class RecomendacionGeneralComponent {
 
   protected editar() : Observable<void>
   { 
-    this.recomendacion.idUsuario = this.idUsuario;
-   return this.expedienteRecomendacionService.editar(this.recomendacion);
+   return this.expedienteRecomendacionGeneralService.editarRecomendacionGeneral(this.recomendacion);
   }
 
   protected agregar() : Observable<void>
   {
-    this.recomendacion.idUsuario = this.idUsuario;
-    return this.expedienteRecomendacionService.agregar(this.recomendacion);
+    
+    return this.expedienteRecomendacionGeneralService.editarRecomendacionGeneral(this.recomendacion);
   }
 
 }
