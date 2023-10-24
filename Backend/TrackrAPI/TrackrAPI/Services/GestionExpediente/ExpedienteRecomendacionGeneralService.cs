@@ -17,6 +17,7 @@ public class ExpedienteRecomendacionGeneralService
     private readonly IExpedientePadecimientoRepository _expedientePadecimientoRepository;
     private readonly IExpedienteRecomendacionGeneralRepository _expedienteRecomendacionGeneralRepository;
     private readonly IDetalleExpedienteRecomendacionGeneral _detalleExpedienteRecomendacionGeneral;
+    private readonly DetalleExpedienteRecomendacionGeneralService _detalleExpedienteRecomendacionGeneralService;
 
     public ExpedienteRecomendacionGeneralService(
         IExpedienteRecomendacionRepository expedienteRecomendacionRepository,
@@ -26,7 +27,8 @@ public class ExpedienteRecomendacionGeneralService
         IUsuarioRepository usuarioRepository,
         IExpedientePadecimientoRepository expedientePadecimientoRepository,
         IExpedienteRecomendacionGeneralRepository expedienteRecomendacionGeneralRepository,
-        IDetalleExpedienteRecomendacionGeneral detalleExpedienteRecomendacionGeneral
+        IDetalleExpedienteRecomendacionGeneral detalleExpedienteRecomendacionGeneral,
+        DetalleExpedienteRecomendacionGeneralService detalleExpedienteRecomendacionGeneralService
     )
     {
         _expedienteRecomendacionRepository = expedienteRecomendacionRepository;
@@ -37,6 +39,7 @@ public class ExpedienteRecomendacionGeneralService
         _expedientePadecimientoRepository = expedientePadecimientoRepository;
         _expedienteRecomendacionGeneralRepository = expedienteRecomendacionGeneralRepository;
         _detalleExpedienteRecomendacionGeneral = detalleExpedienteRecomendacionGeneral;
+        _detalleExpedienteRecomendacionGeneralService = detalleExpedienteRecomendacionGeneralService;
     }
 
     public async Task AgregarPacientes(ExpedienteRecomendacionGeneralFormDTO expedienteRecomendacionGeneralFormDTO)
@@ -150,5 +153,36 @@ public class ExpedienteRecomendacionGeneralService
     public IEnumerable<ExpedienteRecomendacionGeneralGridDTO> obtenerGrid()
     {
         return _expedienteRecomendacionGeneralRepository.ConsultarGrid();
+    }
+
+    public void Editar(ExpedienteRecomendacionGeneralFormDTO expedienteRecomendacionGeneralFormDTO)
+    {
+        _expedienteRecomendacionValidator.ValidarAgregarGeneral(expedienteRecomendacionGeneralFormDTO);
+        var recomendacionGeneral = _expedienteRecomendacionGeneralRepository.Consultar((int)expedienteRecomendacionGeneralFormDTO.IdExpedienteRecomendacionesGenerales);
+        
+        recomendacionGeneral.Descripcion = expedienteRecomendacionGeneralFormDTO.Descripcion;
+
+        _expedienteRecomendacionGeneralRepository.Editar(recomendacionGeneral);
+    }
+
+    public ExpedienteRecomendacionGeneralFormDTO Consultar(int IdExpedienteRecomendacionGeneral)
+    {
+        var recomendacion = _expedienteRecomendacionGeneralRepository.Consultar(IdExpedienteRecomendacionGeneral);
+
+        return new ExpedienteRecomendacionGeneralFormDTO 
+        {
+            IdExpedienteRecomendacionesGenerales = (int)recomendacion.IdExpedienteRecomendacionesGenerales,
+            Tipo = (int)recomendacion.Tipo,
+            Descripcion = recomendacion.Descripcion,
+            IdDoctor = recomendacion.IdAdministrador
+        };
+    }
+
+    public void Eliminar(int IdExpedienteRecomendacionGeneral)
+    {
+        _expedienteRecomendacionValidator.ValidarEliminarGeneral(IdExpedienteRecomendacionGeneral);
+        var recomendacion = _expedienteRecomendacionGeneralRepository.Consultar(IdExpedienteRecomendacionGeneral);
+        _detalleExpedienteRecomendacionGeneralService.eliminarDetalle(recomendacion.IdExpedienteRecomendacionesGenerales);
+        _expedienteRecomendacionGeneralRepository.Eliminar(recomendacion);
     }
 }

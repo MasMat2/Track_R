@@ -7,10 +7,13 @@ namespace TrackrAPI.Services.GestionExpediente;
 public class ExpedienteRecomendacionValidatorService
 {
     public readonly IExpedienteRecomendacionRepository _expedienteRecomendacionRepository;
+    public readonly IExpedienteRecomendacionGeneralRepository _expedienteRecomendacionGeneralRepository;
 
-    public ExpedienteRecomendacionValidatorService(IExpedienteRecomendacionRepository expedienteRecomendacionRepository)
+    public ExpedienteRecomendacionValidatorService(IExpedienteRecomendacionRepository expedienteRecomendacionRepository,
+                                                   IExpedienteRecomendacionGeneralRepository expedienteRecomendacionGeneralRepository)
     {
         _expedienteRecomendacionRepository = expedienteRecomendacionRepository;
+        _expedienteRecomendacionGeneralRepository = expedienteRecomendacionGeneralRepository;
     }
 
     private readonly string MensajeRecomendacionRequerida = "La recomendacion es requerida";
@@ -33,6 +36,10 @@ public class ExpedienteRecomendacionValidatorService
     {
         ValidarExistencia(idRecomendacion);
     }
+    public void ValidarEliminarGeneral(int idRecomendacion)
+    {
+        ValidarExistenciaGeneral(idRecomendacion);
+    }
     public void ValidarRango(ExpedienteRecomendacionFormDTO recomendacion)
     {
         Validator.ValidarLongitudRangoString(recomendacion.Descripcion, LongitudRecomendacion, MensajeRecomendacionLongitud);
@@ -46,6 +53,16 @@ public class ExpedienteRecomendacionValidatorService
     public void ValidarExistencia(int idRecomendacion)
     {
         var recomendacion = _expedienteRecomendacionRepository.Consultar(idRecomendacion);
+
+        if (recomendacion is null)
+        {
+            throw new CdisException(MensajeExistencia);
+        }
+    }
+
+    public void ValidarExistenciaGeneral(int idRecomendacion)
+    {
+        var recomendacion = _expedienteRecomendacionGeneralRepository.Consultar(idRecomendacion);
 
         if (recomendacion is null)
         {

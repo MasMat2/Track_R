@@ -40,5 +40,24 @@ public class ExpedienteRecomendacionGeneralController : ControllerBase
         return _expedienteRecomendacionGeneralService.obtenerGrid();
         
     }
+    
+    [HttpPut]
+    public void EditarRecomendacionGeneral(ExpedienteRecomendacionGeneralFormDTO expedienteRecomendacionGeneralFormDTO)
+    {
+        _expedienteRecomendacionGeneralService.Editar(expedienteRecomendacionGeneralFormDTO);
+    }
+
+    [HttpGet("{idExpedienteRecomendacionesGenerales}")]
+    public ExpedienteRecomendacionGeneralFormDTO ConsultarExpediente(int idExpedienteRecomendacionesGenerales)
+    {
+        return _expedienteRecomendacionGeneralService.Consultar(idExpedienteRecomendacionesGenerales);
+    }
+
+    [HttpDelete("{idExpedienteRecomendacionesGenerales}")]
+    public void Eliminar(int idExpedienteRecomendacionesGenerales)
+    {
+        _expedienteRecomendacionGeneralService.Eliminar(idExpedienteRecomendacionesGenerales);
+    }
+
 }
 

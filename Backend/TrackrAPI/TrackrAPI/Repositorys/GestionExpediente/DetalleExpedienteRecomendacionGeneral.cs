@@ -7,5 +7,15 @@ public class DetalleExpedienteRecomendacionGeneral : Repository<DetalleExpedient
     {
         base.context = context;
     }
+
+    public void eliminarDetalles(int IdExpedienteRecomendacionGeneral)
+    {
+        var eliminarDetalles = context.DetalleExpedienteRecomendacionesGenerales
+               .Where(exp => exp.IdExpedienteRecomendacionesGenerales == IdExpedienteRecomendacionGeneral)
+               .ToList();
+
+        context.DetalleExpedienteRecomendacionesGenerales.RemoveRange(eliminarDetalles);
+        context.SaveChanges();
+    }
 }
 

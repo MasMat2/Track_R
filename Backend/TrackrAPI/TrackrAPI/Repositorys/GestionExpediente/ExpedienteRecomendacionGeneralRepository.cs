@@ -31,5 +31,12 @@ public class ExpedienteRecomendacionGeneralRepository : Repository<ExpedienteRec
         })
         .ToList();
     }
+
+    public ExpedienteRecomendacionesGenerales? Consultar(int idExpedienteRecomendacionGeneral)
+    {
+        return context.ExpedienteRecomendacionesGenerales
+                      .Where(exp => exp.IdExpedienteRecomendacionesGenerales == idExpedienteRecomendacionGeneral)
+                      .FirstOrDefault();
+    }
 }
 
