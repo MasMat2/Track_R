@@ -79,11 +79,11 @@
 
       <div class="row">
         <div class="col-md-12">
-          <label class="label-input required-label" style="color: gray;" >A quién se enviará el mensaje</label>
+          <label class="label-input required-label pt-1" style="color: gray;" >A quién se enviará el mensaje</label>
         </div>
 
-        <div class="col-md-3">
-          <div class="form-check">
+        <div class="col-md-6">
+          <div class="form-check gap">
             <input type="radio"
                    class="form-check-input"
                    name="destinatario"
@@ -92,10 +92,8 @@
                    [(ngModel)]="recomendacion.tipo">
             <label for="todos" class="form-check-label">Todos</label>
           </div>
-        </div>
 
-        <div class="col-md-3">
-          <div class="form-check">
+          <div class="form-check gap">
             <input type="radio"
                    class="form-check-input"
                    name="destinatario"
@@ -104,10 +102,8 @@
                    [(ngModel)]="recomendacion.tipo">
             <label for="padecimiento" class="form-check-label">Pacientes por padecimiento</label>
           </div>
-        </div>
 
-        <div class="col-md-3">
-          <div class="form-check">
+          <div class="form-check gap">
             <input type="radio"
                    class="form-check-input"
                    name="destinatario"
@@ -118,7 +114,15 @@
           </div>
         </div>
 
+        <!-- <div class="col-md-3">
+          
+        </div>
+
         <div class="col-md-3">
+          
+        </div> -->
+
+        <div class="col-md-4">
           <ng-select
             name="padecimientoSelect"
             [items]="padecimientos"
