@@ -1,5 +1,4 @@
 import { Component, OnInit} from '@angular/core';
-import { ExpedienteRecomendacionService } from '@http/gestion-expediente/expediente-recomendacion.service';
 import { ExpedienteRecomendacionGridDTO } from '@dtos/gestion-expediente/expediente-recomendacion/expediente-recomendacion-grid-dto';
 import { GridOptions } from 'ag-grid-community';
 import { EncryptionService } from '@services/encryption.service';
@@ -10,17 +9,13 @@ import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { GRID_ACTION } from '@utils/constants/grid';
 import { FormsModule, NgForm } from '@angular/forms';
 import { FormularioService } from '@services/formulario.service';
-import { ExpedienteRecomendacionFormDTO } from '@dtos/gestion-expediente/expediente-recomendacion/expediente-recomendacion-form.dto';
 import { CommonModule } from '@angular/common';
 import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.module';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ExpedienteRecomendacionGeneralFormDTO } from '@dtos/gestion-expediente/expediente-recomendacion-general/expediente-recomendacion-general-form-dto';
 import { ExpedienteRecomendacionGeneralService } from '../../../shared/http/gestion-expediente/expediente-recomendacion-general.service';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { EntidadService } from '../../../shared/http/gestion-entidad/entidad.service';
 import { EntidadEstructuraService } from '../../../shared/http/gestion-entidad/entidad-estructura.service';
-import { PadecimientoDTO } from '../../../../../../trackr-paciente/src/app/shared/Dtos/gestion-expediente/padecimiento-dto';
-import { ExpedientePadecimientoDTO } from '@dtos/seguridad/expediente-padecimiento-dto';
 import { ExpedientePadecimientoSelectorDTO } from '../../../shared/dtos/seguridad/expediente-padecimiento-selector-dto';
 import { ExpedienteTrackrService } from '../../../shared/http/seguridad/expediente-trackr.service';
 import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-grid-dto';
@@ -53,12 +48,9 @@ export class RecomendacionGeneralComponent {
   ];
   public recomendacionesList$: Observable<ExpedienteRecomendacionGridDTO[]>;
   protected padecimientos: ExpedientePadecimientoSelectorDTO[];
-  protected radio: number;
   protected expedientes: UsuarioExpedienteGridDTO[];
-  protected data:any;
   
   constructor(
-    private expedienteRecomendacionService : ExpedienteRecomendacionService,
     private expedienteRecomendacionGeneralService: ExpedienteRecomendacionGeneralService,
     private encryptionService: EncryptionService,
     private route: ActivatedRoute,
@@ -133,7 +125,6 @@ export class RecomendacionGeneralComponent {
 
   public async enviarFormulario(formulario : NgForm) : Promise<void>
   {
-    console.log(this.data);
     this.submiting = true;
 
     if(!formulario.valid){
