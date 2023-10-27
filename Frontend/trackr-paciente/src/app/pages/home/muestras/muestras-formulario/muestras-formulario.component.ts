@@ -73,6 +73,9 @@ export class MuestrasFormularioComponent implements OnInit {
     }
 
    this.agregar(camposAgregados);
+   for (const seccionCampo of seccion.seccionesCampo) {
+    seccionCampo.valor = ' '
+  }
   }
 
   public agregar(campoAgregar: TablaValorMuestraDTO[]): void {
