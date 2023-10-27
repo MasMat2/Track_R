@@ -30,6 +30,7 @@ import { SeccionMuestraDTO } from '@dtos/gestion-expediente/seccion-muestra-dto'
 export class MuestrasFormularioComponent implements OnInit {
 
   @Output() consultarValoresFueraRango = new EventEmitter<void>();
+  protected day = new Date().getDate();
   protected recomendacion: any;
   protected dateToday: string = new Date().toISOString();
   public arbolPadecimiento: PadecimientoMuestraDTO[] = [];
