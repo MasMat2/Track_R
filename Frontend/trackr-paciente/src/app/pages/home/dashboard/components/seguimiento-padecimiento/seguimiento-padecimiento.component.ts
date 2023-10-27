@@ -110,7 +110,6 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   };
   public barChartOptions:ChartOptions = {plugins: {legend: {display: false}}};
 
-
   constructor(
     private seccionCampoService: SeccionCampoService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
@@ -140,18 +139,60 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   }
 
   private actualizarDatos(filtroClave: string, filtroTiempo: string): void {
-
     lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresPorClaveCampoUsuarioSesion(filtroClave, filtroTiempo))
       .then((valoresPorClaveCampo) => {
+        let data:any = {};
+        if(filtroTiempo != "Hoy"){
+          if(!valoresPorClaveCampo.hasOwnProperty('Do')){
+            data['Do'] = []
+          }else{
+            data['Do'] = valoresPorClaveCampo['Do']
+          }
+          if(!valoresPorClaveCampo.hasOwnProperty('Lu')){
+            data['Lu'] = []
+          }else{
+            data['Lu'] = valoresPorClaveCampo['Lu']
+          }
+          if(!valoresPorClaveCampo.hasOwnProperty('Ma')){
+            data['Ma'] = []
+          }else{
+            data['Ma'] = valoresPorClaveCampo['Ma']
+          }
+          if(!valoresPorClaveCampo.hasOwnProperty('Mi')){
+            data['Mi'] = []
+          }else{
+            data['Mi'] = valoresPorClaveCampo['Mi']
+          }
+          if(!valoresPorClaveCampo.hasOwnProperty('Ju')){
+            data['Ju'] = []
+          }else{
+            data['Ju'] = valoresPorClaveCampo['Ju']
+          }
+          if(!valoresPorClaveCampo.hasOwnProperty('Vi')){
+            data['Vi'] = []
+          }else{
+            data['Vi'] = valoresPorClaveCampo['Vi']
+          }
+          if(!valoresPorClaveCampo.hasOwnProperty('Sa')){
+            data['Sa'] = []
+          }else{
+            data['Sa'] = valoresPorClaveCampo['Sa']
+          }
+        }
+        else{
+          data = valoresPorClaveCampo
+        }
+
         // Transforma los datos para usar en la gráfica
       const labels = Object.keys(valoresPorClaveCampo);
       if(labels == null || !(labels.length > 0)){
         this.limpiarHistograma();
         return
       }
+      
       const datasets = valoresPorClaveCampo[labels[0]].map((_, index) => {
         return {
-          data: labels.map(label => valoresPorClaveCampo[label][index]?.valor ?? 0),
+          data: Object.keys(data).map(label => data[label][index]?.valor ?? 0),
           backgroundColor: this.backgroundColor[index],
           borderColor: this.borderColor[index],
           borderWidth: 1,
@@ -160,7 +201,7 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
 
       // Actualiza las etiquetas y datos en la configuración de la gráfica
       this.barChartData = {
-        labels: labels,
+        labels: Object.keys(data),
         datasets: datasets,
       };
 
