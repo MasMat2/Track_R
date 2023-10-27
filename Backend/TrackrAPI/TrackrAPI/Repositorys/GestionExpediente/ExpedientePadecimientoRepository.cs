@@ -85,5 +85,12 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                     valorEntidadEstructuraValor = pfrDTO.IdPadecimientoNavigation.EntidadEstructuraTablaValor.FirstOrDefault().Valor,
                 }).ToList();
         }
+
+        public IEnumerable<ExpedientePadecimiento> ConsultarPorPadecimiento(int? idPadecimiento)
+        {
+            return context.ExpedientePadecimiento
+                .Where(exp => exp.IdPadecimiento == idPadecimiento)
+                .Include(exp => exp.IdExpedienteNavigation);
+        }
     }
 }

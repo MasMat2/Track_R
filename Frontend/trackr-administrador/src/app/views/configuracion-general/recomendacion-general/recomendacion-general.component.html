@@ -1,0 +1,170 @@
+<div class="modal-content"> 
+    <div class="modal-header">
+      <div>Notificaciones</div>
+    </div>
+  
+    <form
+      #formulario="ngForm"
+      (ngSubmit)="enviarFormulario(formulario)"
+      (keydown.enter)="$event.preventDefault()"
+      novalidate="novalidate"
+    >
+      <div class="modal-contenedor">
+        <div class="row">
+          <div class="col-md-8">
+              <div class="form-group">
+                <label class="label-input required-label" style="color: gray;" >Recomendación</label>
+                <div>
+                  <textarea
+                    #descripcion="ngModel"
+                    [(ngModel)]="recomendacion.descripcion"
+                    name="descripcion"
+                    class="form-control-textarea"
+                    type="text"
+                    maxlength="800"
+                    autocomplete="off"
+                    style="width: 100%;"
+                    rows="4"
+                    required
+                  ></textarea>
+                  <div *ngIf="(descripcion.errors?.['required'] && descripcion.touched )" class="error">
+                    La descripción es requerida
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+          <div class="col-md-2 justify-content-between align-items-center ">
+            <label class="label-input required-label">Fecha</label>
+          <div>
+            <input
+              [(ngModel)] = "recomendacion.fecha"
+              name="fechaAlta"
+              class="form-control"
+              type="text"
+              maxlength="50"
+              autocomplete="off"
+              required
+              [disabled]="true"
+              bsDatepicker
+            />
+  
+          </div>
+        </div>
+      
+        <div class="col-md-2 align-items-center d-flex contenedor-agregar" >
+          <label class="label-input required-label">&nbsp;</label>
+          
+          <ng-template [ngIf]="esAgregar" [ngIfElse]="botonEditar" >
+            <button
+             type="submit"
+             [disabled]="submiting"
+             class="btn"
+            >
+              <i class="fas fa-plus-circle" style="font-size: 24px;"></i> 
+            </button>
+          </ng-template>
+         
+          <ng-template #botonEditar class="button">
+            <button 
+            [disabled]="submiting"
+            type="submit"
+            class="btn"
+            >
+              <img src="assets/img/svg/ico-15x15-Editar-1.svg" style="width: 24px; height: 24px;" (click)="editar()" >
+            </button>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <label class="label-input required-label pt-1" style="color: gray;" >A quién se enviará el mensaje</label>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-check gap">
+            <input type="radio"
+                   class="form-check-input"
+                   name="destinatario"
+                   id="todos"
+                   value="1"
+                   [(ngModel)]="recomendacion.tipo">
+            <label for="todos" class="form-check-label">Todos</label>
+          </div>
+
+          <div class="form-check gap">
+            <input type="radio"
+                   class="form-check-input"
+                   name="destinatario"
+                   id="padecimiento"
+                   value="2"
+                   [(ngModel)]="recomendacion.tipo">
+            <label for="padecimiento" class="form-check-label">Pacientes por padecimiento</label>
+          </div>
+
+          <div class="form-check gap">
+            <input type="radio"
+                   class="form-check-input"
+                   name="destinatario"
+                   id="pacientes"
+                   value="3"
+                   [(ngModel)]="recomendacion.tipo">
+            <label for="pacientes" class="form-check-label">Pacientes</label>
+          </div>
+        </div>
+
+        <!-- <div class="col-md-3">
+          
+        </div>
+
+        <div class="col-md-3">
+          
+        </div> -->
+
+        <div class="col-md-4">
+          <ng-select
+            name="padecimientoSelect"
+            [items]="padecimientos"
+            bindLabel="nombre"
+            bindValue="idPadecimiento"
+            [(ngModel)]="recomendacion.idPadecimiento"
+            *ngIf="recomendacion.tipo == 2">
+          </ng-select>
+
+          <ng-select
+            name="padecimientoSelect"
+            [items]="expedientes"
+            [multiple]="true"
+            bindLabel="nombreCompleto"
+            bindValue="idExpedienteTrackr"
+            [(ngModel)]="recomendacion.paciente"
+            *ngIf="recomendacion.tipo == 3">
+          </ng-select>
+        </div>
+        
+      </div> 
+     </div>
+    </form>
+  </div>
+  
+  <mat-accordion multi="true">
+    <mat-expansion-panel expanded="true"> 
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <p style="color: purple">Bitácora Recomendaciones</p>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="col-md-12">
+          <app-grid-general 
+            #gridRecomendacion
+            [headerName]="HEADER_GRID"
+            [children]="columns"
+            [gridOptions]="gridOptions"
+            [data]="recomendacionesList$ | async"
+            (event)="onGridClick($event)"
+            >
+            </app-grid-general>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>

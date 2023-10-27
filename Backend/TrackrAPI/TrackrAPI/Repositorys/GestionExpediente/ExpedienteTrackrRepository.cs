@@ -139,6 +139,11 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
         return expedienteSidebarDTO.Usuario;
     }
 
+    public IEnumerable<ExpedienteTrackr> ConsultarExpedientes()
+    {
+        return context.ExpedienteTrackr;
+    }
+
 
 
 }
