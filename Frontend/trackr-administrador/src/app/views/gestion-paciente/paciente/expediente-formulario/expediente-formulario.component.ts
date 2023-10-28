@@ -27,7 +27,6 @@ import { UsuarioImagenService } from '@services/usuario-imagen.service';
 import { Genero } from '@models/catalogo/genero';
 import { ExpedienteTrackrService } from '@http/seguridad/expediente-trackr.service';
 import { ExpedienteConsumoMedicamentoComponent } from '../expediente-consumo-medicamento/expediente-consumo-medicamento.component';
-import { RecomendacionGeneralComponent } from 'src/app/views/configuracion-general/recomendacion-general/recomendacion-general.component';
 
 @Component({
   selector: 'app-expediente-formulario',
@@ -139,7 +138,6 @@ ciudad: string
     this.agregarTabTratamientos();
     this.agregarTabConsumoMedicamento();
     this.agregarTabRecomendaciones();
-    this.agregarTabRecomendacionesGenerales();
   }
 
   private agregarTabInformacionGeneral(): void {
@@ -247,18 +245,6 @@ ciudad: string
     this.externalTemplates.push(recomendaciones);
   }
 
-  private agregarTabRecomendacionesGenerales(){
-    const recomendacionesGenerales: ExternalTemplate = {
-      component: RecomendacionGeneralComponent,
-      args: {},
-      label: 'Recomendaciones generales',
-      enabled: this.idUsuario != null ? true : false,
-      externalSubmit: true,
-      submitControl: false
-    };
-
-    this.externalTemplates.push(recomendacionesGenerales);
-  }
 
   public async consultarPadecimientos() {
     await lastValueFrom(this.expedientePadecimientoService.consultarPorUsuario(this.idUsuario))

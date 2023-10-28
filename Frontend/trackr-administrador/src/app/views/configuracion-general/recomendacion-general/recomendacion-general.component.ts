@@ -22,8 +22,6 @@ import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-gri
 
 @Component({
   selector: 'app-recomendacion-general',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MatExpansionModule, GridGeneralModule, NgSelectModule],
   templateUrl: './recomendacion-general.component.html',
   styleUrls: ['./recomendacion-general.component.scss']
 })
