@@ -23,6 +23,13 @@ ion-toolbar.navegacion {
     color: #ffff;
 }
 
+a.breadcrumb-native{
+  padding: 0 !important;
+}
+ion-breadcrumb{
+  padding: 0 !important;
+}
+
 .migaja{
-  padding: 2px;
+  padding: 0 !important;
 }
