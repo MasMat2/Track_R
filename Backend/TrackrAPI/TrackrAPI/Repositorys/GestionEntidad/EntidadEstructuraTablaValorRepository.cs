@@ -79,5 +79,28 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 });
         }
 
+        public IEnumerable<ExpedienteMuestrasGridDTO> ConsultarGridMuestras(int idUsuario)
+        {
+            return context.EntidadEstructuraTablaValor
+                        .Where(eetv => eetv.IdTabla == idUsuario)
+                        .GroupBy(eetv => eetv.FechaMuestra)
+                        .Select(grupo => new ExpedienteMuestrasGridDTO
+                        {
+                            FechaMuestra = grupo.Key,
+                            FueraDeRango = grupo.Any(registro => registro.FueraDeRango == true),
+                            Registro = grupo.Select(registro => new ExpedienteMuestrasRegistroDTO
+                            {
+                                IdEntidadEstructuraTablaValor = registro.IdEntidadEstructuraTablaValor,
+                                Numero = registro.Numero,
+                                IdEntidadEstructura = registro.IdEntidadEstructura,
+                                ClaveCampo = registro.ClaveCampo,
+                                Valor = registro.Valor,
+                                IdTabla = registro.IdTabla,
+                                FueraDeRango = registro.FueraDeRango,
+                                FechaMuestra = grupo.Key
+                            }).ToList()
+                        });
+        }
+
     }
 }

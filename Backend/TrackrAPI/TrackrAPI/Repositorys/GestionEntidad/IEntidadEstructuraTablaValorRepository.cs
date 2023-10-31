@@ -1,6 +1,7 @@
 ﻿using TrackrAPI.Models;
 using System.Collections.Generic;
 using TrackrAPI.Dtos.GestionEntidad;
+using TrackrAPI.Dtos.GestionExpediente;
 
 namespace TrackrAPI.Repositorys.GestionEntidad
 {
@@ -12,5 +13,6 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         int ConsultarUltimoRegistro(int idEntidadEstructura, int idTabla);
         public IEnumerable<EntidadEstructuraTablaValor> ConsultarValoresPorCampos(int idExpediente, IEnumerable<string> claveCampos, bool? fueraRango);
         public IEnumerable<ValoresHistogramaDTO> ConsultarValoresPorClaveCampo(string claveCampo, int idUsuario, DateTime fecha);
+        public IEnumerable<ExpedienteMuestrasGridDTO> ConsultarGridMuestras(int idUsuario);
     }
 }

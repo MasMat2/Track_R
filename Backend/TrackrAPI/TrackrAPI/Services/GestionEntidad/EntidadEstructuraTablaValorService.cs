@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Globalization;
 using TrackrAPI.Repositorys.GestionExpediente;
+using TrackrAPI.Dtos.GestionExpediente;
 
 namespace TrackrAPI.Services.GestionEntidad
 {
@@ -97,7 +98,7 @@ namespace TrackrAPI.Services.GestionEntidad
         {
             using var ts = new TransactionScope();
             var entidadEstructuraMuestra = entidadEstructuraRepository.ConsultarPorClave(GeneralConstant.ClaveEntidadEstructuraMuestra);
-            if(entidadEstructuraMuestra == null)
+            if (entidadEstructuraMuestra == null)
             {
                 throw new CdisException("No existe la entidad estructura con clave 006");
             }
@@ -106,7 +107,8 @@ namespace TrackrAPI.Services.GestionEntidad
             {
                 throw new CdisException("No existe la entidad estructura hijo de la entidad estructura con clave 006");
             }
-            foreach (var muestra in muestraDTO){
+            foreach (var muestra in muestraDTO)
+            {
 
                 var muestraAAgregar = new EntidadEstructuraTablaValor()
                 {
@@ -117,9 +119,9 @@ namespace TrackrAPI.Services.GestionEntidad
                     FechaMuestra = muestra.FechaMuestra,
                     FueraDeRango = muestra.FueraDeRango
                 };
-            var ultimoRegistro = entidadEstructuraTablaValorRepository.ConsultarUltimoRegistro(muestraAAgregar.IdEntidadEstructura, idUsuario);
-            muestraAAgregar.Numero = ultimoRegistro + 1;
-            entidadEstructuraTablaValorRepository.Agregar(muestraAAgregar);
+                var ultimoRegistro = entidadEstructuraTablaValorRepository.ConsultarUltimoRegistro(muestraAAgregar.IdEntidadEstructura, idUsuario);
+                muestraAAgregar.Numero = ultimoRegistro + 1;
+                entidadEstructuraTablaValorRepository.Agregar(muestraAAgregar);
 
             }
             ts.Complete();
@@ -217,7 +219,7 @@ namespace TrackrAPI.Services.GestionEntidad
                 if (columnaCorrespondiente != null)
                 {
                     string valorReferencia = "";
-                    if(columnaCorrespondiente.ValorMinimo != null || columnaCorrespondiente.ValorMaximo != null)
+                    if (columnaCorrespondiente.ValorMinimo != null || columnaCorrespondiente.ValorMaximo != null)
                     {
                         valorReferencia = columnaCorrespondiente.ValorMinimo.ToString() + " - " + columnaCorrespondiente.ValorMaximo.ToString();
                     }
@@ -241,11 +243,11 @@ namespace TrackrAPI.Services.GestionEntidad
             var valoresFueraRangoGridDTOs = new List<ValoresFueraRangoGridDTO>();
             var padecimientos = expedientePadecimientoRepository.ConsultarPorUsuario(idUsuario);
 
-            if(padecimientos == null)
+            if (padecimientos == null)
             {
                 return valoresFueraRangoGridDTOs;
             }
-            foreach(var padecimiento in padecimientos)
+            foreach (var padecimiento in padecimientos)
             {
                 valoresFueraRangoGridDTOs.AddRange(ConsultarValores(padecimiento.IdPadecimiento, idUsuario, true).Distinct());
             }
@@ -347,6 +349,12 @@ namespace TrackrAPI.Services.GestionEntidad
             return valores.GroupBy(v => $"{v.FechaMuestra.GetValueOrDefault().Hour / 3 * 3}:00 - {(v.FechaMuestra.GetValueOrDefault().Hour / 3 + 1) * 3}:00")
                           .ToDictionary(g => g.Key, g => g.ToList());
         }
+
+        public IEnumerable<ExpedienteMuestrasGridDTO> ConsultarGridMuestras(int idUsuario)
+        {
+            return entidadEstructuraTablaValorRepository.ConsultarGridMuestras(idUsuario);
+        }
+
 
     }
 }

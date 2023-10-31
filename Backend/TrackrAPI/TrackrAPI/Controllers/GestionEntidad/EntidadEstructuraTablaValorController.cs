@@ -3,6 +3,7 @@ using TrackrAPI.Dtos.GestionEntidad;
 using TrackrAPI.Services.GestionEntidad;
 using System.Collections.Generic;
 using TrackrAPI.Helpers;
+using TrackrAPI.Dtos.GestionExpediente;
 
 namespace TrackrAPI.Controllers.GestionEntidad
 {
@@ -98,6 +99,12 @@ namespace TrackrAPI.Controllers.GestionEntidad
         {
             int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
             return entidadEstructuraTablaValorService.ConsultarValoresPorClaveCampoParaGrid(claveCampo, idUsuario, filtroTiempo);
+        }
+
+        [HttpGet("grid/{idUsuario}")]
+        public IEnumerable<ExpedienteMuestrasGridDTO> ConsultarGridMuestras(int idUsuario)
+        {
+            return entidadEstructuraTablaValorService.ConsultarGridMuestras(idUsuario);
         }
     }
 }
