@@ -34,3 +34,16 @@
   </ion-buttons>
   <ion-title>{{ titulo }}</ion-title>
 </ion-toolbar>
+
+
+  <breadcrumb #parent>
+    <ion-breadcrumbs>
+      <ng-template ngFor let-route [ngForOf]="parent.breadcrumbs">
+
+        <ion-breadcrumb *ngIf="!route.terminal">{{route.displayName}}</ion-breadcrumb>
+        <ion-breadcrumb *ngIf="route.terminal">{{route.displayName}}</ion-breadcrumb>
+      </ng-template>
+    </ion-breadcrumbs>
+  </breadcrumb>
+
+
