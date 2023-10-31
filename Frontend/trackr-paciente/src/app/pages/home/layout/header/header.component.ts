@@ -5,6 +5,7 @@ import { NotificacionesPageComponent } from './notificaciones/notificacionesPage
 import { UsuarioService } from '@services/usuario.service';
 import { UsuarioDto } from 'src/app/shared/Dtos/perfil/usuario-dto';
 import { BreadcrumbModule } from 'angular-crumbs';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +16,8 @@ import { BreadcrumbModule } from 'angular-crumbs';
     CommonModule,
     IonicModule,
     NotificacionesPageComponent,
-    BreadcrumbModule
+    BreadcrumbModule,
+    RouterModule
   ]
 })
 export class HeaderComponent implements OnInit {
