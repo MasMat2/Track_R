@@ -88,7 +88,7 @@ namespace TrackrAPI.Services.Seguridad
             string correoEncriptado = _simpleAES.EncryptToString(usuarioCompleto.Correo);
             string urlFrontEnd = _config.GetSection("AppSettings:UrlFrontEnd").Value;
 
-            var logotipoCdis = await DescargarLogo(urlFrontEnd + "assets/img/logotipo-cdis.png", "logo");
+            var logotipoCdis = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-01-Trackr.png", "logo");
             var logotipoHospital = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-H_C_CEIC.png", "logohospital");
 
             var mensaje = $@"
@@ -138,7 +138,6 @@ namespace TrackrAPI.Services.Seguridad
                 throw new CdisException("Ocurrió un error al enviar el correo");
             }
         }
-
 
 
         private string GenerarClaveRestablecimiento()
