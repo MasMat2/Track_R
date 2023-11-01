@@ -5,6 +5,8 @@ import { UsuarioService } from '@http/seguridad/usuario.service';
 import { Usuario } from '@models/seguridad/usuario';
 import { NotificacionDoctorHubService } from '@services/notificacion-doctor-hub.service';
 import { Observable, map } from 'rxjs';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { ModalPanelNotificacionesComponent } from './modal-panel-notificaciones/modal-panel-notificaciones.component';
 
 @Component({
   selector: 'app-panel-notificaciones',
@@ -36,7 +38,8 @@ export class PanelNotificacionesComponent implements OnInit {
   constructor(
     private notificacionService: NotificacionService,
     private notificacionHubService: NotificacionDoctorHubService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private modalService: BsModalService
   ) { }
 
   ngOnInit() {
@@ -73,6 +76,13 @@ export class PanelNotificacionesComponent implements OnInit {
   protected async marcarComoVista(idNotificacionUsuario: number) {
     await this.notificacionHubService.marcarComoVista(idNotificacionUsuario);
     this.consultarNotificaciones();
+  }
+
+  protected mostrarModal(notificacion:any){
+    const initialState = {
+      notificacion
+    }
+    this.modalService.show(ModalPanelNotificacionesComponent,{initialState});
   }
 
 }
