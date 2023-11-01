@@ -10,25 +10,32 @@ namespace TrackrAPI.Services.Dashboard;
 public class WidgetService
 {
     private readonly IWidgetRepository _widgetRepository;
+    private readonly IUsuarioWidgetRepository _usuarioWidgetRepository;
     private readonly IExpedientePadecimientoRepository _expedientePadecimientoRepository;
     private readonly IEntidadEstructuraRepository _entidadEstructuraRepository;
 
     public WidgetService(IWidgetRepository widgetRepository,
                          IExpedientePadecimientoRepository expedientePadecimientoRepository,
-                         IEntidadEstructuraRepository entidadEstructuraRepository)
+                         IEntidadEstructuraRepository entidadEstructuraRepository,
+                         IUsuarioWidgetRepository usuarioWidgetRepository)
+                         
     {
         _widgetRepository = widgetRepository;
         _expedientePadecimientoRepository = expedientePadecimientoRepository;
         _entidadEstructuraRepository = entidadEstructuraRepository;
+        _usuarioWidgetRepository = usuarioWidgetRepository;
     }
 
     public IEnumerable<UsuarioPadecimientosDTO> Consultar(int idUsuario)
     {
         var padecimientoUsuario = _expedientePadecimientoRepository.ConsultarPorUsuario(idUsuario);
 
+        var padecimientoUsuarioSeleccionado = padecimientoUsuario.
+            Where(padecimiento => EsWidgetSeleccionado(idUsuario, padecimiento.clavePadecimiento)).ToList();
+
         var variablesPadecimiento = _entidadEstructuraRepository.ValoresVariablesPadecimiento(idUsuario);
 
-        var infoWidgetUsuario = padecimientoUsuario
+        var infoWidgetUsuario = padecimientoUsuarioSeleccionado
         .Select(usuarioNuevo => new
         {
             idExpediente = usuarioNuevo.IdExpediente,
@@ -59,8 +66,20 @@ public class WidgetService
         return infoWidgetUsuario;
     }
 
+    public IEnumerable<Widget> consultarTodos()
+    {
+        return _widgetRepository.ConsultarTodos();
+    }
+
     public IEnumerable<TipoWidget> ConsultarTipo()
     {
         return _widgetRepository.ConsultarTipo();
+    }
+    
+    private bool EsWidgetSeleccionado(int usuarioId, string clave)
+    {
+        var widget = _usuarioWidgetRepository.ConsultarSeleccionadoPorClave(usuarioId, clave);
+
+        return widget != null;
     }
 }

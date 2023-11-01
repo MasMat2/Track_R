@@ -4,6 +4,7 @@ import { CuestionariosPage } from "./cuestionarios/cuestionarios.page";
 import { DashboardPage } from "./dashboard/dashboard.page";
 import { HomePage } from "./home.page";
 import { MuestrasPage } from "./muestras/muestras.page";
+import { ConfiguracionDashboardPage } from "./configuracion-dashboard/configuracion-dashboard.page";
 
 
 export default [
@@ -14,6 +15,7 @@ export default [
       { path: 'chat', component: ChatPage, data: { breadcrumb: 'Chat' } },
       { path: 'muestras', component: MuestrasPage, data: { breadcrumb: 'Muestras' } },
       { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard-routes'), data: { breadcrumb: 'Inicio' }},
+      { path: 'config-dashboard', component: ConfiguracionDashboardPage},
       { path: 'cuestionarios', component: CuestionariosPage, data: { breadcrumb: 'Cuestionario' } },
       { path: 'perfil', loadChildren: () => import('./perfil/perfil-routes'), data: { breadcrumb: 'Perfil' } },
       { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }
