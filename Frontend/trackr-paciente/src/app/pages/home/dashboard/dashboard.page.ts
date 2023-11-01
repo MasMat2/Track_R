@@ -14,8 +14,6 @@ import { UsuarioPadecimientosDTO } from 'src/app/shared/Dtos/gestion-expediente/
 import { PadecimientoDTO } from 'src/app/shared/Dtos/gestion-expediente/padecimiento-dto';
 import { Router, RouterModule } from '@angular/router'; 
 import { SeguimientoPadecimientoComponent } from './components/seguimiento-padecimiento/seguimiento-padecimiento.component';
-import { WidgetContainerComponent } from './components/widget-container/widget-container.component';
-import { WidgetType } from './interfaces/widgets';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -32,8 +30,7 @@ import { WidgetType } from './interfaces/widgets';
     WidgetFrecuenciaComponent,
     WidgetSeguimientoComponent,
     RouterModule,
-    SeguimientoPadecimientoComponent,
-    WidgetContainerComponent,
+    SeguimientoPadecimientoComponent
   ],
   providers: [
     UsuarioWidgetService,
@@ -42,13 +39,11 @@ import { WidgetType } from './interfaces/widgets';
 })
 export class DashboardPage implements OnInit {
 
-  protected selectedUserWidgets: WidgetType[] = [];
   protected padecimientosUsuarioList : UsuarioPadecimientosDTO[];
   protected padecimientosList : PadecimientoDTO[];
 
   constructor(
     private widgetService : WidgetService,
-    private usuarioWidgetService: UsuarioWidgetService,
     private router: Router
   ) { }
 
@@ -56,27 +51,15 @@ export class DashboardPage implements OnInit {
   
   }
 
-  public ionViewWillEnter() : void {
-    this.consultarWidgetsSeguimiento();
-    this.consultarWidgets();
-  }
-
-  public consultarWidgetsSeguimiento(){
+  public ionViewDidEnter() : void {
     this.widgetService.consultarPadecimientos().subscribe((data) => {
       this.padecimientosUsuarioList = data;
       this.padecimientosList = this.padecimientosUsuarioList[0].secciones;
     });
+
   }
 
-  public consultarWidgets(){
-    this.usuarioWidgetService.consultarPorUsuarioEnSesion().subscribe(
-      (data) => {
-        this.selectedUserWidgets = data;
-      }
-    );
-  }
-
-  protected mostrarSeguimiento(idPadecimiento: any){
+  public mostrarSeguimiento(idPadecimiento: any){
     this.router.navigate(['home/perfil/seguimiento', idPadecimiento]);
   }
 

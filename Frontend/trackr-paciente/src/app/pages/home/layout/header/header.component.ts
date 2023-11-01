@@ -6,7 +6,6 @@ import { UsuarioService } from '@services/usuario.service';
 import { UsuarioDto } from 'src/app/shared/Dtos/perfil/usuario-dto';
 import { BreadcrumbModule } from 'angular-crumbs';
 import { RouterModule } from '@angular/router';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -29,8 +28,7 @@ export class HeaderComponent implements OnInit {
   public miUsuario : UsuarioDto;
 
   constructor(
-    private usuarioService : UsuarioService,
-    private router: Router
+    private usuarioService : UsuarioService
   ) { }
 
   ngOnInit() {
@@ -41,10 +39,6 @@ export class HeaderComponent implements OnInit {
     this.usuarioService.consultarMiUsuario().subscribe((data) => {
       this.miUsuario = data;
     });
-  }
-
-  protected mostrarConfiguracionDashboard(){
-    this.router.navigate(['/home/config-dashboard']);
   }
 
 }

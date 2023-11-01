@@ -23,13 +23,4 @@ public class UsuarioWidgetController : ControllerBase
         int idUsuarioSesion = Utileria.ObtenerIdUsuarioSesion(this);
         return _usuarioWidgetService.ConsultarPorUsuario(idUsuarioSesion);
     }
-
-    [HttpPut("modificar")]
-    public void ModificarWidgets(string[] widgets)
-    {
-        int idUsuarioSesion = Utileria.ObtenerIdUsuarioSesion(this);
-
-        _usuarioWidgetService.modificarSeleccionWidgets(idUsuarioSesion, widgets);
-
-    }
 }

@@ -25,13 +25,6 @@ public class WidgetController : ControllerBase
 
     }
 
-    [HttpGet("todos")]
-    public IEnumerable<Widget> ConsultarWidgets()
-    {
-        return _widgetService.consultarTodos();
-
-    }
-
     [HttpGet("tipo")]
     public IEnumerable<TipoWidget> ConsultarTipo()
     {

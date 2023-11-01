@@ -1,4 +1,4 @@
-import { WidgetType } from "src/app/pages/home/dashboard/interfaces/widgets";
+import { WidgetType } from "src/app/pages/paciente/dashboard/interfaces/widgets";
 
 export interface Widget {
   idWidget: number;

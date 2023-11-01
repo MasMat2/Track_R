@@ -36,7 +36,6 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                     FechaDiagnostico = ep.FechaDiagnostico,
                     IdExpediente = ep.IdExpediente,
                     NombrePadecimiento = ep.IdPadecimientoNavigation.Nombre,
-                    clavePadecimiento = ep.IdPadecimientoNavigation.Clave,
                 }).ToList();
         }
 

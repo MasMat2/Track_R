@@ -15,16 +15,4 @@ public class WidgetRepository : Repository<Widget>, IWidgetRepository
     {
         return context.TipoWidget.ToList();
     }
-
-    public IEnumerable<Widget> ConsultarTodos()
-    {
-        return context.Widget.ToList();
-    }
-
-    public Widget consultarPorClave(string clave)
-    {
-        return context.Widget.Where(w => w.Clave.Equals(clave)).FirstOrDefault();
-    }
-
-
 }
