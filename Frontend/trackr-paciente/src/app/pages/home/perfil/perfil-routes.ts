@@ -8,22 +8,18 @@ export default [
     children: [
       {
         path: 'mis-doctores',
-        data: { breadcrumb: "Mis doctores"},
         loadComponent: () => import('./mis-doctores/mis-doctores.page').then((m) => m.MisDoctoresPage)
       },
       {
         path: 'mis-doctores/agregar',
-        data: { breadcrumb: "Agregar"},
         loadComponent: () => import('./mis-doctores/doctores-formulario/doctores-formulario.page').then((m) => m.DoctoresFormularioPage)
       },
       {
         path: 'informacion-general',
-        data: { breadcrumb: "Informacion General"},
         loadComponent: () => import('./informacion-general/informacion-general.component').then((m) => m.InformacionGeneralComponent)
       },
       {
         path: 'mis-tratamientos',
-        data: { breadcrumb: "Mis tratamientos"},
         loadComponent: () => import('./mis-tratamientos/mis-tratamientos.page').then((m) => m.MisTratamientosPage)
       },
       {
@@ -32,7 +28,6 @@ export default [
       },
       {
         path: 'mis-estudios',
-        data: { breadcrumb: "Mis estudios"},
         loadComponent: () => import('./mis-estudios/mis-estudios.component').then((m) => m.MisEstudiosPage)
       },
       {

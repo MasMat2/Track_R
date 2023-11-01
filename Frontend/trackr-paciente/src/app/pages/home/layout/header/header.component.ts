@@ -4,8 +4,6 @@ import { IonicModule } from '@ionic/angular';
 import { NotificacionesPageComponent } from './notificaciones/notificacionesPage/notificaciones-page.component';
 import { UsuarioService } from '@services/usuario.service';
 import { UsuarioDto } from 'src/app/shared/Dtos/perfil/usuario-dto';
-import { BreadcrumbModule } from 'angular-crumbs';
-import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -15,9 +13,7 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     IonicModule,
-    NotificacionesPageComponent,
-    BreadcrumbModule,
-    RouterModule
+    NotificacionesPageComponent
   ]
 })
 export class HeaderComponent implements OnInit {

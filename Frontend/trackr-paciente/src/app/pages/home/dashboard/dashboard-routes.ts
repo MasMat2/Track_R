@@ -7,7 +7,6 @@ export default [
     children: [
       {
         path: 'seguimiento/:id',
-        data: { breadcrumb: "Seguimiento"},
         loadComponent: () => import('./components/seguimiento-padecimiento/seguimiento-padecimiento.component').then((m) => m.SeguimientoPadecimientoComponent)
       },
       { path: '**', redirectTo: '', pathMatch: 'full' }
