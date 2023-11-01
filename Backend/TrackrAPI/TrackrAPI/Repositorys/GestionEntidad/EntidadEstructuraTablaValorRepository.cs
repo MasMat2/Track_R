@@ -86,6 +86,8 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                         .GroupBy(eetv => eetv.FechaMuestra)
                         .Select(grupo => new ExpedienteMuestrasGridDTO
                         {
+                            IdEntidadEstructuraTablaValor = grupo.FirstOrDefault().IdEntidadEstructuraTablaValor,
+                            IdEntidadEstructura = grupo.FirstOrDefault().IdEntidadEstructura,
                             FechaMuestra = grupo.Key,
                             FueraDeRango = grupo.Any(registro => registro.FueraDeRango == true),
                             Registro = grupo.Select(registro => new ExpedienteMuestrasRegistroDTO

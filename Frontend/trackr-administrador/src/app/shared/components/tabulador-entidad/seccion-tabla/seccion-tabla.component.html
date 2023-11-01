@@ -29,7 +29,7 @@
 
     <div class="col-12">
         <p-table
-          [value]="entidadEstructuraSeccion.registrosTabla"
+          [value]="muestras"
           selectionMode="single"
           [(selection)]="seleccionado"
         >
@@ -40,12 +40,14 @@
                     </th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-registro>
-                <tr [pSelectableRow]="registro">
-                    <td *ngFor="let columna of entidadEstructuraSeccion.campos">
-                        {{ obtenerValor(columna.clave, registro.valores) }}
+            <ng-template pTemplate="body" let-muestra>
+                  <tr [pSelectableRow]="muestra" (click)="seleccionar(muestra)">  
+                    <td *ngFor="let columna of entidadEstructuraSeccion.campos ; let last = last">
+                        <div *ngFor="let muestras of muestra.registro; let first = first" [ngClass]="last ? obtenerValorEstilo(muestra, first) : '' ">
+                            {{ obtenerValor(columna.clave, muestras , first, last) }}
+                        </div>
                     </td>
-                </tr>
+                 </tr>   
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>

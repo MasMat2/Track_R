@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EntidadTablaRegistroDto } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
+import { ExpedienteMuestrasGridDTO } from '@dtos/gestion-expediente/expediente-muestras-grid-dto';
 import { ValoresPorClaveCampo } from '@dtos/gestion-expediente/valores-clave-campo';
 import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
 import { RegistroTabla } from '@models/gestion-entidad/registro-tabla';
@@ -45,5 +46,9 @@ export class EntidadEstructuraTablaValorService {
   
   public consultarValoresFueraRangoUsuario(idUsuario : number) {
     return this.http.get<ValoresFueraRangoGridDTO[]>(this.dataUrl + `valoresFueraRangoGeneral/usuario/` + idUsuario);
+  }
+
+  public consultarGridMuestras(idUsuario : number) {
+    return this.http.get<ExpedienteMuestrasGridDTO[]>(this.dataUrl + `grid/` + idUsuario);
   }
 }
