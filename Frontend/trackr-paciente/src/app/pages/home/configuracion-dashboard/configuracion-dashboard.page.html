@@ -1,0 +1,32 @@
+
+<ion-header>
+  <app-header></app-header>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-label class="texto-header" >Visualizar en dashboard: </ion-label>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-icon ></ion-icon>
+
+      <div class="contenido">
+        <div *ngFor="let widget of widgets">
+          <ion-checkbox
+            labelPlacement="end"
+            [(ngModel)]="widget.seleccionado"
+            [checked]="widget.seleccionado"
+          >
+            {{ widget.nombre }}
+          </ion-checkbox>
+
+        </div>
+      </div>
+      
+      <ion-button class="btn-aceptar" (click)="onAceptar()">Guardar</ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+

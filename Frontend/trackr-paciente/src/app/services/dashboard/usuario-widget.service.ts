@@ -24,4 +24,8 @@ export class UsuarioWidgetService {
         map(claves => claves as WidgetType[])
       );
   }
+
+  public modificarPorUsuarioEnSesion(seleccionWidgets: string[]){
+    return this.http.put(this.dataUrl + 'modificar', seleccionWidgets)
+  }
 }
