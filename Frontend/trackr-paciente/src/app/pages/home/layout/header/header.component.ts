@@ -17,8 +17,8 @@ import { Router } from '@angular/router';
     CommonModule,
     IonicModule,
     NotificacionesPageComponent,
-    BreadcrumbModule,
-    RouterModule
+    RouterModule/* ,
+    BreadcrumbModule */
   ]
 })
 export class HeaderComponent implements OnInit {

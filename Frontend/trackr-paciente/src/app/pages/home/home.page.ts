@@ -16,8 +16,8 @@ import { BreadcrumbModule } from 'angular-crumbs';
     CommonModule,
     FormsModule,
     HeaderComponent,
-    FooterComponent,
-    BreadcrumbModule
+    FooterComponent/* ,
+    BreadcrumbModule */
   ]
 })
 export class HomePage implements OnInit {
