@@ -12,12 +12,12 @@ export default [
     path: '',
     component: HomePage,
     children: [
-      { path: 'chat', component: ChatPage },
-      { path: 'muestras', component: MuestrasPage },
-      { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard-routes') },
+      { path: 'chat', component: ChatPage, data: { breadcrumb: 'Chat' } },
+      { path: 'muestras', component: MuestrasPage, data: { breadcrumb: 'Muestras' } },
+      { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard-routes'), data: { breadcrumb: 'Inicio' }},
       { path: 'config-dashboard', component: ConfiguracionDashboardPage},
-      { path: 'cuestionarios', component: CuestionariosPage },
-      { path: 'perfil', loadChildren: () => import('./perfil/perfil-routes') },
+      { path: 'cuestionarios', component: CuestionariosPage, data: { breadcrumb: 'Cuestionario' } },
+      { path: 'perfil', loadChildren: () => import('./perfil/perfil-routes'), data: { breadcrumb: 'Perfil' } },
       { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
