@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderComponent } from './layout/header/header.component';
-import { BreadcrumbModule } from 'angular-crumbs';
+// import { BreadcrumbModule } from 'angular-crumbs';
 
 @Component({
   selector: 'app-home-page',

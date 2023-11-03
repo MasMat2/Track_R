@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { NotificacionesPageComponent } from './notificaciones/notificacionesPage/notificaciones-page.component';
 import { UsuarioService } from '@services/usuario.service';
 import { UsuarioDto } from 'src/app/shared/Dtos/perfil/usuario-dto';
-import { BreadcrumbModule } from 'angular-crumbs';
+// import { BreadcrumbModule } from 'angular-crumbs';
 import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
 
