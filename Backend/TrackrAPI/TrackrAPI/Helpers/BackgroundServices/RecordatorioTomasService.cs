@@ -35,8 +35,6 @@ public class RecordatorioTomasService : IHostedService, IDisposable
 
     private async Task ProcesoDeFondo(object state)
     {
-        
-        Console.WriteLine(DateTime.Now);
         // Crear scope para acceder a TrackrContext
         using (var scope = _scopeFactory.CreateScope())
         {
