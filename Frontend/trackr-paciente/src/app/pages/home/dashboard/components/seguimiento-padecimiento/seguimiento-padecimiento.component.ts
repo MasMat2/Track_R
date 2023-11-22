@@ -5,19 +5,17 @@ import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { EntidadEstructuraTablaValorService } from '@http/gestion-expediente/entidad-estructura-tabla-valor.service';
-import { SeccionCampoService } from '@http/gestion-expediente/seccion-campo.service';
+import { SeccionCampoService } from '@http/gestion-entidad/seccion-campo.service';
 import { ExpedienteColumnaSelectorDTO } from 'src/app/shared/Dtos/gestion-entidades/expediente-columna-selector-dto';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatChipListboxChange, MatChipsModule} from '@angular/material/chips'
 import { NgChartsModule } from 'ng2-charts';
 import { ChartData, ChartOptions, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
-import { ValoresPorClaveCampo } from 'src/app/shared/Dtos/gestion-expediente/valores-clave-campo';
-import { GridGeneralComponent } from '@sharedComponents/grid-general/grid-general.component';
 import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.module';
 import { ColDef, ValueGetterParams } from 'ag-grid-community';
 import {format} from 'date-fns'
+import { ValoresClaveCampoGridDto } from 'src/app/shared/Dtos/gestion-entidades/valores-clave-campo-grid-dto';
 
 
 @Component({
@@ -47,9 +45,8 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   private idPadecimiento: string;
   protected variableList: ExpedienteColumnaSelectorDTO[];
   protected claveVariable: string;
-  protected nombreVariable: string;
   protected filtroTiempo: string = "hoy" ?? "1 semana";
-  protected valoresCampo: any;
+  protected valoresCampo: ValoresClaveCampoGridDto;
   protected valorMin: number | null;
   protected valorMax: number | null;
   protected fechaMin: string;
@@ -213,10 +210,9 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
       lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresPorClaveCampoParaGridUsuarioSesion(filtroClave, filtroTiempo))
       .then((response) => {
         this.valoresCampo = response;
-        console.log(this.valoresCampo);
 
         //Max
-        const { maxValor, fechaMax } = this.valoresCampo.reduce(
+        const { maxValor, fechaMax } = this.valoresCampo.valores.reduce(
           (acc: any, data: any) => (data.valor > acc.maxValor ? { maxValor: data.valor, fechaMax: data.fechaMuestra } : acc),
           { maxValor: -Infinity, fechaMax: null }
         );
@@ -224,11 +220,10 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
           this.valorMax = maxValor;
         else
           this.valorMax = null;
-
         this.fechaMax = format(new Date(fechaMax), 'dd/MM/yyyy')
 
         //Min
-        const { minValor, fechaMin } = this.valoresCampo.reduce(
+        const { minValor, fechaMin } = this.valoresCampo.valores.reduce(
           (acc: any, data: any) => (data.valor < acc.minValor ? { minValor: data.valor, fechaMin: data.fechaMuestra } : acc),
           { minValor: Infinity, fechaMin: null }
         );
@@ -236,16 +231,8 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
           this.valorMin = minValor
         else
           this.valorMin = null;
-        
         this.fechaMin = format(new Date(fechaMin), 'dd/MM/yyyy')
-        
 
-        
-
-        console.log('This Valor máximo:', this.valorMax);
-        console.log('This Fecha de valor maximo:', this.fechaMax);
-        console.log('This Valor mínimo:', this.valorMin);
-        console.log('This Fecha de valor minimo:', this.fechaMin);
       }
     );
   }

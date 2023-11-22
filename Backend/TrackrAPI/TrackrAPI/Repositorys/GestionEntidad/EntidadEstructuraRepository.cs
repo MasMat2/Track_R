@@ -192,6 +192,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                                                             Descripcion = sC.Descripcion,
                                                             MostrarDashboard = sC.MostrarDashboard,
                                                             IconoClase = sC.IdIconoNavigation.Clase,
+                                                            unidadMedida = sC.IdDominioNavigation.UnidadMedida,
                                                             ValorVariable = context.EntidadEstructuraTablaValor
                                                                 .Where(eetv => eetv.IdTabla == idUsuario && eetv.ClaveCampo == "ME-" + sC.Clave)
                                                                 .OrderByDescending(eetv => eetv.FechaMuestra)

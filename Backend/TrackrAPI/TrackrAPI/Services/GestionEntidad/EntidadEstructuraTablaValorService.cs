@@ -9,6 +9,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Globalization;
 using TrackrAPI.Repositorys.GestionExpediente;
 using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Repositorys.Catalogo;
 
 namespace TrackrAPI.Services.GestionEntidad
 {
@@ -294,36 +295,38 @@ namespace TrackrAPI.Services.GestionEntidad
             }
         }
 
-        public IEnumerable<ValoresHistogramaDTO> ConsultarValoresPorClaveCampoParaGrid(string claveCampo, int idUsuario, string fechaFiltro)
+        public ValoresPorCampoGridDTO ConsultarValoresPorClaveCampoParaGrid(string claveCampo, int idUsuario, string fechaFiltro)
         {
             DateTime fecha = DateTime.Now;
+            var valoresGrid = new ValoresPorCampoGridDTO(){ 
+                unidadMedida = seccionCampoRepository.ConsultarUnidadDeMedidaPorClaveCampo(claveCampo) };
 
             switch (fechaFiltro.ToLower())
             {
                 case "hoy":
                     fecha = fecha.AddHours(-24); // Desde las últimas 24 horas
-                    var valoresHoy = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
-                    return valoresHoy;
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresGrid;
                 case "1 semana":
                     fecha = fecha.AddDays(-7); // Desde los últimos 7 días
-                    var valoresSemana = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
-                    return valoresSemana;
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresGrid;
                 case "2 semanas":
                     fecha = fecha.AddDays(-14); // Desde los últimos 14 días
-                    var valoresDosSemanas = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
-                    return valoresDosSemanas;
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresGrid;
                 case "3 semanas":
                     fecha = fecha.AddDays(-21); // Desde las últimas 3 semanas
-                    var valoresTresSemanas = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
-                    return valoresTresSemanas;
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresGrid;
                 case "1 mes":
                     fecha = fecha.AddDays(-30); // Desde el último mes
-                    var valoresUnMes = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
-                    return valoresUnMes;
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresGrid;
                 case "2 meses":
                     fecha = fecha.AddDays(-60); // Desde los últimos 2 meses
-                    var valoresDosMeses = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
-                    return valoresDosMeses;
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresGrid;
                 default:
                     throw new CdisException("Filtro de fecha no reconocido");
             }

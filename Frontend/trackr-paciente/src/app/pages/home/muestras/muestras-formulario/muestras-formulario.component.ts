@@ -5,7 +5,7 @@ import { Component, EventEmitter, OnChanges, OnInit, Output } from '@angular/cor
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { EntidadTablaRegistroDto, TablaValorDto, TablaValorMuestraDTO } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
 import { PadecimientoMuestraDTO } from '@dtos/gestion-expediente/padecimiento-muestra-dto';
-import { SeccionCampoService } from '@http/gestion-expediente/seccion-campo.service';
+import { SeccionCampoService } from '@http/gestion-entidad/seccion-campo.service';
 import { IonicModule } from '@ionic/angular';
 import { SeccionCampo } from '@models/gestion-expediente/seccion-campo';
 import { CampoExpedienteModule } from '@sharedComponents/campo-expediente/campo-expediente.module';

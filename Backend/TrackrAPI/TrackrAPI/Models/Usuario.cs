@@ -12,6 +12,8 @@ namespace TrackrAPI.Models
             Caja = new HashSet<Caja>();
             CajaTurno = new HashSet<CajaTurno>();
             Carrito = new HashSet<Carrito>();
+            ChatMensaje = new HashSet<ChatMensaje>();
+            ChatPersona = new HashSet<ChatPersona>();
             CitaIdUsuarioDoctorNavigation = new HashSet<Cita>();
             CitaIdUsuarioTomaSomatometriaNavigation = new HashSet<Cita>();
             Comision = new HashSet<Comision>();
@@ -143,6 +145,8 @@ namespace TrackrAPI.Models
         public virtual ICollection<Caja> Caja { get; set; }
         public virtual ICollection<CajaTurno> CajaTurno { get; set; }
         public virtual ICollection<Carrito> Carrito { get; set; }
+        public virtual ICollection<ChatMensaje> ChatMensaje { get; set; }
+        public virtual ICollection<ChatPersona> ChatPersona { get; set; }
         public virtual ICollection<Cita> CitaIdUsuarioDoctorNavigation { get; set; }
         public virtual ICollection<Cita> CitaIdUsuarioTomaSomatometriaNavigation { get; set; }
         public virtual ICollection<Comision> Comision { get; set; }

@@ -6,5 +6,6 @@ public class VariableDTO
     public bool? MostrarDashboard { get; set; }
     public string IconoClase { get; set; } = string.Empty;
     public string ValorVariable { get; set; }
+    public string unidadMedida { get; set; }
 
 }

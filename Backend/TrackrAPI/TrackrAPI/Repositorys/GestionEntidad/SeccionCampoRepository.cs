@@ -119,5 +119,14 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                         ValorMaximo = sc.IdDominioNavigation.ValorMaximo
                     });
         }
+
+        public string ConsultarUnidadDeMedidaPorClaveCampo(string claveCampo)
+        {
+            return context.SeccionCampo
+                .Where(sc => sc.Clave == claveCampo)
+                .Include(sc => sc.IdDominioNavigation)
+                .Select(sc => sc.IdDominioNavigation.UnidadMedida).FirstOrDefault();
+
+        }
     }
 }
