@@ -115,11 +115,11 @@ export class ExamenComponent implements OnInit {
     this.examenService
       .consultarMiExamenIndividual(idExamen)
       .subscribe((examen) => {
-        // if (!this.esFechaValida(examen)) {
-        //   const MENSAJE_NO_ACCESO: string = 'Aún no tiene acceso a este examen';
-        //   this.mensajeService.modalError(MENSAJE_NO_ACCESO);
-        //   return;
-        // }
+          if (!this.esFechaValida(examen)) {
+           const MENSAJE_NO_ACCESO: string = 'Aún no tiene acceso a este examen';
+           this.mensajeService.modalError(MENSAJE_NO_ACCESO);
+           return;
+         } 
 
         this.router.navigate(['/administrador/examen/examen/presentar'], {
           queryParams: this.encryptionService.generateURL({
