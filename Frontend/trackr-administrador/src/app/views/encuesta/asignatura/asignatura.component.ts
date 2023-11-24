@@ -17,7 +17,7 @@ import { AsignaturaFormularioComponent } from './asignatura-formulario/asignatur
   templateUrl: './asignatura.component.html',
 })
 export class AsignaturaComponent implements OnInit {
-  protected readonly NOMBRE_ENTIDAD: string = 'Cuestionarios';
+  protected readonly NOMBRE_ENTIDAD: string = 'Asignaturas';
 
   // Accesos
   protected tieneAccesoAgregar: boolean = false;
@@ -34,7 +34,7 @@ export class AsignaturaComponent implements OnInit {
       minWidth: 150,
     },
     {
-      headerName: 'Cuestionario',
+      headerName: 'Asignatura',
       field: 'descripcion',
       minWidth: 150,
     },

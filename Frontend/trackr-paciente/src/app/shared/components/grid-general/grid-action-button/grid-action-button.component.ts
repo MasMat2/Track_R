@@ -88,6 +88,9 @@ export class GridActionButtonComponent {
         case GridAction.GRID_ACCION_PDF_COMPLEMENTO:
           this.title = 'Ver PDF'
           break;
+        case GridAction.GRID_ACTION_PRESENTAR:
+          this.title = 'Presentar'
+          break;
       }
     }
   }

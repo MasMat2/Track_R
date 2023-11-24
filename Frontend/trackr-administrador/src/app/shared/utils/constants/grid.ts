@@ -4,7 +4,8 @@ export enum GRID_ACTION {
   Editar = 'edit',
   Eliminar = 'delete',
   Ver = 'see', //esta propiedad es la que debe coincidir con el scss de grid-action-button
-};
+  Presentar = 'play',
+}
 
 export const CONFIG_COLUMN_ACTION: ColDef = {
   headerName: '',
