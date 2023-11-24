@@ -3,7 +3,7 @@ import { ColDef } from 'ag-grid-community';
 export enum GRID_ACTION {
   Editar = 'edit',
   Eliminar = 'delete',
-  Ver = 'see',
+  Ver = 'see', //esta propiedad es la que debe coincidir con el scss de grid-action-button
 };
 
 export const CONFIG_COLUMN_ACTION: ColDef = {

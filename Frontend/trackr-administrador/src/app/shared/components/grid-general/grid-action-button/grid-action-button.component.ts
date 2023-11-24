@@ -37,7 +37,7 @@ export class GridActionButtonComponent {
         case GeneralConstant.GRID_ACCION_COPIAR:
           this.title = 'Copiar';
           break;
-        case GeneralConstant.GRID_ACCION_VER:
+        case GeneralConstant.GRID_ACCION_VER: //esta propiedad es la que se muestra cuando pasas el mouse sobre el boton
           this.title = 'Ver detalle';
           break;
         case GeneralConstant.GRID_ACCION_PAGAR:
