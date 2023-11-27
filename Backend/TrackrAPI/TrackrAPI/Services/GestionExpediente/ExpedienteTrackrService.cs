@@ -6,10 +6,12 @@ using System.Transactions;
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.DTOs.Dashboard;
+using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionExpediente;
 using TrackrAPI.Repositorys.Inventario;
 using TrackrAPI.Repositorys.Seguridad;
+using TrackrAPI.Services.Dashboard;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace TrackrAPI.Services.GestionExpediente;
@@ -20,18 +22,24 @@ public class ExpedienteTrackrService
     private readonly IDomicilioRepository _domicilioRepository;
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IExpedientePadecimientoRepository _expedientePadecimientoRepository;
+    private readonly UsuarioWidgetService _usuarioWidgetService;
+    private readonly ExpedienteTrackrValidatorService _expedienteTrackrValidatorService;
 
     public ExpedienteTrackrService(
         IExpedienteTrackrRepository expedienteTrackrRepository,
         IDomicilioRepository domicilioRepository,
         IUsuarioRepository usuarioRepository,
-        IExpedientePadecimientoRepository expedientePadecimientoRepository
+        IExpedientePadecimientoRepository expedientePadecimientoRepository,
+        UsuarioWidgetService usuarioWidgetService,
+        ExpedienteTrackrValidatorService expedienteTrackrValidatorService
         )
     {
         this._expedienteTrackrRepository = expedienteTrackrRepository;
         this._domicilioRepository = domicilioRepository;
         this._usuarioRepository = usuarioRepository;
         this._expedientePadecimientoRepository = expedientePadecimientoRepository;
+        _usuarioWidgetService = usuarioWidgetService;
+        _expedienteTrackrValidatorService = expedienteTrackrValidatorService;
     }
     /// <summary>
     /// Consulta el expediente de un usuario
@@ -51,14 +59,20 @@ public class ExpedienteTrackrService
     /// <returns>El id del expediente agregado</returns>
     public int AgregarWrapper(ExpedienteWrapper expedienteWrapper)
     {
+        using TransactionScope scope = new();
         ExpedienteTrackr expedienteTrackr = expedienteWrapper.expediente;
         expedienteTrackr.IdUsuario = expedienteWrapper.paciente.IdUsuario;
+        _expedienteTrackrValidatorService.ValidarAgregar(expedienteTrackr);
 
         expedienteTrackr = _expedienteTrackrRepository.Agregar(expedienteTrackr);
         expedienteTrackr.Numero = expedienteTrackr.IdExpediente.ToString().PadLeft(6, '0');
         _expedienteTrackrRepository.Editar(expedienteTrackr);
 
         AgregarPadecimientos(expedienteWrapper.padecimientos, expedienteTrackr.IdExpediente);
+
+        _usuarioWidgetService.modificarSeleccionWidgets(expedienteTrackr.IdUsuario , GeneralConstant.WidgetsDefault);
+
+        scope.Complete();
         return expedienteTrackr.IdExpediente;
     }
 
@@ -74,6 +88,7 @@ public class ExpedienteTrackrService
         using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
         {
             var idUsuario = expedienteWrapper.paciente.IdUsuario;
+            _expedienteTrackrValidatorService.ValidarEditar(expedienteTrackr);
 
             // Agregar ExpedienteTrackR
             expedienteTrackr.IdUsuario = idUsuario;

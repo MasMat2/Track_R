@@ -88,6 +88,7 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
     await Promise.all([
       this.consultarGeneros(),
       this.consultarPadecimientos(),
+      this.limpiarFormulario()
     ]);
 
     await this.obtenerParametrosURL();
@@ -162,10 +163,10 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
       .then((response) => {
         if (response) {
           this.modalMensajeService.modalExito(this.MENSAJE_AGREGAR);
+          this.limpiarFormulario();
           this.btnSubmit = false;
         }
       });
-    this.btnSubmit = false;
   }
 
   /**
@@ -176,6 +177,7 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
       .then((response) => {
         if (response) {
           this.modalMensajeService.modalExito(this.MENSAJE_EDITAR);
+          this.limpiarFormulario();
           this.btnSubmit = false;
         }
 
@@ -285,7 +287,7 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
     domicilio.calle = paciente.calle;
     domicilio.numeroExterior = paciente.numeroExterior;
     domicilio.numeroInterior = paciente.numeroInterior;
-    // TODO: Implementar EntreCalles
+    domicilio.entreCalles = paciente.entreCalles;
     return domicilio;
   }
 
@@ -347,6 +349,8 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
       this.btnSubmitBusqueda = false;
     }
     else if (resultadoUsuarios.length == 1) {
+      this.consultarExpedienteWrapper();
+      this.domicilio = this.obtenerPacienteDomicilio(resultadoUsuarios[0]);
       this.paciente = resultadoUsuarios[0];
       this.idUsuario = this.paciente.idUsuario;
       this.btnSubmitBusqueda = false;
@@ -388,6 +392,13 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
         this.bsModalRef.hide();
       };
     }
+  }
+
+  private limpiarFormulario() {
+    this.expediente = new ExpedienteTrackR();
+    this.domicilio = new Domicilio();
+    this.padecimientos = [];
+    this.paciente = new Usuario();
   }
 
 }

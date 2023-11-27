@@ -581,7 +581,21 @@ namespace TrackrAPI.Repositorys.Seguridad
                 {
                     IdUsuario = u.IdUsuario,
                     NombreCompleto = u.ObtenerNombreCompleto(),
-                    Correo = u.Correo
+                    ApellidoMaterno = u.ApellidoMaterno,
+                    Nombre = u.Nombre,
+                    ApellidoPaterno = u.ApellidoPaterno,
+                    TelefonoMovil = u.TelefonoMovil,
+                    Correo = u.Correo,
+                    IdPais = u.IdEstadoNavigation.IdPais,
+                    CodigoPostal = u.CodigoPostal,
+                    IdEstado = u.IdEstado,
+                    IdMunicipio = u.IdMunicipio,
+                    IdLocalidad = u.IdLocalidad,
+                    IdColonia = u.IdColonia,
+                    Calle = u.Calle,
+                    NumeroExterior = u.NumeroExterior,
+                    NumeroInterior = u.NumeroInterior,
+                    EntreCalles = u.EntreCalles
                 })
                 .ToList();
         }
