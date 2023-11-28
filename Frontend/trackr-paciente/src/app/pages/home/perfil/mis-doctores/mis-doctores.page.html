@@ -14,9 +14,11 @@
 
         <ion-item>
           <ion-thumbnail slot="start">
-            <ion-img alt="Doctor" src="https://media.revistagq.com/photos/5ca5fd6e3492a940f5bf1bf0/16:9/w_1280,c_limit/doctor_mike_gq_5080.jpg"
-              style="border-radius: 100px;">
-            </ion-img>
+            <div class="img-container">
+
+              <img alt="{{doctor.urlImagen}} d" [src]="doctor.urlImagen" />
+            </div>
+            
           </ion-thumbnail>
 
           <ion-label>

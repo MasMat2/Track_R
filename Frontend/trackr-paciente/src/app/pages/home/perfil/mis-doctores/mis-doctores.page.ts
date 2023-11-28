@@ -7,6 +7,9 @@ import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores
 import { UsuarioDoctorDto } from 'src/app/shared/Dtos/usuario-doctor-dto';
 import { DoctoresFormularioPage } from './doctores-formulario/doctores-formulario.page';
 import { RouterModule } from '@angular/router';
+import { url } from 'inspector';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ArchivoService } from '@services/archivo.service';
 
 
 @Component({
@@ -30,7 +33,9 @@ export class MisDoctoresPage   {
 
   constructor(
     private doctoresService: MisDoctoresService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private archivoService : ArchivoService,
+    private sanitizer : DomSanitizer
   ) { }
 
 
@@ -42,7 +47,17 @@ export class MisDoctoresPage   {
   consultarDoctores() {
     this.doctoresService.consultarExpediente().subscribe((data => {
       this.misDoctores = data;
-    }));
+      this.misDoctores.forEach((doctor) => { 
+        this.archivoService.obtenerUsuarioImagen(doctor.idUsuarioDoctor).subscribe((imgaen) => {
+          let objectURL = URL.createObjectURL(imgaen);
+          let urlImagen = objectURL;
+          let url = this.sanitizer.bypassSecurityTrustUrl(urlImagen);
+          doctor.urlImagen = url;
+        });
+        }
+      )
+  
+  }));
   }
 
   protected eliminar(doctor: UsuarioDoctorDto) {
