@@ -159,6 +159,7 @@
         public const string ClaveRolCliente = "007";
         public const string ClaveRolClienteLinea = "008";
         public const string ClaveRolGestorFlujos = "011";
+        public const string ClaveRolPaciente = "014";
 
         public const string RFCPublicoGeneral = "XAXX010101000";
 

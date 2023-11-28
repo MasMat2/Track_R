@@ -43,7 +43,7 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
             .Include(ep => ep.IdExpedienteNavigation)
             .Include(et => et.IdExpedienteNavigation.ExpedientePadecimiento)
             .ThenInclude(ep => ep.IdPadecimientoNavigation)
-                .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioPaciente &&
+                .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.UsuarioRol.Any( ur => ur.IdRolNavigation.Clave == GeneralConstant.ClaveRolPaciente) &&
                        ep.IdUsuarioDoctor == idDoctor)
                 .GroupBy(ep => ep.IdExpedienteNavigation.IdUsuario)
                 .Select(group => new UsuarioExpedienteGridDTO
