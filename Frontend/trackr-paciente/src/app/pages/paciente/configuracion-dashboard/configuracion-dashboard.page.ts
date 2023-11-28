@@ -35,7 +35,11 @@ export class ConfiguracionDashboardPage  implements OnInit {
 
   protected widgets: WidgetSeleccionado[] = [];
 
-  ngOnInit() {
+  ngOnInit(): void {
+    
+  }
+
+  public ionViewWillEnter() {
     // TODO: 2023-04-26 -> Take 1
 
     const widgets$ = this.widgetService.consultar();

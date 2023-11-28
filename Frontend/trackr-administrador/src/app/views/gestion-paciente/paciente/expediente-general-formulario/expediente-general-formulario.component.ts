@@ -25,6 +25,7 @@ import { UsuarioFormularioComponent } from 'src/app/views/configuracion-general/
 import { Genero } from '@models/catalogo/genero';
 import { GeneroDto } from '@dtos/catalogo/generoDto';
 import { GeneroService } from '@http/catalogo/genero.service';
+import { tr } from 'date-fns/locale';
 
 /**
  * Componente de formulario para el manejo de expedientes.
@@ -132,27 +133,31 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
   protected enviarFormulario(formulario: NgForm): void {
     this.btnSubmit = true;
 
-    if (!formulario.valid) {
-      this.formularioService.validarCamposRequeridos(formulario);
-      this.btnSubmit = false;
-      return;
-    }
-
-    this.expedienteWrapper.expediente = this.expediente;
-
-    this.expedienteWrapper.padecimientos = this.padecimientos;
-    this.expedienteWrapper.paciente.idUsuario = this.paciente.idUsuario;
-    if (this.accion === GeneralConstant.MODAL_ACCION_AGREGAR) {
-      if (this.expedienteWrapper.expediente.idExpediente > 0) {
+    try{
+      if (!formulario.valid) {
+        this.formularioService.validarCamposRequeridos(formulario);
+        this.btnSubmit = false;
+        return;
+      }
+  
+      this.expedienteWrapper.expediente = this.expediente;
+  
+      this.expedienteWrapper.padecimientos = this.padecimientos;
+      this.expedienteWrapper.paciente.idUsuario = this.paciente.idUsuario;
+      if (this.accion === GeneralConstant.MODAL_ACCION_AGREGAR) {
+        if (this.expedienteWrapper.expediente.idExpediente > 0) {
+          this.editar();
+        }
+        else {
+          this.agregar();
+        }
+      } else if (this.accion === GeneralConstant.MODAL_ACCION_EDITAR) {
         this.editar();
       }
-      else {
-        this.agregar();
-      }
-    } else if (this.accion === GeneralConstant.MODAL_ACCION_EDITAR) {
-      this.editar();
+
+    }catch(error){
+      this.btnSubmit = false;
     }
-    this.consultarExpedienteWrapper();
   }
 
   /**
@@ -163,9 +168,13 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
       .then((response) => {
         if (response) {
           this.modalMensajeService.modalExito(this.MENSAJE_AGREGAR);
-          this.limpiarFormulario();
           this.btnSubmit = false;
         }
+        
+      this.consultarExpedienteWrapper();
+      })
+      .catch((error) => { 
+        this.btnSubmit = false;
       });
   }
 
@@ -177,12 +186,15 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
       .then((response) => {
         if (response) {
           this.modalMensajeService.modalExito(this.MENSAJE_EDITAR);
-          this.limpiarFormulario();
           this.btnSubmit = false;
         }
+        
+      this.consultarExpedienteWrapper();
 
       })
-      .catch((error) => { });
+      .catch((error) => {
+        this.btnSubmit = false;
+       });
   }
 
   /**
@@ -348,14 +360,14 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
       this.modalMensajeService.modalError("No se encontraron resultados");
       this.btnSubmitBusqueda = false;
     }
-    else if (resultadoUsuarios.length == 1) {
+/*     else if (resultadoUsuarios.length == 1) {
       this.consultarExpedienteWrapper();
       this.domicilio = this.obtenerPacienteDomicilio(resultadoUsuarios[0]);
       this.paciente = resultadoUsuarios[0];
       this.idUsuario = this.paciente.idUsuario;
       this.btnSubmitBusqueda = false;
       this.filtro = "";
-    }
+    } */
     else {
       let elementosBusqueda: Usuario[] = resultadoUsuarios.map((elem) => {
         let item = new Usuario();
