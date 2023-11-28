@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, QueryList, SimpleChanges, ViewChildren, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, QueryList, SimpleChanges, ViewChildren, ViewContainerRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { EntidadEstructuraTablaValorService } from '@http/gestion-entidad/entidad-estructura-tabla-valor.service';
 import { EntidadEstructuraValorService } from '@http/gestion-entidad/entidad-estructura-valor.service';
@@ -35,6 +35,7 @@ export class TabuladorEntidadComponent implements OnInit {
   **/
   @Input() public externalTemplates: ExternalTemplate[] = [];
   @Output() public enviarFormularioExterno = new EventEmitter<boolean>();
+  protected selectedTab : number = 0;
 
   public MENSAJE_ERRORRES_CAMPO = 'Favor de revisar que los campos estén correctamente llenados';
 
@@ -48,7 +49,8 @@ export class TabuladorEntidadComponent implements OnInit {
     private entidadEstructuraValorService: EntidadEstructuraValorService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
     private entidadService: EntidadService,
-    private mensajeService: MensajeService
+    private mensajeService: MensajeService,
+    private cdr : ChangeDetectorRef
   ) { }
 
   public async ngOnInit() : Promise<void> {
@@ -95,6 +97,8 @@ export class TabuladorEntidadComponent implements OnInit {
 
     const externalTemplatesLength = this.externalTemplates.length;
 
+    this.selectedTab = index;
+    this.cdr.detectChanges();
     /**
      * Identificar si el tab pertenece a un componente externo
      * @externalTemplatesLength me indica si existen templates de componentes externos.
