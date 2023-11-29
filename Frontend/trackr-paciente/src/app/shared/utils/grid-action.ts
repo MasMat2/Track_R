@@ -1,4 +1,3 @@
-import { GRID_ACTION } from '../../../../../trackr-administrador/src/app/shared/utils/constants/grid';
 export class GridAction{
     public static GRID_ACCION_EDITAR = 'edit';
     public static GRID_ACCION_ELIMINAR = 'delete';
