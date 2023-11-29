@@ -7549,6 +7549,8 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.IdTipoNotificacion).ValueGeneratedNever();
 
+                entity.Property(e => e.Clave).HasMaxLength(3);
+
                 entity.Property(e => e.Nombre).HasMaxLength(50);
             });
 

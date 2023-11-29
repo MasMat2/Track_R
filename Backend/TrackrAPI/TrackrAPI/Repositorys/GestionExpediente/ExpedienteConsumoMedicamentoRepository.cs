@@ -45,5 +45,14 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                 .ToList();
         }
 
+      public TratamientoToma? ConsularPorNotificacion(int idNotificacion){
+            return context.TratamientoToma
+            .Include(tt => tt.IdTratamientoRecordatorioNavigation)
+            .Include(tt => tt.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation)
+            .Include(tt => tt.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdExpedienteNavigation)
+            .Where(tt => tt.IdNotificacion == idNotificacion)
+            .FirstOrDefault();
+      }
+
     }
 }
