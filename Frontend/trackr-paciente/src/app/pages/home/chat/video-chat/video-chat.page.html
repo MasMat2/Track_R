@@ -22,14 +22,14 @@
       <ion-col size="6">
         <ion-label>
           <h3>Transmisión Local</h3>
-          <video id="webcamVideo" autoplay playsinline muted [srcObject]="localStream"></video>
+          <video id="webcamVideo" autoplay playsinline [muted]="true" controls [srcObject]="localStream"></video>
         </ion-label>
       </ion-col>
 
       <ion-col size="6">
         <ion-label>
           <h3>Transmisión Remota</h3>
-          <video id="remoteVideo" autoplay playsinline [srcObject]="remoteStream"></video>
+          <video id="remoteVideo" autoplay playsinline controls [srcObject]="remoteStream"></video>
         </ion-label>
       </ion-col>
     </ion-row>
