@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '../../layout/header/header.component';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
+import { FormsModule } from '@angular/forms';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDxj7h-jJmroLl8hqrxlJOkFLji20H5ovs",
@@ -23,6 +24,7 @@ const firebaseConfig = {
     CommonModule,
     IonicModule,
     HeaderComponent,
+    FormsModule
   ]
 })
 export class VideoChatPage implements OnInit {
