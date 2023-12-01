@@ -1,22 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { HeaderComponent } from '../layout/header/header.component';
-import { VideoChatPage } from './video-chat/video-chat.page';
+import { HeaderComponent } from '../../layout/header/header.component';
 
 @Component({
-  selector: 'app-chat',
-  templateUrl: './chat.page.html',
-  styleUrls: ['./chat.page.scss'],
+  selector: 'app-video-chat',
+  templateUrl: './video-chat.page.html',
+  styleUrls: ['./video-chat.page.scss'],
   standalone: true,
   imports: [
     CommonModule,
     IonicModule,
     HeaderComponent,
-    VideoChatPage
   ]
 })
-export class ChatPage implements OnInit {
+export class VideoChatPage implements OnInit {
 
   constructor() { }
 
