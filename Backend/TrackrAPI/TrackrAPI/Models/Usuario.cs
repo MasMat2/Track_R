@@ -18,6 +18,7 @@ namespace TrackrAPI.Models
             CitaIdUsuarioTomaSomatometriaNavigation = new HashSet<Cita>();
             Comision = new HashSet<Comision>();
             ComplementoPago = new HashSet<ComplementoPago>();
+            ConfirmacionCorreo = new HashSet<ConfirmacionCorreo>();
             DomicilioIdUsuarioNavigation = new HashSet<Domicilio>();
             DomicilioIdUsuarioRepartidorNavigation = new HashSet<Domicilio>();
             EntradaPersonalIdUsuarioBajaNavigation = new HashSet<EntradaPersonal>();
@@ -122,6 +123,7 @@ namespace TrackrAPI.Models
         public int? IdSatFormaPago { get; set; }
         public int? IdMetodoPago { get; set; }
         public string? EntreCalles { get; set; }
+        public bool CorreoConfirmado { get; set; }
 
         public virtual Area? IdAreaNavigation { get; set; }
         public virtual Colonia? IdColoniaNavigation { get; set; }
@@ -151,6 +153,7 @@ namespace TrackrAPI.Models
         public virtual ICollection<Cita> CitaIdUsuarioTomaSomatometriaNavigation { get; set; }
         public virtual ICollection<Comision> Comision { get; set; }
         public virtual ICollection<ComplementoPago> ComplementoPago { get; set; }
+        public virtual ICollection<ConfirmacionCorreo> ConfirmacionCorreo { get; set; }
         public virtual ICollection<Domicilio> DomicilioIdUsuarioNavigation { get; set; }
         public virtual ICollection<Domicilio> DomicilioIdUsuarioRepartidorNavigation { get; set; }
         public virtual ICollection<EntradaPersonal> EntradaPersonalIdUsuarioBajaNavigation { get; set; }

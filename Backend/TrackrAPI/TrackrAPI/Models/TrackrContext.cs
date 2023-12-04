@@ -62,6 +62,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<ConfiguracionConcepto> ConfiguracionConcepto { get; set; } = null!;
         public virtual DbSet<ConfiguracionOpcionVenta> ConfiguracionOpcionVenta { get; set; } = null!;
         public virtual DbSet<ConfiguracionVigencia> ConfiguracionVigencia { get; set; } = null!;
+        public virtual DbSet<ConfirmacionCorreo> ConfirmacionCorreo { get; set; } = null!;
         public virtual DbSet<ContenidoExamen> ContenidoExamen { get; set; } = null!;
         public virtual DbSet<CuentaContable> CuentaContable { get; set; } = null!;
         public virtual DbSet<Departamento> Departamento { get; set; } = null!;
@@ -1648,6 +1649,28 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdTipoVigencia)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Configura__IdTip__6809520C");
+            });
+
+            modelBuilder.Entity<ConfirmacionCorreo>(entity =>
+            {
+                entity.HasKey(e => e.IdConfirmacionCorreo)
+                    .HasName("PK__Confirma__C8248F4C979A99FA");
+
+                entity.Property(e => e.IdConfirmacionCorreo).HasColumnName("idConfirmacionCorreo");
+
+                entity.Property(e => e.Clave).HasMaxLength(500);
+
+                entity.Property(e => e.FechaAlta)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fechaAlta");
+
+                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.ConfirmacionCorreo)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Confirmac__idUsu__12899BBD");
             });
 
             modelBuilder.Entity<ContenidoExamen>(entity =>
@@ -8261,6 +8284,11 @@ namespace TrackrAPI.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Nombre).HasMaxLength(50);
+
+                entity.HasOne(d => d.IdPadecimientoNavigation)
+                    .WithMany(p => p.Widget)
+                    .HasForeignKey(d => d.IdPadecimiento)
+                    .HasConstraintName("FK__Widget__IdPadeci__0DC4E6A0");
             });
 
             OnModelCreatingPartial(modelBuilder);
