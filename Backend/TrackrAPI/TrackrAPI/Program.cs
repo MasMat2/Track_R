@@ -151,6 +151,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHub<NotificacionPacienteHub>("/api/hub/notificacion-paciente");
     endpoints.MapHub<NotificacionDoctorHub>("/api/hub/notificacion-doctor");
     endpoints.MapHub<ChatHub>("/api/hub/chat");
+    endpoints.MapHub<ChatMensajeHub>("/api/hub/chatMensaje");
 });
 
 if (!app.Environment.IsDevelopment())
