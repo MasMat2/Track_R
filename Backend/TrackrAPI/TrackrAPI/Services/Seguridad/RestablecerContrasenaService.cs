@@ -35,7 +35,7 @@ namespace TrackrAPI.Services.Seguridad
         public void RestablecerContrasena(RestablecerContrasenaDto usuario)
         {
             _usuarioValidatorService.ValidarRestablecerContrasena(usuario);
-            _usuarioValidatorService.ValidarCorreoNoExistente(usuario);
+            _usuarioValidatorService.ValidarCorreoNoExistente(usuario.Correo);
 
             string clave = GenerarClaveRestablecimiento();
             var usuarioCompleto = _usuarioRepository.ConsultarPorCorreo(usuario.Correo);

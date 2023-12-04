@@ -35,6 +35,7 @@ namespace TrackrAPI.Services.Seguridad
         private UsuarioRolService usuarioRolService;
         private RolService rolService;
         private BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService;
+        private ConfirmacionCorreoService _confirmacionCorreoService;
 
 
         public UsuarioService(IUsuarioRepository usuarioRepository,
@@ -54,7 +55,8 @@ namespace TrackrAPI.Services.Seguridad
             IColoniaRepository coloniaRepository,
             UsuarioRolService usuarioRolService,
             RolService rolService,
-            BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService)
+            BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService,
+            ConfirmacionCorreoService confirmacionCorreoService)
         {
             this.usuarioRepository = usuarioRepository;
             this.expedienteTrackrRepository = expedienteTrackrRepository;
@@ -73,6 +75,7 @@ namespace TrackrAPI.Services.Seguridad
             this.usuarioRolService = usuarioRolService;
             this.rolService = rolService;
             this.bitacoraMovimientoUsuarioService = bitacoraMovimientoUsuarioService;
+            this._confirmacionCorreoService = confirmacionCorreoService;
         }
 
         public Usuario Consultar(int idUsuario)
@@ -280,6 +283,122 @@ namespace TrackrAPI.Services.Seguridad
                 }
 
                 scope.Complete();
+
+                return idUsuario;
+            }
+        }
+
+        public int AgregarTrackr(UsuarioNuevoTrackrDto usuarioDto)
+        {
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+            {
+                var usuario = new Usuario()
+                {
+                    Nombre = usuarioDto.Nombres,
+                    ApellidoPaterno = usuarioDto.ApellidoPaterno,
+                    ApellidoMaterno = usuarioDto.ApellidoMaterno,
+                    Correo = usuarioDto.Correo,
+                    TelefonoMovil = usuarioDto.TelefonoMovil,
+                    //constantes
+                    IdTipoUsuario = 1004,
+                    IdPerfil = 2,
+                    IdCompania = 2,
+                    IdHospital = 57,
+                    CorreoConfirmado = false,
+                    Habilitado = false,
+                    
+            };
+                //Usuario usuario = MapearUsuario(usuarioDto);
+
+                string contrasenaEncriptada;
+                if (usuarioDto.Contrasena == null || usuarioDto.Contrasena == "")
+                {
+                    string contraseniaAutogenerada = GenerarContraseniaAleatoria();
+
+                    contrasenaEncriptada = simpleAES.EncryptToString(contraseniaAutogenerada);
+                    EnviarCorreoConContrasena(usuario, contraseniaAutogenerada);
+                }
+                else
+                {
+                    contrasenaEncriptada = simpleAES.EncryptToString(usuarioDto.Contrasena);
+                }
+
+                
+
+                //usuario.Habilitado = true;
+                usuario.Contrasena = contrasenaEncriptada;
+
+                //if (usuarioDto.AdministradorCompania != true && (usuarioDto.IdsRol == null || usuarioDto.IdsRol.Count == 0))
+                //{
+                //    throw new CdisException("Se debe seleccionar al menos un rol");
+                //}
+
+                //List<Rol> roles = usuarioDto.IdsRol?.Select(idRol => rolService.Consultar(idRol)).ToList();
+
+                //usuarioValidatorService.ValidarAgregar(usuario, roles);
+                int idUsuario = usuarioRepository.Agregar(usuario).IdUsuario;
+
+                //var usuarioRol = new UsuarioRol()
+                //{
+                //    IdRol = 1038,
+                //    IdUsuario = idUsuario
+                //};
+
+                //usuarioRolService.Agregar(usuarioRol);
+
+                // Actualizar los roles del usuario
+                //List<UsuarioRol> usuarioRols = usuarioDto.IdsRol?
+                //    .Select(idRol =>
+                //    {
+                //        return new UsuarioRol()
+                //        {
+                //            IdRol = idRol,
+                //            IdUsuario = idUsuario
+                //        };
+                //    })
+                //    .ToList();
+
+                //if (usuarioRols != null)
+                //{
+                //    usuarioRolService.Guardar(usuarioRols);
+                //}
+
+                // El domicilio sólo se agrega cuando se llenan todos los datos de domicilio
+                //bool esCliente = roles != null && roles.Any(rol => rol.Clave == GeneralConstant.ClaveRolCliente);
+                //if (esCliente && usuario.TieneDomicilioCompleto())
+                //{
+                //    Domicilio domicilioNuevo = ObtenerDomicilioUsuario(usuario);
+
+                //    domicilioValidatorService.ValidarAgregar(domicilioNuevo, false);
+                //    domicilioRepository.Agregar(domicilioNuevo);
+                //}
+
+                // Guardar la imagen
+                //if (usuarioDto.ImagenBase64 != null)
+                //{
+                //    string nombreArchivo = $"{usuario.IdUsuario}{MimeTypeMap.GetExtension(usuarioDto.ImagenTipoMime)}";
+                //    string path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", nombreArchivo);
+                //    usuarioDto.ImagenBase64 = usuarioDto.ImagenBase64.Substring(usuarioDto.ImagenBase64.LastIndexOf(',') + 1);
+                //    File.WriteAllBytes(path, Convert.FromBase64String(usuarioDto.ImagenBase64));
+                //}
+
+                // Guardar el perfil
+                //if (usuarioDto.IdPerfil > 0)
+                //{
+                //    UsuarioLocacion permiso = new()
+                //    {
+                //        IdPerfil = (int)usuarioDto.IdPerfil,
+                //        IdUsuario = idUsuario,
+                //        IdLocacion = idLocacion
+                //    };
+                //    usuarioLocacionService.Agregar(permiso);
+                //}
+
+                this._confirmacionCorreoService.ConfirmarCorreo(usuario.Correo);
+
+                scope.Complete();
+
+                
 
                 return idUsuario;
             }
@@ -623,7 +742,7 @@ namespace TrackrAPI.Services.Seguridad
 
         public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion, int idUsuario)
         {
-            using TransactionScope scope = new TransactionScope();
+            using TransactionScope scope = new();
 
             var usuario = usuarioRepository.Consultar(idUsuario);
             var expediente = expedienteTrackrRepository.ConsultarPorUsuario(usuario.IdUsuario);
@@ -636,7 +755,7 @@ namespace TrackrAPI.Services.Seguridad
             expediente.Peso = informacion.Peso;
             expediente.Cintura = informacion.Cintura;
             expediente.Estatura = informacion.Estatura;
-            usuario.Correo = informacion.Correo;
+            usuario.CorreoPersonal = informacion.Correo;
             usuario.TelefonoMovil = informacion.TelefonoMovil;
             usuario.IdEstado = informacion.IdEstado;
             usuario.IdMunicipio = informacion.IdMunicipio;
@@ -677,6 +796,24 @@ namespace TrackrAPI.Services.Seguridad
         public UsuarioDomicilioDto ConsultaDomicilioPorId(int idUsuario)
         {
            return usuarioRepository.ConsultaDomicilioPorId(idUsuario);
+        }
+
+
+
+        public async void enviarCorreoConfirmacion(UsuarioNuevoTrackrDto usuarioDto)
+        {
+
+            //Console.WriteLine(datos);
+
+            var correo = new Correo()
+            {
+                EsMensajeHtml = false,
+                Asunto = "Registro de Usuario",
+                Mensaje = "Este es un correo de prueba",
+                Receptor = usuarioDto.Correo,
+            };
+
+            await correoHelper.Enviar(correo);
         }
     }
 }

@@ -83,6 +83,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                 // TODO: 2023-05-03 -> Agregar el filtro por rol
                 // && (claveRol == null || u.UsuarioRol.Any(ur => ur.IdRolNavigation.Clave == claveRol))
                 && u.Habilitado == true
+                && u.CorreoConfirmado == true
                 select u;
             return usuarioConsulta.FirstOrDefault();
         }
@@ -627,7 +628,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                 Peso = expediente.Peso,
                 Cintura = expediente.Cintura,
                 Estatura = expediente.Estatura,
-                Correo = usuario.Correo,
+                Correo = usuario.CorreoPersonal,
                 TelefonoMovil = usuario.TelefonoMovil,
                 IdPais = usuario.IdEstadoNavigation?.IdPais,
                 IdEstado = usuario.IdEstado,

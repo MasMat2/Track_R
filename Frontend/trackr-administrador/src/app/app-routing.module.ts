@@ -22,6 +22,12 @@ const routes: Routes = [
     import('./views/administrador/login-administrador/login-administrador.component')
     .then((m) => m.LoginAdministradorComponent)
   },
+  {
+    path: 'confirmar-correo',
+    loadComponent: () =>
+    import('./views/configuracion-general/acceso/confirmar-correo/confirmar-correo.component')
+    .then((m) => m.ConfirmarCorreoComponent)
+  },
 ];
 
 @NgModule({

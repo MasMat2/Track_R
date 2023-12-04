@@ -76,6 +76,34 @@ public class ExpedienteTrackrService
         return expedienteTrackr.IdExpediente;
     }
 
+    public int AgregarExpedienteNuevoUsuario(Usuario usuario)
+    {
+        using TransactionScope scope = new();
+        ExpedienteTrackr expedienteTrackr = new ExpedienteTrackr
+        {
+            IdUsuario = usuario.IdUsuario,
+            Numero = "0",
+            FechaNacimiento = Utileria.ObtenerFechaActual(),
+            Cintura = 1,
+            Estatura = 1,
+            Peso = 1,
+            IdGenero = 9,
+            FechaAlta = Utileria.ObtenerFechaActual()
+        };
+        _expedienteTrackrValidatorService.ValidarAgregar(expedienteTrackr);
+
+        expedienteTrackr = _expedienteTrackrRepository.Agregar(expedienteTrackr);
+        expedienteTrackr.Numero = expedienteTrackr.IdExpediente.ToString().PadLeft(6, '0');
+        _expedienteTrackrRepository.Editar(expedienteTrackr);
+
+        //AgregarPadecimientos(expedienteWrapper.padecimientos, expedienteTrackr.IdExpediente);
+
+        //_usuarioWidgetService.modificarSeleccionWidgets(expedienteTrackr.IdUsuario, GeneralConstant.WidgetsDefault);
+
+        scope.Complete();
+        return expedienteTrackr.IdExpediente;
+    }
+
     /// <summary>
     /// Edita un expedienteWrapper. Primero asigna cada una de las propiedades del expedienteWrapper a sus respectivos modelos.
     /// Para después utilizar el Repositorio de cada modelo y editarlos.

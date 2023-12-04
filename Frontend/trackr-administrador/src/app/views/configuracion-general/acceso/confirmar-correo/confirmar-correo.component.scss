@@ -1,0 +1,26 @@
+
+
+.contenedor{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+.mensaje-container {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+
+  }
+  
+  .verde {
+    background-color: #8BC34A; /* Verde */
+    color: #fff;
+  }
+  
+  .amarillo {
+    background-color: #FFC107; /* Amarillo */
+    color: #fff;
+  }
+

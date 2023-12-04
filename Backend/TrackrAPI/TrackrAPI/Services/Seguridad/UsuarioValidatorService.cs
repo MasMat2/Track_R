@@ -249,9 +249,9 @@ namespace TrackrAPI.Services.Seguridad
             Validator.ValidarRequerido(usuario.Correo, MensajeCorreoRequerido);
         }
 
-        public void ValidarCorreoNoExistente(RestablecerContrasenaDto usuario)
+        public void ValidarCorreoNoExistente(string correoUsuario)
         {
-            Usuario usuarioExistente = this.usuarioRepository.ConsultarPorCorreo(usuario.Correo);
+            Usuario usuarioExistente = this.usuarioRepository.ConsultarPorCorreo(correoUsuario);
 
             if (usuarioExistente == null)
             {
@@ -269,6 +269,25 @@ namespace TrackrAPI.Services.Seguridad
         {
             ValidarActualizarContrasena(usuario);
             Validator.ValidarRequerido(usuario.ContrasenaActualizada, MensajeContrasenaRequerida);
+        }
+
+        public void ValidarConfirmarCorreo(ConfirmarCorreoDto datos)
+        {
+            Validator.ValidarRequerido(datos.Correo, MensajeCorreoRequerido);
+            Validator.ValidarRequerido(datos.Token, MensajeClaveRequerida);
+
+        }
+
+        public void ValidarProcesarConfirmarCorreo(Usuario datos)
+        {
+            
+            var usuario = usuarioRepository.ConsultarPorCorreo(datos.Correo);
+
+            if(usuario.CorreoConfirmado == true)
+            {
+                throw new CdisException("El usuario ya ha confirmado su correo");
+            }
+
         }
 
         public void ValidarExistencia(int idUsuario)
@@ -303,6 +322,7 @@ namespace TrackrAPI.Services.Seguridad
         public Usuario ValidateUserExists(LoginRequest loginRequest)
         {
             string encryptedPassword = simpleAES.EncryptToString(loginRequest.Contrasena);
+            //Usuario 
             Usuario userFromRepo = usuarioRepository.Login(loginRequest.Correo, encryptedPassword, loginRequest.ClaveTipoUsuario);
 
             if (userFromRepo == null)
