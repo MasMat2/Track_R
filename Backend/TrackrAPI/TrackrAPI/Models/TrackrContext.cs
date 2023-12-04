@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -41,6 +41,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<CertificadoLocacion> CertificadoLocacion { get; set; } = null!;
         public virtual DbSet<Chat> Chat { get; set; } = null!;
         public virtual DbSet<ChatMensaje> ChatMensaje { get; set; } = null!;
+        public virtual DbSet<ChatMensajeVisto> ChatMensajeVisto { get; set; } = null!;
         public virtual DbSet<ChatPersona> ChatPersona { get; set; } = null!;
         public virtual DbSet<Cie> Cie { get; set; } = null!;
         public virtual DbSet<Cierre> Cierre { get; set; } = null!;
@@ -62,10 +63,12 @@ namespace TrackrAPI.Models
         public virtual DbSet<ConfiguracionConcepto> ConfiguracionConcepto { get; set; } = null!;
         public virtual DbSet<ConfiguracionOpcionVenta> ConfiguracionOpcionVenta { get; set; } = null!;
         public virtual DbSet<ConfiguracionVigencia> ConfiguracionVigencia { get; set; } = null!;
+        public virtual DbSet<ConfirmacionCorreo> ConfirmacionCorreo { get; set; } = null!;
         public virtual DbSet<ContenidoExamen> ContenidoExamen { get; set; } = null!;
         public virtual DbSet<CuentaContable> CuentaContable { get; set; } = null!;
         public virtual DbSet<Departamento> Departamento { get; set; } = null!;
         public virtual DbSet<Deposito> Deposito { get; set; } = null!;
+        public virtual DbSet<DetalleExpedienteRecomendacionesGenerales> DetalleExpedienteRecomendacionesGenerales { get; set; } = null!;
         public virtual DbSet<Devolucion> Devolucion { get; set; } = null!;
         public virtual DbSet<DevolucionPresentacion> DevolucionPresentacion { get; set; } = null!;
         public virtual DbSet<Direccion> Direccion { get; set; } = null!;
@@ -129,6 +132,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<ExpedientePacienteInformacion> ExpedientePacienteInformacion { get; set; } = null!;
         public virtual DbSet<ExpedientePadecimiento> ExpedientePadecimiento { get; set; } = null!;
         public virtual DbSet<ExpedienteRecomendaciones> ExpedienteRecomendaciones { get; set; } = null!;
+        public virtual DbSet<ExpedienteRecomendacionesGenerales> ExpedienteRecomendacionesGenerales { get; set; } = null!;
         public virtual DbSet<ExpedienteSeccion> ExpedienteSeccion { get; set; } = null!;
         public virtual DbSet<ExpedienteTrackr> ExpedienteTrackr { get; set; } = null!;
         public virtual DbSet<ExpedienteTratamiento> ExpedienteTratamiento { get; set; } = null!;
@@ -288,6 +292,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<TipoExamen> TipoExamen { get; set; } = null!;
         public virtual DbSet<TipoExpediente> TipoExpediente { get; set; } = null!;
         public virtual DbSet<TipoExpedienteAdministrativo> TipoExpedienteAdministrativo { get; set; } = null!;
+        public virtual DbSet<TipoExpedienteRecomendacionGeneral> TipoExpedienteRecomendacionGeneral { get; set; } = null!;
         public virtual DbSet<TipoFlujo> TipoFlujo { get; set; } = null!;
         public virtual DbSet<TipoGuia> TipoGuia { get; set; } = null!;
         public virtual DbSet<TipoIdentificacion> TipoIdentificacion { get; set; } = null!;
@@ -325,11 +330,13 @@ namespace TrackrAPI.Models
         public virtual DbSet<UsuarioAlmacen> UsuarioAlmacen { get; set; } = null!;
         public virtual DbSet<UsuarioLocacion> UsuarioLocacion { get; set; } = null!;
         public virtual DbSet<UsuarioRol> UsuarioRol { get; set; } = null!;
+        public virtual DbSet<UsuarioWidget> UsuarioWidget { get; set; } = null!;
         public virtual DbSet<Vehiculo> Vehiculo { get; set; } = null!;
         public virtual DbSet<VehiculoMantenimiento> VehiculoMantenimiento { get; set; } = null!;
         public virtual DbSet<VersionPoliza> VersionPoliza { get; set; } = null!;
         public virtual DbSet<ViaAdministracion> ViaAdministracion { get; set; } = null!;
         public virtual DbSet<VistaBalanzaComprobacion> VistaBalanzaComprobacion { get; set; } = null!;
+        public virtual DbSet<Widget> Widget { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -1010,12 +1017,24 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdPersona)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ChatMensa__IdPer__0BDC9E2E");
+            });
 
-                entity.HasOne(d => d.IdPersonaVistoNavigation)
-                    .WithMany(p => p.ChatMensaje)
-                    .HasForeignKey(d => d.IdPersonaVisto)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ChatMensa__IdPer__0CD0C267");
+            modelBuilder.Entity<ChatMensajeVisto>(entity =>
+            {
+                entity.HasKey(e => e.IdMensajeVisto)
+                    .HasName("PK__ChatMens__7829C499A0058423");
+
+                entity.ToTable("ChatMensajeVisto", "Trackr");
+
+                entity.HasOne(d => d.IdMensajeNavigation)
+                    .WithMany(p => p.ChatMensajeVisto)
+                    .HasForeignKey(d => d.IdMensaje)
+                    .HasConstraintName("FK__ChatMensa__IdMen__165A2CA1");
+
+                entity.HasOne(d => d.IdPersonaNavigation)
+                    .WithMany(p => p.ChatMensajeVisto)
+                    .HasForeignKey(d => d.IdPersona)
+                    .HasConstraintName("FK__ChatMensa__IdPer__15660868");
             });
 
             modelBuilder.Entity<ChatPersona>(entity =>
@@ -1645,6 +1664,28 @@ namespace TrackrAPI.Models
                     .HasConstraintName("FK__Configura__IdTip__6809520C");
             });
 
+            modelBuilder.Entity<ConfirmacionCorreo>(entity =>
+            {
+                entity.HasKey(e => e.IdConfirmacionCorreo)
+                    .HasName("PK__Confirma__C8248F4C979A99FA");
+
+                entity.Property(e => e.IdConfirmacionCorreo).HasColumnName("idConfirmacionCorreo");
+
+                entity.Property(e => e.Clave).HasMaxLength(500);
+
+                entity.Property(e => e.FechaAlta)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fechaAlta");
+
+                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.ConfirmacionCorreo)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Confirmac__idUsu__12899BBD");
+            });
+
             modelBuilder.Entity<ContenidoExamen>(entity =>
             {
                 entity.HasKey(e => e.IdContenidoExamen)
@@ -1760,6 +1801,31 @@ namespace TrackrAPI.Models
                     .WithMany(p => p.Deposito)
                     .HasForeignKey(d => d.IdPago)
                     .HasConstraintName("FK__Deposito__IdPago__3C0AD43D");
+            });
+
+            modelBuilder.Entity<DetalleExpedienteRecomendacionesGenerales>(entity =>
+            {
+                entity.HasKey(e => e.IdDetalleExpedienteRecomendacionesGenerales)
+                    .HasName("PK__DetalleE__126B70BEEF131F3C");
+
+                entity.ToTable("DetalleExpedienteRecomendacionesGenerales", "Trackr");
+
+                entity.HasOne(d => d.IdExpedienteNavigation)
+                    .WithMany(p => p.DetalleExpedienteRecomendacionesGenerales)
+                    .HasForeignKey(d => d.IdExpediente)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__DetalleEx__IdExp__75ED5D0F");
+
+                entity.HasOne(d => d.IdExpedienteRecomendacionesGeneralesNavigation)
+                    .WithMany(p => p.DetalleExpedienteRecomendacionesGenerales)
+                    .HasForeignKey(d => d.IdExpedienteRecomendacionesGenerales)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__DetalleEx__IdExp__77D5A581");
+
+                entity.HasOne(d => d.IdNotificacionNavigation)
+                    .WithMany(p => p.DetalleExpedienteRecomendacionesGenerales)
+                    .HasForeignKey(d => d.IdNotificacion)
+                    .HasConstraintName("FK__DetalleEx__IdNot__76E18148");
             });
 
             modelBuilder.Entity<Devolucion>(entity =>
@@ -1978,6 +2044,8 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.TipoCampo).HasMaxLength(50);
 
                 entity.Property(e => e.TipoDato).HasMaxLength(50);
+
+                entity.Property(e => e.UnidadMedida).HasMaxLength(50);
 
                 entity.Property(e => e.ValorMaximo).HasColumnType("decimal(18, 0)");
 
@@ -3074,6 +3142,24 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdUsuarioDoctor)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ExpedienteRecomendaciones_Usuario");
+            });
+
+            modelBuilder.Entity<ExpedienteRecomendacionesGenerales>(entity =>
+            {
+                entity.HasKey(e => e.IdExpedienteRecomendacionesGenerales)
+                    .HasName("PK__Expedien__17FD3D5D639FA628");
+
+                entity.ToTable("ExpedienteRecomendacionesGenerales", "Trackr");
+
+                entity.Property(e => e.Descripcion).HasMaxLength(200);
+
+                entity.Property(e => e.FechaRealizacion).HasColumnType("datetime");
+
+                entity.HasOne(d => d.IdAdministradorNavigation)
+                    .WithMany(p => p.ExpedienteRecomendacionesGenerales)
+                    .HasForeignKey(d => d.IdAdministrador)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Expedient__IdAdm__7310F064");
             });
 
             modelBuilder.Entity<ExpedienteSeccion>(entity =>
@@ -7378,6 +7464,16 @@ namespace TrackrAPI.Models
                     .HasConstraintName("FK__TipoExped__IdCom__40657506");
             });
 
+            modelBuilder.Entity<TipoExpedienteRecomendacionGeneral>(entity =>
+            {
+                entity.HasKey(e => e.IdTipo)
+                    .HasName("PK__TipoExpe__9E3A29A5C22BD333");
+
+                entity.ToTable("TipoExpedienteRecomendacionGeneral", "Trackr");
+
+                entity.Property(e => e.Tipo).HasMaxLength(100);
+            });
+
             modelBuilder.Entity<TipoFlujo>(entity =>
             {
                 entity.HasKey(e => e.IdTipoFlujo)
@@ -7488,6 +7584,8 @@ namespace TrackrAPI.Models
                     .HasName("PK__TipoNoti__0ECE0435F8C7AA48");
 
                 entity.Property(e => e.IdTipoNotificacion).ValueGeneratedNever();
+
+                entity.Property(e => e.Clave).HasMaxLength(3);
 
                 entity.Property(e => e.Nombre).HasMaxLength(50);
             });
@@ -8063,6 +8161,26 @@ namespace TrackrAPI.Models
                     .HasConstraintName("FK_UsuarioRol_Usuario");
             });
 
+            modelBuilder.Entity<UsuarioWidget>(entity =>
+            {
+                entity.HasKey(e => e.IdUsuarioWidget)
+                    .HasName("PK_IdUuarioWidget");
+
+                entity.ToTable("UsuarioWidget", "Trackr");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.UsuarioWidget)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_IdUsuarioWidget_Usuario");
+
+                entity.HasOne(d => d.IdWidgetNavigation)
+                    .WithMany(p => p.UsuarioWidget)
+                    .HasForeignKey(d => d.IdWidget)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_IdUsuarioWidget_Widget");
+            });
+
             modelBuilder.Entity<Vehiculo>(entity =>
             {
                 entity.HasKey(e => e.IdVehiculo)
@@ -8165,6 +8283,25 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.Cargo).HasColumnType("decimal(38, 2)");
 
                 entity.Property(e => e.CuentaContable).HasMaxLength(521);
+            });
+
+            modelBuilder.Entity<Widget>(entity =>
+            {
+                entity.HasKey(e => e.IdWidget)
+                    .HasName("PK_IdWidget");
+
+                entity.ToTable("Widget", "Trackr");
+
+                entity.Property(e => e.Clave)
+                    .HasMaxLength(5)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Nombre).HasMaxLength(50);
+
+                entity.HasOne(d => d.IdPadecimientoNavigation)
+                    .WithMany(p => p.Widget)
+                    .HasForeignKey(d => d.IdPadecimiento)
+                    .HasConstraintName("FK__Widget__IdPadeci__0DC4E6A0");
             });
 
             OnModelCreatingPartial(modelBuilder);

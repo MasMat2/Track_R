@@ -12,6 +12,7 @@ namespace TrackrAPI.Models
 
         public int IdTipoNotificacion { get; set; }
         public string Nombre { get; set; } = null!;
+        public string? Clave { get; set; }
 
         public virtual ICollection<Notificacion> Notificacion { get; set; }
     }

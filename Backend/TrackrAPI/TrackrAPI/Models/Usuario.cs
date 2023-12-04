@@ -13,11 +13,13 @@ namespace TrackrAPI.Models
             CajaTurno = new HashSet<CajaTurno>();
             Carrito = new HashSet<Carrito>();
             ChatMensaje = new HashSet<ChatMensaje>();
+            ChatMensajeVisto = new HashSet<ChatMensajeVisto>();
             ChatPersona = new HashSet<ChatPersona>();
             CitaIdUsuarioDoctorNavigation = new HashSet<Cita>();
             CitaIdUsuarioTomaSomatometriaNavigation = new HashSet<Cita>();
             Comision = new HashSet<Comision>();
             ComplementoPago = new HashSet<ComplementoPago>();
+            ConfirmacionCorreo = new HashSet<ConfirmacionCorreo>();
             DomicilioIdUsuarioNavigation = new HashSet<Domicilio>();
             DomicilioIdUsuarioRepartidorNavigation = new HashSet<Domicilio>();
             EntradaPersonalIdUsuarioBajaNavigation = new HashSet<EntradaPersonal>();
@@ -32,6 +34,7 @@ namespace TrackrAPI.Models
             ExpedienteDoctor = new HashSet<ExpedienteDoctor>();
             ExpedientePadecimiento = new HashSet<ExpedientePadecimiento>();
             ExpedienteRecomendaciones = new HashSet<ExpedienteRecomendaciones>();
+            ExpedienteRecomendacionesGenerales = new HashSet<ExpedienteRecomendacionesGenerales>();
             ExpedienteTrackr = new HashSet<ExpedienteTrackr>();
             ExpedienteTratamiento = new HashSet<ExpedienteTratamiento>();
             Factura = new HashSet<Factura>();
@@ -76,6 +79,7 @@ namespace TrackrAPI.Models
             UsuarioAlmacen = new HashSet<UsuarioAlmacen>();
             UsuarioLocacion = new HashSet<UsuarioLocacion>();
             UsuarioRol = new HashSet<UsuarioRol>();
+            UsuarioWidget = new HashSet<UsuarioWidget>();
         }
 
         public int IdUsuario { get; set; }
@@ -120,6 +124,7 @@ namespace TrackrAPI.Models
         public int? IdSatFormaPago { get; set; }
         public int? IdMetodoPago { get; set; }
         public string? EntreCalles { get; set; }
+        public bool CorreoConfirmado { get; set; }
 
         public virtual Area? IdAreaNavigation { get; set; }
         public virtual Colonia? IdColoniaNavigation { get; set; }
@@ -144,11 +149,13 @@ namespace TrackrAPI.Models
         public virtual ICollection<CajaTurno> CajaTurno { get; set; }
         public virtual ICollection<Carrito> Carrito { get; set; }
         public virtual ICollection<ChatMensaje> ChatMensaje { get; set; }
+        public virtual ICollection<ChatMensajeVisto> ChatMensajeVisto { get; set; }
         public virtual ICollection<ChatPersona> ChatPersona { get; set; }
         public virtual ICollection<Cita> CitaIdUsuarioDoctorNavigation { get; set; }
         public virtual ICollection<Cita> CitaIdUsuarioTomaSomatometriaNavigation { get; set; }
         public virtual ICollection<Comision> Comision { get; set; }
         public virtual ICollection<ComplementoPago> ComplementoPago { get; set; }
+        public virtual ICollection<ConfirmacionCorreo> ConfirmacionCorreo { get; set; }
         public virtual ICollection<Domicilio> DomicilioIdUsuarioNavigation { get; set; }
         public virtual ICollection<Domicilio> DomicilioIdUsuarioRepartidorNavigation { get; set; }
         public virtual ICollection<EntradaPersonal> EntradaPersonalIdUsuarioBajaNavigation { get; set; }
@@ -163,6 +170,7 @@ namespace TrackrAPI.Models
         public virtual ICollection<ExpedienteDoctor> ExpedienteDoctor { get; set; }
         public virtual ICollection<ExpedientePadecimiento> ExpedientePadecimiento { get; set; }
         public virtual ICollection<ExpedienteRecomendaciones> ExpedienteRecomendaciones { get; set; }
+        public virtual ICollection<ExpedienteRecomendacionesGenerales> ExpedienteRecomendacionesGenerales { get; set; }
         public virtual ICollection<ExpedienteTrackr> ExpedienteTrackr { get; set; }
         public virtual ICollection<ExpedienteTratamiento> ExpedienteTratamiento { get; set; }
         public virtual ICollection<Factura> Factura { get; set; }
@@ -207,5 +215,6 @@ namespace TrackrAPI.Models
         public virtual ICollection<UsuarioAlmacen> UsuarioAlmacen { get; set; }
         public virtual ICollection<UsuarioLocacion> UsuarioLocacion { get; set; }
         public virtual ICollection<UsuarioRol> UsuarioRol { get; set; }
+        public virtual ICollection<UsuarioWidget> UsuarioWidget { get; set; }
     }
 }
