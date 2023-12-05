@@ -18,13 +18,13 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
         var idUsuario = ObtenerIdUsuario();
         var mensajes = _chatMensajeService.ObtenerMensajesPorChat(1);
 
-        await Clients.Caller.NuevaConexion(mensajes);
+        await Clients.All.NuevaConexion(mensajes);
     }
 
     public async Task NuevoMensaje(ChatMensaje mensaje)
     {
         _chatMensajeService.NuevoMensaje(mensaje);
-        await Clients.Caller.NuevoMensaje(mensaje);
+        await Clients.All.NuevoMensaje(mensaje);
     }
 
     private int ObtenerIdUsuario()
