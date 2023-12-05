@@ -12,8 +12,8 @@ import { ChatMensajeDTO } from '@dtos/chats/chat-mensaje-dto';
 })
 export class ChatComponent {
   protected chats$: Observable<ChatDTO[]>;
-  protected chatMensajes$: Observable<ChatMensajeDTO[]>
-  protected mensajes:ChatMensajeDTO[] = [];
+  protected chatMensajes$: Observable<ChatMensajeDTO[][]>
+  protected mensajes:ChatMensajeDTO[][] = [];
   protected contenido:string;
 
   constructor(
@@ -30,12 +30,12 @@ export class ChatComponent {
     })
   }
 
-  enviarMensaje(): void{
+  enviarMensaje(idChat:number): void{
     let msg: ChatMensajeDTO = {
       fecha: new Date(),
-      idChat: 1,
+      idChat,
       mensaje: this.contenido,
-      idPersona:5334
+      idPersona:5333
     }
 
     this.chatMensajeHubService.enviarMensaje(msg);

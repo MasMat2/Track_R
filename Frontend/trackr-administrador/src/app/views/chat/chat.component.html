@@ -1,7 +1,13 @@
-<div *ngFor="let mensaje of mensajes">
-    <p >{{mensaje.idChatMensaje}} - {{mensaje.mensaje}}</p>
+<div class="row">
+    <div *ngFor="let msgs of mensajes; let i = index" class="col-3">
+        <div *ngFor="let mensaje of msgs">
+            <p >{{mensaje.idChatMensaje}} - {{mensaje.mensaje}}</p>
+        </div>
+        <input type="text" name="mensaje" [(ngModel)]="contenido">
+        <button (click)="enviarMensaje(i+1)">Enviar mensaje</button>
+        
+    </div>
 </div>
 
-<input type="text" name="mensaje" [(ngModel)]="contenido">
-<button (click)="enviarMensaje()">Enviar mensaje</button>
+
 

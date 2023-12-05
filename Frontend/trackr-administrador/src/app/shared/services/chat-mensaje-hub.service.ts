@@ -19,7 +19,7 @@ import { ChatMensajeDTO } from '@dtos/chats/chat-mensaje-dto';
 export class ChatMensajeHubService {
   private connectionStatus = new BehaviorSubject<HubConnectionState>(HubConnectionState.Disconnected);
   
-  private chatMensajeSubject = new BehaviorSubject<ChatMensajeDTO[]>([]);
+  private chatMensajeSubject = new BehaviorSubject<ChatMensajeDTO[][]>([]);
   public chatMensaje$ = this.chatMensajeSubject.asObservable();
 
   private readonly endpoint = 'hub/chatMensaje';
@@ -58,7 +58,7 @@ export class ChatMensajeHubService {
 
     this.connection.on(
       'NuevaConexion',
-      (mensajes: ChatMensajeDTO[]) => this.onNuevaConexion(mensajes)
+      (mensajes: ChatMensajeDTO[][]) => this.onNuevaConexion(mensajes)
     );
 
     this.connectionStatus.next(HubConnectionState.Connecting);
@@ -74,17 +74,20 @@ export class ChatMensajeHubService {
     this.connectionStatus.next(HubConnectionState.Disconnected);
   }
 
-  public obtenerMensajes():ChatMensajeDTO[] {
+  public obtenerMensajes():ChatMensajeDTO[][] {
     return this.chatMensajeSubject.value;
   }
 
   private onNuevoChatMensaje(chatMensaje:ChatMensajeDTO): void{
     const chatsMensaje = this.chatMensajeSubject.value;
-    chatsMensaje.splice(0,0,chatMensaje);
+    let chat = chatsMensaje.find(x => x.find(y => y.idChat == chatMensaje.idChat))
+    chat?.splice(0,0,chatMensaje)
+    
+    //chatsMensaje.splice(0,0,chatMensaje);
     this.chatMensajeSubject.next(chatsMensaje);
   }
 
-  private onNuevaConexion(chats: ChatMensajeDTO[]): void{
+  private onNuevaConexion(chats: ChatMensajeDTO[][]): void{
 
     this.chatMensajeSubject.next(chats);
   }
