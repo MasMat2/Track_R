@@ -13,6 +13,7 @@ using CanalDistAPI.Dtos.Seguridad;
 using TrackrAPI.Dtos.Perfil;
 using TrackrAPI.Repositorys.GestionExpediente;
 using DocumentFormat.OpenXml.Office.CustomXsn;
+using TrackrAPI.Services.GestionExpediente;
 
 namespace TrackrAPI.Services.Seguridad
 {
@@ -36,6 +37,8 @@ namespace TrackrAPI.Services.Seguridad
         private RolService rolService;
         private BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService;
         private ConfirmacionCorreoService _confirmacionCorreoService;
+        private ExpedienteTrackrService _expedienteTrackrService;
+        private UsuarioRolService _usuarioRolService;
 
 
         public UsuarioService(IUsuarioRepository usuarioRepository,
@@ -56,7 +59,8 @@ namespace TrackrAPI.Services.Seguridad
             UsuarioRolService usuarioRolService,
             RolService rolService,
             BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService,
-            ConfirmacionCorreoService confirmacionCorreoService)
+            ConfirmacionCorreoService confirmacionCorreoService,
+            ExpedienteTrackrService expedienteTrackrService)
         {
             this.usuarioRepository = usuarioRepository;
             this.expedienteTrackrRepository = expedienteTrackrRepository;
@@ -76,6 +80,7 @@ namespace TrackrAPI.Services.Seguridad
             this.rolService = rolService;
             this.bitacoraMovimientoUsuarioService = bitacoraMovimientoUsuarioService;
             this._confirmacionCorreoService = confirmacionCorreoService;
+            this._expedienteTrackrService = expedienteTrackrService;
         }
 
         public Usuario Consultar(int idUsuario)
@@ -297,18 +302,18 @@ namespace TrackrAPI.Services.Seguridad
                     Nombre = usuarioDto.Nombres,
                     ApellidoPaterno = usuarioDto.ApellidoPaterno,
                     ApellidoMaterno = usuarioDto.ApellidoMaterno,
-                    Correo = usuarioDto.Correo,
+                    Correo = usuarioDto.NombreUsuario,
+                    CorreoPersonal = usuarioDto.CorreoPersonal,
                     TelefonoMovil = usuarioDto.TelefonoMovil,
                     //constantes
-                    IdTipoUsuario = 1004,
-                    IdPerfil = 2,
-                    IdCompania = 2,
-                    IdHospital = 57,
+                    IdTipoUsuario = 1004, //invitado
+                    IdPerfil = 2236, //paciente
+                    IdCompania = 178, //predeterminada
+                    IdHospital = 174, //predeterminado
                     CorreoConfirmado = false,
-                    Habilitado = false,
+                    Habilitado = true,
                     
             };
-                //Usuario usuario = MapearUsuario(usuarioDto);
 
                 string contrasenaEncriptada;
                 if (usuarioDto.Contrasena == null || usuarioDto.Contrasena == "")
@@ -324,78 +329,28 @@ namespace TrackrAPI.Services.Seguridad
                 }
 
                 
-
-                //usuario.Habilitado = true;
                 usuario.Contrasena = contrasenaEncriptada;
 
-                //if (usuarioDto.AdministradorCompania != true && (usuarioDto.IdsRol == null || usuarioDto.IdsRol.Count == 0))
-                //{
-                //    throw new CdisException("Se debe seleccionar al menos un rol");
-                //}
-
-                //List<Rol> roles = usuarioDto.IdsRol?.Select(idRol => rolService.Consultar(idRol)).ToList();
-
-                //usuarioValidatorService.ValidarAgregar(usuario, roles);
                 int idUsuario = usuarioRepository.Agregar(usuario).IdUsuario;
 
-                //var usuarioRol = new UsuarioRol()
-                //{
-                //    IdRol = 1038,
-                //    IdUsuario = idUsuario
-                //};
+                var usuarioRol = new UsuarioRol()
+                {
+                    IdUsuario = usuario.IdUsuario,
+                    IdRol = 1038, //paciente
+                };
+                usuarioRolService.Agregar(usuarioRol);
 
-                //usuarioRolService.Agregar(usuarioRol);
+                var usuarioLocacion = new UsuarioLocacion()
+                {
+                    IdLocacion = 174, //predeterminado
+                    IdUsuario = idUsuario,
+                    IdPerfil = 2236
+                };
+                usuarioLocacionService.Agregar(usuarioLocacion);
 
-                // Actualizar los roles del usuario
-                //List<UsuarioRol> usuarioRols = usuarioDto.IdsRol?
-                //    .Select(idRol =>
-                //    {
-                //        return new UsuarioRol()
-                //        {
-                //            IdRol = idRol,
-                //            IdUsuario = idUsuario
-                //        };
-                //    })
-                //    .ToList();
-
-                //if (usuarioRols != null)
-                //{
-                //    usuarioRolService.Guardar(usuarioRols);
-                //}
-
-                // El domicilio sólo se agrega cuando se llenan todos los datos de domicilio
-                //bool esCliente = roles != null && roles.Any(rol => rol.Clave == GeneralConstant.ClaveRolCliente);
-                //if (esCliente && usuario.TieneDomicilioCompleto())
-                //{
-                //    Domicilio domicilioNuevo = ObtenerDomicilioUsuario(usuario);
-
-                //    domicilioValidatorService.ValidarAgregar(domicilioNuevo, false);
-                //    domicilioRepository.Agregar(domicilioNuevo);
-                //}
-
-                // Guardar la imagen
-                //if (usuarioDto.ImagenBase64 != null)
-                //{
-                //    string nombreArchivo = $"{usuario.IdUsuario}{MimeTypeMap.GetExtension(usuarioDto.ImagenTipoMime)}";
-                //    string path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", nombreArchivo);
-                //    usuarioDto.ImagenBase64 = usuarioDto.ImagenBase64.Substring(usuarioDto.ImagenBase64.LastIndexOf(',') + 1);
-                //    File.WriteAllBytes(path, Convert.FromBase64String(usuarioDto.ImagenBase64));
-                //}
-
-                // Guardar el perfil
-                //if (usuarioDto.IdPerfil > 0)
-                //{
-                //    UsuarioLocacion permiso = new()
-                //    {
-                //        IdPerfil = (int)usuarioDto.IdPerfil,
-                //        IdUsuario = idUsuario,
-                //        IdLocacion = idLocacion
-                //    };
-                //    usuarioLocacionService.Agregar(permiso);
-                //}
-
+                this._expedienteTrackrService.AgregarExpedienteNuevoUsuario(usuario);
                 this._confirmacionCorreoService.ConfirmarCorreo(usuario.Correo);
-
+                
                 scope.Complete();
 
                 
@@ -746,7 +701,13 @@ namespace TrackrAPI.Services.Seguridad
 
             var usuario = usuarioRepository.Consultar(idUsuario);
             var expediente = expedienteTrackrRepository.ConsultarPorUsuario(usuario.IdUsuario);
-            
+
+
+            if (informacion.CorreoPersonal != usuario.CorreoPersonal)
+            {
+                usuario.CorreoConfirmado = false;
+            }
+
             usuario.Nombre = informacion.Nombre;
             usuario.ApellidoPaterno = informacion.ApellidoPaterno;
             usuario.ApellidoMaterno = informacion.ApellidoMaterno;
@@ -755,7 +716,7 @@ namespace TrackrAPI.Services.Seguridad
             expediente.Peso = informacion.Peso;
             expediente.Cintura = informacion.Cintura;
             expediente.Estatura = informacion.Estatura;
-            usuario.CorreoPersonal = informacion.Correo;
+            usuario.CorreoPersonal = informacion.CorreoPersonal;
             usuario.TelefonoMovil = informacion.TelefonoMovil;
             usuario.IdEstado = informacion.IdEstado;
             usuario.IdMunicipio = informacion.IdMunicipio;
@@ -766,6 +727,7 @@ namespace TrackrAPI.Services.Seguridad
             usuario.NumeroInterior = informacion.NumeroInterior;
             usuario.NumeroExterior = informacion.NumeroExterior;
             usuario.EntreCalles = informacion.EntreCalles;
+            
 
             expedientePadecimientoRepository.EliminarPorExpediente(expediente.IdExpediente);
             foreach (var padecimientoDTO in informacion.padecimientos)
@@ -798,22 +760,5 @@ namespace TrackrAPI.Services.Seguridad
            return usuarioRepository.ConsultaDomicilioPorId(idUsuario);
         }
 
-
-
-        public async void enviarCorreoConfirmacion(UsuarioNuevoTrackrDto usuarioDto)
-        {
-
-            //Console.WriteLine(datos);
-
-            var correo = new Correo()
-            {
-                EsMensajeHtml = false,
-                Asunto = "Registro de Usuario",
-                Mensaje = "Este es un correo de prueba",
-                Receptor = usuarioDto.Correo,
-            };
-
-            await correoHelper.Enviar(correo);
-        }
     }
 }

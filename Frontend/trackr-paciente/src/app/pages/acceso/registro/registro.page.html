@@ -56,14 +56,31 @@
             <ion-col>
               <ion-input
                 #correo="ngModel"
-                [(ngModel)]="usuario.correo"
+                [(ngModel)]="usuario.nombreUsuario"
+                name="nombreusuario"
+                class="form-control"
+                maxlength="50"
+                [required]="true"
+                placeholder="Nombre de usuario"
+                type="text"
+                errorText="Usuario no válido"
+                ngModel
+              >
+              </ion-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-input
+                #correo="ngModel"
+                [(ngModel)]="usuario.correoPersonal"
                 name="correo"
                 class="form-control"
                 maxlength="50"
                 [required]="true"
                 placeholder="Correo Electrónico"
                 type="email"
-                errorText="Invalid email"
+                errorText="Email inválido"
                 ngModel
                 email
               >

@@ -3,8 +3,8 @@ export class UsuarioNuevoTrackrDto {
     nombres: string;
     apellidoPaterno: string;
     apellidoMaterno: string
-    correo: string
+    nombreUsuario: string;
+    correoPersonal: string;
     telefonoMovil: string;
     contrasena: string;
-
 }

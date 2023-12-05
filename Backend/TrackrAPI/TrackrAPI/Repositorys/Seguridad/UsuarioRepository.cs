@@ -83,7 +83,6 @@ namespace TrackrAPI.Repositorys.Seguridad
                 // TODO: 2023-05-03 -> Agregar el filtro por rol
                 // && (claveRol == null || u.UsuarioRol.Any(ur => ur.IdRolNavigation.Clave == claveRol))
                 && u.Habilitado == true
-                && u.CorreoConfirmado == true
                 select u;
             return usuarioConsulta.FirstOrDefault();
         }
@@ -325,6 +324,15 @@ namespace TrackrAPI.Repositorys.Seguridad
             var usuario =
                 from u in context.Usuario
                 where u.Correo == correo
+                select u;
+            return usuario.FirstOrDefault();
+        }
+
+        public Usuario ConsultarPorCorreoPersonal(string correoPersonal)
+        {
+            var usuario =
+                from u in context.Usuario
+                where u.CorreoPersonal == correoPersonal
                 select u;
             return usuario.FirstOrDefault();
         }
@@ -618,7 +626,7 @@ namespace TrackrAPI.Repositorys.Seguridad
 
             var padecimientos = expediente.ExpedientePadecimiento;
 
-            var informacionGeneral = new InformacionGeneralDTO
+            var informacionGeneralDto = new InformacionGeneralDTO
             {
                 Nombre = usuario.Nombre,
                 ApellidoPaterno = usuario.ApellidoPaterno,
@@ -628,7 +636,8 @@ namespace TrackrAPI.Repositorys.Seguridad
                 Peso = expediente.Peso,
                 Cintura = expediente.Cintura,
                 Estatura = expediente.Estatura,
-                Correo = usuario.CorreoPersonal,
+                CorreoPersonal = usuario.CorreoPersonal,
+                Correo = usuario.Correo,
                 TelefonoMovil = usuario.TelefonoMovil,
                 IdPais = usuario.IdEstadoNavigation?.IdPais,
                 IdEstado = usuario.IdEstado,
@@ -640,6 +649,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                 NumeroInterior = usuario.NumeroInterior,
                 NumeroExterior = usuario.NumeroExterior,
                 EntreCalles = usuario.EntreCalles,
+                CorreoConfirmado = usuario.CorreoConfirmado,
                 padecimientos = padecimientos.Select(p => new ExpedientePadecimientoDTO
                 {
                     IdPadecimiento = p.IdPadecimiento,
@@ -651,7 +661,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                 })
             };
 
-            return informacionGeneral;
+            return informacionGeneralDto;
 
         }
         public IEnumerable<UsuarioDto> ConsultarParaEncabezado(int idUsuario)

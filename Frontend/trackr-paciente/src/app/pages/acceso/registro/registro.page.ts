@@ -22,7 +22,7 @@ export class RegistroPage implements OnInit {
   protected termsAccepted: boolean = false;
 
   constructor(
-    private usuarioService: UsuarioService, 
+    private usuarioService: UsuarioService,
     private router: Router,
     private alertController: AlertController
   ) {}
@@ -58,7 +58,7 @@ export class RegistroPage implements OnInit {
   private async presentAlert() {
     const alert = await this.alertController.create({
       header: 'Usuario registrado',
-      message: 'Revise su bandeja de entrada, debe confirmar su correo para poder acceder',
+      message: 'Ya puede iniciar sesión, pero debe verificar su correo para usar la app adecuadamente',
       buttons: [{
         text: 'Ok',
         handler: () => {

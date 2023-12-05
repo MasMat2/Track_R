@@ -16,6 +16,7 @@ namespace TrackrAPI.Services.Seguridad
         private IUsuarioRolRepository usuarioRolRepository;
         private IMetodoPagoRepository metodoPagoRepository;
         private IRolRepository rolRepository;
+        private IConfirmacionCorreoRepository _confirmacionCorreoRepository;
         private readonly SimpleAES simpleAES;
 
 
@@ -24,7 +25,8 @@ namespace TrackrAPI.Services.Seguridad
             IUsuarioRolRepository usuarioRolRepository,
             IMetodoPagoRepository metodoPagoRepository,
             IRolRepository rolRepository,
-            SimpleAES simpleAES
+            SimpleAES simpleAES,
+            IConfirmacionCorreoRepository confirmacionCorreoRepository
         )
         {
             this.usuarioRepository = usuarioRepository;
@@ -32,6 +34,7 @@ namespace TrackrAPI.Services.Seguridad
             this.metodoPagoRepository = metodoPagoRepository;
             this.rolRepository = rolRepository;
             this.simpleAES = simpleAES;
+            this._confirmacionCorreoRepository = confirmacionCorreoRepository;
         }
 
         private readonly string MensajeContrasenaRequerida = "La contraseña es requerida";
@@ -283,9 +286,15 @@ namespace TrackrAPI.Services.Seguridad
             
             var usuario = usuarioRepository.ConsultarPorCorreo(datos.Correo);
 
-            if(usuario.CorreoConfirmado == true)
+            if(usuario != null && usuario.CorreoConfirmado == true)
             {
                 throw new CdisException("El usuario ya ha confirmado su correo");
+            }
+            var usuarioConfirmacion = _confirmacionCorreoRepository.ConsultarPorUsuario(datos.IdUsuario);
+
+            if(usuarioConfirmacion.FechaAlta > Utileria.ObtenerFechaActual().AddDays(1))
+            {
+                throw new CdisException("El límite de tiempo se ha excedido, favor de reenviar correo de confirmación");
             }
 
         }

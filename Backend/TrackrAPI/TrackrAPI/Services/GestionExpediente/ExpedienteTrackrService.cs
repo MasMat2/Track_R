@@ -96,9 +96,7 @@ public class ExpedienteTrackrService
         expedienteTrackr.Numero = expedienteTrackr.IdExpediente.ToString().PadLeft(6, '0');
         _expedienteTrackrRepository.Editar(expedienteTrackr);
 
-        //AgregarPadecimientos(expedienteWrapper.padecimientos, expedienteTrackr.IdExpediente);
-
-        //_usuarioWidgetService.modificarSeleccionWidgets(expedienteTrackr.IdUsuario, GeneralConstant.WidgetsDefault);
+        _usuarioWidgetService.modificarSeleccionWidgets(expedienteTrackr.IdUsuario, GeneralConstant.WidgetsDefault);
 
         scope.Complete();
         return expedienteTrackr.IdExpediente;

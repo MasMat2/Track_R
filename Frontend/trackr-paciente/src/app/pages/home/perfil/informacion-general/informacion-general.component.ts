@@ -25,6 +25,8 @@ import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
 import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores-selector-dto';
 import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
 import { GeneroSelectorDto } from 'src/app/shared/Dtos/catalogo/genero-selector-dto';
+import { ConfirmacionCorreoService } from '@http/seguridad/confirmacion-correo.service';
+import { ConfirmarCorreoDto } from '../../../../shared/Dtos/seguridad/confirmar-correo-dto';
 
 @Component({
   selector: 'app-informacion-general',
@@ -46,10 +48,10 @@ export class InformacionGeneralComponent implements OnInit {
   protected misDoctores: UsuarioDoctoresDto[];
   protected edadUsuario: string;
   public submiting = false;
+  public emailsubmiting = false;
   public esPaisExtranjero: boolean = false;
   public idPaisMexico: 1;
   protected nuevoPadecimiento: ExpedientePadecimientoDto = new ExpedientePadecimientoDto();
-  
 
   public paisList: PaisSelectorDto[] = [];
   public estadoList: EstadoSelectorDto[] = [];
@@ -69,7 +71,8 @@ export class InformacionGeneralComponent implements OnInit {
     private codigoPostalService: CodigoPostalService,
     private entidadEstructuraService: EntidadEstructuraService,
     private doctoresService: MisDoctoresService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private confirmacionCorreoService: ConfirmacionCorreoService
   ) {  }
 
   ngOnInit(){
@@ -202,15 +205,15 @@ export class InformacionGeneralComponent implements OnInit {
   private consultarGeneros() {
     this.generoList = [
       {
-        idGenero: 1,
+        idGenero: 3,
         descripcion: "Hombre"
       },
       {
-        idGenero: 2,
+        idGenero: 4,
         descripcion: "Mujer"
       },
       {
-        idGenero: 3,
+        idGenero: 9,
         descripcion: "Otro"
       },
     ];
@@ -282,6 +285,16 @@ export class InformacionGeneralComponent implements OnInit {
     padecimiento.idPadecimiento = 0;
     this.infoUsuario.padecimientos = [...this.infoUsuario.padecimientos, padecimiento ];
 
+  }
+
+  protected reenviarConfirmacionCorreo(correoUsuario: string){
+    this.emailsubmiting = true;
+    const confirmarCorreo: ConfirmarCorreoDto = { correo: correoUsuario, token: ""};
+    this.confirmacionCorreoService.enviarCorreoConfirmacion(confirmarCorreo).subscribe({
+      next: () => {
+        this.emailsubmiting = false;
+      }
+    })
   }
 
   private async presentAlert() {

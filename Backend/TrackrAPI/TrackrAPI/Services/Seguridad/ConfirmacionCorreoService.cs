@@ -47,7 +47,6 @@ namespace TrackrAPI.Services.Seguridad
 
         public void ConfirmarCorreo(string correoUsuario)
         {
-            //_usuarioValidatorService.ValidarRestablecerContrasena(correoUsuario);
             _usuarioValidatorService.ValidarCorreoNoExistente(correoUsuario);
 
             string clave = GenerarClaveConfirmacion();
@@ -60,9 +59,10 @@ namespace TrackrAPI.Services.Seguridad
                 FechaAlta = Utileria.ObtenerFechaActual()
             };
 
+            Agregar(confirmacionCorreo);
+
             EnviarCorreo(usuarioCompleto.Correo, clave);
 
-            Agregar(confirmacionCorreo);
         }
         public bool ValidarConfirmarCorreo(ConfirmarCorreoDto datosConfirmacionDto)
         {
@@ -78,6 +78,7 @@ namespace TrackrAPI.Services.Seguridad
             }
 
             return false;
+
         }
 
         private int ProcesarConfirmarCorreo(Usuario usuario)
@@ -86,7 +87,6 @@ namespace TrackrAPI.Services.Seguridad
 
             using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
             {
-                usuario.Habilitado = true;
                 usuario.CorreoConfirmado = true;
                 usuario.IdPerfil = 2236;
                 usuario.IdCompania = 177;
@@ -94,12 +94,12 @@ namespace TrackrAPI.Services.Seguridad
                 usuario.IdHospital = 169;
                 _usuarioRepository.Editar(usuario);
 
-                var usuarioRol = new UsuarioRol()
-                {
-                    IdUsuario = usuario.IdUsuario,
-                    IdRol = 1038,
-                };
-                _usuarioRolService.Agregar(usuarioRol);
+                //var usuarioRol = new UsuarioRol()
+                //{
+                //    IdUsuario = usuario.IdUsuario,
+                //    IdRol = 1038,
+                //};
+                //_usuarioRolService.Agregar(usuarioRol);
 
                 var usuarioLocacion = new UsuarioLocacion()
                 {
@@ -109,15 +109,11 @@ namespace TrackrAPI.Services.Seguridad
                 };
                 _usuarioLocacionService.Agregar(usuarioLocacion);
 
-                _expedienteTrackrService.AgregarExpedienteNuevoUsuario(usuario);
-
                 scope.Complete();
 
                 return usuario.IdUsuario;
 
             }
-
-            //throw new CdisException("Ha ocurrido un error al intentar confirmar su correo. El tiempo de validación se ha agotado.");
         }
 
         private ConfirmacionCorreo Agregar(ConfirmacionCorreo confirmacionCorreo)
@@ -154,7 +150,7 @@ namespace TrackrAPI.Services.Seguridad
 
             var correo = new Correo()
             {
-                Receptor = usuarioCompleto.Correo,
+                Receptor = usuarioCompleto.CorreoPersonal,
                 Asunto = "ATISC: Confirmación de correo",
                 Mensaje = mensaje,
                 EsMensajeHtml = true,
