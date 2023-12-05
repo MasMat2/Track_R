@@ -16,13 +16,14 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
     public override async Task OnConnectedAsync()
     {
         var idUsuario = ObtenerIdUsuario();
-        var mensajes = _chatMensajeService.ObtenerMensajesPorChat(1);
-
+        var mensajes = _chatMensajeService.ObtenerMensajesPorChat(idUsuario);
+        Console.WriteLine(idUsuario);
         await Clients.All.NuevaConexion(mensajes);
     }
 
     public async Task NuevoMensaje(ChatMensaje mensaje)
     {
+        mensaje.IdPersona = this.ObtenerIdUsuario();
         _chatMensajeService.NuevoMensaje(mensaje);
         await Clients.All.NuevoMensaje(mensaje);
     }

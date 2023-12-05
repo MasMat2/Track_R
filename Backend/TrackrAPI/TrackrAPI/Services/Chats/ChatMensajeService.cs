@@ -9,18 +9,28 @@ public class ChatMensajeService
 {
     private readonly IChatMensajeRepository _chatMensajeRepository;
     private readonly IHubContext<ChatMensajeHub,IChatMensajeHub> _hubContext;
+    private readonly IChatPersonaRepository _chatPersonaRepository;
 
     public ChatMensajeService(IChatMensajeRepository chatMensajeRepository,
-                              IHubContext<ChatMensajeHub,IChatMensajeHub> hubContext)
+                              IHubContext<ChatMensajeHub,IChatMensajeHub> hubContext,
+                              IChatPersonaRepository chatPersonaRepository)
     {
         _chatMensajeRepository = chatMensajeRepository;
         _hubContext = hubContext;
+        _chatPersonaRepository = chatPersonaRepository;
     }
 
-    public IEnumerable<ChatMensaje> ObtenerMensajesPorChat(int IdChat)
+    public IEnumerable<IEnumerable<ChatMensaje>> ObtenerMensajesPorChat(int IdPersona)
     {
+        var idChats = _chatPersonaRepository.ConsultarChatsPorPersona(IdPersona);
+        IEnumerable<IEnumerable<ChatMensaje>> chats = new List<IEnumerable<ChatMensaje>>();
 
-        return _chatMensajeRepository.ObtenerMensajePorChat(IdChat);
+        foreach(var idChat in idChats) {
+            var aux = _chatMensajeRepository.ObtenerMensajePorChat(idChat.IdChat);
+            chats = chats.Append(aux);
+        }
+        
+        return chats;
     }
 
     public void NuevoMensaje(ChatMensaje mensaje)
