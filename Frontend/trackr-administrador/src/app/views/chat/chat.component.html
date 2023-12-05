@@ -1,1 +1,7 @@
-<p>chat works!</p>
+<div *ngFor="let mensaje of mensajes">
+    <p >{{mensaje.idChatMensaje}} - {{mensaje.mensaje}}</p>
+</div>
+
+<input type="text" name="mensaje" [(ngModel)]="contenido">
+<button (click)="enviarMensaje()">Enviar mensaje</button>
+

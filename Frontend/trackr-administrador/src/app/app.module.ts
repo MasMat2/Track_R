@@ -17,6 +17,7 @@ import { AdministradorAuthService } from './auth/administrador-auth.service';
 import { TokenInterceptor } from './auth/token.interceptor';
 import { MensajeModule } from './shared/components/mensaje/mensaje.module';
 import { LoginService } from './shared/services/seguridad/login.service';
+import { ChatModule } from './views/chat/chat.module';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { LoginService } from './shared/services/seguridad/login.service';
     MatSidenavModule,
     TableModule,
     PaginationModule.forRoot(),
-    FormsModule
+    FormsModule,
+    ChatModule
   ],
   providers: [ LoginService,
     AdministradorAuthService,

@@ -74,7 +74,7 @@ export class ChatMensajeHubService {
     this.connectionStatus.next(HubConnectionState.Disconnected);
   }
 
-  public obtenerNotificaciones():ChatMensajeDTO[] {
+  public obtenerMensajes():ChatMensajeDTO[] {
     return this.chatMensajeSubject.value;
   }
 
@@ -114,5 +114,11 @@ export class ChatMensajeHubService {
           catchError(() => { throw new Error('No se pudo establecer la conexión con el Hub de Notificaciones') })
         )
     }
+  }
+
+  public async enviarMensaje(mensaje:ChatMensajeDTO) {
+    await this.ensureConnection();
+
+    await this.connection.invoke('NuevoMensaje', mensaje);
   }
 }
