@@ -21,8 +21,9 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
         await Clients.Caller.NuevaConexion(mensajes);
     }
 
-    public async Task EnviarMensaje(ChatMensaje mensaje)
+    public async Task NuevoMensaje(ChatMensaje mensaje)
     {
+        _chatMensajeService.NuevoMensaje(mensaje);
         await Clients.Caller.NuevoMensaje(mensaje);
     }
 

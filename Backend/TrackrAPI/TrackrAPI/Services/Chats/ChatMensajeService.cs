@@ -23,7 +23,7 @@ public class ChatMensajeService
         return _chatMensajeRepository.ObtenerMensajePorChat(IdChat);
     }
 
-    public void EnviarMensaje(ChatMensaje mensaje)
+    public void NuevoMensaje(ChatMensaje mensaje)
     {
         _chatMensajeRepository.Agregar(mensaje);
     }
