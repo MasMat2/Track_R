@@ -16,7 +16,7 @@ namespace TrackrAPI.Services.GestionExpediente
         private readonly string MensajeExistencia = "El doctor no existe";
         private readonly string MensajeDoctorDuplicado = "El doctor ya está registrado";
 
-        public void ValidarAgregar(int idExpediente, int idUsuarioDoctor)
+        public void ValidarAgregar(int idExpediente, int idUsuarioDoctor, int idCompania)
         {
             if (idExpediente == null)
             {
