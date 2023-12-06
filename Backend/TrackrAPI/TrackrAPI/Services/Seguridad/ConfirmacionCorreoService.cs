@@ -94,21 +94,27 @@ namespace TrackrAPI.Services.Seguridad
                 usuario.IdHospital = 169;
                 _usuarioRepository.Editar(usuario);
 
-                //var usuarioRol = new UsuarioRol()
-                //{
-                //    IdUsuario = usuario.IdUsuario,
-                //    IdRol = 1038,
-                //};
-                //_usuarioRolService.Agregar(usuarioRol);
 
-                var usuarioLocacion = new UsuarioLocacion()
+                var locacionesUsuario = _usuarioLocacionService.ConsultarPorUsuario(usuario.IdUsuario);
+                var locacionPredeterminada = locacionesUsuario.Where(u => u.IdLocacion == 174).FirstOrDefault();
+                var locacionMuguerza = locacionesUsuario.Where(u => u.IdLocacion == 169).FirstOrDefault();
+
+                if (locacionPredeterminada != null)
                 {
-                    IdLocacion = 169,
-                    IdUsuario = usuario.IdUsuario,
-                    IdPerfil = (int)usuario.IdPerfil,
-                };
-                _usuarioLocacionService.Agregar(usuarioLocacion);
+                    _usuarioLocacionService.Eliminar(locacionPredeterminada.IdUsuarioLocacion);
+                }
 
+                if (locacionMuguerza == null)
+                {
+                    var usuarioLocacion = new UsuarioLocacion()
+                    {
+                        IdLocacion = 169,
+                        IdUsuario = usuario.IdUsuario,
+                        IdPerfil = (int)usuario.IdPerfil,
+                    };
+                    _usuarioLocacionService.Agregar(usuarioLocacion);
+                }
+                
                 scope.Complete();
 
                 return usuario.IdUsuario;
