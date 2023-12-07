@@ -17,21 +17,19 @@ public class ChatService
         this.hubContext = hubContext;
     }
 
-    public Chat AgregarChat()
+    public Chat AgregarChat(Chat chat)
     {
-        var chat = new Chat()
-        {
-            Habilitado = true,
-            Fecha = DateTime.Now,
-        };
+        chat.Habilitado = true;
+        chat.Fecha = new DateTime();
 
         _chatRepository.Agregar(chat);
 
         return chat;
     }
 
-    private async Task EnviarChat(Chat chat)
+    public void NuevoChat(Chat chat,List<int> idPersonas)
     {
-        await hubContext.Clients.All.NuevoChat(chat);
+        _chatRepository.Agregar(chat);
+        //await hubContext.Clients.All.NuevoChat(chat,idPersonas);
     }
 }
