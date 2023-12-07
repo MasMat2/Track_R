@@ -7,6 +7,7 @@ import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-gri
 import { ExpedientePadecimientoSelectorDTO } from '../../../shared/dtos/seguridad/expediente-padecimiento-selector-dto';
 import { ChatHubServiceService } from '../../../shared/services/chat-hub-service.service';
 import { ChatDTO } from '@dtos/chats/chat-dto';
+import { SessionService } from '../../../shared/services/session.service';
 
 @Component({
   selector: 'app-crear-chat',
@@ -22,7 +23,8 @@ export class CrearChatComponent {
 
   constructor(private entidadEstructuraService:EntidadEstructuraService,
               private expedienteTrackrService:ExpedienteTrackrService,
-              private ChatHubServiceService:ChatHubServiceService) {}
+              private ChatHubServiceService:ChatHubServiceService,
+              private SessionService:SessionService) {}
 
   
   ngOnInit(){
@@ -44,7 +46,8 @@ export class CrearChatComponent {
   }
 
   crearChat(){
-    this.personas.push(5333)
+    let idUsuario = this.SessionService.obtenerIdUsuarioSesion();
+    this.personas.push(idUsuario || 0)
     let chat: ChatDTO ={
       fecha: new Date(),
       habilitado: true
