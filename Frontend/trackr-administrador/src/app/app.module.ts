@@ -18,6 +18,8 @@ import { TokenInterceptor } from './auth/token.interceptor';
 import { MensajeModule } from './shared/components/mensaje/mensaje.module';
 import { LoginService } from './shared/services/seguridad/login.service';
 import { ChatModule } from './views/chat/chat.module';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
 
 @NgModule({
   declarations: [
@@ -37,11 +39,13 @@ import { ChatModule } from './views/chat/chat.module';
     TableModule,
     PaginationModule.forRoot(),
     FormsModule,
-    ChatModule
+    ChatModule,
+    NgSelectModule
   ],
   providers: [ LoginService,
     AdministradorAuthService,
     AdministradorAuthGuard,
+    EntidadEstructuraService,
     BsModalRef,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
   ],

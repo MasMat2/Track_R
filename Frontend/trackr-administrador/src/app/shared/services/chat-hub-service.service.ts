@@ -12,6 +12,8 @@ import { catchError, filter, take, timeout } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Constants } from '@utils/constants/constants';
 import { ChatDTO } from '@dtos/chats/chat-dto';
+import { ChatPersonaService } from '../http/chats/chat-persona.service';
+import { ChatPersonaFormDTO } from '../dtos/chats/chat-persona-form-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +28,7 @@ export class ChatHubServiceService {
 
   private connection:HubConnection;
 
-  constructor() { 
+  constructor(private ChatPersonaService:ChatPersonaService) { 
     this.iniciarConexion();
   }
 
@@ -53,7 +55,7 @@ export class ChatHubServiceService {
     
     this.connection.on(
       'NuevoChat',
-      (chat: ChatDTO) => this.onNuevoChat(chat)
+      (chat: ChatDTO,idPersonas:number[]) => this.onNuevoChat(chat,idPersonas)
     );
 
     this.connection.on(
@@ -78,11 +80,20 @@ export class ChatHubServiceService {
     return this.chatSubject.value;
   }
 
-  private onNuevoChat(chat:ChatDTO): void{
+  private onNuevoChat(chat:ChatDTO,idPersonas:number[]): void{
     chat.fecha = new Date();
 
     const chats = this.chatSubject.value;
-    chats.splice(0,0,chat);
+    chats.push(chat);
+    let chatPersona: ChatPersonaFormDTO = {
+      idPersonas: idPersonas,
+      idChat: chat.idChat || 0,
+      idTipo: 1
+    }
+    console.log(idPersonas)
+    this.ChatPersonaService.agregarPersonas(chatPersona).subscribe(res => {
+
+    })
     this.chatSubject.next(chats);
   }
 
@@ -119,5 +130,11 @@ export class ChatHubServiceService {
           catchError(() => { throw new Error('No se pudo establecer la conexión con el Hub de Notificaciones') })
         )
     }
+  }
+
+  public async agregarChat(mensaje:ChatDTO,idPersonas:number[]) {
+    await this.ensureConnection();
+
+    await this.connection.invoke('NuevoChat', mensaje,idPersonas);
   }
 }

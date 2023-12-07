@@ -1,0 +1,41 @@
+<div>
+    <p *ngFor="let mensaje of mensajes">{{mensaje.mensaje}}</p>
+</div>
+<div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-10">
+                <label class="label-input required-label" style="color: gray;" >Mensaje</label>
+                <div>
+                <textarea
+                    #descripcion="ngModel"
+                    [(ngModel)]="msg"
+                    name="mensaje"
+                    class="form-control-textarea"
+                    type="text"
+                    maxlength="800"
+                    autocomplete="off"
+                    style="width: 100%;"
+                    rows="1"
+                    required
+                ></textarea>
+                <div *ngIf="(descripcion.errors?.['required'] && descripcion.touched )" class="error">
+                    La descripción es requerida
+                </div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <button
+                type="submit"
+                class="btn"
+                (click)="enviarMensaje()"
+                >
+                    <i class="fa fa-paper-plane" style="font-size: 24px;"></i> 
+                </button>
+            </div>
+        </div>
+      </div>
+</div>
+
+

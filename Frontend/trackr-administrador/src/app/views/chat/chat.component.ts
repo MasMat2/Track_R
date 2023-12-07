@@ -12,9 +12,14 @@ import { ChatMensajeDTO } from '@dtos/chats/chat-mensaje-dto';
 })
 export class ChatComponent {
   protected chats$: Observable<ChatDTO[]>;
+  protected chats:ChatDTO[] = [];
   protected chatMensajes$: Observable<ChatMensajeDTO[][]>
   protected mensajes:ChatMensajeDTO[][] = [];
   protected contenido:string;
+  protected idChatSeleccionado: number;
+  protected mensajesChatSeleccionado: ChatMensajeDTO[]; 
+
+  protected clickEnChat = false;
 
   constructor(
     private ChatHubServiceService:ChatHubServiceService,
@@ -22,11 +27,23 @@ export class ChatComponent {
   ) { }
 
   ngOnInit(): void {
+    this.obtenerChats();
+    this.obtenerMensajes();
+  }
+
+  obtenerChats(){
+    this.chats$ = this.ChatHubServiceService.chat$
+    this.chats$.subscribe(res => {
+      this.chats = res;
+    })
+  }
+
+  obtenerMensajes(){
     this.chatMensajes$ = this.chatMensajeHubService.chatMensaje$
-    console.log(this.chatMensajes$)
 
     this.chatMensajes$.subscribe(res =>{
       this.mensajes = res;
+      console.log(this.mensajes)
     })
   }
 
@@ -39,5 +56,12 @@ export class ChatComponent {
     }
 
     this.chatMensajeHubService.enviarMensaje(msg);
+  }
+
+  obtenerChatSeleccionado(id:number){
+    this.idChatSeleccionado = id;
+    this.mensajesChatSeleccionado = this.mensajes.find(array => array.some(x => x.idChat === this.idChatSeleccionado)) || [];
+
+    this.clickEnChat = true;
   }
 }

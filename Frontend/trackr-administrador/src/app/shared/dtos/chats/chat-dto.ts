@@ -1,5 +1,5 @@
 export interface ChatDTO{
-    idChat: number;
+    idChat?: number;
     fecha: Date;
     habilitado: boolean;
 }

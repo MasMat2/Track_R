@@ -1,13 +1,19 @@
-<div class="row">
-    <div *ngFor="let msgs of mensajes; let i = index" class="col-3">
-        <div *ngFor="let mensaje of msgs">
-            <p >{{mensaje.idChatMensaje}} - {{mensaje.mensaje}}</p>
-        </div>
-        <input type="text" name="mensaje" [(ngModel)]="contenido">
-        <button (click)="enviarMensaje(i+1)">Enviar mensaje</button>
-        
-    </div>
+<div class="titulo-contenedor-paciente">
+    Chat con Pacientes
 </div>
 
+<div class="row">
+    <div class="col-4">
+        <app-barra-chats [chats]="chats" (idChatPadre)="obtenerChatSeleccionado($event)"></app-barra-chats>
+    </div>
 
+    <div class="col-8">
+        <div class="row">
+            <app-crear-chat></app-crear-chat>
+        </div>
 
+        <div class="row">
+            <app-mensajes *ngIf="clickEnChat" [mensajes]="mensajesChatSeleccionado" [idChat]="idChatSeleccionado"></app-mensajes>
+        </div>
+    </div>
+</div>

@@ -81,7 +81,16 @@ export class ChatMensajeHubService {
   private onNuevoChatMensaje(chatMensaje:ChatMensajeDTO): void{
     const chatsMensaje = this.chatMensajeSubject.value;
     let chat = chatsMensaje.find(x => x.find(y => y.idChat == chatMensaje.idChat))
-    chat?.splice(0,0,chatMensaje)
+    if(chat){
+      chat.push(chatMensaje)
+    }
+    else{
+      let aux:ChatMensajeDTO[] = []
+      aux.push(chatMensaje)
+      chatsMensaje.push(aux)
+
+    }
+    
     
     //chatsMensaje.splice(0,0,chatMensaje);
     this.chatMensajeSubject.next(chatsMensaje);
