@@ -21,6 +21,8 @@ namespace TrackrAPI.Services.Seguridad
         private readonly UsuarioRolService _usuarioRolService;
         private readonly UsuarioLocacionService _usuarioLocacionService;
         private readonly ExpedienteTrackrService _expedienteTrackrService;
+        private readonly IPerfilRepository _perfilRepository;
+        private readonly ITipoUsuarioRepository _tipoUsuarioRepository;
 
         public ConfirmacionCorreoService(
             IUsuarioRepository usuarioRepository,
@@ -31,7 +33,9 @@ namespace TrackrAPI.Services.Seguridad
             UsuarioValidatorService usuarioValidatorService,
             UsuarioRolService usuarioRolService,
             UsuarioLocacionService usuarioLocacionService,
-            ExpedienteTrackrService expedienteTrackrService
+            ExpedienteTrackrService expedienteTrackrService,
+            IPerfilRepository perfilRepository,
+            ITipoUsuarioRepository tipoUsuarioRepository
         ) {
             this._confirmacionCorreoRepository = confirmacionCorreoRepository;
             this._usuarioRepository = usuarioRepository;
@@ -42,6 +46,8 @@ namespace TrackrAPI.Services.Seguridad
             this._usuarioRolService = usuarioRolService;
             this._usuarioLocacionService = usuarioLocacionService;
             this._expedienteTrackrService = expedienteTrackrService;
+            this._perfilRepository = perfilRepository;
+            this._tipoUsuarioRepository = tipoUsuarioRepository;
         
         }
 
@@ -87,17 +93,21 @@ namespace TrackrAPI.Services.Seguridad
 
             using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
             {
+            
+                int idPerfil = _perfilRepository.ConsultarPorClave(GeneralConstant.ClavePerfilPaciente , GeneralConstant.IdCompaniaMuguerza).IdPerfil;
+                int idTipoUsuario = _tipoUsuarioRepository.ConsultarDto(GeneralConstant.ClaveTipoUsuarioPaciente).IdTipoUsuario;
+
                 usuario.CorreoConfirmado = true;
-                usuario.IdPerfil = 2236;
-                usuario.IdCompania = 177;
-                usuario.IdTipoUsuario = 1003;
-                usuario.IdHospital = 169;
+                usuario.IdPerfil = idPerfil;
+                usuario.IdCompania = GeneralConstant.IdCompaniaMuguerza;
+                usuario.IdTipoUsuario = idTipoUsuario;
+                usuario.IdHospital = GeneralConstant.IdHospitalMuguerza;
                 _usuarioRepository.Editar(usuario);
 
 
                 var locacionesUsuario = _usuarioLocacionService.ConsultarPorUsuario(usuario.IdUsuario);
-                var locacionPredeterminada = locacionesUsuario.Where(u => u.IdLocacion == 174).FirstOrDefault();
-                var locacionMuguerza = locacionesUsuario.Where(u => u.IdLocacion == 169).FirstOrDefault();
+                var locacionPredeterminada = locacionesUsuario.Where(u => u.IdLocacion == GeneralConstant.IdHospitalPredeterminado).FirstOrDefault();
+                var locacionMuguerza = locacionesUsuario.Where(u => u.IdLocacion == GeneralConstant.IdHospitalMuguerza).FirstOrDefault();
 
                 if (locacionPredeterminada != null)
                 {
@@ -108,7 +118,7 @@ namespace TrackrAPI.Services.Seguridad
                 {
                     var usuarioLocacion = new UsuarioLocacion()
                     {
-                        IdLocacion = 169,
+                        IdLocacion = GeneralConstant.IdHospitalMuguerza,
                         IdUsuario = usuario.IdUsuario,
                         IdPerfil = (int)usuario.IdPerfil,
                     };

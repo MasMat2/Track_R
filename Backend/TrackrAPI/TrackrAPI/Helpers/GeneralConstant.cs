@@ -11,6 +11,10 @@
         public static readonly int UsuarioMaestroAtisc = 1;
         public static readonly int IdPerfilAdministradorDefault = 1;
 
+        public static readonly int IdHospitalMuguerza = 169;
+        public static readonly int IdHospitalPredeterminado =  174;
+        public static readonly int IdCompaniaMuguerza = 177;
+
         public static readonly string ClaveTipoAccesoMenu = "001";
         public static readonly string ClaveTipoAccesoEvento = "002";
         public static readonly string ClaveTipoAccesoSistema = "003";
