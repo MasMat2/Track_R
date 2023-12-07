@@ -10,10 +10,10 @@
 <ion-toolbar class="navegacion">
 
   <!-- Saludo -->
-  <ion-title size="small">
+  <ion-button slot="start" fill="clear" (click) = "_openPopover($event)" class="ion-activatable saludo" size="small">
     <span class="white">Hola </span>
-    <span *ngIf="miUsuario">{{ miUsuario.nombre }} {{ miUsuario.apellidoPaterno }}</span>
-  </ion-title>
+    <span *ngIf="miUsuario" class="black">{{ miUsuario.nombre }} {{ miUsuario.apellidoPaterno }}</span>
+  </ion-button>
 
   <!-- Botónes de navegación -->
   <ion-buttons slot="primary">

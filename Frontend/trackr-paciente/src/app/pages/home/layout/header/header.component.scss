@@ -15,12 +15,21 @@ ion-toolbar.navegacion {
     --min-height: 25px;
 }
 
+.saludo{
+  --box-shadow: none;
+}
+
 #titulo {
     font-weight: bold;
 }
 
 .white {
     color: #ffff;
+}
+
+.black {
+    color: #000;
+    margin-left: 2vw;
 }
 
 a.breadcrumb-native{
