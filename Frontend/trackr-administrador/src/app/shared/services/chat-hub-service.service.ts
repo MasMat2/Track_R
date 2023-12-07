@@ -88,9 +88,9 @@ export class ChatHubServiceService {
     let chatPersona: ChatPersonaFormDTO = {
       idPersonas: idPersonas,
       idChat: chat.idChat || 0,
-      idTipo: 1
+      idTipo: 2
     }
-    console.log(idPersonas)
+
     this.ChatPersonaService.agregarPersonas(chatPersona).subscribe(res => {
 
     })
