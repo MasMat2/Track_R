@@ -16,10 +16,11 @@ public class ChatRepository : Repository<Chat>, IChatRepository
                       .FirstOrDefault();
     }
 
-    public IEnumerable<Chat> ConsultarChats(int idPersona)
+    public IEnumerable<Chat> ConsultarChats(List<int> idChats)
     {
-        var idChats = context.ChatPersona.Where(x => x.IdPersona == idPersona).Select(x => x.IdChat).ToList();
+        
         return context.Chat.Where(x => idChats.Contains(x.IdChat)).ToList();
+
     }
 }
 

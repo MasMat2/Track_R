@@ -23,7 +23,7 @@ public class ChatHub : Hub<IChatHub>
     public override async Task OnConnectedAsync()
     {
         int idPersona = ObtenerIdUsuario();
-        var chats = _chatRepository.ConsultarChats(idPersona);
+        var chats = _chatService.ConsultarChats(idPersona);
 
         await Clients.Caller.NuevaConexion(chats);
         await base.OnConnectedAsync();
