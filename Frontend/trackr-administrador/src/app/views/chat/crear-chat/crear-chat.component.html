@@ -46,7 +46,8 @@
             bindLabel="nombre"
             bindValue="idPadecimiento"
             [(ngModel)]="padecimiento"
-            *ngIf="tipo == 2">
+            *ngIf="tipo == 2"
+            (change)="obtenerIdPacientesPadecimiento()">
           </ng-select>
 
           <ng-select
@@ -58,6 +59,10 @@
             [(ngModel)]="personas"
             *ngIf="tipo == 3">
           </ng-select>
+        </div>
+
+        <div class="col-md-3">
+          <input type="text" name="titulo" [(ngModel)]="tituloChat">
         </div>
 
         <div class="col-md-3">

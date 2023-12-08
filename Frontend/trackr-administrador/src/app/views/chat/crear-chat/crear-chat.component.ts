@@ -21,8 +21,9 @@ export class CrearChatComponent {
   protected expedientes: UsuarioExpedienteGridDTO[];
   protected padecimiento: number;
   protected personas: number[];
-  protected tituloChat: string;
+  protected tituloChat?: string;
   private idUsuario: number;
+  protected idPacientesPadecimiento:number[];
 
   constructor(private entidadEstructuraService:EntidadEstructuraService,
               private expedienteTrackrService:ExpedienteTrackrService,
@@ -56,14 +57,36 @@ export class CrearChatComponent {
   }
 
   crearChat(){
-    this.personas.push(this.idUsuario)
+    if(this.tituloChat === ""){
+      this.tituloChat = undefined;
+    }
+    if(this.tipo == 3){
+      this.personas.push(this.idUsuario)
     let chat: ChatDTO ={
       fecha: new Date(),
       habilitado: true,
       titulo: this.tituloChat
     }
-    this.ChatHubServiceService.agregarChat(chat,this.personas)
+      this.ChatHubServiceService.agregarChat(chat,this.personas)
+    }
 
+    else if(this.tipo == 2){
+      this.idPacientesPadecimiento.push(this.idUsuario);
+      let chat:ChatDTO ={
+        fecha: new Date(),
+        habilitado: true,
+        titulo: this.tituloChat
+      }
+      this.ChatHubServiceService.agregarChat(chat,this.idPacientesPadecimiento);
+    }
+    
+
+  }
+
+  obtenerIdPacientesPadecimiento(){
+    this.ChatPersonaService.obtenerIdPacientesPadecimiento(this.padecimiento).subscribe(res =>{
+      this.idPacientesPadecimiento = res;
+    })
   }
   
   

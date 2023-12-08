@@ -18,4 +18,8 @@ export class ChatPersonaService {
   obtenerIdUsuario():Observable<number>{
     return this.http.get<number>(`${this.dataUrl}IdUsuario`)
   }
+
+  obtenerIdPacientesPadecimiento(idPadecimiento:number):Observable<number[]>{
+    return this.http.get<number[]>(`${this.dataUrl}Padecimiento/${idPadecimiento}`)
+  }
 }
