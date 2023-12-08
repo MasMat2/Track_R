@@ -3,5 +3,6 @@ export interface ChatMensajeDTO{
     idChat: number;
     idPersona: number;
     mensaje: string;
-    fecha: Date
+    fecha: Date;
+    nombrePersona?:string;
 }
