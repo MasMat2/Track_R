@@ -15,7 +15,8 @@ public class ChatPersonaService
 
     public void agregarPersonaChat(ChatPersonaFormDTO chatPersonaFormDTO)
     {
-        foreach(var idPersona in chatPersonaFormDTO.IdPersonas)
+        var idPersonas = chatPersonaFormDTO.IdPersonas;
+        foreach(var idPersona in idPersonas)
         {
             var chatPersona = new ChatPersona
             {

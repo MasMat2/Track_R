@@ -59,7 +59,7 @@ public class ChatService
                     {
                         var user = _usuarioRepository.Consultar(persona);
                         chat.Titulo = "";
-                        chat.Titulo = user.IdTituloAcademicoNavigation.Nombre + " " + user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno;
+                        chat.Titulo = user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno;
                     }
                 }
             }
