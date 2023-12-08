@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using TrackrAPI.Dtos.Chats;
 using TrackrAPI.Hubs;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Chats;
@@ -20,13 +21,22 @@ public class ChatMensajeService
         _chatPersonaRepository = chatPersonaRepository;
     }
 
-    public IEnumerable<IEnumerable<ChatMensaje>> ObtenerMensajesPorChat(int IdPersona)
+    public IEnumerable<IEnumerable<ChatMensajeDTO>> ObtenerMensajesPorChat(int IdPersona)
     {
         var idChats = _chatPersonaRepository.ConsultarChatsPorPersona(IdPersona);
-        IEnumerable<IEnumerable<ChatMensaje>> chats = new List<IEnumerable<ChatMensaje>>();
+        IEnumerable<IEnumerable<ChatMensajeDTO>> chats = new List<IEnumerable<ChatMensajeDTO>>();
 
         foreach(var idChat in idChats) {
-            var aux = _chatMensajeRepository.ObtenerMensajePorChat(idChat.IdChat);
+            var aux = _chatMensajeRepository.ObtenerMensajePorChat(idChat.IdChat)
+                                            .Select(x => new ChatMensajeDTO
+                                            {
+                                                IdChatMensaje = x.IdChatMensaje,
+                                                IdChat = x.IdChat,
+                                                Fecha = x.Fecha,
+                                                IdPersona = x.IdPersona,
+                                                Mensaje = x.Mensaje,
+                                                NombrePersona = x.IdPersonaNavigation.Nombre + "  "+ x.IdPersonaNavigation.ApellidoPaterno + " "+x.IdPersonaNavigation.ApellidoMaterno
+                                            });
             chats = chats.Append(aux);
         }
         

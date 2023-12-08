@@ -1,4 +1,5 @@
-﻿using TrackrAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using TrackrAPI.Models;
 
 namespace TrackrAPI.Repositorys.Chats;
 
@@ -9,8 +10,8 @@ public class ChatMensajeRepository : Repository<ChatMensaje>, IChatMensajeReposi
     public IEnumerable<ChatMensaje> ObtenerMensajePorChat(int IdChat)
     {
         return context.ChatMensaje
-                      .Where(x => x.IdChat == IdChat)
-                      .ToList();
+                      .Include(x => x.IdPersonaNavigation)
+                      .Where(x => x.IdChat == IdChat);
     }
 }
 
