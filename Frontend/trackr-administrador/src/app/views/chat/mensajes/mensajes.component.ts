@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ChatMensajeDTO } from '@dtos/chats/chat-mensaje-dto';
 import { ChatMensajeHubService } from '../../../shared/services/chat-mensaje-hub.service';
+import { ChatPersonaService } from '../../../shared/http/chats/chat-persona.service';
 
 @Component({
   selector: 'app-mensajes',
@@ -11,8 +12,14 @@ export class MensajesComponent {
   @Input() mensajes : ChatMensajeDTO[];
   @Input() idChat: number;
   protected msg: string;
+  protected idUsuario:number;
 
-  constructor(private ChatMensajeHubService:ChatMensajeHubService) {}
+  constructor(private ChatMensajeHubService:ChatMensajeHubService,
+              private ChatPersonaService:ChatPersonaService) {}
+  
+  ngOnInit(){
+    this.obtenerIdUsuario();
+  }
 
   enviarMensaje(): void{
     let msg: ChatMensajeDTO = {
@@ -24,5 +31,15 @@ export class MensajesComponent {
 
     this.ChatMensajeHubService.enviarMensaje(msg);
     this.msg = "";
+  }
+
+  obtenerIdUsuario(){
+    this.ChatPersonaService.obtenerIdUsuario().subscribe(res => {
+      this.idUsuario = res;
+    })
+  }
+
+  mostrarMensaje(id:number){
+    return id == this.idUsuario;
   }
 }

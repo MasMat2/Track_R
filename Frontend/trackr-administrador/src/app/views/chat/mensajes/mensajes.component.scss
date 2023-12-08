@@ -1,0 +1,22 @@
+.message {
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.user .message-bubble {
+    background-color: #3498db;
+    color: #fff;
+    float: right;
+}
+
+.other .message-bubble {
+    background-color: #ecf0f1;
+    color: #333;
+    float: left;
+}
+
+.message-bubble {
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%;
+}
