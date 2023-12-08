@@ -18,7 +18,7 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
         var idUsuario = ObtenerIdUsuario();
         var mensajes = _chatMensajeService.ObtenerMensajesPorChat(idUsuario);
         Console.WriteLine(idUsuario);
-        await Clients.All.NuevaConexion(mensajes);
+        await Clients.Caller.NuevaConexion(mensajes);
     }
 
     public async Task NuevoMensaje(ChatMensaje mensaje)
