@@ -88,6 +88,16 @@ export class CrearChatComponent {
       this.idPacientesPadecimiento = res;
     })
   }
+
+  desabilitarTitulo(){
+    if(this.personas){
+      if(this.personas.length == 1){
+        return true
+      }
+      return false
+    }
+    return false;
+  }
   
   
 }

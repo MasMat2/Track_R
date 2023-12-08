@@ -62,11 +62,16 @@
         </div>
 
         <div class="col-md-3">
-          <input type="text" name="titulo" [(ngModel)]="tituloChat">
+          <div class="form-group">
+            <label class="label-input required-label" style="color: gray;" >Titulo de chat</label>
+            <input type="text" name="titulo" [(ngModel)]="tituloChat" class="form-control" [disabled]="desabilitarTitulo()">
+          </div>
         </div>
 
         <div class="col-md-3">
-            <button (click)="crearChat()">Crear Chat</button>
+          <div class="form-group">
+            <button (click)="crearChat()" class="btn-agregar">Crear Chat</button>
+          </div>
         </div>
         
       </div>
