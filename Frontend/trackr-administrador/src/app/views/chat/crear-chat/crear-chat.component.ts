@@ -20,6 +20,7 @@ export class CrearChatComponent {
   protected expedientes: UsuarioExpedienteGridDTO[];
   protected padecimiento: number;
   protected personas: number[];
+  protected tituloChat: string;
 
   constructor(private entidadEstructuraService:EntidadEstructuraService,
               private expedienteTrackrService:ExpedienteTrackrService,
@@ -50,7 +51,8 @@ export class CrearChatComponent {
     this.personas.push(idUsuario || 0)
     let chat: ChatDTO ={
       fecha: new Date(),
-      habilitado: true
+      habilitado: true,
+      titulo: this.tituloChat
     }
     this.ChatHubServiceService.agregarChat(chat,this.personas)
 
