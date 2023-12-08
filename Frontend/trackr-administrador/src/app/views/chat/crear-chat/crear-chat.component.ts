@@ -42,7 +42,6 @@ export class CrearChatComponent {
   obtenerPacientes(){
     this.expedienteTrackrService.consultarParaGrid().subscribe(res =>{
       this.expedientes = res;
-      console.log(res)
     })
   }
 

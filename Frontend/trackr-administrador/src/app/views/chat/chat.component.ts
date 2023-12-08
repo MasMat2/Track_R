@@ -35,6 +35,7 @@ export class ChatComponent {
     this.chats$ = this.ChatHubServiceService.chat$
     this.chats$.subscribe(res => {
       this.chats = res;
+      this.obtenerUltimoMensaje();
     })
   }
 
@@ -43,7 +44,7 @@ export class ChatComponent {
 
     this.chatMensajes$.subscribe(res =>{
       this.mensajes = res;
-      console.log(this.mensajes)
+      this.obtenerUltimoMensaje();
     })
   }
 
@@ -63,5 +64,11 @@ export class ChatComponent {
     this.mensajesChatSeleccionado = this.mensajes.find(array => array.some(x => x.idChat === this.idChatSeleccionado)) || [];
 
     this.clickEnChat = true;
+  }
+
+  obtenerUltimoMensaje():void{
+    let ultimoMensaje = this.mensajes.map(arr => arr[arr.length - 1].mensaje)
+
+    this.chats.forEach((x,index) => {x.ultimoMensaje = ultimoMensaje[index]})
   }
 }

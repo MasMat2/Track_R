@@ -9,6 +9,7 @@ import { ChatDTO } from '@dtos/chats/chat-dto';
 export class BarraChatsComponent {
   @Input() chats:ChatDTO[];
   @Output() idChatPadre = new EventEmitter<number>();
+  @Input() ultmoMensajes: string[];
 
   enviarIdChat(idChat:number){
     this.idChatPadre.emit(idChat)
