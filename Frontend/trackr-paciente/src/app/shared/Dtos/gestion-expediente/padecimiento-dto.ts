@@ -9,4 +9,6 @@ export class PadecimientoDTO
     variables : VariablesPadecimientoDTO[];
     idWidget : number;
     descripcionWidget : string;
+    tomasTomadas : number;
+    tomasTotales : number;
 }

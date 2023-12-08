@@ -108,7 +108,7 @@ public class WidgetService
                                                                 VariableClave = sC.Clave,
                                                                 Descripcion = sC.Descripcion,
                                                                 MostrarDashboard = sC.MostrarDashboard,
-                                                                IconoClase = sC.IdIconoNavigation.Clase,
+                                                                IconoClase = sC.IdIconoNavigation?.Clase,
                                                                 unidadMedida = sC.IdDominioNavigation.UnidadMedida,
                                                                 ValorVariable = _entidadEstructuraTablaValorRepository.ConsultarUltimoValor(idUsuario, sC.Clave)
                                                             };

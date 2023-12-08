@@ -14,6 +14,9 @@
                     [tipoWidget] = "padecimiento.idWidget"
                     nombrePadecimiento="{{ padecimiento.nombrePadecimiento }}"
 
+                    [tomasTomadas]=" padecimiento.tomasTomadas "
+                    [tomasTotales]=" padecimiento.tomasTotales "
+
                     nombreVariable="{{padecimiento.variables[0]?.descripcion}}"
                     valorVariable="{{padecimiento.variables[0]?.valorVariable}}"
                     unidadVariable="{{padecimiento.variables[0]?.unidadMedida}}"
