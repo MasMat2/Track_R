@@ -16,7 +16,17 @@ public class ChatPersonaService
     public void agregarPersonaChat(ChatPersonaFormDTO chatPersonaFormDTO)
     {
         var idPersonas = chatPersonaFormDTO.IdPersonas;
-        foreach(var idPersona in idPersonas)
+        for(var i = 0; i < idPersonas.Count; i++)
+        {
+            var chatPersona = new ChatPersona
+            {
+                IdChat = chatPersonaFormDTO.IdChat,
+                IdPersona = idPersonas[i],
+                IdTipo = chatPersonaFormDTO.IdTipo,
+            };
+            _chatPersonaRepository.Agregar(chatPersona);
+        }
+        /*foreach(var idPersona in idPersonas)
         {
             var chatPersona = new ChatPersona
             {
@@ -26,7 +36,7 @@ public class ChatPersonaService
             };
 
             _chatPersonaRepository.Agregar(chatPersona);
-        }
+        }*/
     }
 
     public List<int> ObtenerPacientesPorPadecimiento(int idPadecimiento)
