@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TrackrAPI.Dtos.Chats;
+using TrackrAPI.Helpers;
 using TrackrAPI.Services.Chats;
 
 namespace TrackrAPI.Controllers.Chats
@@ -19,6 +20,12 @@ namespace TrackrAPI.Controllers.Chats
         public void agregarPersonaChat (ChatPersonaFormDTO chatPersonaFormDTO)
         {
             _chatPersonaService.agregarPersonaChat(chatPersonaFormDTO);
+        }
+
+        [HttpGet("IdUsuario")]
+        public int obtenerIdUsuario()
+        {
+            return Utileria.TryObtenerIdUsuarioSesion(this);
         }
     }
 }
