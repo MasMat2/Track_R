@@ -85,6 +85,7 @@ export class ChatHubServiceService {
 
     const chats = this.chatSubject.value;
     chats.push(chat);
+    
     let chatPersona: ChatPersonaFormDTO = {
       idPersonas: idPersonas,
       idChat: chat.idChat || 0,

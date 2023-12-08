@@ -97,7 +97,6 @@ export class ChatMensajeHubService {
   }
 
   private onNuevaConexion(chats: ChatMensajeDTO[][]): void{
-
     this.chatMensajeSubject.next(chats);
   }
 

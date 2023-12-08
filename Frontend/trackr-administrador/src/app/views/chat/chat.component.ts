@@ -67,8 +67,7 @@ export class ChatComponent {
   }
 
   obtenerUltimoMensaje():void{
-    let ultimoMensaje = this.mensajes.map(arr => arr[arr.length - 1].mensaje)
-
+    let ultimoMensaje = this.mensajes.map(arr => arr[arr.length - 1]?.mensaje || "")
     this.chats.forEach((x,index) => {x.ultimoMensaje = ultimoMensaje[index]})
   }
 }
