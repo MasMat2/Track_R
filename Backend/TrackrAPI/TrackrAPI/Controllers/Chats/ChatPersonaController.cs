@@ -27,5 +27,11 @@ namespace TrackrAPI.Controllers.Chats
         {
             return Utileria.TryObtenerIdUsuarioSesion(this);
         }
+
+        [HttpGet("Padecimiento/{IdPadecimiento}")]
+        public List<int> ObtenerPacientesPorPadecimienot(int IdPadecimiento)
+        {
+            return _chatPersonaService.ObtenerPacientesPorPadecimiento(IdPadecimiento);
+        }
     }
 }

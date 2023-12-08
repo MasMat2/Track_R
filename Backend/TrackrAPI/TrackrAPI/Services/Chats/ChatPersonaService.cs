@@ -28,5 +28,10 @@ public class ChatPersonaService
             _chatPersonaRepository.Agregar(chatPersona);
         }
     }
+
+    public List<int> ObtenerPacientesPorPadecimiento(int idPadecimiento)
+    {
+        return _chatPersonaRepository.ObtenerPacientesPorPadecimiento(idPadecimiento);
+    }
 }
 
