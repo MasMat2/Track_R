@@ -17,5 +17,6 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         public int VariablesFueraRango(int idUsuario);
         public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor);
         public IEnumerable<ExpedienteTrackr> ConsultarExpedientes();
+        public IEnumerable<RecordatorioUsuarioDto> RecordatoriosPorUsuario(int idUsuario);
     }
 }

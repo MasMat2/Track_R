@@ -47,6 +47,19 @@ namespace TrackrAPI.Repositorys.GestionEntidad
             return ultimoRegistro?.Numero ?? 0;
         }
 
+        public string ConsultarUltimoValor(int idUsuario  , string clave)
+        {
+            return context.EntidadEstructuraTablaValor
+                    .Where(eetv => eetv.IdTabla == idUsuario && eetv.ClaveCampo == "ME-" + clave)
+                    .OrderByDescending(eetv => eetv.FechaMuestra)
+                    .Take(1).FirstOrDefault().Valor; // Tomar solo la muestra más reciente
+        }
+
+        public bool ExisteValorEnEntidadEstructura(int idUsuario, string clave)
+        {
+            return context.EntidadEstructuraTablaValor.Any(eetv => eetv.IdTabla == idUsuario && eetv.ClaveCampo == "ME-" + clave);
+        }
+
         public IEnumerable<EntidadEstructuraTablaValor> ConsultarValoresPorCampos(int idExpediente, IEnumerable<string> claveCampos, bool? fueraRango)
         {
             // Inicia la consulta

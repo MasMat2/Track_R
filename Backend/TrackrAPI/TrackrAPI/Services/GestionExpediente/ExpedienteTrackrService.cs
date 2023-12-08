@@ -190,6 +190,64 @@ public class ExpedienteTrackrService
         return expedientes;
     }
 
+    public IEnumerable<TomasTomadasPorPadecimientoDto> RecordatoriosPorPadecimiento(int idUsuario)
+    {
+        var recordatorios = _expedienteTrackrRepository.RecordatoriosPorUsuario(idUsuario);
+
+         return recordatorios
+        .GroupBy( tr => tr.Padecimiento)
+        .Select( recordatoriosPorPad => new TomasTomadasPorPadecimientoDto{
+            IdPadecimiento = recordatoriosPorPad.Key,
+            TomasTomadas = recordatoriosPorPad
+         .GroupBy( tr => tr.Dia )
+         .Select( recordatoriosPorDia => new TomasTomadasPorDiaDto{
+             Dia = recordatoriosPorDia.Key,
+             TomasTotales = recordatoriosPorDia.Count(),
+             TomasTomadas = recordatoriosPorDia.Count( tr => tr.Tomado == true)
+         })
+        });  
+    }
+    public IEnumerable<TomasTomadasPorDiaDto> RecordatoriosPorDia(int idUsuario)
+    {
+        var recordatorios = _expedienteTrackrRepository.RecordatoriosPorUsuario(idUsuario);
+
+         return recordatorios
+         .GroupBy( tr => tr.Dia )
+         .Select( recordatoriosPorDia => new TomasTomadasPorDiaDto{
+             Dia = recordatoriosPorDia.Key,
+             TomasTotales = recordatoriosPorDia.Count(),
+             TomasTomadas = recordatoriosPorDia.Count( tr => tr.Tomado == true)
+         });
+    }
+
+    public IEnumerable<TomasTomadasPorPadecimientoDto> RecordatoriosPorPadecimientoHoy(int idUsuario)
+    {
+        DateTime now = DateTime.Now;
+        int currentDay = ((int)now.DayOfWeek + 7) % 7;
+        var recordatoriosPorPadecimiento = RecordatoriosPorPadecimiento(idUsuario);
+
+        var tomasATomarHoy = recordatoriosPorPadecimiento
+        .Select( th => new TomasTomadasPorPadecimientoDto{
+            IdPadecimiento = th.IdPadecimiento,
+            TomasTomadas = th.TomasTomadas.Where( t => t.Dia == currentDay)
+        });
+        return tomasATomarHoy;
+
+    } 
+    public (int TomasTotales, int TomasTomadas) TomasPadecimientoTotalesHoy(int idUsuario , int idPadecimiento)
+    {
+        var recordatoriosPorPadecimientoHoy = RecordatoriosPorPadecimientoHoy(idUsuario);
+
+        int tomasTotales = recordatoriosPorPadecimientoHoy.Where(th => th.IdPadecimiento == idPadecimiento)
+                                                          .Select(ttp => ttp.TomasTomadas.Select(tt => tt.TomasTotales).FirstOrDefault())
+                                                          .FirstOrDefault();
+
+        int tomasTomadas = recordatoriosPorPadecimientoHoy.Where(th => th.IdPadecimiento == idPadecimiento)
+                                                          .Select(ttp => ttp.TomasTomadas.Select(tt => tt.TomasTomadas).FirstOrDefault())
+                                                          .FirstOrDefault();
+
+        return (tomasTotales, tomasTomadas);
+    }
     /// <summary>
     /// Consulta un expedienteWrapper por usuario. Construye el ExpedienteWrapper a base de 4 modelos:
     /// Expediente, Domicilio, Usuario y Padecimientos.

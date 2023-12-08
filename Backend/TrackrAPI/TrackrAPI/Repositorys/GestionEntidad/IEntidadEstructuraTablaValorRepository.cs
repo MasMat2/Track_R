@@ -14,5 +14,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         public IEnumerable<EntidadEstructuraTablaValor> ConsultarValoresPorCampos(int idExpediente, IEnumerable<string> claveCampos, bool? fueraRango);
         public IEnumerable<ValoresHistogramaDTO> ConsultarValoresPorClaveCampo(string claveCampo, int idUsuario, DateTime fecha);
         public IEnumerable<ExpedienteMuestrasGridDTO> ConsultarGridMuestras(int idUsuario);
+        public string ConsultarUltimoValor(int idUsuario  , string clave);
+        public bool ExisteValorEnEntidadEstructura(int idUsuario, string clave);
     }
 }
