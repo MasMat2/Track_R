@@ -993,6 +993,10 @@ namespace TrackrAPI.Models
                 entity.ToTable("Chat", "Trackr");
 
                 entity.Property(e => e.Fecha).HasColumnType("datetime");
+
+                entity.Property(e => e.Titulo)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<ChatMensaje>(entity =>
@@ -2099,6 +2103,8 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.Clave)
                     .HasMaxLength(10)
                     .IsUnicode(false);
+
+                entity.Property(e => e.EsAntecedente).HasColumnName("esAntecedente");
 
                 entity.Property(e => e.Nombre).HasMaxLength(100);
 

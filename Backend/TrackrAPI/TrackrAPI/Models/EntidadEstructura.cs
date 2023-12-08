@@ -24,6 +24,7 @@ namespace TrackrAPI.Models
         public int? IdEntidadEstructuraPadre { get; set; }
         public int? IdIcono { get; set; }
         public int? IdTipoWidget { get; set; }
+        public bool? EsAntecedente { get; set; }
 
         public virtual EntidadEstructura? IdEntidadEstructuraPadreNavigation { get; set; }
         public virtual Entidad IdEntidadNavigation { get; set; } = null!;
