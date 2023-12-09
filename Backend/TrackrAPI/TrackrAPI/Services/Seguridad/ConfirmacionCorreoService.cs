@@ -146,13 +146,14 @@ namespace TrackrAPI.Services.Seguridad
 
             string urlFrontEnd = _config.GetSection("AppSettings:UrlFrontEnd").Value;
 
-            var logotipoCdis = await DescargarLogo(urlFrontEnd + "assets/img/logo-trackr.png", "logo");
+            var logotipoTrackr = await DescargarLogo(urlFrontEnd + "assets/img/logo-trackr.png", "logotrackr");
+            //var logotipoCdis = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-01-Trackr.png", "logocdis");
             //var logotipoHospital = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-H_C_CEIC.png", "logohospital");
 
             var mensaje =
                 $@"
                     <div>
-                        <span><img src=""cid:logo"" style='max-width:100%; height:auto;'></span>
+                        <span><img src=""cid:logotrackr"" style='max-width:100%; height:auto;'></span>
                         <span><img src=""cid:logohospital"" style='max-width:100%; height:auto;' align='right'></span>
                     </div>
                     <hr style='border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;'>
@@ -170,7 +171,7 @@ namespace TrackrAPI.Services.Seguridad
                 Asunto = "ATISC: Confirmación de correo",
                 Mensaje = mensaje,
                 EsMensajeHtml = true,
-                Imagenes = new List<MimePart> { logotipoCdis }
+                Imagenes = new List<MimePart> { logotipoTrackr }
             };
 
             await _correoHelper.Enviar(correo);
