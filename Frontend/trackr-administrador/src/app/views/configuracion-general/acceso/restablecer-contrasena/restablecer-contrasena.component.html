@@ -1,0 +1,70 @@
+<div class="contenedor">
+    <div *ngIf="valido">
+        <div class="formulario">
+            <form
+                id="form"
+                (keydown.enter)="$event.preventDefault()"
+                #formulario="ngForm"
+                (ngSubmit)="enviarFormulario(formulario)"
+                novalidate="novalidate"
+            >
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="label-input required-label">
+                                Nueva Contraseña
+                            </label>
+                            <input
+                            #contra="ngModel"
+                            [(ngModel)]="restablecerContrasena.contrasenaActualizada"
+                            id="contrasena"
+                            name="contrasena"
+                            class="form-control"
+                            type="password"
+                            [required]="true"
+                            maxlength="50"
+                            />
+                            <div *ngIf="contra.errors?.['required'] && contra.touched" class="error">
+                                La nueva contraseña es requerida
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="label-input required-label">
+                                Confirmar Nueva Contraseña
+                            </label>
+                            <input
+                            #confirmarcontra="ngModel"
+                            [(ngModel)]="confirmarContrasena"
+                            id="confirmarcontrasena"
+                            name="confirmarcontrasena"
+                            class="form-control"
+                            type="password"
+                            [required]="true"
+                            maxlength="50"
+                            />
+                            <div *ngIf="confirmarcontra.errors?.['required'] && confirmarcontra.touched" class="error">
+                                debe repetir su nueva contraseña
+                            </div>
+                            <div *ngIf="confirmarcontra.value !== contra.value" class="error">
+                                Las contraseñas deben coincidir
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+            <div class="btn-submit">
+                <button type="submit" form="form" class="btn-primario ml-3" [disabled]="btnSubmit || contra.value !== confirmarcontra.value">Guardar</button>
+            </div>
+
+        </div>
+    </div>
+    <div *ngIf="!valido" class="invalido">
+        <h1>Error en los datos, abra de nuevo el enlace o solicite un nuevo correo</h1>
+    </div>
+</div>
+
