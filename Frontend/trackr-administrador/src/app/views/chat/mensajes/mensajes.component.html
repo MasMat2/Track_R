@@ -3,15 +3,12 @@
         <div *ngFor="let mensaje of mensajes">
             <div class="message user" *ngIf="mostrarMensaje(mensaje.idPersona)">
                 <div class="message-bubble">
-                    {{mensaje.nombrePersona}}
-                    <hr>
                     {{mensaje.mensaje}}
                 </div>
             </div>
             <div class="message other" *ngIf="!mostrarMensaje(mensaje.idPersona)">
                 <div class="message-bubble">
-                    {{mensaje.nombrePersona}}
-                    <hr>
+                    <div class="nombre">{{mensaje.nombrePersona}}</div>
                     {{mensaje.mensaje}}
                 </div>
             </div>
