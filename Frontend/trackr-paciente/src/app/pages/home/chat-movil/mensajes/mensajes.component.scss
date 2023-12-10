@@ -1,0 +1,38 @@
+.message {
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.user .message-bubble {
+  background-color: purple;
+  color: #fff;
+  float: right;
+}
+
+.other .message-bubble {
+  background-color: #ecf0f1;
+  color: #333;
+  float: left;
+}
+
+.message-bubble {
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+
+  .nombre {
+    font-weight: 500;
+    padding: 0%;
+  }
+}
+
+.listado {
+  height: 60vh;
+  overflow-y: auto;
+  align-self: flex-end;
+}
+
+.final {
+  position: relative;
+  bottom: 0;
+}

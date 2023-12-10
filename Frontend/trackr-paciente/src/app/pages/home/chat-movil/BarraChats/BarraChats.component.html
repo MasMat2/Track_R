@@ -1,0 +1,41 @@
+<div class="overflow">
+  <p-table
+    class="primeng-table grid-cuadricula"
+    [value]="chats"
+    dataKey="idProyectoElementoTecnica"
+    *ngIf="chats"
+    [autoLayout]="true"
+  >
+    <ng-template pTemplate="header">
+      <tr class="table-header">
+        <th class="px-0 text-center">Fotografía</th>
+        <th class="text-center">Paciente</th>
+      </tr></ng-template
+    >
+
+    <ng-template pTemplate="body" let-chat>
+      <tr (click)="enviarIdChat(chat.idChat)">
+        <td class="img-container p-0">
+          <img [src]="'assets/img/default-user.jpg'" />
+          <!--
+        <img *ngIf="paciente.imagenBase64 !== undefined"
+          class="imagen-usuario"
+          [src]="paciente.imagenBase64 != undefined
+          ? (paciente.imagenBase64 | urlImagen : paciente?.tipoMime)
+          : 'assets/img/default-user.jpg'"
+          width="85px"
+          height="85px"
+          alt="Imagen de Usuario"
+        /> -->
+        </td>
+        <!-- TODO: Arreglar las bolitas de colores que muestran los signos -->
+        <td style="">
+          <div class="green-dot"></div>
+          {{ chat.titulo }}
+          <p class="edad">{{ chat.ultimoMensaje }}</p>
+        </td>
+      </tr>
+      <br />
+    </ng-template>
+  </p-table>
+</div>

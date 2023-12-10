@@ -1,0 +1,55 @@
+<div class="absolute">
+  <div class="listado">
+    <div *ngFor="let mensaje of mensajes">
+      <div class="message user" *ngIf="mostrarMensaje(mensaje.idPersona)">
+        <div class="message-bubble">
+          {{ mensaje.mensaje }}
+        </div>
+      </div>
+      <div class="message other" *ngIf="!mostrarMensaje(mensaje.idPersona)">
+        <div class="message-bubble">
+          <div class="nombre">{{ mensaje.nombrePersona }}</div>
+          {{ mensaje.mensaje }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-10">
+          <label class="label-input required-label" style="color: gray"
+            >Mensaje</label
+          >
+          <div>
+            <textarea
+              #descripcion="ngModel"
+              [(ngModel)]="msg"
+              name="mensaje"
+              class="form-control"
+              type="text"
+              maxlength="800"
+              autocomplete="off"
+              style="width: 100%"
+              rows="1"
+              required
+            ></textarea>
+            <div
+              *ngIf="(descripcion.errors?.['required'] && descripcion.touched )"
+              class="error"
+            >
+              La descripción es requerida
+            </div>
+          </div>
+        </div>
+
+        <div class="col-2">
+          <button type="submit" class="btn" (click)="enviarMensaje()">
+            <i class="fa fa-paper-plane" style="font-size: 24px"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
