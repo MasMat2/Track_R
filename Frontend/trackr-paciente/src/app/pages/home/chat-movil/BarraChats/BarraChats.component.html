@@ -2,6 +2,15 @@
   <app-header></app-header>
 </ion-header>
 
+<div style="display: flex; overflow-x: auto; height: 30vh;">
+  <div *ngFor="let chat of chats" style="margin-right: 10px; width: 50vh;">
+    <ion-avatar>
+      <img src="assets/img/default-user.jpg" alt="">
+    </ion-avatar>
+    <ion-label>{{chat.titulo}}</ion-label>
+  </div>
+</div>
+
 <div class="overflow">
   <p-table
     class="primeng-table grid-cuadricula"
