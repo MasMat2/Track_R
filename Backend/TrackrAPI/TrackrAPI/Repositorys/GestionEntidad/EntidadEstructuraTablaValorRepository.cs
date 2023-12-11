@@ -63,10 +63,11 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         public IEnumerable<EntidadEstructuraTablaValor> ConsultarValoresPorCampos(int idExpediente, IEnumerable<string> claveCampos, bool? fueraRango)
         {
             // Inicia la consulta
+            var currentDay = DateTime.UtcNow.Date;
             var queryValoresCampos = context.EntidadEstructuraTablaValor
                 .Include(ep => ep.IdEntidadEstructuraNavigation)
                 .Where(ep => claveCampos.Contains(ep.ClaveCampo)
-                    && ep.IdTabla == idExpediente);
+                    && ep.IdTabla == idExpediente && ep.FechaMuestra.Value.Date == currentDay);
 
             // Si fueraRango tiene un valor, añade la condición a la consulta
             if (fueraRango.HasValue)

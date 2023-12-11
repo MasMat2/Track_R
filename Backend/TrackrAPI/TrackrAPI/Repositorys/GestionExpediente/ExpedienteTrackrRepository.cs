@@ -60,10 +60,9 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
 
     public int VariablesFueraRango(int idUsuario)
     {
-        var currentDateUtc = DateTime.UtcNow;
-
+        var currentDateUtc = DateTime.UtcNow.Date;
         return context.EntidadEstructuraTablaValor
-            .Where(eetv => eetv.IdTabla == idUsuario && eetv.FueraDeRango == true)
+            .Where(eetv => eetv.IdTabla == idUsuario && eetv.FueraDeRango == true  && eetv.FechaMuestra.Value.Date == currentDateUtc )
             .Count();
     }
 
