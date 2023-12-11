@@ -12,43 +12,27 @@
 </div>
 
 <div class="overflow">
-  <p-table
-    class="primeng-table grid-cuadricula"
-    [value]="chats"
-    dataKey="idProyectoElementoTecnica"
-    *ngIf="chats"
-    [autoLayout]="true"
-  >
-    <ng-template pTemplate="header">
-      <tr class="table-header">
-        <th class="px-0 text-center">Fotografía</th>
-        <th class="text-center">Paciente</th>
-      </tr></ng-template
-    >
+  <ion-list>
+    <ion-item *ngFor="let chat of chats" (click)="enviarIdChat(chat.idChat || 0)">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="4">
+            <ion-avatar>
+              <img src="assets/img/default-user.jpg" alt="">
+            </ion-avatar>
+          </ion-col>
 
-    <ng-template pTemplate="body" let-chat>
-      <tr (click)="enviarIdChat(chat.idChat)">
-        <td class="img-container p-0">
-          <img [src]="'assets/img/default-user.jpg'" />
-          <!--
-        <img *ngIf="paciente.imagenBase64 !== undefined"
-          class="imagen-usuario"
-          [src]="paciente.imagenBase64 != undefined
-          ? (paciente.imagenBase64 | urlImagen : paciente?.tipoMime)
-          : 'assets/img/default-user.jpg'"
-          width="85px"
-          height="85px"
-          alt="Imagen de Usuario"
-        /> -->
-        </td>
-        <!-- TODO: Arreglar las bolitas de colores que muestran los signos -->
-        <td style="">
-          <div class="green-dot"></div>
-          {{ chat.titulo }}
-          <p class="edad">{{ chat.ultimoMensaje }}</p>
-        </td>
-      </tr>
-      <br />
-    </ng-template>
-  </p-table>
+          <ion-col size="8">
+            <ion-row>
+              <ion-label><b>{{chat.titulo}}</b></ion-label>
+            </ion-row>
+            <ion-row>
+              <ion-label>{{chat.ultimoMensaje}}</ion-label>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+    </ion-item>
+  </ion-list>
 </div>
