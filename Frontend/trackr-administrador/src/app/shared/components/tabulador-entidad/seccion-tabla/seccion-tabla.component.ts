@@ -9,6 +9,12 @@ import { GeneralConstant } from '@utils/general-constant';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { SeccionTablaFormularioComponent } from '../seccion-tabla-formulario/seccion-tabla-formulario.component';
 import * as moment from 'moment';
+import { ExpedienteMuestrasGridDTO } from '@dtos/gestion-expediente/expediente-muestras-grid-dto';
+import { ExpedienteMuestrasRegistroDTO } from '@dtos/gestion-expediente/expediente-muestras-registros-dto';
+import { toDateString } from '../../../utils/utileria';
+import { SeccionCampo } from '@models/gestion-entidad/seccion-campo';
+import { first } from 'rxjs/operators';
+import { sum } from 'lodash';
 
 @Component({
   selector: 'app-seccion-tabla',
@@ -18,8 +24,11 @@ import * as moment from 'moment';
 export class SeccionTablaComponent implements OnInit {
   @Input() public entidadEstructuraSeccion: EntidadEstructura;
   @Input() public idTabla: number;
+ 
+ public campos: SeccionCampo = new SeccionCampo();
+ public muestras : ExpedienteMuestrasGridDTO[];
 
-  public seleccionado?: RegistroTabla;
+  public seleccionado?: ExpedienteMuestrasGridDTO;
 
   constructor(
     private modalService: BsModalService,
@@ -29,9 +38,19 @@ export class SeccionTablaComponent implements OnInit {
 
   ngOnInit() {
     this.entidadEstructuraSeccion.campos.sort((a, b) => a.orden - b.orden);
+    this.obtenerMuestrasGrid();
+    this.campos.descripcion = 'Fuera De Rango';
+    this.campos.clave = 'F-Rango';
+    this.entidadEstructuraSeccion.campos.push(this.campos);
   }
 
-  public seleccionar(registro: RegistroTabla): void {
+  private obtenerMuestrasGrid() {
+    this.entidadEstructuraTablaValorService.consultarGridMuestras(this.idTabla).subscribe((data) => {
+      this.muestras = data;
+    })
+  }
+
+  public seleccionar(registro: ExpedienteMuestrasGridDTO): void {
     this.seleccionado = registro;
   }
 
@@ -46,19 +65,44 @@ export class SeccionTablaComponent implements OnInit {
       });
   }
 
-  public obtenerValor(claveColumna: string, valores: EntidadEstructuraTablaValor[]): string {
-    const valor = valores.find(v => v.claveCampo === claveColumna);
-    const campo = this.entidadEstructuraSeccion.campos.find(c => c.clave === claveColumna);
 
-    if (!valor) {
+  public obtenerValor(claveColumna: string, valores: ExpedienteMuestrasRegistroDTO , firstRegistro : boolean , lastColumna : boolean) : string  {
+
+    if(lastColumna && firstRegistro)
+      return ' _ ';
+
+    if(claveColumna == 'ME-fecha' && valores.fechaMuestra != undefined && firstRegistro)
+    {
+      
+      const fechaMuestra = new Date(valores.fechaMuestra);
+      const fechaFormateada = fechaMuestra.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      return fechaFormateada ?? '';
+    }
+    
+    if(claveColumna == 'ME-hora' && firstRegistro)
+    {
+      const fechaMuestra = new Date(valores.fechaMuestra);
+
+      const horas = fechaMuestra.getHours().toString().padStart(2, '0');
+      const minutos = fechaMuestra.getMinutes().toString().padStart(2, '0');
+
+      const horaYMinuto = `${horas}:${minutos}`;
+      return horaYMinuto;
+    }
+
+    if(claveColumna == valores.claveCampo)
+            return valores.valor;
+      
+    return '';        
+
+  }
+
+  public obtenerValorEstilo(valor: ExpedienteMuestrasRegistroDTO , first : boolean) : string
+  {   
+    if(first)
+     return valor.fueraDeRango ? 'fuera-de-rango' : 'no-fuera-de-rango';
+    else
       return '';
-    }
-
-    if(campo?.idDominioNavigation.tipoDato == 'Date') {
-      return moment(valor.valor).format('DD/MM/YYYY');
-    }
-
-    return valor.valor;
   }
 
   public agregar(): void {
@@ -85,18 +129,15 @@ export class SeccionTablaComponent implements OnInit {
   }
 
   public editar(): void {
-    if (!this.seleccionado) {
-      return;
-    }
-
-    for (const campo of this.entidadEstructuraSeccion.campos) {
-      const valor = this.seleccionado.valores.find(v => v.claveCampo === campo.clave);
-      campo.valor = valor ? valor.valor : '';
-    }
-
+    console.log(this.seleccionado);
+    if (this.seleccionado && this.seleccionado.registro) {
+      for (const campo of this.seleccionado.registro) {
+        const valor = this.seleccionado.registro.find(v => v.claveCampo === campo.claveCampo);
+        campo.valor = valor ? valor.valor : '';
+      }
     const initialState = {
       accion: 'Editar',
-      numeroRegistro: this.seleccionado.idRegistroTabla,
+      numeroRegistro: this.seleccionado.idEntidadEstructuraTablaValor,
       idTabla: this.idTabla,
       idPestanaSeccion: this.entidadEstructuraSeccion.idEntidadEstructura,
       nombreSeccion: this.entidadEstructuraSeccion.nombre,
@@ -115,6 +156,10 @@ export class SeccionTablaComponent implements OnInit {
       modalRef.hide();
       this.actualizarGrid();
     });
+  }else{
+    return;
+  }
+
   }
 
   public async eliminar(): Promise<void> {
@@ -124,7 +169,7 @@ export class SeccionTablaComponent implements OnInit {
 
     const confirmacion = await this.mensajeService
       .modalConfirmacion(
-        '¿Desea eliminar el registro <strong>' + this.seleccionado.idRegistroTabla + '</strong>?',
+        '¿Desea eliminar el registro <strong>' + this.seleccionado.idEntidadEstructuraTablaValor + '</strong>?',
         'Eliminar Registro',
         GeneralConstant.ICONO_CRUZ
       )
@@ -136,7 +181,7 @@ export class SeccionTablaComponent implements OnInit {
     }
 
     const registro: EntidadTablaRegistroDto = {
-      numero: this.seleccionado.idRegistroTabla,
+      numero: this.seleccionado.idEntidadEstructuraTablaValor,
       idEntidadEstructura: this.seleccionado.idEntidadEstructura,
       idTabla: this.idTabla,
       valores: [],

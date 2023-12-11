@@ -1,13 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using TrackrAPI.Dtos.Notificaciones;
 using TrackrAPI.Models;
+using TrackrAPI.Repositorys.GestionExpediente;
 
 namespace TrackrAPI.Repositorys.Notificaciones;
 
 public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, INotificacionUsuarioRepository
 {
-    public NotificacionUsuarioRepository(TrackrContext context) : base(context)
+    private readonly IExpedienteConsumoMedicamentoRepository _expedienteConsumoMedicamentoRepository;
+    public NotificacionUsuarioRepository(TrackrContext context, IExpedienteConsumoMedicamentoRepository expedienteConsumoMedicamentoRepository) : base(context)
     {
+        _expedienteConsumoMedicamentoRepository = expedienteConsumoMedicamentoRepository;
     }
 
     private IQueryable<NotificacionUsuario> ConsultarPorUsuario(int idUsuario)
@@ -64,6 +67,11 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
         foreach (var notificacionUsuario in notificacionesUsuario)
         {
             notificacionUsuario.Visto = true;
+            var toma = _expedienteConsumoMedicamentoRepository.ConsularPorNotificacion(notificacionUsuario.IdNotificacion);
+            if(toma != null){
+                toma.FechaToma = DateTime.Now;
+                _expedienteConsumoMedicamentoRepository.Editar(toma);
+            }
             context.NotificacionUsuario.Update(notificacionUsuario);
         }
 

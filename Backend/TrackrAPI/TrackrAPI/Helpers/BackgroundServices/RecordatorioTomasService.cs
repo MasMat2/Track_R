@@ -35,8 +35,6 @@ public class RecordatorioTomasService : IHostedService, IDisposable
 
     private async Task ProcesoDeFondo(object state)
     {
-        
-        Console.WriteLine(DateTime.Now);
         // Crear scope para acceder a TrackrContext
         using (var scope = _scopeFactory.CreateScope())
         {
@@ -96,7 +94,7 @@ public class RecordatorioTomasService : IHostedService, IDisposable
 
     public async Task CrearTratamientoTomas(TrackrContext context , NotificacionPacienteService notificacionPacienteService){
         DateTime now = DateTime.Now;
-        int currentDay = ((int)now.DayOfWeek + 7) % 7; // Monday = 0, ..., Saturday = 5, Sunday = 6
+        int currentDay = ((int)now.DayOfWeek + 7) % 7; // Monday = 1, ..., Saturday = 6, Sunday = 0
         TimeSpan currentTime = now.TimeOfDay;
         TimeSpan timeIn15Minutes = currentTime + TimeSpan.FromMinutes(15);
         DateTime time15MinutesAgo = now - TimeSpan.FromMinutes(15);

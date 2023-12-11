@@ -5,19 +5,17 @@ import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { EntidadEstructuraTablaValorService } from '@http/gestion-expediente/entidad-estructura-tabla-valor.service';
-import { SeccionCampoService } from '@http/gestion-expediente/seccion-campo.service';
+import { SeccionCampoService } from '@http/gestion-entidad/seccion-campo.service';
 import { ExpedienteColumnaSelectorDTO } from 'src/app/shared/Dtos/gestion-entidades/expediente-columna-selector-dto';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatChipListboxChange, MatChipsModule} from '@angular/material/chips'
 import { NgChartsModule } from 'ng2-charts';
 import { ChartData, ChartOptions, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
-import { ValoresPorClaveCampo } from 'src/app/shared/Dtos/gestion-expediente/valores-clave-campo';
-import { GridGeneralComponent } from '@sharedComponents/grid-general/grid-general.component';
 import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.module';
 import { ColDef, ValueGetterParams } from 'ag-grid-community';
 import {format} from 'date-fns'
+import { ValoresClaveCampoGridDto } from 'src/app/shared/Dtos/gestion-entidades/valores-clave-campo-grid-dto';
 
 
 @Component({
@@ -47,9 +45,8 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   private idPadecimiento: string;
   protected variableList: ExpedienteColumnaSelectorDTO[];
   protected claveVariable: string;
-  protected nombreVariable: string;
   protected filtroTiempo: string = "hoy" ?? "1 semana";
-  protected valoresCampo: any;
+  protected valoresCampo: ValoresClaveCampoGridDto;
   protected valorMin: number | null;
   protected valorMax: number | null;
   protected fechaMin: string;
@@ -110,7 +107,6 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   };
   public barChartOptions:ChartOptions = {plugins: {legend: {display: false}}};
 
-
   constructor(
     private seccionCampoService: SeccionCampoService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
@@ -140,18 +136,60 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   }
 
   private actualizarDatos(filtroClave: string, filtroTiempo: string): void {
-
     lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresPorClaveCampoUsuarioSesion(filtroClave, filtroTiempo))
       .then((valoresPorClaveCampo) => {
+        let data:any = {};
+        if(filtroTiempo != "Hoy"){
+          if(!valoresPorClaveCampo.hasOwnProperty('Do')){
+            data['Do'] = []
+          }else{
+            data['Do'] = valoresPorClaveCampo['Do']
+          }
+          if(!valoresPorClaveCampo.hasOwnProperty('Lu')){
+            data['Lu'] = []
+          }else{
+            data['Lu'] = valoresPorClaveCampo['Lu']
+          }
+          if(!valoresPorClaveCampo.hasOwnProperty('Ma')){
+            data['Ma'] = []
+          }else{
+            data['Ma'] = valoresPorClaveCampo['Ma']
+          }
+          if(!valoresPorClaveCampo.hasOwnProperty('Mi')){
+            data['Mi'] = []
+          }else{
+            data['Mi'] = valoresPorClaveCampo['Mi']
+          }
+          if(!valoresPorClaveCampo.hasOwnProperty('Ju')){
+            data['Ju'] = []
+          }else{
+            data['Ju'] = valoresPorClaveCampo['Ju']
+          }
+          if(!valoresPorClaveCampo.hasOwnProperty('Vi')){
+            data['Vi'] = []
+          }else{
+            data['Vi'] = valoresPorClaveCampo['Vi']
+          }
+          if(!valoresPorClaveCampo.hasOwnProperty('Sa')){
+            data['Sa'] = []
+          }else{
+            data['Sa'] = valoresPorClaveCampo['Sa']
+          }
+        }
+        else{
+          data = valoresPorClaveCampo
+        }
+
         // Transforma los datos para usar en la gráfica
       const labels = Object.keys(valoresPorClaveCampo);
       if(labels == null || !(labels.length > 0)){
         this.limpiarHistograma();
         return
       }
+      
       const datasets = valoresPorClaveCampo[labels[0]].map((_, index) => {
         return {
-          data: labels.map(label => valoresPorClaveCampo[label][index]?.valor ?? 0),
+          data: Object.keys(data).map(label => data[label][index]?.valor ?? 0),
           backgroundColor: this.backgroundColor[index],
           borderColor: this.borderColor[index],
           borderWidth: 1,
@@ -160,7 +198,7 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
 
       // Actualiza las etiquetas y datos en la configuración de la gráfica
       this.barChartData = {
-        labels: labels,
+        labels: Object.keys(data),
         datasets: datasets,
       };
 
@@ -172,10 +210,9 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
       lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresPorClaveCampoParaGridUsuarioSesion(filtroClave, filtroTiempo))
       .then((response) => {
         this.valoresCampo = response;
-        console.log(this.valoresCampo);
 
         //Max
-        const { maxValor, fechaMax } = this.valoresCampo.reduce(
+        const { maxValor, fechaMax } = this.valoresCampo.valores.reduce(
           (acc: any, data: any) => (data.valor > acc.maxValor ? { maxValor: data.valor, fechaMax: data.fechaMuestra } : acc),
           { maxValor: -Infinity, fechaMax: null }
         );
@@ -183,11 +220,10 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
           this.valorMax = maxValor;
         else
           this.valorMax = null;
-
         this.fechaMax = format(new Date(fechaMax), 'dd/MM/yyyy')
 
         //Min
-        const { minValor, fechaMin } = this.valoresCampo.reduce(
+        const { minValor, fechaMin } = this.valoresCampo.valores.reduce(
           (acc: any, data: any) => (data.valor < acc.minValor ? { minValor: data.valor, fechaMin: data.fechaMuestra } : acc),
           { minValor: Infinity, fechaMin: null }
         );
@@ -195,16 +231,8 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
           this.valorMin = minValor
         else
           this.valorMin = null;
-        
         this.fechaMin = format(new Date(fechaMin), 'dd/MM/yyyy')
-        
 
-        
-
-        console.log('This Valor máximo:', this.valorMax);
-        console.log('This Fecha de valor maximo:', this.fechaMax);
-        console.log('This Valor mínimo:', this.valorMin);
-        console.log('This Fecha de valor minimo:', this.fechaMin);
       }
     );
   }

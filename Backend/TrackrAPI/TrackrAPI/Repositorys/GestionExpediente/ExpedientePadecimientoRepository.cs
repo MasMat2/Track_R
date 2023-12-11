@@ -36,6 +36,7 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                     FechaDiagnostico = ep.FechaDiagnostico,
                     IdExpediente = ep.IdExpediente,
                     NombrePadecimiento = ep.IdPadecimientoNavigation.Nombre,
+                    clavePadecimiento = ep.IdPadecimientoNavigation.Clave,
                 }).ToList();
         }
 
@@ -84,6 +85,13 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                     fechaMuestra = pfrDTO.IdPadecimientoNavigation.EntidadEstructuraTablaValor.FirstOrDefault().FechaMuestra.ToString(),
                     valorEntidadEstructuraValor = pfrDTO.IdPadecimientoNavigation.EntidadEstructuraTablaValor.FirstOrDefault().Valor,
                 }).ToList();
+        }
+
+        public IEnumerable<ExpedientePadecimiento> ConsultarPorPadecimiento(int? idPadecimiento)
+        {
+            return context.ExpedientePadecimiento
+                .Where(exp => exp.IdPadecimiento == idPadecimiento)
+                .Include(exp => exp.IdExpedienteNavigation);
         }
     }
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormsModule, NgForm, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { ColoniaService } from '@http/catalogo/colonia.service';
 import { EstadoService } from '@http/catalogo/estado.service';
@@ -9,10 +9,9 @@ import { MunicipioService } from '@http/catalogo/municipio.service';
 import { PaisService } from '@http/catalogo/pais.service';
 import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
 import { UsuarioService } from '@http/seguridad/usuario.service';
-import { IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 import * as Utileria from '@utils/utileria';
 import { Observable, lastValueFrom, of, tap } from 'rxjs';
-import { GeneroSelectorDto } from 'src/app/shared/dtos/catalogo/genero-selector-dto';
 import { ColoniaSelectorDto } from 'src/app/shared/dtos/catalogo/colonia-selector-dto';
 import { EstadoSelectorDto } from 'src/app/shared/dtos/catalogo/estado-selector-dto';
 import { LocalidadSelectorDto } from 'src/app/shared/dtos/catalogo/localidad-selector-dto';
@@ -25,6 +24,9 @@ import { HeaderComponent } from '../../layout/header/header.component';
 import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
 import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores-selector-dto';
 import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
+import { GeneroSelectorDto } from 'src/app/shared/Dtos/catalogo/genero-selector-dto';
+import { ConfirmacionCorreoService } from '@http/seguridad/confirmacion-correo.service';
+import { ConfirmarCorreoDto } from '../../../../shared/Dtos/seguridad/confirmar-correo-dto';
 
 @Component({
   selector: 'app-informacion-general',
@@ -45,11 +47,11 @@ export class InformacionGeneralComponent implements OnInit {
   protected infoUsuario: InformacionGeneralDto;
   protected misDoctores: UsuarioDoctoresDto[];
   protected edadUsuario: string;
-  public btnSubmit = true;
+  public submiting = false;
+  public emailsubmiting = false;
   public esPaisExtranjero: boolean = false;
   public idPaisMexico: 1;
   protected nuevoPadecimiento: ExpedientePadecimientoDto = new ExpedientePadecimientoDto();
-  
 
   public paisList: PaisSelectorDto[] = [];
   public estadoList: EstadoSelectorDto[] = [];
@@ -69,6 +71,8 @@ export class InformacionGeneralComponent implements OnInit {
     private codigoPostalService: CodigoPostalService,
     private entidadEstructuraService: EntidadEstructuraService,
     private doctoresService: MisDoctoresService,
+    private alertController: AlertController,
+    private confirmacionCorreoService: ConfirmacionCorreoService
   ) {  }
 
   ngOnInit(){
@@ -201,15 +205,15 @@ export class InformacionGeneralComponent implements OnInit {
   private consultarGeneros() {
     this.generoList = [
       {
-        idGenero: 1,
+        idGenero: 3,
         descripcion: "Hombre"
       },
       {
-        idGenero: 2,
+        idGenero: 4,
         descripcion: "Mujer"
       },
       {
-        idGenero: 3,
+        idGenero: 9,
         descripcion: "Otro"
       },
     ];
@@ -250,14 +254,18 @@ export class InformacionGeneralComponent implements OnInit {
   }
 
   protected async enviarFormulario(formulario: NgForm){
-    this.btnSubmit = true;
+    this.submiting = true;
 
     if(formulario.invalid){
+      console.log('Formulario inválido');
       Utileria.validarCamposRequeridos(formulario);
-      this.btnSubmit = false;
+      this.presentAlertError();
+      this.submiting = false;
       return;
     }
+    this.presentAlert();
     this.actualizarInformacionUsuario(this.infoUsuario);
+    this.submiting = false;
   }
 
   protected eliminarPadecimiento(index: number){
@@ -275,9 +283,38 @@ export class InformacionGeneralComponent implements OnInit {
   protected agregarPadecimiento(){
     const padecimiento = new ExpedientePadecimientoDto();
     padecimiento.idPadecimiento = 0;
-    console.log(padecimiento)
     this.infoUsuario.padecimientos = [...this.infoUsuario.padecimientos, padecimiento ];
 
+  }
+
+  protected reenviarConfirmacionCorreo(correoUsuario: string){
+    this.emailsubmiting = true;
+    const confirmarCorreo: ConfirmarCorreoDto = { correo: correoUsuario, token: ""};
+    this.confirmacionCorreoService.enviarCorreoConfirmacion(confirmarCorreo).subscribe({
+      next: () => {
+        this.emailsubmiting = false;
+      }
+    })
+  }
+
+  private async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Información actualizada',
+      message: 'La información se actualizó correctamente',
+      buttons: ['OK'],
+    });
+
+    await alert.present();
+  }
+
+  private async presentAlertError() {
+    const alert = await this.alertController.create({
+      header: 'Campdos requeridos',
+      message: 'Llene todos los campos requeridos',
+      buttons: ['OK'],
+    });
+
+    await alert.present();
   }
 
 

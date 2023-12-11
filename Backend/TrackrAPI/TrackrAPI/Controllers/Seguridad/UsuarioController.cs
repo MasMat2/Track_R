@@ -120,6 +120,13 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.Agregar(usuarioDto, (int)usuario.IdHospital);
         }
 
+        [AllowAnonymous]
+        [HttpPost("agregarTrackr")]
+        public int AgregarTrackr(UsuarioNuevoTrackrDto usuarioDto)
+        {
+            return usuarioService.AgregarTrackr(usuarioDto);
+        }
+
         [HttpPut]
         [Route("editar")]
         public void Editar(Usuario usuario)

@@ -20,6 +20,23 @@ public class ExpedienteDoctorRepository : Repository<ExpedienteDoctor>, IExpedie
         .Include(ed => ed.IdUsuarioDoctorNavigation.IdCompaniaNavigation)
         .Where(ed => ed.IdExpediente == idExpediente);
     }
+    public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarDoctores(int idCompania)
+    {
+        return context.Usuario
+            .Join(
+                context.UsuarioRol,
+                usuario => usuario.IdUsuario,
+                usuarioRol => usuarioRol.IdUsuario,
+                (usuario, usuarioRol) => new { Usuario = usuario, UsuarioRol = usuarioRol })
+            .Where(ti => ti.UsuarioRol.IdRolNavigation.Clave == GeneralConstant.ClaveTipoUsuarioMedicoExterno && ti.Usuario.IdCompania == idCompania)
+            .Select(ti => new ExpedienteDoctorSelectorDTO
+            {
+                IdUsuarioDoctor = ti.Usuario.IdUsuario,
+                Ambito = ti.Usuario.IdCompaniaNavigation.Nombre,
+                Nombre = ti.Usuario.Nombre + " " + ti.Usuario.ApellidoPaterno + " " + ti.Usuario.ApellidoMaterno,
+                IdRol = ti.UsuarioRol.IdRol
+            });
+    }
     public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarDoctores()
     {
         return context.Usuario
@@ -37,9 +54,9 @@ public class ExpedienteDoctorRepository : Repository<ExpedienteDoctor>, IExpedie
                 IdRol = ti.UsuarioRol.IdRol
             });
     }
-    public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarSelector(int idExpediente)
+    public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarSelector(int idExpediente , int idCompania)
     {
-        var doctoresCompletos = ConsultarDoctores().ToList();
+        var doctoresCompletos = ConsultarDoctores(idCompania).ToList();
 
         var doctoresExpediente = ConsultarExpediente(idExpediente).ToList();
 

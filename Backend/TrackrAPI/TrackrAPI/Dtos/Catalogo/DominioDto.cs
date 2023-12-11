@@ -1,4 +1,6 @@
-﻿namespace TrackrAPI.Dtos.Catalogo
+﻿using TrackrAPI.Models;
+
+namespace TrackrAPI.Dtos.Catalogo
 {
     public class DominioDto
     {
@@ -14,5 +16,6 @@
         public DateTime? FechaMinima { get; set; }
         public DateTime? FechaMaxima { get; set; }
         public bool PermiteFueraDeRango { get; set; }
+        public string UnidadMedida { get; set; }
     }
 }

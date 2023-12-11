@@ -9,6 +9,7 @@
       
       <ion-item lines="full" detail="false" (click)="toggleExpandido(tratamiento)">
         <ion-label class="label-input">{{tratamiento.farmaco}}</ion-label>
+        <ion-img *ngIf="tratamiento.imagenBase64" [src]="'data:image/jpeg;base64,' + tratamiento.imagenBase64" class="img"></ion-img>
         <ion-icon slot="end" name="chevron-forward-outline" [hidden]="tratamiento.expandido"></ion-icon>
         <ion-icon slot="end" name="chevron-down-outline" [hidden]="!tratamiento.expandido"></ion-icon>
       </ion-item>
@@ -16,6 +17,11 @@
       <div [hidden]="!tratamiento.expandido">
         
         <ion-grid>
+          <ion-row [hidden]="!tratamiento.imagenBase64" class="centered">
+            <ion-col size="2">
+              <img [src]="'data:image/jpeg;base64,' + tratamiento.imagenBase64" alt="Imagen" />
+            </ion-col>
+          </ion-row>
           <ion-row>
             <ion-col class="form-group">
               <ion-input                   
@@ -78,11 +84,7 @@
             </ion-col>
           </ion-row>
 
-          <ion-row [hidden]="!tratamiento.imagenBase64" class="centered">
-            <ion-col size="2">
-              <img [src]="'data:image/jpeg;base64,' + tratamiento.imagenBase64" alt="Imagen" />
-            </ion-col>
-          </ion-row>
+          
         </ion-grid>
 
         <ion-row>

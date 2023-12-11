@@ -245,6 +245,7 @@ ciudad: string
     this.externalTemplates.push(recomendaciones);
   }
 
+
   public async consultarPadecimientos() {
     await lastValueFrom(this.expedientePadecimientoService.consultarPorUsuario(this.idUsuario))
       .then((padecimientos) => {

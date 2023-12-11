@@ -11,5 +11,7 @@ public class PadecimientoUsuarioDTO
     public List<VariableDTO> Variables { get; set; }
     public int? IdWidget { get; set; }
     public string DescripcionWidget { get; set; }
+    public int TomasTomadas { get; set; }
+    public int TomasTotales { get; set; }
 }
 

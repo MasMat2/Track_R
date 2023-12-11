@@ -110,22 +110,24 @@
           </div>
 
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-8">
               <div
                 class="form-group"
                 *ngIf="reactivoList[indice].necesitaRevision"
               >
                 <label class="label-input required-label">Respuesta</label>
                 <div>
-                  <input
+                  <textarea
                     #respuestaCorrecta="ngModel"
                     [(ngModel)]="reactivoList[indice].respuestaAlumno"
                     name="respuestaCorrecta"
-                    class="form-control respuesta"
+                    class=" respuesta"
                     type="text"
                     [required]="true"
                     [disabled]="blockQuestions"
-                  />
+                    rows="3"
+                    style="width: 100%;"
+                  ></textarea>
                 </div>
                 <div
                   *ngIf="

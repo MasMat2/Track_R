@@ -1,0 +1,11 @@
+<div class="contenedor">
+    <div class="mensaje-container">
+        <div *ngIf="!listo" class="amarillo">
+            <h1>En proceso...</h1>
+        </div>
+        <div *ngIf="listo" class="verde">
+            <h1>Listo, ha verificado su correo</h1>
+        </div>
+    </div>
+</div>
+

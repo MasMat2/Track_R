@@ -26,4 +26,14 @@ ion-button{
   --background: #9BD8AC;
 }
 
+.correoConfirmado{
+
+  ion-label{
+    color: red;
+  }
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
 

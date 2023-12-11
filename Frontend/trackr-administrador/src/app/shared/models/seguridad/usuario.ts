@@ -46,6 +46,7 @@ export class Usuario {
   public idListaPrecio: number;
   public idSatFormaPago?: number;
   public idMetodoPago?: number;
+  public entreCalles?: string;
 
   // UsuarioDto
   public clave: string;

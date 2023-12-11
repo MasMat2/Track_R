@@ -13,6 +13,7 @@ using CanalDistAPI.Dtos.Seguridad;
 using TrackrAPI.Dtos.Perfil;
 using TrackrAPI.Repositorys.GestionExpediente;
 using DocumentFormat.OpenXml.Office.CustomXsn;
+using TrackrAPI.Services.GestionExpediente;
 
 namespace TrackrAPI.Services.Seguridad
 {
@@ -35,6 +36,9 @@ namespace TrackrAPI.Services.Seguridad
         private UsuarioRolService usuarioRolService;
         private RolService rolService;
         private BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService;
+        private ConfirmacionCorreoService _confirmacionCorreoService;
+        private ExpedienteTrackrService _expedienteTrackrService;
+        private UsuarioRolService _usuarioRolService;
 
 
         public UsuarioService(IUsuarioRepository usuarioRepository,
@@ -54,7 +58,9 @@ namespace TrackrAPI.Services.Seguridad
             IColoniaRepository coloniaRepository,
             UsuarioRolService usuarioRolService,
             RolService rolService,
-            BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService)
+            BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService,
+            ConfirmacionCorreoService confirmacionCorreoService,
+            ExpedienteTrackrService expedienteTrackrService)
         {
             this.usuarioRepository = usuarioRepository;
             this.expedienteTrackrRepository = expedienteTrackrRepository;
@@ -73,6 +79,8 @@ namespace TrackrAPI.Services.Seguridad
             this.usuarioRolService = usuarioRolService;
             this.rolService = rolService;
             this.bitacoraMovimientoUsuarioService = bitacoraMovimientoUsuarioService;
+            this._confirmacionCorreoService = confirmacionCorreoService;
+            this._expedienteTrackrService = expedienteTrackrService;
         }
 
         public Usuario Consultar(int idUsuario)
@@ -280,6 +288,72 @@ namespace TrackrAPI.Services.Seguridad
                 }
 
                 scope.Complete();
+
+                return idUsuario;
+            }
+        }
+
+        public int AgregarTrackr(UsuarioNuevoTrackrDto usuarioDto)
+        {
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+            {
+                var usuario = new Usuario()
+                {
+                    Nombre = usuarioDto.Nombres,
+                    ApellidoPaterno = usuarioDto.ApellidoPaterno,
+                    ApellidoMaterno = usuarioDto.ApellidoMaterno,
+                    Correo = usuarioDto.NombreUsuario,
+                    CorreoPersonal = usuarioDto.CorreoPersonal,
+                    TelefonoMovil = usuarioDto.TelefonoMovil,
+                    //constantes
+                    IdTipoUsuario = 1004, //invitado
+                    IdPerfil = 2236, //paciente
+                    IdCompania = 178, //predeterminada
+                    IdHospital = 174, //predeterminado
+                    CorreoConfirmado = false,
+                    Habilitado = true,
+                    
+            };
+
+                string contrasenaEncriptada;
+                if (usuarioDto.Contrasena == null || usuarioDto.Contrasena == "")
+                {
+                    string contraseniaAutogenerada = GenerarContraseniaAleatoria();
+
+                    contrasenaEncriptada = simpleAES.EncryptToString(contraseniaAutogenerada);
+                    EnviarCorreoConContrasena(usuario, contraseniaAutogenerada);
+                }
+                else
+                {
+                    contrasenaEncriptada = simpleAES.EncryptToString(usuarioDto.Contrasena);
+                }
+
+                
+                usuario.Contrasena = contrasenaEncriptada;
+
+                int idUsuario = usuarioRepository.Agregar(usuario).IdUsuario;
+
+                var usuarioRol = new UsuarioRol()
+                {
+                    IdUsuario = usuario.IdUsuario,
+                    IdRol = 1038, //paciente
+                };
+                usuarioRolService.Agregar(usuarioRol);
+
+                var usuarioLocacion = new UsuarioLocacion()
+                {
+                    IdLocacion = 174, //predeterminado
+                    IdUsuario = idUsuario,
+                    IdPerfil = 2236
+                };
+                usuarioLocacionService.Agregar(usuarioLocacion);
+
+                this._expedienteTrackrService.AgregarExpedienteNuevoUsuario(usuario);
+                this._confirmacionCorreoService.ConfirmarCorreo(usuario.Correo);
+                
+                scope.Complete();
+
+                
 
                 return idUsuario;
             }
@@ -623,11 +697,17 @@ namespace TrackrAPI.Services.Seguridad
 
         public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion, int idUsuario)
         {
-            using TransactionScope scope = new TransactionScope();
+            using TransactionScope scope = new();
 
             var usuario = usuarioRepository.Consultar(idUsuario);
             var expediente = expedienteTrackrRepository.ConsultarPorUsuario(usuario.IdUsuario);
-            
+
+
+            if (informacion.CorreoPersonal != usuario.CorreoPersonal)
+            {
+                usuario.CorreoConfirmado = false;
+            }
+
             usuario.Nombre = informacion.Nombre;
             usuario.ApellidoPaterno = informacion.ApellidoPaterno;
             usuario.ApellidoMaterno = informacion.ApellidoMaterno;
@@ -636,7 +716,7 @@ namespace TrackrAPI.Services.Seguridad
             expediente.Peso = informacion.Peso;
             expediente.Cintura = informacion.Cintura;
             expediente.Estatura = informacion.Estatura;
-            usuario.Correo = informacion.Correo;
+            usuario.CorreoPersonal = informacion.CorreoPersonal;
             usuario.TelefonoMovil = informacion.TelefonoMovil;
             usuario.IdEstado = informacion.IdEstado;
             usuario.IdMunicipio = informacion.IdMunicipio;
@@ -647,6 +727,7 @@ namespace TrackrAPI.Services.Seguridad
             usuario.NumeroInterior = informacion.NumeroInterior;
             usuario.NumeroExterior = informacion.NumeroExterior;
             usuario.EntreCalles = informacion.EntreCalles;
+            
 
             expedientePadecimientoRepository.EliminarPorExpediente(expediente.IdExpediente);
             foreach (var padecimientoDTO in informacion.padecimientos)
@@ -678,5 +759,6 @@ namespace TrackrAPI.Services.Seguridad
         {
            return usuarioRepository.ConsultaDomicilioPorId(idUsuario);
         }
+
     }
 }

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderComponent } from './layout/header/header.component';
+// import { BreadcrumbModule } from 'angular-crumbs';
 
 @Component({
   selector: 'app-home-page',
@@ -15,7 +16,8 @@ import { HeaderComponent } from './layout/header/header.component';
     CommonModule,
     FormsModule,
     HeaderComponent,
-    FooterComponent
+    FooterComponent/* ,
+    BreadcrumbModule */
   ]
 })
 export class HomePage implements OnInit {

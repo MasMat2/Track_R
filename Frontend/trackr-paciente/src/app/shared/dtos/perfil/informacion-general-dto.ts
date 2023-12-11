@@ -11,6 +11,7 @@ export interface InformacionGeneralDto {
     cintura: number;
     estatura: number;
     correo: string;
+    correoPersonal: string;
     telefonoMovil: string;
     idPais: number;
     idEstado: number;
@@ -22,6 +23,7 @@ export interface InformacionGeneralDto {
     entreCalles: string;
     numeroInterior: string;
     numeroExterior: string;
+    correoConfirmado: string;
 
     padecimientos: ExpedientePadecimientoDto[];
 }

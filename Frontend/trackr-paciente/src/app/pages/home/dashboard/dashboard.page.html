@@ -6,33 +6,25 @@
     <div class="contenedor">
       <div class="titulo-contenedor">Dashboard</div>
       <div class="cuerpo-contenedor">
+        <app-widget-container [widgetKeys]="selectedUserWidgets"></app-widget-container>
         <ion-grid>
           <ion-row>
-            <ion-col [size]="4">
-              <app-widget-frecuencia></app-widget-frecuencia>
-            </ion-col>
-            <ion-col [size]="8">
-              <app-widget-pasos></app-widget-pasos>
-            </ion-col>
-            <ion-col [size]="8">
-                <app-widget-sueno></app-widget-sueno>
-            </ion-col>
-            <ion-col [size]="4">
-              <app-widget-peso></app-widget-peso>
-            </ion-col>
             <ion-col [size] = "12" *ngFor="let padecimiento of padecimientosList">
                 <app-widget-seguimiento
                     [tipoWidget] = "padecimiento.idWidget"
                     nombrePadecimiento="{{ padecimiento.nombrePadecimiento }}"
 
+                    [tomasTomadas]=" padecimiento.tomasTomadas "
+                    [tomasTotales]=" padecimiento.tomasTotales "
+
                     nombreVariable="{{padecimiento.variables[0]?.descripcion}}"
                     valorVariable="{{padecimiento.variables[0]?.valorVariable}}"
-                    unidadVariable="mg/dL"
+                    unidadVariable="{{padecimiento.variables[0]?.unidadMedida}}"
                     claseVariable="{{ padecimiento.variables[0].iconoClase }} + icono-seguimiento"
 
                     nombreVariable2="{{padecimiento.variables[1]?.descripcion}}"
                     valorVariable2="{{padecimiento.variables[1]?.valorVariable}}"
-                    unidadVariable2="mg/dL"
+                    unidadVariable2="{{padecimiento.variables[1]?.unidadMedida}}"
                     claseVariable2="{{ padecimiento.variables[1]?.iconoClase }} + icono-seguimiento"
 
 

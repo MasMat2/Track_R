@@ -1,6 +1,7 @@
 using TrackrAPI.Dtos.GestionExpediente.ExpedienteDoctor;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionExpediente;
+using TrackrAPI.Repositorys.Seguridad;
 
 namespace TrackrAPI.Services.GestionExpediente;
 
@@ -9,16 +10,19 @@ public class ExpedienteDoctorService
     private readonly IExpedienteDoctorRepository _expedienteDoctorRepository;
     private readonly IExpedienteTrackrRepository _expedienteTrackrRepository;
     private readonly ExpedienteDoctorValidatorService _expedienteDoctorValidatorService;
+    private readonly IUsuarioRepository _usuarioRepository;
 
     public ExpedienteDoctorService(IExpedienteDoctorRepository expedienteDoctorRepository,
                                      IExpedienteTrackrRepository expedienteTrackrRepository,
-                                     ExpedienteDoctorValidatorService expedienteDoctorValidatorService
+                                     ExpedienteDoctorValidatorService expedienteDoctorValidatorService,
+                                     IUsuarioRepository usuarioRepository
 
                                     )
     {
         _expedienteDoctorRepository = expedienteDoctorRepository;
         _expedienteTrackrRepository = expedienteTrackrRepository;
         _expedienteDoctorValidatorService = expedienteDoctorValidatorService;
+        _usuarioRepository = usuarioRepository;
     }
 
     public IEnumerable<ExpedienteDoctorCardsDTO> ConsultarExpediente(int idUsuario)
@@ -41,7 +45,8 @@ public class ExpedienteDoctorService
     public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarSelector(int idUsuario)
     {
         int idExpediente = _expedienteTrackrRepository.ConsultarPorUsuario(idUsuario).IdExpediente;
-        return _expedienteDoctorRepository.ConsultarSelector(idExpediente);
+        int idCompania = _usuarioRepository.ConsultarDto(idUsuario).IdCompania;
+        return _expedienteDoctorRepository.ConsultarSelector(idExpediente, idCompania);
     }
     public void Eliminar(ExpedienteDoctorDTO expedienteDoctorDTO)
     {
@@ -61,7 +66,8 @@ public class ExpedienteDoctorService
     {
 
         int idExpediente = _expedienteTrackrRepository.ConsultarPorUsuario(idUsuario).IdExpediente;
-        _expedienteDoctorValidatorService.ValidarAgregar(idExpediente, expedienteDoctorDTO.IdUsuarioDoctor);
+        int idCompania = _usuarioRepository.ConsultarDto(idUsuario).IdCompania;
+        _expedienteDoctorValidatorService.ValidarAgregar(idExpediente, expedienteDoctorDTO.IdUsuarioDoctor , idCompania);
 
         var expedienteDoctor = new ExpedienteDoctor
         {

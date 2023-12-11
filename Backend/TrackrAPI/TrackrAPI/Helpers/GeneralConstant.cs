@@ -11,6 +11,10 @@
         public static readonly int UsuarioMaestroAtisc = 1;
         public static readonly int IdPerfilAdministradorDefault = 1;
 
+        public static readonly int IdHospitalMuguerza = 169;
+        public static readonly int IdHospitalPredeterminado =  174;
+        public static readonly int IdCompaniaMuguerza = 177;
+
         public static readonly string ClaveTipoAccesoMenu = "001";
         public static readonly string ClaveTipoAccesoEvento = "002";
         public static readonly string ClaveTipoAccesoSistema = "003";
@@ -159,6 +163,7 @@
         public const string ClaveRolCliente = "007";
         public const string ClaveRolClienteLinea = "008";
         public const string ClaveRolGestorFlujos = "011";
+        public const string ClaveRolPaciente = "014";
 
         public const string RFCPublicoGeneral = "XAXX010101000";
 
@@ -409,5 +414,7 @@
         public static readonly string TipoMovimientoUsuarioEliminacion = "Eliminación";
         public static readonly string TipoMovimientoUsuarioEntradaPersonal = "Entrada Personal";
         public static readonly string TipoMovimientoUsuarioSalidaPersonal = "Salida Personal";
+        public static readonly string[] WidgetsDefault = { "w-sue" , "w-pes" , "w-fre" , "w-pas" };
+        public static readonly string ClaveNotificacionRecordatorio = "GRL";
     }
 }

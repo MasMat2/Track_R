@@ -43,7 +43,7 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
             .Include(ep => ep.IdExpedienteNavigation)
             .Include(et => et.IdExpedienteNavigation.ExpedientePadecimiento)
             .ThenInclude(ep => ep.IdPadecimientoNavigation)
-                .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioPaciente &&
+                .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.UsuarioRol.Any( ur => ur.IdRolNavigation.Clave == GeneralConstant.ClaveRolPaciente) &&
                        ep.IdUsuarioDoctor == idDoctor)
                 .GroupBy(ep => ep.IdExpedienteNavigation.IdUsuario)
                 .Select(group => new UsuarioExpedienteGridDTO
@@ -106,6 +106,23 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
             .ToList();
     }
 
+    public IEnumerable<RecordatorioUsuarioDto> RecordatoriosPorUsuario(int idUsuario)
+    {
+        var recordatorios = context.TratamientoRecordatorio
+        .Where( tr => tr.IdExpedienteTratamientoNavigation.IdExpedienteNavigation.IdUsuarioNavigation.IdUsuario == idUsuario  && tr.Activo == true)
+        .Select( tr => new RecordatorioUsuarioDto{
+            Padecimiento = tr.IdExpedienteTratamientoNavigation.IdPadecimientoNavigation.IdEntidadEstructura,
+            FechaToma = tr.TratamientoToma.FirstOrDefault().FechaToma,
+            FechaEnvio = tr.TratamientoToma.FirstOrDefault().FechaEnvio,
+            Indicaciones = tr.IdExpedienteTratamientoNavigation.Indicaciones,
+            Dia = tr.Dia,
+            Tomado = tr.TratamientoToma.FirstOrDefault().FechaToma != null
+        })
+        .ToList(); 
+        
+        return recordatorios;
+    }
+
     public UsuarioExpedienteSidebarDTO ConsultarParaSidebar(int idUsuario)
     {
         var expedienteSidebarDTO = context.ExpedienteTrackr
@@ -137,6 +154,11 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
         expedienteSidebarDTO.Usuario.Padecimientos = expedienteSidebarDTO.Padecimientos;
 
         return expedienteSidebarDTO.Usuario;
+    }
+
+    public IEnumerable<ExpedienteTrackr> ConsultarExpedientes()
+    {
+        return context.ExpedienteTrackr;
     }
 
 

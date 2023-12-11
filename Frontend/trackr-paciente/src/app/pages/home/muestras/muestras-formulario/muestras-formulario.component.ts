@@ -5,7 +5,7 @@ import { Component, EventEmitter, OnChanges, OnInit, Output } from '@angular/cor
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { EntidadTablaRegistroDto, TablaValorDto, TablaValorMuestraDTO } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
 import { PadecimientoMuestraDTO } from '@dtos/gestion-expediente/padecimiento-muestra-dto';
-import { SeccionCampoService } from '@http/gestion-expediente/seccion-campo.service';
+import { SeccionCampoService } from '@http/gestion-entidad/seccion-campo.service';
 import { IonicModule } from '@ionic/angular';
 import { SeccionCampo } from '@models/gestion-expediente/seccion-campo';
 import { CampoExpedienteModule } from '@sharedComponents/campo-expediente/campo-expediente.module';
@@ -30,6 +30,7 @@ import { SeccionMuestraDTO } from '@dtos/gestion-expediente/seccion-muestra-dto'
 export class MuestrasFormularioComponent implements OnInit {
 
   @Output() consultarValoresFueraRango = new EventEmitter<void>();
+  protected day = new Date().getDate();
   protected recomendacion: any;
   protected dateToday: string = new Date().toISOString();
   public arbolPadecimiento: PadecimientoMuestraDTO[] = [];
@@ -72,6 +73,9 @@ export class MuestrasFormularioComponent implements OnInit {
     }
 
    this.agregar(camposAgregados);
+   for (const seccionCampo of seccion.seccionesCampo) {
+    seccionCampo.valor = ' '
+  }
   }
 
   public agregar(campoAgregar: TablaValorMuestraDTO[]): void {

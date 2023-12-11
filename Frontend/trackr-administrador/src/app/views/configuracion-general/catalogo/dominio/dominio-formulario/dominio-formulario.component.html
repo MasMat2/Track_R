@@ -215,6 +215,24 @@
           </div>
 
           <div class="col-md-2">
+            <div class="form-group">
+              <label class="label-input required-label">Unidad de medida</label>
+              <div>
+                <input
+                  #uniMed="ngModel"
+                  [(ngModel)]="dominio.unidadMedida"
+                  [disabled]="isDisable"
+                  name="unidadMedidaName"
+                  class="form-control"
+                  type="text"
+                  maxlength="20"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-2">
             <label class="label-input required-label">Permite Fuera de Rango</label>
             <div class="form-group radion-bottom">
               <label class="switch">

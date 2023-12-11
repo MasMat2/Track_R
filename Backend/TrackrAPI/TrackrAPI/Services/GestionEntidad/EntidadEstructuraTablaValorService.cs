@@ -8,6 +8,8 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Globalization;
 using TrackrAPI.Repositorys.GestionExpediente;
+using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Repositorys.Catalogo;
 
 namespace TrackrAPI.Services.GestionEntidad
 {
@@ -97,7 +99,7 @@ namespace TrackrAPI.Services.GestionEntidad
         {
             using var ts = new TransactionScope();
             var entidadEstructuraMuestra = entidadEstructuraRepository.ConsultarPorClave(GeneralConstant.ClaveEntidadEstructuraMuestra);
-            if(entidadEstructuraMuestra == null)
+            if (entidadEstructuraMuestra == null)
             {
                 throw new CdisException("No existe la entidad estructura con clave 006");
             }
@@ -106,7 +108,8 @@ namespace TrackrAPI.Services.GestionEntidad
             {
                 throw new CdisException("No existe la entidad estructura hijo de la entidad estructura con clave 006");
             }
-            foreach (var muestra in muestraDTO){
+            foreach (var muestra in muestraDTO)
+            {
 
                 var muestraAAgregar = new EntidadEstructuraTablaValor()
                 {
@@ -117,9 +120,9 @@ namespace TrackrAPI.Services.GestionEntidad
                     FechaMuestra = muestra.FechaMuestra,
                     FueraDeRango = muestra.FueraDeRango
                 };
-            var ultimoRegistro = entidadEstructuraTablaValorRepository.ConsultarUltimoRegistro(muestraAAgregar.IdEntidadEstructura, idUsuario);
-            muestraAAgregar.Numero = ultimoRegistro + 1;
-            entidadEstructuraTablaValorRepository.Agregar(muestraAAgregar);
+                var ultimoRegistro = entidadEstructuraTablaValorRepository.ConsultarUltimoRegistro(muestraAAgregar.IdEntidadEstructura, idUsuario);
+                muestraAAgregar.Numero = ultimoRegistro + 1;
+                entidadEstructuraTablaValorRepository.Agregar(muestraAAgregar);
 
             }
             ts.Complete();
@@ -217,7 +220,7 @@ namespace TrackrAPI.Services.GestionEntidad
                 if (columnaCorrespondiente != null)
                 {
                     string valorReferencia = "";
-                    if(columnaCorrespondiente.ValorMinimo != null || columnaCorrespondiente.ValorMaximo != null)
+                    if (columnaCorrespondiente.ValorMinimo != null || columnaCorrespondiente.ValorMaximo != null)
                     {
                         valorReferencia = columnaCorrespondiente.ValorMinimo.ToString() + " - " + columnaCorrespondiente.ValorMaximo.ToString();
                     }
@@ -241,11 +244,11 @@ namespace TrackrAPI.Services.GestionEntidad
             var valoresFueraRangoGridDTOs = new List<ValoresFueraRangoGridDTO>();
             var padecimientos = expedientePadecimientoRepository.ConsultarPorUsuario(idUsuario);
 
-            if(padecimientos == null)
+            if (padecimientos == null)
             {
                 return valoresFueraRangoGridDTOs;
             }
-            foreach(var padecimiento in padecimientos)
+            foreach (var padecimiento in padecimientos)
             {
                 valoresFueraRangoGridDTOs.AddRange(ConsultarValores(padecimiento.IdPadecimiento, idUsuario, true).Distinct());
             }
@@ -292,36 +295,38 @@ namespace TrackrAPI.Services.GestionEntidad
             }
         }
 
-        public IEnumerable<ValoresHistogramaDTO> ConsultarValoresPorClaveCampoParaGrid(string claveCampo, int idUsuario, string fechaFiltro)
+        public ValoresPorCampoGridDTO ConsultarValoresPorClaveCampoParaGrid(string claveCampo, int idUsuario, string fechaFiltro)
         {
             DateTime fecha = DateTime.Now;
+            var valoresGrid = new ValoresPorCampoGridDTO(){ 
+                unidadMedida = seccionCampoRepository.ConsultarUnidadDeMedidaPorClaveCampo(claveCampo) };
 
             switch (fechaFiltro.ToLower())
             {
                 case "hoy":
                     fecha = fecha.AddHours(-24); // Desde las últimas 24 horas
-                    var valoresHoy = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
-                    return valoresHoy;
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresGrid;
                 case "1 semana":
                     fecha = fecha.AddDays(-7); // Desde los últimos 7 días
-                    var valoresSemana = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
-                    return valoresSemana;
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresGrid;
                 case "2 semanas":
                     fecha = fecha.AddDays(-14); // Desde los últimos 14 días
-                    var valoresDosSemanas = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
-                    return valoresDosSemanas;
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresGrid;
                 case "3 semanas":
                     fecha = fecha.AddDays(-21); // Desde las últimas 3 semanas
-                    var valoresTresSemanas = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
-                    return valoresTresSemanas;
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresGrid;
                 case "1 mes":
                     fecha = fecha.AddDays(-30); // Desde el último mes
-                    var valoresUnMes = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
-                    return valoresUnMes;
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresGrid;
                 case "2 meses":
                     fecha = fecha.AddDays(-60); // Desde los últimos 2 meses
-                    var valoresDosMeses = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
-                    return valoresDosMeses;
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    return valoresGrid;
                 default:
                     throw new CdisException("Filtro de fecha no reconocido");
             }
@@ -347,6 +352,12 @@ namespace TrackrAPI.Services.GestionEntidad
             return valores.GroupBy(v => $"{v.FechaMuestra.GetValueOrDefault().Hour / 3 * 3}:00 - {(v.FechaMuestra.GetValueOrDefault().Hour / 3 + 1) * 3}:00")
                           .ToDictionary(g => g.Key, g => g.ToList());
         }
+
+        public IEnumerable<ExpedienteMuestrasGridDTO> ConsultarGridMuestras(int idUsuario)
+        {
+            return entidadEstructuraTablaValorRepository.ConsultarGridMuestras(idUsuario);
+        }
+
 
     }
 }

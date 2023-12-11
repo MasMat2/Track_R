@@ -19,6 +19,7 @@
     <!-- Contenido -->
 
     <app-tab
+      *ngIf="i === selectedTab"
       [component]="element.component"
       [args]="element.args"
     >

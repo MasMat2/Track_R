@@ -6,10 +6,12 @@ using System.Transactions;
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.DTOs.Dashboard;
+using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionExpediente;
 using TrackrAPI.Repositorys.Inventario;
 using TrackrAPI.Repositorys.Seguridad;
+using TrackrAPI.Services.Dashboard;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace TrackrAPI.Services.GestionExpediente;
@@ -20,18 +22,24 @@ public class ExpedienteTrackrService
     private readonly IDomicilioRepository _domicilioRepository;
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IExpedientePadecimientoRepository _expedientePadecimientoRepository;
+    private readonly UsuarioWidgetService _usuarioWidgetService;
+    private readonly ExpedienteTrackrValidatorService _expedienteTrackrValidatorService;
 
     public ExpedienteTrackrService(
         IExpedienteTrackrRepository expedienteTrackrRepository,
         IDomicilioRepository domicilioRepository,
         IUsuarioRepository usuarioRepository,
-        IExpedientePadecimientoRepository expedientePadecimientoRepository
+        IExpedientePadecimientoRepository expedientePadecimientoRepository,
+        UsuarioWidgetService usuarioWidgetService,
+        ExpedienteTrackrValidatorService expedienteTrackrValidatorService
         )
     {
         this._expedienteTrackrRepository = expedienteTrackrRepository;
         this._domicilioRepository = domicilioRepository;
         this._usuarioRepository = usuarioRepository;
         this._expedientePadecimientoRepository = expedientePadecimientoRepository;
+        _usuarioWidgetService = usuarioWidgetService;
+        _expedienteTrackrValidatorService = expedienteTrackrValidatorService;
     }
     /// <summary>
     /// Consulta el expediente de un usuario
@@ -51,14 +59,46 @@ public class ExpedienteTrackrService
     /// <returns>El id del expediente agregado</returns>
     public int AgregarWrapper(ExpedienteWrapper expedienteWrapper)
     {
+        using TransactionScope scope = new();
         ExpedienteTrackr expedienteTrackr = expedienteWrapper.expediente;
         expedienteTrackr.IdUsuario = expedienteWrapper.paciente.IdUsuario;
+        _expedienteTrackrValidatorService.ValidarAgregar(expedienteTrackr);
 
         expedienteTrackr = _expedienteTrackrRepository.Agregar(expedienteTrackr);
         expedienteTrackr.Numero = expedienteTrackr.IdExpediente.ToString().PadLeft(6, '0');
         _expedienteTrackrRepository.Editar(expedienteTrackr);
 
         AgregarPadecimientos(expedienteWrapper.padecimientos, expedienteTrackr.IdExpediente);
+
+        _usuarioWidgetService.modificarSeleccionWidgets(expedienteTrackr.IdUsuario , GeneralConstant.WidgetsDefault);
+
+        scope.Complete();
+        return expedienteTrackr.IdExpediente;
+    }
+
+    public int AgregarExpedienteNuevoUsuario(Usuario usuario)
+    {
+        using TransactionScope scope = new();
+        ExpedienteTrackr expedienteTrackr = new ExpedienteTrackr
+        {
+            IdUsuario = usuario.IdUsuario,
+            Numero = "0",
+            FechaNacimiento = Utileria.ObtenerFechaActual(),
+            Cintura = 1,
+            Estatura = 1,
+            Peso = 1,
+            IdGenero = 9,
+            FechaAlta = Utileria.ObtenerFechaActual()
+        };
+        _expedienteTrackrValidatorService.ValidarAgregar(expedienteTrackr);
+
+        expedienteTrackr = _expedienteTrackrRepository.Agregar(expedienteTrackr);
+        expedienteTrackr.Numero = expedienteTrackr.IdExpediente.ToString().PadLeft(6, '0');
+        _expedienteTrackrRepository.Editar(expedienteTrackr);
+
+        _usuarioWidgetService.modificarSeleccionWidgets(expedienteTrackr.IdUsuario, GeneralConstant.WidgetsDefault);
+
+        scope.Complete();
         return expedienteTrackr.IdExpediente;
     }
 
@@ -74,6 +114,7 @@ public class ExpedienteTrackrService
         using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
         {
             var idUsuario = expedienteWrapper.paciente.IdUsuario;
+            _expedienteTrackrValidatorService.ValidarEditar(expedienteTrackr);
 
             // Agregar ExpedienteTrackR
             expedienteTrackr.IdUsuario = idUsuario;
@@ -149,6 +190,64 @@ public class ExpedienteTrackrService
         return expedientes;
     }
 
+    public IEnumerable<TomasTomadasPorPadecimientoDto> RecordatoriosPorPadecimiento(int idUsuario)
+    {
+        var recordatorios = _expedienteTrackrRepository.RecordatoriosPorUsuario(idUsuario);
+
+         return recordatorios
+        .GroupBy( tr => tr.Padecimiento)
+        .Select( recordatoriosPorPad => new TomasTomadasPorPadecimientoDto{
+            IdPadecimiento = recordatoriosPorPad.Key,
+            TomasTomadas = recordatoriosPorPad
+         .GroupBy( tr => tr.Dia )
+         .Select( recordatoriosPorDia => new TomasTomadasPorDiaDto{
+             Dia = recordatoriosPorDia.Key,
+             TomasTotales = recordatoriosPorDia.Count(),
+             TomasTomadas = recordatoriosPorDia.Count( tr => tr.Tomado == true)
+         })
+        });  
+    }
+    public IEnumerable<TomasTomadasPorDiaDto> RecordatoriosPorDia(int idUsuario)
+    {
+        var recordatorios = _expedienteTrackrRepository.RecordatoriosPorUsuario(idUsuario);
+
+         return recordatorios
+         .GroupBy( tr => tr.Dia )
+         .Select( recordatoriosPorDia => new TomasTomadasPorDiaDto{
+             Dia = recordatoriosPorDia.Key,
+             TomasTotales = recordatoriosPorDia.Count(),
+             TomasTomadas = recordatoriosPorDia.Count( tr => tr.Tomado == true)
+         });
+    }
+
+    public IEnumerable<TomasTomadasPorPadecimientoDto> RecordatoriosPorPadecimientoHoy(int idUsuario)
+    {
+        DateTime now = DateTime.Now;
+        int currentDay = ((int)now.DayOfWeek + 7) % 7;
+        var recordatoriosPorPadecimiento = RecordatoriosPorPadecimiento(idUsuario);
+
+        var tomasATomarHoy = recordatoriosPorPadecimiento
+        .Select( th => new TomasTomadasPorPadecimientoDto{
+            IdPadecimiento = th.IdPadecimiento,
+            TomasTomadas = th.TomasTomadas.Where( t => t.Dia == currentDay)
+        });
+        return tomasATomarHoy;
+
+    } 
+    public (int TomasTotales, int TomasTomadas) TomasPadecimientoTotalesHoy(int idUsuario , int idPadecimiento)
+    {
+        var recordatoriosPorPadecimientoHoy = RecordatoriosPorPadecimientoHoy(idUsuario);
+
+        int tomasTotales = recordatoriosPorPadecimientoHoy.Where(th => th.IdPadecimiento == idPadecimiento)
+                                                          .Select(ttp => ttp.TomasTomadas.Select(tt => tt.TomasTotales).FirstOrDefault())
+                                                          .FirstOrDefault();
+
+        int tomasTomadas = recordatoriosPorPadecimientoHoy.Where(th => th.IdPadecimiento == idPadecimiento)
+                                                          .Select(ttp => ttp.TomasTomadas.Select(tt => tt.TomasTomadas).FirstOrDefault())
+                                                          .FirstOrDefault();
+
+        return (tomasTotales, tomasTomadas);
+    }
     /// <summary>
     /// Consulta un expedienteWrapper por usuario. Construye el ExpedienteWrapper a base de 4 modelos:
     /// Expediente, Domicilio, Usuario y Padecimientos.

@@ -7,5 +7,6 @@ namespace TrackrAPI.Repositorys.GestionExpediente
     {
         public IEnumerable<ExpedienteConsumoMedicamentoGridDto> ConsultarParaGrid(int idUsuario);
         public IEnumerable<TratamientoToma> ConsultarConsumoMedicamento(int idUsuario);
+         public TratamientoToma? ConsularPorNotificacion(int idNotificacion);
     }
 }

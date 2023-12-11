@@ -31,6 +31,7 @@ namespace TrackrAPI.Repositorys.Catalogo
                     ValorMaximo = d.ValorMaximo,
                     FechaMinima = d.FechaMinima,
                     FechaMaxima = d.FechaMaxima,
+                    UnidadMedida = d.UnidadMedida,
                     PermiteFueraDeRango = d.PermiteFueraDeRango ?? false
                 })
                 .FirstOrDefault();

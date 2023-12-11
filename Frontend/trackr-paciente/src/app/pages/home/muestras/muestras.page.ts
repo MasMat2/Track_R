@@ -38,7 +38,7 @@ export class MuestrasPage implements OnInit {
   protected columns = [
     { headerName: 'Sección', field: 'variable', minWidth: 20 },
     { headerName: 'Campo', field: 'parametro', minWidth: 10 },
-    { headerName: 'Fecha & Hora', field: 'fechaHora', minWidth: 10 },
+    { headerName: 'Fecha & Hora', field: 'fechaHora', minWidth: 10, sortable: true, sort: 'desc' },
     { headerName: 'Valor', field: 'valorRegistrado', minWidth: 10 },
   ];
 

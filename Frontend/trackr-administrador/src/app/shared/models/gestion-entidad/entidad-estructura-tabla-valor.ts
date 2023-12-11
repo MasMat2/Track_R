@@ -6,6 +6,7 @@ export class EntidadEstructuraTablaValor {
     public claveCampo: string;
     public valor: string;
     public idTabla: number;
+    public fechaMuestra : Date;
 
     constructor() {}
 }

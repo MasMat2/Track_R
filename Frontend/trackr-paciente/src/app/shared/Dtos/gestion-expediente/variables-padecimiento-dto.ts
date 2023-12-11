@@ -5,4 +5,5 @@ export class VariablesPadecimientoDTO
     mostrarDashboard : boolean;
     iconoClase : string;
     valorVariable : string;
+    unidadMedida: string;
 }

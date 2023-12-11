@@ -115,14 +115,15 @@
                 name="generoName"
                 class="select-custom"
                 [items]="generoList"
-                bindLabel="nombre"
+                bindLabel="descripcion"
                 bindValue="idGenero"
                 [(ngModel)]="expediente.idGenero"
                 [placeholder]="placeHolderSelect"
                 [notFoundText]="placeHolderNoOptions"
+                required="true"
               ></ng-select>
               <div
-                *ngIf="genero.errors?.['required'] && genero.touched"
+                *ngIf="!genero.valid && genero.touched"
                 class="error"
               >
                 El género es requerido
@@ -321,7 +322,7 @@
                 type="text"
                 maxlength="50"
                 autocomplete="off"
-                required
+                required = "true"
               />
               <div
                 *ngIf="peso.errors?.['required'] && peso.touched"

@@ -17,6 +17,11 @@ export class ExpedienteRecomendacionService{
     {
         return this.http.get<ExpedienteRecomendacionGridDTO[]>(this.dataUrl + `grid/usuario/${idExpediente}`);
     }
+
+    public consultarGridPorUsuarioRecomendacionGeneral(idExpediente : number) : Observable<ExpedienteRecomendacionGridDTO[]>
+    {
+        return this.http.get<ExpedienteRecomendacionGridDTO[]>(this.dataUrl + `grid/usuario/recomendacionGeneral/${idExpediente}`);
+    }
   
     public consultar(idRecomendacion: number): Observable<ExpedienteRecomendacionFormDTO> {
         return this.http.get<ExpedienteRecomendacionFormDTO>(this.dataUrl + `${idRecomendacion}`)

@@ -10,20 +10,21 @@
 <ion-toolbar class="navegacion">
 
   <!-- Saludo -->
-  <ion-title size="small">
+  <ion-button slot="start" fill="clear" (click) = "_openPopover($event)" class="ion-activatable saludo" size="small">
     <span class="white">Hola </span>
-    <span *ngIf="miUsuario">{{ miUsuario.nombre }} {{ miUsuario.apellidoPaterno }}</span>
-  </ion-title>
+    <span *ngIf="miUsuario" class="black">{{ miUsuario.nombre }} {{ miUsuario.apellidoPaterno }}</span>
+  </ion-button>
 
   <!-- Botónes de navegación -->
   <ion-buttons slot="primary">
 
    <app-notificaciones-page>
    </app-notificaciones-page>
-
-    <ion-button>
+   
+    <ion-button (click) = "mostrarConfiguracionDashboard()" >
       <ion-icon fill="icon-only" name="menu" color="dark" size="large"></ion-icon>
     </ion-button>
+
   </ion-buttons>
 
 </ion-toolbar>
@@ -34,3 +35,16 @@
   </ion-buttons>
   <ion-title>{{ titulo }}</ion-title>
 </ion-toolbar>
+
+
+<!--   <breadcrumb #parent>
+    <ion-breadcrumbs>
+      <ng-template ngFor let-route [ngForOf]="parent.breadcrumbs" style="padding: 0;">
+
+        <ion-breadcrumb *ngIf="!route.terminal" class="migaja" [routerLink]="[route.url]" style="padding: 0;">{{route.displayName}}</ion-breadcrumb>
+        <ion-breadcrumb *ngIf="route.terminal" class="migaja" [routerLink]="[route.url]" style="padding: 0;">{{route.displayName}}</ion-breadcrumb>
+      </ng-template>
+    </ion-breadcrumbs>
+  </breadcrumb>
+ -->
+

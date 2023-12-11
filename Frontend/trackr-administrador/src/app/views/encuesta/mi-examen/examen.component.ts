@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ExamenService } from '@http/examen/examen.service';
 import { Examen } from '@models/examen/examen';
-import { CONFIG_COLUMN_ACTION } from '@utils/constants/grid';
+import { CONFIG_COLUMN_ACTION, GRID_ACTION } from '@utils/constants/grid';
 import { ColDef, ICellRendererParams, ValueGetterParams } from 'ag-grid-community';
 import * as moment from 'moment';
 import { MensajeService } from 'src/app/shared/components/mensaje/mensaje.service';
 import { EncryptionService } from 'src/app/shared/services/encryption.service';
-
 @Component({
   selector: 'app-reactivo',
   templateUrl: './examen.component.html',
@@ -17,12 +16,11 @@ export class ExamenComponent implements OnInit {
   protected readonly HEADER_GRID: string = 'Mis Exámenes';
 
   // Grid
-  private readonly GRID_ACCION_PRESENTAR: string = 'play';
   protected examenList: Examen[] = [];
 
   private columnaPresentar: ColDef = Object.assign(
     {
-      action: this.GRID_ACCION_PRESENTAR,
+      action: GRID_ACTION.Presentar,
       cellRendererSelector: (params: ICellRendererParams) => {
         const component = {
           component: 'actionButton',
@@ -108,7 +106,7 @@ export class ExamenComponent implements OnInit {
    * Evento que se ejecuta al dar clic en algun boton del grid.
    */
   public onGridClick(gridData: { accion: string; data: Examen }) {
-    if (gridData.accion === this.GRID_ACCION_PRESENTAR) {
+    if (gridData.accion === GRID_ACTION.Presentar) {
       this.presentar(gridData.data.idExamen);
     }
   }
@@ -117,11 +115,11 @@ export class ExamenComponent implements OnInit {
     this.examenService
       .consultarMiExamenIndividual(idExamen)
       .subscribe((examen) => {
-        // if (!this.esFechaValida(examen)) {
-        //   const MENSAJE_NO_ACCESO: string = 'Aún no tiene acceso a este examen';
-        //   this.mensajeService.modalError(MENSAJE_NO_ACCESO);
-        //   return;
-        // }
+          if (!this.esFechaValida(examen)) {
+           const MENSAJE_NO_ACCESO: string = 'Aún no tiene acceso a este examen';
+           this.mensajeService.modalError(MENSAJE_NO_ACCESO);
+           return;
+         } 
 
         this.router.navigate(['/administrador/examen/examen/presentar'], {
           queryParams: this.encryptionService.generateURL({

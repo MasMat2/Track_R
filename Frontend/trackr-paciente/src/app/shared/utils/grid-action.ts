@@ -3,6 +3,7 @@ export class GridAction{
     public static GRID_ACCION_ELIMINAR = 'delete';
     public static GRID_ACCION_COPIAR = 'copy';
     public static GRID_ACCION_VER = 'see';
+    public static GRID_ACTION_PRESENTAR = 'play';
     public static GRID_ACCION_AJUSTE = 'ajuste';
     public static GRID_ACCION_REPORTE_INVENTARIO_FISICO = 'reporteInventarioFisico';
     public static GRID_ACCION_RECETA = 'receta';

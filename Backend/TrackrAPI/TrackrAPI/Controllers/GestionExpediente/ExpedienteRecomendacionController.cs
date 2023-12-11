@@ -24,6 +24,12 @@ public class ExpedienteRecomendacionController : ControllerBase
         return _expedienteRecomendacionService.ConsultarGridPorUsuario(idUsuario);
     }
 
+    [HttpGet("grid/usuario/recomendacionGeneral/{idUsuario}")]
+    public IEnumerable<ExpedienteRecomendacionGridDTO> ConsultarGridPorUsuarioRecomendacionGeneral(int idUsuario)
+    {
+        return _expedienteRecomendacionService.ConsultarGridPorUsuarioRecomendacionGeneral(idUsuario);
+    }
+
     [HttpGet("{idExpedienteRecomendacion}")]
     public ExpedienteRecomendacionFormDTO Consultar(int idExpedienteRecomendacion)
     {

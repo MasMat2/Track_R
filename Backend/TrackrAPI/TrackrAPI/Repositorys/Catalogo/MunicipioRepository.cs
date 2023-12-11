@@ -51,11 +51,10 @@ public class MunicipioRepository : Repository<Municipio>, IMunicipioRepository
                 .ThenInclude(e => e.IdPaisNavigation);
     }
 
-    public IEnumerable<Municipio> ConsultarPorEstado(int idPais)
+    public IEnumerable<Municipio> ConsultarPorEstado(int idEstado)
     {
         return context.Municipio
-            .Where(m => m.IdEstadoNavigation.IdPais == idPais)
-            .OrderBy(m => m.IdEstado);
+            .Where(m => m.IdEstado == idEstado);
     }
 
     public Municipio? ConsultarDependencias(int idMunicipio)

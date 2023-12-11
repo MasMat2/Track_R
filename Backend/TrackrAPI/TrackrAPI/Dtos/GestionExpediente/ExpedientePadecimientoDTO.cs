@@ -4,6 +4,7 @@ namespace TrackrAPI.Dtos.GestionExpediente
     {
         public int IdExpedientePadecimiento { get; set; }
         public int IdPadecimiento { get; set; }
+        public string clavePadecimiento { get; set; }
         public int IdUsuarioDoctor { get; set; }
         public string NombreDoctor { get; set; }
         public string NombrePadecimiento { get; set; }

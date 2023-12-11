@@ -35,7 +35,11 @@ export class ConfiguracionDashboardPage  implements OnInit {
 
   protected widgets: WidgetSeleccionado[] = [];
 
-  ngOnInit() {
+  ngOnInit(): void {
+    
+  }
+
+  public ionViewWillEnter() {
     // TODO: 2023-04-26 -> Take 1
 
     const widgets$ = this.widgetService.consultar();
@@ -49,9 +53,6 @@ export class ConfiguracionDashboardPage  implements OnInit {
             ...widget,
             seleccionado: usuarioWidgets.includes(widget.clave),
           };
-
-          console.log(widgetSeleccionado);
-
           return widgetSeleccionado;
         });
       })
@@ -69,11 +70,8 @@ export class ConfiguracionDashboardPage  implements OnInit {
   }
 
   protected onAceptar(): void {
-    console.log(this.widgets);
     const seleccionados = this.widgets
       .filter(widget => widget.seleccionado)
       .map(widget => widget.clave);
-
-    console.log(seleccionados);
   }
 }

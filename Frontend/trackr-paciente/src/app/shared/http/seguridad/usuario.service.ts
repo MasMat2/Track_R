@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { InformacionGeneralDto } from 'src/app/shared/dtos/perfil/informacion-general-dto';
 import { Usuario } from '@models/usuario';
 import { Observable } from 'rxjs';
+import { UsuarioNuevoTrackrDto } from '../../Dtos/seguridad/usuario-nuevo-trackr-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,10 @@ export class UsuarioService {
 
   agregar(usuario: Usuario) {
     return this.http.post<number>(this.url + 'agregar', usuario);
+  }
+
+  agregarTrackr(usuarioDto: UsuarioNuevoTrackrDto) {
+    return this.http.post<number>(this.url + 'agregarTrackr', usuarioDto);
   }
 
   consultarInformacionGeneral(): Observable<InformacionGeneralDto>{

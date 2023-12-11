@@ -9,7 +9,14 @@
       (ngSubmit)="enviarFormulario(formulario)"
     >
       <ion-grid>
-
+        <ion-row>
+          <div class="correoConfirmado" *ngIf="!informacionUsuario.correoConfirmado">
+            <!-- <ion-item> -->
+              <ion-label>Tu correo aún no está verificado</ion-label>
+              <ion-button (click) ="reenviarConfirmacionCorreo(infoUsuario.correo)" [disabled]="emailsubmiting">Enviar correo de verificación</ion-button>
+            <!-- </ion-item> -->
+          </div>
+        </ion-row>
         <ion-row>
           <ion-col>
             <ion-label class = "texto-seccion">General</ion-label>
@@ -251,7 +258,7 @@
               maxlength="50"
               autocomplete="off"
               placeholder="Correo electrónico"
-              [(ngModel)]="informacionUsuario.correo">
+              [(ngModel)]="informacionUsuario.correoPersonal">
             </ion-input>
             <div
               *ngIf="correo.errors?.['required'] && (correo.dirty || correo.touched)"
@@ -300,7 +307,6 @@
               (ionChange)="onChangeCodigoPostal()"
               [(ngModel)]="informacionUsuario.codigoPostal">
             </ion-input>
-            
           </ion-col>
         </ion-row>
         <ion-row>
@@ -455,10 +461,18 @@
               label-placement="floating"
               fill="outline"
               shape="round"
+              required="true"
               [(ngModel)]="padecimiento.idPadecimiento"
               >
-                <ion-select-option *ngFor="let pad of padecimientoList" [value]="pad.idPadecimiento">{{ pad.nombre }}</ion-select-option>
-              </ion-select>
+              <ion-select-option *ngFor="let pad of padecimientoList" [value]="pad.idPadecimiento">{{ pad.nombre }}</ion-select-option>
+            </ion-select>
+            <div
+            *ngIf="padecimiento.idPadecimiento === 0 && tipoPadecimiento.touched"
+            class="error"
+             >
+            El padecimiento es requerido
+            </div>
+
             </ion-col>
             <ion-col size="5">
               <ion-item class="custom-datetime">
@@ -485,7 +499,7 @@
                 #doctor="ngModel"
                 id="doctor"
                 [name]="'doctor' + i"
-                label="Doctor" 
+                label="Doctor"
                 labelPlacement="floating"
                 fill="outline"
                 shape="round"
@@ -495,6 +509,12 @@
                     {{ doctor.nombre}} - {{doctor.ambito}}
                 </ion-select-option>
               </ion-select>
+              <div
+              *ngIf="doctor.invalid && doctor.touched"
+              class="error"
+            >
+              El doctor es requerido
+            </div>
             </ion-col>
             <ion-col size="4">
               <ion-item>
@@ -568,7 +588,7 @@
 
         <ion-row class="mt-4">
           <ion-col>
-              <ion-button [disabled]="!btnSubmit"  type="submit">Guardar</ion-button>
+              <ion-button [disabled]="submiting"  type="submit">Guardar</ion-button>
           </ion-col>
         </ion-row>
         <br>

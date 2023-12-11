@@ -37,7 +37,7 @@ export class TipoExamenComponent implements OnInit {
       action: GRID_ACTION.Ver,
       cellRendererSelector: (params: ICellRendererParams) => {
         const component = {
-          component: 'actionButton',
+          component: 'actionButton', //aqui es donde se asigna el icono
           params: { disabled: false },
         };
         return component;

@@ -1,3 +1,5 @@
+import { SafeUrl } from "@angular/platform-browser";
+
 export class UsuarioDoctoresDto {
         public idExpediente: number;
         public idUsuarioDoctor: number;
@@ -5,4 +7,5 @@ export class UsuarioDoctoresDto {
         public nombre: string;
         public ambito: string;
         public hospital: string;
+        public urlImagen? : any;
 }
