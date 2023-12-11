@@ -27,7 +27,8 @@ export class MensajesComponent {
   constructor(
     private ChatMensajeHubService: ChatMensajeHubService,
     private ChatPersonaService: ChatPersonaService,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private route: Router
   ) {}
 
   ionViewWillEnter() {
@@ -78,5 +79,9 @@ export class MensajesComponent {
       this.mensajes = this.chatMensajes.find((array) =>
         array.some((x) => x.idChat == this.idChat)
       ) || [];
+  }
+
+  regresarBtn(){
+    this.route.navigate(['home/chat-movil'])
   }
 }
