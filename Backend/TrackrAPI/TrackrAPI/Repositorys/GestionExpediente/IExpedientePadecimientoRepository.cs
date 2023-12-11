@@ -12,5 +12,6 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         public void EliminarPorExpediente(int idExpediente);
         public IEnumerable<PadecimientoFueraRangoDTO> ConsultarValoresFueraRango(int idPadecimiento, int idUsuario);
         public IEnumerable<ExpedientePadecimiento> ConsultarPorPadecimiento(int? idPadecimiento);
+        public List<int> ConsultarIdsDoctorPorUsuario(int idUsuario);
     }
 }

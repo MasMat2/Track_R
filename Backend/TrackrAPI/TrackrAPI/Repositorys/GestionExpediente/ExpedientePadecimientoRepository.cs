@@ -93,5 +93,14 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                 .Where(exp => exp.IdPadecimiento == idPadecimiento)
                 .Include(exp => exp.IdExpedienteNavigation);
         }
+
+        public List<int> ConsultarIdsDoctorPorUsuario(int idUsuario)
+        {
+            return context.ExpedientePadecimiento
+                .Where(exp => exp.IdExpedienteNavigation.IdUsuario == idUsuario)
+                .Select(exp => exp.IdUsuarioDoctor)
+                .Distinct()
+                .ToList();
+        }
     }
 }
