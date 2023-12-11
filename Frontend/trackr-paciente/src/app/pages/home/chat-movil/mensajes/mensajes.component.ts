@@ -7,7 +7,9 @@ import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { Observable } from 'rxjs';
 import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
+import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
 import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
+import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-service.service';
 
 @Component({
   selector: 'app-mensajes',
@@ -23,12 +25,18 @@ export class MensajesComponent {
   protected idUsuario: number;
   protected chatMensajes$: Observable<ChatMensajeDTO[][]>
   protected chatMensajes: ChatMensajeDTO[][]
+  protected chat: ChatDTO = {
+    fecha: new Date(),
+    habilitado: true,
+    titulo: 'Chat'
+  };
 
   constructor(
     private ChatMensajeHubService: ChatMensajeHubService,
     private ChatPersonaService: ChatPersonaService,
     private router: ActivatedRoute,
-    private route: Router
+    private route: Router,
+    private ChatHubServiceService:ChatHubServiceService
   ) {}
 
   ionViewWillEnter() {
@@ -40,7 +48,13 @@ export class MensajesComponent {
     this.router.params.subscribe(params => {
       this.idChat = params['id']
       this.obtenerMensajes();
-      console.log(this.idChat)
+      this.obtenerChat();
+    })
+  }
+
+  obtenerChat(){
+    this.ChatHubServiceService.chat$.subscribe(res => {
+      this.chat = res.find(x => x.idChat == this.idChat) || {fecha: new Date(), habilitado: false}
     })
   }
 

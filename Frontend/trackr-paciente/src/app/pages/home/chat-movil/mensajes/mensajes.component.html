@@ -4,6 +4,8 @@
 
 <ion-button expand="full" shape="round" routerLink="home/chat-movil" (click)="regresarBtn()">Regresar</ion-button>
 
+<ion-title class="ion-text-center ion-align-items-center" style="padding-top: 1vh; padding-bottom: 1vh; padding: 0;">{{chat.titulo}}</ion-title>
+
 <div class="absolute">
   <div class="listado">
     <div *ngFor="let mensaje of mensajes">
@@ -14,7 +16,7 @@
       </div>
       <div class="message other" *ngIf="!mostrarMensaje(mensaje.idPersona)">
         <div class="message-bubble">
-          <div class="nombre">{{ mensaje.nombrePersona }}</div>
+          <div class="nombre">{{ mensaje?.nombrePersona || 'Chat' }}</div>
           {{ mensaje.mensaje }}
         </div>
       </div>
@@ -51,9 +53,12 @@
         </div>
 
         <div class="col-2">
-          <button type="submit" class="btn" (click)="enviarMensaje()">
-            <i class="fa fa-paper-plane" style="font-size: 24px"></i>
-          </button>
+          <div class="form-group">
+            <button type="submit" class="btn boton" (click)="enviarMensaje()">
+              <i class="fa fa-paper-plane" style="font-size: 24px"></i>
+            </button>
+          </div>
+          
         </div>
       </div>
     </div>

@@ -27,7 +27,7 @@
 }
 
 .listado {
-  height: 60vh;
+  height: 50vh;
   overflow-y: auto;
   align-self: flex-end;
 }
@@ -35,4 +35,10 @@
 .final {
   position: relative;
   bottom: 0;
+}
+
+.boton{
+  position: relative;
+  right: 2vh;
+  top: 3vh;
 }
