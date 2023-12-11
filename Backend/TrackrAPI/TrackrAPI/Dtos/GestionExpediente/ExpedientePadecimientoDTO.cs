@@ -10,5 +10,6 @@ namespace TrackrAPI.Dtos.GestionExpediente
         public string NombrePadecimiento { get; set; }
         public DateTime FechaDiagnostico { get; set; }
         public int IdExpediente { get; set; }
+        public bool? EsAntecedente { get; set; }
     }
 }

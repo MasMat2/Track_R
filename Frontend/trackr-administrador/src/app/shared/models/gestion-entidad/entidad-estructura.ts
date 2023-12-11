@@ -11,6 +11,7 @@ export class EntidadEstructura {
     public idEntidadEstructuraPadre?: number;
     public idIcono? : number;
     public idTipoWidget? : number;
+    public esAntecedente? : boolean;
 
     // Extras
     // Estructuras - Pestañas
