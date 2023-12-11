@@ -13,7 +13,7 @@ export default [
     component: HomePage,
     children: [
       { path: 'chat', component: ChatPage },
-      { path: 'chat-movil', component: ChatMovilPage },
+      { path: 'chat-movil', loadChildren: () => import('./chat-movil/chat-movil-routes') },
       { path: 'muestras', component: MuestrasPage },
       { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard-routes') },
       { path: 'cuestionarios', component: CuestionariosPage },
