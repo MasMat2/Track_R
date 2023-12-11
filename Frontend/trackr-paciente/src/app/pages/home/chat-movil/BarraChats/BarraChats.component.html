@@ -1,0 +1,40 @@
+<ion-header>
+  <app-header></app-header>
+</ion-header>
+
+<ion-title class="ion-text-center ion-align-items-center" style="padding-top: 2vh; padding-bottom: 2vh;">Chat</ion-title>
+
+<div style="display: flex; overflow-x: auto; height: 40vh;">
+  <div *ngFor="let chat of chats" style="margin-right: 10px; width: 50vh;">
+    <ion-avatar>
+      <img src="assets/img/default-user.jpg" alt="">
+    </ion-avatar>
+    <ion-label>{{chat.titulo}}</ion-label>
+  </div>
+</div>
+
+<div class="overflow">
+  <ion-list>
+    <ion-item *ngFor="let chat of chats" (click)="enviarIdChat(chat.idChat || 0)">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="4">
+            <ion-avatar>
+              <img src="assets/img/default-user.jpg" alt="">
+            </ion-avatar>
+          </ion-col>
+
+          <ion-col size="8">
+            <ion-row>
+              <ion-label><b>{{chat.titulo}}</b></ion-label>
+            </ion-row>
+            <ion-row>
+              <ion-label>{{chat.ultimoMensaje}}</ion-label>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+    </ion-item>
+  </ion-list>
+</div>
