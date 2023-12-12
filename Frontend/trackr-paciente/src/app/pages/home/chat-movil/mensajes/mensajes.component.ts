@@ -46,7 +46,7 @@ export class MensajesComponent {
 
   obtenerIdChat(){
     this.router.params.subscribe(params => {
-      this.idChat = params['id']
+      this.idChat = Number(params['id'])
       this.obtenerMensajes();
       this.obtenerChat();
     })
