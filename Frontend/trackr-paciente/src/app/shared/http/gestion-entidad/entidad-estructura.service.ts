@@ -15,4 +15,12 @@ export class EntidadEstructuraService {
   public consultarPadecimientosParaSelector(): Observable<ExpedientePadecimientoSelectorDTO[]> {
     return this.http.get<ExpedientePadecimientoSelectorDTO[]>(this.dataUrl + `consultarPadecimientosParaSelector/`);
   }
+
+  public consultarDiagnosticosParaSelector(): Observable<ExpedientePadecimientoSelectorDTO[]> {
+    return this.http.get<ExpedientePadecimientoSelectorDTO[]>(this.dataUrl + `diagnosticos/selector`);
+  }
+
+  public consultarAntecedentesParaSelector(): Observable<ExpedientePadecimientoSelectorDTO[]> {
+    return this.http.get<ExpedientePadecimientoSelectorDTO[]>(this.dataUrl + `antecedentes/selector`);
+  }
 }
