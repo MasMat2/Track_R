@@ -64,13 +64,16 @@
         <div class="col-md-3">
           <div class="form-group">
             <label class="label-input required-label" style="color: gray;" >Titulo de chat</label>
-            <input type="text" name="titulo" [(ngModel)]="tituloChat" class="form-control" [disabled]="desabilitarTitulo()">
+            <input #descripcion="ngModel" type="text" name="titulo" [(ngModel)]="tituloChat" class="form-control" [disabled]="desabilitarTitulo()">
+            <div *ngIf="(descripcion.errors?.['required'] && descripcion.touched )" class="error">
+              El titulo es requerido
+          </div>
           </div>
         </div>
 
         <div class="col-md-3">
           <div class="form-group">
-            <button (click)="crearChat()" class="btn-agregar">Crear Chat</button>
+            <button (click)="crearChat()" class="btn-agregar" [disabled]="deshabilitarBtn()">Crear Chat</button>
           </div>
         </div>
         

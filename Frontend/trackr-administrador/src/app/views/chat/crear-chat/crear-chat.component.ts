@@ -98,6 +98,30 @@ export class CrearChatComponent {
     }
     return false;
   }
+
+  campoVacio(){
+    if(!this.tituloChat){
+      return true;
+    }
+    if(this.tituloChat == ''){
+      return true
+    }
+    return false;
+  }
+
+  deshabilitarBtn(){
+    if(this.campoVacio() == false &&  this.desabilitarTitulo() ==true){
+      return false;
+    }
+    if(this.campoVacio() == true &&  this.desabilitarTitulo() ==true){
+      return false;
+    }
+    if(this.campoVacio() == false &&  this.desabilitarTitulo() ==false){
+      return false;
+    }
+    
+    return true;
+  }
   
   
 }
