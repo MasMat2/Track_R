@@ -47,19 +47,30 @@ export class InformacionGeneralComponent implements OnInit {
   protected infoUsuario: InformacionGeneralDto;
   protected misDoctores: UsuarioDoctoresDto[];
   protected edadUsuario: string;
-  public submiting = false;
-  public emailsubmiting = false;
-  public esPaisExtranjero: boolean = false;
-  public idPaisMexico: 1;
+  protected submiting = false;
+  protected emailsubmiting = false;
+  protected esPaisExtranjero: boolean = false;
+  private idPaisMexico: 1;
   protected nuevoPadecimiento: ExpedientePadecimientoDto = new ExpedientePadecimientoDto();
+  protected nuevoAntecedente: ExpedientePadecimientoDto = new ExpedientePadecimientoDto();
+  protected nuevoDiagnostico: ExpedientePadecimientoDto = new ExpedientePadecimientoDto();
+  protected nuevoAntecedenteInvalido = false;
+  protected nuevoDiagnosticoInvalido = false;
 
-  public paisList: PaisSelectorDto[] = [];
-  public estadoList: EstadoSelectorDto[] = [];
-  public municipioList: municipioSelectorDto[] = [];
-  public localidadList: LocalidadSelectorDto[] = [];
-  public coloniaList: ColoniaSelectorDto[] = [];
-  public generoList: GeneroSelectorDto[] = [];
-  public padecimientoList: ExpedientePadecimientoSelectorDTO[] = [];
+
+
+  protected paisList: PaisSelectorDto[] = [];
+  protected estadoList: EstadoSelectorDto[] = [];
+  protected municipioList: municipioSelectorDto[] = [];
+  protected localidadList: LocalidadSelectorDto[] = [];
+  protected coloniaList: ColoniaSelectorDto[] = [];
+  protected generoList: GeneroSelectorDto[] = [];
+  protected antecedenteList: ExpedientePadecimientoSelectorDTO[] = [];
+  protected diagnosticoList: ExpedientePadecimientoSelectorDTO[] = [];
+  protected antecedenteFiltradoList: ExpedientePadecimientoSelectorDTO[] = [];
+  protected diagnosticoFiltradoList: ExpedientePadecimientoSelectorDTO[] = [];
+
+
 
   constructor(
     private usuarioService: UsuarioService,
@@ -77,7 +88,6 @@ export class InformacionGeneralComponent implements OnInit {
 
   ngOnInit(){
     this.consultarGeneros();
-    this.consultarPadecimientos();
     this.obtenerUsuario();
     this.consultarPaises();
   }
@@ -187,10 +197,20 @@ export class InformacionGeneralComponent implements OnInit {
     }
   }
 
-  private async consultarPadecimientos(){
-    return lastValueFrom(this.entidadEstructuraService.consultarPadecimientosParaSelector())
-    .then((padecimientos: ExpedientePadecimientoSelectorDTO[]) => {
-      this.padecimientoList = padecimientos;
+  private async consultarAntecedentes(){
+    return lastValueFrom(this.entidadEstructuraService.consultarAntecedentesParaSelector())
+    .then((antecedentes: ExpedientePadecimientoSelectorDTO[]) => {
+     this.antecedenteList = antecedentes;
+     this.antecedenteFiltradoList = antecedentes.filter(ante => !this.infoUsuario.padecimientos.some(pad => pad.idPadecimiento === ante.idPadecimiento));
+    })
+  }
+
+  private async consultarDiagnosticos(){
+    return lastValueFrom(this.entidadEstructuraService.consultarDiagnosticosParaSelector())
+    .then((diagnosticos: ExpedientePadecimientoSelectorDTO[]) => {
+      this.diagnosticoList = diagnosticos;
+      this.diagnosticoFiltradoList = diagnosticos.filter(diag => !this.infoUsuario.padecimientos.some(pad => pad.idPadecimiento === diag.idPadecimiento));
+
     })
   }
 
@@ -233,6 +253,8 @@ export class InformacionGeneralComponent implements OnInit {
           this.consultarLocalidades(this.infoUsuario.idEstado);
           this.consultarColonias(this.infoUsuario.codigoPostal);
           this.consultarDoctores();
+          this.consultarAntecedentes();
+          this.consultarDiagnosticos();
           this.calcularEdad();
         }
       )
@@ -285,6 +307,38 @@ export class InformacionGeneralComponent implements OnInit {
     padecimiento.idPadecimiento = 0;
     this.infoUsuario.padecimientos = [...this.infoUsuario.padecimientos, padecimiento ];
 
+  }
+
+  protected agregarAntecedente(){
+    if(this.nuevoAntecedente.idPadecimiento == null || this.nuevoAntecedente.idUsuarioDoctor == null){
+      this.nuevoAntecedenteInvalido = true;
+      return;
+    }
+    const padecimiento = new ExpedientePadecimientoDto();
+    padecimiento.idPadecimiento = this.nuevoAntecedente.idPadecimiento;
+    padecimiento.idUsuarioDoctor = this.nuevoAntecedente.idUsuarioDoctor;
+    padecimiento.fechaDiagnostico = this.nuevoAntecedente.fechaDiagnostico;
+    padecimiento.esAntecedente = true;
+    this.infoUsuario.padecimientos = [...this.infoUsuario.padecimientos, padecimiento ];
+    this.nuevoAntecedenteInvalido = false;
+    this.nuevoAntecedente = new ExpedientePadecimientoDto();
+    this.consultarAntecedentes();
+  }
+
+  protected agregarDiagnostico(){
+    if(this.nuevoDiagnostico.idPadecimiento == null || this.nuevoDiagnostico.idUsuarioDoctor == null){
+      this.nuevoDiagnosticoInvalido = true;
+      return;
+    }
+    const padecimiento = new ExpedientePadecimientoDto();
+    padecimiento.idPadecimiento = this.nuevoDiagnostico.idPadecimiento;
+    padecimiento.idUsuarioDoctor = this.nuevoDiagnostico.idUsuarioDoctor;
+    padecimiento.fechaDiagnostico = this.nuevoDiagnostico.fechaDiagnostico;
+    padecimiento.esAntecedente = false;
+    this.infoUsuario.padecimientos = [...this.infoUsuario.padecimientos, padecimiento ];
+    this.nuevoDiagnosticoInvalido = false;
+    this.nuevoDiagnostico = new ExpedientePadecimientoDto();
+    this.consultarDiagnosticos();
   }
 
   protected reenviarConfirmacionCorreo(correoUsuario: string){

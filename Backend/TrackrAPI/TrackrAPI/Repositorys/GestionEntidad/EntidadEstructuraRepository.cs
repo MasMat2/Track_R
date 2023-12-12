@@ -162,6 +162,32 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 });
         }
 
+        public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarAntecedentesParaSelector()
+        {
+            return context.EntidadEstructura
+                .Where(e => (e.Tabulacion == true) &&
+                            (e.IdEntidadNavigation.Clave == GeneralConstant.ClaveEntidadPadecimiento) &&
+                            (e.EsAntecedente == true))
+                .Select(e => new ExpedientePadecimientoSelectorDTO
+                {
+                    IdPadecimiento = e.IdEntidadEstructura,
+                    Nombre = e.Nombre ?? string.Empty,
+                });
+        }
+
+        public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarDiagnosticosParaSelector()
+        {
+            return context.EntidadEstructura
+                .Where(e => (e.Tabulacion == true) &&
+                            (e.IdEntidadNavigation.Clave == GeneralConstant.ClaveEntidadPadecimiento) &&
+                            (e.EsAntecedente == false))
+                .Select(e => new ExpedientePadecimientoSelectorDTO
+                {
+                    IdPadecimiento = e.IdEntidadEstructura,
+                    Nombre = e.Nombre ?? string.Empty,
+                });
+        }
+
         //Dado un idUsuario, devuelve el valor mas reciente de las variables que mostrarDashboard = true de sus respectivos padecimientos
         public IEnumerable<EntidadEstructura> ValoresVariablesPadecimiento(int idUsuario)
         {

@@ -63,5 +63,17 @@ namespace TrackrAPI.Controllers.GestionEntidad
         {
             return entidadEstructuraService.ConsultarPadecimientosParaSelector();
         }
+
+        [HttpGet("antecedentes/selector")]
+        public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarAntecedentesParaSelector()
+        {
+            return entidadEstructuraService.ConsultarAntecedentesParaSelector();
+        }
+
+        [HttpGet("diagnosticos/selector")]
+        public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarDiagnosticosParaSelector()
+        {
+            return entidadEstructuraService.ConsultarDiagnosticosParaSelector();
+        }
     }
 }
