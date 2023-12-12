@@ -54,6 +54,8 @@ export class NotificacionesComponent  implements OnInit
 
   iconMappings: any = {
     1: { class: 'fa-solid fa-earth-americas', color: '#671e75' },
+    2: { class: 'fa-solid fa-comment-dots', color: '#671e75' },
+    4 : { class: 'fa-solid fa-user', color: '#671e75' },
     5: { class: 'fa-regular fa-circle-user', color: '#671e75' },
     6: { class: 'fa-solid fa-capsules', color: '#671e75' }
   };
