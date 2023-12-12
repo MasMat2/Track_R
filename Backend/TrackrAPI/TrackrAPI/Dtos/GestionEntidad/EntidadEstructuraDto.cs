@@ -15,7 +15,8 @@ namespace TrackrAPI.Dtos.GestionEntidad
         public bool EsTabla { get; set; }
         public int? IdTipoWidget {get ; set;}
         public int? IdIcono { get; set; }
-
+        public bool? EsAntecedente { get; set; }
+            
         public List<EntidadEstructuraDto> Hijos { get; set; }
         public List<SeccionCampo> Campos { get; set; }
     }

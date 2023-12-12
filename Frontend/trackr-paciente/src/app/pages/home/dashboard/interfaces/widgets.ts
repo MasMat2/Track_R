@@ -12,12 +12,12 @@ export const ALL_WIDGET_TYPES = [
   'w-pes',
   'w-sue',
   'w-fre',
-  'P001',
-  'P002',
-  'P003',
-  'P004',
-  'P005',
-  'P006'
+  'A001',
+  'A002',
+  'A003',
+  'D001',
+  'D002',
+  'D004'
 
 ] as const;
 
@@ -43,11 +43,11 @@ export const WIDGETS: WidgetDictionary = {
   'w-pes': { class: WidgetPesoComponent, columns: 4 },
   'w-fre' : {class: WidgetFrecuenciaComponent, columns: 4},
   'w-sue': {class: WidgetSuenoComponent, columns: 8},
-  'P001' : {class: WidgetSeguimientoComponent, columns: 12},
-  'P002' : {class: WidgetSeguimientoComponent, columns: 12},
-  'P003' : {class: WidgetSeguimientoComponent, columns: 12},
-  'P004' : {class: WidgetSeguimientoComponent, columns: 12},
-  'P005' : {class: WidgetSeguimientoComponent, columns: 12},
-  'P006' : {class: WidgetSeguimientoComponent, columns: 12},
+  'A001' : {class: WidgetSeguimientoComponent, columns: 12},
+  'A002' : {class: WidgetSeguimientoComponent, columns: 12},
+  'A003' : {class: WidgetSeguimientoComponent, columns: 12},
+  'D001' : {class: WidgetSeguimientoComponent, columns: 12},
+  'D002' : {class: WidgetSeguimientoComponent, columns: 12},
+  'D004' : {class: WidgetSeguimientoComponent, columns: 12},
 
 };

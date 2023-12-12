@@ -4,5 +4,6 @@ export class ExpedientePadecimientoDto {
     idUsuarioDoctor: number;
     nombreDoctor: string;
     nombrePadecimiento: string;
-    fechaDiagnostico: Date; 
+    fechaDiagnostico: Date;
+    esAntecedente: boolean;
 }

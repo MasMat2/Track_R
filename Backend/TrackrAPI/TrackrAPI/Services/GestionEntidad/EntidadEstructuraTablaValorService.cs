@@ -10,6 +10,9 @@ using System.Globalization;
 using TrackrAPI.Repositorys.GestionExpediente;
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Repositorys.Catalogo;
+using TrackrAPI.Services.Notificaciones;
+using TrackrAPI.Dtos.Notificaciones;
+using TrackrAPI.Repositorys.Seguridad;
 
 namespace TrackrAPI.Services.GestionEntidad
 {
@@ -19,18 +22,24 @@ namespace TrackrAPI.Services.GestionEntidad
         private readonly ISeccionCampoRepository seccionCampoRepository;
         private readonly IExpedientePadecimientoRepository expedientePadecimientoRepository;
         private readonly IEntidadEstructuraRepository entidadEstructuraRepository;
+        private readonly NotificacionDoctorService _notificacionDoctorService;
+        private readonly IUsuarioRepository _usuarioRepository;
 
         public EntidadEstructuraTablaValorService(
             IEntidadEstructuraTablaValorRepository entidadEstructuraTablaValorRepository,
             ISeccionCampoRepository seccionCampoRepository,
             IExpedientePadecimientoRepository expedientePadecimientoRepository,
-            IEntidadEstructuraRepository entidadEstructuraRepository
+            IEntidadEstructuraRepository entidadEstructuraRepository,
+            NotificacionDoctorService notificacionDoctorService,
+            IUsuarioRepository usuarioRepository
             )
         {
             this.entidadEstructuraTablaValorRepository = entidadEstructuraTablaValorRepository;
             this.seccionCampoRepository = seccionCampoRepository;
             this.expedientePadecimientoRepository = expedientePadecimientoRepository;
             this.entidadEstructuraRepository = entidadEstructuraRepository;
+            _notificacionDoctorService = notificacionDoctorService;
+            _usuarioRepository = usuarioRepository;
         }
 
         public List<RegistroTablaDto> ConsultarRegistroTablaPorTabulacion(int idEntidadEstructura, int idTabla)
@@ -95,7 +104,7 @@ namespace TrackrAPI.Services.GestionEntidad
             ts.Complete();
         }
 
-        public void AgregarMuestra(TablaValorMuestraDTO[] muestraDTO, int idUsuario)
+        public async Task AgregarMuestra(TablaValorMuestraDTO[] muestraDTO, int idUsuario)
         {
             using var ts = new TransactionScope();
             var entidadEstructuraMuestra = entidadEstructuraRepository.ConsultarPorClave(GeneralConstant.ClaveEntidadEstructuraMuestra);
@@ -120,6 +129,20 @@ namespace TrackrAPI.Services.GestionEntidad
                     FechaMuestra = muestra.FechaMuestra,
                     FueraDeRango = muestra.FueraDeRango
                 };
+
+                if ((bool)muestraAAgregar.FueraDeRango)
+                {
+                    List<int> idsDoctores =  this.expedientePadecimientoRepository.ConsultarIdsDoctorPorUsuario(idUsuario);
+                    string nombreVariable = this.seccionCampoRepository.ConsultarPorClave(muestraAAgregar.ClaveCampo).Descripcion;
+                    string nombrePaciente  = _usuarioRepository.ConsultarDto(idUsuario).Nombre;
+                    var notificacion = new NotificacionDoctorCapturaDTO(
+
+                        "El paciente " + nombrePaciente + " ha registrado un valor fuera de rango en la variable " + nombreVariable + ".",
+                        4,
+                        idUsuario
+                    );
+                    await _notificacionDoctorService.Notificar(notificacion, idsDoctores);
+                }
                 var ultimoRegistro = entidadEstructuraTablaValorRepository.ConsultarUltimoRegistro(muestraAAgregar.IdEntidadEstructura, idUsuario);
                 muestraAAgregar.Numero = ultimoRegistro + 1;
                 entidadEstructuraTablaValorRepository.Agregar(muestraAAgregar);

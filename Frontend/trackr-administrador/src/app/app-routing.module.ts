@@ -28,6 +28,12 @@ const routes: Routes = [
     import('./views/configuracion-general/acceso/confirmar-correo/confirmar-correo.component')
     .then((m) => m.ConfirmarCorreoComponent)
   },
+  {
+    path: 'restablecer-contrasena',
+    loadComponent: () =>
+    import('./views/configuracion-general/acceso/restablecer-contrasena/restablecer-contrasena.component')
+    .then((m) => m.RestablecerContrasenaComponent)
+  }
 ];
 
 @NgModule({

@@ -81,29 +81,31 @@ namespace TrackrAPI.Services.Seguridad
             throw new CdisException("Ha ocurrido un error al intentar actualizar la contraseña. El tiempo de validación se ha agotado.");
         }
 
-        public async Task EnviarCorreo(string correoUsuario, string clave)
+        public async void EnviarCorreo(string correoUsuario, string clave)
         {
             var usuarioCompleto = _usuarioRepository.ConsultarPorCorreo(correoUsuario);
 
             string correoEncriptado = _simpleAES.EncryptToString(usuarioCompleto.Correo);
             string urlFrontEnd = _config.GetSection("AppSettings:UrlFrontEnd").Value;
 
-            var logotipoCdis = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-01-Trackr.png", "logo");
-            var logotipoHospital = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-H_C_CEIC.png", "logohospital");
+            var logotipoTrackr = await DescargarLogo(urlFrontEnd + "assets/img/logo-trackr.png", "logotrackr");
+            //var logotipoCdis = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-01-Trackr.png", "logocdis");
+            //var logotipoHospital = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-H_C_CEIC.png", "logohospital");
 
-            var mensaje = $@"
-        <div>
-            <span><img src=""cid:logo"" style='max-width:100%; height:auto;'></span>
-            <span><img src=""cid:logohospital"" style='max-width:100%; height:auto;' align='right'></span>
-        </div>
-        <hr style='border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;'>
-        <p>Da clic en el siguiente link para restablecer tu contraseña:
-            <a href='{urlFrontEnd}#/acceso/restablecer-contrasena?id={correoEncriptado}&tkn={clave}' target='_blank'>
-                Restablecer mi contraseña
-            </a>
-        </p>
-        <hr style='border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;'>
-    ";
+            var mensaje = 
+                $@"
+                    <div>
+                        <span><img src=""cid:logotrackr"" style='max-width:100%; height:auto;'></span>
+                        <span><img src=""cid:logohospital"" style='max-width:100%; height:auto;' align='right'></span>
+                    </div>
+                    <hr style='border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;'>
+                    <p>Da clic en el siguiente link para restablecer tu contraseña:
+                        <a href='{urlFrontEnd}#/restablecer-contrasena?id={correoEncriptado}&tkn={clave}' target='_blank'>
+                            Restablecer mi contraseña
+                        </a>
+                    </p>
+                    <hr style='border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;'>
+                ";
 
             var correo = new Correo
             {
@@ -111,7 +113,7 @@ namespace TrackrAPI.Services.Seguridad
                 Asunto = "ATISC: Restablecimiento de contraseña",
                 Mensaje = mensaje,
                 EsMensajeHtml = true,
-                Imagenes = new List<MimePart> { logotipoCdis, logotipoHospital }
+                Imagenes = new List<MimePart> { logotipoTrackr }
             };
 
             await _correoHelper.Enviar(correo);
