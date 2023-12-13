@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting.Internal;
 using MimeTypes;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Transactions;
@@ -177,9 +178,13 @@ public class ExpedienteTrackrService
             if (!string.IsNullOrWhiteSpace(expediente.TipoMime))
             {
                 string filePath = $"Archivos/Usuario/{expediente.IdUsuario}{MimeTypeMap.GetExtension(expediente.TipoMime)}";
+                
+                    Console.WriteLine("Expediente : " + JsonConvert.SerializeObject(expediente, Formatting.Indented));
+                    Console.WriteLine("--------------------");
                 if (File.Exists(filePath))
                 {
                     byte[] imageArray = File.ReadAllBytes(filePath);
+
                     expediente.ImagenBase64 = Convert.ToBase64String(imageArray);
                 }
             }

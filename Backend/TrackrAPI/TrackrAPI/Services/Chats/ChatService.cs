@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.InkML;
 using Microsoft.AspNetCore.SignalR;
+using MimeTypes;
 using TrackrAPI.Helpers;
 using TrackrAPI.Hubs;
 using TrackrAPI.Models;
@@ -68,7 +69,24 @@ public class ChatService
                         chat.Titulo = user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno;
                     }
                 }
-                 chat.IdCreadorChat = _chatPersonaRepository.ConsultarIdCreador(chat.IdChat); 
+
+            }
+
+            int idChatCreador = _chatPersonaRepository.ConsultarIdCreador(chat.IdChat);
+            var usuarioCreador = _usuarioRepository.ConsultarDto(idChatCreador);
+            if (usuarioCreador != null)
+            {
+
+                if (!string.IsNullOrEmpty(usuarioCreador.ImagenTipoMime))
+                {
+                    string filePath = $"Archivos/Usuario/{usuarioCreador.IdUsuario}{MimeTypeMap.GetExtension(usuarioCreador.ImagenTipoMime)}";
+                    if (File.Exists(filePath))
+                    {
+                        byte[] imageArray = File.ReadAllBytes(filePath);
+                        chat.ImagenBase64 = Convert.ToBase64String(imageArray);
+                        chat.TipoMime = usuarioCreador.ImagenTipoMime;
+                    }
+                }
             }
         }
 

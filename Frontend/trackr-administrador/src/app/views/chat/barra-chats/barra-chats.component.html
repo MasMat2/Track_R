@@ -18,8 +18,9 @@
       <td class="img-container p-0" >
         <img
           [src]="
-            
-            'assets/img/default-user.jpg'
+            chat.idCreadorChat != undefined || null
+            ? (chat.imagenBase64 | urlImagen : chat?.tipoMime)
+            : 'assets/img/default-user.jpg'
           "
         />
 <!--

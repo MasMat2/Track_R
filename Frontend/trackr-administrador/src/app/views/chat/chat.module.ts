@@ -7,6 +7,7 @@ import { MensajesComponent } from './mensajes/mensajes.component';
 import { CrearChatComponent } from './crear-chat/crear-chat.component';
 import { TableModule } from 'primeng/table';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 
 
@@ -21,7 +22,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     CommonModule,
     FormsModule,
     TableModule,
-    NgSelectModule
+    NgSelectModule,
+    PipesModule
   ]
 })
 export class ChatModule { }

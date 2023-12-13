@@ -6,7 +6,8 @@ public partial class ChatDTO
     public DateTime Fecha { get; set; }
     public bool Habilitado { get; set; }
     public string? Titulo { get; set; }
-    public int IdCreadorChat { get; set; }
+    public string ImagenBase64 { get; set; }
+    public string TipoMime { get; set; }
 
 }
 
