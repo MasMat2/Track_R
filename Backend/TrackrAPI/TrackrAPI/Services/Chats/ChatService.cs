@@ -43,12 +43,18 @@ public class ChatService
         //await hubContext.Clients.All.NuevoChat(chat,idPersonas);
     }
 
-    public IEnumerable<Chat> ConsultarChats(int IdPersona)
+    public IEnumerable<ChatDTO> ConsultarChats(int IdPersona)
     {
         var idChats = _chatPersonaRepository.ConsultarChatsPorPersona(IdPersona).Select(x => x.IdChat).ToList();
-        var chats = _chatRepository.ConsultarChats(idChats);
+        var chatsDto = _chatRepository.ConsultarChats(idChats).Select(x => new ChatDTO
+        {
+            IdChat = x.IdChat,
+            Titulo = x.Titulo,
+            Fecha = x.Fecha,
+            Habilitado = x.Habilitado
+        }).ToList();
 
-        foreach(var chat in chats)
+        foreach(var chat in chatsDto)
         {
             if(_chatPersonaRepository.ConsultarPersonasPorChat(chat.IdChat).ToList().Count == 2)
             {
@@ -62,9 +68,10 @@ public class ChatService
                         chat.Titulo = user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno;
                     }
                 }
+                 chat.IdCreadorChat = _chatPersonaRepository.ConsultarIdCreador(chat.IdChat); 
             }
         }
 
-        return chats;
+        return chatsDto;
     }
 }

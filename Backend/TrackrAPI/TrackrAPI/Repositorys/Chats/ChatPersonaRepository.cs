@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 
 namespace TrackrAPI.Repositorys.Chats;
@@ -33,5 +34,14 @@ public class ChatPersonaRepository : Repository<ChatPersona>, IChatPersonaReposi
                       .Include(x => x.IdExpedienteNavigation)
                       .Select(x => x.IdExpedienteNavigation.IdUsuario)
                       .ToList();
+    }
+    public int ConsultarIdCreador(int idChat)
+    {
+        var idCreador =  context.ChatPersona
+                      .Where(x => x.IdChat == idChat && x.IdTipoNavigation.Clave == GeneralConstant.ClaveTipoUsuarioChatAdmin)
+                      .Select(x => x.IdPersona)
+                      .FirstOrDefault();
+
+        return idCreador;
     }
 }

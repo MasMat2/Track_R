@@ -416,5 +416,7 @@
         public static readonly string TipoMovimientoUsuarioSalidaPersonal = "Salida Personal";
         public static readonly string[] WidgetsDefault = { "w-sue" , "w-pes" , "w-fre" , "w-pas" };
         public static readonly string ClaveNotificacionRecordatorio = "GRL";
+        public static readonly int IdTipoUsuarioChatAdmin = 1;
+        public static readonly string ClaveTipoUsuarioChatAdmin = "001";
     }
 }

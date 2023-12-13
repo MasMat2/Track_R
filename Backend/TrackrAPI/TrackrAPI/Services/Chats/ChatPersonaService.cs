@@ -1,4 +1,5 @@
 ﻿using TrackrAPI.Dtos.Chats;
+using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Chats;
 
@@ -13,7 +14,7 @@ public class ChatPersonaService
         _chatPersonaRepository = chatPersonaRepository;
     }
 
-    public void agregarPersonaChat(ChatPersonaFormDTO chatPersonaFormDTO)
+    public void agregarPersonaChat(ChatPersonaFormDTO chatPersonaFormDTO, int idUsuario)
     {
         var idPersonas = chatPersonaFormDTO.IdPersonas;
         for(var i = 0; i < idPersonas.Count; i++)
@@ -22,7 +23,7 @@ public class ChatPersonaService
             {
                 IdChat = chatPersonaFormDTO.IdChat,
                 IdPersona = idPersonas[i],
-                IdTipo = chatPersonaFormDTO.IdTipo,
+                IdTipo = idPersonas[i] == idUsuario? GeneralConstant.IdTipoUsuarioChatAdmin : chatPersonaFormDTO.IdTipo,
             };
             _chatPersonaRepository.Agregar(chatPersona);
         }

@@ -3,5 +3,6 @@ export interface ChatDTO{
     fecha: Date;
     habilitado: boolean;
     titulo?: string;
-    ultimoMensaje?:string
+    ultimoMensaje?:string;
+    idCreadorChat?: number;
 }

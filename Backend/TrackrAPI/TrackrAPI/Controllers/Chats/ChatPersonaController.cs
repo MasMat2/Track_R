@@ -19,7 +19,8 @@ namespace TrackrAPI.Controllers.Chats
         [HttpPost]
         public void agregarPersonaChat (ChatPersonaFormDTO chatPersonaFormDTO)
         {
-            _chatPersonaService.agregarPersonaChat(chatPersonaFormDTO);
+            int IdUsuario = Utileria.TryObtenerIdUsuarioSesion(this);
+            _chatPersonaService.agregarPersonaChat(chatPersonaFormDTO , IdUsuario);
         }
 
         [HttpGet("IdUsuario")]

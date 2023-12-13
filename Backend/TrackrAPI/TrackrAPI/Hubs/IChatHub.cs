@@ -4,7 +4,7 @@ namespace TrackrAPI.Hubs;
 
 public interface IChatHub
 {
-    Task NuevaConexion(IEnumerable<Chat> chats);
+    Task NuevaConexion(IEnumerable<ChatDTO> chats);
     Task NuevoChat(Chat chat, List<int> idPersonas);
 }
 
