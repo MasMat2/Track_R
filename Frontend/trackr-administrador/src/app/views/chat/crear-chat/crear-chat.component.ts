@@ -65,7 +65,8 @@ export class CrearChatComponent {
     let chat: ChatDTO ={
       fecha: new Date(),
       habilitado: true,
-      titulo: this.tituloChat
+      titulo: this.tituloChat,
+      idCreadorChat: this.idUsuario
     }
       this.ChatHubServiceService.agregarChat(chat,this.personas)
     }
@@ -75,7 +76,8 @@ export class CrearChatComponent {
       let chat:ChatDTO ={
         fecha: new Date(),
         habilitado: true,
-        titulo: this.tituloChat
+        titulo: this.tituloChat,
+        idCreadorChat: this.idUsuario
       }
       this.ChatHubServiceService.agregarChat(chat,this.idPacientesPadecimiento);
     }
