@@ -4,6 +4,7 @@ export interface ChatDTO{
     habilitado: boolean;
     titulo?: string;
     ultimoMensaje?:string;
+    idCreadorChat: number;
     imagenBase64?: string;
     tipoMime?: string;
 }

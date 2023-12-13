@@ -28,7 +28,8 @@ export class MensajesComponent {
   protected chat: ChatDTO = {
     fecha: new Date(),
     habilitado: true,
-    titulo: 'Chat'
+    titulo: 'Chat',
+    idCreadorChat: 0,
   };
 
   constructor(
@@ -54,7 +55,7 @@ export class MensajesComponent {
 
   obtenerChat(){
     this.ChatHubServiceService.chat$.subscribe(res => {
-      this.chat = res.find(x => x.idChat == this.idChat) || {fecha: new Date(), habilitado: false}
+      this.chat = res.find(x => x.idChat == this.idChat) || {fecha: new Date(), habilitado: false , idCreadorChat: 0}
     })
   }
 

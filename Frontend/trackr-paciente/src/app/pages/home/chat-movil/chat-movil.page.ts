@@ -10,6 +10,8 @@ import { ChatHubServiceService } from 'src/app/services/dashboard/chat-hub-servi
 import { BarraChatsComponent } from './BarraChats/BarraChats.component';
 import { MensajesComponent } from './mensajes/mensajes.component';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ArchivoService } from '@services/archivo.service';
 
 @Component({
   selector: 'app-chat-movil',
@@ -37,7 +39,9 @@ export class ChatMovilComponent implements OnInit {
 
   constructor(
     private ChatHubServiceService: ChatHubServiceService,
-    private chatMensajeHubService: ChatMensajeHubService
+    private chatMensajeHubService: ChatMensajeHubService,
+    private archivoService : ArchivoService,
+    private sanitizer : DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -47,9 +51,8 @@ export class ChatMovilComponent implements OnInit {
 
   obtenerChats() {
     this.chats$ = this.ChatHubServiceService.chat$;
-    this.chats$.subscribe((res) => {
-      console.log(res);
-      this.chats = res;
+    this.chats$.subscribe((chats) => {
+      this.chats = chats;
       this.obtenerUltimoMensaje();
     });
   }

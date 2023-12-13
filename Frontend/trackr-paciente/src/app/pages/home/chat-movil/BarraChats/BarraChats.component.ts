@@ -9,6 +9,10 @@ import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { ChatMensajeHubService } from '../../../../services/dashboard/chat-mensaje-hub.service';
 import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
+import { ArchivoService } from '@services/archivo.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
+import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
 
 @Component({
   selector: 'app-barra-chats',
@@ -22,22 +26,36 @@ export class BarraChatsComponent {
   protected chats: ChatDTO[];
   protected chatMensajes$: Observable<ChatMensajeDTO[][]>;
   protected mensajes: ChatMensajeDTO[][];
+  protected misDoctores: UsuarioDoctoresDto[];
   //@Output() idChatPadre = new EventEmitter<number>();
   //@Input() ultmoMensajes: string[];
 
   constructor(private router: Router,
               private ChatHubServiceService:ChatHubServiceService,
-              private chatMensajeHubService:ChatMensajeHubService) {}
+              private chatMensajeHubService:ChatMensajeHubService,
+              private archivoService : ArchivoService,
+              private sanitizer : DomSanitizer,
+              private doctoresService : MisDoctoresService) {}
 
   ionViewWillEnter(){
     this.obtenerChats()
+    this.consultarDoctores();
   }
 
   obtenerChats() {
     this.chats$ = this.ChatHubServiceService.chat$;
-    this.chats$.subscribe((res) => {
-      console.log(res);
-      this.chats = res;
+    this.chats$.subscribe((chats) => {
+
+      chats.forEach((chat) => {
+        this.archivoService.obtenerUsuarioImagen(chat.idCreadorChat).subscribe((imgaen) => {
+          let objectURL = URL.createObjectURL(imgaen);
+          let urlImagen = objectURL;
+          let url = this.sanitizer.bypassSecurityTrustUrl(urlImagen);
+          chat.urlImagen = url;
+        });
+      });
+      
+      this.chats = chats;
       this.obtenerUltimoMensaje();
     });
   }
@@ -62,5 +80,21 @@ export class BarraChatsComponent {
 
   enviarIdChat(idChat: number) {
     this.router.navigate(['home/chat-movil/chat',idChat]);
+  }
+
+  consultarDoctores() {
+    this.doctoresService.consultarExpediente().subscribe((doctores => {
+      doctores.forEach((doctor) => { 
+        this.archivoService.obtenerUsuarioImagen(doctor.idUsuarioDoctor).subscribe((imgaen) => {
+          let objectURL = URL.createObjectURL(imgaen);
+          let urlImagen = objectURL;
+          let url = this.sanitizer.bypassSecurityTrustUrl(urlImagen);
+          doctor.urlImagen = url;
+        });
+      }
+      )
+      
+      this.misDoctores = doctores;
+    }));
   }
 }

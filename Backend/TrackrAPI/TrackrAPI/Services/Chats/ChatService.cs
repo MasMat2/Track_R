@@ -86,6 +86,7 @@ public class ChatService
                         chat.ImagenBase64 = Convert.ToBase64String(imageArray);
                         chat.TipoMime = usuarioCreador.ImagenTipoMime;
                     }
+                        chat.IdCreadorChat = idChatCreador;
                 }
             }
         }

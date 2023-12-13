@@ -4,12 +4,15 @@
 
 <ion-title class="ion-text-center ion-align-items-center" style="padding-top: 2vh; padding-bottom: 2vh;">Chat</ion-title>
 
-<div style="display: flex; overflow-x: auto; height: 40vh;">
-  <div *ngFor="let chat of chats" style="margin-right: 10px; width: 50vh;">
-    <ion-avatar>
-      <img src="assets/img/default-user.jpg" alt="">
+<div style="display: flex; overflow-x: auto; height: 40vh; position: relative;">
+  <div *ngFor="let doctor of misDoctores" style="margin-right: 10px; width: 50vh;">
+    <ion-avatar style="position: relative;">
+      <img alt="{{doctor.urlImagen}} d" [src]="doctor.urlImagen" />
+      <div style="position: absolute; top: 0; right: 0;">
+        <ion-icon name="add-circle"></ion-icon>
+      </div>
     </ion-avatar>
-    <ion-label>{{chat.titulo}}</ion-label>
+    <ion-label>{{doctor.nombre}}</ion-label>
   </div>
 </div>
 
@@ -19,8 +22,11 @@
       <ion-grid>
         <ion-row>
           <ion-col size="4">
-            <ion-avatar>
-              <img src="assets/img/default-user.jpg" alt="">
+            <ion-avatar style="position: relative;">
+              <img [src]="chat.urlImagen" alt="{{chat.urlImagen}}">
+              <div style="position: absolute; top: 0; right: 0;">
+                <ion-icon name="remove-circle"></ion-icon>
+              </div>
             </ion-avatar>
           </ion-col>
 

@@ -45,19 +45,19 @@ export class MisDoctoresPage   {
   }
 
   consultarDoctores() {
-    this.doctoresService.consultarExpediente().subscribe((data => {
-      this.misDoctores = data;
-      this.misDoctores.forEach((doctor) => { 
+    this.doctoresService.consultarExpediente().subscribe((doctores => {
+      doctores.forEach((doctor) => { 
         this.archivoService.obtenerUsuarioImagen(doctor.idUsuarioDoctor).subscribe((imgaen) => {
           let objectURL = URL.createObjectURL(imgaen);
           let urlImagen = objectURL;
           let url = this.sanitizer.bypassSecurityTrustUrl(urlImagen);
           doctor.urlImagen = url;
         });
-        }
+      }
       )
-  
-  }));
+      
+      this.misDoctores = doctores;
+    }));
   }
 
   protected eliminar(doctor: UsuarioDoctorDto) {
