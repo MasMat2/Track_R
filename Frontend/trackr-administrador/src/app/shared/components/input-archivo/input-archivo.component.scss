@@ -1,0 +1,46 @@
+@import 'src/app/shared/styles/variables.scss';
+
+.btn-subir {
+  font-size: small;
+  color: #fbe5d6;
+
+  padding: 0px;
+  margin: 1px 5px;
+  height: calc(1.3em + .70rem + 6px);
+
+  background-color: transparent;
+
+  // &:hover {
+  //   background-color: #f3f3f3;
+  // }
+
+  transition: 200ms;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  border-radius: 20px;
+  text-wrap: true;
+  max-width: 100%;
+  max-height: 100%;
+  align-content: center;
+
+}
+
+.form-control{
+  color: gray;
+}
+
+.icono{
+  height: 80%;
+  background-color: transparent;
+  border-radius: 50%;
+
+  &:hover {
+    background-color: #f3f3f3;
+  }
+}
+
+.btn-ayuda:disabled{
+  opacity: 0;
+}

@@ -1,0 +1,21 @@
+<div class="form-group" style="margin-top: 40px;">
+  <label class="label-input required-label" style="margin-left: 30px;margin-top: -5px; font-size: 12px;">{{this.label}}</label>
+  <div class="d-flex justify-content-around">
+    <button class="btn-subir" (click)="getElement()" [disabled]="habilitado">
+      <img src="assets/img/svg/ico-15x15-Boton-Circular-Naranja-Subir_Archivo-Cargar.svg"  class="icono">
+    </button>
+    <input #inputArchivo="ngModel" ngModel [id]="id" [name]="label" class="col-md-7" type="file"
+    autocomplete="off" (change)="fileChange($event)" [hidden]="true" />
+    <input #nombre="ngModel" [(ngModel)]="nombreArchivo" name="nombre" class="form-control" type="text" maxlength="100" readonly disabled
+    style="height: calc(1.5em + 0.75rem + 7px)  !important;"/>
+    <button class="btn-subir" (click)="previsualizar()" [disabled]="habilitado">
+      <img src="assets/img/svg/ico-15x15-Boton-Circular-Naranja-Ver_Archivo.svg"  class="icono">
+    </button>
+    <button class="btn-subir" (click)="descargarArchivo()" >
+      <img src="assets/img/svg/ico-15x15-Boton-Circular-Naranja-Descargar.svg"  class="icono">
+    </button>
+    <button class="btn-subir btn-ayuda" (click)="previsualizarAyuda()" [disabled]="!contieneAyuda">
+      <img src="assets/img/svg/ico-15x15-Boton-Circular-Amarillo-Ayuda.svg"  class="icono">
+    </button>
+  </div>
+</div>
