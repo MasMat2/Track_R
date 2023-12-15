@@ -81,6 +81,10 @@ export class CrearChatComponent {
       }
       this.ChatHubServiceService.agregarChat(chat,this.idPacientesPadecimiento);
     }
+
+    this.tituloChat = '';
+    this.padecimiento = 0;
+    this.personas = []
     
 
   }

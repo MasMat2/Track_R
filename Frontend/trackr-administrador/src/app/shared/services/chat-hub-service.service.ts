@@ -93,9 +93,8 @@ export class ChatHubServiceService {
     }
 
     this.ChatPersonaService.agregarPersonas(chatPersona).subscribe(res => {
-
+      this.chatSubject.next(chats);
     })
-    this.chatSubject.next(chats);
   }
 
   private onNuevaConexion(chats: ChatDTO[]): void{
