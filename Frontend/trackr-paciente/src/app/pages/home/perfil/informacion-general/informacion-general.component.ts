@@ -27,6 +27,7 @@ import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
 import { GeneroSelectorDto } from 'src/app/shared/Dtos/catalogo/genero-selector-dto';
 import { ConfirmacionCorreoService } from '@http/seguridad/confirmacion-correo.service';
 import { ConfirmarCorreoDto } from '../../../../shared/Dtos/seguridad/confirmar-correo-dto';
+import {GeneroService} from '@http/catalogo/genero.service'
 
 @Component({
   selector: 'app-informacion-general',
@@ -57,8 +58,6 @@ export class InformacionGeneralComponent implements OnInit {
   protected nuevoAntecedenteInvalido = false;
   protected nuevoDiagnosticoInvalido = false;
 
-
-
   protected paisList: PaisSelectorDto[] = [];
   protected estadoList: EstadoSelectorDto[] = [];
   protected municipioList: municipioSelectorDto[] = [];
@@ -69,7 +68,6 @@ export class InformacionGeneralComponent implements OnInit {
   protected diagnosticoList: ExpedientePadecimientoSelectorDTO[] = [];
   protected antecedenteFiltradoList: ExpedientePadecimientoSelectorDTO[] = [];
   protected diagnosticoFiltradoList: ExpedientePadecimientoSelectorDTO[] = [];
-
 
 
   constructor(
@@ -83,7 +81,8 @@ export class InformacionGeneralComponent implements OnInit {
     private entidadEstructuraService: EntidadEstructuraService,
     private doctoresService: MisDoctoresService,
     private alertController: AlertController,
-    private confirmacionCorreoService: ConfirmacionCorreoService
+    private confirmacionCorreoService: ConfirmacionCorreoService,
+    private generoService: GeneroService
   ) {  }
 
   ngOnInit(){
@@ -224,25 +223,12 @@ export class InformacionGeneralComponent implements OnInit {
     }));
   }
 
-
-
   private consultarGeneros() {
-    this.generoList = [
-      {
-        idGenero: 3,
-        descripcion: "Hombre"
-      },
-      {
-        idGenero: 4,
-        descripcion: "Mujer"
-      },
-      {
-        idGenero: 9,
-        descripcion: "Otro"
-      },
-    ];
-
-    return lastValueFrom(of(this.generoList));
+    this.generoService.consultarGeneros().subscribe(
+      generos => {
+        this.generoList = generos;
+      }
+    );
   }
 
   private obtenerUsuario(){
