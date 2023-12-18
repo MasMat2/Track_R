@@ -92,6 +92,10 @@ export class InformacionGeneralComponent implements OnInit {
     this.consultarPaises();
   }
 
+  ionViewWillEnter(){
+    this.consultarDoctores();
+  }
+
   private async consultarPaises(): Promise<void> {
     const paises = await this.paisService
       .consultarTodosParaSelector()
@@ -242,7 +246,6 @@ export class InformacionGeneralComponent implements OnInit {
   }
 
   private obtenerUsuario(){
-
     this.informacionUsuario$ = this.usuarioService.consultarInformacionGeneral().pipe(
       tap(
         (data) => {
@@ -252,7 +255,6 @@ export class InformacionGeneralComponent implements OnInit {
           this.consultarMunicipios(this.infoUsuario.idEstado);
           this.consultarLocalidades(this.infoUsuario.idEstado);
           this.consultarColonias(this.infoUsuario.codigoPostal);
-          this.consultarDoctores();
           this.consultarAntecedentes();
           this.consultarDiagnosticos();
           this.calcularEdad();
@@ -346,9 +348,8 @@ export class InformacionGeneralComponent implements OnInit {
     const confirmarCorreo: ConfirmarCorreoDto = { correo: correoUsuario, token: ""};
     this.confirmacionCorreoService.enviarCorreoConfirmacion(confirmarCorreo).subscribe({
       next: () => {
-        this.emailsubmiting = false;
       }
-    })
+    });
   }
 
   private async presentAlert() {
@@ -363,7 +364,7 @@ export class InformacionGeneralComponent implements OnInit {
 
   private async presentAlertError() {
     const alert = await this.alertController.create({
-      header: 'Campdos requeridos',
+      header: 'Campos requeridos',
       message: 'Llene todos los campos requeridos',
       buttons: ['OK'],
     });
