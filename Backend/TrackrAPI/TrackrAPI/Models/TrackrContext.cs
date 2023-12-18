@@ -21,6 +21,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<AccesoPerfil> AccesoPerfil { get; set; } = null!;
         public virtual DbSet<AgrupadorCuentaContable> AgrupadorCuentaContable { get; set; } = null!;
         public virtual DbSet<Almacen> Almacen { get; set; } = null!;
+        public virtual DbSet<Archivo> Archivo { get; set; } = null!;
         public virtual DbSet<Area> Area { get; set; } = null!;
         public virtual DbSet<Artefacto> Artefacto { get; set; } = null!;
         public virtual DbSet<Articulo> Articulo { get; set; } = null!;
@@ -511,6 +512,32 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdUsuarioResponsable)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Almacen_UsuarioResponsable");
+            });
+
+            modelBuilder.Entity<Archivo>(entity =>
+            {
+                entity.HasKey(e => e.IdArchivo)
+                    .HasName("PK__Archivo__26B9211157A0384D");
+
+                entity.ToTable("Archivo", "Trackr");
+
+                entity.Property(e => e.Archivo1)
+                    .HasColumnType("image")
+                    .HasColumnName("Archivo");
+
+                entity.Property(e => e.ArchivoNombre)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ArchivoTipoMime)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaRealizacion).HasColumnType("datetime");
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Area>(entity =>
