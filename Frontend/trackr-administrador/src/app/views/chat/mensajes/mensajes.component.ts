@@ -30,7 +30,13 @@ export class MensajesComponent {
     }
 
     this.ChatMensajeHubService.enviarMensaje(msg);
+    if(this.mensajes.length == 0){
+      this.ChatMensajeHubService.chatMensaje$.subscribe(res => {
+        this.mensajes = res.find(array => array.some(x => x.idChat === this.idChat)) || [];
+      })
+    }
     this.msg = "";
+
   }
 
   obtenerIdUsuario(){
