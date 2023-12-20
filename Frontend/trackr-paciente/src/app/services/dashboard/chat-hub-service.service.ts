@@ -83,20 +83,28 @@ export class ChatHubServiceService {
     return this.chatSubject.value;
   }
 
-  private onNuevoChat(chat: ChatDTO, idPersonas: number[]): void {
-    chat.fecha = new Date();
+  private onNuevoChat(chat:ChatDTO,idPersonas:number[]): void{
+    console.log(chat,idPersonas)
+    let chats = this.chatSubject.value;
+    chats.push(chat);
+    
+    this.iniciarConexion();
+    /*chat.fecha = new Date();
 
     const chats = this.chatSubject.value;
     chats.push(chat);
-
+    
     let chatPersona: ChatPersonaFormDTO = {
       idPersonas: idPersonas,
       idChat: chat.idChat || 0,
-      idTipo: 2,
-    };
+      idTipo: 2
+    }
 
-    this.ChatPersonaService.agregarPersonas(chatPersona).subscribe((res) => {});
-    this.chatSubject.next(chats);
+    this.ChatPersonaService.agregarPersonas(chatPersona).subscribe(res => {
+      this.chatSubject.next(chats);
+      console.log(chats)
+      this.connection.invoke('NuevaConexion',chats)
+    })*/
   }
 
   private onNuevaConexion(chats: ChatDTO[]): void {

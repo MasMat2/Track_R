@@ -69,14 +69,21 @@ export class BarraChatsComponent {
     });
   }
 
-  obtenerUltimoMensaje(): void {
+  obtenerUltimoMensaje():void{
+    if(this.mensajes){
+      let ultimoMensaje = this.mensajes.map(arr => {console.log(arr); return arr[arr.length - 1]?.mensaje || ""})
+      this.chats.forEach((x,index) => {x.ultimoMensaje = ultimoMensaje[index]})
+    }
+  }
+
+  /*obtenerUltimoMensaje(): void {
     let ultimoMensaje = this.mensajes.map(
       (arr) => arr[arr.length - 1]?.mensaje || ''
     );
     this.chats.forEach((x, index) => {
       x.ultimoMensaje = ultimoMensaje[index];
     });
-  }
+  }*/
 
   enviarIdChat(idChat: number) {
     this.router.navigate(['home/chat-movil/chat',idChat]);
