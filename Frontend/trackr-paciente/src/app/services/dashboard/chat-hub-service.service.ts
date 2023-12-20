@@ -84,7 +84,6 @@ export class ChatHubServiceService {
   }
 
   private onNuevoChat(chat:ChatDTO,idPersonas:number[]): void{
-    console.log(chat,idPersonas)
     let chats = this.chatSubject.value;
     chats.push(chat);
     
