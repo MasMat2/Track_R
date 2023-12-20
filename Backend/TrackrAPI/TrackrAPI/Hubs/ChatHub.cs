@@ -29,12 +29,21 @@ public class ChatHub : Hub<IChatHub>
         await base.OnConnectedAsync();
     }
 
-    public async Task NuevoChat(Chat chat,List<int> idPersonas)
+    public async Task NuevaConexion(IEnumerable<ChatDTO> chat)
+    {
+        int idPersona = ObtenerIdUsuario();
+        var chats = _chatService.ConsultarChats(idPersona);
+
+        await Clients.Caller.NuevaConexion(chats);
+        await base.OnConnectedAsync();
+    }
+
+    public async Task NuevoChat(Chat chat, List<int> idPersonas)
     {
         chat.Fecha = DateTime.Now;
         chat.Habilitado = true;
-        _chatService.NuevoChat(chat,idPersonas);
-        await Clients.All.NuevoChat(chat, idPersonas);
+        _chatService.NuevoChat(chat, idPersonas);
+       await Clients.All.NuevoChat(chat, idPersonas);
     }
 
     private int ObtenerIdUsuario()
