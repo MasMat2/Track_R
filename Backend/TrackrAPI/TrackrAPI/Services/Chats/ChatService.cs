@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.InkML;
 using Microsoft.AspNetCore.SignalR;
 using MimeTypes;
+using TrackrAPI.Dtos.Chats;
 using TrackrAPI.Helpers;
 using TrackrAPI.Hubs;
 using TrackrAPI.Models;
@@ -15,17 +16,20 @@ public class ChatService
     private readonly IHubContext<ChatHub, IChatHub> hubContext;
     private readonly IChatPersonaRepository _chatPersonaRepository;
     private readonly IUsuarioRepository _usuarioRepository;
+    private readonly ChatPersonaService _chatPersonaService;
 
     public ChatService(IChatRepository chatRepository,
                        IHubContext<ChatHub,
                        IChatHub> hubContext,
                        IChatPersonaRepository chatPersonaRepository,
-                       IUsuarioRepository usuarioRepository)
+                       IUsuarioRepository usuarioRepository,
+                       ChatPersonaService chatPersonaService)
     {
         _chatRepository = chatRepository;
         this.hubContext = hubContext;
         _chatPersonaRepository = chatPersonaRepository;
         _usuarioRepository = usuarioRepository;
+        _chatPersonaService = chatPersonaService;
     }
 
     public Chat AgregarChat(Chat chat)
@@ -38,9 +42,16 @@ public class ChatService
         return chat;
     }
 
-    public void NuevoChat(Chat chat,List<int> idPersonas)
+    public void NuevoChat(Chat chat,List<int> idPersonas,int idUsuario)
     {
         _chatRepository.Agregar(chat);
+        ChatPersonaFormDTO chatPersona = new ChatPersonaFormDTO
+        {
+            IdChat = chat.IdChat,
+            IdPersonas = idPersonas,
+            IdTipo = 2
+        };
+        _chatPersonaService.agregarPersonaChat(chatPersona, idUsuario);
         //await hubContext.Clients.All.NuevoChat(chat,idPersonas);
     }
 

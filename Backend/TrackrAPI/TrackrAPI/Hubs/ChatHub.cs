@@ -42,7 +42,7 @@ public class ChatHub : Hub<IChatHub>
     {
         chat.Fecha = DateTime.Now;
         chat.Habilitado = true;
-        _chatService.NuevoChat(chat, idPersonas);
+        _chatService.NuevoChat(chat, idPersonas,ObtenerIdUsuario());
        await Clients.All.NuevoChat(chat, idPersonas);
     }
 
