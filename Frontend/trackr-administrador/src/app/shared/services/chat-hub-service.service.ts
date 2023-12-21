@@ -81,7 +81,8 @@ export class ChatHubServiceService {
   }
 
   private onNuevoChat(chat:ChatDTO,idPersonas:number[]): void{
-    chat.fecha = new Date();
+    this.iniciarConexion();
+    /*chat.fecha = new Date();
 
     const chats = this.chatSubject.value;
     chats.push(chat);
@@ -95,7 +96,7 @@ export class ChatHubServiceService {
     this.ChatPersonaService.agregarPersonas(chatPersona).subscribe(res => {
       this.chatSubject.next(chats);
       this.connection.invoke('NuevaConexion',chats)
-    })
+    })*/
   }
 
   private onNuevaConexion(chats: ChatDTO[]): void{
