@@ -66,6 +66,11 @@ export class ChatHubServiceService {
       this.onNuevaConexion(chats)
     );
 
+    this.connection.on(
+      'CargarChats',
+      (chats: ChatDTO[]) => this.onCargarChats(chats)
+    )
+
     this.connectionStatus.next(HubConnectionState.Connecting);
 
     await this.connection.start();
@@ -113,6 +118,10 @@ export class ChatHubServiceService {
       chat.fecha = new Date(chat.fecha);
     }
 
+    this.chatSubject.next(chats);
+  }
+
+  private onCargarChats(chats:ChatDTO[]):void{
     this.chatSubject.next(chats);
   }
 
