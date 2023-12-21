@@ -84,10 +84,12 @@ export class ChatHubServiceService {
   }
 
   private async onNuevoChat(chat:ChatDTO,idPersonas:number[]){
-    //let chats = this.chatSubject.value;
-    //console.log(chats)
-    //chats.push(chat);
-    await this.iniciarConexion();
+    chat.fecha = new Date();
+
+    const chats = this.chatSubject.value;
+    console.log(chats)
+    chats.push(chat);
+    //this.chatSubject.next(chats);
     /*chat.fecha = new Date();
 
     const chats = this.chatSubject.value;
