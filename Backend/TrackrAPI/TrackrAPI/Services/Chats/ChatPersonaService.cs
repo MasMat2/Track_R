@@ -44,5 +44,17 @@ public class ChatPersonaService
     {
         return _chatPersonaRepository.ObtenerPacientesPorPadecimiento(idPadecimiento);
     }
+
+    public List<ChatPersonaSelectorDTO> ObtenerPersonasChatSelector(int idChat)
+    {
+        Console.WriteLine(idChat);
+        return _chatPersonaRepository.ConsultarPersonasPorChat(idChat)
+                                      .Select(x => new ChatPersonaSelectorDTO
+                                      {
+                                          IdUsuario = x.IdPersona,
+                                          Nombre = x.IdPersonaNavigation.Nombre + " " + x.IdPersonaNavigation.ApellidoPaterno + " " + x.IdPersonaNavigation.ApellidoMaterno
+                                      })
+                                      .ToList();
+    }
 }
 
