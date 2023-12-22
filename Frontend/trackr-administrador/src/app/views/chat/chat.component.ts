@@ -18,6 +18,7 @@ export class ChatComponent {
   protected contenido:string;
   protected idChatSeleccionado: number;
   protected mensajesChatSeleccionado: ChatMensajeDTO[]; 
+  protected tituloChatSeleccionado: string;
 
   protected clickEnChat = false;
 
@@ -62,7 +63,8 @@ export class ChatComponent {
   obtenerChatSeleccionado(id:number){
     this.idChatSeleccionado = id;
     this.mensajesChatSeleccionado = this.mensajes.find(array => array.some(x => x.idChat === this.idChatSeleccionado)) || [];
-
+    let aux = this.chats.find(x => x.idChat == id)
+    this.tituloChatSeleccionado = aux?.titulo || "";
     this.clickEnChat = true;
   }
 
