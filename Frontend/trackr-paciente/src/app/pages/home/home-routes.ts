@@ -18,7 +18,7 @@ export default [
       { path: 'muestras', component: MuestrasPage, data: { breadcrumb: 'Muestras' } },
       { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard-routes'), data: { breadcrumb: 'Inicio' }},
       { path: 'config-dashboard', component: ConfiguracionDashboardPage},
-      { path: 'cuestionarios', component: CuestionariosPage, data: { breadcrumb: 'Cuestionario' } },
+      { path: 'cuestionarios',loadChildren: () => import('./cuestionarios/cuestionarios-routes')  ,data: { breadcrumb: 'Cuestionario' } },
       { path: 'perfil', loadChildren: () => import('./perfil/perfil-routes'), data: { breadcrumb: 'Perfil' } },
       { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }
     ]

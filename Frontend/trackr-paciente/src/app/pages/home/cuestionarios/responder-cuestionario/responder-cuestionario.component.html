@@ -1,0 +1,121 @@
+<ion-header>
+  <app-header></app-header>
+</ion-header>
+<ion-content>
+
+  <div class="presentacion" *ngIf="!presentando && !examenTerminado && !blockQuestions">
+    <h1>Bienvenido al cuestionario en línea: {{examen.tipoExamen}}</h1>
+    <ul>
+      <li>
+        Antes de responder lea con atención los Reactivos y seleccione la respuesta correcta.
+      </li>
+      <li>
+        Para pasar al siguiente Reactivo de Clic en el botón Siguiente.
+      </li>
+      <li>
+        Si desea regresar al Reactivo anterior de Clic en el botón Anterior.
+      </li>
+      <li>
+        Si sale de la pestaña se finalizará el examen
+      </li>
+      <li>
+        Si desea Terminar el examen antes de finalizarlo presione Finalizar Examen.
+      </li>
+    </ul>
+    <div class="presentacion-buttons">
+      <ion-button color="light" class="regresar" (click)="cancelar()">Regresar</ion-button>
+      <ion-button class="iniciar" (click)="consultarReactivos()">Iniciar</ion-button>
+    </div>
+  </div>
+
+  <div class="contenido-cuestionario" *ngIf="(presentando && !examenTerminado) || blockQuestions">
+    <ion-label class="texto-seccion">
+      {{examen.tipoExamen}}
+    </ion-label>
+    <ion-progress-bar [value]="progreso"></ion-progress-bar>
+    <div class="pregunta" *ngIf="!mostrarMsgFinal">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>{{indice+1}}.-{{reactivoList[indice].pregunta}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div *ngIf="reactivoList[indice].imagenBase64 !== '' " style="text-align: center; margin-top: 10px; margin-bottom: 10px;">
+            <img
+              *ngIf="reactivoList[indice].imagenBase64 !== 'data:;base64,' "
+              id="logo"
+              class="imagenPregunta"
+              [src]="reactivoList[indice].imagenBase64"
+              height="200"
+            />
+          </div>
+          <p>{{reactivoList[indice].respuesta}}</p>
+          <div *ngIf="!reactivoList[indice].necesitaRevision">
+            <ion-radio-group
+              [(ngModel)]="reactivoList[indice].respuestaAlumno"
+            >
+              <ion-item
+                *ngFor="let res of respuestas"
+                lines="none"
+              >
+                <ion-radio justify="start" labelPlacement="end" [value]="res.nombre">{{res.nombre}}</ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </div>
+          <div *ngIf="reactivoList[indice].necesitaRevision">
+            <ion-item lines="none">
+              <ion-textarea
+                [(ngModel)]="reactivoList[indice].respuestaAlumno"
+                label="Respuesta:" labelPlacement="floating"
+                rows="5"
+              >
+              </ion-textarea>
+            </ion-item>
+          </div>
+        </ion-card-content>
+        <div class="contenido-buttons">
+          <ion-button
+            fill="clear"
+            (click)="anterior()"
+            *ngIf="(indice + 1 > 1 && blockQuestions) || !blockQuestions"
+          >
+            <ion-icon color="medium" name="chevron-back"></ion-icon>
+            Anterior
+          </ion-button>
+          <ion-button
+            fill="clear"
+            (click)="siguiente()"
+            *ngIf="indice + 1 !== reactivoList.length || (blockQuestions && indice + 1 !== reactivoList.length)"
+          >
+            Siguiente
+            <ion-icon color="medium" name="chevron-forward"></ion-icon>
+          </ion-button>
+          <ion-button
+            fill="clear"
+            (click)="siguiente()"
+            *ngIf="indice + 1 === reactivoList.length && !blockQuestions"
+          >
+            Finalizar
+            <ion-icon color="medium" name="chevron-forward"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-card>
+    </div>
+    <div class="mensaje-final" *ngIf="mostrarMsgFinal">
+      <h2>Agradecemos tu tiempo y el valor de tus respuestas.</h2>
+      <ion-button (click)="presentAlertTerminar()" [disabled]="submitting">
+        Finalizar Cuestionario
+      </ion-button>
+      <div class="contenido-buttons">
+        <ion-button
+          fill="clear"
+          (click)="anterior()"
+          *ngIf="(indice + 1 > 1 && blockQuestions) || !blockQuestions"
+        >
+          <ion-icon color="medium" name="chevron-back"></ion-icon>
+          Anterior
+        </ion-button>
+      </div>
+
+    </div>
+  </div>
+</ion-content>
