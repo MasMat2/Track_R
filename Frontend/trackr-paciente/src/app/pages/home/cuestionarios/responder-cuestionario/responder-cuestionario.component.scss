@@ -1,0 +1,64 @@
+.texto-seccion{
+    font-weight: bold;
+    color: #4c0080;
+}
+
+.presentacion{
+    h1{
+        text-align: center;
+        margin-bottom: 3vh;
+    }
+    margin: 1em;
+    .presentacion-buttons{
+        display: flex;
+        justify-content: center;
+        margin-top: 10vh;
+
+        ion-button{
+            width: 50%;
+        }
+    }
+}
+
+.contenido-cuestionario{
+    margin: 1em;
+
+    .contenido-buttons{
+        display: flex;
+        justify-content: space-between;
+        ion-button{
+            color: var(--ion-color-medium);
+        }
+    }
+
+    .pregunta{
+        ion-card{
+            border-radius:20px !important;
+        }
+        ion-card-content{
+            min-height: 60vh;
+        }
+        p{
+            white-space: pre-wrap;
+        }
+    
+        ion-textarea{
+            --background: var(--ion-color-light);
+            --padding-end: 10px;
+            --padding-start: 10px;
+          }
+    }
+
+    .mensaje-final{
+        h2{
+            margin-top: 3vh;
+        }
+
+        ion-button{
+            margin-top: 10vh;
+        }
+    }
+}
+
+
+

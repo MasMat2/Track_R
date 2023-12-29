@@ -38,6 +38,12 @@ public class ExamenController : ControllerBase
         return _examenService.ConsultarMisExamenes(Utileria.ObtenerIdUsuarioSesion(this));
     }
 
+    [HttpGet("MisExamenes/contestados")]
+    public IEnumerable<ExamenGridDto> ConsultarMisExamenesContestados()
+    {
+        return _examenService.ConsultarMisExamenesContestados(Utileria.ObtenerIdUsuarioSesion(this));
+    }
+
     [HttpGet]
     [Route("consultar/{idExamen}")]
     public Examen? Consultar(int idExamen)
