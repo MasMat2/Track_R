@@ -146,10 +146,10 @@ export class ResponderCuestionarioComponent  implements OnInit {
   protected siguiente() {
     if (this.indice + 1 < this.reactivoList.length) {
       this.indice++;
-      this.progreso += this.porcentajePorPregunta;
+      this.progreso = this.indice*this.porcentajePorPregunta;
     }
     else{ //cuando ya se encuentra en la ultima pregunta
-      this.progreso += this.porcentajePorPregunta;
+      this.progreso = 1;
       this.mostrarMsgFinal = true;
     }
   }
@@ -157,11 +157,12 @@ export class ResponderCuestionarioComponent  implements OnInit {
   protected anterior() {
     if (this.indice > 0 && !this.mostrarMsgFinal) {
       this.indice--;
-      this.progreso -= this.porcentajePorPregunta;
+      this.progreso = this.indice*this.porcentajePorPregunta;
     }
-    else{ //cuando ya se encuentra en el mensaje final
-      this.progreso -= this.porcentajePorPregunta;
+    else{//cuando ya se encuentra en el mensaje final
+      this.progreso = this.indice*this.porcentajePorPregunta;
       this.mostrarMsgFinal = false;
+
     }
   }
 
