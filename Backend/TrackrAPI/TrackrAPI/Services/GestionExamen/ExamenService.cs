@@ -56,6 +56,12 @@ public class ExamenService
     {
         return _examenRepository.ConsultarMisExamenes(idUsuario);
     }
+
+    public IEnumerable<ExamenGridDto> ConsultarMisExamenesContestados(int idUsuario)
+    {
+        return _examenRepository.ConsultarMisExamenesContestados(idUsuario);
+    }
+
     public IEnumerable<ExamenCalificacionDto> ConsultarCalificaciones(int idProgramacionExamen)
     {
         return _examenRepository.ConsultarCalificaciones(idProgramacionExamen);

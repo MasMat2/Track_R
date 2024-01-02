@@ -8,6 +8,8 @@ import { UsuarioDto } from 'src/app/shared/Dtos/perfil/usuario-dto';
 import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
 import { LogoutComponent } from './logout/logout.component';
+import { menu } from 'ionicons/icons'
+import { addIcons } from 'ionicons';
 
 @Component({
   selector: 'app-header',
@@ -34,7 +36,9 @@ export class HeaderComponent implements OnInit {
     private usuarioService : UsuarioService,
     private router: Router,
     private popoverControler : PopoverController
-  ) { }
+  ){
+    addIcons({menu})
+  }
 
   ngOnInit() {
     this.consultarMiUsuario();

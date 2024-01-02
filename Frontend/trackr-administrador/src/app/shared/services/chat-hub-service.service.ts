@@ -63,6 +63,11 @@ export class ChatHubServiceService {
       (chats: ChatDTO[]) => this.onNuevaConexion(chats)
     );
 
+    this.connection.on(
+      'CargarChats',
+      (chats: ChatDTO[]) => this.onCargarChats(chats)
+    )
+
     this.connectionStatus.next(HubConnectionState.Connecting);
 
     await this.connection.start();
@@ -85,6 +90,11 @@ export class ChatHubServiceService {
 
     const chats = this.chatSubject.value;
     chats.push(chat);
+    this.chatSubject.next(chats);
+    /*chat.fecha = new Date();
+
+    const chats = this.chatSubject.value;
+    chats.push(chat);
     
     let chatPersona: ChatPersonaFormDTO = {
       idPersonas: idPersonas,
@@ -94,7 +104,8 @@ export class ChatHubServiceService {
 
     this.ChatPersonaService.agregarPersonas(chatPersona).subscribe(res => {
       this.chatSubject.next(chats);
-    })
+      this.connection.invoke('NuevaConexion',chats)
+    })*/
   }
 
   private onNuevaConexion(chats: ChatDTO[]): void{
@@ -103,6 +114,10 @@ export class ChatHubServiceService {
     }
 
     this.chatSubject.next(chats);
+  }
+
+  private onCargarChats(chats:ChatDTO[]):void{
+    this.chatSubject.next(chats)
   }
 
   private async ensureConnection(): Promise<void> {

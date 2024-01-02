@@ -1,0 +1,60 @@
+<ion-header>
+  <app-header></app-header>
+</ion-header>
+<ion-content>
+  <div class="contenido">
+    <div class="pendientes">
+      <ion-label class="texto-seccion">
+        Cuestionarios pendientes
+      </ion-label>
+      <ion-item lines="none" *ngFor="let examen of examenPendienteList">
+        <ion-label>
+          <h3>{{examen.tipoExamen}}</h3>
+        </ion-label>
+        <ion-label>
+          <p>{{examen.fechaExamen}}</p>
+          <p>{{examen.horaExamen}}</p>
+        </ion-label>
+        <ion-button (click)="responderCuestionario(examen.idExamen)">Contestar</ion-button>
+
+      </ion-item>
+    </div>
+    <div class="contestados">
+      <ion-label class="texto-seccion">
+        Cuestionarios contestados
+      </ion-label>
+      <!--Mostrar 5-->
+      <div *ngIf="!mostrarTodosContestados">
+        <ion-item *ngFor="let examen of examenContestadoList.slice(0, 5) ">
+          <ion-label>
+            <h3>
+              {{examen.tipoExamen}}
+            </h3>
+            <p>{{examen.fechaExamen}}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item class="texto-ver-mas" button="true" (click)="verMas(true)">
+          <ion-label>
+            Ver Todos (+{{examenContestadoList.length - 5}})
+          </ion-label>
+        </ion-item>
+      </div>
+      <!--Mostrar todos-->
+      <div *ngIf="mostrarTodosContestados">
+        <ion-item *ngFor="let examen of examenContestadoList">
+          <ion-label>
+            <h3>
+              {{examen.tipoExamen}}
+            </h3>
+            <p>{{examen.fechaExamen}}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item class="texto-ver-mas" button="true" (click)="verMas(false)">
+          <ion-label>
+            Ver Menos
+          </ion-label>
+        </ion-item>
+      </div>
+    </div>
+  </div>
+</ion-content>

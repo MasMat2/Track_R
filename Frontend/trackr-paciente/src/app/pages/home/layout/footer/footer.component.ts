@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import {home, videocam, statsChart, documentText, personCircle, chatboxEllipses} from 'ionicons/icons'
+
+
 
 @Component({
   selector: 'app-footer',
@@ -8,12 +12,14 @@ import { IonicModule } from '@ionic/angular';
   styleUrls: ['./footer.component.scss'],
   standalone: true,
   imports: [
+    IonicModule,
     CommonModule,
-    IonicModule
   ]
 })
 export class FooterComponent implements OnInit {
-  constructor() { }
+  constructor() {
+    addIcons({home, videocam, statsChart, documentText, personCircle, chatboxEllipses})
+  }
 
   public ngOnInit(): void {}
 }

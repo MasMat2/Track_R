@@ -13,13 +13,15 @@ import { ArchivoService } from '@services/archivo.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
 import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
+import { ChatPersonaService } from '../../../../shared/http/chat/chat-persona.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-barra-chats',
   templateUrl: './BarraChats.component.html',
   styleUrls: ['./BarraChats.component.scss'],
   standalone: true,
-  imports: [TableModule, CommonModule,IonicModule,HeaderComponent],
+  imports: [TableModule, CommonModule,IonicModule,HeaderComponent, FormsModule],
 })
 export class BarraChatsComponent {
   protected chats$: Observable<ChatDTO[]>;
@@ -27,6 +29,10 @@ export class BarraChatsComponent {
   protected chatMensajes$: Observable<ChatMensajeDTO[][]>;
   protected mensajes: ChatMensajeDTO[][];
   protected misDoctores: UsuarioDoctoresDto[];
+  protected doctorSeleccionado: boolean = false;
+  protected idUsuario:number;
+  protected usuarios: number[] = [];
+  protected tituloChat:string;
   //@Output() idChatPadre = new EventEmitter<number>();
   //@Input() ultmoMensajes: string[];
 
@@ -35,11 +41,19 @@ export class BarraChatsComponent {
               private chatMensajeHubService:ChatMensajeHubService,
               private archivoService : ArchivoService,
               private sanitizer : DomSanitizer,
-              private doctoresService : MisDoctoresService) {}
+              private doctoresService : MisDoctoresService,
+              private ChatPersonaService:ChatPersonaService) {}
 
   ionViewWillEnter(){
     this.obtenerChats()
     this.consultarDoctores();
+    this.obtenerIdUsuario();
+  }
+
+  obtenerIdUsuario(){
+    this.ChatPersonaService.obtenerIdUsuario().subscribe(res => {
+      this.idUsuario = res;
+    })
   }
 
   obtenerChats() {
@@ -69,14 +83,21 @@ export class BarraChatsComponent {
     });
   }
 
-  obtenerUltimoMensaje(): void {
+  obtenerUltimoMensaje():void{
+    if(this.mensajes){
+      let ultimoMensaje = this.mensajes.map(arr => {console.log(arr); return arr[arr.length - 1]?.mensaje || ""})
+      this.chats.forEach((x,index) => {x.ultimoMensaje = ultimoMensaje[index]})
+    }
+  }
+
+  /*obtenerUltimoMensaje(): void {
     let ultimoMensaje = this.mensajes.map(
       (arr) => arr[arr.length - 1]?.mensaje || ''
     );
     this.chats.forEach((x, index) => {
       x.ultimoMensaje = ultimoMensaje[index];
     });
-  }
+  }*/
 
   enviarIdChat(idChat: number) {
     this.router.navigate(['home/chat-movil/chat',idChat]);
@@ -96,5 +117,26 @@ export class BarraChatsComponent {
       
       this.misDoctores = doctores;
     }));
+  }
+
+  doctorClick(idDoctor:number){
+    this.doctorSeleccionado = ! this.doctorSeleccionado
+    this.usuarios = []
+    this.usuarios.push(this.idUsuario);
+    this.usuarios.push(idDoctor);
+  }
+
+  crearChat(){
+    let chat: ChatDTO = {
+      fecha: new Date(),
+      habilitado: true,
+      idCreadorChat: this.usuarios[this.usuarios.length - 1],
+      titulo: this.tituloChat
+    };
+
+    this.ChatHubServiceService.agregarChat(chat,this.usuarios);
+    this.tituloChat = "";
+    this.usuarios = []
+    this.doctorSeleccionado = false;
   }
 }

@@ -16,6 +16,7 @@ public class ChatPersonaRepository : Repository<ChatPersona>, IChatPersonaReposi
     public IEnumerable<ChatPersona> ConsultarPersonasPorChat(int IdChat)
     {
         return context.ChatPersona
+                      .Include(x => x.IdPersonaNavigation)
                       .Where(x => x.IdChat == IdChat)
                       .ToList();
     }

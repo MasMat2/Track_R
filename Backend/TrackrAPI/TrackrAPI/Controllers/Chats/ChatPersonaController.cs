@@ -34,5 +34,11 @@ namespace TrackrAPI.Controllers.Chats
         {
             return _chatPersonaService.ObtenerPacientesPorPadecimiento(IdPadecimiento);
         }
+
+        [HttpGet("PersonasEnChat/{IdChat}")]
+        public List<ChatPersonaSelectorDTO> ObtenerPersonasEnChatSelector(int IdChat)
+        {
+            return _chatPersonaService.ObtenerPersonasChatSelector(IdChat);
+        }
     }
 }

@@ -55,6 +55,23 @@ public class ExamenRepository : Repository<Examen>, IExamenRepository
             .ToList();
     }
 
+    public IEnumerable<ExamenGridDto> ConsultarMisExamenesContestados(int idUsuario)
+    {
+        return context.Examen
+            .Where(p => p.IdUsuarioParticipante == idUsuario && p.IdEstatusExamen == 3 && p.Estatus == true)
+            .OrderByDescending(p => p.IdProgramacionExamenNavigation.FechaExamen)
+            .Select(p => new ExamenGridDto
+            {
+                IdExamen = p.IdExamen,
+                TipoExamen = p.IdProgramacionExamenNavigation.IdTipoExamenNavigation.Nombre ?? string.Empty,
+                FechaExamen = p.IdProgramacionExamenNavigation.FechaExamen,
+                HoraExamen = p.IdProgramacionExamenNavigation.HoraExamen,
+                Duracion = p.IdProgramacionExamenNavigation.Duracion,
+                TotalPreguntas = p.IdProgramacionExamenNavigation.IdTipoExamenNavigation.TotalPreguntas
+            })
+            .ToList();
+    }
+
     public ExamenDto? ConsultarMiExamen(int idExamen)
     {
         return context.Examen

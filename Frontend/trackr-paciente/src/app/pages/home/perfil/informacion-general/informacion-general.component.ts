@@ -28,6 +28,8 @@ import { GeneroSelectorDto } from 'src/app/shared/Dtos/catalogo/genero-selector-
 import { ConfirmacionCorreoService } from '@http/seguridad/confirmacion-correo.service';
 import { ConfirmarCorreoDto } from '../../../../shared/Dtos/seguridad/confirmar-correo-dto';
 import {GeneroService} from '@http/catalogo/genero.service'
+import { addIcons } from 'ionicons';
+import { addCircleOutline, closeCircleOutline } from 'ionicons/icons'
 
 @Component({
   selector: 'app-informacion-general',
@@ -83,7 +85,9 @@ export class InformacionGeneralComponent implements OnInit {
     private alertController: AlertController,
     private confirmacionCorreoService: ConfirmacionCorreoService,
     private generoService: GeneroService
-  ) {  }
+  ) {
+    addIcons({addCircleOutline, closeCircleOutline})
+    }
 
   ngOnInit(){
     this.consultarGeneros();
