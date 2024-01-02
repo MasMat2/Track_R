@@ -538,6 +538,11 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.Archivo)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .HasConstraintName("FK_Archivo_Usuario");
             });
 
             modelBuilder.Entity<Area>(entity =>
@@ -1036,6 +1041,11 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.Fecha).HasColumnType("datetime");
 
                 entity.Property(e => e.Mensaje).HasMaxLength(700);
+
+                entity.HasOne(d => d.IdArchivoNavigation)
+                    .WithMany(p => p.ChatMensaje)
+                    .HasForeignKey(d => d.IdArchivo)
+                    .HasConstraintName("FK_Mensaje_Aechivo");
 
                 entity.HasOne(d => d.IdChatNavigation)
                     .WithMany(p => p.ChatMensaje)
