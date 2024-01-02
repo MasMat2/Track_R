@@ -10,5 +10,6 @@ public class ArchivoFormDTO
     public byte[] Archivo { get; set; }
     public string ArchivoTipoMime { get; set; }
     public string ArchivoNombre { get; set; }
+    public int IdUsuario { get; set; }
 }
 
