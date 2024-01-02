@@ -1,15 +1,18 @@
+<ion-header>
+  <app-header></app-header>
+</ion-header>
 <ion-content>
   <div class = "contenedor">
     <ion-row>
       <ion-col size="12">
-        <ion-select 
+        <ion-select
           id="variable"
           name="variable"
           label="Variable"
           label-placement="floating"
           fill="outline"
           shape="round"
-          [(ngModel)]="claveVariable" 
+          [(ngModel)]="claveVariable"
           (ngModelChange)="onChangeVariable($event)">
             <ion-select-option *ngFor="let variable of variableList" [value]="variable.clave">{{variable.variable}}</ion-select-option>
         </ion-select>
@@ -67,12 +70,10 @@
           </ion-label>
         </div>
         <div class="circle-container d-flex flex-column align-items-center">
- 
           <div class="valores-extremos">
             <span class="valor">{{valorMin}}</span>
             <span class="unidad">{{valoresCampo?.unidadMedida}}</span>
           </div>
-
         </div>
       </ion-col>
       <ion-col size="6">
@@ -87,16 +88,13 @@
           </ion-label>
         </div>
         <div class="circle-container d-flex flex-column align-items-center">
-
           <div class="valores-extremos">
             <span class="valor">{{valorMax}}</span>
             <span class="unidad">{{valoresCampo?.unidadMedida}}</span>
           </div>
-
         </div>
       </ion-col>
     </ion-row>
-
 
     <div class="histograma">
       <!-- Gráfica / Histograma -->
@@ -121,7 +119,6 @@
         [disableXLS]="true"
     >
     </app-grid-general>
-    
   </div>
 </ion-content>
 

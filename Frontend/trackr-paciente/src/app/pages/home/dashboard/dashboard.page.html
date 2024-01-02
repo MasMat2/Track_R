@@ -1,45 +1,5 @@
-  <ion-header>
-    <app-header></app-header>
-  </ion-header>
+<ion-header>
+  <app-header></app-header>
+</ion-header>
 
-  <ion-content>
-    <div class="contenedor">
-      <div class="titulo-contenedor">Dashboard</div>
-      <div class="cuerpo-contenedor">
-        <app-widget-container [widgetKeys]="selectedUserWidgets"></app-widget-container>
-        <ion-grid>
-          <ion-row>
-            <ion-col [size] = "12" *ngFor="let padecimiento of padecimientosList">
-                <app-widget-seguimiento
-                    [tipoWidget] = "padecimiento.idWidget"
-                    nombrePadecimiento="{{ padecimiento.nombrePadecimiento }}"
-
-                    [tomasTomadas]=" padecimiento.tomasTomadas "
-                    [tomasTotales]=" padecimiento.tomasTotales "
-
-                    nombreVariable="{{padecimiento.variables[0]?.descripcion}}"
-                    valorVariable="{{padecimiento.variables[0]?.valorVariable}}"
-                    unidadVariable="{{padecimiento.variables[0]?.unidadMedida}}"
-                    claseVariable="{{ padecimiento.variables[0].iconoClase }} + icono-seguimiento"
-
-                    nombreVariable2="{{padecimiento.variables[1]?.descripcion}}"
-                    valorVariable2="{{padecimiento.variables[1]?.valorVariable}}"
-                    unidadVariable2="{{padecimiento.variables[1]?.unidadMedida}}"
-                    claseVariable2="{{ padecimiento.variables[1]?.iconoClase }} + icono-seguimiento"
-
-
-                    nombreTratamiento="Medicamento"
-                    valorTratamiento="2U"
-                    unidadTratamiento="Humalog Mix 25 Plum"
-                    claseTratamiento="{{ padecimiento.iconoClase }} + icono-seguimiento"
-
-                    (click) = "mostrarSeguimiento(padecimiento.idPadecimiento)"
-                ></app-widget-seguimiento>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </div>
-    </div>
-  </ion-content>
-
-  
+<ion-router-outlet></ion-router-outlet>

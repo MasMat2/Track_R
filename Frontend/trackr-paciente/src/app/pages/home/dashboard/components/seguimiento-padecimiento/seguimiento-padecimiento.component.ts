@@ -32,7 +32,8 @@ import { ValoresClaveCampoGridDto } from 'src/app/shared/Dtos/gestion-entidades/
     ReactiveFormsModule,
     NgChartsModule,
     MatChipsModule,
-    GridGeneralModule
+    GridGeneralModule,
+    HeaderComponent
   ],
   providers: [
     SeccionCampoService,
