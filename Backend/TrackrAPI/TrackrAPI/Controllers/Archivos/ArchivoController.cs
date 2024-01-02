@@ -5,7 +5,7 @@ using TrackrAPI.Services.Archivos;
 namespace TrackrAPI.Controllers.Archivos
 {
     [ApiController]
-    [Route("api/{controller}")]
+    [Route("api/ArchivoTrackr")]
     public class ArchivoController : ControllerBase
     {
         private readonly ArchivoService _archivoService;

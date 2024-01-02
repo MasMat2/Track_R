@@ -21,7 +21,8 @@ public class ArchivoService
             ArchivoNombre = archivoFormDTO.ArchivoNombre,
             ArchivoTipoMime = archivoFormDTO.ArchivoTipoMime,
             Archivo1 = archivoFormDTO.Archivo,
-            FechaRealizacion = archivoFormDTO.FechaRealizacion
+            FechaRealizacion = archivoFormDTO.FechaRealizacion,
+            IdUsuario = archivoFormDTO.IdUsuario
         };
         _archivoRepository.Agregar(archivo);
     }
