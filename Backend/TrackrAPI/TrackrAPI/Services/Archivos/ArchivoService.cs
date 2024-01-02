@@ -22,7 +22,7 @@ public class ArchivoService
             ArchivoTipoMime = archivoFormDTO.ArchivoTipoMime,
             Archivo1 = archivoFormDTO.Archivo,
             FechaRealizacion = archivoFormDTO.FechaRealizacion
-        }
+        };
         _archivoRepository.Agregar(archivo);
     }
 }
