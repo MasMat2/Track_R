@@ -3,6 +3,8 @@ import { ChatMensajeDTO } from '@dtos/chats/chat-mensaje-dto';
 import { ChatMensajeHubService } from '../../../shared/services/chat-mensaje-hub.service';
 import { ChatPersonaService } from '../../../shared/http/chats/chat-persona.service';
 import { ChatPersonaSelectorDTO } from '@dtos/chats/chat-persona-selector-dto';
+import { ArchivoService } from '../../../shared/http/archivo/archivo.service';
+import { ArchivoFormDTO } from '@dtos/archivos/archivo-form-dto';
 
 @Component({
   selector: 'app-mensajes',
@@ -15,10 +17,12 @@ export class MensajesComponent {
   @Input() tituloChat:string;
   protected msg: string;
   protected idUsuario:number;
-  protected personas: ChatPersonaSelectorDTO[]
+  protected personas: ChatPersonaSelectorDTO[];
+  protected archivo: File;
 
   constructor(private ChatMensajeHubService:ChatMensajeHubService,
-              private ChatPersonaService:ChatPersonaService) {}
+              private ChatPersonaService:ChatPersonaService,
+              private ArchivoService:ArchivoService) {}
   
   ngOnInit(){
     this.obtenerIdUsuario();
@@ -61,5 +65,45 @@ export class MensajesComponent {
 
   mostrarMensaje(id:number){
     return id == this.idUsuario;
+  }
+
+  onFileSelected(event: any): void {
+    this.archivo = event.target.files[0];
+  }
+
+  readFileAsByteArray(file: File): Promise<Uint8Array> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = (e: any) => {
+        const result: ArrayBuffer = e.target.result;
+        const byteArray = new Uint8Array(result);
+        resolve(byteArray);
+      };
+  
+      reader.onerror = (error) => {
+        reject(error);
+      };
+  
+      reader.readAsArrayBuffer(file);
+    });
+  }
+
+  async subirArchivo(){
+    let byte = await this.readFileAsByteArray(this.archivo);
+
+    let aux:ArchivoFormDTO = {
+      idUsuario: 5333,
+      archivo: Array.from(byte),
+      archivoNombre: this.archivo.name,
+      archivoTipoMime: this.archivo.type,
+      fechaRealizacion: new Date(),
+      nombre: this.archivo.name
+    }
+    console.log(aux.archivo)
+
+    this.ArchivoService.subirArchivo(aux).subscribe(res => {
+      console.log(res)
+    })
   }
 }

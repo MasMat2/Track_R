@@ -35,7 +35,11 @@
     <div class="final">
         <div class="form-group">
             <div class="row">
-                <div class="col-10">
+                <div class="col-2">
+                    <input type="file" name="" id="" (change)="onFileSelected($event)">
+                    <button (click)="subirArchivo()">Enviar</button>
+                </div>
+                <div class="col-8">
                     <label class="label-input required-label" style="color: gray;" >Mensaje</label>
                     <div>
                     <textarea
