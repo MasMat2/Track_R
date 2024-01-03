@@ -18,7 +18,7 @@ export class MensajesComponent {
   protected msg: string;
   protected idUsuario:number;
   protected personas: ChatPersonaSelectorDTO[];
-  protected archivo ?: File;
+  protected archivo ?: File =undefined;
 
   constructor(private ChatMensajeHubService:ChatMensajeHubService,
               private ChatPersonaService:ChatPersonaService,
@@ -31,6 +31,7 @@ export class MensajesComponent {
 
   ngOnChanges(){
     this.obtenerPersonasEnChat();
+    console.log(this.mensajes)
   }
 
   obtenerPersonasEnChat(){
@@ -44,7 +45,8 @@ export class MensajesComponent {
       fecha: new Date(),
       idChat: this.idChat,
       mensaje: this.msg,
-      idPersona:5333
+      idPersona:5333,
+      archivo: ''
     }
 
     //Agregar logica para subir archivo
@@ -143,9 +145,8 @@ export class MensajesComponent {
     }
   }
 
-  downloadFile(fileBase64:string) {
+  downloadFile(fileBase64:string,nombre?:string,mime?:string) {
     // Decodificar la cadena Base64
-    console.log(fileBase64)
     const decodedData = atob(fileBase64);
 
     // Convertir a un array de bytes
@@ -164,7 +165,10 @@ export class MensajesComponent {
     document.body.appendChild(a);
     a.style.display = 'none';
     a.href = url;
-    a.download = 'archivo_descargado.png'; // Nombre del archivo
+    
+    a.download = `${nombre}`;
+    
+     // Nombre del archivo
     a.click();
 
     // Limpiar el object URL después de la descarga
