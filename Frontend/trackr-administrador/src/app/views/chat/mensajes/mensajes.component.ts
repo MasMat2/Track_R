@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { ChatMensajeDTO } from '@dtos/chats/chat-mensaje-dto';
 import { ChatMensajeHubService } from '../../../shared/services/chat-mensaje-hub.service';
 import { ChatPersonaService } from '../../../shared/http/chats/chat-persona.service';
@@ -19,6 +19,7 @@ export class MensajesComponent {
   protected idUsuario:number;
   protected personas: ChatPersonaSelectorDTO[];
   protected archivo ?: File =undefined;
+  @ViewChild('fileInput') fileInput!: ElementRef;
 
   constructor(private ChatMensajeHubService:ChatMensajeHubService,
               private ChatPersonaService:ChatPersonaService,
@@ -173,5 +174,14 @@ export class MensajesComponent {
 
     // Limpiar el object URL después de la descarga
     URL.revokeObjectURL(url);
+  }
+
+  openFileInput(): void {
+    this.fileInput.nativeElement.click();
+  }
+
+  imprimirFecha(fecha:Date):string{
+    let x = new Date(fecha)
+    return `${x.getDate()}/${x.getMonth()+1}/${x.getFullYear()} - ${x.getHours()}:${x.getMinutes()}`
   }
 }
