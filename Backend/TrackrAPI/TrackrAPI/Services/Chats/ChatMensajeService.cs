@@ -46,7 +46,14 @@ public class ChatMensajeService
                                                 Fecha = x.Fecha,
                                                 IdPersona = x.IdPersona,
                                                 Mensaje = x.Mensaje,
-                                                NombrePersona = x.IdPersonaNavigation.Nombre + "  "+ x.IdPersonaNavigation.ApellidoPaterno + " "+x.IdPersonaNavigation.ApellidoMaterno
+                                                NombrePersona = x.IdPersonaNavigation.Nombre + "  "+ x.IdPersonaNavigation.ApellidoPaterno + " "+x.IdPersonaNavigation.ApellidoMaterno,
+                                                Archivo = (x.IdArchivoNavigation != null && x.IdArchivoNavigation.Archivo1 != null)
+                                                           ? "data:" + x.IdArchivoNavigation.ArchivoTipoMime + ";base64," + Convert.ToBase64String(x.IdArchivoNavigation.Archivo1)
+                                                           : string.Empty,
+                                                ArchivoNombre = (x.IdArchivoNavigation != null) ? x.IdArchivoNavigation.ArchivoNombre : string.Empty,
+                                                ArchivoTipoMime = (x.IdArchivoNavigation != null) ? x.IdArchivoNavigation.ArchivoTipoMime : string.Empty,
+                                                FechaRealizacion = (x.IdArchivoNavigation != null) ? x.IdArchivoNavigation.FechaRealizacion : null,
+                                                Nombre = (x.IdArchivoNavigation != null) ? x.IdArchivoNavigation.Nombre : string.Empty
                                             });
             chats = chats.Append(aux);
         }
@@ -68,6 +75,7 @@ public class ChatMensajeService
         //Subir si existe el archivo
         if (mensaje.ArchivoTipoMime != null)
         {
+
             var archivo = new Archivo
             {
                 Archivo1 = Convert.FromBase64String(mensaje.Archivo.Substring(mensaje.Archivo.LastIndexOf(',') +1)),
