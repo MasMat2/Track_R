@@ -18,7 +18,7 @@ export class MensajesComponent {
   protected msg: string;
   protected idUsuario:number;
   protected personas: ChatPersonaSelectorDTO[];
-  protected archivo: File;
+  protected archivo ?: File;
 
   constructor(private ChatMensajeHubService:ChatMensajeHubService,
               private ChatPersonaService:ChatPersonaService,
@@ -64,6 +64,8 @@ export class MensajesComponent {
       })
     }
     this.msg = "";
+
+    this.archivo = undefined;
 
   }
 
@@ -121,7 +123,8 @@ export class MensajesComponent {
   }
 
   async subirArchivo(){
-    let byte = await this.readFileAsByteArray(this.archivo);
+    if(this.archivo){
+      let byte = await this.readFileAsByteArray(this.archivo);
 
     let aux:ArchivoFormDTO = {
       idUsuario: 5333,
@@ -136,5 +139,6 @@ export class MensajesComponent {
     this.ArchivoService.subirArchivo(aux).subscribe(res => {
       console.log(res)
     })
+    }
   }
 }
