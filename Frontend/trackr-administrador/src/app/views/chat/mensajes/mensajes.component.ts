@@ -39,12 +39,22 @@ export class MensajesComponent {
     })
   }
 
-  enviarMensaje(): void{
+  async enviarMensaje(): Promise<void>{
     let msg: ChatMensajeDTO = {
       fecha: new Date(),
       idChat: this.idChat,
       mensaje: this.msg,
       idPersona:5333
+    }
+
+    //Agregar logica para subir archivo
+    if(this.archivo){
+      let byte = await this.convertirBase64String();
+      msg.archivo = byte;
+      msg.archivoNombre = this.archivo.name;
+      msg.archivoTipoMime = this.archivo.type;
+      msg.fechaRealizacion = new Date();
+      msg.nombre = this.archivo.name;
     }
 
     this.ChatMensajeHubService.enviarMensaje(msg);
@@ -86,6 +96,27 @@ export class MensajesComponent {
       };
   
       reader.readAsArrayBuffer(file);
+    });
+  }
+
+  convertirBase64String() :Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (this.archivo) {
+        const lector = new FileReader();
+
+        lector.onload = (e: any) => {
+          const resultadoBase64 = e.target.result;
+          resolve(resultadoBase64);
+        };
+
+        lector.onerror = (e) => {
+          reject(e);
+        };
+
+        lector.readAsDataURL(this.archivo);
+      } else {
+        reject('No se ha seleccionado ningún archivo.');
+      }
     });
   }
 
