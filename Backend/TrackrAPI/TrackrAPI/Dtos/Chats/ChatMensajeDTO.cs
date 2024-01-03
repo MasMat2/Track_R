@@ -8,5 +8,10 @@ public class ChatMensajeDTO
     public string Mensaje { get; set; }
     public DateTime Fecha { get; set; }
     public string NombrePersona { get; set; }
+    public string ? Nombre { get; set; }
+    public DateTime ? FechaRealizacion { get; set; }
+    public string ? Archivo { get; set; }
+    public string ? ArchivoTipoMime { get; set; }
+    public string ? ArchivoNombre { get; set; }
 }
 

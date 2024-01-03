@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using TrackrAPI.Dtos.Chats;
 using TrackrAPI.Models;
 using TrackrAPI.Services.Chats;
 
@@ -20,10 +21,11 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
         await Clients.Caller.NuevaConexion(mensajes);
     }
 
-    public async Task NuevoMensaje(ChatMensaje mensaje)
+    public async Task NuevoMensaje(ChatMensajeDTO mensaje)
     {
+        Console.WriteLine(mensaje.ArchivoTipoMime);
         mensaje.IdPersona = this.ObtenerIdUsuario();
-        _chatMensajeService.NuevoMensaje(mensaje);
+        await _chatMensajeService.NuevoMensaje(mensaje);
         await Clients.All.NuevoMensaje(mensaje);
     }
 

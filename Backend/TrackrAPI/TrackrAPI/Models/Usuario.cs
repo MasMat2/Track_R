@@ -8,6 +8,7 @@ namespace TrackrAPI.Models
         public Usuario()
         {
             Almacen = new HashSet<Almacen>();
+            Archivo = new HashSet<Archivo>();
             BitacoraMovimientoUsuario = new HashSet<BitacoraMovimientoUsuario>();
             Caja = new HashSet<Caja>();
             CajaTurno = new HashSet<CajaTurno>();
@@ -144,6 +145,7 @@ namespace TrackrAPI.Models
         public virtual TipoUsuario IdTipoUsuarioNavigation { get; set; } = null!;
         public virtual TituloAcademico? IdTituloAcademicoNavigation { get; set; }
         public virtual ICollection<Almacen> Almacen { get; set; }
+        public virtual ICollection<Archivo> Archivo { get; set; }
         public virtual ICollection<BitacoraMovimientoUsuario> BitacoraMovimientoUsuario { get; set; }
         public virtual ICollection<Caja> Caja { get; set; }
         public virtual ICollection<CajaTurno> CajaTurno { get; set; }

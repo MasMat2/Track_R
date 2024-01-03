@@ -5,4 +5,9 @@ export interface ChatMensajeDTO{
     mensaje: string;
     fecha: Date;
     nombrePersona?:string;
+    nombre?:string
+    fechaRealizacion ?: Date;
+    archivo ?: any;
+    archivoTipoMime ?: string;
+    archivoNombre ?: string;
 }
