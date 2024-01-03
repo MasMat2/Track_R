@@ -19,12 +19,14 @@
             <div class="message user" *ngIf="mostrarMensaje(mensaje.idPersona)">
                 <div class="message-bubble">
                     {{mensaje.mensaje}}
+                    <button (click)="downloadFile(mensaje.archivo)" *ngIf="mensaje.archivo != ''">Descargar Archivo</button>
                 </div>
             </div>
             <div class="message other" *ngIf="!mostrarMensaje(mensaje.idPersona)">
                 <div class="message-bubble">
                     <div class="nombre">{{mensaje.nombrePersona}}</div>
                     {{mensaje.mensaje}}
+                    <button (click)="downloadFile(mensaje.archivo)" *ngIf="mensaje.archivo != ''">Descargar Archivo</button>
                 </div>
             </div>
         </div>

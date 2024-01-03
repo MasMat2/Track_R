@@ -50,6 +50,7 @@ export class MensajesComponent {
     //Agregar logica para subir archivo
     if(this.archivo){
       let byte = await this.convertirBase64String();
+      byte = byte.split(',')[1];
       msg.archivo = byte;
       msg.archivoNombre = this.archivo.name;
       msg.archivoTipoMime = this.archivo.type;
@@ -140,5 +141,33 @@ export class MensajesComponent {
       console.log(res)
     })
     }
+  }
+
+  downloadFile(fileBase64:string) {
+    // Decodificar la cadena Base64
+    console.log(fileBase64)
+    const decodedData = atob(fileBase64);
+
+    // Convertir a un array de bytes
+    const byteNumbers = new Array(decodedData.length);
+    for (let i = 0; i < decodedData.length; i++) {
+      byteNumbers[i] = decodedData.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+
+    // Crear un Blob con los datos binarios
+    const blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+    // Crear un object URL y asignarlo al enlace de descarga
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.style.display = 'none';
+    a.href = url;
+    a.download = 'archivo_descargado.png'; // Nombre del archivo
+    a.click();
+
+    // Limpiar el object URL después de la descarga
+    URL.revokeObjectURL(url);
   }
 }
