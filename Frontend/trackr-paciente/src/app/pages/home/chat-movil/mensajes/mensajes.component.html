@@ -9,27 +9,42 @@
   <div class="absolute">
     <div class="listado">
       <div *ngFor="let mensaje of mensajes">
-        <div class="message user" *ngIf="mostrarMensaje(mensaje.idPersona)">
-          <div class="message-bubble">
-            {{ mensaje.mensaje }}
+          <div class="message user" *ngIf="mostrarMensaje(mensaje.idPersona)">
+              <div class="message-bubble">
+                  {{mensaje.mensaje}} <br>
+                  <button class="btn btn-1" (click)="downloadFile(mensaje.archivo,mensaje.archivoNombre,mensaje.archivoTipoMime)" *ngIf="mensaje.archivo != ''">
+                      <i class="fa fa-file" style="font-size: 24px;"></i> {{mensaje.archivoNombre}}
+                  </button>
+                  <br>
+                  {{imprimirFecha(mensaje.fecha)}}
+              </div>
           </div>
-        </div>
-        <div class="message other" *ngIf="!mostrarMensaje(mensaje.idPersona)">
-          <div class="message-bubble">
-            <div class="nombre">{{ mensaje?.nombrePersona || 'Chat' }}</div>
-            {{ mensaje.mensaje }}
+          <div class="message other" *ngIf="!mostrarMensaje(mensaje.idPersona)">
+              <div class="message-bubble">
+                  <div class="nombre">{{mensaje.nombrePersona}}</div>
+                  {{mensaje.mensaje}} <br>
+                  <button class="btn" (click)="downloadFile(mensaje.archivo,mensaje.archivoNombre,mensaje.archivoTipoMime)" *ngIf="mensaje.archivo != ''">
+                      <i class="fa fa-file" style="font-size: 24px;"></i> {{mensaje.archivoNombre}}
+                  </button>
+                  <br>
+                  {{imprimirFecha(mensaje.fecha)}}
+              </div>
           </div>
-        </div>
       </div>
-    </div>
+  </div>
 
     <div class="final">
       <div class="form-group">
         <div class="row">
-          <div class="col-10">
-            <label class="label-input required-label" style="color: gray"
+            <div class="col-2">
+              <button class="btn" (click)="openFileInput()"><i class="fa fa-file" style="font-size: 24px;"></i></button>
+              <input type="file" id="fileInput" #fileInput style="display: none" (change)="onFileSelected($event)" />
+              <!-- <input type="file" class="fa fa-file" name="" id="" (change)="onFileSelected($event)"> -->
+          </div>
+          <div class="col-8">
+            <!-- <label class="label-input required-label" style="color: gray"
               >Mensaje</label
-            >
+            > -->
             <div>
               <textarea
                 #descripcion="ngModel"
