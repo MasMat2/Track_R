@@ -6,7 +6,7 @@ namespace TrackrAPI.Hubs;
 public interface IChatMensajeHub
 {
     Task NuevaConexion(IEnumerable<IEnumerable<ChatMensajeDTO>> mensajes);
-    Task NuevoMensaje(ChatMensaje mensaje);
+    Task NuevoMensaje(ChatMensajeDTO mensaje);
 
 }
 

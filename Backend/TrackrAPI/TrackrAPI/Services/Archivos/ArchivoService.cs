@@ -13,7 +13,7 @@ public class ArchivoService
         _archivoRepository = archivoRepository;
     }
 
-    public void Agregar(ArchivoFormDTO archivoFormDTO)
+    public Archivo Agregar(ArchivoFormDTO archivoFormDTO)
     {
         var archivo = new Archivo
         {
@@ -24,6 +24,6 @@ public class ArchivoService
             FechaRealizacion = archivoFormDTO.FechaRealizacion,
             IdUsuario = archivoFormDTO.IdUsuario
         };
-        _archivoRepository.Agregar(archivo);
+        return _archivoRepository.Agregar(archivo);
     }
 }

@@ -179,8 +179,8 @@ public class ExpedienteTrackrService
             {
                 string filePath = $"Archivos/Usuario/{expediente.IdUsuario}{MimeTypeMap.GetExtension(expediente.TipoMime)}";
                 
-                    Console.WriteLine("Expediente : " + JsonConvert.SerializeObject(expediente, Formatting.Indented));
-                    Console.WriteLine("--------------------");
+                    //Console.WriteLine("Expediente : " + JsonConvert.SerializeObject(expediente, Formatting.Indented));
+                    //Console.WriteLine("--------------------");
                 if (File.Exists(filePath))
                 {
                     byte[] imageArray = File.ReadAllBytes(filePath);

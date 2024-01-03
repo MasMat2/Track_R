@@ -3,6 +3,7 @@ using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +41,11 @@ builder.Services.AddControllers().AddNewtonsoftJson(opt =>
 });
 
 builder.Services.AddCors();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(e =>
+{
+    e.MaximumReceiveMessageSize = 102400000;
+});
+builder.Services.Configure<FormOptions>(options => options.MultipartBodyLengthLimit = 102400000);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<SimpleAES>();
 builder.Services.AddScoped<CorreoHelper>();
