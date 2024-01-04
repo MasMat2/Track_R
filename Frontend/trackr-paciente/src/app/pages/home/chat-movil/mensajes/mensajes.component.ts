@@ -225,4 +225,5 @@ export class MensajesComponent {
     let x = new Date(fecha)
     return `${x.getDate()}/${x.getMonth()+1}/${x.getFullYear()} - ${x.getHours()}:${x.getMinutes()}`
   }
+  
 }

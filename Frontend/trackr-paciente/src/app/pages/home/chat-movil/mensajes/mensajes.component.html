@@ -57,6 +57,7 @@
                 style="width: 100%"
                 rows="1"
                 required
+                (keyup.enter)="enviarMensaje()"
               ></textarea>
               <div
                 *ngIf="(descripcion.errors?.['required'] && descripcion.touched )"
