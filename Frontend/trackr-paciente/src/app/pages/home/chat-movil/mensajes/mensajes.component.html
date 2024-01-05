@@ -7,7 +7,7 @@
   <ion-title class="ion-text-center ion-align-items-center" style="padding-top: 1vh; padding-bottom: 1vh; padding: 0;">{{chat.titulo}}</ion-title>
 
   <div class="absolute">
-    <div class="listado">
+    <div #scrollContainer class="listado">
       <div *ngFor="let mensaje of mensajes">
           <div class="message user" *ngIf="mostrarMensaje(mensaje.idPersona)">
               <div class="message-bubble">

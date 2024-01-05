@@ -35,6 +35,7 @@ export class MensajesComponent {
   };
   protected archivo ?: File =undefined;
   @ViewChild('fileInput') fileInput!: ElementRef;
+  @ViewChild('scrollContainer') private scrollContainer: ElementRef;
 
   constructor(
     private ChatMensajeHubService: ChatMensajeHubService,
@@ -224,6 +225,18 @@ export class MensajesComponent {
   imprimirFecha(fecha:Date):string{
     let x = new Date(fecha)
     return `${x.getDate()}/${x.getMonth()+1}/${x.getFullYear()} - ${x.getHours()}:${x.getMinutes()}`
+  }
+
+  // Esta función se llama después de cada actualización de la vista
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  // Función para desplazar automáticamente hacia abajo al final de la lista
+  scrollToBottom(): void {
+    try {
+      this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+    } catch (err) { }
   }
   
 }
