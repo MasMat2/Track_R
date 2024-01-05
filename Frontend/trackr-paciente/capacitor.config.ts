@@ -4,7 +4,12 @@ const config: CapacitorConfig = {
   appId: 'trackr.app',
   appName: 'trackr-paciente',
   webDir: 'www',
-  bundledWebRuntime: false
+  bundledWebRuntime: false,
+  plugins: {
+    CapacitorHttp: {
+      enabled: true,
+    },
+  },
 };
 
 export default config;
