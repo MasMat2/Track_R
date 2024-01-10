@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { EntidadEstructuraTablaValorService } from '@http/gestion-expediente/entidad-estructura-tabla-valor.service';
 import { SeccionCampoService } from '@http/gestion-entidad/seccion-campo.service';
@@ -111,7 +111,8 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   constructor(
     private seccionCampoService: SeccionCampoService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
   
     ) { }
 
@@ -252,6 +253,10 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
         this.variableList = seccionesPadecimiento;
       }
     );
+  }
+
+  regresarBtn(){
+    this.router.navigate(['home/dashboard']);
   }
 
 
