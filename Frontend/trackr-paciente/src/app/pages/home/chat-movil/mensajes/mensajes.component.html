@@ -12,7 +12,7 @@
           <div class="message user" *ngIf="mostrarMensaje(mensaje.idPersona)">
               <div class="message-bubble">
                   {{mensaje.mensaje}} <br>
-                  <button class="btn btn-1" (click)="downloadFile(mensaje.archivo,mensaje.archivoNombre,mensaje.archivoTipoMime)" *ngIf="mensaje.archivo != ''">
+                  <button class="btn btn-1" (click)="clickArchivo(mensaje.idArchivo)" *ngIf="mensaje.idArchivo !== 0">
                       <i class="fa fa-file" style="font-size: 24px;"></i> {{mensaje.archivoNombre}}
                   </button>
                   <br>
@@ -23,7 +23,7 @@
               <div class="message-bubble">
                   <div class="nombre">{{mensaje.nombrePersona}}</div>
                   {{mensaje.mensaje}} <br>
-                  <button class="btn" (click)="downloadFile(mensaje.archivo,mensaje.archivoNombre,mensaje.archivoTipoMime)" *ngIf="mensaje.archivo != ''">
+                  <button class="btn" (click)="clickArchivo(mensaje.idArchivo)" *ngIf="mensaje.idArchivo !== 0">
                       <i class="fa fa-file" style="font-size: 24px;"></i> {{mensaje.archivoNombre}}
                   </button>
                   <br>

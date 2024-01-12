@@ -72,6 +72,7 @@ export class ChatMovilComponent implements OnInit {
       idChat,
       mensaje: this.contenido,
       idPersona: 5333,
+      idArchivo: 0,
     };
 
     this.chatMensajeHubService.enviarMensaje(msg);

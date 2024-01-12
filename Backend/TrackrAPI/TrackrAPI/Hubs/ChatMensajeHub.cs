@@ -33,7 +33,7 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
     {
         Console.WriteLine(mensaje.ArchivoTipoMime);
         mensaje.IdPersona = this.ObtenerIdUsuario();
-        await _chatMensajeService.NuevoMensaje(mensaje);
+        _chatMensajeService.NuevoMensaje(mensaje);
 
         var user = _usuarioService.ConsultarDto(mensaje.IdPersona);
         mensaje.NombrePersona = user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno;

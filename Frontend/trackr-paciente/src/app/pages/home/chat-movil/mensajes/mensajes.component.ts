@@ -11,7 +11,7 @@ import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
 import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
 import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-service.service';
 import { ArchivoService } from '../../../../shared/http/archivo/archivo.service';
-import { ArchivoFormDTO } from '@dtos/archivos/archivo-form-dto';
+import { ArchivoFormDTO } from '../../../../shared/Dtos/archivos/archivo-form-dto';
 
 @Component({
   selector: 'app-mensajes',
@@ -71,7 +71,8 @@ export class MensajesComponent {
       idChat: this.idChat,
       mensaje: this.msg,
       idPersona:5333,
-      archivo: ''
+      archivo: '',
+      idArchivo: 0
     }
 
     //Agregar logica para subir archivo
@@ -186,6 +187,12 @@ export class MensajesComponent {
       console.log(res)
     })
     }
+  }
+
+  clickArchivo(idArchivo:number){
+    this.ArchivoService.getArchivo(idArchivo).subscribe(res => {
+      this.downloadFile(res.archivo,res.nombre,res.archivoMime)
+    });
   }
 
   downloadFile(fileBase64:string,nombre?:string,mime?:string) {

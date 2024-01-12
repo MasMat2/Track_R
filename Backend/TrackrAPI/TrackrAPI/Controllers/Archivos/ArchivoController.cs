@@ -20,5 +20,16 @@ namespace TrackrAPI.Controllers.Archivos
         {
             _archivoService.Agregar(archivoFormDTO);
         }
+
+        [HttpGet("{IdArchivo}")]
+        public ArchivoDTO GetArchivo(int IdArchivo) { 
+            return _archivoService.GetArchivo(IdArchivo);
+        }
+
+        [HttpGet("fileName/{IdArchivo}")]
+        public string GetFileName(int IdArchivo)
+        {
+            return _archivoService.GetFileName(IdArchivo);
+        }
     }
 }

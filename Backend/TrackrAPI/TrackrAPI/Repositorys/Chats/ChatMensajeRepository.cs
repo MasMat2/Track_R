@@ -11,7 +11,6 @@ public class ChatMensajeRepository : Repository<ChatMensaje>, IChatMensajeReposi
     {
         return context.ChatMensaje
                       .Include(x => x.IdPersonaNavigation)
-                      .Include(x => x.IdArchivoNavigation)
                       .Where(x => x.IdChat == IdChat);
     }
 }

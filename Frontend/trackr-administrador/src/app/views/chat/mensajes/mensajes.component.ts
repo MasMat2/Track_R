@@ -33,7 +33,6 @@ export class MensajesComponent {
 
   ngOnChanges(){
     this.obtenerPersonasEnChat();
-    console.log(this.mensajes)
   }
 
   obtenerPersonasEnChat(){
@@ -48,7 +47,8 @@ export class MensajesComponent {
       idChat: this.idChat,
       mensaje: this.msg,
       idPersona:5333,
-      archivo: ''
+      archivo: '',
+      idArchivo: 0,
     }
 
     //Agregar logica para subir archivo
@@ -147,7 +147,14 @@ export class MensajesComponent {
     }
   }
 
+  clickArchivo(idArchivo:number){
+    this.ArchivoService.getArchivo(idArchivo).subscribe(res => {
+      this.downloadFile(res.archivo,res.nombre,res.archivoMime)
+    });
+  }
+
   downloadFile(fileBase64:string,nombre?:string,mime?:string) {
+    
     // Decodificar la cadena Base64
     const decodedData = atob(fileBase64);
 
