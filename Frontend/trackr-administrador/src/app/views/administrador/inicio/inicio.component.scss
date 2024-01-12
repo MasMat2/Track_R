@@ -21,3 +21,16 @@
   overflow-y: auto; 
 }
 
+.popover-custom {
+  max-width: 500px !important; // ajusta el ancho máximo según tus necesidades
+  width: auto !important; // ancho automático para ajustar el contenido
+}
+
+.center {
+  font-size: 30px;
+  margin: 0 auto;
+  display: block;
+  position: relative;
+  top: 10px;  
+}
+
