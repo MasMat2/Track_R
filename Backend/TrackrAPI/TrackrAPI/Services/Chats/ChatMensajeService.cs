@@ -18,18 +18,21 @@ public class ChatMensajeService
     private readonly IChatPersonaRepository _chatPersonaRepository;
     private readonly NotificacionDoctorService _notificacionService;
     private readonly IArchivoRepository _archivoRepository;
+    private readonly ArchivoService _archivoService;
 
     public ChatMensajeService(IChatMensajeRepository chatMensajeRepository,
                               IHubContext<ChatMensajeHub,IChatMensajeHub> hubContext,
                               IChatPersonaRepository chatPersonaRepository,
                               NotificacionDoctorService notificacionService,
-                              IArchivoRepository archivoRepository)
+                              IArchivoRepository archivoRepository,
+                              ArchivoService archivoService)
     {
         _chatMensajeRepository = chatMensajeRepository;
         _hubContext = hubContext;
         _chatPersonaRepository = chatPersonaRepository;
         _notificacionService = notificacionService;
         _archivoRepository = archivoRepository;
+        _archivoService = archivoService;
     }
 
     public IEnumerable<IEnumerable<ChatMensajeDTO>> ObtenerMensajesPorChat(int IdPersona)
@@ -47,21 +50,18 @@ public class ChatMensajeService
                                                 IdPersona = x.IdPersona,
                                                 Mensaje = x.Mensaje,
                                                 NombrePersona = x.IdPersonaNavigation.Nombre + "  "+ x.IdPersonaNavigation.ApellidoPaterno + " "+x.IdPersonaNavigation.ApellidoMaterno,
-                                                Archivo = (x.IdArchivoNavigation != null && x.IdArchivoNavigation.Archivo1 != null)
-                                                           ? /*"data:" + x.IdArchivoNavigation.ArchivoTipoMime + ";base64,"+*/ Convert.ToBase64String(x.IdArchivoNavigation.Archivo1)
-                                                           : string.Empty,
-                                                ArchivoNombre = (x.IdArchivoNavigation != null) ? x.IdArchivoNavigation.ArchivoNombre : string.Empty,
-                                                ArchivoTipoMime = (x.IdArchivoNavigation != null) ? x.IdArchivoNavigation.ArchivoTipoMime : string.Empty,
-                                                FechaRealizacion = (x.IdArchivoNavigation != null) ? x.IdArchivoNavigation.FechaRealizacion : null,
-                                                Nombre = (x.IdArchivoNavigation != null) ? x.IdArchivoNavigation.Nombre : string.Empty
+                                                IdArchivo = (x.IdArchivo != null) ? (int) x.IdArchivo:0,
+                                                ArchivoNombre = (x.IdArchivo != null) ? _archivoService.GetFileName((int)x.IdArchivo):null,
+
                                             });
+           
             chats = chats.Append(aux);
         }
         
         return chats;
     }
 
-    public async Task NuevoMensaje(ChatMensajeDTO mensaje)
+    public int NuevoMensaje(ChatMensajeDTO mensaje)
     {
         int? idArchivo = null;
         var idsPersonasChat = _chatPersonaRepository.ConsultarPersonasPorChat(mensaje.IdChat)
@@ -70,7 +70,7 @@ public class ChatMensajeService
                                                     .ToList();
         var notificacion = new NotificacionDoctorCapturaDTO(mensaje.Mensaje , 2 , mensaje.IdPersona);
         
-        await _notificacionService.Notificar(notificacion, idsPersonasChat);
+        _notificacionService.Notificar(notificacion, idsPersonasChat);
         
         //Subir si existe el archivo
         if (mensaje.ArchivoTipoMime != null)
@@ -106,7 +106,7 @@ public class ChatMensajeService
 
         _chatMensajeRepository.Agregar(mensajeAux);
 
-
+        return (idArchivo != null) ? (int)idArchivo:0;
     }
 }
 

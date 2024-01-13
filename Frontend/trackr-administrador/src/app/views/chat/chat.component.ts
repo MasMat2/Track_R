@@ -54,7 +54,8 @@ export class ChatComponent {
       fecha: new Date(),
       idChat,
       mensaje: this.contenido,
-      idPersona:5333
+      idPersona:5333,
+      idArchivo: 0
     }
 
     this.chatMensajeHubService.enviarMensaje(msg);
