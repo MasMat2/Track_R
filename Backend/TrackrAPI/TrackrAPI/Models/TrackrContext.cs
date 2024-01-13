@@ -5396,6 +5396,11 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.Titulo).HasMaxLength(1000);
 
+                entity.HasOne(d => d.IdPersonaNavigation)
+                    .WithMany(p => p.Notificacion)
+                    .HasForeignKey(d => d.IdPersona)
+                    .HasConstraintName("FK_NotificacionAUsuario");
+
                 entity.HasOne(d => d.IdTipoNotificacionNavigation)
                     .WithMany(p => p.Notificacion)
                     .HasForeignKey(d => d.IdTipoNotificacion)

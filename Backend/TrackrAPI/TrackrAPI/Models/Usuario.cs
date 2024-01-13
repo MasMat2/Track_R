@@ -55,6 +55,7 @@ namespace TrackrAPI.Models
             NotaVentaDetalle = new HashSet<NotaVentaDetalle>();
             NotaVentaIdUsuarioAltaNavigation = new HashSet<NotaVenta>();
             NotaVentaIdUsuarioClienteNavigation = new HashSet<NotaVenta>();
+            Notificacion = new HashSet<Notificacion>();
             NotificacionDoctor = new HashSet<NotificacionDoctor>();
             NotificacionUsuario = new HashSet<NotificacionUsuario>();
             OrdenCompraIdUsuarioCompradorNavigation = new HashSet<OrdenCompra>();
@@ -192,6 +193,7 @@ namespace TrackrAPI.Models
         public virtual ICollection<NotaVentaDetalle> NotaVentaDetalle { get; set; }
         public virtual ICollection<NotaVenta> NotaVentaIdUsuarioAltaNavigation { get; set; }
         public virtual ICollection<NotaVenta> NotaVentaIdUsuarioClienteNavigation { get; set; }
+        public virtual ICollection<Notificacion> Notificacion { get; set; }
         public virtual ICollection<NotificacionDoctor> NotificacionDoctor { get; set; }
         public virtual ICollection<NotificacionUsuario> NotificacionUsuario { get; set; }
         public virtual ICollection<OrdenCompra> OrdenCompraIdUsuarioCompradorNavigation { get; set; }

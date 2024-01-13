@@ -19,7 +19,9 @@ namespace TrackrAPI.Models
         public string Mensaje { get; set; } = null!;
         public string Titulo { get; set; } = null!;
         public int IdTipoNotificacion { get; set; }
+        public int? IdPersona { get; set; }
 
+        public virtual Usuario? IdPersonaNavigation { get; set; }
         public virtual TipoNotificacion IdTipoNotificacionNavigation { get; set; } = null!;
         public virtual ICollection<DetalleExpedienteRecomendacionesGenerales> DetalleExpedienteRecomendacionesGenerales { get; set; }
         public virtual ICollection<ExpedienteRecomendaciones> ExpedienteRecomendaciones { get; set; }
