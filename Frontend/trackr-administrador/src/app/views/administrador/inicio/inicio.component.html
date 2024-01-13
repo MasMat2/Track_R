@@ -1,6 +1,6 @@
 <div class="contenedor" *ngIf="usuario$ | async; let usuario">
   <div class="row">
-    <div class="col-11">
+    <div class="col-9">
       <div class="titulo-contenedor">
         Bienvenido,
         <span class="nombre-doctor">{{ usuario.tituloAcademico }} {{ usuario.nombreCompleto }}</span>
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="col-1 scrollable-panel" >
+    <!-- <div class="col-1 scrollable-panel" >
       <button
           class="btn center"
           [popover]="contenidoPopOver"
@@ -34,21 +34,11 @@
       <div class="scrollable-panel">
         <app-panel-notificaciones ></app-panel-notificaciones>
       </div>
-    </ng-template>
+    </ng-template> -->
       
-
-    <!-- <div class="col-3 scrollable-panel" >
-      <button
-        [popover]="contenidoPopOver"
-        placement="bottom"
-        [containerClass]="'popover-custom'"
-      ><i class="fa fa-bell" aria-hidden="true"></i></button>
-    </div>
-    <ng-template #contenidoPopOver>
-      <div class="col-12 scrollable-panel" >
+      <div class="col-3 scrollable-panel" >
         <app-panel-notificaciones ></app-panel-notificaciones>
       </div>
-    </ng-template> -->
     
   </div>
 </div>
