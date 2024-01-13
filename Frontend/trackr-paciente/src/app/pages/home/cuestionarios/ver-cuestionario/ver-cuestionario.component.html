@@ -1,0 +1,36 @@
+<ion-header>
+  <app-header></app-header>
+</ion-header>
+<ion-content>
+  <div class="info-examen">
+    <ion-label>
+      <h1>{{tipoExamen}}</h1>
+    </ion-label>
+  </div>
+  <div class="preguntas">
+    <ion-card *ngFor="let reactivo of reactivoList index as i" class="pregunta">
+      <ion-card-header>
+        <ion-card-title>{{i+1}}.-{{reactivo.pregunta}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngIf="reactivo.imagenBase64 !== '' " style="text-align: center; margin-top: 10px; margin-bottom: 10px;">
+          <img
+            *ngIf="reactivo.imagenBase64 !== 'data:;base64,' "
+            id="logo"
+            class="imagenPregunta"
+            [src]="reactivo.imagenBase64"
+            height="200"
+          />
+        </div>
+        <ion-label>
+          <div class="opciones" *ngIf="!reactivo.necesitaRevision">
+          <p>{{reactivo.respuesta}}</p>
+          </div>
+          <h2>Su respuesta: <span style="color: black ; font-weight: bold;">{{reactivo.respuestaAlumno}}</span></h2>
+        </ion-label>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <ion-button shape="round" expand="full" routerLink="home/cuestionarios">Volver</ion-button>
+</ion-content>
+

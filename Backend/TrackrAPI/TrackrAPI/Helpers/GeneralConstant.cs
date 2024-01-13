@@ -418,5 +418,8 @@
         public static readonly string ClaveNotificacionRecordatorio = "GRL";
         public static readonly int IdTipoUsuarioChatAdmin = 1;
         public static readonly string ClaveTipoUsuarioChatAdmin = "001";
+        public static readonly int idEstatusExamenTerminado = 3;
+        public static readonly int idEstatusExamenPresentandose = 2;
+        public static readonly int idEstatusExamenProgramado = 1;
     }
 }
