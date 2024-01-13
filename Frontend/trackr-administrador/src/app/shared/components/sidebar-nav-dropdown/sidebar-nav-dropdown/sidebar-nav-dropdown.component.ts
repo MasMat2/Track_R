@@ -11,6 +11,7 @@ import { GeneralConstant } from '@utils/general-constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Subscription, filter } from 'rxjs';
 import { AyudaModalComponent } from './ayuda-modal/ayuda-modal.component';
+import { PanelNotificacionesComponent } from '@components/inicio/components/panel-notificaciones/panel-notificaciones.component';
 
 @Component({
   selector: 'app-nav-dropdown',
@@ -108,6 +109,15 @@ export class SidebarNavDropdownComponent implements OnInit {
       ...GeneralConstant.CONFIG_MODAL_SMALL
     });
 
+    this.bsModalRef.content!.onClose = (cerrar: boolean) => {
+      if (cerrar) {
+      }
+      this.bsModalRef.hide();
+    };
+  }
+
+  public mostrarNotificaciones(){
+    this.bsModalRef = this.modalService.show(PanelNotificacionesComponent)
     this.bsModalRef.content!.onClose = (cerrar: boolean) => {
       if (cerrar) {
       }

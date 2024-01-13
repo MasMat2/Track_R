@@ -9,6 +9,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MenuItemComponent } from './menu-item/menu-item.component';
+import { PanelNotificacionesModule } from '../../../views/administrador/inicio/components/panel-notificaciones/panel-notificaciones.module';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { MenuItemComponent } from './menu-item/menu-item.component';
     MatMenuModule,
     MatSidenavModule,
     MatButtonModule,
+    PanelNotificacionesModule,
+    PopoverModule,
   ],
   exports: [SidebarNavDropdownComponent]
 })
