@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Sanitizer } from '@angular/core';
 import { NotificacionDoctorCapturaDTO } from '@dtos/notificaciones/notificacion-doctor-captura-dto';
 import { NotificacionService } from '@http/notificaciones/notificacion.service';
 import { UsuarioService } from '@http/seguridad/usuario.service';
@@ -7,6 +7,7 @@ import { NotificacionDoctorHubService } from '@services/notificacion-doctor-hub.
 import { Observable, map } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ModalPanelNotificacionesComponent } from './modal-panel-notificaciones/modal-panel-notificaciones.component';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-panel-notificaciones',
@@ -31,7 +32,7 @@ export class PanelNotificacionesComponent implements OnInit {
     paciente: string,
     mensaje: string,
     fecha: Date,
-    imagen?: string,
+    imagen?: string | SafeUrl,
     visto: boolean
   }[]>;
 
@@ -39,7 +40,8 @@ export class PanelNotificacionesComponent implements OnInit {
     private notificacionService: NotificacionService,
     private notificacionHubService: NotificacionDoctorHubService,
     private usuarioService: UsuarioService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private sanitizer:DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -56,7 +58,7 @@ export class PanelNotificacionesComponent implements OnInit {
             paciente: notificacion.nombrePaciente,
             mensaje: notificacion.mensaje,
             fecha: notificacion.fechaAlta,
-            imagen: undefined,
+            imagen: (notificacion.imagen !== null || notificacion.imagen !== undefined) ? this.sanitizer.bypassSecurityTrustUrl(notificacion.imagen || '') : undefined,
             visto: notificacion.visto
           };
         }))
