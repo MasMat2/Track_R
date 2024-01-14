@@ -41,7 +41,8 @@ public class NotificacionDoctorService
             notificacionDto.FechaAlta,
             notificacionUsuarioDto.Visto,
             notificacionDto.IdTipoNotificacion,
-            idPaciente
+            idPaciente,
+            ""
         );
     }
 
