@@ -9,5 +9,6 @@ public record NotificacionDoctorDTO(
     DateTime FechaAlta,
     bool Visto,
     int IdTipoNotificacion,
-    int IdPaciente
+    int IdPaciente,
+    string ? Imagen
 );

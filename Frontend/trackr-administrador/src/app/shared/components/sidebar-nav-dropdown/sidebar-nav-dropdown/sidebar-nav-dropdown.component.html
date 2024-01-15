@@ -38,6 +38,7 @@
 
       <app-menu-item
         [item]="{ name: 'Notificaciones', icon: 'fa-regular fa-bell', url: 'administrador', claveTipoAcceso: '' }"
+        (click)="mostrarNotificaciones()"
       >
       </app-menu-item>
 
@@ -59,3 +60,9 @@
     <ng-content></ng-content>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<ng-template #contenidoPopOver>
+  <div class="scrollable-panel">
+    <app-panel-notificaciones ></app-panel-notificaciones>
+  </div>
+</ng-template>

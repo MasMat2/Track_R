@@ -8,6 +8,8 @@ import { UsuarioService } from '../../../shared/http/seguridad/usuario.service';
 import { Usuario } from '@models/seguridad/usuario';
 import { Observable } from 'rxjs';
 import { PanelNotificacionesModule } from './components/panel-notificaciones/panel-notificaciones.module';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+import { PanelNotificacionesComponent } from './components/panel-notificaciones/panel-notificaciones.component';
 
 @Component({
   selector: 'app-inicio',
@@ -20,7 +22,8 @@ import { PanelNotificacionesModule } from './components/panel-notificaciones/pan
     ResumenPadecimientosModule,
     GraficaNotificacionesModule,
     GraficaTratamientosModule,
-    PanelNotificacionesModule
+    PanelNotificacionesModule,
+    PopoverModule,
   ]
 })
 export class InicioComponent implements OnInit {
