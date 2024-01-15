@@ -1,7 +1,16 @@
 
+
 <ion-content>
   <div class="contenedor">
-    <div class="titulo-contenedor">Perfil</div>
+    <div class="titulo-contenedor">
+      <ion-buttons>
+        <ion-back-button></ion-back-button>
+        <ion-button routerLink="acceso">
+          <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      Perfil
+    </div>
     <div class="cuerpo-contenedor">
       <form
         (keydown.enter)="$event.preventDefault()"
@@ -16,6 +25,10 @@
                 [(ngModel)]="usuario.nombres"
                 name="nombre"
                 class="form-control"
+                label="Nombres"
+                label-placement="floating"
+                fill="outline"
+                shape="round"
                 type="text"
                 maxlength="200"
                 [required]="true"
@@ -31,6 +44,10 @@
                 [(ngModel)]="usuario.apellidoPaterno"
                 name="apellidoPaterno"
                 class="form-control"
+                label="Apellido Paterno"
+                label-placement="floating"
+                fill="outline"
+                shape="round"
                 type="text"
                 maxlength="200"
                 [required]="true"
@@ -44,6 +61,10 @@
                 [(ngModel)]="usuario.apellidoMaterno"
                 name="apellidoMaterno"
                 class="form-control"
+                label="Apellido Materno"
+                label-placement="floating"
+                fill="outline"
+                shape="round"
                 type="text"
                 maxlength="200"
                 [required]="true"
@@ -59,6 +80,10 @@
                 [(ngModel)]="usuario.nombreUsuario"
                 name="nombreusuario"
                 class="form-control"
+                label="Nombre de usuario"
+                label-placement="floating"
+                fill="outline"
+                shape="round"
                 maxlength="50"
                 [required]="true"
                 placeholder="Nombre de usuario"
@@ -76,6 +101,10 @@
                 [(ngModel)]="usuario.correoPersonal"
                 name="correo"
                 class="form-control"
+                label="Correo Electrónico"
+                label-placement="floating"
+                fill="outline"
+                shape="round"
                 maxlength="50"
                 [required]="true"
                 placeholder="Correo Electrónico"
@@ -94,6 +123,10 @@
                 [(ngModel)]="usuario.telefonoMovil"
                 name="telefonoMovil"
                 class="form-control"
+                label="Teléfono Móvil"
+                label-placement="floating"
+                fill="outline"
+                shape="round"
                 [required]="true"
                 placeholder="Teléfono Móvil"
                 type="tel"
@@ -108,6 +141,10 @@
                 [(ngModel)]="usuario.contrasena"
                 name="contrasenaName"
                 class="form-control"
+                label="Contraseña"
+                label-placement="floating"
+                fill="outline"
+                shape="round"
                 placeholder="Contraseña"
                 [required]="true"
                 type="password"
@@ -121,6 +158,10 @@
                 [(ngModel)]="confirmarContrasena"
                 name="confirmacionContrasenaName"
                 class="form-control"
+                label="Contraseña"
+                label-placement="floating"
+                fill="outline"
+                shape="round"
                 appConfirmacionContrasena="contrasenaName"
                 [required]="usuario.contrasena !== '' && usuario.contrasena !== null"
                 placeholder="Confirmar Contraseña"
@@ -131,18 +172,28 @@
           </ion-row>
           <ion-row>
             <ion-col>
-              <ion-item>
-                <ion-checkbox
-                  (ionChange)="changeEvent($event)"
-                  labelPlacement="end"
-                  >Acepto Términos y Condiciones</ion-checkbox
-                >
-              </ion-item>
+              <div class="terminos-condiciones">
+                <ion-item>
+                  <ion-label>
+                    Acepto los
+                    <a
+                      (click)="mostrarTerminosYCondiciones()"
+                      style="text-decoration: underline !important; font-weight: bold;">
+
+                      terminos y condiciones
+                    </a>
+                  </ion-label>
+                  <ion-checkbox
+                    (ionChange)="changeEvent($event)"
+                    slot="start">
+                  </ion-checkbox>
+                </ion-item>
+              </div>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col>
-              <ion-button [disabled]="!termsAccepted || submitting" type="submit">
+              <ion-button [disabled]="!termsAccepted || submitting || !formulario.valid" type="submit">
                 Registrar Perfil
               </ion-button>
             </ion-col>
