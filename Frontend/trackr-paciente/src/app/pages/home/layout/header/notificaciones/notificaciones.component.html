@@ -6,7 +6,7 @@
     </ion-label>
   </ion-item>
 
-  <ion-item *ngFor="let notificacion of notificaciones$ | async" [ngClass]="{ 'ion-item': !notificacion.visto }" [button]="true" [detail]="false"  (click)="marcarComoVista(notificacion.id , notificacion.visto)">
+  <ion-item *ngFor="let notificacion of notificaciones$ | async" [ngClass]="{ 'ion-item': !notificacion.visto }" [button]="true" [detail]="false"  (click)="marcarComoVista(notificacion.id , notificacion.visto , notificacion.idTipoNotificacion)">
     <ion-icon  [class]="iconMappings[notificacion.idTipoNotificacion]?.class" [style.color]="iconMappings[notificacion.idTipoNotificacion]?.color" slot="start"></ion-icon>
     <div  class="notification-item">
       <ion-label >

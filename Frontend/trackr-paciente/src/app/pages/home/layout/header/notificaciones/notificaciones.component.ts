@@ -4,6 +4,7 @@ import { IonicModule} from '@ionic/angular';
 import { NotificacionPacienteHubService } from '@services/notificacion-paciente-hub.service';
 import { Observable , map} from 'rxjs';
 import { NotificacionPacientePopOverDto } from '../../../../../shared/Dtos/notificaciones/notificacion-paciente-popover-dto';
+import { NotificacionPacienteService } from '../../../../../shared/http/gestion-perfil/notificacion-paciente.service';
 
 @Component({
   selector: 'app-notificaciones',
@@ -21,8 +22,8 @@ export class NotificacionesComponent  implements OnInit
 {
   protected notificaciones$: Observable<NotificacionPacientePopOverDto[]>;
   
-  constructor(private notificacionHubService : NotificacionPacienteHubService
-              ){}
+  constructor(private notificacionHubService : NotificacionPacienteHubService,
+              private  notificacionPacienteService : NotificacionPacienteService){}
 
   ngOnInit() 
   {
@@ -44,10 +45,14 @@ export class NotificacionesComponent  implements OnInit
     );
   }
 
-  protected async marcarComoVista(idNotificacionUsuario: number  , visto : boolean) {
+  protected async marcarComoVista(idNotificacionUsuario: number  , visto : boolean , idTipoNotificacion : number) {
     if(!visto)
     {
       await this.notificacionHubService.marcarComoVista(idNotificacionUsuario);
+      if(idTipoNotificacion == 6)
+      {
+        this.notificacionPacienteService.actualizarWidgets();
+      }
       this.consultarNotificaciones();
     }
   }
