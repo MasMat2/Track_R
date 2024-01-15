@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { NotificacionPacientePopOverDto } from '../../Dtos/perfil/notificacion-paciente-dto';
 
 @Injectable({
@@ -8,6 +8,8 @@ import { NotificacionPacientePopOverDto } from '../../Dtos/perfil/notificacion-p
 })
 export class NotificacionPacienteService {
     private dataUrl = 'notificacion/';
+    private actualizarWidgetsSource = new BehaviorSubject<boolean>(false);
+    actualizarWidgets$ = this.actualizarWidgetsSource.asObservable();
 
     constructor(public http: HttpClient) { }
 
@@ -18,4 +20,8 @@ export class NotificacionPacienteService {
   /*   public marcarComoVista(idNotificacion : number) : Observable<void>{
         return this.http.post<void>(this.dataUrl + 'leida' , idNotificacion);
     } */
+
+    actualizarWidgets() {
+        this.actualizarWidgetsSource.next(true);
+      }
 }

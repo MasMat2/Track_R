@@ -111,11 +111,13 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
         .Where( tr => tr.IdExpedienteTratamientoNavigation.IdExpedienteNavigation.IdUsuarioNavigation.IdUsuario == idUsuario  && tr.Activo == true)
         .Select( tr => new RecordatorioUsuarioDto{
             Padecimiento = tr.IdExpedienteTratamientoNavigation.IdPadecimientoNavigation.IdEntidadEstructura,
-            FechaToma = tr.TratamientoToma.FirstOrDefault().FechaToma,
-            FechaEnvio = tr.TratamientoToma.FirstOrDefault().FechaEnvio,
             Indicaciones = tr.IdExpedienteTratamientoNavigation.Indicaciones,
             Dia = tr.Dia,
-            Tomado = tr.TratamientoToma.FirstOrDefault().FechaToma != null
+            Tomas = tr.TratamientoToma.Select( tt => new TomaDto {
+                FechaToma = tt.FechaToma,
+                FechaEnvio = tt.FechaEnvio,
+                IdTomaTratamiento = tt.IdTomaTratamiento
+            }).ToList()
         })
         .ToList(); 
         

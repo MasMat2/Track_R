@@ -16,6 +16,7 @@ import { WidgetFrecuenciaComponent } from '../widget-frecuencia/widget-frecuenci
 import { WidgetPasosComponent } from '../widget-pasos/widget-pasos.component';
 import { WidgetPesoComponent } from '../widget-peso/widget-peso.component';
 import { WidgetSuenoComponent } from '../widget-sueno/widget-sueno.component';
+import { NotificacionPacienteService } from '@http/gestion-perfil/notificacion-paciente.service';
 
 @Component({
   selector: 'app-inicio',
@@ -50,8 +51,13 @@ export class InicioPage implements OnInit {
   constructor(
     private widgetService : WidgetService,
     private usuarioWidgetService: UsuarioWidgetService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private notificacionPacienteService : NotificacionPacienteService
+  ) { 
+    this.notificacionPacienteService.actualizarWidgets$.subscribe(() => {
+      this.consultarWidgetsSeguimiento();
+    })
+  }
 
   ngOnInit() {
     

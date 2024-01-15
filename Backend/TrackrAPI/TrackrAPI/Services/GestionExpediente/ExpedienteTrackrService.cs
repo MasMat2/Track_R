@@ -199,49 +199,53 @@ public class ExpedienteTrackrService
     {
         var recordatorios = _expedienteTrackrRepository.RecordatoriosPorUsuario(idUsuario);
 
-         return recordatorios
+        return recordatorios
         .GroupBy( tr => tr.Padecimiento)
-        .Select( recordatoriosPorPad => new TomasTomadasPorPadecimientoDto{
+        .Select( recordatoriosPorPad => new TomasTomadasPorPadecimientoDto
+        {
             IdPadecimiento = recordatoriosPorPad.Key,
             TomasTomadas = recordatoriosPorPad
-         .GroupBy( tr => tr.Dia )
-         .Select( recordatoriosPorDia => new TomasTomadasPorDiaDto{
-             Dia = recordatoriosPorDia.Key,
-             TomasTotales = recordatoriosPorDia.Count(),
-             TomasTomadas = recordatoriosPorDia.Count( tr => tr.Tomado == true)
-         })
-        });  
+            .GroupBy(tr => tr.Dia)
+            .Select(recordatoriosPorDia => new TomasTomadasPorDiaDto
+            {
+                Dia = recordatoriosPorDia.Key,
+                TomasTotales = recordatoriosPorDia.Sum(rpd => rpd.Tomas.Count),
+                TomasTomadas = recordatoriosPorDia.Sum(rpd => rpd.Tomas.Count(t => t.FechaToma != null))
+            }).ToList()
+        });
     }
+
     public IEnumerable<TomasTomadasPorDiaDto> RecordatoriosPorDia(int idUsuario)
     {
         var recordatorios = _expedienteTrackrRepository.RecordatoriosPorUsuario(idUsuario);
 
          return recordatorios
          .GroupBy( tr => tr.Dia )
-         .Select( recordatoriosPorDia => new TomasTomadasPorDiaDto{
-             Dia = recordatoriosPorDia.Key,
-             TomasTotales = recordatoriosPorDia.Count(),
-             TomasTomadas = recordatoriosPorDia.Count( tr => tr.Tomado == true)
-         });
+            .Select(recordatoriosPorDia => new TomasTomadasPorDiaDto
+            {
+                Dia = recordatoriosPorDia.Key,
+                TomasTotales = recordatoriosPorDia.Sum(rpd => rpd.Tomas.Count),
+                TomasTomadas = recordatoriosPorDia.Sum(rpd => rpd.Tomas.Count(t => t.FechaToma != null))
+            });
     }
 
     public IEnumerable<TomasTomadasPorPadecimientoDto> RecordatoriosPorPadecimientoHoy(int idUsuario)
     {
         DateTime now = DateTime.Now;
         int currentDay = ((int)now.DayOfWeek + 7) % 7;
-        var recordatoriosPorPadecimiento = RecordatoriosPorPadecimiento(idUsuario);
+        var recordatoriosPorPadecimiento = RecordatoriosPorPadecimiento(idUsuario).ToList();
 
         var tomasATomarHoy = recordatoriosPorPadecimiento
         .Select( th => new TomasTomadasPorPadecimientoDto{
             IdPadecimiento = th.IdPadecimiento,
-            TomasTomadas = th.TomasTomadas.Where( t => t.Dia == currentDay)
+            TomasTomadas = th.TomasTomadas.Where( t => t.Dia == currentDay).ToList()
         });
         return tomasATomarHoy;
 
     } 
     public (int TomasTotales, int TomasTomadas) TomasPadecimientoTotalesHoy(int idUsuario , int idPadecimiento)
     {
-        var recordatoriosPorPadecimientoHoy = RecordatoriosPorPadecimientoHoy(idUsuario);
+        var recordatoriosPorPadecimientoHoy = RecordatoriosPorPadecimientoHoy(idUsuario).ToList();
 
         int tomasTotales = recordatoriosPorPadecimientoHoy.Where(th => th.IdPadecimiento == idPadecimiento)
                                                           .Select(ttp => ttp.TomasTomadas.Select(tt => tt.TomasTotales).FirstOrDefault())
