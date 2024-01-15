@@ -62,20 +62,5 @@ public class ExpedienteTrackrController : ControllerBase
         int idDoctor = Utileria.ObtenerIdUsuarioSesion(this);
         return _expedienteTrackrService.ApegoMedicamentoUsuarios(idDoctor);
     }
-    [HttpGet("recordatoriosPorPadecimiento/{idUsuario}")]
-    public IEnumerable<object> RecordatoriosPorPadecimiento(int idUsuario)
-    {
-        return _expedienteTrackrService.RecordatoriosPorPadecimiento(idUsuario);
-    }
-    [HttpGet("recordatoriosPorDia/{idUsuario}")]
-    public IEnumerable<object> RecordatoriosPorDia(int idUsuario)
-    {
-        return _expedienteTrackrService.RecordatoriosPorDia(idUsuario);
-    }
-
-    [HttpGet("recordatoriosPorPadecimientoHoy/{idUsuario}")]
-    public IEnumerable<object> RecordatoriosPorPadecimientoHoy(int idUsuario){
-        return _expedienteTrackrService.RecordatoriosPorPadecimientoHoy(idUsuario);
-    }
 
 }
