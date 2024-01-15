@@ -1,10 +1,11 @@
 import { CommonModule, NgClass, NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { IonicModule} from '@ionic/angular';
+import { AlertController, IonicModule} from '@ionic/angular';
 import { NotificacionPacienteHubService } from '@services/notificacion-paciente-hub.service';
 import { Observable , map} from 'rxjs';
 import { NotificacionPacientePopOverDto } from '../../../../../shared/Dtos/notificaciones/notificacion-paciente-popover-dto';
 import { NotificacionPacienteService } from '../../../../../shared/http/gestion-perfil/notificacion-paciente.service';
+import { GeneralConstant } from '@utils/general-constant';
 
 @Component({
   selector: 'app-notificaciones',
@@ -23,7 +24,8 @@ export class NotificacionesComponent  implements OnInit
   protected notificaciones$: Observable<NotificacionPacientePopOverDto[]>;
   
   constructor(private notificacionHubService : NotificacionPacienteHubService,
-              private  notificacionPacienteService : NotificacionPacienteService){}
+              private  notificacionPacienteService : NotificacionPacienteService,
+              private alertController : AlertController){}
 
   ngOnInit() 
   {
@@ -45,13 +47,13 @@ export class NotificacionesComponent  implements OnInit
     );
   }
 
-  protected async marcarComoVista(idNotificacionUsuario: number  , visto : boolean , idTipoNotificacion : number) {
-    if(!visto)
+  protected async marcarComoVista(notificacion : NotificacionPacientePopOverDto) {
+    if(!notificacion.visto)
     {
-      await this.notificacionHubService.marcarComoVista(idNotificacionUsuario);
-      if(idTipoNotificacion == 6)
+      await this.notificacionHubService.marcarComoVista(notificacion.id);
+      if(notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA)
       {
-        this.notificacionPacienteService.actualizarWidgets();
+        await this.modalTomarToma(notificacion.mensaje);
       }
       this.consultarNotificaciones();
     }
@@ -64,4 +66,19 @@ export class NotificacionesComponent  implements OnInit
     5: { class: 'fa-regular fa-circle-user', color: '#671e75' },
     6: { class: 'fa-solid fa-capsules', color: '#671e75' }
   };
+
+    protected async modalTomarToma(mensaje : string) {
+      const alert = await this.alertController.create({
+        header: 'Tomar toma',
+        message: mensaje,
+        buttons: [{
+          text: 'Tomar',
+          handler: () => {
+            this.notificacionPacienteService.actualizarWidgets();
+          }
+        },]
+      });
+  
+      await alert.present();
+    }
 }
