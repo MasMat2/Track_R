@@ -18,6 +18,7 @@ export class MensajesComponent {
   protected msg: string;
   protected idUsuario:number;
   protected personas: ChatPersonaSelectorDTO[];
+  protected idPersonas:number[]
   protected archivo ?: File =undefined;
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('scrollContainer') private scrollContainer: ElementRef;
@@ -38,6 +39,7 @@ export class MensajesComponent {
   obtenerPersonasEnChat(){
     this.ChatPersonaService.obtenerPersonasEnChatSelector(this.idChat).subscribe(res =>{
       this.personas = res;
+      this.idPersonas = this.personas.map(x => x.idUsuario)
     })
   }
 

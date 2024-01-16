@@ -5,9 +5,11 @@
     <div class="col" *ngIf="personas.length > 2">
         <ng-select
             name="padecimientoSelect"
+            [multiple]="true"
             [items]="personas"
             bindLabel="nombre"
             bindValue="idUsuario"
+           [(ngModel)]="idPersonas"
             >
           </ng-select>
     </div>
