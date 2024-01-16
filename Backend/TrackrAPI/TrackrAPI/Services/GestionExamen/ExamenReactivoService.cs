@@ -49,7 +49,10 @@ public class ExamenReactivoService
             throw new CdisException("El examen no existe");
         }
 
-        examen.IdEstatusExamen = 2; // Cambiar estado a presentando
+        if(examen.IdEstatusExamen != GeneralConstant.idEstatusExamenTerminado)
+        {
+            examen.IdEstatusExamen = GeneralConstant.idEstatusExamenPresentandose; // Cambiar estado a presentando
+        }
         _examenRepository.Editar(examen);
 
         return _examenReactivoRepository.ConsultarReactivosExamen(idExamen);

@@ -6,7 +6,9 @@ import { ExamenService } from '@http/cuestionarios/examen.service';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { Examen } from '@models/examen/examen';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
-import { format, parse } from 'date-fns';
+import { format} from 'date-fns';
+import { chevronForward } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
 
 @Component({
   selector: 'app-mis-cuestionarios',
@@ -30,7 +32,7 @@ export class MisCuestionariosComponent  implements OnInit {
     private examenService: ExamenService,
     private router: Router,
     private alertController: AlertController
-  ) { }
+  ) { addIcons({chevronForward})}
 
   ngOnInit() {
   }
@@ -74,8 +76,12 @@ export class MisCuestionariosComponent  implements OnInit {
            this.presentAlertError();
            return;
          }
-        this.router.navigate(['/home/cuestionarios/cuestionario', idExamen]);
+        this.router.navigate(['/home/cuestionarios/responder', idExamen]);
       });
+  }
+
+  protected verCuestionario(idExamen: number) {
+    this.router.navigate(['/home/cuestionarios/ver', idExamen]);
   }
 
   private esFechaValida(examen: Examen): boolean {
