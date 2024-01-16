@@ -117,7 +117,9 @@ export class SidebarNavDropdownComponent implements OnInit {
   }
 
   public mostrarNotificaciones(){
-    this.bsModalRef = this.modalService.show(PanelNotificacionesComponent)
+    this.bsModalRef = this.modalService.show(PanelNotificacionesComponent,{
+      class: 'modal-izquierda'
+    })
     this.bsModalRef.content!.onClose = (cerrar: boolean) => {
       if (cerrar) {
       }
