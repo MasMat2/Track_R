@@ -3,6 +3,7 @@ using TrackrAPI.Services.GestionExamen;
 using TrackrAPI.Dtos.GestionExamen;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TrackrAPI.Controllers.GestionExamen;
 
@@ -98,5 +99,14 @@ public class ExamenController : ControllerBase
     public void Actualizar(List<Examen> examenList)
     {
         _examenService.Actualizar(examenList);
+    }
+
+    [HttpPost]
+    [Route("descargarExamenPdf/{idExamen}")]
+    public IActionResult descargarExamenPdf(int idExamen)
+    {
+        byte[] pdfBytes = _examenService.descargarRespuestasPdf(idExamen);
+
+        return File(pdfBytes, "application/pdf");
     }
 }

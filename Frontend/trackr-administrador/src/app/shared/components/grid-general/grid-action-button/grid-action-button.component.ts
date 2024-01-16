@@ -88,6 +88,9 @@ export class GridActionButtonComponent {
         case GeneralConstant.GRID_ACTION_PRESENTAR:
           this.title = 'Presentar'
           break;
+        case GeneralConstant.GRID_ACCION_DESCARGAR_PDF:
+          this.title = 'Descargar en PDF';
+          break;
       }
     }
   }

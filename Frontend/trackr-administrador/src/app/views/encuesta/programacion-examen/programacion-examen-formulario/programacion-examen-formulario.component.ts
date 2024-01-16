@@ -21,6 +21,7 @@ import { ColDef, ICellRendererParams } from 'ag-grid-community';
 import { flatMap } from 'lodash';
 import { combineLatestWith, mergeMap } from 'rxjs';
 import { EncryptionService } from 'src/app/shared/services/encryption.service';
+import * as Utileria from '@utils/utileria';
 
 @Component({
   selector: 'app-programacionExamen-formulario',
@@ -65,6 +66,22 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
     CONFIG_COLUMN_ACTION
   );
 
+  private readonly COLUMNA_DESCARGAR_PDF: ColDef = Object.assign(
+    {
+      action: GRID_ACTION.DescargarPdf,
+      cellRendererSelector: (params: ICellRendererParams) => {
+        const component = {
+          component: 'actionButton',
+          params: { disabled: false },
+        };
+        return params.data.resultado != null ? component : '';
+      },
+      minWidth: 44,
+      maxWidth: 44,
+    },
+    CONFIG_COLUMN_ACTION
+  );
+
   protected columns: ColDef[] = [
     {
       headerName: 'Participantes',
@@ -85,6 +102,7 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
       width: 70,
     },
     this.COLUMNA_DETALLE,
+    this.COLUMNA_DESCARGAR_PDF,
   ];
 
   constructor(
@@ -155,6 +173,13 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
   protected onGridClick(gridData: { accion: string; data: Examen }): void {
     if (gridData.accion === GRID_ACTION.Ver) {
       this.revisar(gridData.data.idExamen);
+    }
+    if(gridData.accion === GRID_ACTION.DescargarPdf){
+      this.descargarRespuestasPdf(
+        gridData.data.idExamen,
+        this.programacionExamen.clave,
+        gridData.data.nombreUsuario
+      );
     }
   }
 
@@ -267,5 +292,22 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
           }),
         });
       });
+  }
+
+  private descargarRespuestasPdf(idExamen: number, claveExamen: string, nombreUsuario: string){
+    this.examenService.descargarRespuestasPDF(idExamen).subscribe(
+      (data) => {
+        const a = document.createElement('a');
+        const objectUrl = URL.createObjectURL(data);
+        a.href = objectUrl;
+        a.download = Utileria.obtenerFormatoNombreArchivo(
+          'Respuestas_' + claveExamen + '_' + nombreUsuario,
+          'pdf'
+        );
+        a.click();
+
+        URL.revokeObjectURL(objectUrl);
+      }
+    )
   }
 }

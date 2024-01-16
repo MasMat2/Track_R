@@ -5,6 +5,7 @@ export enum GRID_ACTION {
   Eliminar = 'delete',
   Ver = 'see', //esta propiedad es la que debe coincidir con el scss de grid-action-button
   Presentar = 'play',
+  DescargarPdf = 'descargarPdf',
 };
 
 export const CONFIG_COLUMN_ACTION: ColDef = {

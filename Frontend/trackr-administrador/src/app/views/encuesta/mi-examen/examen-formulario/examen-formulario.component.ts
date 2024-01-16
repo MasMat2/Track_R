@@ -10,6 +10,7 @@ import { EncryptionService } from '@services/encryption.service';
 import { GeneralConstant } from '@utils/general-constant';
 import { MensajeService } from 'src/app/shared/components/mensaje/mensaje.service';
 import { FormularioService } from 'src/app/shared/services/formulario.service';
+import * as Utileria from '@utils/utileria';
 import {
   DROPDOWN_NO_OPTIONS,
   DROPDOWN_PLACEHOLDER,
@@ -38,6 +39,7 @@ export class ExamenFormularioComponent implements OnInit {
   // Form
   protected submitting = false;
   protected presentando = false;
+  protected permitirDescargar = false;
 
   protected reactivo = new Reactivo();
   protected examen = new Examen();
@@ -84,7 +86,7 @@ export class ExamenFormularioComponent implements OnInit {
         }
       } else {
         this.blockQuestions = true;
-        this.consultarReactivosNoExamen();
+        this.consultarReactivosParaRevision();
       }
     });
   }
@@ -119,7 +121,13 @@ export class ExamenFormularioComponent implements OnInit {
       });
   }
 
-  consultarReactivosNoExamen() {
+  consultarReactivosParaRevision() {
+    this.permitirDescargar = true;
+
+    this.examenService.consultarMiExamen(this.examen.idExamen)
+      .subscribe((data) => {
+        this.examen = data;
+      });
     this.examenReactivoService
       .consultarReactivosExamen(this.examen.idExamen)
       .subscribe((data) => {
@@ -210,5 +218,23 @@ export class ExamenFormularioComponent implements OnInit {
 
       this.submitting = false;
     });
+  }
+
+  protected descargarRespuestas(idExamen: number){
+    this.examenService.descargarRespuestasPDF(idExamen).subscribe(
+      (data) => {
+        console.log(this.examen);
+        const a = document.createElement('a');
+        const objectUrl = URL.createObjectURL(data);
+        a.href = objectUrl;
+        a.download = Utileria.obtenerFormatoNombreArchivo(
+          'Respuestas_' + this.examen.clave + '_' + this.examen.nombreUsuario,
+          'pdf'
+        );
+        a.click();
+
+        URL.revokeObjectURL(objectUrl);
+      }
+    )
   }
 }
