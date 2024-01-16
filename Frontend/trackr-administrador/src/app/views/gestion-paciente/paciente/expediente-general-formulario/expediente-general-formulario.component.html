@@ -60,7 +60,7 @@
           </div>
         </div>
 
-          <div class="col-md-2 d-flex align-items-center">
+          <div class="col-md-2 d-flex align-items-center" *ngIf="accion == 'Agregar'">
             <button
               type="button"
               (click)="buscar()"
@@ -71,7 +71,7 @@
             </button>
           </div>
 
-          <div class="contenedor-agregar col-md-2 d-flex align-items-center" (click)="agregarUsuario()">
+          <div class="contenedor-agregar col-md-2 d-flex align-items-center" (click)="agregarUsuario()" *ngIf="accion == 'Agregar'">
             <i class="fas fa-plus-circle"></i><span>Agregar</span>
           </div>
       </div>

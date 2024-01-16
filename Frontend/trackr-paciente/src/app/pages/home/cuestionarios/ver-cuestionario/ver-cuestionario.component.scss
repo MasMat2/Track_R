@@ -1,0 +1,23 @@
+
+
+.info-examen{
+    margin-top: 1em;
+    text-align: center;
+    h1{
+        color: #4c0080;
+    }
+}
+ion-card{
+    border-radius:20px !important;
+}
+.pregunta{
+    .opciones{
+        margin-bottom: 2vh;
+    }
+    p{
+        white-space: pre-wrap;
+    }
+    h2{
+        color: var(--ion-color-primary);
+    }
+}
