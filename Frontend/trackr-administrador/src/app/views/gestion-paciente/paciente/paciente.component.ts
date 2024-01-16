@@ -9,6 +9,8 @@ import { lastValueFrom } from 'rxjs';
 import { UsuarioExpedienteSidebarDTO } from '@dtos/seguridad/usuario-expediente-sidebar-dto';
 import { EntidadEstructuraTablaValorService } from '@http/gestion-entidad/entidad-estructura-tabla-valor.service';
 import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { GestionAsistenteComponent } from './gestion-asistente/gestion-asistente.component';
 
 @Component({
   selector: 'app-paciente',
@@ -77,7 +79,8 @@ export class PacienteComponent implements OnInit {
     private router: Router,
     private encryptionService: EncryptionService,
     private expedienteTrackrService: ExpedienteTrackrService,
-    private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService
+    private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
+    private modalService: BsModalService
   ) {}
 
   ngOnInit(): void {
@@ -129,6 +132,18 @@ export class PacienteComponent implements OnInit {
     this.router.navigate([
       '/administrador/gestion-paciente/paciente/expediente-formulario',
     ]);
+  }
+  protected agregarAsistente(): void {
+    const initialState = {
+      idUsuario: 10,
+    };
+    const modalRef = this.modalService.show(
+      GestionAsistenteComponent,
+      {
+        initialState,
+        ...GeneralConstant.CONFIG_MODAL_DEFAULT
+      }
+    );
   }
 
   protected eliminar(data: any): void {

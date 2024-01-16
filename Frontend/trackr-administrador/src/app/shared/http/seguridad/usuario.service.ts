@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AsistenteDoctorDto } from '@dtos/seguridad/asistente-doctor-dto';
 import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-grid-dto';
 import { ExpedienteTrackR } from '@models/seguridad/expediente-trackr';
 import { Usuario } from '@models/seguridad/usuario';
@@ -140,6 +141,25 @@ export class UsuarioService {
 
   consultaDomicilioPorId(idUsuario: number){
     return  this.http.get<UsuarioDomicilio>(this.url + `consultaDomicilioPorId/${idUsuario}`);
+  }
+
+  consultarAsistentes(){
+    return this.http.get<Usuario[]>(this.url + `consultarAsistentes`);
+  }
+
+  misAsistentes()
+  {
+    return this.http.get<AsistenteDoctorDto[]>(this.url + `asistentesPorDoctor`);
+  }
+
+  agregarAsistente(idAsistente : number)
+  {
+    return this.http.post<void>(this.url + `asistente/${idAsistente}` , {});
+  }
+  
+  eliminarAsistente(idAsistente : number)
+  {
+    return this.http.delete<void>(this.url + `asistente/${idAsistente}`);
   }
 
 }
