@@ -10,6 +10,9 @@ public interface IExamenRepository : IRepository<Examen>
     public IEnumerable<Examen> ConsultarTodosParaSelector(int idProgramacionExamen);
     public IEnumerable<ExamenGridDto> ConsultarMisExamenes(int idUsuario);
     public IEnumerable<ExamenGridDto> ConsultarMisExamenesContestados(int idUsuario);
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesPendientesPorResponsable(int idUsuario);
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesVencidosPorResponsable(int idUsuario);
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesContestadosPorResponsable(int idUsuario);
     public ExamenDto? ConsultarMiExamen(int idExamen);
     public IEnumerable<ExamenCalificacionDto> ConsultarCalificaciones(int idProgramacionExamen);
 }

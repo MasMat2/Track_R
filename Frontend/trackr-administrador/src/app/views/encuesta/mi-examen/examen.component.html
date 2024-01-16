@@ -1,20 +1,55 @@
 <div class="contenedor">
-    <div class="titulo-contenedor">Mis Cuestionarios</div>
+    <div class="titulo-contenedor">Mis Cuestionarios Asignados</div>
     <div class="cuerpo-contenedor">
-      <div class="row justify-content-center">
-        <div class="col-md-12">
-          <app-grid-general
-            #gridNecesidad
-            [headerName]="HEADER_GRID"
-            [data]="examenList"
-            [children]="columns"
-            (event)="onGridClick($event)"
-            [disableDelete]="true"
-            [disableEdit]="true"
-            >
-            <!-- TODO: 2023-06-20 -> NO BUTTONS -->
-            <!-- [noButtons]="true" -->
-          </app-grid-general>
+
+      <div class="grid">
+        <div><h3>Cuestionarios Pendientes:</h3></div>
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <app-grid-general
+              #gridNecesidad
+              [headerName]="HEADER_GRID"
+              [data]="examenPendienteList"
+              [children]="columnasSinRevisar"
+              (event)="onGridClick($event)"
+              [disableDelete]="true"
+              [disableEdit]="true">
+            </app-grid-general>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div><h3>Cuestionarios Contestados:</h3></div>
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <app-grid-general
+              #gridNecesidad
+              [headerName]="HEADER_GRID"
+              [data]="examenContestadoList"
+              [children]="columnasConRevisar"
+              (event)="onGridClick($event)"
+              [disableDelete]="true"
+              [disableEdit]="true">
+            </app-grid-general>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div><h3>Cuestionarios Vencidos:</h3></div>
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <app-grid-general
+              #gridNecesidad
+              [headerName]="HEADER_GRID"
+              [data]="examenVencidoList"
+              [children]="columnasSinRevisar"
+              (event)="onGridClick($event)"
+              [disableDelete]="true"
+              [disableEdit]="true">
+            </app-grid-general>
+          </div>
         </div>
       </div>
     </div>

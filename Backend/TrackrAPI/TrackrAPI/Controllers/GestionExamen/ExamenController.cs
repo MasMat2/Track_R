@@ -45,6 +45,24 @@ public class ExamenController : ControllerBase
         return _examenService.ConsultarMisExamenesContestados(Utileria.ObtenerIdUsuarioSesion(this));
     }
 
+    [HttpGet("MisExamenesAsignados")]
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesPendientesPorResponsable()
+    {
+        return _examenService.ConsultarExamenesPendientesPorResponsable(Utileria.ObtenerIdUsuarioSesion(this));
+    }
+
+    [HttpGet("MisExamenesAsignados/vencidos")]
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesVencidosPorResponsable()
+    {
+        return _examenService.ConsultarExamenesVencidosPorResponsable(Utileria.ObtenerIdUsuarioSesion(this));
+    }
+
+    [HttpGet("MisExamenesAsignados/contestados")]
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesContestadosPorResponsable()
+    {
+        return _examenService.ConsultarExamenesContestadosPorResponsable(Utileria.ObtenerIdUsuarioSesion(this));
+    }
+
     [HttpGet]
     [Route("consultar/{idExamen}")]
     public Examen? Consultar(int idExamen)

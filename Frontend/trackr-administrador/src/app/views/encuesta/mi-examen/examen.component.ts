@@ -7,20 +7,26 @@ import { ColDef, ICellRendererParams, ValueGetterParams } from 'ag-grid-communit
 import * as moment from 'moment';
 import { MensajeService } from 'src/app/shared/components/mensaje/mensaje.service';
 import { EncryptionService } from 'src/app/shared/services/encryption.service';
+import * as Utileria from '@utils/utileria'
+
 @Component({
   selector: 'app-reactivo',
   templateUrl: './examen.component.html',
+  styleUrls: ['./examen.component.scss'],
 })
 export class ExamenComponent implements OnInit {
 
   protected readonly HEADER_GRID: string = 'Mis Exámenes';
 
   // Grid
-  protected examenList: Examen[] = [];
+  protected examenPendienteList: Examen[] = [];
+  protected examenContestadoList: Examen[] = [];
+  protected examenVencidoList: Examen[] = [];
 
-  private columnaPresentar: ColDef = Object.assign(
+
+  private columnaRevisar: ColDef = Object.assign(
     {
-      action: GRID_ACTION.Presentar,
+      action: GRID_ACTION.Revisar,
       cellRendererSelector: (params: ICellRendererParams) => {
         const component = {
           component: 'actionButton',
@@ -34,71 +40,112 @@ export class ExamenComponent implements OnInit {
     CONFIG_COLUMN_ACTION
   );
 
-  protected columns: ColDef[] = [
+  private columnaDescargarPdf: ColDef = Object.assign(
     {
-      headerName: 'Tipo de Examen',
-      field: 'tipoExamen',
-      minWidth: 70,
-      width: 70,
-    },
-    {
-      headerName: 'Fecha Programada',
-      field: 'fechaExamen',
-      minWidth: 70,
-      width: 70,
-      cellRenderer: (params: ICellRendererParams) => {
-        return moment(params.data.fechaExamen).format('DD/MM/YYYY');
+      action: GRID_ACTION.DescargarPdf,
+      cellRendererSelector: (params: ICellRendererParams) => {
+        const component = {
+          component: 'actionButton',
+          params: { disabled: false },
+        };
+        return component;
       },
-      valueGetter: (params: ValueGetterParams) => {
-        return moment(params.data.fechaExamen).format('DD/MM/YYYY');
-      },
+      minWidth: 44,
+      maxWidth: 44,
     },
+    CONFIG_COLUMN_ACTION
+  );
+
+  protected columnasConRevisar: ColDef[] = [
     {
-      headerName: 'Hora Programada',
-      field: 'horaExamen',
-      minWidth: 70,
-      width: 70,
-      cellRenderer: (params: ICellRendererParams) => {
-        return moment(params.data.horaExamen, 'HH:mm:ss').format('LT');
-      },
-      valueGetter: (params: ValueGetterParams) => {
-        return moment(params.data.horaExamen, 'HH:mm:ss').format('LT');
-      },
-    },
-    {
-      headerName: 'Duración Total (Min)',
-      field: 'duracion',
+      headerName: 'Clave',
+      field: 'clave',
       minWidth: 70,
       width: 70,
     },
     {
-      headerName: 'Total de Preguntas',
-      field: 'totalPreguntas',
+      headerName: 'Participante',
+      field: 'nombreUsuario',
       minWidth: 70,
       width: 70,
     },
-    this.columnaPresentar,
+    {
+      headerName: 'Resultado',
+      field: 'resultado',
+      minWidth: 70,
+      width: 70,
+    },
+    {
+      headerName: 'Preguntas correctas',
+      field: 'preguntasCorrectas',
+      minWidth: 70,
+      width: 70,
+    },
+    this.columnaRevisar,
+    this.columnaDescargarPdf,
+  ];
+
+  protected columnasSinRevisar: ColDef[] = [
+    {
+      headerName: 'Clave',
+      field: 'clave',
+      minWidth: 70,
+      width: 70,
+    },
+    {
+      headerName: 'Participante',
+      field: 'nombreUsuario',
+      minWidth: 70,
+      width: 70,
+    },
+    {
+      headerName: 'Resultado',
+      field: 'resultado',
+      minWidth: 70,
+      width: 70,
+    },
+    {
+      headerName: 'Preguntas correctas',
+      field: 'preguntasCorrectas',
+      minWidth: 70,
+      width: 70,
+    },
+    this.columnaDescargarPdf,
   ];
 
   constructor(
     private encryptionService: EncryptionService,
     private examenService: ExamenService,
-    private mensajeService: MensajeService,
     private router: Router
   ) {}
 
   public ngOnInit(): void {
-    this.consultarGrid();
+    this.consultarGridContestados();
+    this.consultarGridPendientes();
+    this.consultarGridVencidos();
   }
 
-  /**
-   * Consulta la informacion del grid.
-   */
-  public consultarGrid(): void {
+  public consultarGridPendientes(): void {
     this.examenService
-      .consultarMisExamenes()
+      .consultarExamenesPendientesAsignados()
       .subscribe((examenes: Examen[]) => {
-        this.examenList = examenes;
+        this.examenPendienteList = examenes;
+      });
+  }
+
+  public consultarGridContestados(): void {
+    this.examenService
+      .consultarExamenesContestadosAsignados()
+      .subscribe((examenes: Examen[]) => {
+        this.examenContestadoList = examenes;
+      });
+  }
+
+  public consultarGridVencidos(): void {
+    this.examenService
+      .consultarExamenesVencidosAsignados()
+      .subscribe((examenes: Examen[]) => {
+        this.examenVencidoList = examenes;
       });
   }
 
@@ -106,53 +153,40 @@ export class ExamenComponent implements OnInit {
    * Evento que se ejecuta al dar clic en algun boton del grid.
    */
   public onGridClick(gridData: { accion: string; data: Examen }) {
-    if (gridData.accion === GRID_ACTION.Presentar) {
-      this.presentar(gridData.data.idExamen);
+    if (gridData.accion === GRID_ACTION.Revisar) {
+      this.revisar(gridData.data.idExamen);
+    }
+    if(gridData.accion === GRID_ACTION.DescargarPdf){
+      this.descargarRespuestasPdf(
+        gridData.data.idExamen,
+        gridData.data.clave,
+        gridData.data.nombreUsuario
+      );
     }
   }
 
-  public presentar(idExamen: number) {
-    this.examenService
-      .consultarMiExamenIndividual(idExamen)
-      .subscribe((examen) => {
-          if (!this.esFechaValida(examen)) {
-           const MENSAJE_NO_ACCESO: string = 'Aún no tiene acceso a este examen';
-           this.mensajeService.modalError(MENSAJE_NO_ACCESO);
-           return;
-         } 
+  public revisar(idExamen: number) {
+    this.router.navigate(['/administrador/examen/examen/presentar'], {
+      queryParams: this.encryptionService.generateURL({
+        i: idExamen.toString(),
+        revision: '1',
+      }),
+    });
+  }
 
-        this.router.navigate(['/administrador/examen/examen/presentar'], {
-          queryParams: this.encryptionService.generateURL({
-            i: idExamen.toString(),
-            revision: '0',
-          }),
-        });
+  private descargarRespuestasPdf(idExamen: number, claveExamen: string, nombreUsuario: string){
+    this.examenService.descargarRespuestasPDF(idExamen).subscribe(
+      (data) => {
+        const a = document.createElement('a');
+        const objectUrl = URL.createObjectURL(data);
+        a.href = objectUrl;
+        a.download = Utileria.obtenerFormatoNombreArchivo(
+          'Respuestas_' + claveExamen + '_' + nombreUsuario,
+          'pdf'
+        );
+        a.click();
 
+        URL.revokeObjectURL(objectUrl);
       });
-  }
-
-  private esFechaValida(examen: Examen): boolean {
-    const fechaExamen = new Date(`${examen.fechaExamen.toDateString()} ${examen.horaExamen}`);
-    const fechaActual = new Date();
-
-    if (fechaExamen.toDateString() !== fechaActual.toDateString()) {
-      return false;
-    }
-
-    const milisegundos = fechaExamen.getTime() - fechaActual.getTime();
-
-    const MS_IN_A_DAY: number = 86_400_000;
-    const MS_IN_AN_HOUR: number = 3_600_000;
-    const MS_IN_A_MINUTE: number = 60_000;
-
-    const diferenciaMinutos = Math.round(
-      ((milisegundos % MS_IN_A_DAY) % MS_IN_AN_HOUR) / MS_IN_A_MINUTE
-    );
-
-    if (diferenciaMinutos > 5 || diferenciaMinutos <= -15) {
-      return false;
-    }
-
-    return true;
   }
 }

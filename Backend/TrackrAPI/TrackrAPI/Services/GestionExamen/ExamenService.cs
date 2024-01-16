@@ -69,6 +69,21 @@ public class ExamenService
         return _examenRepository.ConsultarMisExamenesContestados(idUsuario);
     }
 
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesPendientesPorResponsable(int idUsuario)
+    {
+        return _examenRepository.ConsultarExamenesPendientesPorResponsable(idUsuario);
+    }
+
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesVencidosPorResponsable(int idUsuario)
+    {
+        return _examenRepository.ConsultarExamenesVencidosPorResponsable(idUsuario);
+    }
+
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesContestadosPorResponsable(int idUsuario)
+    {
+        return _examenRepository.ConsultarExamenesContestadosPorResponsable(idUsuario);
+    }
+
     public IEnumerable<ExamenCalificacionDto> ConsultarCalificaciones(int idProgramacionExamen)
     {
         return _examenRepository.ConsultarCalificaciones(idProgramacionExamen);
