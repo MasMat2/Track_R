@@ -31,12 +31,12 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
 
     public async Task NuevoMensaje(ChatMensajeDTO mensaje)
     {
-        Console.WriteLine(mensaje.ArchivoTipoMime);
         mensaje.IdPersona = this.ObtenerIdUsuario();
-        _chatMensajeService.NuevoMensaje(mensaje);
+        int idArchivo = _chatMensajeService.NuevoMensaje(mensaje);
 
         var user = _usuarioService.ConsultarDto(mensaje.IdPersona);
         mensaje.NombrePersona = user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno;
+        mensaje.IdArchivo = idArchivo;
 
         var idPersonas = _chatPersonaRepository.ConsultarPersonasPorChat(mensaje.IdChat).Select(x => x.IdPersona).ToList();
 

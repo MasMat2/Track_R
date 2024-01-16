@@ -47,7 +47,6 @@ public class ChatPersonaService
 
     public List<ChatPersonaSelectorDTO> ObtenerPersonasChatSelector(int idChat)
     {
-        Console.WriteLine(idChat);
         return _chatPersonaRepository.ConsultarPersonasPorChat(idChat)
                                       .Select(x => new ChatPersonaSelectorDTO
                                       {

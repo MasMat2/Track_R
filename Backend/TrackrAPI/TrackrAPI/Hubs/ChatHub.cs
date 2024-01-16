@@ -55,7 +55,6 @@ public class ChatHub : Hub<IChatHub>
     public async Task CargarChats(IEnumerable<ChatDTO> chats)
     {
         int idPersona = ObtenerIdUsuario();
-        Console.WriteLine(idPersona);
         var chatss = _chatService.ConsultarChats(idPersona);
         //await Clients.All.CargarChats(chatss);
     }
