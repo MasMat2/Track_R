@@ -9,6 +9,7 @@ import { ChatHubServiceService } from '../../../shared/services/chat-hub-service
 import { ChatDTO } from '@dtos/chats/chat-dto';
 import { SessionService } from '../../../shared/services/session.service';
 import { ChatPersonaService } from '../../../shared/http/chats/chat-persona.service';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-crear-chat',
@@ -29,7 +30,8 @@ export class CrearChatComponent {
               private expedienteTrackrService:ExpedienteTrackrService,
               private ChatHubServiceService:ChatHubServiceService,
               private SessionService:SessionService,
-              private ChatPersonaService:ChatPersonaService) {}
+              private ChatPersonaService:ChatPersonaService,
+              private modal:BsModalRef) {}
 
   
   ngOnInit(){
@@ -85,7 +87,7 @@ export class CrearChatComponent {
     this.tituloChat = '';
     this.padecimiento = 0;
     this.personas = []
-    
+    this.modal.hide();
 
   }
 

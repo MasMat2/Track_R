@@ -8,6 +8,8 @@ import { CrearChatComponent } from './crear-chat/crear-chat.component';
 import { TableModule } from 'primeng/table';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
+import { ModalBaseComponent } from '@sharedComponents/modal-base/modal-base.component';
+import { ModalBaseModule } from '@sharedComponents/modal-base/modal-base.module';
 
 
 
@@ -23,7 +25,8 @@ import { PipesModule } from 'src/app/shared/pipes/pipes.module';
     FormsModule,
     TableModule,
     NgSelectModule,
-    PipesModule
+    PipesModule,
+    ModalBaseModule
   ]
 })
 export class ChatModule { }
