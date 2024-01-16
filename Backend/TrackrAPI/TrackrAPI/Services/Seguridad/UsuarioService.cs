@@ -39,6 +39,7 @@ namespace TrackrAPI.Services.Seguridad
         private ConfirmacionCorreoService _confirmacionCorreoService;
         private ExpedienteTrackrService _expedienteTrackrService;
         private UsuarioRolService _usuarioRolService;
+        private IAsistenteDoctorRepository _asistenteDoctorRepository;
 
 
         public UsuarioService(IUsuarioRepository usuarioRepository,
@@ -60,7 +61,8 @@ namespace TrackrAPI.Services.Seguridad
             RolService rolService,
             BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService,
             ConfirmacionCorreoService confirmacionCorreoService,
-            ExpedienteTrackrService expedienteTrackrService)
+            ExpedienteTrackrService expedienteTrackrService,
+            IAsistenteDoctorRepository asistenteDoctorRepository)
         {
             this.usuarioRepository = usuarioRepository;
             this.expedienteTrackrRepository = expedienteTrackrRepository;
@@ -81,6 +83,7 @@ namespace TrackrAPI.Services.Seguridad
             this.bitacoraMovimientoUsuarioService = bitacoraMovimientoUsuarioService;
             this._confirmacionCorreoService = confirmacionCorreoService;
             this._expedienteTrackrService = expedienteTrackrService;
+            _asistenteDoctorRepository = asistenteDoctorRepository;
         }
 
         public Usuario Consultar(int idUsuario)
@@ -434,6 +437,32 @@ namespace TrackrAPI.Services.Seguridad
             usuarioValidatorService.ValidarEditar(usuario, roles);
             bitacoraMovimientoUsuarioService.Agregar(GeneralConstant.TipoMovimientoUsuarioEdicion, "Edición del usuario " + usuario.ObtenerNombreCompleto(), null);
             usuarioRepository.Editar(usuario);
+        }
+
+        public IEnumerable<UsuarioDto> ConsultarAsistentes(int idCompania)
+        {
+            return usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente);
+        }
+
+        public IEnumerable<AsistenteDoctorDto> ConsultarAsistentePorDoctor(int idDoctor)
+        {
+            return _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(idDoctor);
+        }
+
+        public void AgregarAsistente(int idUsuario , int idAsistente)
+        {
+            var asistente = new AsistenteDoctor()
+            {
+                IdAsistente = idAsistente,
+                IdDoctor = idUsuario
+            };
+            _asistenteDoctorRepository.Agregar(asistente);
+        }
+
+        public void EliminarAsistente(int idAsistenteDoctor)
+        {
+            var asistente = _asistenteDoctorRepository.Consultar(idAsistenteDoctor);
+            _asistenteDoctorRepository.Eliminar(asistente);
         }
 
         public IEnumerable<UsuarioGridDto> ConsultarGeneral(int idCompania)

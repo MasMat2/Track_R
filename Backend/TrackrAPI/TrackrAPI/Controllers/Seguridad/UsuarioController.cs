@@ -283,5 +283,31 @@ namespace TrackrAPI.Controllers.Seguridad
         {
             return usuarioService.ConsultaDomicilioPorId(idUsuario);
         }
+        [HttpGet("consultarAsistentes")]
+        public IEnumerable<UsuarioDto> ConsultarAsistentes()
+        {
+            var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
+            return usuarioService.ConsultarAsistentes((int)usuario.IdCompania);
+        }
+
+        [HttpGet("asistentesPorDoctor")]
+        public IEnumerable<AsistenteDoctorDto> ConsultarAsistentesPorDoctor()
+        {
+            int idDoctor  = Utileria.ObtenerIdUsuarioSesion(this);
+            return usuarioService.ConsultarAsistentePorDoctor(idDoctor);
+        }
+
+        [HttpPost("asistente/{idAsistente}")]
+        public void AgregarAsistente(int idAsistente)
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            usuarioService.AgregarAsistente(idUsuario , idAsistente);
+        }
+
+        [HttpDelete("asistente/{idAsistenteDoctor}")]
+        public void EliminarAsistente(int idAsistenteDoctor)
+        {
+            usuarioService.EliminarAsistente(idAsistenteDoctor);
+        }
     }
 }

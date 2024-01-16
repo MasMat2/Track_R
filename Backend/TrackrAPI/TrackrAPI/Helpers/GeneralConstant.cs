@@ -25,6 +25,7 @@
 
         public static readonly string ClavePerfilPaciente = "BASE007";
         public static readonly string ClavePerfilSinAcceso = "BASE002";
+        public static readonly string ClavePerfilAsistente = "005";
 
         public static readonly string RutaArchivoAcceso = "Archivo/Acceso/";
         public static readonly string RutaArchivoHospitalLogotipo = "Archivo/HospitalLogotipo/";
