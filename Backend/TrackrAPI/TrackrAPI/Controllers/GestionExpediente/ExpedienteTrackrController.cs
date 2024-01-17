@@ -5,6 +5,7 @@ using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.DTOs.Dashboard;
 using TrackrAPI.Helpers;
 using TrackrAPI.Services.GestionExpediente;
+using TrackrAPI.Services.Seguridad;
 
 namespace TrackrAPI.Controllers.GestionExpediente;
 
@@ -13,10 +14,12 @@ namespace TrackrAPI.Controllers.GestionExpediente;
 public class ExpedienteTrackrController : ControllerBase
 {
     private readonly ExpedienteTrackrService _expedienteTrackrService;
+    private readonly UsuarioService _usuarioService;
 
-    public ExpedienteTrackrController(ExpedienteTrackrService expedienteTrackrService)
+    public ExpedienteTrackrController(ExpedienteTrackrService expedienteTrackrService, UsuarioService usuarioService)
     {
         this._expedienteTrackrService = expedienteTrackrService;
+        this._usuarioService = usuarioService;
     }
 
     [HttpGet]
@@ -41,8 +44,8 @@ public class ExpedienteTrackrController : ControllerBase
     [HttpGet("consultarParaGrid/")]
     public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid()
     {
-        int idDoctor = Utileria.ObtenerIdUsuarioSesion(this);
-        return _expedienteTrackrService.ConsultarParaGrid(idDoctor);
+        var usuario  =  _usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
+        return _expedienteTrackrService.ConsultarParaGrid(usuario.IdUsuario , usuario.IdCompania);
     }
 
     [HttpDelete("eliminar/{idExpediente}")]

@@ -37,14 +37,14 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
             .FirstOrDefault();
     }
 
-    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(int idDoctor)
+    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(List<int> idDoctorList)
     {
         return context.ExpedientePadecimiento
             .Include(ep => ep.IdExpedienteNavigation)
             .Include(et => et.IdExpedienteNavigation.ExpedientePadecimiento)
             .ThenInclude(ep => ep.IdPadecimientoNavigation)
                 .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.UsuarioRol.Any( ur => ur.IdRolNavigation.Clave == GeneralConstant.ClaveRolPaciente) &&
-                       ep.IdUsuarioDoctor == idDoctor)
+                       idDoctorList.Contains(ep.IdUsuarioDoctor))
                 .GroupBy(ep => ep.IdExpedienteNavigation.IdUsuario)
                 .Select(group => new UsuarioExpedienteGridDTO
             {
