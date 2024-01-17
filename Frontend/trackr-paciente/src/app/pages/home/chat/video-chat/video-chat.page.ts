@@ -2,18 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '../../layout/header/header.component';
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
 import { FormsModule } from '@angular/forms';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDxj7h-jJmroLl8hqrxlJOkFLji20H5ovs",
-  authDomain: "videochat-3de3c.firebaseapp.com",
-  projectId: "videochat-3de3c",
-  storageBucket: "videochat-3de3c.appspot.com",
-  messagingSenderId: "874522306310",
-  appId: "1:874522306310:web:f6eab68621355847782087"
-};
+import { SignalingHubService } from '@services/signaling-hub.service';
 
 @Component({
   selector: 'app-video-chat',
@@ -27,11 +17,10 @@ const firebaseConfig = {
     FormsModule
   ]
 })
-export class VideoChatPage implements OnInit {
+export class VideoChatPage extends EventTarget implements OnInit {
   protected pc: RTCPeerConnection;
   protected localStream: MediaStream;
   protected remoteStream: MediaStream;
-  protected firestore: firebase.firestore.Firestore;
 
   protected servers = {
     iceServers: [
@@ -62,33 +51,53 @@ export class VideoChatPage implements OnInit {
     iceCandidatePoolSize: 10,
   };
 
-  protected callInput: any;
+  protected callInput: string;
   protected buttonState = true;
   protected hangupButtonState = true;
 
-  constructor() {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    this.firestore = firebase.firestore();
+  constructor(private signalingHubService: SignalingHubService) {
+    super();
     this.pc = new RTCPeerConnection(this.servers);
   }
 
   ngOnInit(): void {
-    this.setupWebcam();
+    this.setUpObserver();
   }
 
-  private async setupWebcam(): Promise<void> {
-    // HTML elements
+  private setUpObserver() {
+    this.signalingHubService.message$.subscribe((json_string: string) => {
+      if(json_string.length <= 0) return;
+
+      var message = JSON.parse(json_string);
+      console.log(message);
+      switch (message.type) {
+
+        case "local-id":
+          this.callInput = message.local_id;
+          break;
+
+        case "new-ice-candidate":
+          this.pc.addIceCandidate(message.candidate);
+          break;
+
+        case "video-offer":  
+          if (!this.pc.currentRemoteDescription && message?.offer) {
+            const offerDescription = new RTCSessionDescription(message.offer);
+            this.pc.setRemoteDescription(offerDescription);
+            this.dispatchEvent(new Event('offerReceived'));
+          };
+          break;
+
+        case "video-answer":
+          if (!this.pc.currentRemoteDescription && message?.answer) {
+            const answerDescription = new RTCSessionDescription(message.answer);
+            this.pc.setRemoteDescription(answerDescription);
+          };
+          break;
+      }
+    })
   }
 
-  private async createOffer(): Promise<void> {
-    // Logic to create an offer
-  }
-
-  private async answerCall(): Promise<void> {
-    // Logic to answer a call
-  }
 
   // 1. Setup media sources
 
@@ -109,20 +118,26 @@ export class VideoChatPage implements OnInit {
     };
 
     this.buttonState = false;
+
   };
 
   // 2. Create an offer
   callButtonClick = async () => {
-    // Reference Firestore collections for signaling
-    const callDoc = this.firestore.collection('calls').doc();
-    const offerCandidates = callDoc.collection('offerCandidates');
-    const answerCandidates = callDoc.collection('answerCandidates');
+    this.signalingHubService.crearLlamada();
 
-    this.callInput = callDoc.id;
+    // Wait for peer id to send offer and candidates
+    const waitForPeerConnection = new Promise((resolve) => {
+      this.signalingHubService.addEventListener('peerconnected', resolve);
+    });
+    
+    await waitForPeerConnection;
 
     // Get candidates for caller, save to db
     this.pc.onicecandidate = (event) => {
-      event.candidate && offerCandidates.add(event.candidate.toJSON());
+      event.candidate && this.signalingHubService.sendMessage({
+        type: "new-ice-candidate",
+        candidate: event.candidate
+      });
     };
 
     // Create offer
@@ -134,25 +149,9 @@ export class VideoChatPage implements OnInit {
       type: offerDescription.type,
     };
 
-    await callDoc.set({ offer });
-
-    // Listen for remote answer
-    callDoc.onSnapshot((snapshot: any) => {
-      const data = snapshot.data();
-      if (!this.pc.currentRemoteDescription && data?.answer) {
-        const answerDescription = new RTCSessionDescription(data.answer);
-        this.pc.setRemoteDescription(answerDescription);
-      }
-    });
-
-    // When answered, add candidate to peer connection
-    answerCandidates.onSnapshot((snapshot: any) => {
-      snapshot.docChanges().forEach((change: any) => {
-        if (change.type === 'added') {
-          const candidate = new RTCIceCandidate(change.doc.data());
-          this.pc.addIceCandidate(candidate);
-        }
-      });
+    await this.signalingHubService.sendMessage({
+      type: "video-offer",
+      offer: offer
     });
 
     this.hangupButtonState = false;
@@ -161,19 +160,29 @@ export class VideoChatPage implements OnInit {
   // 3. Answer the call with the unique ID
   answerButtonClick = async () => {
     const callId = this.callInput;
-    const callDoc = this.firestore.collection('calls').doc(callId);
-    const answerCandidates = callDoc.collection('answerCandidates');
-    const offerCandidates = callDoc.collection('offerCandidates');
 
+    console.log("wait");
+
+    // Wait for offer to send answer and candidates
+    const waitForOffer = new Promise((resolve) => {
+      console.log("resolving")
+      this.addEventListener('offerReceived', resolve);
+    });
+    
+    await this.signalingHubService.crearLlamada(callId);
+
+    await waitForOffer;
+    
+
+    console.log("offerReceived");
     this.pc.onicecandidate = (event) => {
-      event.candidate && answerCandidates.add(event.candidate.toJSON());
+      event.candidate && this.signalingHubService.sendMessage({
+        type: "new-ice-candidate",
+        candidate: event.candidate
+      });
     };
 
-    const callData = (await callDoc.get()).data() ?? {offer: 0};
-
-    const offerDescription = callData["offer"];
-    await this.pc.setRemoteDescription(new RTCSessionDescription(offerDescription));
-
+    console.log("answer");
     const answerDescription = await this.pc.createAnswer();
     await this.pc.setLocalDescription(answerDescription);
 
@@ -182,16 +191,11 @@ export class VideoChatPage implements OnInit {
       sdp: answerDescription.sdp,
     };
 
-    await callDoc.update({ answer });
+    console.log("send answer");
+    await this.signalingHubService.sendMessage(({
+      type: "video-answer",
+      answer: answer
+    }));
 
-    offerCandidates.onSnapshot((snapshot: any) => {
-      snapshot.docChanges().forEach((change: any) => {
-        console.log(change);
-        if (change.type === 'added') {
-          let data = change.doc.data();
-          this.pc.addIceCandidate(new RTCIceCandidate(data));
-        }
-      });
-    });
   }
 }
