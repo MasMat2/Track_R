@@ -39,7 +39,8 @@ public class ProgramacionExamenRepository : Repository<ProgramacionExamen>, IPro
 
     public IEnumerable<ProgramacionExamenGridDto> ConsultarGeneral(int idCompania)
     {
-        return context.ProgramacionExamen
+        
+        var prograexamens = context.ProgramacionExamen
             .Where(p => p.Estatus == true && p.IdUsuarioResponsableNavigation.IdCompania == idCompania)
             .OrderBy(p => p.Clave)
             .Select(p => new ProgramacionExamenGridDto
@@ -51,10 +52,13 @@ public class ProgramacionExamenRepository : Repository<ProgramacionExamen>, IPro
                 FechaExamen = p.FechaExamen,
                 HoraExamen = p.HoraExamen,
                 Duracion = p.Duracion,
-                CantidadParticipantes = p.CantidadParticipantes,
+                PorcentajeAvance = CalcularPorcentajeAvance(p.IdProgramacionExamen, p.Examen.ToList()),
                 Estatus = p.Estatus ?? false
             })
             .ToList();
+
+        return prograexamens;
+
     }
 
     public IEnumerable<ProgramacionExamenGridDto> ConsultarTodosParaSelector()
@@ -79,4 +83,15 @@ public class ProgramacionExamenRepository : Repository<ProgramacionExamen>, IPro
             .Where(p => p.IdProgramacionExamen == idProgramacionExamen)
             .FirstOrDefault();
     }
+
+    private static string CalcularPorcentajeAvance(int idProgramacionExamen, List<Examen> participantes)
+    {
+        var porcentaje = "";
+        var todos = participantes.Count();
+        var terminados = participantes.Count(e => e.IdEstatusExamen == 3);
+        porcentaje = $"{terminados}/{todos}";
+
+        return porcentaje;
+    }
+
 }

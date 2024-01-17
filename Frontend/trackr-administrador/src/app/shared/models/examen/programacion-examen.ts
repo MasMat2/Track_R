@@ -19,5 +19,7 @@ export class ProgramacionExamen{
 
     public participantes: number[];
 
+    public porcentajeAvance: number;
+
     constructor() {}
 }
