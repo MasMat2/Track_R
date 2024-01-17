@@ -43,6 +43,18 @@ export class ExamenService {
     return this.http.get<Examen[]>(this.dataUrl + 'consultarMisExamenes');
   }
 
+  public consultarExamenesPendientesAsignados(): Observable<Examen[]> {
+    return this.http.get<Examen[]>(this.dataUrl + 'misExamenesAsignados');
+  }
+
+  public consultarExamenesContestadosAsignados(): Observable<Examen[]> {
+    return this.http.get<Examen[]>(this.dataUrl + 'misExamenesAsignados/contestados');
+  }
+
+  public consultarExamenesVencidosAsignados(): Observable<Examen[]> {
+    return this.http.get<Examen[]>(this.dataUrl + 'misExamenesAsignados/vencidos');
+  }
+
   public consultarMiExamen(idExamen: number): Observable<Examen> {
     return this.http.get<Examen>(this.dataUrl + `consultarMiExamen/${idExamen}`);
   }
@@ -54,4 +66,11 @@ export class ExamenService {
   public consultarCalificaciones(idProgramacionExamen: number): Observable<Examen[]> {
     return this.http.get<Examen[]>(this.dataUrl + `consultarCalificaciones/${idProgramacionExamen}`);
   }
+
+  public descargarRespuestasPDF(idExamen: number) {
+    return this.http.post(this.dataUrl + `descargarExamenPdf/${idExamen}`, {},
+    {responseType: 'blob'}
+    );
+  }
+
 }

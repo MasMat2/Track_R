@@ -3,6 +3,7 @@ using TrackrAPI.Services.GestionExamen;
 using TrackrAPI.Dtos.GestionExamen;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TrackrAPI.Controllers.GestionExamen;
 
@@ -42,6 +43,24 @@ public class ExamenController : ControllerBase
     public IEnumerable<ExamenGridDto> ConsultarMisExamenesContestados()
     {
         return _examenService.ConsultarMisExamenesContestados(Utileria.ObtenerIdUsuarioSesion(this));
+    }
+
+    [HttpGet("MisExamenesAsignados")]
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesPendientesPorResponsable()
+    {
+        return _examenService.ConsultarExamenesPendientesPorResponsable(Utileria.ObtenerIdUsuarioSesion(this));
+    }
+
+    [HttpGet("MisExamenesAsignados/vencidos")]
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesVencidosPorResponsable()
+    {
+        return _examenService.ConsultarExamenesVencidosPorResponsable(Utileria.ObtenerIdUsuarioSesion(this));
+    }
+
+    [HttpGet("MisExamenesAsignados/contestados")]
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesContestadosPorResponsable()
+    {
+        return _examenService.ConsultarExamenesContestadosPorResponsable(Utileria.ObtenerIdUsuarioSesion(this));
     }
 
     [HttpGet]
@@ -98,5 +117,14 @@ public class ExamenController : ControllerBase
     public void Actualizar(List<Examen> examenList)
     {
         _examenService.Actualizar(examenList);
+    }
+
+    [HttpPost]
+    [Route("descargarExamenPdf/{idExamen}")]
+    public IActionResult descargarExamenPdf(int idExamen)
+    {
+        byte[] pdfBytes = _examenService.descargarRespuestasPdf(idExamen);
+
+        return File(pdfBytes, "application/pdf");
     }
 }

@@ -10,5 +10,6 @@ public class ProgramacionExamenGridDto
     public TimeSpan? HoraExamen { get; set; }
     public double? Duracion { get; set; }
     public int? CantidadParticipantes { get; set; }
+    public string? PorcentajeAvance { get; set; }
     public bool? Estatus { get; set; }
 }

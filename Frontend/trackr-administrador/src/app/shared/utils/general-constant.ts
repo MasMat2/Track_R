@@ -18,7 +18,7 @@ export class GeneralConstant {
   public static GRID_ACCION_ELIMINAR = 'delete';
   public static GRID_ACCION_COPIAR = 'copy';
   public static GRID_ACCION_VER = 'see'; //debe coincidir con GRID_ACTION.Ver
-  public static GRID_ACTION_PRESENTAR = 'play';
+  public static GRID_ACTION_REVISAR = 'play';
   public static GRID_ACCION_AJUSTE = 'ajuste';
   public static GRID_ACCION_REPORTE_INVENTARIO_FISICO = 'reporteInventarioFisico';
   public static GRID_ACCION_RECETA = 'receta';
@@ -44,6 +44,8 @@ export class GeneralConstant {
   public static GRID_ACCION_CONCILIAR = 'conciliar';
   public static GRID_ACCION_COMPLEMENTO = 'complementoPago';
   public static GRID_ACCION_PDF_COMPLEMENTO = 'pdfComplemento';
+  public static GRID_ACCION_DESCARGAR_PDF = 'descargarPdf';
+
 
   public static COMPONENT_ACCION_AGREGAR = 'Agregar';
   public static COMPONENT_ACCION_EDITAR = 'Editar';

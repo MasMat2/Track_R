@@ -72,6 +72,62 @@ public class ExamenRepository : Repository<Examen>, IExamenRepository
             .ToList();
     }
 
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesPendientesPorResponsable(int idUsuario)
+    {
+        return context.Examen
+            .Where(p => p.IdProgramacionExamenNavigation.IdUsuarioResponsable == idUsuario && p.IdEstatusExamen == 1 && p.Estatus == true
+                    && p.IdProgramacionExamenNavigation.FechaExamen >= System.DateTime.Now.Date)
+            .OrderBy(p => p.IdExamen)
+            .Select(p => new CuestionariosPorResponsableDto
+            {
+                IdExamen = p.IdExamen,
+                clave = p.IdProgramacionExamenNavigation.Clave ?? string.Empty,
+                NombreUsuario = p.IdUsuarioParticipanteNavigation.Nombre + " " + p.IdUsuarioParticipanteNavigation.ApellidoPaterno + " " + p.IdUsuarioParticipanteNavigation.ApellidoMaterno,
+                IdProgramacionExamen = p.IdProgramacionExamen,
+                IdUsuarioParticipante = p.IdUsuarioParticipante,
+                Resultado = p.Resultado,
+                PreguntasCorrectas = p.PreguntasCorrectas
+            })
+            .ToList();
+    }
+
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesVencidosPorResponsable(int idUsuario)
+    {
+        return context.Examen
+            .Where(p => p.IdProgramacionExamenNavigation.IdUsuarioResponsable == idUsuario && p.IdEstatusExamen == 1 && p.Estatus == true
+                    && p.IdProgramacionExamenNavigation.FechaExamen < System.DateTime.Now.Date)
+            .OrderBy(p => p.IdExamen)
+            .Select(p => new CuestionariosPorResponsableDto
+            {
+                IdExamen = p.IdExamen,
+                clave = p.IdProgramacionExamenNavigation.Clave ?? string.Empty,
+                NombreUsuario = p.IdUsuarioParticipanteNavigation.Nombre + " " + p.IdUsuarioParticipanteNavigation.ApellidoPaterno + " " + p.IdUsuarioParticipanteNavigation.ApellidoMaterno,
+                IdProgramacionExamen = p.IdProgramacionExamen,
+                IdUsuarioParticipante = p.IdUsuarioParticipante,
+                Resultado = p.Resultado,
+                PreguntasCorrectas = p.PreguntasCorrectas
+            })
+            .ToList();
+    }
+
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesContestadosPorResponsable(int idUsuario)
+    {
+        return context.Examen
+            .Where(p => p.IdProgramacionExamenNavigation.IdUsuarioResponsable == idUsuario && p.IdEstatusExamen == 3 && p.Estatus == true)
+            .OrderBy(p => p.IdExamen)
+            .Select(p => new CuestionariosPorResponsableDto
+            {
+                IdExamen = p.IdExamen,
+                clave = p.IdProgramacionExamenNavigation.Clave ?? string.Empty,
+                NombreUsuario = p.IdUsuarioParticipanteNavigation.Nombre + " " + p.IdUsuarioParticipanteNavigation.ApellidoPaterno + " " + p.IdUsuarioParticipanteNavigation.ApellidoMaterno,
+                IdProgramacionExamen = p.IdProgramacionExamen,
+                IdUsuarioParticipante = p.IdUsuarioParticipante,
+                Resultado = p.Resultado,
+                PreguntasCorrectas = p.PreguntasCorrectas
+            })
+            .ToList();
+    }
+
     public ExamenDto? ConsultarMiExamen(int idExamen)
     {
         return context.Examen

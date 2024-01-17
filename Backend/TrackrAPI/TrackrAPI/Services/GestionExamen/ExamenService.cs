@@ -3,6 +3,10 @@ using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionExamen;
 using TrackrAPI.Repositorys.Seguridad;
 using TrackrAPI.Helpers;
+using DinkToPdf;
+using DinkToPdf.Contracts;
+using System;
+
 
 namespace TrackrAPI.Services.GestionExamen;
 
@@ -16,6 +20,7 @@ public class ExamenService
     private readonly IContenidoExamenRepository _contenidoExamenRepository;
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly CorreoHelper _correoHelper;
+    private readonly IConverter _converter;
 
     private readonly string AsuntoCorreo = "Programación de examen";
 
@@ -27,7 +32,8 @@ public class ExamenService
         IUsuarioRepository usuarioRepository,
         IExamenReactivoRepository examenReactivoRepository,
         IReactivoRepository reactivoRepository,
-        IContenidoExamenRepository contenidoExamenRepository)
+        IContenidoExamenRepository contenidoExamenRepository,
+        IConverter converter)
     {
         _correoHelper = correoHelper;
         _examenRepository = examenRepository;
@@ -37,6 +43,7 @@ public class ExamenService
         _contenidoExamenRepository = contenidoExamenRepository;
         _programacionExamenRepository = programacionExamenRepository;
         _usuarioRepository = usuarioRepository;
+        _converter = converter;
     }
 
     public Examen? Consultar(int idExamen)
@@ -62,6 +69,21 @@ public class ExamenService
         return _examenRepository.ConsultarMisExamenesContestados(idUsuario);
     }
 
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesPendientesPorResponsable(int idUsuario)
+    {
+        return _examenRepository.ConsultarExamenesPendientesPorResponsable(idUsuario);
+    }
+
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesVencidosPorResponsable(int idUsuario)
+    {
+        return _examenRepository.ConsultarExamenesVencidosPorResponsable(idUsuario);
+    }
+
+    public IEnumerable<CuestionariosPorResponsableDto> ConsultarExamenesContestadosPorResponsable(int idUsuario)
+    {
+        return _examenRepository.ConsultarExamenesContestadosPorResponsable(idUsuario);
+    }
+
     public IEnumerable<ExamenCalificacionDto> ConsultarCalificaciones(int idProgramacionExamen)
     {
         return _examenRepository.ConsultarCalificaciones(idProgramacionExamen);
@@ -81,11 +103,11 @@ public class ExamenService
         {
             IEnumerable<ContenidoExamen> cteList = _contenidoExamenRepository.ConsultarTodosNoFormato(examen.IdProgramacionExamenNavigation.IdTipoExamen);
 
-            foreach(ContenidoExamen cte in cteList)
+            foreach (ContenidoExamen cte in cteList)
             {
                 IEnumerable<Reactivo> reactivoList = _reactivoRepository.ConsultarReactivosAleatorio(cte.IdAsignatura, cte.IdNivelExamen, cte.TotalPreguntas ?? 0);
 
-                foreach(Reactivo reactivo in reactivoList)
+                foreach (Reactivo reactivo in reactivoList)
                 {
                     ExamenReactivo examenReactivo = new()
                     {
@@ -242,5 +264,138 @@ public class ExamenService
                 + $"<hr style=\"border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;\">",
             EsMensajeHtml = true
         };
+    }
+
+    public byte[] descargarRespuestasPdf(int idExamen)
+    {
+        var examen = _examenRepository.ConsultarMiExamen(idExamen);
+
+        string nombreArchivo = @$"Respuestas_{examen.TipoExamen}_{examen.NombreUsuario}.pdf";
+
+        string html = ObtenerEstilos();
+
+        html += GenerarPdf(idExamen);
+
+        var globalSettings = new GlobalSettings
+        {
+            Orientation = Orientation.Portrait,
+            PaperSize = PaperKind.Letter,
+            DocumentTitle = nombreArchivo,
+        };
+
+        var objectSettings = new ObjectSettings
+        {
+            HtmlContent = html,
+            WebSettings = { DefaultEncoding = "utf-8" }
+        };
+
+        var pdfFile = new HtmlToPdfDocument()
+        {
+            GlobalSettings = globalSettings,
+            Objects = { objectSettings }
+        };
+
+        return _converter.Convert(pdfFile);
+
+    }
+
+    public string GenerarPdf(int idExamen)
+    {
+        string preguntas = "";
+        var index = 0;
+
+        var examen = _examenRepository.ConsultarMiExamen(idExamen);
+        var reactivos = _examenReactivoRepository.ConsultarReactivosExamen(examen.IdExamen);
+
+        foreach (var reactivo in reactivos)
+        {
+            if (reactivo.ImagenBase64 != "" && reactivo.ImagenBase64 != "data:;base64,")
+            {
+                preguntas +=
+                    @$"
+                        <div class='pregunta'>
+                           <h3>{ index+1 }.- { reactivo.Pregunta }</h3>
+                           <div style='text-align: center; margin-top: 10px; margin-bottom: 10px;'>
+                               <img id='logo' class='imagenPregunta' src='{ reactivo.ImagenBase64 }' height='200'/>
+                           </div>
+                           <p>{ reactivo.Respuesta }</p>
+                           <p>Respondió: <span style='font-weight: bold;'>{ reactivo.RespuestaAlumno }</span></p>
+                       </div>
+                    ";
+            }
+            else
+            {
+                preguntas +=
+                @$"
+                    <div class='pregunta'>
+                        <h3>{index+1 }.- { reactivo.Pregunta }</h3>
+                        <p> { reactivo.Respuesta }</p>
+                        <p>Respondió: <span style='font-weight: bold;'>{ reactivo.RespuestaAlumno }</span></p>
+                    </div>
+                ";
+            }
+            index++;
+        }
+
+        return
+            @$"
+                <div class='body'>
+                    <div class='header'>
+                        <div class='titulo'>
+                            <h1>{ examen.TipoExamen }: { examen.Clave }</h1>
+                        </div>
+                        <div class='subtitulo'>
+                            <div><h2>Respondió: { examen.NombreUsuario }</h2></div>
+                            <div>
+                                <h2> Fecha: { examen.FechaExamen.Value.ToShortDateString() }</h2>
+                                <h2> Hora: { examen.HoraExamen }</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='preguntas'>
+                        { preguntas }
+                    </div>
+                </div>
+            ";
+
+    }
+
+    private string ObtenerEstilos()
+    {
+        return @"
+            <style>
+                
+                .body{
+                    font-family: 'Times New Roman', Times, serif;
+                }
+                .header{
+                    margin-top: 5vh;
+                    margin-bottom: 2vh;
+                    text-align: center;
+
+                }
+
+                .titulo{
+                    font-size: 20px
+                }
+
+                .subtitulo{
+                    font-size: 18px;
+                    margin: 5vh 1vw 5vh 1vw ;
+                    justify-content: space-between;
+                    display: flex;
+    
+                }
+
+                .preguntas{
+                    font-size: 15px;
+                    margin: 2em;
+                }
+
+                .pregunta p{
+                    white-space: pre-wrap;
+                }
+
+            </style>";
     }
 }

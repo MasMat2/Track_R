@@ -43,7 +43,7 @@ export class ProgramacionExamenComponent implements OnInit {
       width: 100,
     },
     {
-      headerName: 'Tipo de Examen',
+      headerName: 'Tipo de Encuesta',
       field: 'tipoExamen',
       minWidth: 100,
       width: 100,
@@ -79,8 +79,8 @@ export class ProgramacionExamenComponent implements OnInit {
       width: 70,
     },
     {
-      headerName: 'Cantidad de Participantes',
-      field: 'cantidadParticipantes',
+      headerName: 'Porcentaje de avance',
+      field: 'porcentajeAvance',
       minWidth: 70,
       width: 70,
     },
