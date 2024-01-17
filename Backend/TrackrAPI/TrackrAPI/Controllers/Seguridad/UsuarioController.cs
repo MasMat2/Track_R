@@ -297,6 +297,13 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultarAsistentePorDoctor(idDoctor);
         }
 
+        [HttpGet("misDoctores")]
+        public IEnumerable<AsistenteDoctorDto> ConsultarDoctoresPorAsistente()
+        {
+            int idAsistente = Utileria.ObtenerIdUsuarioSesion(this);
+            return usuarioService.ConsultarDoctoresPorAsistente(idAsistente);
+        }
+
         [HttpPost("asistente/{idAsistente}")]
         public void AgregarAsistente(int idAsistente)
         {
@@ -308,6 +315,20 @@ namespace TrackrAPI.Controllers.Seguridad
         public void EliminarAsistente(int idAsistenteDoctor)
         {
             usuarioService.EliminarAsistente(idAsistenteDoctor);
+        }
+
+        [HttpGet("esMedico")]
+        public bool EsMedico()
+        {
+            var usuario = usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
+            return usuarioService.EsMedico(usuario.IdCompania , usuario.IdUsuario);
+        }
+
+        [HttpGet("esAsistente")]
+        public bool EsAsistente()
+        {
+            var usuario = usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
+            return usuarioService.EsAsistente(usuario.IdCompania , usuario.IdUsuario);
         }
     }
 }

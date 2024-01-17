@@ -449,6 +449,11 @@ namespace TrackrAPI.Services.Seguridad
             return _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(idDoctor);
         }
 
+        public IEnumerable<AsistenteDoctorDto> ConsultarDoctoresPorAsistente(int idAsistente)
+        {
+            return _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idAsistente);
+        }
+
         public void AgregarAsistente(int idUsuario , int idAsistente)
         {
             var asistente = new AsistenteDoctor()
@@ -787,6 +792,16 @@ namespace TrackrAPI.Services.Seguridad
         public UsuarioDomicilioDto ConsultaDomicilioPorId(int idUsuario)
         {
            return usuarioRepository.ConsultaDomicilioPorId(idUsuario);
+        }
+
+        public bool EsAsistente(int idCompania , int idUsuario)
+        {
+            return usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente).Any((usuario) => usuario.IdUsuario == idUsuario);
+        }
+
+        public bool EsMedico(int idCompania , int idUsuario)
+        {
+            return usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilMedico).Any( (usuario) => usuario.IdUsuario == idUsuario);
         }
 
     }

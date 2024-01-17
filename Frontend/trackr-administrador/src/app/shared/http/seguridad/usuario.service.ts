@@ -152,6 +152,11 @@ export class UsuarioService {
     return this.http.get<AsistenteDoctorDto[]>(this.url + `asistentesPorDoctor`);
   }
 
+  misDoctores()
+  {
+    return this.http.get<AsistenteDoctorDto[]>(this.url + `misDoctores`);
+  }
+
   agregarAsistente(idAsistente : number)
   {
     return this.http.post<void>(this.url + `asistente/${idAsistente}` , {});
@@ -160,6 +165,16 @@ export class UsuarioService {
   eliminarAsistente(idAsistente : number)
   {
     return this.http.delete<void>(this.url + `asistente/${idAsistente}`);
+  }
+
+  esAsistente()
+  {
+    return this.http.get<boolean>(this.url + `esAsistente`);
+  }
+
+  esMedico()
+  {
+    return this.http.get<boolean>(this.url + `esMedico`);
   }
 
 }

@@ -4,11 +4,11 @@
       <div class="col-md-6"> 
         <ul class="list-group list-group-flush">
           <li href="#"  class="list-group-item d-flex justify-content-center" *ngFor="let asistente of misAsistentesData | async">
-            {{asistente.nombreAsistente}} <i class="fas fa-times" (click)="eliminarAsistente(asistente)"></i>
+            {{asistente.nombreAsistente}} <i class="fas fa-times" *ngIf="!esAsistente" (click)="eliminarAsistente(asistente)"></i>
            </li>
         </ul>
       </div>
-      <div class="col-md-6"> 
+      <div class="col-md-6 " *ngIf="!esAsistente"> 
         <ul class="list-group list-group-flush">
           <li href="#"  class="list-group-item d-flex justify-content-center" *ngFor="let asistente of asistentes | async" (click)="agregarAsistente(asistente)">
             {{asistente.nombre}}

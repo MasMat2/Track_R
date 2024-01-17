@@ -11,6 +11,7 @@ import { EntidadEstructuraTablaValorService } from '@http/gestion-entidad/entida
 import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { GestionAsistenteComponent } from './gestion-asistente/gestion-asistente.component';
+import { UsuarioService } from '@http/seguridad/usuario.service';
 
 @Component({
   selector: 'app-paciente',
@@ -21,6 +22,7 @@ export class PacienteComponent implements OnInit {
   protected pacientes: UsuarioExpedienteGridDTO[] = [];
   protected isVistaCuadricula: boolean = true;
   protected mostrarSidebar: boolean = false;
+  protected esAsistente : boolean | null = null;
   anchoContenedor: string = '100%';
   paciente: UsuarioExpedienteSidebarDTO = {
     idUsuario: 0,
@@ -80,10 +82,12 @@ export class PacienteComponent implements OnInit {
     private encryptionService: EncryptionService,
     private expedienteTrackrService: ExpedienteTrackrService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private usuarioService : UsuarioService
   ) {}
 
   ngOnInit(): void {
+    this.esAsistenteUsuario();
     this.consultarPacientes();
   }
 
@@ -135,7 +139,7 @@ export class PacienteComponent implements OnInit {
   }
   protected agregarAsistente(): void {
     const initialState = {
-      idUsuario: 10,
+      esAsistente: this.esAsistente
     };
     const modalRef = this.modalService.show(
       GestionAsistenteComponent,
@@ -182,4 +186,12 @@ export class PacienteComponent implements OnInit {
       }
     );
   }
+
+  private esAsistenteUsuario()
+  {
+    this.usuarioService.esAsistente().subscribe((esAsistente) => {
+      this.esAsistente = esAsistente;
+    });
+  }
+
 }
