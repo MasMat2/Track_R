@@ -8,6 +8,7 @@ import { Observable, map } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ModalPanelNotificacionesComponent } from './modal-panel-notificaciones/modal-panel-notificaciones.component';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-panel-notificaciones',
@@ -33,7 +34,8 @@ export class PanelNotificacionesComponent implements OnInit {
     mensaje: string,
     fecha: Date,
     imagen?: string | SafeUrl,
-    visto: boolean
+    visto: boolean,
+    idChat?: number
   }[]>;
 
   constructor(
@@ -41,7 +43,8 @@ export class PanelNotificacionesComponent implements OnInit {
     private notificacionHubService: NotificacionDoctorHubService,
     private usuarioService: UsuarioService,
     private modalService: BsModalService,
-    private sanitizer:DomSanitizer
+    private sanitizer:DomSanitizer,
+    private router:Router
   ) { }
 
   ngOnInit() {
@@ -59,7 +62,8 @@ export class PanelNotificacionesComponent implements OnInit {
             mensaje: notificacion.mensaje,
             fecha: notificacion.fechaAlta,
             imagen: (notificacion.imagen !== null || notificacion.imagen !== undefined) ? this.sanitizer.bypassSecurityTrustUrl(notificacion.imagen || '') : undefined,
-            visto: notificacion.visto
+            visto: notificacion.visto,
+            idChat: notificacion.idChat
           };
         }))
       );
@@ -81,10 +85,16 @@ export class PanelNotificacionesComponent implements OnInit {
   }
 
   protected mostrarModal(notificacion:any){
-    const initialState = {
-      notificacion
+    if(notificacion.idChat !== null){
+      this.router.navigate(['administrador','chat'])
+      this.modalService.hide();
     }
-    this.modalService.show(ModalPanelNotificacionesComponent,{initialState});
+    else {
+      const initialState = {
+        notificacion
+      }
+      this.modalService.show(ModalPanelNotificacionesComponent,{initialState});
+    }
   }
 
 }
