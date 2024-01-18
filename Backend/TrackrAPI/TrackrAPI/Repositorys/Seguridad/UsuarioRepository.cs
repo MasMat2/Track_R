@@ -310,6 +310,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                             .Include(u => u.EntradaPersonalIdUsuarioNavigation)
                             .Include(u => u.IdCompaniaNavigation)
                             .Include(u => u.IdRegimenFiscalNavigation)
+                            .Include( u => u.AsistenteDoctorIdAsistenteNavigation)
                           where u.IdUsuario == idUsuario
                           select u;
             return usuario.FirstOrDefault();
