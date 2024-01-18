@@ -65,6 +65,7 @@ public class ChatMensajeService
     {
         int? idArchivo = null;
         var idsPersonasChat = _chatPersonaRepository.ConsultarPersonasPorChat(mensaje.IdChat)
+                                                    .Where( cP => cP.IdPersona != mensaje.IdPersona)
                                                     .Select(x => x.IdPersona)
                                                     .Distinct()
                                                     .ToList();
