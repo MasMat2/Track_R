@@ -42,7 +42,8 @@ public class NotificacionDoctorService
             notificacionUsuarioDto.Visto,
             notificacionDto.IdTipoNotificacion,
             idPaciente,
-            ""
+            null,
+            null
         );
     }
 

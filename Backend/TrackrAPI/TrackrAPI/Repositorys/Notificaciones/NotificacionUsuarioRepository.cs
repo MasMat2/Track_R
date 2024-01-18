@@ -62,7 +62,8 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
                 nu.Visto,
                 nu.IdNotificacionNavigation.IdTipoNotificacion,
                 nu.IdNotificacionNavigation.NotificacionDoctor.FirstOrDefault()?.IdPaciente ?? 0,
-                this.ObtenerImagenUsuario(nu?.IdNotificacionNavigation?.IdPersona!= null ? (int)nu?.IdNotificacionNavigation?.IdPersona : 0, !string.IsNullOrEmpty(nu?.IdNotificacionNavigation?.IdPersonaNavigation?.ImagenTipoMime) ? nu?.IdNotificacionNavigation?.IdPersonaNavigation?.ImagenTipoMime :null) 
+                this.ObtenerImagenUsuario(nu?.IdNotificacionNavigation?.IdPersona!= null ? (int)nu?.IdNotificacionNavigation?.IdPersona : 0, !string.IsNullOrEmpty(nu?.IdNotificacionNavigation?.IdPersonaNavigation?.ImagenTipoMime) ? nu?.IdNotificacionNavigation?.IdPersonaNavigation?.ImagenTipoMime :null),
+                nu.IdNotificacionNavigation.IdChat
             ));
     }
 
