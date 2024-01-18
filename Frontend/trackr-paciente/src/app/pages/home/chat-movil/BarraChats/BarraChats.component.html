@@ -23,8 +23,8 @@
   <div style="display: flex; overflow-x: auto; height: 30vh; position: relative;">
     <div *ngFor="let doctor of misDoctores" style="margin-right: 10px; width: 50vh;" (click)="doctorClick(doctor.idUsuarioDoctor)">
       <ion-avatar style="position: relative;">
-        <!-- <img alt="{{doctor.urlImagen}} d" [src]="doctor.urlImagen" /> -->
-        <img alt="profile pic" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+         <img *ngIf="doctor?.urlImagen" alt="{{doctor.urlImagen}} d" [src]="doctor.urlImagen" /> 
+        <!-- <img alt="profile pic" src="https://ionicframework.com/docs/img/demos/avatar.svg" /> -->
         <div style="position: absolute; top: 0; right: 0;">
           <ion-icon name="add-circle"></ion-icon>
         </div>
@@ -40,8 +40,8 @@
           <ion-row>
             <ion-col size="4">
               <ion-avatar style="position: relative;">
-                <!-- <img [src]="chat.urlImagen" alt="{{chat.urlImagen}}"> -->
-                <img alt="profile pic" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+                <img *ngIf="chat?.urlImagen" [src]="chat.urlImagen" alt="{{chat.urlImagen}}"> 
+                <!-- <img alt="profile pic" src="https://ionicframework.com/docs/img/demos/avatar.svg" /> -->
                 <div style="position: absolute; top: 0; right: 0;">
                   <ion-icon name="remove-circle"></ion-icon>
                 </div>
