@@ -50,6 +50,7 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
             {
                 IdExpedienteTrackr = group.Key,
                 IdUsuario = group.Key,
+                DoctorAsociado = group.FirstOrDefault().IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre + " " + group.FirstOrDefault().IdUsuarioDoctorNavigation.ApellidoPaterno,
                 NombreCompleto = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ObtenerNombreCompleto(),
                 Patologias = group.FirstOrDefault().IdExpedienteNavigation.ExpedientePadecimiento.ObtenerPadecimientos(),
                 Edad = (DateTime.Today.Year - group.FirstOrDefault().IdExpedienteNavigation.FechaNacimiento.Year).ToString() + " años",

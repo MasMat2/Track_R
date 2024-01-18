@@ -208,6 +208,7 @@ public class ExpedienteTrackrService
                 expediente.VariablesFueraRango = _expedienteTrackrRepository.VariablesFueraRango(expediente.IdUsuario);
 
         }
+        expedientes = expedientes.OrderBy(e => e.DoctorAsociado);
         return expedientes;
     }
 

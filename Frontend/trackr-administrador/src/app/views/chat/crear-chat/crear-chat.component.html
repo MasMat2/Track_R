@@ -49,19 +49,24 @@
             *ngIf="tipo == 2"
             (change)="obtenerIdPacientesPadecimiento()">
           </ng-select>
-
           <ng-select
             name="padecimientoSelect"
             [items]="expedientes"
             [multiple]="true"
             bindLabel="nombreCompleto"
             bindValue="idExpedienteTrackr"
+            groupBy="doctorAsociado"
             [(ngModel)]="personas"
-            *ngIf="tipo == 3">
-          </ng-select>
+            *ngIf="tipo == 3"
+            (change)="tieneMismoDoctor()">
+          </ng-select> 
+          <div *ngIf="!mismoDoctor" class="error">
+            No se puede seleccionar de distinto auxiliar.
+          </div>
+       
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3" *ngIf="personas.length > 1">
           <div class="form-group">
             <label class="label-input required-label" style="color: gray;" >Titulo de chat</label>
             <input #descripcion="ngModel" type="text" name="titulo" [(ngModel)]="tituloChat" class="form-control" [disabled]="desabilitarTitulo()">
@@ -73,7 +78,7 @@
 
         <div class="col-md-3">
           <div class="form-group">
-            <button (click)="crearChat()" class="btn-agregar" [disabled]="deshabilitarBtn()">Crear Chat</button>
+            <button (click)="crearChat()" class="btn-agregar" [disabled]="deshabilitarBtn() || !mismoDoctor">Crear Chat</button>
           </div>
         </div>
         
