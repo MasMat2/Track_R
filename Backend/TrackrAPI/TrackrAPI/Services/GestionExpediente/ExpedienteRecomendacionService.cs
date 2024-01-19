@@ -67,7 +67,9 @@ public class ExpedienteRecomendacionService
         (
             doctor.Nombre,
             expedienteRecomendacionFormDTO.Descripcion ?? string.Empty,
-            5
+            5,
+            doctor.IdUsuario,
+            null
         );
 
         var notificacionInsertada = await _notificacionPacienteService.Notificar(notificacion , expedienteRecomendacionFormDTO.IdUsuario);
