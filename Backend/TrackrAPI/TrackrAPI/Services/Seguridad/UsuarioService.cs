@@ -441,12 +441,45 @@ namespace TrackrAPI.Services.Seguridad
 
         public IEnumerable<UsuarioDto> ConsultarAsistentes(int idCompania)
         {
-            return usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente);
+            var asistentes =  usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente);
+
+            foreach(var asistente in asistentes)
+            {
+                if (!string.IsNullOrEmpty(asistente.ImagenTipoMime))
+                {
+                    string filePath = $"Archivos/Usuario/{asistente.IdUsuario}{MimeTypeMap.GetExtension(asistente.ImagenTipoMime)}";
+                    if (File.Exists(filePath))
+                    {
+                        byte[] imageArray = File.ReadAllBytes(filePath);
+                        asistente.ImagenBase64 = Convert.ToBase64String(imageArray);
+                        asistente.ImagenTipoMime = asistente.ImagenTipoMime;
+                    }
+                }
+            }
+
+            return asistentes;
         }
 
         public IEnumerable<AsistenteDoctorDto> ConsultarAsistentePorDoctor(int idDoctor)
         {
-            return _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(idDoctor);
+            var asistentes =  _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(idDoctor);
+
+            foreach(var asistente in asistentes)
+            {
+                if (!string.IsNullOrEmpty(asistente.ImagenTipoMime))
+                {
+                    string filePath = $"Archivos/Usuario/{asistente.IdUsuario}{MimeTypeMap.GetExtension(asistente.ImagenTipoMime)}";
+                    if (File.Exists(filePath))
+                    {
+                        byte[] imageArray = File.ReadAllBytes(filePath);
+                        asistente.ImagenBase64 = Convert.ToBase64String(imageArray);
+                        asistente.ImagenTipoMime = asistente.ImagenTipoMime;
+                    }
+                }
+            }
+
+
+            return asistentes;
         }
 
         public IEnumerable<AsistenteDoctorDto> ConsultarDoctoresPorAsistente(int idAsistente)
