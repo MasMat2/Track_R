@@ -145,7 +145,7 @@ export class PacienteComponent implements OnInit {
       GestionAsistenteComponent,
       {
         initialState,
-        ...GeneralConstant.CONFIG_MODAL_DEFAULT
+        ...GeneralConstant.CONFIG_MODAL_MEDIUM
       }
     );
   }
@@ -162,6 +162,7 @@ export class PacienteComponent implements OnInit {
     lastValueFrom(this.expedienteTrackrService.consultarParaGrid()).then(
       (pacientes: UsuarioExpedienteGridDTO[]) => {
         this.pacientes = pacientes;
+        console.log(this.pacientes);
       }
     );
   }

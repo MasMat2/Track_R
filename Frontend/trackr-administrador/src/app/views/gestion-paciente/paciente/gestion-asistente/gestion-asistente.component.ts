@@ -14,30 +14,43 @@ import { Observable} from 'rxjs';
 export class GestionAsistenteComponent implements OnInit {
   public idUsuario : number;
   protected asistentes : Observable<Usuario[]>;
+  protected auxiliares : Usuario[];
   protected misAsistentesData : Observable<AsistenteDoctorDto[]>;
+  protected misAsistentesArray : AsistenteDoctorDto[];
   protected esAsistente : boolean;
+  protected titulo : string;
 
   constructor(private usuarioService : UsuarioService, 
               private mensajeService : MensajeService) { }
 
   ngOnInit() {
     this.esAsistente ? this.misDoctores() : this.misAsistentes();
+    this.titulo = this.esAsistente ? 'Mis doctores' : 'Auxiliares';
     this.consultarAsistentes();
   }
 
   private async consultarAsistentes()
   {
-    this.asistentes = this.usuarioService.consultarAsistentes();
+ 
+    this.usuarioService.consultarAsistentes().subscribe((data) => {
+      this.auxiliares = data;
+    });
+
   }
 
   private async misAsistentes()
   {
     this.misAsistentesData = this.usuarioService.misAsistentes();
+    this.usuarioService.misAsistentes().subscribe((data) => {
+      this.misAsistentesArray = data;
+    });
   }
 
   private async misDoctores()
   {
-    this.misAsistentesData = this.usuarioService.misDoctores();
+    this.usuarioService.misDoctores().subscribe((data) => {
+      this.misAsistentesArray = data;
+    });
   }
 
   public async agregarAsistente(asistente : Usuario)

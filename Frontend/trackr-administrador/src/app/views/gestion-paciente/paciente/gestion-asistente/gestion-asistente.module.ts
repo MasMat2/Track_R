@@ -2,11 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GestionAsistenteComponent } from './gestion-asistente.component';
 import { ModalBaseModule } from '@sharedComponents/modal-base/modal-base.module';
+import { TableModule } from 'primeng/table';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    ModalBaseModule
+    ModalBaseModule,
+    TableModule,
+    PipesModule
   ],
   declarations: [GestionAsistenteComponent]
 })

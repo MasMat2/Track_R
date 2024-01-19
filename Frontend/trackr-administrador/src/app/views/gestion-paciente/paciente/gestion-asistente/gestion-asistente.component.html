@@ -1,19 +1,105 @@
-<app-modal-base [titulo]="'Agregar asistente'">
+<app-modal-base [titulo]="titulo">
   <ng-template #modalBody>
-    <div class="row d-flex justify-content-around">
-      <div class="col-md-6"> 
-        <ul class="list-group list-group-flush">
-          <li href="#"  class="list-group-item d-flex justify-content-center" *ngFor="let asistente of misAsistentesData | async">
-            {{asistente.nombreAsistente}} <i class="fas fa-times" *ngIf="!esAsistente" (click)="eliminarAsistente(asistente)"></i>
-           </li>
-        </ul>
+    <div class="row">
+      <div class="col-md-6" style="min-height: 30vh;" *ngIf="!esAsistente; else fullWidthColumn" >
+        <p-table
+          class="primeng-table grid-cuadricula"
+          [value]="misAsistentesArray"
+          dataKey="idAsistenteDoctor"
+          [autoLayout]="true"
+          *ngIf="misAsistentesArray"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="text-center">Imagen</th>
+              <th class="text-center">Nombre del Asistente</th>
+            </tr>
+          </ng-template>
+  
+          <ng-template pTemplate="body" let-doctor>
+            <tr>
+              <td class="img-container p-0">
+                <img [src]="doctor.imagenUrl"/>
+              </td>
+  
+              <td class="asistente-cell">
+                <span class="asistente-name">{{ doctor.nombreAsistente }}</span>
+                <button class="btn" *ngIf="!esAsistente" (click)="eliminarAsistente(doctor)">
+                  <i class="fa-solid fa-circle-minus"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
       </div>
-      <div class="col-md-6 " *ngIf="!esAsistente"> 
-        <ul class="list-group list-group-flush">
-          <li href="#"  class="list-group-item d-flex justify-content-center" *ngFor="let asistente of asistentes | async" (click)="agregarAsistente(asistente)">
-            {{asistente.nombre}}
-           </li>
-        </ul>
+
+      <ng-template #fullWidthColumn>
+        <div class="col-md-12" style="min-height: 30vh;">
+          <p-table
+            class="primeng-table grid-cuadricula"
+            [value]="misAsistentesArray"
+            dataKey="idAsistenteDoctor"
+            [autoLayout]="true"
+            *ngIf="misAsistentesArray"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">Imagen</th>
+                <th class="text-center">Mis Doctores</th>
+              </tr>
+            </ng-template>
+    
+            <ng-template pTemplate="body" let-doctor>
+              <tr>
+                <td class="img-container p-0">
+                  <img [src]="doctor.imagenUrl"/>
+                </td>
+    
+                <td class="asistente-cell">
+                  <span class="asistente-name" >{{ doctor.nombreAsistente }}</span>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </ng-template>
+
+      <div class="col-md-6" style="min-height: 30vh;" *ngIf="!esAsistente">
+        <p-table
+          class="primeng-table grid-cuadricula"
+          [value]="auxiliares"
+          dataKey="idUsuario"
+          [autoLayout]="true"
+          *ngIf="auxiliares"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="text-center">Imagen</th>
+              <th class="text-center">Nombre del Asistente</th>
+            </tr>
+          </ng-template>
+  
+          <ng-template pTemplate="body" let-doctor>
+            <tr>
+              <td class="img-container p-0">
+                <img
+                [src]="
+                  doctor.imagenBase64 != undefined
+                    ? (doctor.imagenBase64 | urlImagen : doctor?.tipoMime)
+                    : 'assets/img/default-user.jpg'
+                "
+              />
+              </td>
+  
+              <td class="asistente-cell">
+                <span class="asistente-name">{{ doctor.nombreCompleto }}</span>
+                <button class="btn" *ngIf="!esAsistente" (click)="agregarAsistente(doctor)">
+                  <i class="fas fa-plus-circle"></i> 
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
       </div>
     </div>
   </ng-template>
