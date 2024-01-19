@@ -484,7 +484,23 @@ namespace TrackrAPI.Services.Seguridad
 
         public IEnumerable<AsistenteDoctorDto> ConsultarDoctoresPorAsistente(int idAsistente)
         {
-            return _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idAsistente);
+            var doctores =  _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idAsistente);
+
+            foreach(var doctor in doctores)
+            {
+                if (!string.IsNullOrEmpty(doctor.ImagenTipoMime))
+                {
+                    string filePath = $"Archivos/Usuario/{doctor.IdUsuario}{MimeTypeMap.GetExtension(doctor.ImagenTipoMime)}";
+                    if (File.Exists(filePath))
+                    {
+                        byte[] imageArray = File.ReadAllBytes(filePath);
+                        doctor.ImagenBase64 = Convert.ToBase64String(imageArray);
+                        doctor.ImagenTipoMime = doctor.ImagenTipoMime;
+                    }
+                }
+            }
+
+            return doctores;
         }
 
         public void AgregarAsistente(int idUsuario , int idAsistente)
