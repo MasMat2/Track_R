@@ -1,0 +1,25 @@
+.asistente-cell {
+    text-align: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.delete-icon {
+    right: 10%;
+    position: absolute;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.btn {
+    position: absolute;
+    color: purple;
+    right: 10%;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}

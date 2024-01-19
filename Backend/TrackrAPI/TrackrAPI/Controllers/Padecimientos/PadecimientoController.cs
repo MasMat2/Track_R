@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TrackrAPI.Dtos.Padecimientos;
 using TrackrAPI.Helpers;
+using TrackrAPI.Repositorys.Seguridad;
 using TrackrAPI.Services.Padecimientos;
 
 namespace TrackrAPI.Controllers.Padecimientos;
@@ -10,16 +11,18 @@ namespace TrackrAPI.Controllers.Padecimientos;
 public class PadecimientoController : ControllerBase
 {
     private readonly PadecimientoService _padecimientoService;
+    private readonly IUsuarioRepository _usuarioRepository;
 
-    public PadecimientoController(PadecimientoService padecimientoService)
+    public PadecimientoController(PadecimientoService padecimientoService, IUsuarioRepository usuarioRepository)
     {
         _padecimientoService = padecimientoService;
+        _usuarioRepository = usuarioRepository;
     }
 
     [HttpGet("pacientesPorPadecimiento")]
     public IEnumerable<PacientesPorPadecimientoDTO> ConsultarPacientesPorPadecimiento()
     {
-        int idDoctor = Utileria.ObtenerIdUsuarioSesion(this);
-        return _padecimientoService.ConsultarPacientesPorPadecimiento(idDoctor);
+        var doctor = _usuarioRepository.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
+        return _padecimientoService.ConsultarPacientesPorPadecimiento(doctor.IdUsuario, doctor.IdCompania);
     }
 }

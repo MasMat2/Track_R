@@ -11,11 +11,11 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         public ExpedienteTrackr ConsultarPorNumero(string numero);
         public ExpedienteTrackr ConsultarPorUsuario(int idUsuario);
 
-        public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(int idDoctor);
+        public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(List<int> idDoctor);
         public UsuarioExpedienteSidebarDTO ConsultarParaSidebar(int idUsuario);
         public int DosisNoTomadas(int idExpediente);
         public int VariablesFueraRango(int idUsuario);
-        public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor);
+        public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(List<int> idDoctor);
         public IEnumerable<ExpedienteTrackr> ConsultarExpedientes();
         public IEnumerable<RecordatorioUsuarioDto> RecordatoriosPorUsuario(int idUsuario);
     }

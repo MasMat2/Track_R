@@ -37,19 +37,20 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
             .FirstOrDefault();
     }
 
-    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(int idDoctor)
+    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(List<int> idDoctorList)
     {
         return context.ExpedientePadecimiento
             .Include(ep => ep.IdExpedienteNavigation)
             .Include(et => et.IdExpedienteNavigation.ExpedientePadecimiento)
             .ThenInclude(ep => ep.IdPadecimientoNavigation)
                 .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.UsuarioRol.Any( ur => ur.IdRolNavigation.Clave == GeneralConstant.ClaveRolPaciente) &&
-                       ep.IdUsuarioDoctor == idDoctor)
+                       idDoctorList.Contains(ep.IdUsuarioDoctor))
                 .GroupBy(ep => ep.IdExpedienteNavigation.IdUsuario)
                 .Select(group => new UsuarioExpedienteGridDTO
             {
                 IdExpedienteTrackr = group.Key,
                 IdUsuario = group.Key,
+                DoctorAsociado = group.FirstOrDefault().IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre + " " + group.FirstOrDefault().IdUsuarioDoctorNavigation.ApellidoPaterno,
                 NombreCompleto = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ObtenerNombreCompleto(),
                 Patologias = group.FirstOrDefault().IdExpedienteNavigation.ExpedientePadecimiento.ObtenerPadecimientos(),
                 Edad = (DateTime.Today.Year - group.FirstOrDefault().IdExpedienteNavigation.FechaNacimiento.Year).ToString() + " años",
@@ -87,14 +88,14 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
     }
 
    
-  public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor)
+  public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(List<int> idDoctor)
     {
         DateTime fechaInicioSemanaPasada = DateTime.Today.AddDays(-7);
 
         return context.TratamientoToma
             .Include(tt => tt.IdTratamientoRecordatorioNavigation)
                 .ThenInclude(tr => tr.IdExpedienteTratamientoNavigation)
-            .Where(tt => tt.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdUsuarioDoctor == idDoctor
+            .Where(tt => idDoctor.Contains(tt.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdUsuarioDoctor)
                 && tt.FechaEnvio >= fechaInicioSemanaPasada)
             .GroupBy(tt => tt.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdPadecimiento)
             .Select(group => new ApegoTomaMedicamentoDto

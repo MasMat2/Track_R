@@ -12,10 +12,10 @@ namespace TrackrAPI.Repositorys.GestionExpediente
             base.context = context;
         }
 
-        public IEnumerable<ExpedientePadecimientoDTO> Consultar(int idDoctor)
+        public IEnumerable<ExpedientePadecimientoDTO> Consultar(List<int> idDoctor)
         {
             return context.ExpedientePadecimiento
-            .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioPaciente && ep.IdUsuarioDoctor == idDoctor)
+            .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioPaciente && idDoctor.Contains(ep.IdUsuarioDoctor))
                 .Select(ep => new ExpedientePadecimientoDTO
                 {
                     IdExpedientePadecimiento = ep.IdExpedientePadecimiento,
@@ -96,11 +96,23 @@ namespace TrackrAPI.Repositorys.GestionExpediente
 
         public List<int> ConsultarIdsDoctorPorUsuario(int idUsuario)
         {
-            return context.ExpedientePadecimiento
+            var idsDoctores = context.ExpedientePadecimiento
+                .Include(exp => exp.IdUsuarioDoctorNavigation)
                 .Where(exp => exp.IdExpedienteNavigation.IdUsuario == idUsuario)
                 .Select(exp => exp.IdUsuarioDoctor)
-                .Distinct()
                 .ToList();
+
+            var idsDoctorAsistentes = context.ExpedientePadecimiento
+                .Include(exp => exp.IdUsuarioDoctorNavigation)
+                .Where(exp => exp.IdExpedienteNavigation.IdUsuario == idUsuario)
+                .SelectMany(exp => exp.IdUsuarioDoctorNavigation.AsistenteDoctorIdDoctorNavigation.Select(dac => dac.IdAsistente))
+                .Where(id => id.HasValue)
+                .Select(id => id.Value)
+                .ToList();
+
+            idsDoctores.AddRange(idsDoctorAsistentes);
+
+            return idsDoctores.Distinct().ToList();
         }
     }
 }
