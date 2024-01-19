@@ -25,7 +25,9 @@ namespace TrackrAPI.Models
         public DateTime? FechaMaxima { get; set; }
         public bool? PermiteFueraDeRango { get; set; }
         public string? UnidadMedida { get; set; }
+        public int? IdHospital { get; set; }
 
+        public virtual Hospital? IdHospitalNavigation { get; set; }
         public virtual ICollection<DominioDetalle> DominioDetalle { get; set; }
         public virtual ICollection<ExpedienteCampo> ExpedienteCampo { get; set; }
         public virtual ICollection<SeccionCampo> SeccionCampo { get; set; }

@@ -10,5 +10,6 @@ public record NotificacionDoctorDTO(
     bool Visto,
     int IdTipoNotificacion,
     int IdPaciente,
-    string ? Imagen
+    string ? Imagen,
+    int ? IdChat
 );

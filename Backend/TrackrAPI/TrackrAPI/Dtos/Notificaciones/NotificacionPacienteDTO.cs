@@ -8,5 +8,6 @@ public record NotificacionPacienteDTO(
     string Mensaje,
     DateTime FechaAlta,
     bool Visto,
-    int IdTipoNotificacion
+    int IdTipoNotificacion,
+    int? IdChat
 );

@@ -5,5 +5,7 @@ public record NotificacionDTO(
     string Titulo,
     string Mensaje,
     DateTime FechaAlta,
-    int IdTipoNotificacion
+    int IdTipoNotificacion,
+    int ? IdPersona,
+    int ? IdChat
 );

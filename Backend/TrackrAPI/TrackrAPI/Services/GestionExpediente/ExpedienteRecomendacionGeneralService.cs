@@ -62,7 +62,9 @@ public class ExpedienteRecomendacionGeneralService
             (
                 doctor.Nombre,
                 expedienteRecomendacionGeneralFormDTO.Descripcion ?? string.Empty,
-                1
+                1,
+                doctor.IdUsuario,
+                null
             );
 
             var notificacionInsertada = await _notificacionPacienteService.Notificar(notificacion, usuario);
@@ -98,7 +100,9 @@ public class ExpedienteRecomendacionGeneralService
             (
                 doctor.Nombre,
                 expedienteRecomendacionGeneralFormDTO.Descripcion ?? string.Empty,
-                1
+                1,
+                doctor.IdUsuario,
+                null
             );
 
             var notificacionInsertada = await _notificacionPacienteService.Notificar(notificacion, idUsuario);
@@ -137,7 +141,9 @@ public class ExpedienteRecomendacionGeneralService
             (
                 doctor.Nombre,
                 expedienteRecomendacionGeneralFormDTO.Descripcion ?? string.Empty,
-                1
+                1,
+                doctor.IdUsuario,
+                null
             );
             var notificacionInsertada = await _notificacionPacienteService.Notificar(notificacion, idUsuario);
             var detalleRecomendacionGeneral = new DetalleExpedienteRecomendacionesGenerales

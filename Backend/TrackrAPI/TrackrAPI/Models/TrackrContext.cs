@@ -28,6 +28,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<ArticuloClase> ArticuloClase { get; set; } = null!;
         public virtual DbSet<ArticuloPresentacion> ArticuloPresentacion { get; set; } = null!;
         public virtual DbSet<Asignatura> Asignatura { get; set; } = null!;
+        public virtual DbSet<AsistenteDoctor> AsistenteDoctor { get; set; } = null!;
         public virtual DbSet<Auxiliar> Auxiliar { get; set; } = null!;
         public virtual DbSet<AyudaSeccion> AyudaSeccion { get; set; } = null!;
         public virtual DbSet<BalanceCuentaContable> BalanceCuentaContable { get; set; } = null!;
@@ -723,6 +724,24 @@ namespace TrackrAPI.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.FechaAlta).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<AsistenteDoctor>(entity =>
+            {
+                entity.HasKey(e => e.IdAsistenteDoctor)
+                    .HasName("PK__Asistent__021DF896B836A7E7");
+
+                entity.ToTable("AsistenteDoctor", "Trackr");
+
+                entity.HasOne(d => d.IdAsistenteNavigation)
+                    .WithMany(p => p.AsistenteDoctorIdAsistenteNavigation)
+                    .HasForeignKey(d => d.IdAsistente)
+                    .HasConstraintName("FK__Asistente__IdAsi__21CBDF4D");
+
+                entity.HasOne(d => d.IdDoctorNavigation)
+                    .WithMany(p => p.AsistenteDoctorIdDoctorNavigation)
+                    .HasForeignKey(d => d.IdDoctor)
+                    .HasConstraintName("FK__Asistente__IdDoc__20D7BB14");
             });
 
             modelBuilder.Entity<Auxiliar>(entity =>
@@ -2091,6 +2110,11 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.ValorMaximo).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.ValorMinimo).HasColumnType("decimal(18, 0)");
+
+                entity.HasOne(d => d.IdHospitalNavigation)
+                    .WithMany(p => p.Dominio)
+                    .HasForeignKey(d => d.IdHospital)
+                    .HasConstraintName("FK_Dominio_Hospital");
             });
 
             modelBuilder.Entity<DominioDetalle>(entity =>
@@ -5395,6 +5419,11 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.Mensaje).HasMaxLength(500);
 
                 entity.Property(e => e.Titulo).HasMaxLength(1000);
+
+                entity.HasOne(d => d.IdChatNavigation)
+                    .WithMany(p => p.Notificacion)
+                    .HasForeignKey(d => d.IdChat)
+                    .HasConstraintName("FK_Notificacion_Chat");
 
                 entity.HasOne(d => d.IdPersonaNavigation)
                     .WithMany(p => p.Notificacion)

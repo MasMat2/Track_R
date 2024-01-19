@@ -42,7 +42,8 @@ public class NotificacionDoctorService
             notificacionUsuarioDto.Visto,
             notificacionDto.IdTipoNotificacion,
             idPaciente,
-            ""
+            null,
+            null
         );
     }
 
@@ -58,7 +59,9 @@ public class NotificacionDoctorService
         var notificacionDto = new NotificacionCapturaDTO(
             paciente.ObtenerNombreCompleto(),
             notificacionDoctorDto.Mensaje,
-            notificacionDoctorDto.IdTipoNotificacion);
+            notificacionDoctorDto.IdTipoNotificacion,
+            notificacionDoctorDto.IdPersona,
+            notificacionDoctorDto.IdChat);
 
         return notificacionDto;
     }

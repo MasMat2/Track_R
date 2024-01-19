@@ -6,4 +6,5 @@ export class NotificacionPacientePopOverDto
     public mensaje: string;
     public fecha: Date;
     public visto: boolean;
+    public idChat?:number; 
 }

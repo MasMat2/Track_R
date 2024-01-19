@@ -25,7 +25,9 @@ public class NotificacionService
             Titulo = notificacionDto.Titulo,
             Mensaje = notificacionDto.Mensaje,
             FechaAlta = DateTime.UtcNow,
-            IdTipoNotificacion = notificacionDto.IdTipoNotificacion
+            IdTipoNotificacion = notificacionDto.IdTipoNotificacion,
+            IdPersona = notificacionDto.IdPersona,
+            IdChat = notificacionDto.IdChat,
         };
 
         notificacionRepository.Agregar(notificacion);
@@ -35,7 +37,9 @@ public class NotificacionService
             notificacion.Titulo,
             notificacion.Mensaje,
             notificacion.FechaAlta,
-            notificacion.IdTipoNotificacion
+            notificacion.IdTipoNotificacion,
+            notificacion.IdPersona,
+            notificacion.IdChat
         );
     }
 

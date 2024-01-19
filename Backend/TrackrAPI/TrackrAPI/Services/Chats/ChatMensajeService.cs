@@ -68,7 +68,7 @@ public class ChatMensajeService
                                                     .Select(x => x.IdPersona)
                                                     .Distinct()
                                                     .ToList();
-        var notificacion = new NotificacionDoctorCapturaDTO(mensaje.Mensaje , 2 , mensaje.IdPersona);
+        var notificacion = new NotificacionDoctorCapturaDTO(mensaje.Mensaje , 2 , mensaje.IdPersona,mensaje.IdPersona,mensaje.IdChat);
         
         _notificacionService.Notificar(notificacion, idsPersonasChat);
         
