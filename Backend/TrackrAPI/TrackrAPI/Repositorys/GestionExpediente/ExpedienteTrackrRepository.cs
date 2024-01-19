@@ -88,14 +88,14 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
     }
 
    
-  public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor)
+  public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(List<int> idDoctor)
     {
         DateTime fechaInicioSemanaPasada = DateTime.Today.AddDays(-7);
 
         return context.TratamientoToma
             .Include(tt => tt.IdTratamientoRecordatorioNavigation)
                 .ThenInclude(tr => tr.IdExpedienteTratamientoNavigation)
-            .Where(tt => tt.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdUsuarioDoctor == idDoctor
+            .Where(tt => idDoctor.Contains(tt.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdUsuarioDoctor)
                 && tt.FechaEnvio >= fechaInicioSemanaPasada)
             .GroupBy(tt => tt.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdPadecimiento)
             .Select(group => new ApegoTomaMedicamentoDto

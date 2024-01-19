@@ -296,9 +296,21 @@ public class ExpedienteTrackrService
         return _expedienteTrackrRepository.ConsultarParaSidebar(idUsuario);
 
     }
-    public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor)
+    public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor , int idCompania)
     {
-        return _expedienteTrackrRepository.ApegoMedicamentoUsuarios(idDoctor);
+        List<int> idDoctorList = new();
+        var esAsistente = _usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente)
+                                                    .Any((usuario) => usuario.IdUsuario == idDoctor);
+
+        if(esAsistente){
+              idDoctorList = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idDoctor)
+                                                          .Select( ad => ad.IdUsuario).ToList(); 
+          }
+          else{
+                idDoctorList.Add(idDoctor);
+          }
+
+        return _expedienteTrackrRepository.ApegoMedicamentoUsuarios(idDoctorList);
     }
 
 }

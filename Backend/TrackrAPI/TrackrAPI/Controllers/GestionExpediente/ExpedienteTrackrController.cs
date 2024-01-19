@@ -62,8 +62,8 @@ public class ExpedienteTrackrController : ControllerBase
     [HttpGet("apegoMedicamentoUsuarios")]
     public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios()
     {
-        int idDoctor = Utileria.ObtenerIdUsuarioSesion(this);
-        return _expedienteTrackrService.ApegoMedicamentoUsuarios(idDoctor);
+        var usuario  =  _usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
+        return _expedienteTrackrService.ApegoMedicamentoUsuarios(usuario.IdUsuario , usuario.IdCompania);
     }
 
 }
