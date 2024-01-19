@@ -86,7 +86,7 @@ export class PanelNotificacionesComponent implements OnInit {
 
   protected mostrarModal(notificacion:any){
     if(notificacion.idChat !== null){
-      this.router.navigate(['administrador','chat'])
+      this.router.navigate(['administrador','chat', notificacion.idChat])
       this.modalService.hide();
     }
     else {
