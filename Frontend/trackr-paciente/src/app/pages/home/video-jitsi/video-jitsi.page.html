@@ -4,16 +4,16 @@
 
 <ion-content [fullscreen]="true">
   <ion-item>
-    <ion-label position="floating">Room</ion-label>
+    <ion-label position="floating">Room meet</ion-label>
     <ion-input [(ngModel)]="room" name="room" type="text" required></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label position="floating">Username</ion-label>
+    <ion-label position="floating">Usuario</ion-label>
     <ion-input [(ngModel)]="user" name="username" type="text" required></ion-input>
   </ion-item>
 
-  <ion-button expand="full" (click)="submitForm()">Enviar</ion-button>
+  <ion-button expand="full" (click)="submitForm()">Entrar</ion-button>
 
   <app-call-jitsi *ngIf="jitsiDataUp"></app-call-jitsi>
 
