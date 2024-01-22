@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.module';
 import { ExpedienteTratamientoComponent } from './expediente-tratamiento.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { ExpedienteTratamientoComponent } from './expediente-tratamiento.compone
     TableModule,
     MatExpansionModule,
     PipesModule,
-    GridGeneralModule
+    GridGeneralModule,
+    NgChartsModule
   ],
   declarations: [ExpedienteTratamientoComponent],
   exports: [ExpedienteTratamientoComponent]

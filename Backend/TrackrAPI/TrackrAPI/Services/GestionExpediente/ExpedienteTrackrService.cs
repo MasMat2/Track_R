@@ -312,5 +312,9 @@ public class ExpedienteTrackrService
 
         return _expedienteTrackrRepository.ApegoMedicamentoUsuarios(idDoctorList);
     }
+    public IEnumerable<ApegoTomaMedicamentoDto> ApegoTratamientoPorPaciente(int idUsuario)
+    {
+        return _expedienteTrackrRepository.ApegoTratamientoPorPaciente(idUsuario);
+    }
 
 }

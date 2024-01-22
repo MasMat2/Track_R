@@ -105,6 +105,23 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
             })
             .ToList();
     }
+  public IEnumerable<ApegoTomaMedicamentoDto> ApegoTratamientoPorPaciente(int idUsuario)
+    {
+        DateTime fechaInicioSemanaPasada = DateTime.Today.AddDays(-7);
+
+        return context.TratamientoToma
+            .Include(tt => tt.IdTratamientoRecordatorioNavigation)
+                .ThenInclude(tr => tr.IdExpedienteTratamientoNavigation)
+            .Where(tt => tt.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdExpedienteNavigation.IdUsuario == idUsuario
+                && tt.FechaEnvio >= fechaInicioSemanaPasada)
+            .GroupBy(tt => tt.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdPadecimiento)
+            .Select(group => new ApegoTomaMedicamentoDto
+            {
+                PadecimientoNombre = group.Select( item => item.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdPadecimientoNavigation.Nombre ).First(),
+                Apego = (decimal) group.Count(tt => tt.FechaToma != null) / group.Count() * 100
+            })
+            .ToList();
+    }
 
     public IEnumerable<RecordatorioUsuarioDto> RecordatoriosPorUsuario(int idUsuario)
     {

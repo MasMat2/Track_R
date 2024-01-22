@@ -66,4 +66,10 @@ public class ExpedienteTrackrController : ControllerBase
         return _expedienteTrackrService.ApegoMedicamentoUsuarios(usuario.IdUsuario , usuario.IdCompania);
     }
 
+    [HttpGet("apegoTratamientoPorPaciente/{idPaciente}")]
+    public IEnumerable<ApegoTomaMedicamentoDto> ApegoTratamientoPorPaciente(int idPaciente)
+    {
+        return _expedienteTrackrService.ApegoTratamientoPorPaciente(idPaciente);
+    }
+
 }

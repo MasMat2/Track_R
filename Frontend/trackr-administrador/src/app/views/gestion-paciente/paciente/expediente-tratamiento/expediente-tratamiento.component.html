@@ -19,6 +19,22 @@
         [disableEdit]="true"
       >
       </app-grid-general>
+
+      <div class="col-md-6">
+        <div class="titulo-seccion">
+          Apego a Tratamientos de Pacientes por Padecimiento
+        </div>
+        
+        <canvas
+          baseChart
+          [data]="chartData"
+          [type]="chartType"
+          [options]="chartOptions"
+          [plugins]="chartPlugins"
+        >
+        </canvas>
+      </div>
+
     </div>
   </mat-expansion-panel>
 </mat-accordion>

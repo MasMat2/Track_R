@@ -41,4 +41,8 @@ export class ExpedienteTrackrService {
         return this.http.get<ApegoTomaMedicamentoDto[]>(this.dataUrl + 'apegoMedicamentoUsuarios');
     }
 
+    public apegoTratamientoPorPaciente(idPaciente: number) :  Observable<ApegoTomaMedicamentoDto[]> {
+        return this.http.get<ApegoTomaMedicamentoDto[]>(this.dataUrl + `apegoTratamientoPorPaciente/${idPaciente}`);
+    }
+
 }
