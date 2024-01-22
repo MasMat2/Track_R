@@ -14,7 +14,12 @@
   </ion-item>
 
   <ion-button expand="full" (click)="submitForm()">Entrar</ion-button>
+  <ion-button expand="full" (click)="newMeetJitsi()">Nuevo meet</ion-button>
+
+  <app-create-jitsi-meet *ngIf="newMeet"></app-create-jitsi-meet>
 
   <app-call-jitsi *ngIf="jitsiDataUp"></app-call-jitsi>
+
+
 
 </ion-content>

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit} from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import {AudioInterface, ParticipantInterface} from '../interfaces/jitsi-interface';
@@ -10,14 +10,13 @@ import { CommonModule } from '@angular/common';
 declare var JitsiMeetExternalAPI: any;
 
 @Component({
-  selector: 'app-call-jitsi',
-  templateUrl: './call-jitsi.component.html',
-  styleUrls: ['./call-jitsi.component.scss'],
+  selector: 'app-create-jitsi-meet',
+  templateUrl: './create-jitsi-meet.component.html',
+  styleUrls: ['./create-jitsi-meet.component.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class CallJitsiComponent  implements OnInit {
-
+export class CreateJitsiMeetComponent  implements OnInit {
 
   domain: string = "meet.jit.si"; // For self hosted use your domain
   room: any;
@@ -28,39 +27,41 @@ export class CallJitsiComponent  implements OnInit {
   // For Custom Controls
   isAudioMuted = false;
   isVideoMuted = false;
-    
+
   constructor(
     private router: Router,
     private dataJitsiService: DataJitsiService
   ) { }
 
 
-
-  ngOnInit(): void {
-    this.room = this.dataJitsiService.room //'bwb-bfqi-vmh'; // Set your room name
-    this.user = {name : this.dataJitsiService.user} //{name: 'Paciente Trackr' }// Set your username
-    
+  ngOnInit() {
+    this.createNewRoom();
   }
 
-  ngAfterViewInit(): void {
-    this.options = {
-      roomName: this.room,
+  createNewRoom(): void {
+    // Generar un nuevo nombre de sala (puedes hacer esto de acuerdo a tus necesidades)
+    const newRoomName = 'nueva-sala-1982729u99' //+ Math.floor(Math.random() * 1000);
+
+    // Configuración para la nueva sala
+    const newRoomOptions = {
+      roomName: newRoomName,
       width: 900,
       height: 500,
       configOverwrite: { prejoinPageEnabled: false },
       interfaceConfigOverwrite: {
         // overwrite interface properties
       },
-      parentNode: document.querySelector('#jitsi-iframe'),
+      parentNode: document.querySelector('#jitsi-new-meet-iframe'),
       userInfo: {
-        displayName: this.user.name
+        displayName: "Trackr-web"
       }
-    }
+    };
 
-    this.api = new JitsiMeetExternalAPI(this.domain, this.options);
+    // Crear una nueva instancia de JitsiMeetExternalAPI para la nueva sala
+    const newRoomApi = new JitsiMeetExternalAPI(this.domain, newRoomOptions);
 
-    // Event handlers
-    this.api.addEventListeners({
+    // Event handlers para la nueva sala
+    newRoomApi.addEventListeners({
       readyToClose: this.handleClose,
       participantLeft: this.handleParticipantLeft,
       participantJoined: this.handleParticipantJoined,
@@ -69,6 +70,12 @@ export class CallJitsiComponent  implements OnInit {
       audioMuteStatusChanged: this.handleMuteStatus,
       videoMuteStatusChanged: this.handleVideoStatus
     });
+
+    // Puedes almacenar la información de la nueva sala o realizar otras acciones según tus necesidades
+    console.log('Nueva sala creada:', newRoomName);
+
+    // También puedes redirigir a la nueva sala si es necesario
+    // this.router.navigate(['/ruta-de-la-nueva-sala', newRoomName]);
   }
 
   handleClose = () => {
@@ -126,6 +133,5 @@ export class CallJitsiComponent  implements OnInit {
       this.isVideoMuted = !this.isVideoMuted;
     }
   }
-
 
 }
