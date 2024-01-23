@@ -245,5 +245,9 @@ export class MensajesComponent {
       this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
     } catch (err) { }
   }
+
+  eliminarArchivo(){
+    this.archivo = undefined;
+  }
   
 }

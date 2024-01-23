@@ -55,6 +55,9 @@
                 <div class="col-10" *ngIf="archivo">
                     {{archivo?.name}}
                 </div>
+                <div class="col-1" (click)="eliminarArchivo()" *ngIf="archivo">
+                    <button class="btn"><i class="fa fa-trash" style="font-size: 24px;"></i></button>
+                </div>
                 <div class="col-10">
                     <!-- <label class="label-input required-label" style="color: gray;" >Mensaje</label> -->
                     <div>
