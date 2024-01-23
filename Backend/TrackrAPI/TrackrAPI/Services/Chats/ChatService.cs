@@ -76,8 +76,7 @@ public class ChatService
                     if(persona != IdPersona)
                     {
                         var user = _usuarioRepository.Consultar(persona);
-                        chat.Titulo = "";
-                        chat.Titulo = user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno;
+                        chat.Titulo = user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno + " " + chat.Titulo;
                         var usuario = _usuarioRepository.ConsultarDto(persona);
                         if(usuario != null)
                         {

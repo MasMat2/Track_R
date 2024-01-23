@@ -9,6 +9,9 @@ import { lastValueFrom } from 'rxjs';
 import { UsuarioExpedienteSidebarDTO } from '@dtos/seguridad/usuario-expediente-sidebar-dto';
 import { EntidadEstructuraTablaValorService } from '@http/gestion-entidad/entidad-estructura-tabla-valor.service';
 import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { GestionAsistenteComponent } from './gestion-asistente/gestion-asistente.component';
+import { UsuarioService } from '@http/seguridad/usuario.service';
 
 @Component({
   selector: 'app-paciente',
@@ -19,6 +22,7 @@ export class PacienteComponent implements OnInit {
   protected pacientes: UsuarioExpedienteGridDTO[] = [];
   protected isVistaCuadricula: boolean = true;
   protected mostrarSidebar: boolean = false;
+  protected esAsistente : boolean | null = null;
   anchoContenedor: string = '100%';
   paciente: UsuarioExpedienteSidebarDTO = {
     idUsuario: 0,
@@ -77,10 +81,13 @@ export class PacienteComponent implements OnInit {
     private router: Router,
     private encryptionService: EncryptionService,
     private expedienteTrackrService: ExpedienteTrackrService,
-    private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService
+    private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
+    private modalService: BsModalService,
+    private usuarioService : UsuarioService
   ) {}
 
   ngOnInit(): void {
+    this.esAsistenteUsuario();
     this.consultarPacientes();
   }
 
@@ -130,6 +137,18 @@ export class PacienteComponent implements OnInit {
       '/administrador/gestion-paciente/paciente/expediente-formulario',
     ]);
   }
+  protected agregarAsistente(): void {
+    const initialState = {
+      esAsistente: this.esAsistente
+    };
+    const modalRef = this.modalService.show(
+      GestionAsistenteComponent,
+      {
+        initialState,
+        ...GeneralConstant.CONFIG_MODAL_MEDIUM
+      }
+    );
+  }
 
   protected eliminar(data: any): void {
     this.expedienteTrackrService.eliminar(data.idExpediente);
@@ -143,6 +162,7 @@ export class PacienteComponent implements OnInit {
     lastValueFrom(this.expedienteTrackrService.consultarParaGrid()).then(
       (pacientes: UsuarioExpedienteGridDTO[]) => {
         this.pacientes = pacientes;
+        console.log(this.pacientes);
       }
     );
   }
@@ -167,4 +187,12 @@ export class PacienteComponent implements OnInit {
       }
     );
   }
+
+  private esAsistenteUsuario()
+  {
+    this.usuarioService.esAsistente().subscribe((esAsistente) => {
+      this.esAsistente = esAsistente;
+    });
+  }
+
 }

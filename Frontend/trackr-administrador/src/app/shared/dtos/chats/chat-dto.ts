@@ -1,6 +1,7 @@
 export interface ChatDTO{
     idChat?: number;
     fecha: Date;
+    doctorAsociado?: string;
     habilitado: boolean;
     titulo?: string;
     ultimoMensaje?:string;
