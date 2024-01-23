@@ -65,10 +65,11 @@ public class ChatMensajeService
     {
         int? idArchivo = null;
         var idsPersonasChat = _chatPersonaRepository.ConsultarPersonasPorChat(mensaje.IdChat)
+                                                    .Where( cP => cP.IdPersona != mensaje.IdPersona)
                                                     .Select(x => x.IdPersona)
                                                     .Distinct()
                                                     .ToList();
-        var notificacion = new NotificacionDoctorCapturaDTO(mensaje.Mensaje , 2 , mensaje.IdPersona);
+        var notificacion = new NotificacionDoctorCapturaDTO(mensaje.Mensaje , 2 , mensaje.IdPersona,mensaje.IdPersona,mensaje.IdChat);
         
         _notificacionService.Notificar(notificacion, idsPersonasChat);
         

@@ -13,6 +13,7 @@ using TrackrAPI.Repositorys.GestionExpediente;
 using TrackrAPI.Repositorys.Inventario;
 using TrackrAPI.Repositorys.Seguridad;
 using TrackrAPI.Services.Dashboard;
+using TrackrAPI.Services.Seguridad;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace TrackrAPI.Services.GestionExpediente;
@@ -25,6 +26,7 @@ public class ExpedienteTrackrService
     private readonly IExpedientePadecimientoRepository _expedientePadecimientoRepository;
     private readonly UsuarioWidgetService _usuarioWidgetService;
     private readonly ExpedienteTrackrValidatorService _expedienteTrackrValidatorService;
+    private readonly IAsistenteDoctorRepository _asistenteDoctorRepository; 
 
     public ExpedienteTrackrService(
         IExpedienteTrackrRepository expedienteTrackrRepository,
@@ -32,7 +34,8 @@ public class ExpedienteTrackrService
         IUsuarioRepository usuarioRepository,
         IExpedientePadecimientoRepository expedientePadecimientoRepository,
         UsuarioWidgetService usuarioWidgetService,
-        ExpedienteTrackrValidatorService expedienteTrackrValidatorService
+        ExpedienteTrackrValidatorService expedienteTrackrValidatorService,
+        IAsistenteDoctorRepository asistenteDoctorRepository 
         )
     {
         this._expedienteTrackrRepository = expedienteTrackrRepository;
@@ -41,6 +44,7 @@ public class ExpedienteTrackrService
         this._expedientePadecimientoRepository = expedientePadecimientoRepository;
         _usuarioWidgetService = usuarioWidgetService;
         _expedienteTrackrValidatorService = expedienteTrackrValidatorService;
+        _asistenteDoctorRepository = asistenteDoctorRepository; 
     }
     /// <summary>
     /// Consulta el expediente de un usuario
@@ -170,9 +174,21 @@ public class ExpedienteTrackrService
         }
     }
 
-    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(int idDoctor)
+    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(int idUsuario , int idCompania)
     {
-        IEnumerable<UsuarioExpedienteGridDTO> expedientes = _expedienteTrackrRepository.ConsultarParaGrid(idDoctor);
+        List<int> idDoctorList = new();
+        var esAsistente = _usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente)
+                                                    .Any((usuario) => usuario.IdUsuario == idUsuario);
+
+        if(esAsistente){
+           idDoctorList = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idUsuario)
+                                                        .Select( ad => ad.IdUsuario).ToList(); 
+        }
+        else{
+            idDoctorList.Add(idUsuario);
+        }
+
+        IEnumerable<UsuarioExpedienteGridDTO> expedientes = _expedienteTrackrRepository.ConsultarParaGrid(idDoctorList);
         foreach(UsuarioExpedienteGridDTO expediente in expedientes)
         {
             if (!string.IsNullOrWhiteSpace(expediente.TipoMime))
@@ -192,6 +208,7 @@ public class ExpedienteTrackrService
                 expediente.VariablesFueraRango = _expedienteTrackrRepository.VariablesFueraRango(expediente.IdUsuario);
 
         }
+        expedientes = expedientes.OrderBy(e => e.DoctorAsociado);
         return expedientes;
     }
 
@@ -279,9 +296,21 @@ public class ExpedienteTrackrService
         return _expedienteTrackrRepository.ConsultarParaSidebar(idUsuario);
 
     }
-    public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor)
+    public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor , int idCompania)
     {
-        return _expedienteTrackrRepository.ApegoMedicamentoUsuarios(idDoctor);
+        List<int> idDoctorList = new();
+        var esAsistente = _usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente)
+                                                    .Any((usuario) => usuario.IdUsuario == idDoctor);
+
+        if(esAsistente){
+              idDoctorList = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idDoctor)
+                                                          .Select( ad => ad.IdUsuario).ToList(); 
+          }
+          else{
+                idDoctorList.Add(idDoctor);
+          }
+
+        return _expedienteTrackrRepository.ApegoMedicamentoUsuarios(idDoctorList);
     }
 
 }

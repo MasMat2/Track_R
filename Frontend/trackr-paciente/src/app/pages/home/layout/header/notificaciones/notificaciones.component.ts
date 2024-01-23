@@ -1,11 +1,12 @@
 import { CommonModule, NgClass, NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AlertController, IonicModule} from '@ionic/angular';
+import { AlertController, IonicModule, PopoverController } from '@ionic/angular';
 import { NotificacionPacienteHubService } from '@services/notificacion-paciente-hub.service';
 import { Observable , map} from 'rxjs';
 import { NotificacionPacientePopOverDto } from '../../../../../shared/Dtos/notificaciones/notificacion-paciente-popover-dto';
 import { NotificacionPacienteService } from '../../../../../shared/http/gestion-perfil/notificacion-paciente.service';
 import { GeneralConstant } from '@utils/general-constant';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-notificaciones',
@@ -25,7 +26,9 @@ export class NotificacionesComponent  implements OnInit
   
   constructor(private notificacionHubService : NotificacionPacienteHubService,
               private  notificacionPacienteService : NotificacionPacienteService,
-              private alertController : AlertController){}
+              private alertController : AlertController,
+              private router:Router,
+              private popOverController:PopoverController){}
 
   ngOnInit() 
   {
@@ -34,29 +37,35 @@ export class NotificacionesComponent  implements OnInit
 
   private consultarNotificaciones(): void {
     this.notificaciones$ = this.notificacionHubService.notificaciones$.pipe(
-      map((notificaciones) =>
-        notificaciones.map((notificacion) => ({
+      map((notificaciones) =>{
+          return notificaciones.map((notificacion) => ({
           idTipoNotificacion: notificacion.idTipoNotificacion,
           id: notificacion.idNotificacionUsuario,
           titulo: notificacion.titulo,
           mensaje: notificacion.mensaje,
           fecha: notificacion.fechaAlta,
           visto: notificacion.visto,
-        } as NotificacionPacientePopOverDto)) 
+          idChat: notificacion.idChat
+        } as NotificacionPacientePopOverDto)) }
       )
     );
   }
 
   protected async marcarComoVista(notificacion : NotificacionPacientePopOverDto) {
+    //http://localhost:8100/#/home/chat-movil/chat/340
     if(!notificacion.visto)
     {
       await this.notificacionHubService.marcarComoVista(notificacion.id);
       if(notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA)
       {
         await this.modalTomarToma(notificacion.mensaje);
-      }
-      this.consultarNotificaciones();
+      } 
     }
+    this.consultarNotificaciones();
+      if(notificacion.idChat !== null){
+        this.router.navigate(['home','chat-movil','chat',notificacion.idChat])
+        this.popOverController.dismiss();
+      }
   }
 
   iconMappings: any = {

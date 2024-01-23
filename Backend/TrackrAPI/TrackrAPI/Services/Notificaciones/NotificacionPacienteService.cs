@@ -32,7 +32,8 @@ public class NotificacionPacienteService
             notificacionDto.Mensaje,
             notificacionDto.FechaAlta,
             notificacionUsuarioDto.Visto,
-            notificacionDto.IdTipoNotificacion
+            notificacionDto.IdTipoNotificacion,
+            null
         );
     }
 

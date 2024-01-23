@@ -118,7 +118,9 @@ public class RecordatorioTomasService : IHostedService, IDisposable
             (
                 recordatorio.IdExpedienteTratamientoNavigation.Farmaco,
                 mensajeNotificacion,
-                6
+                6,
+                null,
+                null
             );
 
             var notificacionInsertada = await notificacionPacienteService.Notificar(notificacion , recordatorio.IdExpedienteTratamientoNavigation.IdExpedienteNavigation.IdUsuario);

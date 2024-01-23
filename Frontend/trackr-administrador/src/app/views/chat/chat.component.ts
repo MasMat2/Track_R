@@ -4,6 +4,7 @@ import { ChatHubServiceService } from '@services/chat-hub-service.service';
 import { Observable } from 'rxjs';
 import { ChatMensajeHubService } from '../../shared/services/chat-mensaje-hub.service';
 import { ChatMensajeDTO } from '@dtos/chats/chat-mensaje-dto';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
@@ -24,12 +25,24 @@ export class ChatComponent {
 
   constructor(
     private ChatHubServiceService:ChatHubServiceService,
-    private chatMensajeHubService:ChatMensajeHubService
+    private chatMensajeHubService:ChatMensajeHubService,
+    private route:ActivatedRoute
   ) { }
 
   ngOnInit(): void {
     this.obtenerChats();
-    this.obtenerMensajes();
+    //this.obtenerMensajes();
+  }
+
+  obtenerId(){
+    this.route.params.subscribe(params => {
+      const idChat = Number(params['id']);
+      if(!isNaN(idChat)){
+        this.idChatSeleccionado = idChat;
+        this.obtenerChatSeleccionado(idChat)
+        this.clickEnChat = true;
+      }
+    })
   }
 
   obtenerChats(){
@@ -37,6 +50,7 @@ export class ChatComponent {
     this.chats$.subscribe(res => {
       this.chats = res;
       this.obtenerUltimoMensaje();
+      this.obtenerMensajes();
     })
   }
 
@@ -46,6 +60,14 @@ export class ChatComponent {
     this.chatMensajes$.subscribe(res =>{
       this.mensajes = res;
       this.obtenerUltimoMensaje();
+      this.obtenerId();
+      // this.route.params.subscribe(params => {
+      //   const idChat = Number(params['id']);
+      //   if(idChat !== undefined){
+      //     this.idChatSeleccionado = idChat;
+      //     this.obtenerChatSeleccionado(idChat);
+      //   }
+      // })
     })
   }
 

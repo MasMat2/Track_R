@@ -23,6 +23,7 @@ namespace TrackrAPI.Repositorys.Seguridad
         public IEnumerable<UsuarioDto> ConsultarPorTipoUsuario(string claveTipoUsuario, int idCompania);
         public IEnumerable<UsuarioGridDto> ConsultarGeneral(int idCompania);
         public IEnumerable<UsuarioDto> ConsultarPorRol(string claveRol, int idCompania);
+        public IEnumerable<UsuarioDto> ConsultarPorPerfil(int idCompania , string clavePerfil);
         public IEnumerable<UsuarioDto> ConsultarPorRolActivosParaSelector(int rol, int idCompania, int idHospital);
         public IEnumerable<UsuarioDto> ConsultarPorRolCompaniaParaSelector(int rol, int idCompania);
         public bool TieneRol(string claveRol, int idUsuario);

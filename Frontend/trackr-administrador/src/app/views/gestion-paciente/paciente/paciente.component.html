@@ -151,8 +151,9 @@
         class="d-flex align-items-center justify-content-between"
         style="margin-left: 10px"
       >
-        <div class="contenedor-agregar justify-content-start" (click)="agregar()">
-          <button class="btn-agregar">Agregar Paciente</button>
+        <div class="contenedor-agregar justify-content-start" >
+          <button class="btn-agregar" (click)="agregar()">Agregar Paciente</button>
+          <button class="btn-terceario" (click)="agregarAsistente()" *ngIf="esAsistente !== null">{{ esAsistente  ? 'Mis doctores' : 'Agregar asistentes'}}</button>
         </div>
         <div class="justify-content-end">
           <div style="text-align: right">

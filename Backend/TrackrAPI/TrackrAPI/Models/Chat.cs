@@ -8,6 +8,7 @@ namespace TrackrAPI.Models
         public Chat()
         {
             ChatMensaje = new HashSet<ChatMensaje>();
+            Notificacion = new HashSet<Notificacion>();
         }
 
         public int IdChat { get; set; }
@@ -16,5 +17,6 @@ namespace TrackrAPI.Models
         public string? Titulo { get; set; }
 
         public virtual ICollection<ChatMensaje> ChatMensaje { get; set; }
+        public virtual ICollection<Notificacion> Notificacion { get; set; }
     }
 }

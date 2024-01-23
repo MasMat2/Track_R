@@ -139,7 +139,9 @@ namespace TrackrAPI.Services.GestionEntidad
 
                         "El paciente " + nombrePaciente + " ha registrado un valor fuera de rango en la variable " + nombreVariable + ".",
                         4,
-                        idUsuario
+                        idUsuario,
+                        idUsuario,
+                        null
                     );
                     await _notificacionDoctorService.Notificar(notificacion, idsDoctores);
                 }

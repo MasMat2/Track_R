@@ -39,6 +39,7 @@ namespace TrackrAPI.Services.Seguridad
         private ConfirmacionCorreoService _confirmacionCorreoService;
         private ExpedienteTrackrService _expedienteTrackrService;
         private UsuarioRolService _usuarioRolService;
+        private IAsistenteDoctorRepository _asistenteDoctorRepository;
 
 
         public UsuarioService(IUsuarioRepository usuarioRepository,
@@ -60,7 +61,8 @@ namespace TrackrAPI.Services.Seguridad
             RolService rolService,
             BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService,
             ConfirmacionCorreoService confirmacionCorreoService,
-            ExpedienteTrackrService expedienteTrackrService)
+            ExpedienteTrackrService expedienteTrackrService,
+            IAsistenteDoctorRepository asistenteDoctorRepository)
         {
             this.usuarioRepository = usuarioRepository;
             this.expedienteTrackrRepository = expedienteTrackrRepository;
@@ -81,6 +83,7 @@ namespace TrackrAPI.Services.Seguridad
             this.bitacoraMovimientoUsuarioService = bitacoraMovimientoUsuarioService;
             this._confirmacionCorreoService = confirmacionCorreoService;
             this._expedienteTrackrService = expedienteTrackrService;
+            _asistenteDoctorRepository = asistenteDoctorRepository;
         }
 
         public Usuario Consultar(int idUsuario)
@@ -436,6 +439,86 @@ namespace TrackrAPI.Services.Seguridad
             usuarioRepository.Editar(usuario);
         }
 
+        public IEnumerable<UsuarioDto> ConsultarAsistentes(int idCompania)
+        {
+            var asistentes =  usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente);
+
+            foreach(var asistente in asistentes)
+            {
+                if (!string.IsNullOrEmpty(asistente.ImagenTipoMime))
+                {
+                    string filePath = $"Archivos/Usuario/{asistente.IdUsuario}{MimeTypeMap.GetExtension(asistente.ImagenTipoMime)}";
+                    if (File.Exists(filePath))
+                    {
+                        byte[] imageArray = File.ReadAllBytes(filePath);
+                        asistente.ImagenBase64 = Convert.ToBase64String(imageArray);
+                        asistente.ImagenTipoMime = asistente.ImagenTipoMime;
+                    }
+                }
+            }
+
+            return asistentes;
+        }
+
+        public IEnumerable<AsistenteDoctorDto> ConsultarAsistentePorDoctor(int idDoctor)
+        {
+            var asistentes =  _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(idDoctor);
+
+            foreach(var asistente in asistentes)
+            {
+                if (!string.IsNullOrEmpty(asistente.ImagenTipoMime))
+                {
+                    string filePath = $"Archivos/Usuario/{asistente.IdUsuario}{MimeTypeMap.GetExtension(asistente.ImagenTipoMime)}";
+                    if (File.Exists(filePath))
+                    {
+                        byte[] imageArray = File.ReadAllBytes(filePath);
+                        asistente.ImagenBase64 = Convert.ToBase64String(imageArray);
+                        asistente.ImagenTipoMime = asistente.ImagenTipoMime;
+                    }
+                }
+            }
+
+
+            return asistentes;
+        }
+
+        public IEnumerable<AsistenteDoctorDto> ConsultarDoctoresPorAsistente(int idAsistente)
+        {
+            var doctores =  _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idAsistente);
+
+            foreach(var doctor in doctores)
+            {
+                if (!string.IsNullOrEmpty(doctor.ImagenTipoMime))
+                {
+                    string filePath = $"Archivos/Usuario/{doctor.IdUsuario}{MimeTypeMap.GetExtension(doctor.ImagenTipoMime)}";
+                    if (File.Exists(filePath))
+                    {
+                        byte[] imageArray = File.ReadAllBytes(filePath);
+                        doctor.ImagenBase64 = Convert.ToBase64String(imageArray);
+                        doctor.ImagenTipoMime = doctor.ImagenTipoMime;
+                    }
+                }
+            }
+
+            return doctores;
+        }
+
+        public void AgregarAsistente(int idUsuario , int idAsistente)
+        {
+            var asistente = new AsistenteDoctor()
+            {
+                IdAsistente = idAsistente,
+                IdDoctor = idUsuario
+            };
+            _asistenteDoctorRepository.Agregar(asistente);
+        }
+
+        public void EliminarAsistente(int idAsistenteDoctor)
+        {
+            var asistente = _asistenteDoctorRepository.Consultar(idAsistenteDoctor);
+            _asistenteDoctorRepository.Eliminar(asistente);
+        }
+
         public IEnumerable<UsuarioGridDto> ConsultarGeneral(int idCompania)
         {
             return usuarioRepository.ConsultarGeneral(idCompania);
@@ -758,6 +841,16 @@ namespace TrackrAPI.Services.Seguridad
         public UsuarioDomicilioDto ConsultaDomicilioPorId(int idUsuario)
         {
            return usuarioRepository.ConsultaDomicilioPorId(idUsuario);
+        }
+
+        public bool EsAsistente(int idCompania , int idUsuario)
+        {
+            return usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente).Any((usuario) => usuario.IdUsuario == idUsuario);
+        }
+
+        public bool EsMedico(int idCompania , int idUsuario)
+        {
+            return usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilMedico).Any( (usuario) => usuario.IdUsuario == idUsuario);
         }
 
     }

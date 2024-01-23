@@ -10,6 +10,8 @@ import { ChatDTO } from '@dtos/chats/chat-dto';
 import { SessionService } from '../../../shared/services/session.service';
 import { ChatPersonaService } from '../../../shared/http/chats/chat-persona.service';
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import { UsuarioService } from '@http/seguridad/usuario.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-crear-chat',
@@ -21,23 +23,52 @@ export class CrearChatComponent {
   protected padecimientos: ExpedientePadecimientoSelectorDTO[];
   protected expedientes: UsuarioExpedienteGridDTO[];
   protected padecimiento: number;
-  protected personas: number[];
+  protected personas: number[] = [];
   protected tituloChat?: string;
   private idUsuario: number;
   protected idPacientesPadecimiento:number[];
+  protected mismoDoctor: boolean = true;
+  protected nombreDoctor: string;
+
 
   constructor(private entidadEstructuraService:EntidadEstructuraService,
               private expedienteTrackrService:ExpedienteTrackrService,
               private ChatHubServiceService:ChatHubServiceService,
               private SessionService:SessionService,
               private ChatPersonaService:ChatPersonaService,
-              private modal:BsModalRef) {}
+              private modal:BsModalRef,
+              private usuarioService : UsuarioService) {}
 
   
   ngOnInit(){
     this.obtenerPacientes();
     this.obtenerPadecimientos();
     this.obtenerIdUsario()
+  }
+
+  esAsistente()
+  {
+    return lastValueFrom(this.usuarioService.esAsistente());
+  }
+
+  public tieneMismoDoctor(): boolean {
+      console.log(this.personas.length)
+      // Obtén el doctorAsociado del primer idUsuario seleccionado
+      const expedienteInicial = this.expedientes.find(expediente => expediente.idUsuario === this.personas[0]);
+      if (!expedienteInicial) 
+      {
+        return false; 
+      }
+      this.nombreDoctor = expedienteInicial.doctorAsociado;
+
+      // Verifica si todos los idUsuario seleccionados tienen el mismo doctorAsociado
+      return this.personas.every(idUsuario => 
+        {
+        const expediente = this.expedientes.find(e => e.idUsuario === idUsuario);
+        this.mismoDoctor = expediente ? expediente.doctorAsociado === this.nombreDoctor : false;
+        return this.mismoDoctor;
+      });
+  
   }
 
   obtenerPadecimientos(){
@@ -58,10 +89,16 @@ export class CrearChatComponent {
     })
   }
 
-  crearChat(){
+  async crearChat(){
     if(this.tituloChat === ""){
       this.tituloChat = undefined;
     }
+    var esAsistente = await this.esAsistente();
+
+    if(esAsistente){
+      this.tituloChat = "- Auxiliar " + this.nombreDoctor;
+    }
+
     if(this.tipo == 3){
       this.personas.push(this.idUsuario)
     let chat: ChatDTO ={
@@ -106,13 +143,20 @@ export class CrearChatComponent {
   }
 
   campoVacio(){
-    if(!this.tituloChat){
-      return true;
+    if(this.personas.length > 1)
+    {
+      if(!this.tituloChat){
+        return true;
+      }
+      if(this.tituloChat == ''){
+        return true
+      }
+      return false;
     }
-    if(this.tituloChat == ''){
-      return true
-    }
-    return false;
+    else if(this.personas.length == 0)
+        return true;
+      else
+        return false;
   }
 
   deshabilitarBtn(){
