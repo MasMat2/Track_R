@@ -26,59 +26,14 @@ import { WidgetType } from './interfaces/widgets';
     CommonModule,
     FormsModule,
     HeaderComponent,
-    WidgetPasosComponent,
-    WidgetPesoComponent,
-    WidgetSuenoComponent,
-    WidgetFrecuenciaComponent,
-    WidgetSeguimientoComponent,
     RouterModule,
-    SeguimientoPadecimientoComponent,
-    WidgetContainerComponent,
   ],
-  providers: [
-    UsuarioWidgetService,
-    WidgetService
-  ]
 })
 export class DashboardPage implements OnInit {
 
-  protected selectedUserWidgets: WidgetType[] = [];
-  protected padecimientosUsuarioList : UsuarioPadecimientosDTO[];
-  protected padecimientosList : PadecimientoDTO[];
-
   constructor(
-    private widgetService : WidgetService,
-    private usuarioWidgetService: UsuarioWidgetService,
-    private router: Router
   ) { }
 
   public ngOnInit(): void {
-  
   }
-
-  public ionViewWillEnter() : void {
-    this.consultarWidgetsSeguimiento();
-    this.consultarWidgets();
-  }
-
-  public consultarWidgetsSeguimiento(){
-    this.widgetService.consultarPadecimientos().subscribe((data) => {
-      this.padecimientosUsuarioList = data;
-      this.padecimientosList = this.padecimientosUsuarioList[0].secciones;
-    });
-  }
-
-  public consultarWidgets(){
-    this.usuarioWidgetService.consultarPorUsuarioEnSesion().subscribe(
-      (data) => {
-        this.selectedUserWidgets = data;
-      }
-    );
-  }
-
-  protected mostrarSeguimiento(idPadecimiento: any){
-    this.router.navigate(['home/perfil/seguimiento', idPadecimiento]);
-  }
-
-
 }

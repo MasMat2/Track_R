@@ -17,6 +17,7 @@ export const ALL_WIDGET_TYPES = [
   'A003',
   'D001',
   'D002',
+  'D003',
   'D004'
 
 ] as const;
@@ -48,6 +49,7 @@ export const WIDGETS: WidgetDictionary = {
   'A003' : {class: WidgetSeguimientoComponent, columns: 12},
   'D001' : {class: WidgetSeguimientoComponent, columns: 12},
   'D002' : {class: WidgetSeguimientoComponent, columns: 12},
+  'D003' : {class: WidgetSeguimientoComponent, columns: 12},
   'D004' : {class: WidgetSeguimientoComponent, columns: 12},
 
 };

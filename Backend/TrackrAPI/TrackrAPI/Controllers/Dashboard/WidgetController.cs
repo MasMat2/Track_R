@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Services.Dashboard;
+using TrackrAPI.Services.GestionExpediente;
 
 namespace TrackrAPI.Controllers.Dashboard;
 
@@ -36,5 +38,13 @@ public class WidgetController : ControllerBase
     public IEnumerable<TipoWidget> ConsultarTipo()
     {
         return _widgetService.ConsultarTipo();
+    }
+
+
+    [HttpGet("configuracionDashboard/widgets")]
+    public IEnumerable<Widget> ConsultarWidgetsConfiguracionDashboardPorUsuario()
+    {
+        int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+        return _widgetService.WidgetsDisponiblesPorUsuario(idUsuario);
     }
 }

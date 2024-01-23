@@ -102,5 +102,16 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                 .Distinct()
                 .ToList();
         }
+
+        public IEnumerable<Widget> ConsultarWidgetsSeguimientoPadecimientoPorUsuario(int idUsuario)
+        {
+
+            return context.ExpedientePadecimiento
+                .Include(ep => ep.IdPadecimientoNavigation.Widget)
+                .Where(ep => ep.IdExpedienteNavigation.IdUsuario == idUsuario).
+                Select(w => w.IdPadecimientoNavigation.Widget.SingleOrDefault());
+                
+
+        }
     }
 }

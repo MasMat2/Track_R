@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 
 namespace TrackrAPI.Repositorys.Dashboard;
@@ -24,6 +25,11 @@ public class WidgetRepository : Repository<Widget>, IWidgetRepository
     public Widget consultarPorClave(string clave)
     {
         return context.Widget.Where(w => w.Clave.Equals(clave)).FirstOrDefault();
+    }
+
+    public IEnumerable<Widget> ConsultarDefault()
+    {
+        return context.Widget.Where(w => GeneralConstant.WidgetsDefault.Contains(w.Clave));
     }
 
 
