@@ -43,7 +43,8 @@ export class MensajesComponent {
   //Variables para el audio
   protected isAudio:boolean = false;
   protected grabacionIniciada: boolean = false;
-  protected audio?:string;
+  protected audio?:string = '';
+  protected audio2?:string;
 
   constructor(
     private ChatMensajeHubService: ChatMensajeHubService,
@@ -101,6 +102,14 @@ export class MensajesComponent {
       msg.nombre = this.archivo.name;
     }
 
+    if(this.audio != ''){
+      msg.archivo = this.audio;
+      msg.archivoNombre = `audio-${Date.now()}.wav`
+      msg.archivoTipoMime = "audio/wav"
+      msg.fechaRealizacion = new Date();
+      msg.nombre = `audio-${Date.now()}.wav`
+    }
+
     this.ChatMensajeHubService.enviarMensaje(msg);
     if(this.mensajes.length == 0){
       this.ChatMensajeHubService.chatMensaje$.subscribe(res => {
@@ -110,6 +119,9 @@ export class MensajesComponent {
     this.msg = "";
 
     this.archivo = undefined;
+    this.audio = '';
+    this.audio2 = '';
+    this.isAudio = false;
   }
 
   obtenerIdUsuario() {
@@ -290,9 +302,10 @@ export class MensajesComponent {
       return;
     }
     VoiceRecorder.stopRecording().then(audio => {
+      this.grabacionIniciada = false;
       if(audio.value){
-        this.audio = "data:audio/wav;base64,"+audio.value.recordDataBase64;
-        console.log(this.audio)
+        this.audio = audio.value.recordDataBase64;
+        this.audio2 = 'data:audio/wav;base64,' + audio.value.recordDataBase64;
       }
     })
   }
