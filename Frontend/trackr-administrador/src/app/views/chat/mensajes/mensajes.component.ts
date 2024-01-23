@@ -44,6 +44,12 @@ export class MensajesComponent {
   }
 
   async enviarMensaje(): Promise<void>{
+    const regex = /^\n+$/;
+    if(regex.test(this.msg)){
+      this.msg = '';
+      return;
+    }
+    
     let msg: ChatMensajeDTO = {
       fecha: new Date(),
       idChat: this.idChat,

@@ -74,9 +74,9 @@
                         required
                         (keyup.enter)="enviarMensaje()"
                     ></textarea>
-                    <div *ngIf="(descripcion.errors?.['required'] && descripcion.touched )" class="error">
+                    <!-- <div *ngIf="(descripcion.errors?.['required'] && descripcion.touched )" class="error">
                         La descripción es requerida
-                    </div>
+                    </div> -->
                     </div>
                 </div>
     
@@ -85,6 +85,7 @@
                     type="submit"
                     class="btn"
                     (click)="enviarMensaje()"
+                    [disabled]="msg == '' || msg == undefined"
                     >
                         <i class="fa fa-paper-plane" style="font-size: 24px;"></i> 
                     </button>
