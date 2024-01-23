@@ -13,6 +13,9 @@ import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-s
 import { ArchivoService } from '../../../../shared/http/archivo/archivo.service';
 import { ArchivoFormDTO } from '../../../../shared/Dtos/archivos/archivo-form-dto';
 
+//Libreria de capacitor para grabar audio
+import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder';
+
 @Component({
   selector: 'app-mensajes',
   templateUrl: './mensajes.component.html',
@@ -37,6 +40,11 @@ export class MensajesComponent {
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('scrollContainer') private scrollContainer: ElementRef;
 
+  //Variables para el audio
+  protected isAudio:boolean = false;
+  protected grabacionIniciada: boolean = false;
+  protected audio?:string;
+
   constructor(
     private ChatMensajeHubService: ChatMensajeHubService,
     private ChatPersonaService: ChatPersonaService,
@@ -49,6 +57,7 @@ export class MensajesComponent {
   ionViewWillEnter() {
     this.obtenerIdUsuario();
     this.obtenerIdChat();
+    this.solicitarPermisos();
   }
 
   obtenerIdChat(){
@@ -255,5 +264,37 @@ export class MensajesComponent {
   eliminarArchivo(){
     this.archivo = undefined;
   }
+
+  changeAudio(){
+    this.isAudio = !this.isAudio;
+  }
   
+  solicitarPermisos(){
+    VoiceRecorder.hasAudioRecordingPermission().then(permision => {
+      if(!permision.value){
+        VoiceRecorder.requestAudioRecordingPermission();
+      }
+    })
+  }
+
+  grabar(){
+    if(this.grabacionIniciada){
+      return;
+    }
+    this.grabacionIniciada = true;
+    VoiceRecorder.startRecording();
+  }
+
+  detenerGrabacion(){
+    if(!this.grabacionIniciada){
+      return;
+    }
+    VoiceRecorder.stopRecording().then(audio => {
+      if(audio.value){
+        this.audio = "data:audio/wav;base64,"+audio.value.recordDataBase64;
+        console.log(this.audio)
+      }
+    })
+  }
+
 }
