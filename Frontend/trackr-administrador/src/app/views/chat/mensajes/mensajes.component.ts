@@ -6,6 +6,10 @@ import { ChatPersonaSelectorDTO } from '@dtos/chats/chat-persona-selector-dto';
 import { ArchivoService } from '../../../shared/http/archivo/archivo.service';
 import { ArchivoFormDTO } from '@dtos/archivos/archivo-form-dto';
 
+//Libreria de capacitor para grabar audio
+import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder';
+
+
 @Component({
   selector: 'app-mensajes',
   templateUrl: './mensajes.component.html',
@@ -23,6 +27,12 @@ export class MensajesComponent {
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('scrollContainer') private scrollContainer: ElementRef;
 
+  //Variables para el audio
+  protected isAudio:boolean = false;
+  protected grabacionIniciada: boolean = false;
+  protected audio?:string = '';
+  protected audio2?:string;
+
   constructor(private ChatMensajeHubService:ChatMensajeHubService,
               private ChatPersonaService:ChatPersonaService,
               private ArchivoService:ArchivoService) {}
@@ -30,6 +40,7 @@ export class MensajesComponent {
   ngOnInit(){
     this.obtenerIdUsuario();
     this.obtenerPersonasEnChat();
+    this.solicitarPermisos();
   }
 
   ngOnChanges(){
@@ -70,6 +81,14 @@ export class MensajesComponent {
       msg.nombre = this.archivo.name;
     }
 
+    if(this.audio != ''){
+      msg.archivo = this.audio;
+      msg.archivoNombre = `audio-${Date.now()}.wav`
+      msg.archivoTipoMime = "audio/wav"
+      msg.fechaRealizacion = new Date();
+      msg.nombre = `audio-${Date.now()}.wav`
+    }
+
     this.ChatMensajeHubService.enviarMensaje(msg);
     if(this.mensajes.length == 0){
       this.ChatMensajeHubService.chatMensaje$.subscribe(res => {
@@ -79,6 +98,10 @@ export class MensajesComponent {
     this.msg = "";
 
     this.archivo = undefined;
+
+    this.audio = '';
+    this.audio2 = '';
+    this.isAudio = false;
 
   }
 
@@ -220,4 +243,38 @@ export class MensajesComponent {
   eliminarArchivo(){
     this.archivo = undefined;
   }
+
+  changeAudio(){
+    this.isAudio = !this.isAudio;
+  }
+
+  solicitarPermisos(){
+    VoiceRecorder.hasAudioRecordingPermission().then(permision => {
+      if(!permision.value){
+        VoiceRecorder.requestAudioRecordingPermission();
+      }
+    })
+  }
+
+  grabar(){
+    if(this.grabacionIniciada){
+      return;
+    }
+    this.grabacionIniciada = true;
+    VoiceRecorder.startRecording();
+  }
+
+  detenerGrabacion(){
+    if(!this.grabacionIniciada){
+      return;
+    }
+    VoiceRecorder.stopRecording().then(audio => {
+      this.grabacionIniciada = false;
+      if(audio.value){
+        this.audio = audio.value.recordDataBase64;
+        this.audio2 = 'data:audio/wav;base64,' + audio.value.recordDataBase64;
+      }
+    })
+  }
+
 }
