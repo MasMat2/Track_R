@@ -16,6 +16,10 @@ import { ArchivoFormDTO } from '../../../../shared/Dtos/archivos/archivo-form-dt
 //Libreria de capacitor para grabar audio
 import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder';
 
+//Escribir archivos
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
+
+
 @Component({
   selector: 'app-mensajes',
   templateUrl: './mensajes.component.html',
@@ -52,7 +56,7 @@ export class MensajesComponent {
     private router: ActivatedRoute,
     private route: Router,
     private ChatHubServiceService:ChatHubServiceService,
-    private ArchivoService:ArchivoService
+    private ArchivoService:ArchivoService,
   ) {}
 
   ionViewWillEnter() {
@@ -222,7 +226,29 @@ export class MensajesComponent {
     });
   }
 
-  downloadFile(fileBase64:string,nombre?:string,mime?:string) {
+  async downloadFile(fileBase64: string, nombre?: string, mime?: string) {
+    try {
+
+      let downloadDirectory = Directory.Documents
+      // Crear un archivo en el sistema de archivos
+      const result = await Filesystem.writeFile({
+        path: nombre || '',
+        data: fileBase64,
+        directory: Directory.Documents,
+        //encoding: Encoding.UTF8,
+      });
+  
+      // Obtener la URL del archivo creado
+      const url = result.uri;
+  
+      console.log(url)
+  
+    } catch (error) {
+      console.error('Error al descargar el archivo:', error);
+    }
+  }
+
+  /*downloadFile(fileBase64:string,nombre?:string,mime?:string) {
     // Decodificar la cadena Base64
     const decodedData = atob(fileBase64);
 
@@ -250,7 +276,7 @@ export class MensajesComponent {
 
     // Limpiar el object URL después de la descarga
     URL.revokeObjectURL(url);
-  }
+  }*/
 
   openFileInput(): void {
     this.fileInput.nativeElement.click();
