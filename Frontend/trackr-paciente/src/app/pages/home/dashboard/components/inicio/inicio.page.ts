@@ -72,7 +72,6 @@ export class InicioPage implements OnInit {
     this.widgetService.consultarPadecimientos().subscribe((data) => {
       this.padecimientosUsuarioList = data;
       this.padecimientosList = this.padecimientosUsuarioList[0].secciones;
-      console.log(this.padecimientosList);
     });
   }
 
