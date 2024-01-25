@@ -46,9 +46,10 @@ export class ConfiguracionDashboardPage  implements OnInit {
   }
 
   private consultarWidgets(){
+    const widgets$ = this.widgetService.consultarWidgetsSeguimientoUsuario();
 
-    const widgets$ = this.widgetService.consultar();
     const usuarioWidgets$ = this.usuarioWidgetService.consultarPorUsuarioEnSesion();
+
     const widgetsSeleccionados$ = widgets$.pipe(
       combineLatestWith(usuarioWidgets$),
       map(([widgets, usuarioWidgets]) => {

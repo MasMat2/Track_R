@@ -12,4 +12,6 @@ public interface IWidgetRepository : IRepository<Widget>
     public IEnumerable<Widget> ConsultarTodos();
 
     public Widget consultarPorClave(string clave);
+
+    public IEnumerable<Widget> ConsultarDefault();
 }

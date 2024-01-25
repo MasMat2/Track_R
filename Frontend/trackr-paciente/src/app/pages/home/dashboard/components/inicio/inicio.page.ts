@@ -55,20 +55,20 @@ export class InicioPage implements OnInit {
     private notificacionPacienteService : NotificacionPacienteService
   ) { 
     this.notificacionPacienteService.actualizarWidgets$.subscribe(() => {
-      this.consultarWidgetsSeguimiento();
+      this.consultarInfoWidgetsSeguimiento();
     })
   }
 
   ngOnInit() {
-    
+
   }
 
   public ionViewWillEnter(){
-    this.consultarWidgetsSeguimiento();
+    //this.consultarInfoWidgetsSeguimiento();
     this.consultarWidgets();
   }
 
-  public consultarWidgetsSeguimiento(){
+  public consultarInfoWidgetsSeguimiento(){
     this.widgetService.consultarPadecimientos().subscribe((data) => {
       this.padecimientosUsuarioList = data;
       this.padecimientosList = this.padecimientosUsuarioList[0].secciones;

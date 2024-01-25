@@ -69,9 +69,13 @@ Al utilizar esta aplicación, aceptas estos Términos y Condiciones. Si tienes a
 
   private agregar(){
     this.usuarioService.agregarTrackr(this.usuario).subscribe({
-      next: () => {
-        this.presentAlert();
+      error: ()=> {
+        this.usuario.nombreUsuario = "";
         this.submitting = false;
+      },
+      complete: ()=> {
+        this.submitting = false;
+        this.presentAlert();
       }
     })
   }

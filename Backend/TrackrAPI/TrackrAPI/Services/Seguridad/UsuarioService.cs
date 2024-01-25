@@ -300,6 +300,7 @@ namespace TrackrAPI.Services.Seguridad
         {
             using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
             {
+
                 var usuario = new Usuario()
                 {
                     Nombre = usuarioDto.Nombres,
@@ -316,7 +317,9 @@ namespace TrackrAPI.Services.Seguridad
                     CorreoConfirmado = false,
                     Habilitado = true,
                     
-            };
+                };
+
+                usuarioValidatorService.ValidarDuplicados(usuario);
 
                 string contrasenaEncriptada;
                 if (usuarioDto.Contrasena == null || usuarioDto.Contrasena == "")

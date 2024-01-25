@@ -8,15 +8,16 @@ import { WidgetSeguimientoComponent } from "../components/widget-seguimiento/wid
 // Todos los tipos de widgets posibles
 //Claves provisionales aquí y en la BD
 export const ALL_WIDGET_TYPES = [
-  'w-pas',
-  'w-pes',
-  'w-sue',
   'w-fre',
+  'w-pas',
+  'w-sue',
+  'w-pes',
   'A001',
   'A002',
   'A003',
   'D001',
   'D002',
+  'D003',
   'D004'
 
 ] as const;
@@ -39,15 +40,20 @@ export type WidgetDefinition = {
 export type WidgetDictionary = Record<WidgetType, WidgetDefinition>;
 
 export const WIDGETS: WidgetDictionary = {
-  'w-pas': { class: WidgetPasosComponent, columns: 8 },
-  'w-pes': { class: WidgetPesoComponent, columns: 4 },
-  'w-fre' : {class: WidgetFrecuenciaComponent, columns: 4},
-  'w-sue': {class: WidgetSuenoComponent, columns: 8},
+  /* 
+  Para cambiar el orden de los widgets 
+  se modificó el orden en el que aparecen en la tabla trackr.widget 
+  */
+  'w-fre': {class: WidgetFrecuenciaComponent, columns: 6},
+  'w-pas': { class: WidgetPasosComponent, columns: 6 },
+  'w-sue' : {class: WidgetSuenoComponent, columns: 7},
+  'w-pes': { class: WidgetPesoComponent, columns: 5 },
   'A001' : {class: WidgetSeguimientoComponent, columns: 12},
   'A002' : {class: WidgetSeguimientoComponent, columns: 12},
   'A003' : {class: WidgetSeguimientoComponent, columns: 12},
   'D001' : {class: WidgetSeguimientoComponent, columns: 12},
   'D002' : {class: WidgetSeguimientoComponent, columns: 12},
+  'D003' : {class: WidgetSeguimientoComponent, columns: 12},
   'D004' : {class: WidgetSeguimientoComponent, columns: 12},
 
 };

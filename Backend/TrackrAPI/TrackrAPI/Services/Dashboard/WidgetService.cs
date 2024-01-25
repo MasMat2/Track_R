@@ -72,9 +72,9 @@ public class WidgetService
                     TomasTomadas = tomasTomadas,
                     TomasTotales = tomasTotales
                 };
-            }
-
-            ).ToList()
+            })
+            .Where(s => s.Variables.Count() != 0) //No mostrar en dashboard si aún no hay registros clinicos
+            .ToList()
         })
         .ToList();
 
@@ -136,4 +136,16 @@ public class WidgetService
 
         return widget != null;
     }
+
+
+    public IEnumerable<Widget> WidgetsDisponiblesPorUsuario(int idUsuario)
+    {
+        var widgetsDefault = _widgetRepository.ConsultarDefault();
+        var widgetsPadecimientosUsuario = _expedientePadecimientoRepository.ConsultarWidgetsSeguimientoPadecimientoPorUsuario(idUsuario);
+        
+        //Widgets predeterminados + widgets de los padecimientos que tenga el usuario:
+        return widgetsDefault.Concat(widgetsPadecimientosUsuario);
+    }
+
+    
 }

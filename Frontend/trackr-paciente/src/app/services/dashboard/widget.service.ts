@@ -29,4 +29,9 @@ export class WidgetService {
   public consultarPadecimientos() :  Observable<UsuarioPadecimientosDTO[]>{
     return this.http.get<UsuarioPadecimientosDTO[]>(this.dataUrl);
   }
+
+  public consultarWidgetsSeguimientoUsuario() :  Observable<Widget[]>{
+    return this.http.get<Widget[]>(this.dataUrl + 'configuracionDashboard/widgets');
+  }
+
 }

@@ -35,7 +35,21 @@
 
     <div class="final">
       <div class="form-group">
-        <div class="row">
+        
+
+      <div class="row" *ngIf="isAudio">
+        <div class="col-2">
+          <button class="btn"><i class="fa fa-microphone" style="font-size: 24px;" (click)="grabar()"></i></button>
+        </div>
+        <div class="col-2">
+          <button class="btn"><i class="fa fa-stop" style="font-size: 24px;" (click)="detenerGrabacion()"></i></button>
+        </div>
+        <div class="col-5">
+          <audio controls [src]="audio2"></audio>
+        </div>
+      </div>
+
+      <div class="row">
             <div class="col-2">
               <button class="btn" (click)="openFileInput()"><i class="fa fa-file" style="font-size: 24px;"></i></button>
               <input type="file" id="fileInput" #fileInput style="display: none" (change)="onFileSelected($event)" />
@@ -44,7 +58,14 @@
           <div class="col-8" *ngIf="archivo">
             {{archivo?.name}}
         </div>
-          <div class="col-8">
+        <div class="col-2" (click)="eliminarArchivo()" *ngIf="archivo">
+          <button class="btn"><i class="fa fa-trash" style="font-size: 24px;"></i></button>
+      </div>
+
+      <div class="col-2">
+        <button class="btn"><i class="fa fa-microphone" style="font-size: 24px;" (click)="changeAudio()"></i></button>
+      </div>
+          <div class="col-6">
             <!-- <label class="label-input required-label" style="color: gray"
               >Mensaje</label
             > -->
@@ -62,18 +83,18 @@
                 required
                 (keyup.enter)="enviarMensaje()"
               ></textarea>
-              <div
+              <!-- <div
                 *ngIf="(descripcion.errors?.['required'] && descripcion.touched )"
                 class="error"
               >
                 La descripción es requerida
-              </div>
+              </div> -->
             </div>
           </div>
 
           <div class="col-2">
             <div class="form-group">
-              <button type="submit" class="btn boton" (click)="enviarMensaje()">
+              <button type="submit" class="btn boton" (click)="enviarMensaje()" [disabled]="msg === '' || msg === undefined">
                 <i class="fa fa-paper-plane" style="font-size: 24px"></i>
               </button>
             </div>
