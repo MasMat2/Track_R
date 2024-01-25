@@ -1,52 +1,55 @@
+@import "../../../../../theme/variables.scss";
+
 .footer{
-
   ion-tab-bar {
-    //bottom: 20px;
-    width: 100%;
+      contain: size layout style  !important; //necesario para que el tab central pueda sobresalir
+      position: absolute;
+      bottom: 0;
+      border-radius: 20px 20px 0 0;
+      width: 100%;
+      height: 8.7vh;
+
+      ion-tab-button:not(.tab-central){ //todos los tabs excepto el central
+        --background: transparent;
+        --color-selected: var(--primary-700);
+      }
+
+      .tab-central{
+        --background: var(--primary-700);
+        --color: white;
+        --color-selected: white;
+        height: 6vh;
+        max-width: 6vh;
+        border-radius: 50%;
+        margin-top: -4vh;
+      }
   }
 
-  ion-icon{
-    width: 60%;
-  }
 
-  ion-tab-button{
-    width: 17%;
-    font-size: 2.6vw;
-  }
 }
 
- ion-toolbar {
-    --background:#F2F2F2;
-}
 
-ion-icon {
-    color: #BFBFBF;
-}
 
-ion-action-sheet.rojo .action-sheet-group {
-  background: red;
-}
 
-// Establecer el color de fondo de la hoja de acción
-ion-action-sheet {
-  --background: rgba(255, 255, 255, 0.9);
-}
 
-// Establecer el color del texto de los botones de la hoja de acción
-ion-action-sheet {
-  --button-color: #333;
-  --button-color-hover: #007bff;
-  --button-color-activated: #007bff;
-  --button-background-hover: #007bff;
-  --button-background-activated: #007bff;
-}
 
-// Establecer el color del texto del botón destrutivo
-ion-action-sheet {
-  --destructive-color: #ff3b30;
-  --destructive-color-hover: #fff;
-  --destructive-color-activated: #fff;
-  --destructive-background-hover: #ff3b30;
-  --destructive-background-activated: #ff3b30;
-}
+
+// ion-tab-bar {
+//   //contain: none;
+//   contain: size layout style  !important;
+//   --border-radius: 20px 20px 0 0;
+//   --border: 2px solid black;
+// }
+
+// ion-tab-bar ion-tab-button:nth-child(2) {
+//   --background: #1b8472;
+//   --color: rgba(255, 255, 255, .6);
+//   --color-selected: #ffffff;
+
+//   border-radius: 50%;
+//   max-width: 80px;
+//   height: 80px;
+  
+//   margin-top: -40px;
+// }
 
