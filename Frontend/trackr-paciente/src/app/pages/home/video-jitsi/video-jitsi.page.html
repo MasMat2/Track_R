@@ -1,6 +1,4 @@
-<ion-header>
-  <app-header></app-header>
-</ion-header>
+
 
 <ion-content [fullscreen]="true">
   <ion-item>
@@ -15,10 +13,12 @@
 
   <ion-button expand="full" (click)="submitForm()">Entrar</ion-button>
   <ion-button expand="full" (click)="newMeetJitsi()">Nuevo meet</ion-button>
+  <!--ion-button size="small" id="webcamButton" (click)="webcamButton()">Iniciar webcam</ion-button-->
 
-  <app-create-jitsi-meet *ngIf="newMeet"></app-create-jitsi-meet>
 
-  <app-call-jitsi *ngIf="jitsiDataUp"></app-call-jitsi>
+  <app-create-jitsi-meet *ngIf="newMeet" style="width: 50%; height: 100%;"></app-create-jitsi-meet>
+
+  <app-call-jitsi *ngIf="jitsiDataUp" style="width: 100%; height: 100%;"></app-call-jitsi>
 
 
 

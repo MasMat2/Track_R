@@ -22,6 +22,8 @@ declare var JitsiMeetExternalAPI: any;
 })
 export class VideoJitsiPage implements OnInit {
 
+  protected localStream: MediaStream;
+
   room: string;
   user: string;
   jitsiDataUp: boolean = false;
@@ -42,6 +44,26 @@ export class VideoJitsiPage implements OnInit {
   newMeetJitsi(){
     this.newMeet = true;
   }
+
+  webcamButton = async () => {
+    this.localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    /*this.remoteStream = new MediaStream();
+
+    // Push tracks from local stream to peer connection
+    this.localStream.getTracks().forEach((track) => {
+      if (this.localStream) this.pc.addTrack(track, this.localStream);
+    });
+
+    // Pull tracks from remote stream, add to video stream
+    this.pc.ontrack = (event) => {
+      event.streams[0].getTracks().forEach((track) => {
+        this.remoteStream.addTrack(track);
+      });
+    };
+
+    this.buttonState = false;*/
+
+  };
 
 
 }

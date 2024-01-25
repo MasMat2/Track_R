@@ -1,11 +1,17 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {AudioInterface, ParticipantInterface} from '../interfaces/jitsi-interface';
+
+import { AudioInterface, ParticipantInterface } from '../interfaces/jitsi-interface';
 import { IonicModule, NavController } from '@ionic/angular';
 import { DataJitsiService } from '../service-jitsi/data-jitsi.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+
+import { Meta } from '@angular/platform-browser';
+
+import { ScreenOrientation, OrientationType } from '@capawesome/capacitor-screen-orientation';
+
 
 declare var JitsiMeetExternalAPI: any;
 
@@ -16,7 +22,9 @@ declare var JitsiMeetExternalAPI: any;
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class CreateJitsiMeetComponent  implements OnInit {
+export class CreateJitsiMeetComponent implements OnInit {
+
+  protected localStream: MediaStream;
 
   domain: string = "meet.jit.si"; // For self hosted use your domain
   room: any;
@@ -30,34 +38,59 @@ export class CreateJitsiMeetComponent  implements OnInit {
 
   constructor(
     private router: Router,
-    private dataJitsiService: DataJitsiService
+    private dataJitsiService: DataJitsiService,
+    private meta: Meta,
   ) { }
 
 
   ngOnInit() {
-    this.createNewRoom();
+    this.bloquearOrientacion(); //Para mejorar la visibilidad del iframe de jitsi
+    this.iniciarWebCam(); //iniciamos camara y microfono para que pueda ser iniciada una llamada en el iframe de jitsi
+    const cspValue = "default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;";
+    this.meta.addTag({ name: 'Content-Security-Policy', content: cspValue }); //Se le indica al template que confie en iframe
+
+    this.createNewRoom(); //Metodo para crear una llamada con jitsi
   }
 
-  createNewRoom(): void {
-    // Generar un nuevo nombre de sala (puedes hacer esto de acuerdo a tus necesidades)
-    const newRoomName = 'nueva-sala-1982729u99' //+ Math.floor(Math.random() * 1000);
 
-    // Configuración para la nueva sala
+  async bloquearOrientacion() {
+    try {
+      await ScreenOrientation.lock({ type: OrientationType.LANDSCAPE });
+    } catch (error) {
+      console.error('Error Screen Orientation:', error);
+    }
+  }
+
+  iniciarWebCam = async () => {
+    this.localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+  };
+
+  createNewRoom(): void {
+    
+    const newRoomName = 'meet-trackr-1212' //+ Math.floor(Math.random() * 1000);
+
+    //Crea la nueva URL utilizando la plantilla de cadenas
+    const newUrl = `intent://${this.domain}/${newRoomName}#Intent;scheme=org.jitsi.meet;package=org.jitsi.meet;end`;
+
+    window.location.assign(newUrl);
+    
+    //Configuración para la nueva sala
     const newRoomOptions = {
       roomName: newRoomName,
       width: 900,
       height: 500,
       configOverwrite: { prejoinPageEnabled: false },
       interfaceConfigOverwrite: {
-        // overwrite interface properties
+        //overwrite interface properties
       },
       parentNode: document.querySelector('#jitsi-new-meet-iframe'),
       userInfo: {
-        displayName: "Trackr-web"
+        displayName: "Trackr-user"
       }
+
     };
 
-    // Crear una nueva instancia de JitsiMeetExternalAPI para la nueva sala
+    //Crear una nueva instancia de JitsiMeetExternalAPI para la nueva sala
     const newRoomApi = new JitsiMeetExternalAPI(this.domain, newRoomOptions);
 
     // Event handlers para la nueva sala
@@ -71,10 +104,9 @@ export class CreateJitsiMeetComponent  implements OnInit {
       videoMuteStatusChanged: this.handleVideoStatus
     });
 
-    // Puedes almacenar la información de la nueva sala o realizar otras acciones según tus necesidades
     console.log('Nueva sala creada:', newRoomName);
 
-    // También puedes redirigir a la nueva sala si es necesario
+    //Redirigir a la nueva sala si es necesario
     // this.router.navigate(['/ruta-de-la-nueva-sala', newRoomName]);
   }
 
