@@ -3,6 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { ScreenOrientationService } from '@services/screen-orientation.service';
+
+
 
 @Component({
   selector: 'app-acceso-page',
@@ -17,9 +20,11 @@ import { IonicModule } from '@ionic/angular';
   ]
 })
 export class AccesoPage implements OnInit {
-  constructor() { }
+  
+  constructor(private orientationService: ScreenOrientationService) { }
 
   ngOnInit() {
+    this.orientationService.lockPortrait();
   }
 
 }

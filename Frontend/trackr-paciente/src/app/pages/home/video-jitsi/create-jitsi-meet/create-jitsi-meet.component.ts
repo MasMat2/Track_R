@@ -9,9 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { Meta } from '@angular/platform-browser';
-
-import { ScreenOrientation, OrientationType } from '@capawesome/capacitor-screen-orientation';
-
+import { ScreenOrientationService } from '@services/screen-orientation.service';
 
 declare var JitsiMeetExternalAPI: any;
 
@@ -40,11 +38,12 @@ export class CreateJitsiMeetComponent implements OnInit {
     private router: Router,
     private dataJitsiService: DataJitsiService,
     private meta: Meta,
+    private orientationService: ScreenOrientationService
   ) { }
 
 
   ngOnInit() {
-    this.bloquearOrientacion(); //Para mejorar la visibilidad del iframe de jitsi
+    this.lockLandscapte(); //Para mejorar la visibilidad del iframe de jitsi
     this.iniciarWebCam(); //iniciamos camara y microfono para que pueda ser iniciada una llamada en el iframe de jitsi
     const cspValue = "default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;";
     this.meta.addTag({ name: 'Content-Security-Policy', content: cspValue }); //Se le indica al template que confie en iframe
@@ -52,13 +51,8 @@ export class CreateJitsiMeetComponent implements OnInit {
     this.createNewRoom(); //Metodo para crear una llamada con jitsi
   }
 
-
-  async bloquearOrientacion() {
-    try {
-      await ScreenOrientation.lock({ type: OrientationType.LANDSCAPE });
-    } catch (error) {
-      console.error('Error Screen Orientation:', error);
-    }
+  async lockLandscapte() {
+    await this.orientationService.lockLandscape();
   }
 
   iniciarWebCam = async () => {
