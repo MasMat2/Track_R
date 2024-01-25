@@ -10,6 +10,7 @@ import { GeneralConstant } from '@utils/general-constant';
 import * as Utileria from '@utils/utileria';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { AuthService } from '../../../auth/auth.service';
+import { ScreenOrientationService } from '@services/screen-orientation.service';
 
 @Component({
   selector: 'app-login',
@@ -30,10 +31,13 @@ export class LoginPage implements OnInit {
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private orientationService: ScreenOrientationService
   ) { }
 
   ngOnInit() {
+    this.orientationService.unlock();
+    this.orientationService.lockPortrait();
   }
 
   /**

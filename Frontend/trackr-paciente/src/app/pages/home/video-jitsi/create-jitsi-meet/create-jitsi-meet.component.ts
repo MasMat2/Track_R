@@ -10,6 +10,9 @@ import { CommonModule } from '@angular/common';
 
 import { Meta } from '@angular/platform-browser';
 import { ScreenOrientationService } from '@services/screen-orientation.service';
+import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
+import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
+import { ChatHubServiceService } from 'src/app/services/dashboard/chat-hub-service.service';
 
 declare var JitsiMeetExternalAPI: any;
 
@@ -38,7 +41,9 @@ export class CreateJitsiMeetComponent implements OnInit {
     private router: Router,
     private dataJitsiService: DataJitsiService,
     private meta: Meta,
-    private orientationService: ScreenOrientationService
+    private orientationService: ScreenOrientationService,
+    private mensajeHubService: ChatMensajeHubService,
+    private chatMensajeHubServiceService: ChatHubServiceService
   ) { }
 
 
@@ -62,10 +67,10 @@ export class CreateJitsiMeetComponent implements OnInit {
   createNewRoom(): void {
     
     const newRoomName = 'meet-trackr-1212' //+ Math.floor(Math.random() * 1000);
+    this.mandarMensajeLlamada('https://meet.jit.si/meet-trackr-1212');
 
     //Crea la nueva URL utilizando la plantilla de cadenas
     const newUrl = `intent://${this.domain}/${newRoomName}#Intent;scheme=org.jitsi.meet;package=org.jitsi.meet;end`;
-
     window.location.assign(newUrl);
     
     //Configuración para la nueva sala
@@ -102,6 +107,21 @@ export class CreateJitsiMeetComponent implements OnInit {
 
     //Redirigir a la nueva sala si es necesario
     // this.router.navigate(['/ruta-de-la-nueva-sala', newRoomName]);
+  }
+
+  mandarMensajeLlamada(mensajeLlamada : string): void{
+    console.log("mandarMensajeLlamada method")
+    let msg: ChatMensajeDTO = {
+      fecha: new Date(),
+      idChat: 353,
+      mensaje: mensajeLlamada,
+      idPersona:5333,
+      archivo: '',
+      idArchivo: 0
+    }
+
+    this.mensajeHubService.enviarMensaje(msg);
+    console.log("mandarMensajeLlamada method msg: "+mensajeLlamada)
   }
 
   handleClose = () => {
