@@ -3,6 +3,7 @@
 .footer{
   background-color: var(--neutral-100);
   ion-tab-bar {
+      background-color: var(--neutral-50);
       contain: size layout style  !important; //necesario para que el tab central pueda sobresalir
       border-radius: 20px 20px 0 0;
       width: 100%;
@@ -15,8 +16,8 @@
 
       .tab-central{
         --background: var(--primary-700);
-        --color: white;
-        --color-selected: white;
+        --color: var(--neutral-50);
+        --color-selected: var(--neutral-50);
         height: 6vh;
         max-width: 6vh;
         border-radius: 50%;
