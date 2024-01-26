@@ -48,16 +48,12 @@ export class CreateJitsiMeetComponent implements OnInit {
 
 
   ngOnInit() {
-    this.lockLandscapte(); //Para mejorar la visibilidad del iframe de jitsi
+    this.orientationService.lockLandscape();
     this.iniciarWebCam(); //iniciamos camara y microfono para que pueda ser iniciada una llamada en el iframe de jitsi
     const cspValue = "default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;";
     this.meta.addTag({ name: 'Content-Security-Policy', content: cspValue }); //Se le indica al template que confie en iframe
 
     this.createNewRoom(); //Metodo para crear una llamada con jitsi
-  }
-
-  async lockLandscapte() {
-    await this.orientationService.lockLandscape();
   }
 
   iniciarWebCam = async () => {
@@ -107,6 +103,7 @@ export class CreateJitsiMeetComponent implements OnInit {
 
     //Redirigir a la nueva sala si es necesario
     // this.router.navigate(['/ruta-de-la-nueva-sala', newRoomName]);
+    
   }
 
   mandarMensajeLlamada(mensajeLlamada : string): void{

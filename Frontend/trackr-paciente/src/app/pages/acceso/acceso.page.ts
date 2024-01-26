@@ -21,9 +21,10 @@ import { ScreenOrientationService } from '@services/screen-orientation.service';
 })
 export class AccesoPage implements OnInit {
   
-  constructor() { }
+  constructor(private orientacionService: ScreenOrientationService) { }
 
   ngOnInit() {
+    this.orientacionService.lockPortrait();
   }
 
 }

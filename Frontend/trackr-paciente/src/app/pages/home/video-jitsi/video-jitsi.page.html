@@ -1,5 +1,5 @@
 <ion-content [fullscreen]="true">
-  <div *ngIf="newMeet">
+  <!--div *ngIf="newMeet">
     <ion-item>
       <ion-label position="floating">Room meet</ion-label>
       <ion-input [(ngModel)]="room" name="room" type="text" required></ion-input>
@@ -9,12 +9,13 @@
       <ion-label position="floating">Usuario</ion-label>
       <ion-input [(ngModel)]="user" name="username" type="text" required></ion-input>
     </ion-item>
-  </div>
+  </div-->
 
   <!--ion-button expand="full" (click)="submitForm()">Entrar</ion-button-->
-  <ion-button expand="full" (click)="newMeetJitsi()">Nuevo meet</ion-button>
   <!--ion-button size="small" id="webcamButton" (click)="webcamButton()">Iniciar webcam</ion-button-->
 
+
+  <ion-button expand="full" (click)="newMeetJitsi()" *ngIf="!newMeet">Nuevo meet</ion-button>
 
   <app-create-jitsi-meet *ngIf="newMeet" style="width: 50%; height: 100%;"></app-create-jitsi-meet>
 
