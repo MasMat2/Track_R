@@ -123,6 +123,7 @@ export class CreateJitsiMeetComponent implements OnInit {
 
   handleClose = () => {
     console.log("handleClose");
+    this.orientationService.lockPortrait();
   }
 
   handleParticipantLeft = async (participant: ParticipantInterface) => {
