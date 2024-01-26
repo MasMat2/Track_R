@@ -13,6 +13,8 @@ import { ScreenOrientationService } from '@services/screen-orientation.service';
 import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
 import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
 import { ChatHubServiceService } from 'src/app/services/dashboard/chat-hub-service.service';
+import { Observable } from 'rxjs';
+import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
 
 declare var JitsiMeetExternalAPI: any;
 
@@ -26,6 +28,10 @@ declare var JitsiMeetExternalAPI: any;
 export class CreateJitsiMeetComponent implements OnInit {
 
   protected localStream: MediaStream;
+  protected mensajes$: Observable<ChatMensajeDTO[][]>;
+  protected mensajes : ChatMensajeDTO[][];
+  protected chats$: Observable<ChatDTO[]>;
+  protected chats: ChatDTO[] = [];
 
   domain: string = "meet.jit.si"; // For self hosted use your domain
   room: any;
@@ -54,6 +60,25 @@ export class CreateJitsiMeetComponent implements OnInit {
     this.meta.addTag({ name: 'Content-Security-Policy', content: cspValue }); //Se le indica al template que confie en iframe
 
     this.createNewRoom(); //Metodo para crear una llamada con jitsi
+    this.obtenerChats();
+    this.obtenerMensajes();
+  }
+
+  //Metodo para inicializar el hub
+  obtenerChats(){
+    this.chatMensajeHubServiceService.iniciarConexion();
+    this.chats$ = this.chatMensajeHubServiceService.chat$;
+    this.chats$.subscribe(res => {
+      this.chats = res;
+    })
+  }
+  obtenerMensajes(){
+    this.mensajeHubService.iniciarConexion();
+    this.mensajes$ = this.mensajeHubService.chatMensaje$;
+    this.mensajes$.subscribe(res => {
+      this.mensajes = res;
+      console.log(this.mensajes)
+    })
   }
 
   iniciarWebCam = async () => {

@@ -16,6 +16,9 @@ import { Router, RouterModule } from '@angular/router';
 import { SeguimientoPadecimientoComponent } from './components/seguimiento-padecimiento/seguimiento-padecimiento.component';
 import { WidgetContainerComponent } from './components/widget-container/widget-container.component';
 import { WidgetType } from './interfaces/widgets';
+import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
+import { ChatHubServiceService } from 'src/app/services/dashboard/chat-hub-service.service';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -49,11 +52,14 @@ export class DashboardPage implements OnInit {
   constructor(
     private widgetService : WidgetService,
     private usuarioWidgetService: UsuarioWidgetService,
-    private router: Router
+    private router: Router,
+    private ChatMensajeHubService:ChatMensajeHubService,
+    private ChatHubServiceService:ChatHubServiceService
   ) { }
 
   public ngOnInit(): void {
-  
+    this.ChatHubServiceService.iniciarConexion();
+    this.ChatMensajeHubService.iniciarConexion();
   }
 
   public ionViewWillEnter() : void {

@@ -9,6 +9,8 @@ import { AudioInterface, ParticipantInterface } from './interfaces/jitsi-interfa
 import { DataJitsiService } from './service-jitsi/data-jitsi.service';
 import { CallJitsiComponent } from './call-jitsi/call-jitsi.component';
 import { CreateJitsiMeetComponent } from './create-jitsi-meet/create-jitsi-meet.component';
+import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
+import { ChatHubServiceService } from 'src/app/services/dashboard/chat-hub-service.service';
 
 declare var JitsiMeetExternalAPI: any;
 
@@ -31,9 +33,14 @@ export class VideoJitsiPage implements OnInit {
   newMeet: boolean = false;
 
 
-  constructor(private dataJitsiService: DataJitsiService) { }
+  constructor(private dataJitsiService: DataJitsiService,
+    private ChatMensajeHubService:ChatMensajeHubService,
+    private ChatHubServiceService:ChatHubServiceService) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.ChatHubServiceService.iniciarConexion();
+    this.ChatMensajeHubService.iniciarConexion();
+  }
 
   submitForm() {
     this.dataJitsiService.room = this.room;
