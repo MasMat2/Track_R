@@ -1,50 +1,17 @@
-<!-- Sección logotipo -->
-<ion-toolbar class="seccion-titulo">
-  <ion-title id="titulo" slot="start">
-    <span>t r a c k </span>
-    <span class="white">. r</span>
-  </ion-title>
-</ion-toolbar>
+  <ion-toolbar class="header">
+    <ion-item lines="none" class="header-content">
+      <ion-avatar (click) = "_openPopover($event)">
+        <!--Reemplazar por foto de perfil del usuario-->
+        <ion-img
+          src="https://ionicframework.com/docs/img/demos/avatar.svg">
+        </ion-img>
+      </ion-avatar>
+      <ion-label>
+        <h2>¡Hola, {{miUsuario?.nombre}}!</h2>
+        <p>Que gusto verte de nuevo.</p>
+      </ion-label>
+      <app-notificaciones-page></app-notificaciones-page>
+    </ion-item>
+  </ion-toolbar>
 
-<!-- Sección navegación -->
-<ion-toolbar class="navegacion">
-
-  <!-- Saludo -->
-  <ion-button slot="start" fill="clear" (click) = "_openPopover($event)" class="ion-activatable saludo" size="small">
-    <span class="white">Hola </span>
-    <span *ngIf="miUsuario" class="black">{{ miUsuario.nombre }} {{ miUsuario.apellidoPaterno }}</span>
-  </ion-button>
-
-  <!-- Botónes de navegación -->
-  <ion-buttons slot="primary">
-
-   <app-notificaciones-page>
-   </app-notificaciones-page>
-   
-    <ion-button (click) = "mostrarConfiguracionDashboard()" >
-      <ion-icon fill="icon-only" name="menu" color="dark" size="large"></ion-icon>
-    </ion-button>
-
-  </ion-buttons>
-
-</ion-toolbar>
-
-<ion-toolbar *ngIf="mostrarTitulo">
-  <ion-buttons slot="start">
-    <ion-back-button defaultHref="/home/perfil"></ion-back-button>
-  </ion-buttons>
-  <ion-title>{{ titulo }}</ion-title>
-</ion-toolbar>
-
-
-<!--   <breadcrumb #parent>
-    <ion-breadcrumbs>
-      <ng-template ngFor let-route [ngForOf]="parent.breadcrumbs" style="padding: 0;">
-
-        <ion-breadcrumb *ngIf="!route.terminal" class="migaja" [routerLink]="[route.url]" style="padding: 0;">{{route.displayName}}</ion-breadcrumb>
-        <ion-breadcrumb *ngIf="route.terminal" class="migaja" [routerLink]="[route.url]" style="padding: 0;">{{route.displayName}}</ion-breadcrumb>
-      </ng-template>
-    </ion-breadcrumbs>
-  </breadcrumb>
- -->
 

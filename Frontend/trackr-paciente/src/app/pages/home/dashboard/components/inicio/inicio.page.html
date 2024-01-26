@@ -3,7 +3,14 @@
 </ion-header>
 <ion-content>
   <div class="contenedor">
-    <div class="titulo-contenedor">Dashboard</div>
+    <div class="titulo-contenedor">
+      <ion-title>Dashboard</ion-title>
+      <ion-buttons>
+        <ion-button (click) = "mostrarConfiguracionDashboard()" class="config-dashboard">
+          <ion-icon slot="icon-only" name="menu"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
     <div class="cuerpo-contenedor">
       <app-widget-container [widgetKeys]="selectedUserWidgets"></app-widget-container>
       <ion-grid>

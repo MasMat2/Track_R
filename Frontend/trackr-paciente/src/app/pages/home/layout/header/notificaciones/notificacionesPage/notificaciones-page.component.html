@@ -1,10 +1,18 @@
 
-<ion-button (click)="_openPopover($event)">
+<div class="header-button">
+    <div>
+      <ion-button (click)="_openPopover($event)">
+        <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
+        <ion-badge
+          *ngIf="(notificaciones$ | async)?.length !== 0"
+          color="danger"
+          class="badge-on-icon">
+          {{ (notificaciones$ | async)?.length || 0 }}
+        </ion-badge>
+      </ion-button>
+    </div>
+</div>
 
-  <ion-icon fill="icon-only" name="notifications" color="dark"></ion-icon>
-  <ion-badge *ngIf="(notificaciones$ | async)?.length !== 0" color="danger" class="badge-on-icon">{{ (notificaciones$ | async)?.length || 0 }}</ion-badge>
-
-</ion-button>
 
 
 

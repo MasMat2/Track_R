@@ -1,15 +1,35 @@
+@import "../../../../../../../theme/variables.scss";
+
+
 //Para el icono rojo que está encima de la campanita de notificaciones
 .popover-button-with-badge {
     position: relative;
     align-items: center;
 }
 
+.header-button{
+
+    ion-button {
+        --background: transparent;
+        --color: var(--neutral-50);
+        --border-color: var(--primary-600);
+        --border-radius: 20%;
+        --border-style: solid;
+        --border-width: 1px;
+        ion-icon{
+            font-size: 2em;
+        }
+    }
+
+}
+
+
+
 .badge-on-icon {
     position: absolute;
-    top: 0;
     right: 0;
     transform: translate(50%, -50%);
-    font-size: 0.6em;
+    font-size: 0.8em;
     width: 1.5em;
     height: 1.5em;
     padding: 0.1em;

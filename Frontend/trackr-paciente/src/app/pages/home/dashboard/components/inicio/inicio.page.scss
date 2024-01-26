@@ -5,3 +5,11 @@
     background-position: center;
     background-repeat: no-repeat;
   }
+
+  .titulo-contenedor{
+    display: flex;
+    text-align: center;
+    ion-title{
+      padding-left: 68px;
+    }
+  }

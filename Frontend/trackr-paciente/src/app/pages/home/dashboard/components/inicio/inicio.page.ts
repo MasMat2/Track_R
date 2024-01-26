@@ -87,5 +87,9 @@ export class InicioPage implements OnInit {
     this.router.navigate(['home/dashboard/seguimiento', idPadecimiento]);
   }
 
+  protected mostrarConfiguracionDashboard(){
+    this.router.navigate(['/home/config-dashboard']);
+  }
+
 
 }

@@ -1,44 +1,47 @@
 @import "../../../../../theme/variables.scss";
 
-ion-toolbar {
-  &.seccion-titulo, &.navegacion {
+
+.header{
+  border-radius: 0 0 10px 10px;
+  --background: var(--primary-700);
+  --min-height: 45px;
+  padding-top: 6vh;
+  height: 17.5vh;
+  .header-content{
     --background: var(--primary-700);
+  
+    ion-avatar{
+      margin-right: 10px;
+      width: 7vh;
+      height: 7vh;
+    }
+  
+    ion-label{
+      h2{
+        font-size: calc(0.7em + 1vw);
+        font-family: var(--font-display);
+        font-weight: bold;
+        color: var(--neutral-50); 
+      }
+  
+      p{
+        font-size: calc(0.7em + 1vw);
+        font-family: var(--font-display);
+        color: var(--neutral-50);
+        
+      }
+    }
   }
+
 }
 
-ion-toolbar.seccion-titulo {
-    --min-height: 45px;
-    padding-top: 20px;
-}
+// a.breadcrumb-native{
+//   padding: 0 !important;
+// }
+// ion-breadcrumb{
+//   padding: 0 !important;
+// }
 
-ion-toolbar.navegacion {
-    --min-height: 25px;
-}
-
-.saludo{
-  --box-shadow: none;
-}
-
-#titulo {
-    font-weight: bold;
-}
-
-.white {
-    color: #ffff;
-}
-
-.black {
-    color: #000;
-    margin-left: 2vw;
-}
-
-a.breadcrumb-native{
-  padding: 0 !important;
-}
-ion-breadcrumb{
-  padding: 0 !important;
-}
-
-.migaja{
-  padding: 0 !important;
-}
+// .migaja{
+//   padding: 0 !important;
+// }

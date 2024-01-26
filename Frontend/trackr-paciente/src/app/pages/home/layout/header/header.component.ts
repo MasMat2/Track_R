@@ -6,7 +6,6 @@ import { UsuarioService } from '@services/usuario.service';
 import { UsuarioDto } from 'src/app/shared/Dtos/perfil/usuario-dto';
 // import { BreadcrumbModule } from 'angular-crumbs';
 import { RouterModule } from '@angular/router';
-import { Router } from '@angular/router';
 import { LogoutComponent } from './logout/logout.component';
 import { menu } from 'ionicons/icons'
 import { addIcons } from 'ionicons';
@@ -34,7 +33,6 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private usuarioService : UsuarioService,
-    private router: Router,
     private popoverControler : PopoverController
   ){
     addIcons({menu})
@@ -57,10 +55,6 @@ export class HeaderComponent implements OnInit {
     this.usuarioService.consultarMiUsuario().subscribe((data) => {
       this.miUsuario = data;
     });
-  }
-
-  protected mostrarConfiguracionDashboard(){
-    this.router.navigate(['/home/config-dashboard']);
   }
 
 }
