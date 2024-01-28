@@ -16,12 +16,17 @@ import { ArchivoFormDTO } from '../../../../shared/Dtos/archivos/archivo-form-dt
 //Libreria de capacitor para grabar audio
 import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder';
 
+//Escribir archivos
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
+
+
+
 @Component({
   selector: 'app-mensajes',
   templateUrl: './mensajes.component.html',
   styleUrls: ['./mensajes.component.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule, IonicModule,HeaderComponent],
+  imports: [FormsModule, CommonModule, IonicModule, HeaderComponent],
 })
 export class MensajesComponent {
   protected mensajes: ChatMensajeDTO[];
@@ -36,24 +41,24 @@ export class MensajesComponent {
     titulo: 'Chat',
     idCreadorChat: 0,
   };
-  protected archivo ?: File =undefined;
+  protected archivo?: File = undefined;
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('scrollContainer') private scrollContainer: ElementRef;
 
   //Variables para el audio
-  protected isAudio:boolean = false;
+  protected isAudio: boolean = false;
   protected grabacionIniciada: boolean = false;
-  protected audio?:string = '';
-  protected audio2?:string;
+  protected audio?: string = '';
+  protected audio2?: string;
 
   constructor(
     private ChatMensajeHubService: ChatMensajeHubService,
     private ChatPersonaService: ChatPersonaService,
     private router: ActivatedRoute,
     private route: Router,
-    private ChatHubServiceService:ChatHubServiceService,
-    private ArchivoService:ArchivoService
-  ) {}
+    private ChatHubServiceService: ChatHubServiceService,
+    private ArchivoService: ArchivoService,
+  ) { }
 
   ionViewWillEnter() {
     this.obtenerIdUsuario();
@@ -61,7 +66,7 @@ export class MensajesComponent {
     this.solicitarPermisos();
   }
 
-  obtenerIdChat(){
+  obtenerIdChat() {
     this.router.params.subscribe(params => {
       this.idChat = Number(params['id'])
       this.obtenerMensajes();
@@ -69,30 +74,30 @@ export class MensajesComponent {
     })
   }
 
-  obtenerChat(){
+  obtenerChat() {
     this.ChatHubServiceService.chat$.subscribe(res => {
-      this.chat = res.find(x => x.idChat == this.idChat) || {fecha: new Date(), habilitado: false , idCreadorChat: 0}
+      this.chat = res.find(x => x.idChat == this.idChat) || { fecha: new Date(), habilitado: false, idCreadorChat: 0 }
     })
   }
 
   async enviarMensaje(): Promise<void> {
     const regex = /^\n+$/;
-    if(regex.test(this.msg)){
+    if (regex.test(this.msg)) {
       this.msg = '';
       return;
     }
-    
+
     let msg: ChatMensajeDTO = {
       fecha: new Date(),
       idChat: this.idChat,
       mensaje: this.msg,
-      idPersona:5333,
+      idPersona: 5333,
       archivo: '',
       idArchivo: 0
     }
 
     //Agregar logica para subir archivo
-    if(this.archivo){
+    if (this.archivo) {
       let byte = await this.convertirBase64String();
       byte = byte.split(',')[1];
       msg.archivo = byte;
@@ -102,7 +107,7 @@ export class MensajesComponent {
       msg.nombre = this.archivo.name;
     }
 
-    if(this.audio != ''){
+    if (this.audio != '') {
       msg.archivo = this.audio;
       msg.archivoNombre = `audio-${Date.now()}.wav`
       msg.archivoTipoMime = "audio/wav"
@@ -111,7 +116,7 @@ export class MensajesComponent {
     }
 
     this.ChatMensajeHubService.enviarMensaje(msg);
-    if(this.mensajes.length == 0){
+    if (this.mensajes.length == 0) {
       this.ChatMensajeHubService.chatMensaje$.subscribe(res => {
         this.mensajes = res.find(array => array.some(x => x.idChat === this.idChat)) || [];
       })
@@ -144,12 +149,12 @@ export class MensajesComponent {
   }
 
   obtenerChatSeleccionado() {
-      this.mensajes = this.chatMensajes.find((array) =>
-        array.some((x) => x.idChat == this.idChat)
-      ) || [];
+    this.mensajes = this.chatMensajes.find((array) =>
+      array.some((x) => x.idChat == this.idChat)
+    ) || [];
   }
 
-  regresarBtn(){
+  regresarBtn() {
     this.route.navigate(['home/chat-movil'])
   }
 
@@ -160,22 +165,22 @@ export class MensajesComponent {
   readFileAsByteArray(file: File): Promise<Uint8Array> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-  
+
       reader.onload = (e: any) => {
         const result: ArrayBuffer = e.target.result;
         const byteArray = new Uint8Array(result);
         resolve(byteArray);
       };
-  
+
       reader.onerror = (error) => {
         reject(error);
       };
-  
+
       reader.readAsArrayBuffer(file);
     });
   }
 
-  convertirBase64String() :Promise<string> {
+  convertirBase64String(): Promise<string> {
     return new Promise((resolve, reject) => {
       if (this.archivo) {
         const lector = new FileReader();
@@ -196,33 +201,57 @@ export class MensajesComponent {
     });
   }
 
-  async subirArchivo(){
-    if(this.archivo){
+  async subirArchivo() {
+    if (this.archivo) {
       let byte = await this.readFileAsByteArray(this.archivo);
 
-    let aux:ArchivoFormDTO = {
-      idUsuario: 5333,
-      archivo: Array.from(byte),
-      archivoNombre: this.archivo.name,
-      archivoTipoMime: this.archivo.type,
-      fechaRealizacion: new Date(),
-      nombre: this.archivo.name
-    }
-    console.log(aux.archivo)
+      let aux: ArchivoFormDTO = {
+        idUsuario: 5333,
+        archivo: Array.from(byte),
+        archivoNombre: this.archivo.name,
+        archivoTipoMime: this.archivo.type,
+        fechaRealizacion: new Date(),
+        nombre: this.archivo.name
+      }
+      console.log(aux.archivo)
 
-    this.ArchivoService.subirArchivo(aux).subscribe(res => {
-      console.log(res)
-    })
+      this.ArchivoService.subirArchivo(aux).subscribe(res => {
+        console.log(res)
+      })
     }
   }
 
-  clickArchivo(idArchivo:number){
+  clickArchivo(idArchivo: number) {
     this.ArchivoService.getArchivo(idArchivo).subscribe(res => {
-      this.downloadFile(res.archivo,res.nombre,res.archivoMime)
+      this.downloadFile(res.archivo, res.nombre, res.archivoMime)
     });
   }
 
-  downloadFile(fileBase64:string,nombre?:string,mime?:string) {
+  async downloadFile(fileBase64: string, nombre?: string, mime?: string) {
+    try {
+
+      let downloadDirectory = Directory.Documents
+
+      // Crear un archivo en el sistema de archivos
+      const result = await Filesystem.writeFile({
+        path: `${Directory.Data}/${nombre}`,
+        data: fileBase64,
+        directory: Directory.External,
+        recursive: true,
+        //encoding: Encoding.UTF8,
+      });
+
+      // Obtener la URL del archivo creado
+      const url = result.uri;
+
+      console.log(url)
+
+    } catch (error) {
+      console.error('Error al descargar el archivo:', error);
+    }
+  }
+
+  /*downloadFile(fileBase64:string,nombre?:string,mime?:string) {
     // Decodificar la cadena Base64
     const decodedData = atob(fileBase64);
 
@@ -250,15 +279,15 @@ export class MensajesComponent {
 
     // Limpiar el object URL después de la descarga
     URL.revokeObjectURL(url);
-  }
+  }*/
 
   openFileInput(): void {
     this.fileInput.nativeElement.click();
   }
 
-  imprimirFecha(fecha:Date):string{
+  imprimirFecha(fecha: Date): string {
     let x = new Date(fecha)
-    return `${x.getDate()}/${x.getMonth()+1}/${x.getFullYear()} - ${x.getHours()}:${x.getMinutes()}`
+    return `${x.getDate()}/${x.getMonth() + 1}/${x.getFullYear()} - ${x.getHours()}:${x.getMinutes()}`
   }
 
   // Esta función se llama después de cada actualización de la vista
@@ -273,37 +302,37 @@ export class MensajesComponent {
     } catch (err) { }
   }
 
-  eliminarArchivo(){
+  eliminarArchivo() {
     this.archivo = undefined;
   }
 
-  changeAudio(){
+  changeAudio() {
     this.isAudio = !this.isAudio;
   }
-  
-  solicitarPermisos(){
+
+  solicitarPermisos() {
     VoiceRecorder.hasAudioRecordingPermission().then(permision => {
-      if(!permision.value){
+      if (!permision.value) {
         VoiceRecorder.requestAudioRecordingPermission();
       }
     })
   }
 
-  grabar(){
-    if(this.grabacionIniciada){
+  grabar() {
+    if (this.grabacionIniciada) {
       return;
     }
     this.grabacionIniciada = true;
     VoiceRecorder.startRecording();
   }
 
-  detenerGrabacion(){
-    if(!this.grabacionIniciada){
+  detenerGrabacion() {
+    if (!this.grabacionIniciada) {
       return;
     }
     VoiceRecorder.stopRecording().then(audio => {
       this.grabacionIniciada = false;
-      if(audio.value){
+      if (audio.value) {
         this.audio = audio.value.recordDataBase64;
         this.audio2 = 'data:audio/wav;base64,' + audio.value.recordDataBase64;
       }
