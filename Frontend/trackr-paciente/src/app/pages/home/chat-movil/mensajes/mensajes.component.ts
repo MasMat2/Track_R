@@ -18,6 +18,7 @@ import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, Cur
 
 //Escribir archivos
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
+import { PlataformaService } from 'src/app/services/dashboard/plataforma.service';
 
 
 
@@ -58,6 +59,7 @@ export class MensajesComponent {
     private route: Router,
     private ChatHubServiceService: ChatHubServiceService,
     private ArchivoService: ArchivoService,
+    private plataformaService : PlataformaService
   ) { }
 
   ionViewWillEnter() {
@@ -213,7 +215,6 @@ export class MensajesComponent {
         fechaRealizacion: new Date(),
         nombre: this.archivo.name
       }
-      console.log(aux.archivo)
 
       this.ArchivoService.subirArchivo(aux).subscribe(res => {
         console.log(res)
@@ -223,11 +224,18 @@ export class MensajesComponent {
 
   clickArchivo(idArchivo: number) {
     this.ArchivoService.getArchivo(idArchivo).subscribe(res => {
-      this.downloadFile(res.archivo, res.nombre, res.archivoMime)
+      if(this.plataformaService.isMobile())
+      {
+        this.downloadFileMobile(res.archivo, res.nombre, res.archivoMime)
+      }
+      else if(this.plataformaService.isWeb())
+      {
+        this.downloadFileWeb(res.archivo, res.nombre, res.archivoMime)
+      }
     });
   }
 
-  async downloadFile(fileBase64: string, nombre?: string, mime?: string) {
+  async downloadFileMobile(fileBase64: string, nombre?: string, mime?: string) {
     try {
 
       let downloadDirectory = Directory.Documents
@@ -251,7 +259,7 @@ export class MensajesComponent {
     }
   }
 
-  /*downloadFile(fileBase64:string,nombre?:string,mime?:string) {
+  downloadFileWeb(fileBase64:string,nombre?:string,mime?:string) {
     // Decodificar la cadena Base64
     const decodedData = atob(fileBase64);
 
@@ -279,7 +287,7 @@ export class MensajesComponent {
 
     // Limpiar el object URL después de la descarga
     URL.revokeObjectURL(url);
-  }*/
+  }
 
   openFileInput(): void {
     this.fileInput.nativeElement.click();
