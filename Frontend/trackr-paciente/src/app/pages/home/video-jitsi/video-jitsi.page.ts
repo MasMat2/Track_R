@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, NavController } from '@ionic/angular';
@@ -26,13 +26,13 @@ export class VideoJitsiPage implements OnInit {
 
   protected localStream: MediaStream;
 
-  idChat: string;
+  protected idChat: string;
 
-  room: string;
-  user: string;
-  jitsiDataUp: boolean = false;
+  protected room: string;
+  protected user: string;
+  protected jitsiDataUp: boolean = false;
 
-  newMeet: boolean = false;
+  protected newMeet: boolean = false;
 
 
   constructor(private dataJitsiService: DataJitsiService,
@@ -46,7 +46,6 @@ export class VideoJitsiPage implements OnInit {
 
     this.activatedRoute.paramMap.subscribe(params => {
       this.idChat = params.get('id-chat')!;
-      console.log('ID recibido:', this.idChat);
     });
   }
 
