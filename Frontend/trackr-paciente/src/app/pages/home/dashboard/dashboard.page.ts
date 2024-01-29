@@ -31,6 +31,10 @@ import { ChatHubServiceService } from 'src/app/services/dashboard/chat-hub-servi
     HeaderComponent,
     RouterModule,
   ],
+  providers: [
+    UsuarioWidgetService,
+    WidgetService
+  ]
 })
 export class DashboardPage implements OnInit {
 
