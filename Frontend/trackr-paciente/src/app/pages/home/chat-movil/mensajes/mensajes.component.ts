@@ -317,7 +317,7 @@ export class MensajesComponent {
   }
 
   solicitarPermisos() {
-    VoiceRecorder.hasAudioRecordingPermission().then(permision => {
+    VoiceRecorder.hasAudioRecordingPermission().then( (permision:GenericResponse) => {
       if (!permision.value) {
         VoiceRecorder.requestAudioRecordingPermission();
       }
@@ -336,7 +336,7 @@ export class MensajesComponent {
     if (!this.grabacionIniciada) {
       return;
     }
-    VoiceRecorder.stopRecording().then(audio => {
+    VoiceRecorder.stopRecording().then( (audio:RecordingData) => {
       this.grabacionIniciada = false;
       if (audio.value) {
         this.audio = audio.value.recordDataBase64;
