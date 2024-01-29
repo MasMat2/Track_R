@@ -7,7 +7,7 @@ import { ArchivoService } from '../../../shared/http/archivo/archivo.service';
 import { ArchivoFormDTO } from '@dtos/archivos/archivo-form-dto';
 
 //Libreria de capacitor para grabar audio
-import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder';
+/* import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder'; */
 
 
 @Component({
@@ -40,7 +40,7 @@ export class MensajesComponent {
   ngOnInit(){
     this.obtenerIdUsuario();
     this.obtenerPersonasEnChat();
-    this.solicitarPermisos();
+/*     this.solicitarPermisos(); */
   }
 
   ngOnChanges(){
@@ -248,23 +248,23 @@ export class MensajesComponent {
     this.isAudio = !this.isAudio;
   }
 
-  solicitarPermisos(){
+/*   solicitarPermisos(){
     VoiceRecorder.hasAudioRecordingPermission().then(permision => {
       if(!permision.value){
         VoiceRecorder.requestAudioRecordingPermission();
       }
     })
-  }
+  } */
 
-  grabar(){
+/*   grabar(){
     if(this.grabacionIniciada){
       return;
     }
     this.grabacionIniciada = true;
     VoiceRecorder.startRecording();
   }
-
-  detenerGrabacion(){
+ */
+/*   detenerGrabacion(){
     if(!this.grabacionIniciada){
       return;
     }
@@ -275,6 +275,6 @@ export class MensajesComponent {
         this.audio2 = 'data:audio/wav;base64,' + audio.value.recordDataBase64;
       }
     })
-  }
+  } */
 
 }
