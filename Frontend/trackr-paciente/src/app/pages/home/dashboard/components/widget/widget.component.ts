@@ -17,6 +17,7 @@ export class WidgetComponent  implements OnInit {
   @Input() public title: string;
   @Input() public iconClass?: string;
   @Input() public colorBackground?: string;
+  @Input() public colorTitle?: string;
 
   constructor() { }
 

@@ -2,17 +2,18 @@
  <div *ngIf="tipoWidget === 1" class="widget-hover">
   <app-widget
   title="Seguimiento de {{ nombrePadecimiento }}"
+  colorTitle="#656565"
 >
   <div class="container d-flex justify-content-center gap-5">
     <div class="dato">
-      <span class="icono"><ion-icon class="{{claseVariable}}"></ion-icon></span>
+
       <span class="nombre">{{ nombreVariable }}</span>
-      <span class="valor">{{ valorVariable }}</span>
+      <span class="valor ">{{ valorVariable }}</span>
       <span class="unidad">{{ unidadVariable }}</span>
     </div>
 
     <div class="dato">
-      <span class="icono"><ion-icon class="{{claseTratamiento}}"></ion-icon></span>
+
       <span class="nombre">{{ nombreTratamiento }}</span>
       <span class="valor"> {{tomasTomadas }} / {{ tomasTotales }} </span>
     </div>
@@ -23,6 +24,7 @@
 <div *ngIf="tipoWidget === 2"  class="widget-hover">
   <app-widget
   title="Seguimiento de {{ nombrePadecimiento }}"
+  colorTitle="#656565"
 >
   <div class="d-flex justify-content-center gap-5">
     <div class="col">
@@ -77,7 +79,7 @@
    
 
     <div class="dato">
-      <span class="icono"><ion-icon class="{{claseTratamiento}}"></ion-icon></span>
+
       <span class="nombre">{{ nombreTratamiento }}</span>
       <span class="valor">{{ tomasTomadas}}/{{ tomasTotales }}</span>
     </div>
@@ -88,6 +90,7 @@
 <div *ngIf="tipoWidget === 3"  class="widget-hover">
   <app-widget
   title="Seguimiento de {{ nombrePadecimiento }}"
+  colorTitle="#656565"
 >
     <div class="container d-flex align-items-center gap-2">
       <div class="dato">
@@ -100,7 +103,7 @@
       </div>
 
       <div class="dato">
-        <span class="icono"><ion-icon class="{{claseTratamiento}}"></ion-icon></span>
+
         <span class="nombre">{{ nombreTratamiento }}</span>
         <span class="valor">{{ tomasTomadas }} / {{ tomasTotales }}</span>
       </div>
