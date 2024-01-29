@@ -10,11 +10,6 @@ export const routes: Routes = [
   {
     path: 'acceso',
     loadChildren: () => import('./pages/acceso/acceso-routes')
-  },
-  {
-    path: '**',
-    redirectTo: 'acceso',
-    pathMatch: 'full',
-  },
+  }
 
 ];
