@@ -6,6 +6,7 @@ import { HomePage } from "./home.page";
 import { MuestrasPage } from "./muestras/muestras.page";
 import { ChatMovilComponent as ChatMovilPage } from "./chat-movil/chat-movil.page";
 import { ConfiguracionDashboardPage } from "./configuracion-dashboard/configuracion-dashboard.page";
+import { VideoJitsiPage } from "./video-jitsi/video-jitsi.page";
 
 
 export default [
@@ -14,6 +15,7 @@ export default [
     component: HomePage,
     children: [
       { path: 'chat', component: ChatPage, data: { breadcrumb: 'Chat' } },
+      { path: 'video-jitsi', component: VideoJitsiPage},
       { path: 'chat-movil', loadChildren: () => import('./chat-movil/chat-movil-routes') },
       { path: 'clinicos', component: MuestrasPage, data: { breadcrumb: 'Muestras' } },
       { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard-routes'), data: { breadcrumb: 'Inicio' }},

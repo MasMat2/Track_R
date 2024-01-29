@@ -130,8 +130,13 @@ export class ChatMensajeHubService {
   }
 
   public async enviarMensaje(mensaje: ChatMensajeDTO) {
-    await this.ensureConnection();
+    try {
+      console.log("enviarMensaje method:"+mensaje);
+      await this.ensureConnection();
 
-    await this.connection.invoke('NuevoMensaje', mensaje);
+      await this.connection.invoke('NuevoMensaje', mensaje);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

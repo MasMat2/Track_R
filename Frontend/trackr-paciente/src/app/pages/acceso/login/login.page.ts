@@ -30,7 +30,7 @@ export class LoginPage implements OnInit {
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
   ) { }
 
   ngOnInit() {
