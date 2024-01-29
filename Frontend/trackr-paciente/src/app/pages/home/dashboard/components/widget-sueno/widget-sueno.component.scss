@@ -1,85 +1,25 @@
 @import "../../styles/circle-container.scss";
+@import "../../../../../../theme/variables.scss";
 
-.container {
-  padding: 0;
-}
+ion-label {
+  font-family: var(--font-body);
+  color: var(--neutral-100);
+  width: 100%;
+  font-size: 2.3vw;
 
-.container.d-flex {
-  gap: 10px;
-
-  .seccion-porcentaje {
-    flex: 40;
-  }
-
-  .seccion-valores {
-    flex: 60;
+  .valor {
+    font-size: 2.8vw;
   }
 }
 
-.seccion-porcentaje {
-  .relative-container {
-    position: relative;
-    width: 100%;
-
-    .circle-container {
-      width: 100%;
-
-      .valor {
-        font-size: 6vw;
-        color: var(--error-300);
-      }
-    }
-
-    .img-container {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-
-      object-fit: contain;
-      height: 8vw;
-
-      img {
-        height: 100%;
-      }
-    }
-  }
-
-  .label {
-    font-size: 1.8vw;
-    font-weight: bold;
-    color: var(--accent-color-green);
-  }
+ion-grid {
+  display: inherit;
 }
 
-.seccion-valores {
-  font-size: 2.8vw;
-
-  .sueno-rem,
-  .sueno-profundo,
-  .tiempo-dormido {
-    font-size: 1em;
-
-    div {
-      font-size: 1em;
-
-      .valor {
-        font-size: 1.2em;
-        font-weight: bold;
-      }
-
-      .unidad {
-        font-size: 0.8em;
-      }
-    }
-
-    div {
-      font-size: 1em;
-
-      .label {
-        font-size: 0.7em;
-      }
-    }
-
-
-  }
+.sueno-total {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: flex-end;
 }

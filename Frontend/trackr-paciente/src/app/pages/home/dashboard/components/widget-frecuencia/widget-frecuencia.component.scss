@@ -1,12 +1,27 @@
+@import "../../../../../../theme/variables.scss";
 .container {
   padding: 0;
 }
 
-.valor {
-  font-size: 8vw;
-  font-weight: bold;
-}
+.valores {
+  padding-right: 0px;
+  padding-top: 15%;
+  align-items: center;
+  justify-content: end;
 
-.label {
-  font-size: 4vw;
+  .valor {
+    font-size: 6vw;
+    color: var(--neutral-100);
+    font-family: var(--font-body);
+    margin-right: 5%;
+    font-weight: bold;
+    margin-bottom: 0;
+  }
+
+  .unidad {
+    font-size: 6vw;
+    color: var(--neutral-100);
+    font-family: var(--font-body);
+    margin-right: 5%;
+  }
 }

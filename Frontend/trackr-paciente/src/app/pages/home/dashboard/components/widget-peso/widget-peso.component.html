@@ -1,33 +1,14 @@
 <app-widget
   title="Peso"
-  iconClass="scale-outline"
+  iconClass="scale"
+  colorBackground="#9691A8"
 >
   <div class="container d-flex justify-content-center align-items-center">
-    <div class="circle-container d-flex flex-column align-items-center">
-      <div class="peso-perdido">
-        <ion-icon name="caret-down-outline" size="medium"></ion-icon>
-        <span class="valor">{{pesoPerdido}}</span>
-        <span class="unidad">kg</span>
-      </div>
 
-      <div class="peso-restante">
-        <span class="label">Restan </span>
-        <span class="valor">{{pesoFaltante}} </span>
-        <span class="unidad">kg</span>
-      </div>
-
-      <div class="peso-actual">
-        <span class="valor">{{ pesoActual }}</span>
-        <span class="unidad">kg</span>
-      </div>
-
-      <div class="dias">
-        <span class="valor">{{ dias }}</span>
-        <span class="unidad">d</span>
-      </div>
+    <div class="peso-actual">
+      <span class="valor"> {{ pesoActual }} </span>  
+      <span class="unidad">kg</span>
     </div>
-    <div class="img-container">
-      <img src="assets/img/widgets/standing.png">
-    </div>
+    
   </div>
 </app-widget>

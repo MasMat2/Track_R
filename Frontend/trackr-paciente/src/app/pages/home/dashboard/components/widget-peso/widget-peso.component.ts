@@ -17,7 +17,7 @@ export class WidgetPesoComponent  implements OnInit {
 
   protected pesoPerdido: number = 12;
   protected pesoFaltante: number = 5;
-  protected pesoActual: number = 85;
+  protected pesoActual: number = 61;
   protected dias: number = 40;
 
   constructor() { }

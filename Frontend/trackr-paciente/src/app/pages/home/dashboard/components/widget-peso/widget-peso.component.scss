@@ -1,118 +1,25 @@
 @import "../../styles/circle-container.scss";
+@import "../../../../../../theme/variables.scss";
 
 .container {
   padding: 0;
-}
-
-.container.d-flex {
-  gap: 5px;
-
-  .circle-container {
-    flex: 80;
-  }
-
-  .img-container {
-    flex: 20;
-  }
-}
-
-.circle-container {
-  font-size: 3vw;
-  line-height: 1;
-}
-
-.img-container {
-  height: 100%;
-  object-fit: contain;
-
-  img {
-    height: 100%;
-  }
-}
-
-.peso-perdido {
-  color: var(--accent-color-green);
-  // display: flex;
-  // align-items: center;
-  font-size: 1em;
-
-  .valor {
-    font-size: 1.1em;
-    font-weight: bold;
-  }
-
-  .unidad {
-    font-size: 0.8em;
-  }
-
-  ion-icon {
-    font-size: 1em;
-  }
-}
-
-.peso-restante {
-  font-size: 1em;
-
-  .label {
-    font-size: 0.6em;
-  }
-
-  .valor {
-    font-size: 0.9em;
-    font-weight: bold;
-  }
-
-  .unidad {
-    font-size: 0.8em;
-  }
+  position: relative;
 }
 
 .peso-actual {
   font-size: 1em;
+  color: var(--neutral-100);
+  font-size: 6vw;
+  font-family: var(--font-body);
+  height: 100%;
+  position: absolute;
+  right: 5%;
+  bottom: 0;
 
   .valor {
-    font-size: 1.9em;
     font-weight: bold;
   }
 
   .unidad {
-    font-size: 1em;
   }
 }
-
-.dias {
-  font-size: 1em;
-
-  .valor {
-    font-size: 1.1em;
-  }
-}
-
-// div[class*="col-"],
-// div[class^="col"] {
-//   padding: 50px;
-// }
-
-// ion-icon {
-//   color: var(--accent-color-green);
-//   font-size: 0.1em;
-//   font-weight: bold;
-//   line-height: 0.1;
-// }
-
-// .medida {
-//   font-size: 0.4em;
-//   font-weight: bold;
-//   line-height: 0.5;
-// }
-// .valor {
-//   font-size: 1em;
-//   font-weight: bold;
-//   line-height: 1;
-// }
-
-// .label {
-//   font-size: 0.4em;
-//   font-weight: bold;
-//   line-height: 0.5;
-// }

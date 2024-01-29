@@ -1,39 +1,27 @@
-<app-widget title="Pasos" iconClass="footsteps-outline">
-  <div class="container d-flex align-items-center gap-2">
-    <div class="counter d-flex flex-column align-items-center">
-      <!-- Contador -->
-      <div class="circle-container">
-        <div class="valor">{{ pasos?.value | number }}</div>
-        <div class="label">pasos</div>
-      </div>
+<app-widget title="Pasos" iconClass="walk" colorBackground="#E0B58E">
+  <div style=" width: 100%; padding-left: 40%;">
+    <div class="container d-flex align-items-center gap-2">
 
-      <!-- Meta -->
-      <div class="meta text-center mt-2">
-        de <span class="valor">{{ meta | number }}</span> pasos
-      </div>
-    </div>
-
-    <div class="img-container">
-      <img src="assets/img/widgets/walking.png"/>
-    </div>
-
-    <div class="values d-flex flex-column align-items-center gap-3">
-      <!-- Distancia -->
-      <div class="text-center">
-        <div class="value">
-          <span class="valor">{{ distancia | number }}</span><span class="medida">m</span>
+      <div class="values d-flex flex-column align-items-start gap-2">
+        <!-- Distancia -->
+        <div class="">
+          <div class="value">
+            <span class="valor">{{ distancia | number }}</span><span class="medida"></span>
+          </div>
+          <div class="label">pasos</div>
         </div>
-        <div class="label">caminados</div>
-      </div>
 
-      <!-- Tiempo -->
-      <div class="text-center">
-        <div class="value">
-          <span class="valor">{{ horas }}</span><span class="medida">h</span>
-          <span class="valor">{{ minutos }}</span><span class="medida">min</span>
+        <!-- Tiempo -->
+        <div class="">
+          <div class="value">
+            <span class="valor">{{ horas }}</span><span class="medida">h</span>
+            <span class="valor">{{ minutos }}</span><span class="medida">min</span>
+          </div>
+          <div class="label">caminando</div>
         </div>
-        <div class="label">caminados</div>
       </div>
     </div>
+
   </div>
+
 </app-widget>

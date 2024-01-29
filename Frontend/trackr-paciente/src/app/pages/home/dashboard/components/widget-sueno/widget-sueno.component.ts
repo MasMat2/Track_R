@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WidgetComponent } from '../widget/widget.component';
 import { CommonModule } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-widget-sueno',
@@ -10,6 +11,7 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     WidgetComponent,
+    IonicModule
   ]
 })
 export class WidgetSuenoComponent  implements OnInit {
