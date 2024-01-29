@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 
@@ -38,6 +38,8 @@ export class CreateJitsiMeetComponent implements OnInit {
   options: any;
   api: any;
   user: any;
+
+  @Input() idChat : string;
 
   // For Custom Controls
   isAudioMuted = false;
@@ -87,8 +89,8 @@ export class CreateJitsiMeetComponent implements OnInit {
 
   createNewRoom(): void {
     
-    const newRoomName = 'meet-trackr-1212' //+ Math.floor(Math.random() * 1000);
-    this.mandarMensajeLlamada('https://meet.jit.si/meet-trackr-1212');
+    const newRoomName = 'trackr-'+ Math.floor(Math.random() * 1000);
+    this.mandarMensajeLlamada('https://meet.jit.si/'+newRoomName);
 
     //Crea la nueva URL utilizando la plantilla de cadenas
     const newUrl = `intent://${this.domain}/${newRoomName}#Intent;scheme=org.jitsi.meet;package=org.jitsi.meet;end`;
@@ -132,10 +134,10 @@ export class CreateJitsiMeetComponent implements OnInit {
   }
 
   mandarMensajeLlamada(mensajeLlamada : string): void{
-    console.log("mandarMensajeLlamada method")
+    console.log("id chat mensaje " + this.idChat);
     let msg: ChatMensajeDTO = {
       fecha: new Date(),
-      idChat: 353,
+      idChat: parseInt(this.idChat),
       mensaje: mensajeLlamada,
       idPersona:5333,
       archivo: '',
