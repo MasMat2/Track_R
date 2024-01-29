@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, NavController } from '@ionic/angular';
 import { HeaderComponent } from '../layout/header/header.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { AudioInterface, ParticipantInterface } from './interfaces/jitsi-interface';
 import { DataJitsiService } from './service-jitsi/data-jitsi.service';
@@ -26,6 +26,8 @@ export class VideoJitsiPage implements OnInit {
 
   protected localStream: MediaStream;
 
+  idChat: string;
+
   room: string;
   user: string;
   jitsiDataUp: boolean = false;
@@ -35,11 +37,17 @@ export class VideoJitsiPage implements OnInit {
 
   constructor(private dataJitsiService: DataJitsiService,
     private ChatMensajeHubService:ChatMensajeHubService,
-    private ChatHubServiceService:ChatHubServiceService) { }
+    private ChatHubServiceService:ChatHubServiceService,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() { 
     this.ChatHubServiceService.iniciarConexion();
     this.ChatMensajeHubService.iniciarConexion();
+
+    this.activatedRoute.paramMap.subscribe(params => {
+      this.idChat = params.get('id-chat')!;
+      console.log('ID recibido:', this.idChat);
+    });
   }
 
   submitForm() {

@@ -59,7 +59,7 @@ export class MensajesComponent {
     private route: Router,
     private ChatHubServiceService: ChatHubServiceService,
     private ArchivoService: ArchivoService,
-    private plataformaService : PlataformaService
+    private plataformaService: PlataformaService
   ) { }
 
   ionViewWillEnter() {
@@ -224,12 +224,10 @@ export class MensajesComponent {
 
   clickArchivo(idArchivo: number) {
     this.ArchivoService.getArchivo(idArchivo).subscribe(res => {
-      if(this.plataformaService.isMobile())
-      {
+      if (this.plataformaService.isMobile()) {
         this.downloadFileMobile(res.archivo, res.nombre, res.archivoMime)
       }
-      else if(this.plataformaService.isWeb())
-      {
+      else if (this.plataformaService.isWeb()) {
         this.downloadFileWeb(res.archivo, res.nombre, res.archivoMime)
       }
     });
@@ -259,7 +257,7 @@ export class MensajesComponent {
     }
   }
 
-  downloadFileWeb(fileBase64:string,nombre?:string,mime?:string) {
+  downloadFileWeb(fileBase64: string, nombre?: string, mime?: string) {
     // Decodificar la cadena Base64
     const decodedData = atob(fileBase64);
 
@@ -279,10 +277,10 @@ export class MensajesComponent {
     document.body.appendChild(a);
     a.style.display = 'none';
     a.href = url;
-    
+
     a.download = `${nombre}`;
-    
-     // Nombre del archivo
+
+    // Nombre del archivo
     a.click();
 
     // Limpiar el object URL después de la descarga
@@ -345,6 +343,13 @@ export class MensajesComponent {
         this.audio2 = 'data:audio/wav;base64,' + audio.value.recordDataBase64;
       }
     })
+  }
+
+  crearLlamada() {
+    //this.router.navigate(['/ruta-especifica', idChat]);
+    this.route.navigate(
+      ['/home/video-jitsi'],
+      { queryParams: { 'id-chat': this.idChat } });
   }
 
 }
