@@ -10,13 +10,14 @@ import { WidgetService } from 'src/app/services/dashboard/widget.service';
 import { WidgetType } from '../../interfaces/widgets';
 import { UsuarioPadecimientosDTO } from 'src/app/shared/Dtos/gestion-expediente/usuario-padecimientos-dto';
 import { PadecimientoDTO } from 'src/app/shared/Dtos/gestion-expediente/padecimiento-dto';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { SeguimientoPadecimientoComponent } from '../seguimiento-padecimiento/seguimiento-padecimiento.component';
 import { WidgetFrecuenciaComponent } from '../widget-frecuencia/widget-frecuencia.component';
 import { WidgetPasosComponent } from '../widget-pasos/widget-pasos.component';
 import { WidgetPesoComponent } from '../widget-peso/widget-peso.component';
 import { WidgetSuenoComponent } from '../widget-sueno/widget-sueno.component';
 import { NotificacionPacienteService } from '@http/gestion-perfil/notificacion-paciente.service';
+import { filter, lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-inicio',
@@ -47,6 +48,7 @@ export class InicioPage implements OnInit {
   protected selectedUserWidgets: WidgetType[] = [];
   protected padecimientosUsuarioList : UsuarioPadecimientosDTO[];
   protected padecimientosList : PadecimientoDTO[];
+  private previousUrl: string;
 
   constructor(
     private widgetService : WidgetService,
@@ -56,31 +58,47 @@ export class InicioPage implements OnInit {
   ) { 
     this.notificacionPacienteService.actualizarWidgets$.subscribe(() => {
       this.consultarInfoWidgetsSeguimiento();
-    })
+    });
+
+    this.navegarConfigADashboardChanges();
+ 
   }
 
   ngOnInit() {
-
   }
+
 
   public ionViewWillEnter(){
-    //this.consultarInfoWidgetsSeguimiento();
     this.consultarWidgets();
+    this.consultarInfoWidgetsSeguimiento();
   }
 
-  public consultarInfoWidgetsSeguimiento(){
-    this.widgetService.consultarPadecimientos().subscribe((data) => {
-      this.padecimientosUsuarioList = data;
-      this.padecimientosList = this.padecimientosUsuarioList[0].secciones;
-    });
-  }
+  private navegarConfigADashboardChanges(){
 
-  public consultarWidgets(){
-    this.usuarioWidgetService.consultarPorUsuarioEnSesion().subscribe(
-      (data) => {
-        this.selectedUserWidgets = data;
+    this.router.events
+    .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+    .subscribe(async (event: NavigationEnd) =>
+     {
+      const currentUrl = event.urlAfterRedirects;
+      if (this.previousUrl === '/home/config-dashboard' && currentUrl === '/home/dashboard/inicio') 
+      {
+        await this.consultarInfoWidgetsSeguimiento();
+
+        await this.consultarWidgets();
+
       }
-    );
+      this.previousUrl = currentUrl;
+    });
+
+  }
+
+  public async consultarInfoWidgetsSeguimiento() {
+    this.padecimientosUsuarioList = await lastValueFrom(this.widgetService.consultarPadecimientos());
+    this.padecimientosList = this.padecimientosUsuarioList[0]?.secciones;
+  }
+
+  public async consultarWidgets(){
+    this.selectedUserWidgets = await lastValueFrom(this.usuarioWidgetService.consultarPorUsuarioEnSesion());
   }
 
   protected mostrarSeguimiento(idPadecimiento: any){
