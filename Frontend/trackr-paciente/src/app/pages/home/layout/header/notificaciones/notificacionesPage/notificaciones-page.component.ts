@@ -6,7 +6,7 @@ import { Observable, map } from 'rxjs';
 import { CommonModule, NgIf } from '@angular/common';
 import { NotificacionPacientePopOverDto } from 'src/app/shared/Dtos/notificaciones/notificacion-paciente-popover-dto';
 import { addIcons } from 'ionicons';
-import { notifications } from 'ionicons/icons'
+import { notificationsOutline } from 'ionicons/icons'
 
 @Component({
   selector: 'app-notificaciones-page',
@@ -21,13 +21,13 @@ import { notifications } from 'ionicons/icons'
 })
 export class NotificacionesPageComponent implements OnInit
 {
-  protected notificaciones$: Observable<NotificacionPacientePopOverDto[]>; 
+  protected notificaciones$: Observable<NotificacionPacientePopOverDto[]>;
 
   constructor(
     private popoverControler : PopoverController,
     private notificacionHubService : NotificacionPacienteHubService
   ){
-    addIcons({notifications})
+    addIcons({notificationsOutline})
   }
 
   ngOnInit()
