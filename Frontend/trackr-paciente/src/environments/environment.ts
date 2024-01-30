@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  urlBackend: 'https://www.atisc.com/trackr_dev/api/',
+  urlBackend: 'https://localhost:44353/api/',
   urlFrontend: 'http://localhost:8100/#',
 
 };
