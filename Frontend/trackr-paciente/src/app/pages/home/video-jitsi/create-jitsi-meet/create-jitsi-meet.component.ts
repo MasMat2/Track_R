@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 import { AudioInterface, ParticipantInterface } from '../interfaces/jitsi-interface';
@@ -51,11 +51,13 @@ export class CreateJitsiMeetComponent implements OnInit {
     private meta: Meta,
     private orientationService: ScreenOrientationService,
     private mensajeHubService: ChatMensajeHubService,
-    private chatMensajeHubServiceService: ChatHubServiceService
+    private chatMensajeHubServiceService: ChatHubServiceService,
+    private route: ActivatedRoute
   ) { }
 
 
   ngOnInit() {
+    this.idChat = this.route.snapshot.queryParamMap.get('id-chat')!;
     this.orientationService.lockLandscape();
     this.iniciarWebCam(); //iniciamos camara y microfono para que pueda ser iniciada una llamada en el iframe de jitsi
     const cspValue = "default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;";
