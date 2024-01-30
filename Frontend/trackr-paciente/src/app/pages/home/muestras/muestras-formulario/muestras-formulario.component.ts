@@ -12,6 +12,8 @@ import { CampoExpedienteModule } from '@sharedComponents/campo-expediente/campo-
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import * as Utileria from '@utils/utileria';
 import { SeccionMuestraDTO } from '@dtos/gestion-expediente/seccion-muestra-dto';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -39,7 +41,20 @@ export class MuestrasFormularioComponent implements OnInit {
   constructor(
     private seccionCampoService: SeccionCampoService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
-    ) { }
+    private router : Router
+    ) { 
+      this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe(async (event: NavigationEnd) =>
+       {
+        const currentUrl = event.urlAfterRedirects;
+        if ( currentUrl === '/home/clinicos') 
+        {
+          this.consultarArbol();
+  
+        }
+      });
+    }
 
   ngOnInit() {
     this.consultarArbol();
