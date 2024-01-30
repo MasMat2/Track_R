@@ -1,3 +1,5 @@
+@import "../../../../theme/variables.scss";
+
 h4{
   text-align: center;
 }
@@ -66,4 +68,9 @@ a:link {
   }
 }
 
+.btn-login{
+  --background: var(--neutral-100);
+  --color: var(--primary-700);
+  --box-shadow: 0;
+}
 

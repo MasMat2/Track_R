@@ -25,16 +25,21 @@
 }
 
 .btn-register {
-  --border-color: var(--ion-color-secondary);
   --color: white;
   --box-shadow: 0;
 }
 
 @media(min-width: 400px){
   .logos{
-    width: 400px;
+    width: 800px;
   }
   .contenedor-botones{
     width: 400px;
   }
+}
+
+.btn-login{
+  --background: var(--neutral-100);
+  --color: var(--primary-700);
+  --box-shadow: 0;
 }
