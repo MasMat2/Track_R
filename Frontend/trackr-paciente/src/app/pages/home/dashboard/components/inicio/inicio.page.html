@@ -14,7 +14,7 @@
     <div class="cuerpo-contenedor">
       <app-widget-container [widgetKeys]="selectedUserWidgets"></app-widget-container>
       <ion-grid>
-        <ion-row>
+        <ion-row *ngIf="padecimientosList">
           <ion-col [size] = "12" *ngFor="let padecimiento of padecimientosList">
               <app-widget-seguimiento
                   [tipoWidget] = "padecimiento.idWidget"
