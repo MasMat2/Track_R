@@ -349,8 +349,24 @@ export class MensajesComponent {
     this.route.navigate(['/home/video-jitsi/create-call', this.idChat]);
   }
 
-  contestarLlamada() {
-    this.route.navigate(['/home/video-jitsi/answer-call', 'HonestFlowersSkiOpenly']);
+  contestarLlamada(meetCode: string) {
+    this.route.navigate(['/home/video-jitsi/answer-call', meetCode]);
+  }
+
+  validarMeet(msj: string) {
+
+    if (msj.includes('trackr-' + this.idChat)) {
+      const regex = /trackr-\d{3}-\d+/;
+      const match = msj.match(regex);
+      if (match && match.length > 0) {
+        const codigo = match[0];
+        this.contestarLlamada(codigo);
+      } else {
+        console.log("Error al validar codigo meet jitsi.");
+      }
+
+
+    }
   }
 
 }

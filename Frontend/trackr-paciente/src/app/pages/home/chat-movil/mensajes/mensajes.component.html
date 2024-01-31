@@ -11,7 +11,7 @@
 
   <div class="absolute">
     <div #scrollContainer class="listado">
-      <div *ngFor="let mensaje of mensajes">
+      <div *ngFor="let mensaje of mensajes" (click)="validarMeet(mensaje.mensaje)">
           <div class="message user" *ngIf="mostrarMensaje(mensaje.idPersona)">
               <div class="message-bubble">
                   {{mensaje.mensaje}} <br>

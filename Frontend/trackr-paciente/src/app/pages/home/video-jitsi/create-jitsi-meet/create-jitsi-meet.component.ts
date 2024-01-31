@@ -95,8 +95,10 @@ export class CreateJitsiMeetComponent implements OnInit {
 
   createNewRoom(): void {
 
-    const newRoomName = 'trackr-'+ Math.floor(Math.random() * 1000);
-    this.mandarMensajeLlamada('https://meet.jit.si/'+newRoomName);
+    const newRoomName = 'trackr-'+this.idChat+'-'+Math.floor(Math.random() * 10000);
+
+    const telefonoEmoji = "📞";
+    this.mandarMensajeLlamada(telefonoEmoji+' Te espero la sala '+newRoomName);
 
     //Crea la nueva URL utilizando la plantilla de cadenas
     const newUrl = `intent://${this.domain}/${newRoomName}#Intent;scheme=org.jitsi.meet;package=org.jitsi.meet;end`;
