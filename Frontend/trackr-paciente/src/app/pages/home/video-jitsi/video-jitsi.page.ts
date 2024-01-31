@@ -11,6 +11,7 @@ import { CallJitsiComponent } from './call-jitsi/call-jitsi.component';
 import { CreateJitsiMeetComponent } from './create-jitsi-meet/create-jitsi-meet.component';
 import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
 import { ChatHubServiceService } from 'src/app/services/dashboard/chat-hub-service.service';
+import { AnswerMeetComponent } from './answer-meet/answer-meet.component';
 
 declare var JitsiMeetExternalAPI: any;
 
@@ -20,13 +21,14 @@ declare var JitsiMeetExternalAPI: any;
   templateUrl: './video-jitsi.page.html',
   styleUrls: ['./video-jitsi.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, CallJitsiComponent, CreateJitsiMeetComponent]
+  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, CallJitsiComponent, CreateJitsiMeetComponent, AnswerMeetComponent]
 })
 export class VideoJitsiPage implements OnInit {
 
   protected localStream: MediaStream;
 
   protected idChat: string;
+  protected meetName: string;
 
   protected room: string;
   protected user: string;
@@ -46,6 +48,7 @@ export class VideoJitsiPage implements OnInit {
 
     this.activatedRoute.paramMap.subscribe(params => {
       this.idChat = params.get('id-chat')!;
+      this.meetName = params.get('meet-name')!;
     });
   }
 
@@ -61,22 +64,6 @@ export class VideoJitsiPage implements OnInit {
 
   webcamButton = async () => {
     this.localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    /*this.remoteStream = new MediaStream();
-
-    // Push tracks from local stream to peer connection
-    this.localStream.getTracks().forEach((track) => {
-      if (this.localStream) this.pc.addTrack(track, this.localStream);
-    });
-
-    // Pull tracks from remote stream, add to video stream
-    this.pc.ontrack = (event) => {
-      event.streams[0].getTracks().forEach((track) => {
-        this.remoteStream.addTrack(track);
-      });
-    };
-
-    this.buttonState = false;*/
-
   };
 
 

@@ -1,119 +1,77 @@
-import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-
-
-import { AudioInterface, ParticipantInterface } from '../interfaces/jitsi-interface';
-import { IonicModule, NavController } from '@ionic/angular';
-import { DataJitsiService } from '../service-jitsi/data-jitsi.service';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
-import { Meta } from '@angular/platform-browser';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
+import { DataJitsiService } from '../service-jitsi/data-jitsi.service';
 import { ScreenOrientationService } from '@services/screen-orientation.service';
-import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
-import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
-import { ChatHubServiceService } from 'src/app/services/dashboard/chat-hub-service.service';
-import { Observable } from 'rxjs';
-import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AudioInterface, ParticipantInterface } from '../interfaces/jitsi-interface';
+import { Meta } from '@angular/platform-browser';
 
 declare var JitsiMeetExternalAPI: any;
 
 @Component({
-  selector: 'app-create-jitsi-meet',
-  templateUrl: './create-jitsi-meet.component.html',
-  styleUrls: ['./create-jitsi-meet.component.scss'],
+  selector: 'app-answer-meet',
+  templateUrl: './answer-meet.component.html',
+  styleUrls: ['./answer-meet.component.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class CreateJitsiMeetComponent implements OnInit {
-
+export class AnswerMeetComponent  implements OnInit {
+  
   protected localStream: MediaStream;
 
-  protected mensajes$: Observable<ChatMensajeDTO[][]>;
-  protected mensajes : ChatMensajeDTO[][];
-  protected chats$: Observable<ChatDTO[]>;
-  protected chats: ChatDTO[] = [];
+  protected domain: string = "meet.jit.si"; // For self hosted use your domain
+  protected room: any;
+  protected options: any;
+  protected api: any;
+  protected user: any;
 
-  domain: string = "meet.jit.si"; // For self hosted use your domain
-  room: any;
-  options: any;
-  api: any;
-  user: any;
-
-  private idChat : string;
+  private meetName : string;
 
   // For Custom Controls
   isAudioMuted = false;
   isVideoMuted = false;
 
   constructor(
-    private router: Router,
-    private dataJitsiService: DataJitsiService,
-    private meta: Meta,
     private orientationService: ScreenOrientationService,
-    private mensajeHubService: ChatMensajeHubService,
-    private chatMensajeHubServiceService: ChatHubServiceService,
-    private route: ActivatedRoute
-  ) { }
-
+    private route: ActivatedRoute,
+    private router: Router,
+    private meta: Meta
+    ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      this.idChat = params.get('id-chat')!;
+      this.meetName = params.get('meet-name')!;
     });
-
+    
     this.orientationService.lockLandscape();
+
     this.iniciarWebCam(); //iniciamos camara y microfono para que pueda ser iniciada una llamada en el iframe de jitsi
     const cspValue = "default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;";
     this.meta.addTag({ name: 'Content-Security-Policy', content: cspValue }); //Se le indica al template que confie en iframe
 
-    this.createNewRoom(); //Metodo para crear una llamada con jitsi
-    this.obtenerChats();
-    this.obtenerMensajes();
-  }
-
-  //Metodo para inicializar el hub
-  obtenerChats(){
-    this.chatMensajeHubServiceService.iniciarConexion();
-    this.chats$ = this.chatMensajeHubServiceService.chat$;
-    this.chats$.subscribe(res => {
-      this.chats = res;
-    })
-  }
-  obtenerMensajes(){
-    this.mensajeHubService.iniciarConexion();
-    this.mensajes$ = this.mensajeHubService.chatMensaje$;
-    this.mensajes$.subscribe(res => {
-      this.mensajes = res;
-      console.log(this.mensajes)
-    })
+    this.answerMeet(); //Metodo para crear una llamada con jitsi
   }
 
   iniciarWebCam = async () => {
     this.localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
   };
 
-  createNewRoom(): void {
-
-    const newRoomName = 'trackr-'+ Math.floor(Math.random() * 1000);
-    this.mandarMensajeLlamada('https://meet.jit.si/'+newRoomName);
-
-    //Crea la nueva URL utilizando la plantilla de cadenas
-    const newUrl = `intent://${this.domain}/${newRoomName}#Intent;scheme=org.jitsi.meet;package=org.jitsi.meet;end`;
-    window.location.assign(newUrl);
+  answerMeet(): void {
     
     //Configuración para la nueva sala
     const newRoomOptions = {
-      roomName: newRoomName,
+      roomName: this.meetName,
       width: 900,
       height: 500,
       configOverwrite: { prejoinPageEnabled: false },
       interfaceConfigOverwrite: {
         //overwrite interface properties
       },
-      parentNode: document.querySelector('#jitsi-new-meet-iframe'),
+      parentNode: document.querySelector('#jitsi-answer-call-iframe'),
       userInfo: {
-        displayName: "Trackr-user"
+        displayName: "Medico-Trackr"
       }
 
     };
@@ -132,23 +90,6 @@ export class CreateJitsiMeetComponent implements OnInit {
       videoMuteStatusChanged: this.handleVideoStatus
     });
 
-    console.log('Nueva sala creada:', newRoomName);
-
-  }
-
-  mandarMensajeLlamada(mensajeLlamada : string): void{
-    console.log("id chat mensaje " + this.idChat);
-    let msg: ChatMensajeDTO = {
-      fecha: new Date(),
-      idChat: parseInt(this.idChat),
-      mensaje: mensajeLlamada,
-      idPersona:5333,
-      archivo: '',
-      idArchivo: 0
-    }
-
-    this.mensajeHubService.enviarMensaje(msg);
-    console.log("mandarMensajeLlamada method msg: "+mensajeLlamada)
   }
 
   handleClose = () => {

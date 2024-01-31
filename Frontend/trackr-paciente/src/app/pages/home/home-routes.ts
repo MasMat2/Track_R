@@ -15,7 +15,7 @@ export default [
     component: HomePage,
     children: [
       { path: 'chat', component: ChatPage, data: { breadcrumb: 'Chat' } },
-      { path: 'video-jitsi', component: VideoJitsiPage},
+      { path: 'video-jitsi', loadChildren: () => import('./video-jitsi/video-jitsi-routes') },
       { path: 'chat-movil', loadChildren: () => import('./chat-movil/chat-movil-routes') },
       { path: 'clinicos', component: MuestrasPage, data: { breadcrumb: 'Muestras' } },
       { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard-routes'), data: { breadcrumb: 'Inicio' }},
