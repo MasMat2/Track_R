@@ -12,7 +12,8 @@ import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
 import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-service.service';
 import { ArchivoService } from '../../../../shared/http/archivo/archivo.service';
 import { ArchivoFormDTO } from '../../../../shared/Dtos/archivos/archivo-form-dto';
-
+import { addIcons } from 'ionicons';
+import { videocamOutline } from 'ionicons/icons';
 //Libreria de capacitor para grabar audio
 import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder';
 
@@ -60,7 +61,7 @@ export class MensajesComponent {
     private ChatHubServiceService: ChatHubServiceService,
     private ArchivoService: ArchivoService,
     private plataformaService: PlataformaService
-  ) { }
+  ) { addIcons({videocamOutline}); }
 
   ionViewWillEnter() {
     this.obtenerIdUsuario();

@@ -1,5 +1,94 @@
-.overflow {
+@import "../../../../../theme/variables.scss";
+
+
+ion-header{
+  ion-title{
+    font-weight: bold;
+  }
+  .primary-toolbar{
+    --border-width: 1px 0;
+    --border-color: var(--neutral-200);
+
+  }
+}
+
+.barra-busqueda{
+  --background: var(--neutral-100);
+  ion-searchbar{
+    --background: var(--primary-100);
+    --border-radius: 5px;
+  }
+}
+
+.lista-doctores{
+  border: 1px solid var(--neutral-200);
+  background: var(--neutral-50);
+  display: flex;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  align-items: center;
+  //white-space: nowrap;
+
+  .doctor{
+    height: 20vh;
+    min-width: 25vw;
+    display: inline-block;
+
+    .imagen{
+      margin-top: 10px;
+      position: relative;
+      height: 50%;
+      ion-avatar{      
+        margin: auto;
+      }
+
+      .icono-agregar{
+        position: absolute;
+        top: 0;
+        right: 0;
+  
+        font-size: 1.2em;
+      }
+    }
+    
+    .nombre{
+      height: 10vh;
+      ion-label{
+        text-align: center;
+        p{
+          font-size: 0.9em;
+        }
+      }
+    }
+    
+    
+  }
+}
+
+.chats{
   height: 78vh;
   padding-top: 3vh;
-  overflow-y: auto;
+
+  ion-list{
+    background: var(--neutral-100);
+    .chat{
+      --background: var(--neutral-100);
+
+      ion-avatar{
+        --border-radius: 15px;
+      }
+
+      ion-label{
+        h3{
+          font-size: 0.9em;
+          font-weight: bold;
+        }
+
+        p{
+          font-size: 0.8em;
+        }
+      }
+    }
+  }
+  
 }

@@ -1,6 +1,6 @@
 <ion-tabs #tabs (ionTabsDidChange)="cambiarIconoTabSeleccionada()">
   <div class="footer">
-  <ion-tab-bar slot="bottom">
+  <ion-tab-bar slot="bottom" [ngStyle]="{'display': mostrarFooter ? 'flex' : 'none'}">
     <ion-tab-button tab="chat-movil" class="tab">
       <ion-icon [name]="selectedTab === 'chat-movil' ? 'chatbox-ellipses' : 'chatbox-ellipses-outline'"></ion-icon>
     </ion-tab-button>
