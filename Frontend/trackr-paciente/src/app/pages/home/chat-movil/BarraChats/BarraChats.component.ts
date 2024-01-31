@@ -15,39 +15,56 @@ import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
 import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
 import { ChatPersonaService } from '../../../../shared/http/chat/chat-persona.service';
 import { FormsModule } from '@angular/forms';
+import { addIcons } from 'ionicons';
+import { addCircle, chatboxOutline } from 'ionicons/icons'
 
 @Component({
   selector: 'app-barra-chats',
   templateUrl: './BarraChats.component.html',
   styleUrls: ['./BarraChats.component.scss'],
   standalone: true,
-  imports: [TableModule, CommonModule,IonicModule,HeaderComponent, FormsModule],
+  imports: [
+    TableModule, 
+    CommonModule,
+    IonicModule,
+    HeaderComponent, 
+    FormsModule,
+  ],
+  providers : [
+
+  ]
 })
 export class BarraChatsComponent {
+  private idUsuario:number;
   protected chats$: Observable<ChatDTO[]>;
   protected chats: ChatDTO[];
-  protected chatMensajes$: Observable<ChatMensajeDTO[][]>;
-  protected mensajes: ChatMensajeDTO[][];
+  //protected chatMensajes$: Observable<ChatMensajeDTO[][]>;
+  //protected mensajes: ChatMensajeDTO[][];
   protected misDoctores: UsuarioDoctoresDto[];
-  protected doctorSeleccionado: boolean = false;
-  protected idUsuario:number;
   protected usuarios: number[] = [];
   protected tituloChat:string;
-  //@Output() idChatPadre = new EventEmitter<number>();
-  //@Input() ultmoMensajes: string[];
 
-  constructor(private router: Router,
-              private ChatHubServiceService:ChatHubServiceService,
-              private chatMensajeHubService:ChatMensajeHubService,
-              private archivoService : ArchivoService,
-              private sanitizer : DomSanitizer,
-              private doctoresService : MisDoctoresService,
-              private ChatPersonaService:ChatPersonaService) {}
+  protected doctorSeleccionado: boolean = false;
+  protected verListaDoctores: boolean = false;
+  protected chatsFiltradosPorBusqueda: any;
+
+  constructor(
+    private router: Router,
+    private ChatHubServiceService:ChatHubServiceService,
+    //private chatMensajeHubService:ChatMensajeHubService,
+    private archivoService : ArchivoService,
+    private sanitizer : DomSanitizer,
+    private doctoresService : MisDoctoresService,
+    private ChatPersonaService:ChatPersonaService
+  ) {
+    addIcons({addCircle, chatboxOutline});
+  }
 
   ionViewWillEnter(){
     this.obtenerChats()
     this.consultarDoctores();
     this.obtenerIdUsuario();
+    //this.obtenerMensajes();
   }
 
   obtenerIdUsuario(){
@@ -70,25 +87,26 @@ export class BarraChatsComponent {
       });
       
       this.chats = chats;
-      this.obtenerUltimoMensaje();
+      this.chatsFiltradosPorBusqueda = chats;
+      //this.obtenerUltimoMensaje();
     });
   }
 
-  obtenerMensajes() {
-    this.chatMensajes$ = this.chatMensajeHubService.chatMensaje$;
+  // obtenerMensajes() {
+  //   this.chatMensajes$ = this.chatMensajeHubService.chatMensaje$;
 
-    this.chatMensajes$.subscribe((res) => {
-      this.mensajes = res;
-      this.obtenerUltimoMensaje();
-    });
-  }
+  //   this.chatMensajes$.subscribe((res) => {
+  //     this.mensajes = res;
+  //     this.obtenerUltimoMensaje();
+  //   });
+  // }
 
-  obtenerUltimoMensaje():void{
-    if(this.mensajes){
-      let ultimoMensaje = this.mensajes.map(arr => {console.log(arr); return arr[arr.length - 1]?.mensaje || ""})
-      this.chats.forEach((x,index) => {x.ultimoMensaje = ultimoMensaje[index]})
-    }
-  }
+  // obtenerUltimoMensaje():void{
+  //   if(this.mensajes){
+  //     let ultimoMensaje = this.mensajes.map(arr => {console.log(arr); return arr[arr.length - 1]?.mensaje || ""})
+  //     this.chats.forEach((x,index) => {x.ultimoMensaje = ultimoMensaje[index]})
+  //   }
+  // }
 
   /*obtenerUltimoMensaje(): void {
     let ultimoMensaje = this.mensajes.map(
@@ -138,5 +156,19 @@ export class BarraChatsComponent {
     this.tituloChat = "";
     this.usuarios = []
     this.doctorSeleccionado = false;
+  }
+
+  protected mostrarListaDoctores(){
+    this.verListaDoctores = ! this.verListaDoctores;
+  }
+
+  protected buscarChat(event: any){
+    const text = event.target.value;
+    this.chatsFiltradosPorBusqueda = this.chats;
+    if(text && text.trim() != ''){
+      this.chatsFiltradosPorBusqueda = this.chatsFiltradosPorBusqueda.filter((chat: any) =>{
+          return (chat.titulo.toLowerCase().indexOf(text.toLowerCase()) > -1 || chat.ultimoMensaje.toLowerCase().indexOf(text.toLowerCase()) > -1 );
+      })
+    }
   }
 }
