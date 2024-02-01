@@ -22,4 +22,8 @@ export class DominioHospitalService {
   public editarDominioHospital(dominioHospital:DominioHospitalDto):Observable<void>{
     return this.http.put<void>(`${this.dataUrl}`,dominioHospital)
   }
+
+  public eliminarDominioHospital(idDominio:number, idHospital:number):Observable<void>{
+    return this.http.delete<void>(`${this.dataUrl}${idHospital}/${idDominio}`)
+  }
 }

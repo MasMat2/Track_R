@@ -324,7 +324,9 @@ export class DominioFormularioComponent implements OnInit {
       })
     }
     if(gridData.accion === GeneralConstant.GRID_ACCION_ELIMINAR){
-      console.log('Eliminar')
+      this.dominioHospitalService.eliminarDominioHospital(this.dominio.idDominio,gridData.data.idHospital).subscribe(res => {
+        alert('Dominio de hospital eliminado')
+      })
     }
   }
 }
