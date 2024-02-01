@@ -76,6 +76,7 @@ export class DominioFormularioComponent implements OnInit {
     idDominio: 0,
     idHospital: 0
   };
+  protected tituloEditar = '';
 
   constructor(
     private mensajeService: MensajeService,
@@ -308,6 +309,7 @@ export class DominioFormularioComponent implements OnInit {
   }
 
   protected onGridClickHospital(gridData: { accion: string; data: Hospital }){
+    this.tituloEditar = `Editando Dominio para ${gridData.data.nombre}`;
     if(gridData.accion === GeneralConstant.GRID_ACCION_EDITAR){
       console.log(`Dominio: ${this.dominio.idDominio}, Hospital: ${gridData.data.idHospital}`)
       this.dominioHospitalService.obtenerDominioHospital(this.dominio.idDominio,gridData.data.idHospital).subscribe(res => {
