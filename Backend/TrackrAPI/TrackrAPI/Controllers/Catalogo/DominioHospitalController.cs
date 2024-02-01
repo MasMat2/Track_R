@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrackrAPI.Dtos.Catalogo;
+using TrackrAPI.Helpers;
 using TrackrAPI.Services.Catalogo;
+using TrackrAPI.Services.Seguridad;
 
 namespace TrackrAPI.Controllers.Catalogo
 {
@@ -10,18 +12,25 @@ namespace TrackrAPI.Controllers.Catalogo
     public class DominioHospitalController : ControllerBase
     {
         private readonly DominioHospitalService _dominioHospitalService;
+        private readonly UsuarioService _usuarioService;
 
-        public DominioHospitalController(DominioHospitalService dominioHospitalService)
+        public DominioHospitalController(DominioHospitalService dominioHospitalService,
+                                         UsuarioService usuarioService)
         {
             _dominioHospitalService = dominioHospitalService;
+            _usuarioService = usuarioService;
         }
 
         [HttpGet]
         [Route("{idHospital}/{idDominio}")]
         public DominioHospitalDto Consultar(int idHospital, int idDominio)
         {
-            Console.WriteLine(idDominio);
-            Console.WriteLine(idHospital);
+            if(idHospital == 0)
+            {
+                var idUsuario = Utileria.TryObtenerIdUsuarioSesion(this);
+                idHospital = _usuarioService.Consultar(idUsuario).IdHospital;
+                Console.WriteLine(idHospital);
+            }
             return _dominioHospitalService.Consultar(idHospital,idDominio);
         }
 
