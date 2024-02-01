@@ -10,6 +10,10 @@ import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { GeneralConstant } from '@utils/general-constant';
 import * as Utileria from '@utils/utileria';
 import * as moment from 'moment';
+import { HospitalService } from '../../../../../shared/http/catalogo/hospital.service';
+import { Hospital } from '@models/catalogo/hospital';
+import { DominioHospitalService } from '../../../../../shared/http/catalogo/dominio-hospital.service';
+import { DominioHospitalDto } from '@dtos/catalogo/dominio-hospital-dto';
 
 @Component({
   selector: 'app-dominio-formulario',
@@ -67,12 +71,20 @@ export class DominioFormularioComponent implements OnInit {
 
   public esUsuarioMaestroAtisc = false;
 
+  protected hospitales:Hospital[];
+  protected dominioHospital:DominioHospitalDto = {
+    idDominio: 0,
+    idHospital: 0
+  };
+
   constructor(
     private mensajeService: MensajeService,
     private formularioService: FormularioService,
     private dominioService: DominioService,
     private dominioDetalleService: DominioDetalleService,
-    private sessionService: SessionService
+    private sessionService: SessionService,
+    private hospitalService:HospitalService,
+    private dominioHospitalService:DominioHospitalService
   ) {}
 
   public ngOnInit(): void {
@@ -86,6 +98,15 @@ export class DominioFormularioComponent implements OnInit {
       this.dominioDetalle = new DominioDetalle();
     }
     this.accionDetalle = 'Agregar';
+
+    this.obtenerHospitales();
+  }
+
+  obtenerHospitales(){
+    this.hospitalService.consultarTodosParaSelector().subscribe(res => {
+      console.log(res)
+      this.hospitales = res;
+    })
   }
 
   // Funciones para validar fechas
@@ -123,8 +144,10 @@ export class DominioFormularioComponent implements OnInit {
     }
   }
 
+  //Funcion para el boton guardar
   public enviarFormulario(formulario: NgForm): void {
     this.btnSubmit = true;
+    console.log('hola')
     if (!formulario.valid) {
       this.formularioService.validarCamposRequeridos(formulario);
       this.btnSubmit = false;
@@ -139,6 +162,18 @@ export class DominioFormularioComponent implements OnInit {
     } else if (this.accion === GeneralConstant.MODAL_ACCION_EDITAR) {
       this.editar();
     }
+
+    //Guardar en BD DominioHospital
+    this.dominioHospitalService.obtenerDominioHospital(this.dominioHospital.idDominio,this.dominioHospital.idHospital).subscribe(res => {
+      if(res != null){
+        this.dominioHospitalService.editarDominioHospital(this.dominioHospital).subscribe(res => {})
+      }
+      else{
+        if(this.dominioHospital.idDominio != 0 || this.dominioHospital.idHospital != 0){
+          this.dominioHospitalService.guardarDominioHospital(this.dominioHospital).subscribe(res => {})
+        } 
+      }
+    })
   }
 
   public enviarFormularioDetalle(formulario: NgForm): void {
@@ -270,5 +305,26 @@ export class DominioFormularioComponent implements OnInit {
 
   public cancelar(): void {
     this.onClose(true);
+  }
+
+  protected onGridClickHospital(gridData: { accion: string; data: Hospital }){
+    if(gridData.accion === GeneralConstant.GRID_ACCION_EDITAR){
+      console.log(`Dominio: ${this.dominio.idDominio}, Hospital: ${gridData.data.idHospital}`)
+      this.dominioHospitalService.obtenerDominioHospital(this.dominio.idDominio,gridData.data.idHospital).subscribe(res => {
+        if(res != null){
+          this.dominioHospital = res
+          console.log(this.dominioHospital)
+        }
+        else{
+          this.dominioHospital = {
+            idDominio: this.dominio.idDominio,
+            idHospital: gridData.data.idHospital
+          };
+        }
+      })
+    }
+    if(gridData.accion === GeneralConstant.GRID_ACCION_ELIMINAR){
+      console.log('Eliminar')
+    }
   }
 }
