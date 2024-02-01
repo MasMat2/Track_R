@@ -47,9 +47,16 @@ namespace TrackrAPI.Controllers.Catalogo
         }
 
         [HttpDelete]
-        public void Eliminar(DominioHospitalDto dominioHospitalDto)
+        [Route("{idHospital}/{idDominio}")]
+        public void Eliminar(int idHospital, int idDominio)
         {
-            _dominioHospitalService.Eliminar(dominioHospitalDto);
+            var dominio = _dominioHospitalService.Consultar(idHospital,idDominio);
+
+            if(dominio is null)
+            {
+                throw new CdisException("No se encontro el dominio registrado en el hospital");
+            }
+            _dominioHospitalService.Eliminar(dominio);
         }
     }
 }
