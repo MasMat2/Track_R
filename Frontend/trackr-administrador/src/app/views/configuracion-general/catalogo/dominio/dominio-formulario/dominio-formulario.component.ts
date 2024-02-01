@@ -105,7 +105,6 @@ export class DominioFormularioComponent implements OnInit {
 
   obtenerHospitales(){
     this.hospitalService.consultarTodosParaSelector().subscribe(res => {
-      console.log(res)
       this.hospitales = res;
     })
   }
@@ -148,7 +147,6 @@ export class DominioFormularioComponent implements OnInit {
   //Funcion para el boton guardar
   public enviarFormulario(formulario: NgForm): void {
     this.btnSubmit = true;
-    console.log('hola')
     if (!formulario.valid) {
       this.formularioService.validarCamposRequeridos(formulario);
       this.btnSubmit = false;
@@ -311,11 +309,9 @@ export class DominioFormularioComponent implements OnInit {
   protected onGridClickHospital(gridData: { accion: string; data: Hospital }){
     this.tituloEditar = `Editando Dominio para ${gridData.data.nombre}`;
     if(gridData.accion === GeneralConstant.GRID_ACCION_EDITAR){
-      console.log(`Dominio: ${this.dominio.idDominio}, Hospital: ${gridData.data.idHospital}`)
       this.dominioHospitalService.obtenerDominioHospital(this.dominio.idDominio,gridData.data.idHospital).subscribe(res => {
         if(res != null){
           this.dominioHospital = res
-          console.log(this.dominioHospital)
         }
         else{
           this.dominioHospital = {
@@ -327,7 +323,7 @@ export class DominioFormularioComponent implements OnInit {
     }
     if(gridData.accion === GeneralConstant.GRID_ACCION_ELIMINAR){
       this.dominioHospitalService.eliminarDominioHospital(this.dominio.idDominio,gridData.data.idHospital).subscribe(res => {
-        alert('Dominio de hospital eliminado')
+        this.mensajeService.modalExito('Dominio de hospital eliminado exitosamente')
       })
     }
   }
