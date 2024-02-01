@@ -107,7 +107,7 @@ export class CreateJitsiMeetComponent implements OnInit {
     //Configuración para la nueva sala
     const newRoomOptions = {
       roomName: newRoomName,
-      width: 900,
+      width: 800,
       height: 500,
       configOverwrite: { prejoinPageEnabled: false },
       interfaceConfigOverwrite: {
