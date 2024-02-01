@@ -5,6 +5,8 @@ import { SeccionCampo } from '@models/gestion-entidad/seccion-campo';
 import { EntidadTablaRegistroDto, TablaValorDto } from '../../../dtos/gestion-entidades/entidad-tabla-registro-dto';
 import { MensajeService } from '../../mensaje/mensaje.service';
 import * as Utileria from '@utils/utileria';
+import { DominioHospitalService } from '@http/catalogo/dominio-hospital.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-seccion-tabla-formulario',
@@ -27,7 +29,8 @@ export class SeccionTablaFormularioComponent implements OnInit {
 
   constructor(
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
-    private mensajeService: MensajeService
+    private mensajeService: MensajeService,
+    private dominioHospitalService:DominioHospitalService
   ) {}
 
   public grupos: {
@@ -89,7 +92,7 @@ export class SeccionTablaFormularioComponent implements OnInit {
     }
   }
 
-  public editar(): void {
+  public async editar() {
     const registro: EntidadTablaRegistroDto = {
       numero: this.numeroRegistro,
       idEntidadEstructura: this.idPestanaSeccion,
@@ -102,18 +105,18 @@ export class SeccionTablaFormularioComponent implements OnInit {
         c.valor && c.valor !== ''
     );
 
-    registro.valores = campos.map(
-      (campo: SeccionCampo) => {
+    registro.valores = await Promise.all(campos.map(
+      async (campo: SeccionCampo) => {
         const valor: TablaValorDto = {
           idEntidadEstructuraTablaValor: 0,
           claveCampo: campo.clave,
           valor: campo.valor?.toString() ?? '',
-          fueraDeRango: this.estaFueraDeRango(campo)
+          fueraDeRango: await this.estaFueraDeRango(campo)
         };
 
         return valor;
       }
-    );
+    ));
 
     const subscription = this.entidadEstructuraTablaValorService
       .editar(registro)
@@ -126,7 +129,7 @@ export class SeccionTablaFormularioComponent implements OnInit {
       });
   }
 
-  public agregar(): void {
+  public async agregar() {
     const registro: EntidadTablaRegistroDto = {
       numero: 0,
       idEntidadEstructura: this.idPestanaSeccion,
@@ -142,18 +145,18 @@ export class SeccionTablaFormularioComponent implements OnInit {
         c.idDominioNavigation.tipoCampo !== 'Select Múltiple'
     );
 
-    registro.valores = camposAgregar.map(
-      (campo: SeccionCampo) => {
+    registro.valores = await Promise.all( camposAgregar.map(
+      async (campo: SeccionCampo) => {
         const valor: TablaValorDto = {
           idEntidadEstructuraTablaValor: 0,
           claveCampo: campo.clave,
           valor: campo.valor?.toString() ?? '',
-          fueraDeRango: this.estaFueraDeRango(campo)
+          fueraDeRango: await this.estaFueraDeRango(campo)
         };
 
         return valor;
       }
-    );
+    ));
 
     const subscription = this.entidadEstructuraTablaValorService
       .agregar(registro)
@@ -166,7 +169,7 @@ export class SeccionTablaFormularioComponent implements OnInit {
       });
   }
 
-  private estaFueraDeRango(campo: SeccionCampo) {
+  private async estaFueraDeRango(campo: SeccionCampo) {
     const dominio = campo.idDominioNavigation;
 
     const number = Number.parseFloat(campo.valor?.toString() ?? '');
@@ -174,6 +177,19 @@ export class SeccionTablaFormularioComponent implements OnInit {
     if (Number.isNaN(number)) {
       return false;
     }
+
+    //Verificacion de la tabla dominio hospital
+    let domHos = await lastValueFrom(this.dominioHospitalService.obtenerDominioHospital(dominio.idDominio,0))
+    console.log(domHos)
+    if(domHos != null){
+      if(domHos.valorMaximo != null){
+        dominio.valorMaximo = Number(domHos.valorMaximo)
+      }
+      if(domHos.valorMinimo != null){
+        dominio.valorMinimo = Number(domHos.valorMinimo)
+      }
+    }
+
 
     const min = dominio.valorMinimo;
     const max = dominio.valorMaximo;
