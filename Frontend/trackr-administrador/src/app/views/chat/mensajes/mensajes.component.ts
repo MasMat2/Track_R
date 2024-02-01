@@ -5,6 +5,7 @@ import { ChatPersonaService } from '../../../shared/http/chats/chat-persona.serv
 import { ChatPersonaSelectorDTO } from '@dtos/chats/chat-persona-selector-dto';
 import { ArchivoService } from '../../../shared/http/archivo/archivo.service';
 import { ArchivoFormDTO } from '@dtos/archivos/archivo-form-dto';
+import { Router } from '@angular/router';
 
 //Libreria de capacitor para grabar audio
 /* import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder'; */
@@ -35,7 +36,8 @@ export class MensajesComponent {
 
   constructor(private ChatMensajeHubService:ChatMensajeHubService,
               private ChatPersonaService:ChatPersonaService,
-              private ArchivoService:ArchivoService) {}
+              private ArchivoService:ArchivoService,
+              private router: Router) {}
   
   ngOnInit(){
     this.obtenerIdUsuario();
@@ -276,5 +278,26 @@ export class MensajesComponent {
       }
     })
   } */
+
+
+  contestarLlamada(meetCode: string) {
+    this.router.navigate(['administrador','jitsi-meet', meetCode]);
+  }
+
+  validarMeet(msj: string) {
+
+    if (msj.includes('trackr-' + this.idChat)) {
+      const regex = /trackr-\d{3}-\d+/;
+      const match = msj.match(regex);
+      if (match && match.length > 0) {
+        const codigo = match[0];
+        this.contestarLlamada(codigo);
+      } else {
+        console.log("Error al validar codigo meet jitsi.");
+      }
+
+
+    }
+  }
 
 }

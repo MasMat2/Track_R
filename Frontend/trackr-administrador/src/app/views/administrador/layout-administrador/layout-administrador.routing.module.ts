@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { InicioComponent } from '../inicio/inicio.component';
 import { ChatComponent } from '../../chat/chat.component';
+import { JitsiMeetModule } from '../../jitsi-meet/jitsi-meet.module';
+import { AnswerMeetComponent } from '../../jitsi-meet/answer-meet/answer-meet.component';
 
 const routes: Routes = [
   {
@@ -33,6 +35,13 @@ const routes: Routes = [
   {
     path: 'chat/:id',
     component: ChatComponent
+  },
+  {
+    path: 'jitsi-meet/:meet-name',
+    //component: AnswerMeetComponent
+    loadChildren: () =>
+      import('src/app/views/jitsi-meet/jitsi-meet.module')
+      .then((m) => m.JitsiMeetModule),
   }
 ];
 
