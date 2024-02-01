@@ -5,6 +5,6 @@ namespace TrackrAPI.Repositorys.Catalogo;
 
 public interface IDominioHospitalRepository : IRepository<DominioHospital>
 {
-    public DominioHospitalDto Consultar(int idDominioHospital);
+    public DominioHospitalDto Consultar(int idHospital, int idDominio);
 }
 

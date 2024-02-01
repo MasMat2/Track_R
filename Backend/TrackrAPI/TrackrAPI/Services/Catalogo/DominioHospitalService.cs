@@ -32,9 +32,9 @@ public class DominioHospitalService
         _dominioHospitalRepository.Agregar(dominio);
     }
 
-    public DominioHospitalDto Consultar(int idDominioHospital)
+    public DominioHospitalDto Consultar(int idHospital, int idDominio)
     {
-        return _dominioHospitalRepository.Consultar(idDominioHospital);
+        return _dominioHospitalRepository.Consultar(idHospital,idDominio);
     }
 
     public void Modificar(DominioHospitalDto dominioHospitalDto)

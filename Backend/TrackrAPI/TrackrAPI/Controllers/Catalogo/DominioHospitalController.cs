@@ -17,10 +17,12 @@ namespace TrackrAPI.Controllers.Catalogo
         }
 
         [HttpGet]
-        [Route("{id}")]
-        public DominioHospitalDto Consultar(int id)
+        [Route("{idHospital}/{idDominio}")]
+        public DominioHospitalDto Consultar(int idHospital, int idDominio)
         {
-            return _dominioHospitalService.Consultar(id);
+            Console.WriteLine(idDominio);
+            Console.WriteLine(idHospital);
+            return _dominioHospitalService.Consultar(idHospital,idDominio);
         }
 
         [HttpPost]

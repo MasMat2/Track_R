@@ -10,10 +10,10 @@ public class DominioHospitalRepository : Repository<DominioHospital>, IDominioHo
         base.context = context;
     }
 
-    public DominioHospitalDto Consultar(int idDominioHospital)
+    public DominioHospitalDto Consultar(int idHospital, int idDominio)
     {
         return context.DominioHospital
-                      .Where(x => x.IdDominioHospital == idDominioHospital)
+                      .Where(x => (x.IdDominio == idDominio) && (x.IdHospital == idHospital))
                       .Select(x => new DominioHospitalDto
                       {
                           IdDominioHospital = x.IdDominioHospital,
