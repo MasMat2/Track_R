@@ -15,6 +15,7 @@ namespace TrackrAPI.Models
             Comision = new HashSet<Comision>();
             ComplementoPago = new HashSet<ComplementoPago>();
             Dominio = new HashSet<Dominio>();
+            DominioHospital = new HashSet<DominioHospital>();
             EntradaPersonal = new HashSet<EntradaPersonal>();
             Factura = new HashSet<Factura>();
             HospitalLogotipo = new HashSet<HospitalLogotipo>();
@@ -80,6 +81,7 @@ namespace TrackrAPI.Models
         public virtual ICollection<Comision> Comision { get; set; }
         public virtual ICollection<ComplementoPago> ComplementoPago { get; set; }
         public virtual ICollection<Dominio> Dominio { get; set; }
+        public virtual ICollection<DominioHospital> DominioHospital { get; set; }
         public virtual ICollection<EntradaPersonal> EntradaPersonal { get; set; }
         public virtual ICollection<Factura> Factura { get; set; }
         public virtual ICollection<HospitalLogotipo> HospitalLogotipo { get; set; }

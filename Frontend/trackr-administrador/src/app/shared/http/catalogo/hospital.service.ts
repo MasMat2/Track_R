@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Hospital } from '@models/catalogo/hospital';
 
-@Injectable()
+@Injectable({providedIn:'root'})
 export class HospitalService {
   private dataUrl = 'hospital/';
 
