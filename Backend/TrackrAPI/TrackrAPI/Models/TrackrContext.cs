@@ -78,6 +78,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<Domicilio> Domicilio { get; set; } = null!;
         public virtual DbSet<Dominio> Dominio { get; set; } = null!;
         public virtual DbSet<DominioDetalle> DominioDetalle { get; set; } = null!;
+        public virtual DbSet<DominioHospital> DominioHospital { get; set; } = null!;
         public virtual DbSet<Enfermedad> Enfermedad { get; set; } = null!;
         public virtual DbSet<Entidad> Entidad { get; set; } = null!;
         public virtual DbSet<EntidadEstructura> EntidadEstructura { get; set; } = null!;
@@ -2133,6 +2134,32 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdDominio)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_DominioDetalle_Dominio");
+            });
+
+            modelBuilder.Entity<DominioHospital>(entity =>
+            {
+                entity.HasKey(e => e.IdDominioHospital)
+                    .HasName("PK__DominioH__001F4EB6474874F1");
+
+                entity.Property(e => e.FechaMaxima).HasColumnType("date");
+
+                entity.Property(e => e.FechaMinima).HasColumnType("date");
+
+                entity.Property(e => e.UnidadMedida).HasMaxLength(50);
+
+                entity.Property(e => e.ValorMaximo).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.ValorMinimo).HasColumnType("decimal(18, 0)");
+
+                entity.HasOne(d => d.IdDominioNavigation)
+                    .WithMany(p => p.DominioHospital)
+                    .HasForeignKey(d => d.IdDominio)
+                    .HasConstraintName("FK__DominioHo__Unida__259C7031");
+
+                entity.HasOne(d => d.IdHospitalNavigation)
+                    .WithMany(p => p.DominioHospital)
+                    .HasForeignKey(d => d.IdHospital)
+                    .HasConstraintName("FK__DominioHo__IdHos__2690946A");
             });
 
             modelBuilder.Entity<Enfermedad>(entity =>

@@ -14,6 +14,8 @@ import * as Utileria from '@utils/utileria';
 import { SeccionMuestraDTO } from '@dtos/gestion-expediente/seccion-muestra-dto';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
+import { DominioHospitalService } from '@http/catalogo/dominio-hospital.service';
+
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -41,7 +43,8 @@ export class MuestrasFormularioComponent implements OnInit {
   constructor(
     private seccionCampoService: SeccionCampoService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
-    private router : Router
+    private router : Router,
+    private dominioHospitalService:DominioHospitalService
     ) { 
       this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
@@ -67,7 +70,7 @@ export class MuestrasFormularioComponent implements OnInit {
     });
   }
 
-  public enviarFormulario(seccion: SeccionMuestraDTO, fechaSeleccionada: string): void {
+  public async enviarFormulario(seccion: SeccionMuestraDTO, fechaSeleccionada: string) {
     this.submitting = true;
     const camposAgregados: TablaValorMuestraDTO[] = [];
   
@@ -76,7 +79,7 @@ export class MuestrasFormularioComponent implements OnInit {
         camposAgregados.push({
           claveCampo: seccionCampo.clave,
           valor: seccionCampo.valor.toString(),
-          fueraDeRango: this.estaFueraDeRango(seccionCampo),
+          fueraDeRango: await this.estaFueraDeRango(seccionCampo),
           fechaMuestra: new Date(fechaSeleccionada)
         });
       }
@@ -103,7 +106,7 @@ export class MuestrasFormularioComponent implements OnInit {
     );
   }
 
-  private estaFueraDeRango(campo: SeccionCampo) {
+  private async estaFueraDeRango(campo: SeccionCampo) {
     const dominio = campo.idDominioNavigation;
 
     const number = Number.parseFloat(campo.valor?.toString() ?? '');
@@ -112,8 +115,22 @@ export class MuestrasFormularioComponent implements OnInit {
       return false;
     }
 
+    //Verificacion de la tabla dominio hospital
+    let domHos = await lastValueFrom(this.dominioHospitalService.obtenerDominioHospital(dominio.idDominio,0))
+    console.log(domHos)
+    if(domHos != null){
+      if(domHos.valorMaximo != null){
+        dominio.valorMaximo = Number(domHos.valorMaximo)
+      }
+      if(domHos.valorMinimo != null){
+        dominio.valorMinimo = Number(domHos.valorMinimo)
+      }
+    }
+
     const min = dominio.valorMinimo;
     const max = dominio.valorMaximo;
+    console.log(min)
+    console.log(max)
 
     const valor = Number(campo.valor);
 

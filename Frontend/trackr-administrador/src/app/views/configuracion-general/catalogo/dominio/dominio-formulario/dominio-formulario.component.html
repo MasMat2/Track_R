@@ -92,6 +92,9 @@
             </div>
           </div>
         </div>
+        <!-------------------------------------------------------------------------------------->
+        <hr>
+        <div *ngIf="tituloEditar != ''" class="subseccion">{{tituloEditar}}</div>
         <div class="row">
           <div class="col-md-2">
             <div class="form-group">
@@ -99,7 +102,7 @@
               <div>
                 <input
                   #lonMinima="ngModel"
-                  [(ngModel)]="dominio.longitudMinima"
+                  [(ngModel)]="dominioHospital.longitudMinima"
                   [disabled]="isDisable"
                   name="longitudMinimaName"
                   class="form-control"
@@ -130,7 +133,7 @@
               <div>
                 <input
                   #lonMaxima="ngModel"
-                  [(ngModel)]="dominio.longitudMaxima"
+                  [(ngModel)]="dominioHospital.longitudMaxima"
                   [disabled]="isDisable"
                   name="longitudMaximaName"
                   class="form-control"
@@ -160,7 +163,7 @@
               <div>
                 <input
                   #valMin="ngModel"
-                  [(ngModel)]="dominio.valorMinimo"
+                  [(ngModel)]="dominioHospital.valorMinimo"
                   [disabled]="isDisable"
                   name="valorMinimoName"
                   class="form-control"
@@ -190,7 +193,7 @@
               <div>
                 <input
                   #valMax="ngModel"
-                  [(ngModel)]="dominio.valorMaximo"
+                  [(ngModel)]="dominioHospital.valorMaximo"
                   [disabled]="isDisable"
                   name="valorMaximoName"
                   class="form-control"
@@ -220,7 +223,7 @@
               <div>
                 <input
                   #uniMed="ngModel"
-                  [(ngModel)]="dominio.unidadMedida"
+                  [(ngModel)]="dominioHospital.unidadMedida"
                   [disabled]="isDisable"
                   name="unidadMedidaName"
                   class="form-control"
@@ -239,7 +242,7 @@
                 <input
                   type="checkbox"
                   #permiteFueraDeRango="ngModel"
-                  [(ngModel)]="dominio.permiteFueraDeRango"
+                  [(ngModel)]="dominioHospital.permiteFueraDeRango"
                   id="permiteFueraDeRango"
                   name="permiteFueraDeRango"
                   class="form-control">
@@ -259,7 +262,7 @@
               <div class="calendario">
                 <input
                   #fechaMinima="ngModel"
-                  [(ngModel)]="dominio.fechaMinima"
+                  [(ngModel)]="dominioHospital.fechaMinima"
                   id="fechaMinima"
                   name="fechaMinima"
                   class="form-control"
@@ -282,7 +285,7 @@
               <div class="calendario">
                 <input
                   #fechaMaxima="ngModel"
-                  [(ngModel)]="dominio.fechaMaxima"
+                  [(ngModel)]="dominioHospital.fechaMaxima"
                   id="fechaMaxima"
                   name="fechaMaxima"
                   class="form-control"
@@ -300,7 +303,16 @@
           </div>
         </div>
 
+        <hr>
+        <div> 
+          <app-grid-general
+          [data]="hospitales"
+          [children]="[{ headerName: 'Hospital', field: 'nombre', minWidth: 150 }]"
+          (event)="onGridClickHospital($event)"
+          >
 
+          </app-grid-general>
+        </div>
 
         <form
           (keydown.enter)="$event.preventDefault()"
@@ -352,6 +364,7 @@
               <app-grid-general
                 [data]="dominioDetalleList"
                 [children]="columns"
+                [disableDelete]="true"
                 (event)="onGridClick($event)">
               </app-grid-general>
             </div>

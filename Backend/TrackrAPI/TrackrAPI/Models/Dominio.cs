@@ -8,6 +8,7 @@ namespace TrackrAPI.Models
         public Dominio()
         {
             DominioDetalle = new HashSet<DominioDetalle>();
+            DominioHospital = new HashSet<DominioHospital>();
             ExpedienteCampo = new HashSet<ExpedienteCampo>();
             SeccionCampo = new HashSet<SeccionCampo>();
         }
@@ -29,6 +30,7 @@ namespace TrackrAPI.Models
 
         public virtual Hospital? IdHospitalNavigation { get; set; }
         public virtual ICollection<DominioDetalle> DominioDetalle { get; set; }
+        public virtual ICollection<DominioHospital> DominioHospital { get; set; }
         public virtual ICollection<ExpedienteCampo> ExpedienteCampo { get; set; }
         public virtual ICollection<SeccionCampo> SeccionCampo { get; set; }
     }
