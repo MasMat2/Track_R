@@ -6,10 +6,12 @@ import { ChatPersonaSelectorDTO } from '@dtos/chats/chat-persona-selector-dto';
 import { ArchivoService } from '../../../shared/http/archivo/archivo.service';
 import { ArchivoFormDTO } from '@dtos/archivos/archivo-form-dto';
 import { Router } from '@angular/router';
+import { Subject, lastValueFrom } from 'rxjs';
 
 //Libreria de capacitor para grabar audio
 /* import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder'; */
 
+declare var Recorder: any;
 
 @Component({
   selector: 'app-mensajes',
@@ -33,6 +35,10 @@ export class MensajesComponent {
   protected grabacionIniciada: boolean = false;
   protected audio?:string = '';
   protected audio2?:string;
+  private media: MediaRecorder;
+  private audioChunks: Blob[] = [];
+  protected audioSubject = new Subject<string>();
+  private record:string;
 
   constructor(private ChatMensajeHubService:ChatMensajeHubService,
               private ChatPersonaService:ChatPersonaService,
@@ -42,6 +48,7 @@ export class MensajesComponent {
   ngOnInit(){
     this.obtenerIdUsuario();
     this.obtenerPersonasEnChat();
+    this.permisosGrabacion();
 /*     this.solicitarPermisos(); */
   }
 
@@ -279,7 +286,64 @@ export class MensajesComponent {
     })
   } */
 
+  permisosGrabacion(){
+    navigator.mediaDevices.getUserMedia({audio:true})
+                          .then( (stream) => {
+                            this.media = new MediaRecorder(stream)
 
+                            this.media.onstart = () => {
+                              this.audioChunks = [];
+                            }
+                            
+                            this.media.ondataavailable = (event) => {
+                              if (event.data.size > 0) {
+                                this.audioChunks.push(event.data);
+                              }
+                            };
+                    
+                            this.media.onstop = async () => {
+                              const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
+                              const reader = new FileReader();
+                              reader.onload = () => {
+                                const base64data = reader.result != null ? reader.result.toString().split(',')[1]: '';
+                                this.audio = base64data;
+                                this.audio2 = 'data:audio/wav;base64,' + base64data;
+                                this.audioSubject.next('data:audio/wav;base64,'+base64data);
+                              };
+                    
+                              reader.readAsDataURL(audioBlob);
+                              this.audioChunks = [];
+                            };
+                          })
+  }
+
+  grabar(){
+    if(this.grabacionIniciada){
+      return;
+    }
+    this.grabacionIniciada = true;
+    this.media.start();
+    console.log('grabacion iniciada')
+    
+  }
+
+  async detenerGrabacion(){
+    if(!this.grabacionIniciada){
+      console.log('dds')
+      return;
+    }
+      console.log('grabacion detenida')
+      this.grabacionIniciada = false;
+      this.media.stop();
+      this.audioSubject.subscribe(record => {
+        
+        this.audio = record;
+        this.audio2 = 'data:audio/wav;base64,' + record;
+      })
+      
+    
+    
+  }
   contestarLlamada(meetCode: string) {
     this.router.navigate(['administrador','jitsi-meet', meetCode]);
   }
