@@ -11,7 +11,7 @@ export class SignalingHubBase extends EventTarget {
   
   private messaageSource = new BehaviorSubject<string>('');
   message$ = this.messaageSource.asObservable();
-  public peer_id: string;
+  private index = -1;
 
   constructor(
     protected endpoint: string,
@@ -48,18 +48,18 @@ export class SignalingHubBase extends EventTarget {
 
     this.connection.on(
       'NewMessage',
-      (json_string: string) => this.onNewMessage(json_string)
+      (obj: any) => this.onNewMessage(obj)
+    );
+    
+    this.connection.on(
+      'LocalId',
+      (local_id: string) => this.onLocalId(local_id)
     );
 
-    this.connection.on(
-        'LocalId',
-        (local_id: string) => this.onLocalId(local_id)
-    );
-
-    this.connection.on(
-        'PeerId',
-        (peer_id: string) => this.onPeerId(peer_id)
-    );
+    // this.connection.on(
+    //   'CalleeConnected',
+    //   () => this.onCalleeConnected()
+    // );
 
     this.connectionStatus.next(HubConnectionState.Connecting);
 
@@ -67,29 +67,33 @@ export class SignalingHubBase extends EventTarget {
   }
 
   
-  public async crearLlamada(id?: string) {
+  public async crearLlamada(caller_id?: string) {
     
     await this.ensureConnection();
 
-    console.log(`CrearLlamada: ${id}`);
-
-    if(id != null){
-        this.peer_id = id;
-    }
+    console.log(`CrearLlamada: ${caller_id}`);
     
-    return await this.connection.invoke('CrearLlamada', id);
+    await this.connection.invoke('CrearLlamada', caller_id);
 
   }
 
   public async sendMessage(obj: any) {
     await this.ensureConnection();
     
-    await this.connection.invoke('EnviarMensaje', this.peer_id, JSON.stringify(obj));
+    await this.connection.invoke('SendMessageToPeer', JSON.stringify(obj));
 
+    
   }
-  
-  protected onNewMessage(json_string: any){
-    this.messaageSource.next(json_string);
+
+
+  protected async onNewMessage(obj: any){
+    console.log(obj);
+    //console.log(`onNewMessage: ${obj.id} - ${obj.content}`);
+
+    if(Math.random() < 0.5){
+      this.messaageSource.next(obj.content);
+      await this.connection.invoke('AcknowledgeMessage', obj.id);
+    };
   };
 
   protected onLocalId(local_id: any){
@@ -97,14 +101,17 @@ export class SignalingHubBase extends EventTarget {
         type: "local-id",
         local_id: local_id
     });
-    this.onNewMessage(json_string);
+    this.messaageSource.next(json_string);
   };
 
-  protected onPeerId(peer_id: any){
-    this.peer_id = peer_id;
-    console.log(`PeerId: ${peer_id}`);
-    this.dispatchEvent(new Event('peerconnected'));
-  };
+
+  // Caller methods
+  // public async onCalleeConnected() {
+
+  //   this.dispatchEvent(new Event('calleeConnected'));
+
+  // }
+  
 
   public async detenerConexion() {
     this.connectionStatus.next(HubConnectionState.Disconnecting);
