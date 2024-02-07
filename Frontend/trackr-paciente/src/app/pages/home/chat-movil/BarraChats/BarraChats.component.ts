@@ -77,14 +77,14 @@ export class BarraChatsComponent {
     this.chats$ = this.ChatHubServiceService.chat$;
     this.chats$.subscribe((chats) => {
 
-      chats.forEach((chat) => {
+      /*chats.forEach((chat) => {
         this.archivoService.obtenerUsuarioImagen(chat.idCreadorChat).subscribe((imgaen) => {
           let objectURL = URL.createObjectURL(imgaen);
           let urlImagen = objectURL;
           let url = this.sanitizer.bypassSecurityTrustUrl(urlImagen);
           chat.urlImagen = url;
         });
-      });
+      });*/
       
       this.chats = chats;
       this.chatsFiltradosPorBusqueda = chats;
@@ -123,7 +123,7 @@ export class BarraChatsComponent {
 
   consultarDoctores() {
     this.doctoresService.consultarExpediente().subscribe((doctores => {
-      doctores.forEach((doctor) => { 
+      /*doctores.forEach((doctor) => { 
         this.archivoService.obtenerUsuarioImagen(doctor.idUsuarioDoctor).subscribe((imgaen) => {
           let objectURL = URL.createObjectURL(imgaen);
           let urlImagen = objectURL;
@@ -131,7 +131,7 @@ export class BarraChatsComponent {
           doctor.urlImagen = url;
         });
       }
-      )
+      )*/
       
       this.misDoctores = doctores;
     }));

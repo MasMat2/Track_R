@@ -13,13 +13,16 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
     private readonly ChatMensajeService _chatMensajeService;
     private readonly UsuarioService _usuarioService;
     private readonly IChatPersonaRepository _chatPersonaRepository;
+    private readonly IAsistenteDoctorRepository _asistenteDoctorRepository;
     public ChatMensajeHub(ChatMensajeService chatMensajeService,
                           UsuarioService usuarioService,
-                          IChatPersonaRepository chatPersonaRepository)
+                          IChatPersonaRepository chatPersonaRepository,
+                          IAsistenteDoctorRepository asistenteDoctorRepository)
     {
         _chatMensajeService = chatMensajeService;
         _usuarioService = usuarioService;
         _chatPersonaRepository = chatPersonaRepository;
+        _asistenteDoctorRepository = asistenteDoctorRepository;
     }
 
     public override async Task OnConnectedAsync()
@@ -43,6 +46,16 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
         foreach(var persona in idPersonas)
         {
             Clients.User(persona.ToString()).NuevoMensaje(mensaje);
+
+            var idAsistentes = _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(persona).Select(x => x.IdUsuario).ToList();
+
+            if(idAsistentes != null)
+            {
+                foreach(var asistente in idAsistentes)
+                {
+                    Clients.User(asistente.ToString()).NuevoMensaje(mensaje);
+                }
+            }
         }
 
         //await Clients.All.NuevoMensaje(mensaje);

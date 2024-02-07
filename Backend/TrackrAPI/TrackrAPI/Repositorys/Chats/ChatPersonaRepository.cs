@@ -1,12 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
+using TrackrAPI.Repositorys.Seguridad;
 
 namespace TrackrAPI.Repositorys.Chats;
 
 public class ChatPersonaRepository : Repository<ChatPersona>, IChatPersonaRepository
 {
-    public ChatPersonaRepository(TrackrContext context) : base(context) { }
+    private readonly IUsuarioRepository _usuarioRepository;
+    private readonly IAsistenteDoctorRepository _asistenteDoctorRepository;
+    public ChatPersonaRepository(TrackrContext context,
+                                 IUsuarioRepository usuarioRepository,
+                                 IAsistenteDoctorRepository asistenteDoctorRepository) : base(context) { 
+        _usuarioRepository = usuarioRepository;
+        _asistenteDoctorRepository = asistenteDoctorRepository;
+    }
 
     public IEnumerable<ChatPersona> ConsultarChatPersonas()
     {
@@ -23,6 +31,21 @@ public class ChatPersonaRepository : Repository<ChatPersona>, IChatPersonaReposi
 
     public IEnumerable<ChatPersona> ConsultarChatsPorPersona(int IdPersona)
     {
+        //Agregar la logica del asistente
+        var user = _usuarioRepository.ConsultarDto(IdPersona);
+        var esAsistente = _usuarioRepository.ConsultarPorPerfil(user.IdCompania, GeneralConstant.ClavePerfilAsistente)
+                                            .Any((usuario) => usuario.IdUsuario == user.IdUsuario);
+
+        if (esAsistente)
+        {
+            var idDoctorList = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(user.IdUsuario)
+                                                          .Select(ad => ad.IdUsuario).ToList();
+            idDoctorList.Add(user.IdUsuario);
+            return context.ChatPersona
+                      .Where(x => idDoctorList.Contains(x.IdPersona))
+                      .ToList();
+        }
+
         return context.ChatPersona
                       .Where(x => x.IdPersona == IdPersona)
                       .ToList();
