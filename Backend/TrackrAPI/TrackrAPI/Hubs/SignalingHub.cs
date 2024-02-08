@@ -13,8 +13,7 @@ public class SignalingHub : Hub<ISignalingHub>
     private static readonly ConcurrentDictionary<string, Queue<Message>> _messageQueues = new ConcurrentDictionary<string, Queue<Message>>();
 
     private static readonly ConcurrentDictionary<string, string> peer_ids = new ConcurrentDictionary<string, string>();
-    private readonly int _maxRetryAttempts = 3;
-    private readonly int _ackTimeoutMilliseconds = 1000;
+    private readonly int _ackTimeoutMilliseconds = 500;
 
     CancellationTokenSource _cts = new CancellationTokenSource();
 

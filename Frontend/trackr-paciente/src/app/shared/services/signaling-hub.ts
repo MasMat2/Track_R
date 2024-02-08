@@ -32,7 +32,6 @@ export class SignalingHubBase extends EventTarget {
 
     const url = `${environment.urlBackend}${this.endpoint}`;
 
-
     const connectionConfig: IHttpConnectionOptions = {
       accessTokenFactory: () => {
         return token;
@@ -55,11 +54,6 @@ export class SignalingHubBase extends EventTarget {
       'LocalId',
       (local_id: string) => this.onLocalId(local_id)
     );
-
-    // this.connection.on(
-    //   'CalleeConnected',
-    //   () => this.onCalleeConnected()
-    // );
 
     this.connectionStatus.next(HubConnectionState.Connecting);
 
@@ -88,12 +82,10 @@ export class SignalingHubBase extends EventTarget {
 
   protected async onNewMessage(obj: any){
     console.log(obj);
-    //console.log(`onNewMessage: ${obj.id} - ${obj.content}`);
-
-    if(Math.random() < 0.5){
-      this.messaageSource.next(obj.content);
-      await this.connection.invoke('AcknowledgeMessage', obj.id);
-    };
+    
+    this.messaageSource.next(obj.content);
+    await this.connection.invoke('AcknowledgeMessage', obj.id);
+    
   };
 
   protected onLocalId(local_id: any){
@@ -104,14 +96,6 @@ export class SignalingHubBase extends EventTarget {
     this.messaageSource.next(json_string);
   };
 
-
-  // Caller methods
-  // public async onCalleeConnected() {
-
-  //   this.dispatchEvent(new Event('calleeConnected'));
-
-  // }
-  
 
   public async detenerConexion() {
     this.connectionStatus.next(HubConnectionState.Disconnecting);
