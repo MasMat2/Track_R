@@ -6,6 +6,7 @@ using TrackrAPI.Repositorys.GestionCaja;
 using TrackrAPI.Repositorys.Seguridad;
 using System.Collections.Generic;
 using System.Linq;
+using TrackrAPI.Repositorys.GestionExpediente;
 
 namespace TrackrAPI.Services.Seguridad
 {
@@ -17,6 +18,7 @@ namespace TrackrAPI.Services.Seguridad
         private IMetodoPagoRepository metodoPagoRepository;
         private IRolRepository rolRepository;
         private IConfirmacionCorreoRepository _confirmacionCorreoRepository;
+        private readonly IExpedienteTrackrRepository _expedienteTrackrRepository;
         private readonly SimpleAES simpleAES;
 
 
@@ -26,7 +28,8 @@ namespace TrackrAPI.Services.Seguridad
             IMetodoPagoRepository metodoPagoRepository,
             IRolRepository rolRepository,
             SimpleAES simpleAES,
-            IConfirmacionCorreoRepository confirmacionCorreoRepository
+            IConfirmacionCorreoRepository confirmacionCorreoRepository,
+            IExpedienteTrackrRepository expedienteTrackrRepository
         )
         {
             this.usuarioRepository = usuarioRepository;
@@ -35,6 +38,7 @@ namespace TrackrAPI.Services.Seguridad
             this.rolRepository = rolRepository;
             this.simpleAES = simpleAES;
             this._confirmacionCorreoRepository = confirmacionCorreoRepository;
+            _expedienteTrackrRepository = expedienteTrackrRepository;
         }
 
         private readonly string MensajeContrasenaRequerida = "La contraseña es requerida";
@@ -334,11 +338,25 @@ namespace TrackrAPI.Services.Seguridad
             //Usuario 
             Usuario userFromRepo = usuarioRepository.Login(loginRequest.Correo, encryptedPassword, loginRequest.ClaveTipoUsuario);
 
+            ValidarUsuarioExpediente(userFromRepo.IdUsuario);
+
             if (userFromRepo == null)
             {
                 throw new CdisException("Usuario y/o contraseña incorrectos");
             }
             return userFromRepo;
+        }
+
+        public Usuario ValidarUsuarioExpediente(int idUsuario)
+        {
+            var expediente = _expedienteTrackrRepository.ConsultarPorUsuario(idUsuario);
+
+            if(expediente == null)
+            {
+                throw new CdisException("El usuario no cuenta con expediente médico");
+            }
+
+            return usuarioRepository.Consultar(idUsuario);
         }
 
 
