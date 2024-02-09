@@ -332,26 +332,28 @@ namespace TrackrAPI.Services.Seguridad
         /// 3. Si no se encuentra un usuario coincidente, se lanza una excepción CdisException con un mensaje de error.
         /// 4. Si se encuentra un usuario coincidente, se devuelve el objeto Usuario correspondiente.
         /// </remarks>
-        public Usuario ValidateUserExists(LoginRequest loginRequest)
+        public Usuario ValidateUserExists(LoginRequest loginRequest , bool esMobile)
         {
             string encryptedPassword = simpleAES.EncryptToString(loginRequest.Contrasena);
             //Usuario 
             Usuario userFromRepo = usuarioRepository.Login(loginRequest.Correo, encryptedPassword, loginRequest.ClaveTipoUsuario);
 
-            ValidarUsuarioExpediente(userFromRepo.IdUsuario);
+           
 
             if (userFromRepo == null)
             {
                 throw new CdisException("Usuario y/o contraseña incorrectos");
             }
+
+            ValidarUsuarioExpediente(userFromRepo.IdUsuario , esMobile);
             return userFromRepo;
         }
 
-        public Usuario ValidarUsuarioExpediente(int idUsuario)
+        public Usuario ValidarUsuarioExpediente(int idUsuario , bool esMobile)
         {
             var expediente = _expedienteTrackrRepository.ConsultarPorUsuario(idUsuario);
 
-            if(expediente == null)
+            if(expediente == null && esMobile)
             {
                 throw new CdisException("El usuario no cuenta con expediente médico");
             }
