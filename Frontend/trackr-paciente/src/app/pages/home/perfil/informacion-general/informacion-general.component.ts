@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormsModule, NgForm, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { ColoniaService } from '@http/catalogo/colonia.service';
@@ -30,6 +30,7 @@ import { ConfirmarCorreoDto } from '../../../../shared/Dtos/seguridad/confirmar-
 import {GeneroService} from '@http/catalogo/genero.service'
 import { addIcons } from 'ionicons';
 import { addCircleOutline, closeCircleOutline } from 'ionicons/icons'
+import { OnExit } from 'src/app/shared/guards/exit.guard';
 
 @Component({
   selector: 'app-informacion-general',
@@ -44,7 +45,7 @@ import { addCircleOutline, closeCircleOutline } from 'ionicons/icons'
     HeaderComponent,
   ]
 })
-export class InformacionGeneralComponent implements OnInit {
+export class InformacionGeneralComponent implements OnInit , OnExit {
 
   protected informacionUsuario$: Observable<InformacionGeneralDto>;
   protected infoUsuario: InformacionGeneralDto;
@@ -70,6 +71,7 @@ export class InformacionGeneralComponent implements OnInit {
   protected diagnosticoList: ExpedientePadecimientoSelectorDTO[] = [];
   protected antecedenteFiltradoList: ExpedientePadecimientoSelectorDTO[] = [];
   protected diagnosticoFiltradoList: ExpedientePadecimientoSelectorDTO[] = [];
+  @ViewChild('formulario') formulario: NgForm;
 
 
   constructor(
@@ -341,6 +343,32 @@ export class InformacionGeneralComponent implements OnInit {
       }
     });
   }
+  private async presentAlertSalir(): Promise<boolean> {
+    const alert = await this.alertController.create({
+      header: '¿Está seguro que desea salir?',
+      message: 'Si sale, perderá los cambios que no haya guardado',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            return false;
+          }
+        },
+        {
+          text: 'Salir',
+          handler: () => {
+            return true;
+          }
+        }
+      ]
+    });
+    alert.present();
+    const data = await alert.onDidDismiss();
+    return data.role === 'cancel' ? false : true;
+  }
+
 
   private async presentAlert() {
     const alert = await this.alertController.create({
@@ -361,6 +389,16 @@ export class InformacionGeneralComponent implements OnInit {
 
     await alert.present();
   }
+
+
+  onExit(){
+    if(this.formulario.dirty){
+      const rta  = this.presentAlertSalir();
+      return rta;
+    }
+
+    return true;
+  };
 
 
 }
