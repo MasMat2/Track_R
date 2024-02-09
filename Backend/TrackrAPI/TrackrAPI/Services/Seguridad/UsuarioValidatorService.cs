@@ -63,12 +63,12 @@ namespace TrackrAPI.Services.Seguridad
         private static readonly int LongitudMaximaComun = 50;
         private static readonly int LongitudMaximaCien = 100;
         private static readonly int LongitudMaximaTelefono = 15;
-        private readonly string MensajeLongitudCorreo = $"La longitud máxima del correo electrónico son { LongitudMaximaCien } caracteres";
-        private readonly string MensajeLongitudNombre = $"La longitud máxima del nombre son { LongitudMaximaComun } caracteres";
-        private readonly string MensajeLongitudApellidoPaterno = $"La longitud máxima del apellido paterno son { LongitudMaximaComun } caracteres";
-        private readonly string MensajeLongitudApellidoMaterno = $"La longitud máxima del apellido materno son { LongitudMaximaComun } caracteres";
-        private readonly string MensajeLongitudTelefono = $"La longitud máxima del teléfono móvil son { LongitudMaximaTelefono } caracteres";
-        private readonly string MensajeLongitudCiudad = $"La longitud máxima de la ciudad son { LongitudMaximaCien } caracteres";
+        private readonly string MensajeLongitudCorreo = $"La longitud máxima del correo electrónico son {LongitudMaximaCien} caracteres";
+        private readonly string MensajeLongitudNombre = $"La longitud máxima del nombre son {LongitudMaximaComun} caracteres";
+        private readonly string MensajeLongitudApellidoPaterno = $"La longitud máxima del apellido paterno son {LongitudMaximaComun} caracteres";
+        private readonly string MensajeLongitudApellidoMaterno = $"La longitud máxima del apellido materno son {LongitudMaximaComun} caracteres";
+        private readonly string MensajeLongitudTelefono = $"La longitud máxima del teléfono móvil son {LongitudMaximaTelefono} caracteres";
+        private readonly string MensajeLongitudCiudad = $"La longitud máxima de la ciudad son {LongitudMaximaCien} caracteres";
 
         private readonly string MensajeRfcDuplicado = "El RFC ingresado ya se encuentra registrado";
         private readonly string MensajeUsuarioExistencia = "El usuario no existe";
@@ -262,7 +262,7 @@ namespace TrackrAPI.Services.Seguridad
 
             if (usuarioExistente == null)
             {
-                 throw new CdisException(MensajeCorreoExistencia);
+                throw new CdisException(MensajeCorreoExistencia);
             }
         }
 
@@ -287,16 +287,16 @@ namespace TrackrAPI.Services.Seguridad
 
         public void ValidarProcesarConfirmarCorreo(Usuario datos)
         {
-            
+
             var usuario = usuarioRepository.ConsultarPorCorreo(datos.Correo);
 
-            if(usuario != null && usuario.CorreoConfirmado == true)
+            if (usuario != null && usuario.CorreoConfirmado == true)
             {
                 throw new CdisException("El usuario ya ha confirmado su correo");
             }
             var usuarioConfirmacion = _confirmacionCorreoRepository.ConsultarPorUsuario(datos.IdUsuario);
 
-            if(usuarioConfirmacion.FechaAlta > Utileria.ObtenerFechaActual().AddDays(1))
+            if (usuarioConfirmacion.FechaAlta > Utileria.ObtenerFechaActual().AddDays(1))
             {
                 throw new CdisException("El límite de tiempo se ha excedido, favor de reenviar correo de confirmación");
             }
@@ -338,7 +338,7 @@ namespace TrackrAPI.Services.Seguridad
             //Usuario 
             Usuario userFromRepo = usuarioRepository.Login(loginRequest.Correo, encryptedPassword, loginRequest.ClaveTipoUsuario);
 
-            ValidarUsuarioExpediente(userFromRepo.IdUsuario);
+            //ValidarUsuarioExpediente(userFromRepo.IdUsuario);
 
             if (userFromRepo == null)
             {
@@ -351,7 +351,7 @@ namespace TrackrAPI.Services.Seguridad
         {
             var expediente = _expedienteTrackrRepository.ConsultarPorUsuario(idUsuario);
 
-            if(expediente == null)
+            if (expediente == null)
             {
                 throw new CdisException("El usuario no cuenta con expediente médico");
             }

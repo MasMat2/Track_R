@@ -14,6 +14,7 @@ using TrackrAPI.Dtos.Perfil;
 using TrackrAPI.Repositorys.GestionExpediente;
 using DocumentFormat.OpenXml.Office.CustomXsn;
 using TrackrAPI.Services.GestionExpediente;
+using TrackrAPI.Repositorys.Archivos;
 
 namespace TrackrAPI.Services.Seguridad
 {
@@ -40,6 +41,7 @@ namespace TrackrAPI.Services.Seguridad
         private ExpedienteTrackrService _expedienteTrackrService;
         private UsuarioRolService _usuarioRolService;
         private IAsistenteDoctorRepository _asistenteDoctorRepository;
+        private IArchivoRepository _archivoRepository;
 
 
         public UsuarioService(IUsuarioRepository usuarioRepository,
@@ -62,7 +64,8 @@ namespace TrackrAPI.Services.Seguridad
             BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService,
             ConfirmacionCorreoService confirmacionCorreoService,
             ExpedienteTrackrService expedienteTrackrService,
-            IAsistenteDoctorRepository asistenteDoctorRepository)
+            IAsistenteDoctorRepository asistenteDoctorRepository,
+            IArchivoRepository archivoRepository)
         {
             this.usuarioRepository = usuarioRepository;
             this.expedienteTrackrRepository = expedienteTrackrRepository;
@@ -84,6 +87,7 @@ namespace TrackrAPI.Services.Seguridad
             this._confirmacionCorreoService = confirmacionCorreoService;
             this._expedienteTrackrService = expedienteTrackrService;
             _asistenteDoctorRepository = asistenteDoctorRepository;
+            this._archivoRepository = archivoRepository;
         }
 
         public Usuario Consultar(int idUsuario)
@@ -275,7 +279,19 @@ namespace TrackrAPI.Services.Seguridad
                     string nombreArchivo = $"{usuario.IdUsuario}{MimeTypeMap.GetExtension(usuarioDto.ImagenTipoMime)}";
                     string path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", nombreArchivo);
                     usuarioDto.ImagenBase64 = usuarioDto.ImagenBase64.Substring(usuarioDto.ImagenBase64.LastIndexOf(',') + 1);
-                    File.WriteAllBytes(path, Convert.FromBase64String(usuarioDto.ImagenBase64));
+                    //Logica para agregar las fotos de perfil en la tabla archivo
+                    var fotoPerfil = new Archivo
+                    {
+                        Nombre = nombreArchivo,
+                        ArchivoNombre = nombreArchivo,
+                        Archivo1 = Convert.FromBase64String(usuarioDto.ImagenBase64),
+                        ArchivoTipoMime = usuarioDto.ImagenTipoMime,
+                        EsFotoPerfil = true,
+                        FechaRealizacion = DateTime.Now,
+                        IdUsuario = usuario.IdUsuario
+                    };
+                    _archivoRepository.Agregar(fotoPerfil);
+                    //File.WriteAllBytes(path, Convert.FromBase64String(usuarioDto.ImagenBase64));
                 }
 
                 // Guardar el perfil
@@ -316,7 +332,7 @@ namespace TrackrAPI.Services.Seguridad
                     IdHospital = 174, //predeterminado
                     CorreoConfirmado = false,
                     Habilitado = true,
-                    
+
                 };
 
                 usuarioValidatorService.ValidarDuplicados(usuario);
@@ -334,7 +350,7 @@ namespace TrackrAPI.Services.Seguridad
                     contrasenaEncriptada = simpleAES.EncryptToString(usuarioDto.Contrasena);
                 }
 
-                
+
                 usuario.Contrasena = contrasenaEncriptada;
 
                 int idUsuario = usuarioRepository.Agregar(usuario).IdUsuario;
@@ -356,10 +372,10 @@ namespace TrackrAPI.Services.Seguridad
 
                 this._expedienteTrackrService.AgregarExpedienteNuevoUsuario(usuario);
                 this._confirmacionCorreoService.ConfirmarCorreo(usuario.Correo);
-                
+
                 scope.Complete();
 
-                
+
 
                 return idUsuario;
             }
@@ -390,7 +406,19 @@ namespace TrackrAPI.Services.Seguridad
                     string path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", nombreArchivo);
                     usuarioDto.ImagenBase64 = usuarioDto.ImagenBase64.Substring(usuarioDto.ImagenBase64.LastIndexOf(',') + 1);
                     usuario.ImagenTipoMime = usuarioDto.ImagenTipoMime;
-                    File.WriteAllBytes(path, Convert.FromBase64String(usuarioDto.ImagenBase64));
+                    //Logica para agregar las fotos de perfil en la tabla archivo
+                    var fotoPerfil = new Archivo
+                    {
+                        Nombre = nombreArchivo,
+                        ArchivoNombre = nombreArchivo,
+                        Archivo1 = Convert.FromBase64String(usuarioDto.ImagenBase64),
+                        ArchivoTipoMime = usuarioDto.ImagenTipoMime,
+                        EsFotoPerfil = true,
+                        FechaRealizacion = DateTime.Now,
+                        IdUsuario = usuario.IdUsuario
+                    };
+                    _archivoRepository.Agregar(fotoPerfil);
+                    //File.WriteAllBytes(path, Convert.FromBase64String(usuarioDto.ImagenBase64));
                 }
 
                 // El domicilio sólo se actualiza cuando se llenan todos los datos de domicilio
@@ -444,9 +472,9 @@ namespace TrackrAPI.Services.Seguridad
 
         public IEnumerable<UsuarioDto> ConsultarAsistentes(int idCompania)
         {
-            var asistentes =  usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente);
+            var asistentes = usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente);
 
-            foreach(var asistente in asistentes)
+            foreach (var asistente in asistentes)
             {
                 if (!string.IsNullOrEmpty(asistente.ImagenTipoMime))
                 {
@@ -465,9 +493,9 @@ namespace TrackrAPI.Services.Seguridad
 
         public IEnumerable<AsistenteDoctorDto> ConsultarAsistentePorDoctor(int idDoctor)
         {
-            var asistentes =  _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(idDoctor);
+            var asistentes = _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(idDoctor);
 
-            foreach(var asistente in asistentes)
+            foreach (var asistente in asistentes)
             {
                 if (!string.IsNullOrEmpty(asistente.ImagenTipoMime))
                 {
@@ -487,9 +515,9 @@ namespace TrackrAPI.Services.Seguridad
 
         public IEnumerable<AsistenteDoctorDto> ConsultarDoctoresPorAsistente(int idAsistente)
         {
-            var doctores =  _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idAsistente);
+            var doctores = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idAsistente);
 
-            foreach(var doctor in doctores)
+            foreach (var doctor in doctores)
             {
                 if (!string.IsNullOrEmpty(doctor.ImagenTipoMime))
                 {
@@ -506,7 +534,7 @@ namespace TrackrAPI.Services.Seguridad
             return doctores;
         }
 
-        public void AgregarAsistente(int idUsuario , int idAsistente)
+        public void AgregarAsistente(int idUsuario, int idAsistente)
         {
             var asistente = new AsistenteDoctor()
             {
@@ -813,7 +841,7 @@ namespace TrackrAPI.Services.Seguridad
             usuario.NumeroInterior = informacion.NumeroInterior;
             usuario.NumeroExterior = informacion.NumeroExterior;
             usuario.EntreCalles = informacion.EntreCalles;
-            
+
 
             expedientePadecimientoRepository.EliminarPorExpediente(expediente.IdExpediente);
             foreach (var padecimientoDTO in informacion.padecimientos)
@@ -843,17 +871,17 @@ namespace TrackrAPI.Services.Seguridad
 
         public UsuarioDomicilioDto ConsultaDomicilioPorId(int idUsuario)
         {
-           return usuarioRepository.ConsultaDomicilioPorId(idUsuario);
+            return usuarioRepository.ConsultaDomicilioPorId(idUsuario);
         }
 
-        public bool EsAsistente(int idCompania , int idUsuario)
+        public bool EsAsistente(int idCompania, int idUsuario)
         {
             return usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente).Any((usuario) => usuario.IdUsuario == idUsuario);
         }
 
-        public bool EsMedico(int idCompania , int idUsuario)
+        public bool EsMedico(int idCompania, int idUsuario)
         {
-            return usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilMedico).Any( (usuario) => usuario.IdUsuario == idUsuario);
+            return usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilMedico).Any((usuario) => usuario.IdUsuario == idUsuario);
         }
 
     }
