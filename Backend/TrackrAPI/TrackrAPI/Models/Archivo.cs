@@ -17,6 +17,7 @@ namespace TrackrAPI.Models
         public string ArchivoTipoMime { get; set; } = null!;
         public string? ArchivoNombre { get; set; }
         public int? IdUsuario { get; set; }
+        public bool? EsFotoPerfil { get; set; }
 
         public virtual Usuario? IdUsuarioNavigation { get; set; }
         public virtual ICollection<ChatMensaje> ChatMensaje { get; set; }
