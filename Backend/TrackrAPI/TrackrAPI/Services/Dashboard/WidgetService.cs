@@ -24,7 +24,7 @@ public class WidgetService
                          IUsuarioWidgetRepository usuarioWidgetRepository,
                          IEntidadEstructuraTablaValorRepository entidadEstructuraTablaValorRepository,
                          ExpedienteTrackrService expedienteTrackrService)
-                         
+
     {
         _widgetRepository = widgetRepository;
         _expedientePadecimientoRepository = expedientePadecimientoRepository;
@@ -52,7 +52,7 @@ public class WidgetService
             nombrePadecimiento = usuarioNuevo.NombrePadecimiento,
             idWidgetPadecimiento = variablesPadecimiento.FirstOrDefault(vp => vp.IdPadecimiento == usuarioNuevo.IdPadecimiento).IdWidgetEntidad,
             descripcion = variablesPadecimiento.FirstOrDefault(vp => vp.IdPadecimiento == usuarioNuevo.IdPadecimiento).DescripcionWidget,
-            variables = variablesPadecimiento.FirstOrDefault(vp => vp.IdPadecimiento == usuarioNuevo.IdPadecimiento)?.Variables.ToList().Any() == false 
+            variables = variablesPadecimiento.FirstOrDefault(vp => vp.IdPadecimiento == usuarioNuevo.IdPadecimiento)?.Variables.ToList().Any() == false
                                 ? new List<VariableDTO>() { new VariableDTO() {
                                         VariableClave = "No hay registros clínicos",
                                         Descripcion = "No hay registros clínicos",
@@ -60,7 +60,7 @@ public class WidgetService
                                         IconoClase = "fas fa-exclamation-triangle",
                                         ValorVariable = "-",
                                         unidadMedida = ""
-                                     }} 
+                                     }}
                                 : variablesPadecimiento.FirstOrDefault(vp => vp.IdPadecimiento == usuarioNuevo.IdPadecimiento).Variables.ToList()
         })
         .GroupBy(result => result.idExpediente)
@@ -94,7 +94,7 @@ public class WidgetService
     {
         var variablesPadecimiento = _entidadEstructuraRepository.ValoresVariablesPadecimiento(idUsuario);
 
-        var joto =  variablesPadecimiento.GroupBy(ee => ee.IdEntidadEstructuraPadre)
+        var aux = variablesPadecimiento.GroupBy(ee => ee.IdEntidadEstructuraPadre)
                 .Select(group => new PadecimientoVariablesDTO
                 {
                     IdEntidadEstructura = group.First().IdEntidadEstructura,
@@ -109,7 +109,7 @@ public class WidgetService
                     SeccionClave = group.First().IdSeccionNavigation.Clave,
                     Variables = group.SelectMany(ee => ee.IdSeccionNavigation.SeccionCampo
                                                         .Where(sC => _entidadEstructuraTablaValorRepository.ExisteValorEnEntidadEstructura(idUsuario, sC.Clave))
-                                                        .Select(sC => 
+                                                        .Select(sC =>
                                                         {
                                                             return new VariableDTO
                                                             {
@@ -125,7 +125,7 @@ public class WidgetService
                                                         ).ToList()
                 }).ToList();
 
-                return joto;
+        return aux;
     }
 
     public IEnumerable<Widget> consultarTodos()
@@ -150,10 +150,10 @@ public class WidgetService
     {
         var widgetsDefault = _widgetRepository.ConsultarDefault();
         var widgetsPadecimientosUsuario = _expedientePadecimientoRepository.ConsultarWidgetsSeguimientoPadecimientoPorUsuario(idUsuario);
-        
+
         //Widgets predeterminados + widgets de los padecimientos que tenga el usuario:
         return widgetsDefault.Concat(widgetsPadecimientosUsuario);
     }
 
-    
+
 }

@@ -2,9 +2,9 @@
 
 namespace TrackrAPI.Repositorys.Archivos;
 
-public class ArchivoRepository: Repository<Archivo>, IArchivoRepository
+public class ArchivoRepository : Repository<Archivo>, IArchivoRepository
 {
-    public ArchivoRepository(TrackrContext context): base(context) { }
+    public ArchivoRepository(TrackrContext context) : base(context) { }
 
     public Archivo GetArchivo(int idArchivo)
     {
@@ -14,6 +14,14 @@ public class ArchivoRepository: Repository<Archivo>, IArchivoRepository
     public string GetFileName(int idArchivo)
     {
         return context.Archivo.Where(x => x.IdArchivo == idArchivo).Select(x => x.Nombre).FirstOrDefault();
+    }
+
+    public Archivo? ObtenerImagenUsuario(int idUsuario)
+    {
+        return context.Archivo
+                      .Where(x => x.IdUsuario == idUsuario && x.EsFotoPerfil == true)
+                      .OrderBy(x => x.FechaRealizacion)
+                      .LastOrDefault();
     }
 
 }
