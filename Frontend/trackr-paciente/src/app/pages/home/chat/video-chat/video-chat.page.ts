@@ -51,9 +51,10 @@ export class VideoChatPage extends EventTarget implements OnInit {
     iceCandidatePoolSize: 10,
   };
 
-  protected callInput: string;
+  protected callerId: string;
   protected buttonState = true;
   protected hangupButtonState = true;
+  protected caller = false;
 
   constructor(private signalingHubService: SignalingHubService) {
     super();
@@ -72,8 +73,13 @@ export class VideoChatPage extends EventTarget implements OnInit {
       console.log(message);
       switch (message.type) {
 
+        case "callee-connected":
+          
+          this.dispatchEvent(new Event('calleeConnected'));
+          break;
+
         case "local-id":
-          this.callInput = message.local_id;
+          this.callerId = message.local_id;
           break;
 
         case "new-ice-candidate":
@@ -95,7 +101,66 @@ export class VideoChatPage extends EventTarget implements OnInit {
           };
           break;
       }
-    })
+    });
+
+    // Caller listener
+    this.addEventListener('calleeConnected', async () => {
+
+      if(this.caller){
+
+        // Get candidates for caller, save to db
+        this.pc.onicecandidate = (event) => {
+          event.candidate && this.signalingHubService.sendMessage({
+            type: "new-ice-candidate",
+            candidate: event.candidate
+          });
+        };
+
+        // Create offer
+        const offerDescription = await this.pc.createOffer();
+        await this.pc.setLocalDescription(offerDescription);
+
+        const offer = {
+          sdp: offerDescription.sdp,
+          type: offerDescription.type,
+        };
+
+        await this.signalingHubService.sendMessage({
+          type: "video-offer",
+          offer: offer
+        });
+
+        this.hangupButtonState = false;
+      }    
+    });
+
+    // Callee listener
+    this.addEventListener('offerReceived', async () => {
+
+      console.log("offerReceived");
+      this.pc.onicecandidate = (event) => {
+        event.candidate && this.signalingHubService.sendMessage({
+          type: "new-ice-candidate",
+          candidate: event.candidate
+        });
+      };
+  
+      console.log("answer");
+      const answerDescription = await this.pc.createAnswer();
+      await this.pc.setLocalDescription(answerDescription);
+  
+      const answer = {
+        type: answerDescription.type,
+        sdp: answerDescription.sdp,
+      };
+  
+      console.log("send answer");
+      await this.signalingHubService.sendMessage(({
+        type: "video-answer",
+        answer: answer
+      }));
+      
+    });
   }
 
 
@@ -123,79 +188,31 @@ export class VideoChatPage extends EventTarget implements OnInit {
 
   // 2. Create an offer
   callButtonClick = async () => {
+
+    this.caller = true;
     this.signalingHubService.crearLlamada();
 
     // Wait for peer id to send offer and candidates
-    const waitForPeerConnection = new Promise((resolve) => {
-      this.signalingHubService.addEventListener('peerconnected', resolve);
-    });
+
+    // const waitForPeerConnection = new Promise((resolve) => {
+    //   this.signalingHubService.addEventListener('peerconnected', resolve);
+    // });
     
-    await waitForPeerConnection;
-
-    // Get candidates for caller, save to db
-    this.pc.onicecandidate = (event) => {
-      event.candidate && this.signalingHubService.sendMessage({
-        type: "new-ice-candidate",
-        candidate: event.candidate
-      });
-    };
-
-    // Create offer
-    const offerDescription = await this.pc.createOffer();
-    await this.pc.setLocalDescription(offerDescription);
-
-    const offer = {
-      sdp: offerDescription.sdp,
-      type: offerDescription.type,
-    };
-
-    await this.signalingHubService.sendMessage({
-      type: "video-offer",
-      offer: offer
-    });
-
-    this.hangupButtonState = false;
+    // await waitForPeerConnection;
   };
 
   // 3. Answer the call with the unique ID
   answerButtonClick = async () => {
-    const callId = this.callInput;
+
+    this.caller = false;
+    const caller_id = this.callerId;
 
     console.log("wait");
 
-    // Wait for offer to send answer and candidates
-    const waitForOffer = new Promise((resolve) => {
-      console.log("resolving")
-      this.addEventListener('offerReceived', resolve);
-    });
-    
-    await this.signalingHubService.crearLlamada(callId);
+    console.log("resolving");
 
-    await waitForOffer;
-    
 
-    console.log("offerReceived");
-    this.pc.onicecandidate = (event) => {
-      event.candidate && this.signalingHubService.sendMessage({
-        type: "new-ice-candidate",
-        candidate: event.candidate
-      });
-    };
-
-    console.log("answer");
-    const answerDescription = await this.pc.createAnswer();
-    await this.pc.setLocalDescription(answerDescription);
-
-    const answer = {
-      type: answerDescription.type,
-      sdp: answerDescription.sdp,
-    };
-
-    console.log("send answer");
-    await this.signalingHubService.sendMessage(({
-      type: "video-answer",
-      answer: answer
-    }));
+    await this.signalingHubService.crearLlamada(caller_id);
 
   }
 }

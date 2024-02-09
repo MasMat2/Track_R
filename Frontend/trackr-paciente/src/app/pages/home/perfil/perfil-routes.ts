@@ -1,6 +1,7 @@
 import { Routes, RouterModule, Route } from '@angular/router';
 import { PerfilPage } from './perfil.page';
 import { MisDoctoresPage } from './mis-doctores/mis-doctores.page';
+import { ExitGuard } from 'src/app/shared/guards/exit.guard';
 export default [
   {
     path: '',
@@ -18,6 +19,7 @@ export default [
       },
       {
         path: 'informacion-general',
+        canDeactivate : [ExitGuard],
         data: { breadcrumb: "Informacion General"},
         loadComponent: () => import('./informacion-general/informacion-general.component').then((m) => m.InformacionGeneralComponent)
       },

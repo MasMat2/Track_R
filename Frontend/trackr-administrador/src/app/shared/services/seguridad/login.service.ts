@@ -13,6 +13,7 @@ export class LoginService {
   constructor(public http: HttpClient) { }
 
   public authenticate(loginRequest: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(this.dataUrl + 'authenticate/', loginRequest);
+    var esMobile = false;
+    return this.http.post<LoginResponse>(this.dataUrl + `authenticate/${esMobile}`, loginRequest);
   }
 }

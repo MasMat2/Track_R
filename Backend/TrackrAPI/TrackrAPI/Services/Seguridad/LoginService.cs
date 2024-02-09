@@ -39,9 +39,9 @@ public class LoginService
     /// Valida que el usuario exista, con los datos proporcionados.
     /// Genera el Token JWT. Con el método GenerateToken.
     /// </remarks>
-    public LoginResponse Authenticate(LoginRequest loginRequest)
+    public LoginResponse Authenticate(LoginRequest loginRequest , bool esMobile)
     {
-        Usuario usuario = usuarioValidatorService.ValidateUserExists(loginRequest);
+        Usuario usuario = usuarioValidatorService.ValidateUserExists(loginRequest , esMobile);
 
         var locacionSeleccionada = ObtenerLocacionSeleccionada(loginRequest, usuario);
 

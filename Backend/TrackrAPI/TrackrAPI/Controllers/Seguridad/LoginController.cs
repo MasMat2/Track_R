@@ -20,12 +20,12 @@ namespace TrackrAPI.Controllers.Seguridad
 
         [AllowAnonymous]
         [HttpPost]
-        [Route("authenticate")]
-        public IActionResult Authenticate(LoginRequest loginRequest)
+        [Route("authenticate/{esMobile}")]
+        public IActionResult Authenticate(LoginRequest loginRequest , bool esMobile)
         {
             try
             {
-                var loginResult = loginService.Authenticate(loginRequest);
+                var loginResult = loginService.Authenticate(loginRequest , esMobile);
                 return Ok(loginResult);
             }
             catch (LoginSinLocacionException ex)
