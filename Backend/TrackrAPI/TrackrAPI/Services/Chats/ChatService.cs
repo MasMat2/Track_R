@@ -7,6 +7,7 @@ using TrackrAPI.Hubs;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Chats;
 using TrackrAPI.Repositorys.Seguridad;
+using TrackrAPI.Services.Archivos;
 
 namespace TrackrAPI.Services.Chats;
 
@@ -17,19 +18,22 @@ public class ChatService
     private readonly IChatPersonaRepository _chatPersonaRepository;
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly ChatPersonaService _chatPersonaService;
+    private readonly ArchivoService _archivoService;
 
     public ChatService(IChatRepository chatRepository,
                        IHubContext<ChatHub,
                        IChatHub> hubContext,
                        IChatPersonaRepository chatPersonaRepository,
                        IUsuarioRepository usuarioRepository,
-                       ChatPersonaService chatPersonaService)
+                       ChatPersonaService chatPersonaService,
+                       ArchivoService archivoService)
     {
         _chatRepository = chatRepository;
         this.hubContext = hubContext;
         _chatPersonaRepository = chatPersonaRepository;
         _usuarioRepository = usuarioRepository;
         _chatPersonaService = chatPersonaService;
+        _archivoService = archivoService;
     }
 
     public Chat AgregarChat(Chat chat)
@@ -42,7 +46,7 @@ public class ChatService
         return chat;
     }
 
-    public void NuevoChat(Chat chat,List<int> idPersonas,int idUsuario)
+    public void NuevoChat(Chat chat, List<int> idPersonas, int idUsuario)
     {
         _chatRepository.Agregar(chat);
         ChatPersonaFormDTO chatPersona = new ChatPersonaFormDTO
@@ -66,30 +70,38 @@ public class ChatService
             Habilitado = x.Habilitado
         }).ToList();
 
-        foreach(var chat in chatsDto)
+        foreach (var chat in chatsDto)
         {
-            if(_chatPersonaRepository.ConsultarPersonasPorChat(chat.IdChat).ToList().Count == 2)
+            if (_chatPersonaRepository.ConsultarPersonasPorChat(chat.IdChat).ToList().Count == 2)
             {
                 var personas = _chatPersonaRepository.ConsultarPersonasPorChat(chat.IdChat).Select(x => x.IdPersona).ToList();
-                foreach(var persona in personas)
+                foreach (var persona in personas)
                 {
-                    if(persona != IdPersona)
+                    if (persona != IdPersona)
                     {
                         var user = _usuarioRepository.Consultar(persona);
                         chat.Titulo = user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno + " " + chat.Titulo;
                         var usuario = _usuarioRepository.ConsultarDto(persona);
-                        if(usuario != null)
+                        if (usuario != null)
                         {
                             if (!string.IsNullOrEmpty(usuario.ImagenTipoMime))
                             {
-                                string filePath = $"Archivos/Usuario/{usuario.IdUsuario}{MimeTypeMap.GetExtension(usuario.ImagenTipoMime)}";
-                                if (File.Exists(filePath))
+                                var imagen = _archivoService.ObtenerImagenUsuario(usuario.IdUsuario);
+                                if (imagen != null)
                                 {
-                                    byte[] imageArray = File.ReadAllBytes(filePath);
-                                    chat.ImagenBase64 = Convert.ToBase64String(imageArray);
-                                    chat.TipoMime = usuario.ImagenTipoMime;
+                                    chat.ImagenBase64 = Convert.ToBase64String(imagen.Archivo1);
+                                    chat.TipoMime = imagen.ArchivoTipoMime;
+                                    chat.IdCreadorChat = usuario.IdUsuario;
                                 }
-                                chat.IdCreadorChat = usuario.IdUsuario;
+
+                                // string filePath = $"Archivos/Usuario/{usuario.IdUsuario}{MimeTypeMap.GetExtension(usuario.ImagenTipoMime)}";
+                                // if (File.Exists(filePath))
+                                // {
+                                //     byte[] imageArray = File.ReadAllBytes(filePath);
+                                //     chat.ImagenBase64 = Convert.ToBase64String(imageArray);
+                                //     chat.TipoMime = usuario.ImagenTipoMime;
+                                // }
+                                // chat.IdCreadorChat = usuario.IdUsuario;
                             }
                         }
                     }
@@ -105,14 +117,21 @@ public class ChatService
                 {
                     if (!string.IsNullOrEmpty(usuario.ImagenTipoMime))
                     {
-                        string filePath = $"Archivos/Usuario/{usuario.IdUsuario}{MimeTypeMap.GetExtension(usuario.ImagenTipoMime)}";
-                        if (File.Exists(filePath))
+                        var imagen = _archivoService.ObtenerImagenUsuario(usuario.IdUsuario);
+                        if (imagen != null)
                         {
-                            byte[] imageArray = File.ReadAllBytes(filePath);
-                            chat.ImagenBase64 = Convert.ToBase64String(imageArray);
-                            chat.TipoMime = usuario.ImagenTipoMime;
+                            chat.ImagenBase64 = Convert.ToBase64String(imagen.Archivo1);
+                            chat.TipoMime = imagen.ArchivoTipoMime;
+                            chat.IdCreadorChat = usuario.IdUsuario;
                         }
-                        chat.IdCreadorChat = idCreador;
+                        // string filePath = $"Archivos/Usuario/{usuario.IdUsuario}{MimeTypeMap.GetExtension(usuario.ImagenTipoMime)}";
+                        // if (File.Exists(filePath))
+                        // {
+                        //     byte[] imageArray = File.ReadAllBytes(filePath);
+                        //     chat.ImagenBase64 = Convert.ToBase64String(imageArray);
+                        //     chat.TipoMime = usuario.ImagenTipoMime;
+                        // }
+                        // chat.IdCreadorChat = idCreador;
                     }
                 }
             }
@@ -136,7 +155,7 @@ public class ChatService
             }
             */
         }
-        
+
         return chatsDto;
     }
 }
