@@ -49,5 +49,9 @@
 	<string>Se necesita la camara usar la funcion las videollamadas.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Se necesita el microfono para usar la funcion de audios.</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Es necesario para obtener los datos de salud</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Es necesario para trabajar con los datos de salud</string>
 </dict>
 </plist>

@@ -10,6 +10,7 @@ import { GeneralConstant } from '@utils/general-constant';
 import * as Utileria from '@utils/utileria';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { AuthService } from '../../../auth/auth.service';
+import { HealthkitService } from '@services/healthkit.service';
 
 @Component({
   selector: 'app-login',

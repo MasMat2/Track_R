@@ -26,6 +26,8 @@ PODS:
     - Capacitor
   - CapawesomeCapacitorScreenOrientation (5.0.1):
     - Capacitor
+  - PerfoodCapacitorHealthkit (1.3.0):
+    - Capacitor
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -42,6 +44,7 @@ DEPENDENCIES:
   - CapacitorVoiceRecorder (from `../../node_modules/capacitor-voice-recorder`)
   - "CapawesomeCapacitorFilePicker (from `../../node_modules/@capawesome/capacitor-file-picker`)"
   - "CapawesomeCapacitorScreenOrientation (from `../../node_modules/@capawesome/capacitor-screen-orientation`)"
+  - "PerfoodCapacitorHealthkit (from `../../node_modules/@perfood/capacitor-healthkit`)"
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -72,6 +75,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capawesome/capacitor-file-picker"
   CapawesomeCapacitorScreenOrientation:
     :path: "../../node_modules/@capawesome/capacitor-screen-orientation"
+  PerfoodCapacitorHealthkit:
+    :path: "../../node_modules/@perfood/capacitor-healthkit"
 
 SPEC CHECKSUMS:
   Capacitor: 4c0681b47eebeba1f902093d24149cf2f518393e
@@ -88,7 +93,8 @@ SPEC CHECKSUMS:
   CapacitorVoiceRecorder: 872ea857b497ce2c71afe3e4eb5de0a74290c0db
   CapawesomeCapacitorFilePicker: 4a27a464c569de315738fcb7bdd3ad544ef3c7c2
   CapawesomeCapacitorScreenOrientation: a757a72cd4a113142638c049af61441793721f07
+  PerfoodCapacitorHealthkit: 88f6e78b319072c4d0aec439b2fcc14d3f05d311
 
-PODFILE CHECKSUM: 88f5f746c7c39bff024a95e985ef0277717ceedc
+PODFILE CHECKSUM: 4dcfd305eb548dc30395fbbe6c341e770df62320
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.0
