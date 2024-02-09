@@ -9,7 +9,7 @@ public class ArchivoService
 {
     private readonly IArchivoRepository _archivoRepository;
 
-    public ArchivoService (IArchivoRepository archivoRepository)
+    public ArchivoService(IArchivoRepository archivoRepository)
     {
         _archivoRepository = archivoRepository;
     }
@@ -42,5 +42,10 @@ public class ArchivoService
     public string GetFileName(int idArchivo)
     {
         return _archivoRepository.GetFileName(idArchivo);
+    }
+
+    public Archivo? ObtenerImagenUsuario(int idUsuario)
+    {
+        return _archivoRepository.ObtenerImagenUsuario(idUsuario);
     }
 }
