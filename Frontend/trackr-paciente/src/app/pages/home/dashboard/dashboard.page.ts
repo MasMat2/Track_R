@@ -54,7 +54,6 @@ export class DashboardPage implements OnInit {
     this.ChatHubServiceService.iniciarConexion();
     this.ChatMensajeHubService.iniciarConexion();
     this.solicitarPermiso();
-    //this.healthkitService.getPermissions();
   }
 
   async solicitarPermiso(){

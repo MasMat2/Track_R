@@ -27,12 +27,33 @@ export class WidgetSuenoComponent  implements OnInit {
   protected minutostiempoDormido: number = 33;
   protected suenoProfundo: number = 2;
   protected minsuenoProfundo: number = 22;
-  ngOnInit() {}
+  ngOnInit() {
+    this.cargarDatos();
+  }
 
   async cargarDatos() {
-    const dataSleep = await this.healthKitService.getActivitySleep();
-    console.log(dataSleep);
-    //this.hora=dataSleep.resultData[0].duration.toString();
+    try {
+      
+      
+      const dataSleep = await this.healthKitService.getActivitySleep();
+
+      //Se hace el conteo total de las horas en AsLeep (dormido incluyendo REM(Movimientos oculares rapidos) y Deep)
+      const registrosDormidos = dataSleep.resultData.filter(registro => registro.sleepState === "Asleep");
+
+      //Duración total de sueño en minutos
+      const duracionTotalEnMinutos = Math.ceil(registrosDormidos.reduce((total, registro) => {
+        const startDate = new Date(registro.startDate);
+        const endDate = new Date(registro.endDate);
+        const duracionEnMinutos = (endDate.getTime() - startDate.getTime()) / (1000 * 60); // Convertir de milisegundos a minutos
+        return total + duracionEnMinutos;
+      }, 0));
+
+      this.tiempoDormido = Math.floor(duracionTotalEnMinutos / 60);
+      this.minutostiempoDormido = duracionTotalEnMinutos % 60;
+
+    } catch (error) {
+      console.error('Error al obtener datos sleep Analysis:', error);
+    }
   }
 
 }

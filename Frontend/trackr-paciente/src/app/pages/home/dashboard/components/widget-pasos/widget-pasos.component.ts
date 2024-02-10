@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { WidgetComponent } from '../widget/widget.component';
 import { HealthData } from '../../../../../shared/Dtos/health-data/health-data-interface';
 import { HealthService } from '@services/health.service';
+import { HealthkitService } from '@services/healthkit.service';
 
 
 @Component({
@@ -24,33 +25,41 @@ export class WidgetPasosComponent  implements OnInit {
   protected horas: number = 10;
   protected minutos: number = 10;
 
-  protected pasos : HealthData;
+  protected pasos : String = "0";
   protected distancia: number;
 
-  constructor(private healthService: HealthService) { }
+  constructor(private healthKitService: HealthkitService) { }
 
   ngOnInit() {
-
-    this.healthService.getPermissionState(); 
-
-
-    this.healthService.getPasos().then(data => {
-      this.pasos = data;
-      this.distancia = Math.round(this.pasos.value*0.68);
-    }).catch(error => {
-      // handle error here
-      console.error(error);
-    });
+   this.cargarPasos();
   }
 
-  updateDataSteps(){
-    this.healthService.getPasos().then(data => {
-      this.pasos = data;
-      this.distancia = Math.round(this.pasos.value*0.68);
-    }).catch(error => {
-      // handle error here
-      console.error(error);
-    });
+  async cargarPasos() {
+    try {
+      const dataPasos = await this.healthKitService.getSteps();
+      //Sumar todos los registros de hoy en pasos
+      const sumaPasos = dataPasos.resultData.reduce((total, elemento) => total + elemento.value, 0);
+      this.pasos = sumaPasos.toString();
+      
+      //Obtener la diferencia entre la penultima caminata y la ultima caminata
+      const penultimaCaminata = dataPasos.resultData[dataPasos.resultData.length - 2];
+      const ultimaCaminata = dataPasos.resultData[dataPasos.resultData.length - 1];
+
+      const fechaFinPenultima = new Date(penultimaCaminata.endDate);
+      const fechaInicioUltima = new Date(ultimaCaminata.startDate);
+
+      const diferenciaEnMilisegundos = fechaInicioUltima.getTime() - fechaFinPenultima.getTime();
+
+      const horasUltimaCaminata = Math.floor(diferenciaEnMilisegundos / (1000 * 60 * 60));
+      const minutosUltimaCaminata = Math.floor((diferenciaEnMilisegundos % (1000 * 60 * 60)) / (1000 * 60));
+
+      this.horas = horasUltimaCaminata;
+      this.minutos = minutosUltimaCaminata;
+
+    } catch (error) {
+      console.error('Error al obtener datos de pasos:', error);
+    }
   }
+
 
 }
