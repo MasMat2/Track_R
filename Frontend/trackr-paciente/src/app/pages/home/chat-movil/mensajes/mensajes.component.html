@@ -1,106 +1,99 @@
-<ion-content>
-  <div style="display: flex; justify-content: space-between;">
-    <ion-button fill="outline" expand="full" shape="round" routerLink="home/chat-movil" (click)="regresarBtn()">Regresar</ion-button>
-    <ion-button fill="clear" style="" (click)="crearLlamada()"> <ion-icon name="videocam-outline"></ion-icon></ion-button>
-  </div>
+<ion-header>
 
-  <ion-title class="ion-text-center ion-align-items-center" style="padding-top: 1vh; padding-bottom: 1vh; padding: 0;">{{chat.titulo}}</ion-title>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-button (click)="regresarBtn()">
+        <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
 
-  <div class="absolute">
-    <div #scrollContainer class="listado">
-      <div *ngFor="let mensaje of mensajes" (click)="validarMeet(mensaje.mensaje)">
-          <div class="message user" *ngIf="mostrarMensaje(mensaje.idPersona)">
-              <div class="message-bubble">
-                  {{mensaje.mensaje}} <br>
-                  <button class="btn btn-1" (click)="clickArchivo(mensaje.idArchivo)" *ngIf="mensaje.idArchivo !== 0">
-                      <i class="fa fa-file" style="font-size: 24px;"></i> {{mensaje.archivoNombre}}
-                  </button>
-                  <br>
-                  {{imprimirFecha(mensaje.fecha)}}
-              </div>
-          </div>
-          <div class="message other" *ngIf="!mostrarMensaje(mensaje.idPersona)">
-              <div class="message-bubble">
-                  <div class="nombre">{{mensaje.nombrePersona}}</div>
-                  {{mensaje.mensaje}} <br>
-                  <button class="btn" (click)="clickArchivo(mensaje.idArchivo)" *ngIf="mensaje.idArchivo !== 0">
-                      <i class="fa fa-file" style="font-size: 24px;"></i> {{mensaje.archivoNombre}}
-                  </button>
-                  <br>
-                  {{imprimirFecha(mensaje.fecha)}}
-              </div>
-          </div>
-      </div>
-  </div>
+    <ion-title class="chat-titulo">
+      {{chat.titulo}}
+    </ion-title>
 
-    <div class="final">
-      <div class="form-group">
-        
+    <ion-buttons slot="end">
+      <ion-button (click)="crearLlamada()">
+        <ion-icon name="videocam-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
-      <div class="row" *ngIf="isAudio">
-        <div class="col-2">
-          <button class="btn"><i class="fa fa-microphone" style="font-size: 24px;" (click)="grabar()"></i></button>
-        </div>
-        <div class="col-2">
-          <button class="btn"><i class="fa fa-stop" style="font-size: 24px;" (click)="detenerGrabacion()"></i></button>
-        </div>
-        <div class="col-5">
-          <audio controls [src]="audio2"></audio>
+
+<div class="chat-container">
+  <div #scrollContainer class="listado">
+    <div style="height: 2vh;"></div>
+    <div *ngFor="let mensaje of mensajes" (click)="validarMeet(mensaje.mensaje)">
+      <div class="message user" *ngIf="mostrarMensaje(mensaje.idPersona)">
+        <div class="message-bubble">
+          {{mensaje.mensaje}} <br>
+          <button class="btn btn-1 archivo" (click)="clickArchivo(mensaje.idArchivo)" *ngIf="mensaje.idArchivo !== 0">
+            <i class="fa fa-file" style="font-size: 24px;"></i> {{mensaje.archivoNombre}}
+          </button>
+          <br>
+          {{imprimirFecha(mensaje.fecha)}}
         </div>
       </div>
-
-      <div class="row">
-            <div class="col-2">
-              <button class="btn" (click)="openFileInput()"><i class="fa fa-file" style="font-size: 24px;"></i></button>
-              <input type="file" id="fileInput" #fileInput style="display: none" (change)="onFileSelected($event)" />
-              <!-- <input type="file" class="fa fa-file" name="" id="" (change)="onFileSelected($event)"> -->
-          </div>
-          <div class="col-8" *ngIf="archivo">
-            {{archivo?.name}}
+      <div class="message other" *ngIf="!mostrarMensaje(mensaje.idPersona)">
+        <div class="message-bubble">
+          <div class="nombre">{{mensaje.nombrePersona}}</div>
+          {{mensaje.mensaje}} <br>
+          <button class="btn archivo" (click)="clickArchivo(mensaje.idArchivo)" *ngIf="mensaje.idArchivo !== 0">
+            <i class="fa fa-file" style="font-size: 24px;"></i> {{mensaje.archivoNombre}}
+          </button>
+          <br>
+          {{imprimirFecha(mensaje.fecha)}}
         </div>
-        <div class="col-2" (click)="eliminarArchivo()" *ngIf="archivo">
-          <button class="btn"><i class="fa fa-trash" style="font-size: 24px;"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="final">
+  <div class="form-group">
+    <div class="row" *ngIf="isAudio">
+      <div class="col-2">
+        <button class="btn"><i class="fa fa-microphone" style="font-size: 24px;" (click)="grabar()"></i></button>
+      </div>
+      <div class="col-2">
+        <button class="btn"><i class="fa fa-stop" style="font-size: 24px;" (click)="detenerGrabacion()"></i></button>
+      </div>
+      <div class="col-5">
+        <audio controls [src]="audio2"></audio>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-2">
+        <button class="btn" (click)="openFileInput()"><i class="fa fa-file" style="font-size: 24px;"></i></button>
+        <input type="file" id="fileInput" #fileInput style="display: none" (change)="onFileSelected($event)" />
+      </div>
+      <div class="col-8" *ngIf="archivo">
+        {{archivo?.name}}
+      </div>
+      <div class="col-2" (click)="eliminarArchivo()" *ngIf="archivo">
+        <button class="btn"><i class="fa fa-trash" style="font-size: 24px;"></i></button>
       </div>
 
       <div class="col-2">
         <button class="btn"><i class="fa fa-microphone" style="font-size: 24px;" (click)="changeAudio()"></i></button>
       </div>
-          <div class="col-6">
-            <!-- <label class="label-input required-label" style="color: gray"
-              >Mensaje</label
-            > -->
-            <div>
-              <textarea
-                #descripcion="ngModel"
-                [(ngModel)]="msg"
-                name="mensaje"
-                class="form-control"
-                type="text"
-                maxlength="800"
-                autocomplete="off"
-                style="width: 100%"
-                rows="1"
-                required
-                (keyup.enter)="enviarMensaje()"
-              ></textarea>
-              <!-- <div
-                *ngIf="(descripcion.errors?.['required'] && descripcion.touched )"
-                class="error"
-              >
-                La descripción es requerida
-              </div> -->
-            </div>
-          </div>
+      <div class="col-6">
+        <div>
+          <textarea #descripcion="ngModel" [(ngModel)]="msg" name="mensaje" class="form-control" type="text"
+            maxlength="800" autocomplete="off" style="width: 100%" rows="1" required
+            (keyup.enter)="enviarMensaje()"></textarea>
+        </div>
+      </div>
 
-          <div class="col-2">
-            <div class="form-group">
-              <button type="submit" class="btn boton" (click)="enviarMensaje()" [disabled]="msg === '' || msg === undefined">
-                <i class="fa fa-paper-plane" style="font-size: 24px"></i>
-              </button>
-            </div>
-          </div>
+      <div class="col-2">
+        <div>
+          <button type="submit" class="btn btn-enviar" (click)="enviarMensaje()"
+            [disabled]="msg === '' || msg === undefined">
+            <i class="fa fa-paper-plane" style="font-size: 24px"></i>
+          </button>
         </div>
       </div>
     </div>
   </div>
-</ion-content>
+</div>
