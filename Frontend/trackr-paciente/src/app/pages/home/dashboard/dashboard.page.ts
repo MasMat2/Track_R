@@ -48,6 +48,6 @@ export class DashboardPage implements OnInit {
 
   public ngOnInit(): void {
     this.ChatHubServiceService.iniciarConexion();
-    this.ChatMensajeHubService.iniciarConexion();
+    //this.ChatMensajeHubService.iniciarConexion();
   }
 }
