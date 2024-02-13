@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChatPersonaService } from '@http/chat/chat-persona.service';
-import { IonicModule } from '@ionic/angular';
+import { IonContent, IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { Observable } from 'rxjs';
 import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
@@ -13,7 +13,7 @@ import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-s
 import { ArchivoService } from '../../../../shared/http/archivo/archivo.service';
 import { ArchivoFormDTO } from '../../../../shared/Dtos/archivos/archivo-form-dto';
 import { addIcons } from 'ionicons';
-import { videocamOutline } from 'ionicons/icons';
+import {cameraOutline, paperPlane, videocamOutline, chevronBack, trash, mic, micOutline, documentOutline } from 'ionicons/icons';
 //Libreria de capacitor para grabar audio
 import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder';
 
@@ -21,6 +21,11 @@ import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, Cur
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
 import { PlataformaService } from 'src/app/services/dashboard/plataforma.service';
 
+import { timer, Subject } from 'rxjs';
+import { finalize, map, takeUntil, takeWhile } from 'rxjs/operators';
+import { Haptics, ImpactStyle } from '@capacitor/haptics'
+import { PressDirective } from 'src/app/shared/directives/press.directive';
+import { SwipeDirective } from 'src/app/shared/directives/swipe.directive';
 
 
 @Component({
@@ -28,12 +33,12 @@ import { PlataformaService } from 'src/app/services/dashboard/plataforma.service
   templateUrl: './mensajes.component.html',
   styleUrls: ['./mensajes.component.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule, IonicModule, HeaderComponent],
+  imports: [FormsModule, CommonModule, IonicModule, HeaderComponent, PressDirective, SwipeDirective],
 })
-export class MensajesComponent {
+export class MensajesComponent{
   protected mensajes: ChatMensajeDTO[];
   protected idChat: number;
-  protected msg: string;
+  protected msg: string = '';
   protected idUsuario: number;
   protected chatMensajes$: Observable<ChatMensajeDTO[][]>
   protected chatMensajes: ChatMensajeDTO[][]
@@ -43,13 +48,23 @@ export class MensajesComponent {
     titulo: 'Chat',
     idCreadorChat: 0,
   };
+
+  protected escribiendo: boolean = false;
+  private stop$ = new Subject<any>();
+  duracionAudio = '';
+  duracion = 0;
+  protected timer$: any;
+
   protected archivo?: File = undefined;
   @ViewChild('fileInput') fileInput!: ElementRef;
-  @ViewChild('scrollContainer') private scrollContainer: ElementRef;
+  @ViewChild(IonContent) content: IonContent;
+  @ViewChild('movableSpan') movableSpan: ElementRef;
+
 
   //Variables para el audio
   protected isAudio: boolean = false;
   protected grabacionIniciada: boolean = false;
+  protected grabacionCancelada: boolean = false;
   protected audio?: string = '';
   protected audio2?: string;
 
@@ -60,8 +75,17 @@ export class MensajesComponent {
     private route: Router,
     private ChatHubServiceService: ChatHubServiceService,
     private ArchivoService: ArchivoService,
-    private plataformaService: PlataformaService
-  ) { addIcons({videocamOutline}); }
+    private plataformaService: PlataformaService,
+  ) { 
+      addIcons({videocamOutline, 
+        chevronBack, 
+        cameraOutline, 
+        paperPlane, 
+        trash, 
+        documentOutline,
+        mic,
+        micOutline}); 
+    }
 
   ionViewWillEnter() {
     this.obtenerIdUsuario();
@@ -289,6 +313,11 @@ export class MensajesComponent {
   }
 
   openFileInput(): void {
+    if(this.audio != ''){
+      this.audio = '';
+      this.audio2 = '';
+      this.isAudio = false;
+    }
     this.fileInput.nativeElement.click();
   }
 
@@ -299,14 +328,12 @@ export class MensajesComponent {
 
   // Esta función se llama después de cada actualización de la vista
   ngAfterViewChecked() {
-    this.scrollToBottom();
+    this.scrollContentToBottom();
   }
 
   // Función para desplazar automáticamente hacia abajo al final de la lista
-  scrollToBottom(): void {
-    try {
-      this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
-    } catch (err) { }
+  scrollContentToBottom(){
+    this.content.scrollToBottom();
   }
 
   eliminarArchivo() {
@@ -314,6 +341,8 @@ export class MensajesComponent {
   }
 
   changeAudio() {
+    this.audio = '';
+    this.audio2 = '';
     this.isAudio = !this.isAudio;
   }
 
@@ -329,21 +358,69 @@ export class MensajesComponent {
     if (this.grabacionIniciada) {
       return;
     }
+
+    //this.changeAudio();
     this.grabacionIniciada = true;
-    VoiceRecorder.startRecording();
+
+    VoiceRecorder.startRecording().then(_ => {
+      this.calcularDuracion();
+    });
+    
   }
 
   detenerGrabacion() {
-    if (!this.grabacionIniciada) {
+    if (!this.grabacionIniciada || this.grabacionCancelada) {
+      this.grabacionCancelada = false;
       return;
+    }
+    if(this.archivo){
+      this.archivo = undefined;
     }
     VoiceRecorder.stopRecording().then((audio: RecordingData) => {
       this.grabacionIniciada = false;
+      this.isAudio = true;
       if (audio.value) {
         this.audio = audio.value.recordDataBase64;
         this.audio2 = 'data:audio/wav;base64,' + audio.value.recordDataBase64;
       }
-    })
+    });
+  }
+
+  cancelarGrabacion() {
+    if (!this.grabacionIniciada) {
+      return;
+    }
+    if(this.archivo){
+      this.archivo = undefined;
+    }
+    VoiceRecorder.stopRecording().then((audio: RecordingData) => {
+      this.grabacionCancelada = true;
+      this.grabacionIniciada = false;
+    });
+    Haptics.impact({style: ImpactStyle.Light});
+  }
+
+  calcularDuracion(){
+    if(!this.grabacionIniciada){
+      this.duracion = 0;
+      this.duracionAudio = '';
+      return;
+    }
+    
+    this.timer$ = timer(0, 1000).pipe(
+      takeUntil(this.stop$),
+      takeWhile(_ => this.duracion >= 0), //Aqui se puede colocar un máximo para el contador
+      finalize(() => {
+        this.duracion = 0; //detiene y reinicia el contador cuando se deja de grabar
+      }),
+      map(_ => {
+        this.duracion= this.duracion + 1;
+        const minutos = Math.floor(this.duracion / 60);
+        const segundos = (this.duracion % 60).toString().padStart(2, '0');
+        this.duracionAudio = `${minutos}:${segundos}`;
+        return this.duracion;
+      })
+    );
   }
 
   crearLlamada() {
@@ -369,5 +446,53 @@ export class MensajesComponent {
 
     }
   }
+
+  //verificar si se está escribiendo un mensaje (mensaje no vacío)
+  escribiendoMensaje(){
+    return !(/^ *$/.test(this.msg))
+  }
+
+  protected presionarGrabarAudio(event: any) {
+    //al presionar empezar a grabar
+    if(event == 'start'){
+      Haptics.impact({style: ImpactStyle.Light}); //pequeña vibración para feedback
+      this.grabar();
+    }
+
+    //al soltar detener la grabación
+    if(event == 'end'){
+      Haptics.impact({style: ImpactStyle.Light}); //pequeña vibración para feedback
+      this.detenerGrabacion();
+    }
+  }
+
+  deslizarCancelarAudio(event: any) {
+
+    if(event.dirX == 'left'){
+
+      //Cuando se mueva 100px desde el origen
+      //Se cancela la grabación
+      if(event.currentX <= event.startX - 100){
+        this.cancelarGrabacion();
+      }
+
+      const relativeX = event.currentX - event.startX + 15; //15px es el threshold especificado en la directiva
+      if(!this.grabacionCancelada){
+        this.updateSpanPosition(relativeX);
+      }
+
+    }
+
+  }
+
+  //función para el efecto de arrastre del span al cancelar el audio
+  updateSpanPosition(posicionX: number): void {
+    //el span se moverá posicionX pixeles a la izquierda, 
+    //donde posicionX es la diferencia entre la posicion actual de tu dedo y el boton del microfono (el inicio)
+    this.movableSpan.nativeElement.style.transform = `translateX(calc(-50% + ${posicionX}px))`;
+  }
+
+
+
 
 }
