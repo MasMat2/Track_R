@@ -77,7 +77,7 @@ export class MensajesComponent{
     private route: Router,
     private ChatHubServiceService: ChatHubServiceService,
     private ArchivoService: ArchivoService,
-    private plataformaService: PlataformaService,,
+    private plataformaService: PlataformaService,
     private ModalController:ModalController
   ) { 
       addIcons({videocamOutline, 
