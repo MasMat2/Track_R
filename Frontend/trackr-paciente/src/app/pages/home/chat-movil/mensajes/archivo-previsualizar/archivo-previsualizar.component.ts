@@ -30,8 +30,9 @@ export class ArchivoPrevisualizarComponent  implements OnInit {
   }
 
   descargarArchivo(){
+    
     if (this.plataformaService.isMobile()) {
-      console.log('descargar archivo mobile')
+      
          this.downloadFileMobile(this.archivo.archivo, this.archivo.nombre, this.archivo.archivoMime)
        }
        else if (this.plataformaService.isWeb()) {
