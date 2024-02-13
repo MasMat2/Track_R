@@ -230,12 +230,7 @@ export class MensajesComponent {
     this.ArchivoService.getArchivo(idArchivo).subscribe( async res => {
       const modal =  await this.ModalController.create({component: ArchivoPrevisualizarComponent,componentProps:{archivo:res}});
       modal.present();
-      // if (this.plataformaService.isMobile()) {
-      //   this.downloadFileMobile(res.archivo, res.nombre, res.archivoMime)
-      // }
-      // else if (this.plataformaService.isWeb()) {
-      //   this.downloadFileWeb(res.archivo, res.nombre, res.archivoMime)
-      // }
+
     });
   }
 
