@@ -20,6 +20,8 @@ import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, Cur
 //Escribir archivos
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
 import { PlataformaService } from 'src/app/services/dashboard/plataforma.service';
+import { ModalController } from '@ionic/angular';
+import { ArchivoPrevisualizarComponent } from './archivo-previsualizar/archivo-previsualizar.component';
 
 import { timer, Subject } from 'rxjs';
 import { finalize, map, takeUntil, takeWhile } from 'rxjs/operators';
@@ -75,7 +77,8 @@ export class MensajesComponent{
     private route: Router,
     private ChatHubServiceService: ChatHubServiceService,
     private ArchivoService: ArchivoService,
-    private plataformaService: PlataformaService,
+    private plataformaService: PlataformaService,,
+    private ModalController:ModalController
   ) { 
       addIcons({videocamOutline, 
         chevronBack, 
@@ -248,13 +251,10 @@ export class MensajesComponent{
   }
 
   clickArchivo(idArchivo: number) {
-    this.ArchivoService.getArchivo(idArchivo).subscribe(res => {
-      if (this.plataformaService.isMobile()) {
-        this.downloadFileMobile(res.archivo, res.nombre, res.archivoMime)
-      }
-      else if (this.plataformaService.isWeb()) {
-        this.downloadFileWeb(res.archivo, res.nombre, res.archivoMime)
-      }
+    this.ArchivoService.getArchivo(idArchivo).subscribe( async res => {
+      const modal =  await this.ModalController.create({component: ArchivoPrevisualizarComponent,componentProps:{archivo:res}});
+      modal.present();
+
     });
   }
 
