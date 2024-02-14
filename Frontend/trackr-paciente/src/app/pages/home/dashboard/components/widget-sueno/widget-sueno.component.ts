@@ -19,14 +19,17 @@ import { HealthkitService } from '@services/healthkit.service';
 export class WidgetSuenoComponent  implements OnInit {
 
   constructor(private healthKitService: HealthkitService) { }
+  //Estado de healthkit: AsLeep
+  protected tiempoDormido: number = 0;
+  protected minutostiempoDormido: number = 0;
 
-  protected suenoActual: number = 78;
-  protected horasMinDiarias: number = 1;
-  protected minutosMinDiarias: number = 48;
-  protected tiempoDormido: number = 6;
-  protected minutostiempoDormido: number = 33;
-  protected suenoProfundo: number = 2;
-  protected minsuenoProfundo: number = 22;
+  //Estado de healthkit: AsleepREM
+  protected suenoHorasREM: number = 0;
+  protected suenoMinutosREM: number = 0;
+  
+  //Estado de healthkit: AsleepDeep
+  protected suenoHorasProfundo: number = 0;
+  protected suenoMinutosProfundo: number = 0;
   ngOnInit() {
     this.cargarDatos();
   }
@@ -34,22 +37,35 @@ export class WidgetSuenoComponent  implements OnInit {
   async cargarDatos() {
     try {
       
-      
       const dataSleep = await this.healthKitService.getActivitySleep();
 
-      //Se hace el conteo total de las horas en AsLeep (dormido incluyendo REM(Movimientos oculares rapidos) y Deep)
-      const registrosDormidos = dataSleep.resultData.filter(registro => registro.sleepState === "Asleep");
-
-      //Duración total de sueño en minutos
-      const duracionTotalEnMinutos = Math.ceil(registrosDormidos.reduce((total, registro) => {
-        const startDate = new Date(registro.startDate);
-        const endDate = new Date(registro.endDate);
-        const duracionEnMinutos = (endDate.getTime() - startDate.getTime()) / (1000 * 60); // Convertir de milisegundos a minutos
-        return total + duracionEnMinutos;
-      }, 0));
-
-      this.tiempoDormido = Math.floor(duracionTotalEnMinutos / 60);
-      this.minutostiempoDormido = duracionTotalEnMinutos % 60;
+      for (const data of dataSleep.resultData) {
+        const sleepState = data.sleepState;
+        
+        const startDate = new Date(data.startDate);
+        const endDate = new Date(data.endDate);
+        const durationMs = endDate.getTime() - startDate.getTime();
+        const durationMinutes = durationMs / (1000 * 60); 
+        
+        switch (sleepState) {
+            case 'Asleep':
+                this.tiempoDormido += Math.floor(durationMinutes / 60);
+                this.minutostiempoDormido += Math.floor(durationMinutes % 60);
+                break;
+            case 'AsleepREM':
+                this.suenoHorasREM += Math.floor(durationMinutes / 60);
+                this.suenoMinutosREM += Math.floor(durationMinutes % 60);
+                break;
+            case 'AsleepDeep':
+                this.suenoHorasProfundo += Math.floor(durationMinutes / 60);
+                this.suenoMinutosProfundo += Math.floor(durationMinutes % 60); 
+                break;
+            default:
+                console.log('Estado de sueño desconocido:', sleepState);
+                break;
+        }
+    }
+      
 
     } catch (error) {
       console.error('Error al obtener datos sleep Analysis:', error);

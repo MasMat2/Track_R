@@ -35,9 +35,9 @@ export class WidgetPesoComponent  implements OnInit {
       if (dataWeight.resultData.length > 0) {
         const ultimoElemento = dataWeight.resultData.pop(); 
         this.pesoActual = ultimoElemento!.value.toString();
-    } else {
-        this.pesoActual = '0.0';
-    }
+      } else {
+          this.pesoActual = '0.0';
+      }
     
     } catch (error) {
       console.error('Error al obtener datos de peso:', error);
