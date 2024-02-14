@@ -5,6 +5,7 @@ using Org.BouncyCastle.Utilities;
 using TrackrAPI.Dtos.Notificaciones;
 using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.Models;
+using TrackrAPI.Repositorys.Archivos;
 using TrackrAPI.Repositorys.GestionExpediente;
 
 namespace TrackrAPI.Repositorys.Notificaciones;
@@ -12,9 +13,11 @@ namespace TrackrAPI.Repositorys.Notificaciones;
 public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, INotificacionUsuarioRepository
 {
     private readonly IExpedienteConsumoMedicamentoRepository _expedienteConsumoMedicamentoRepository;
-    public NotificacionUsuarioRepository(TrackrContext context, IExpedienteConsumoMedicamentoRepository expedienteConsumoMedicamentoRepository) : base(context)
+    private readonly IArchivoRepository _archivoRepository;
+    public NotificacionUsuarioRepository(TrackrContext context, IExpedienteConsumoMedicamentoRepository expedienteConsumoMedicamentoRepository, IArchivoRepository archivoRepository) : base(context)
     {
         _expedienteConsumoMedicamentoRepository = expedienteConsumoMedicamentoRepository;
+        _archivoRepository = archivoRepository;
     }
 
     private IQueryable<NotificacionUsuario> ConsultarPorUsuario(int idUsuario)
@@ -62,7 +65,7 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
                 nu.Visto,
                 nu.IdNotificacionNavigation.IdTipoNotificacion,
                 nu.IdNotificacionNavigation.NotificacionDoctor.FirstOrDefault()?.IdPaciente ?? 0,
-                this.ObtenerImagenUsuario(nu?.IdNotificacionNavigation?.IdPersona!= null ? (int)nu?.IdNotificacionNavigation?.IdPersona : 0, !string.IsNullOrEmpty(nu?.IdNotificacionNavigation?.IdPersonaNavigation?.ImagenTipoMime) ? nu?.IdNotificacionNavigation?.IdPersonaNavigation?.ImagenTipoMime :null),
+                this.ObtenerImagenUsuario(nu?.IdNotificacionNavigation?.IdPersona != null ? (int)nu?.IdNotificacionNavigation?.IdPersona : 0, !string.IsNullOrEmpty(nu?.IdNotificacionNavigation?.IdPersonaNavigation?.ImagenTipoMime) ? nu?.IdNotificacionNavigation?.IdPersonaNavigation?.ImagenTipoMime : null),
                 nu.IdNotificacionNavigation.IdChat
             ));
     }
@@ -77,7 +80,8 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
         {
             notificacionUsuario.Visto = true;
             var toma = _expedienteConsumoMedicamentoRepository.ConsularPorNotificacion(notificacionUsuario.IdNotificacion);
-            if(toma != null){
+            if (toma != null)
+            {
                 toma.FechaToma = DateTime.Now;
                 _expedienteConsumoMedicamentoRepository.Editar(toma);
             }
@@ -88,16 +92,22 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
 
     public string? ObtenerImagenUsuario(int IdUsuario, string ImagenTipoMime)
     {
-        
+
         if (!string.IsNullOrEmpty(ImagenTipoMime))
         {
-            string filePath = $"Archivos/Usuario/{IdUsuario}{MimeTypeMap.GetExtension(ImagenTipoMime)}";
-            if (File.Exists(filePath))
+            var img = _archivoRepository.ObtenerImagenUsuario(IdUsuario);
+            if (img != null)
             {
-                byte[] imageArray = File.ReadAllBytes(filePath);
-                var ImagenBase64 = Convert.ToBase64String(imageArray);
-                return "data:"+ImagenTipoMime+";base64,"+ImagenBase64;
+                return "data:" + img.ArchivoTipoMime + ";base64," + Convert.ToBase64String(img.Archivo1);
             }
+
+            // string filePath = $"Archivos/Usuario/{IdUsuario}{MimeTypeMap.GetExtension(ImagenTipoMime)}";
+            // if (File.Exists(filePath))
+            // {
+            //     byte[] imageArray = File.ReadAllBytes(filePath);
+            //     var ImagenBase64 = Convert.ToBase64String(imageArray);
+            //     return "data:"+ImagenTipoMime+";base64,"+ImagenBase64;
+            // }
         }
         return null;
     }
