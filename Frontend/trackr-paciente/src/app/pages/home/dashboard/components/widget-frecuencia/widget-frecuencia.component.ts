@@ -24,9 +24,13 @@ export class WidgetFrecuenciaComponent  implements OnInit {
   async cargarHR() {
     try {
       const dataHR = await this.healthKitService.getHR();
-      console.log('Heart Rate'+dataHR.countReturn.toString());
-      console.log(dataHR);
-      this.ritmoCardiaco = dataHR.resultData[0].value.toString();
+      if (dataHR.resultData.length > 0) {
+          const ultimoValor = dataHR.resultData[dataHR.resultData.length - 1].value;
+          this.ritmoCardiaco = ultimoValor.toString();
+      } else {
+          this.ritmoCardiaco = "No hay datos disponibles";
+      }
+
     } catch (error) {
       console.error('Error al obtener datos de ritmo cardiaco:', error);
     }
