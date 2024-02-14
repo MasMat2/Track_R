@@ -14,7 +14,7 @@ import { HealthkitService } from '@services/healthkit.service';
 export class WidgetFrecuenciaComponent  implements OnInit {
 
 
-  protected ritmoCardiaco: number = 100;
+  protected ritmoCardiaco: string = '-';
   constructor(private healthKitService: HealthkitService) { }
 
   ngOnInit() {
@@ -24,11 +24,9 @@ export class WidgetFrecuenciaComponent  implements OnInit {
   async cargarHR() {
     try {
       const dataHR = await this.healthKitService.getHR();
+      console.log('Heart Rate'+dataHR.countReturn.toString());
       console.log(dataHR);
-      //Sumar todos los registros de hoy en ritmo cardiaco
-
-      //const sumaHR = dataHR.resultData.reduce((total, elemento) => total + elemento.value, 0);
-      //this.ritmoCardiaco = sumaHR;
+      this.ritmoCardiaco = dataHR.resultData[0].value.toString();
     } catch (error) {
       console.error('Error al obtener datos de ritmo cardiaco:', error);
     }

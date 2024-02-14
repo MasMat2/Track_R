@@ -22,8 +22,8 @@ export class WidgetPasosComponent  implements OnInit {
   protected meta: number = 10_000;
 
   protected metros: number = 10_000;
-  protected horas: number = 10;
-  protected minutos: number = 10;
+  protected horas: string = '-';
+  protected minutos: string = '-';
 
   protected pasos : String = "0";
   protected distancia: number;
@@ -45,16 +45,16 @@ export class WidgetPasosComponent  implements OnInit {
       const penultimaCaminata = dataPasos.resultData[dataPasos.resultData.length - 2];
       const ultimaCaminata = dataPasos.resultData[dataPasos.resultData.length - 1];
 
-      const fechaFinPenultima = new Date(penultimaCaminata.endDate);
-      const fechaInicioUltima = new Date(ultimaCaminata.startDate);
+      const timempoActual = new Date();
+      const tiempoInicioUltima = new Date(ultimaCaminata.startDate);
 
-      const diferenciaEnMilisegundos = fechaInicioUltima.getTime() - fechaFinPenultima.getTime();
+      const diferenciaEnMilisegundos = timempoActual.getTime() - tiempoInicioUltima.getTime();
 
       const horasUltimaCaminata = Math.floor(diferenciaEnMilisegundos / (1000 * 60 * 60));
       const minutosUltimaCaminata = Math.floor((diferenciaEnMilisegundos % (1000 * 60 * 60)) / (1000 * 60));
 
-      this.horas = horasUltimaCaminata;
-      this.minutos = minutosUltimaCaminata;
+      this.horas = horasUltimaCaminata.toString();
+      this.minutos = minutosUltimaCaminata.toString();
 
     } catch (error) {
       console.error('Error al obtener datos de pasos:', error);
