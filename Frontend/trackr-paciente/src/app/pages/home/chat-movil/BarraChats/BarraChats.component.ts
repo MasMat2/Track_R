@@ -76,15 +76,21 @@ export class BarraChatsComponent {
   obtenerChats() {
     this.chats$ = this.ChatHubServiceService.chat$;
     this.chats$.subscribe((chats) => {
-
-      /*chats.forEach((chat) => {
-        this.archivoService.obtenerUsuarioImagen(chat.idCreadorChat).subscribe((imgaen) => {
-          let objectURL = URL.createObjectURL(imgaen);
-          let urlImagen = objectURL;
-          let url = this.sanitizer.bypassSecurityTrustUrl(urlImagen);
-          chat.urlImagen = url;
-        });
-      });*/
+      console.log(chats)
+      chats.forEach((chat) => {
+        if(chat.imagenBase64 != null){
+          let base64String = "data:" +chat.tipoMime + ';base64,' + chat.imagenBase64;
+          let aux = this.sanitizer.bypassSecurityTrustUrl(base64String);
+          chat.urlImagen = base64String;
+        }
+        
+        // this.archivoService.obtenerUsuarioImagen(chat.idCreadorChat).subscribe((imgaen) => {
+        //   let objectURL = URL.createObjectURL(imgaen);
+        //   let urlImagen = objectURL;
+        //   let url = this.sanitizer.bypassSecurityTrustUrl(urlImagen);
+        //   chat.urlImagen = url;
+        // });
+      });
       
       this.chats = chats;
       this.chatsFiltradosPorBusqueda = chats;

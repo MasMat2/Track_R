@@ -68,8 +68,8 @@ export class CreateJitsiMeetComponent implements OnInit {
     this.meta.addTag({ name: 'Content-Security-Policy', content: cspValue }); //Se le indica al template que confie en iframe
 
     this.createNewRoom(); //Metodo para crear una llamada con jitsi
-    this.obtenerChats();
-    this.obtenerMensajes();
+    // this.obtenerChats();
+    // this.obtenerMensajes();
   }
 
   //Metodo para inicializar el hub

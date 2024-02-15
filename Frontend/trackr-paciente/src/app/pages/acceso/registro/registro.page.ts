@@ -2,9 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { HospitalService } from '@http/catalogo/hospital.service';
 import { UsuarioService } from '@http/seguridad/usuario.service';
 import { AlertController, CheckboxCustomEvent, IonicModule } from '@ionic/angular';
+import { Hospital } from '@models/catalogo/hospital';
 import { Usuario } from '@models/usuario';
+import { NgSelectModule } from '@ng-select/ng-select';
 import * as Utileria from '@utils/utileria';
 import { UsuarioNuevoTrackrDto } from 'src/app/shared/Dtos/seguridad/usuario-nuevo-trackr-dto';
 
@@ -13,13 +16,17 @@ import { UsuarioNuevoTrackrDto } from 'src/app/shared/Dtos/seguridad/usuario-nue
   templateUrl: './registro.page.html',
   styleUrls: ['./registro.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterModule],
+  imports: [IonicModule, CommonModule, FormsModule, RouterModule, NgSelectModule],
 })
 export class RegistroPage implements OnInit {
   protected usuario = new UsuarioNuevoTrackrDto();
   protected confirmarContrasena: string = '';
   protected submitting: boolean = false;
   protected termsAccepted: boolean = false;
+  protected hospitalList : Hospital[] = [];
+  protected idHospital : number;
+  protected placeHolderSelectHospital : string = "Seleccione un hospital";
+  protected placeHolderNoOptions : string = "No hay hospitales disponibles";
   
   private readonly TERMINOS_Y_CONDICIONES: string = `
 **Términos y Condiciones de Uso de la Aplicación Track.r**
@@ -45,10 +52,17 @@ Al utilizar esta aplicación, aceptas estos Términos y Condiciones. Si tienes a
   constructor(
     private usuarioService: UsuarioService,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private hospitalService : HospitalService
   ) {}
 
-  public ngOnInit() {}
+  public ngOnInit() {
+    this.hospitalService.consultarTodosParaSelector().subscribe(
+      (data) => {
+          this.hospitalList = data;
+      }
+    );
+  }
 
   protected enviarFormulario(formulario: NgForm): void {
     this.submitting = true;

@@ -6,6 +6,8 @@ using TrackrAPI.Services.Catalogo;
 using TrackrAPI.Services.Seguridad;
 using System.IO;
 using TrackrAPI.Services.Inventario;
+using TrackrAPI.Services.Archivos;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace TrackrAPI.Controllers.Catalogo
 {
@@ -17,18 +19,21 @@ namespace TrackrAPI.Controllers.Catalogo
         private readonly HospitalLogotipoService hospitalLogotipoService;
         private readonly CompaniaLogotipoService companiaLogotipoService;
         private readonly UsuarioService usuarioService;
+        private readonly ArchivoService archivoService;
 
         public ArchivoController(
             IWebHostEnvironment hostingEnvironment,
             HospitalLogotipoService hospitalLogotipoService,
             CompaniaLogotipoService companiaLogotipoService,
-            UsuarioService usuarioService
+            UsuarioService usuarioService,
+            ArchivoService archivoService
             )
         {
             this.hostingEnvironment = hostingEnvironment;
             this.hospitalLogotipoService = hospitalLogotipoService;
             this.companiaLogotipoService = companiaLogotipoService;
             this.usuarioService = usuarioService;
+            this.archivoService = archivoService;
         }
 
         [HttpGet("HospitalLogotipo/{idHospitalLogotipo}")]
@@ -36,7 +41,7 @@ namespace TrackrAPI.Controllers.Catalogo
         {
             var hospital = hospitalLogotipoService.ConsultarDto(idHospitalLogotipo);
             string directoryPath = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "HospitalLogotipo");
-            string path = Path.Combine(directoryPath, $"{hospital.Src}{ MimeTypeMap.GetExtension(hospital.TipoMime)}");
+            string path = Path.Combine(directoryPath, $"{hospital.Src}{MimeTypeMap.GetExtension(hospital.TipoMime)}");
 
             string pathDefault = Path.Combine(directoryPath, GeneralConstant.NombreImagenAtiDefault);
             string tipoMimeDefault = GeneralConstant.TipoMimeAtiDefault;
@@ -72,7 +77,7 @@ namespace TrackrAPI.Controllers.Catalogo
                 companiaLogotipo.TipoMime = tipoMimeDefault;
 
                 if (!System.IO.File.Exists(pathDefault))
-                   throw new CdisException("No se encontró la imagen");
+                    throw new CdisException("No se encontró la imagen");
             }
 
             var imageFileStream = System.IO.File.OpenRead(path);
@@ -94,14 +99,32 @@ namespace TrackrAPI.Controllers.Catalogo
             }
             else
             {
-                path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"{usuario.IdUsuario}{ MimeTypeMap.GetExtension(usuario.ImagenTipoMime)}");
-                tipoMime = usuario.ImagenTipoMime;
-
-                if (!System.IO.File.Exists(path))
+                var archivo = archivoService.ObtenerImagenUsuario(idUsuario);
+                if (archivo == null)
                 {
                     path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
                     tipoMime = "image/svg+xml";
                 }
+                else
+                {
+                    MemoryStream ms = new MemoryStream();
+
+                    BinaryFormatter binForm = new BinaryFormatter();
+                    ms.Write(archivo.Archivo1, 0, archivo.Archivo1.Length);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    return File(ms, archivo.ArchivoTipoMime);
+
+                }
+
+
+                // path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"{usuario.IdUsuario}{ MimeTypeMap.GetExtension(usuario.ImagenTipoMime)}");
+                // tipoMime = usuario.ImagenTipoMime;
+
+                // if (!System.IO.File.Exists(path))
+                // {
+                //     path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
+                //     tipoMime = "image/svg+xml";
+                // }
             }
 
             var imageFileStream = System.IO.File.OpenRead(path);

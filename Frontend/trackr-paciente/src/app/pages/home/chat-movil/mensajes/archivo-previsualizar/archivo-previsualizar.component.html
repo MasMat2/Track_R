@@ -1,0 +1,23 @@
+<ion-content>
+    <ion-button fill="outline" expand="full" shape="round"  (click)="regresarBtn()">Regresar</ion-button>
+
+    <ion-img [src]="archivoBase64" *ngIf="type === 'image'"></ion-img>
+
+    <audio controls [src]="archivoBase64" *ngIf="type === 'audio'"></audio>
+
+    <ngx-extended-pdf-viewer
+        *ngIf="type === 'application'"
+        [base64Src]="archivo.archivo"
+        [filenameForDownload]="archivo.nombre"
+        [useBrowserLocale]="true"
+        [zoom]="'page-actual'"
+        [textLayer]="true"
+        [zoom]="'auto'"
+    ></ngx-extended-pdf-viewer>
+
+    <ion-button (click)="descargarArchivo()">
+        Descargar
+    </ion-button>
+
+</ion-content>
+

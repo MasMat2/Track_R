@@ -9,6 +9,7 @@
         public string CorreoPersonal { get; set; }
         public string TelefonoMovil { get; set; }
         public string Contrasena { get; set; }
+        public int IdHospital { get; set; }
         
     }
 }

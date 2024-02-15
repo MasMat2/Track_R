@@ -7,4 +7,5 @@ export class UsuarioNuevoTrackrDto {
     correoPersonal: string;
     telefonoMovil: string;
     contrasena: string;
+    idHospital: number;
 }

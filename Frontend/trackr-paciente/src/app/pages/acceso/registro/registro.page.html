@@ -171,6 +171,27 @@
           </ion-row>
           <ion-row>
             <ion-col>
+              <ion-select
+                #locacion="ngModel"
+                name="locacion"
+                bindLabel="nombre"
+                bindValue="idHospital"
+                shape="round"
+                name="hospital"
+                class="form-control"
+                [label]="placeHolderSelectHospital"
+                label-placement="floating"
+                fill="outline"
+                [required]="true"
+                [(ngModel)]="usuario.idHospital"
+                [placeholder]="placeHolderSelectHospital"
+              >
+              <ion-select-option *ngFor="let hospital of hospitalList" [value]="hospital.idHospital">{{ hospital.nombre }}</ion-select-option>
+            </ion-select>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
               <div class="terminos-condiciones">
                 <ion-item>
                   <ion-label>

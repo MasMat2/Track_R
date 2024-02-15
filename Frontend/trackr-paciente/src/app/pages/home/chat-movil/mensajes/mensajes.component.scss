@@ -1,44 +1,117 @@
+@import "../../../../../../src/theme/variables.scss";
 .message {
   margin-bottom: 10px;
   overflow: hidden;
 }
 
 .user .message-bubble {
-  background-color: #9ED1FE;
-  color: #333;
+  background-color: var(--primary-700);
+  color: var(--neutral-50);
+  font-family: var(--font-body);
+  border-radius: 10px 10px 0px 10px;
+  margin-right: 3vw;
   float: right;
+
+  .archivo {
+    color: var(--neutral-50);
+  }
 }
 
 .other .message-bubble {
-  background-color: #ecf0f1;
-  color: #333;
+  background-color: var(--neutral-50);
+  color: var(--neutral-900);
+  margin-left: 3vw;
+  border-radius: 10px 10px 10px 0px;
+  font-family: var(--font-body);
   float: left;
+
+  .archivo {
+    color: var(--neutral-900);
+  }
 }
 
 .message-bubble {
   padding: 10px;
-  border-radius: 10px;
   max-width: 70%;
 
   .nombre {
-    font-weight: 500;
+    font-weight: bold;
     padding: 0%;
   }
 }
 
 .listado {
-  height: 55vh;
+  height: 100%;
   overflow-y: auto;
   align-self: flex-end;
+  background-color: var(--primary-50);
 }
 
 .final {
   position: relative;
   bottom: 0;
+  padding-bottom: 2vh;
+  padding-top: 2vh;
 }
 
-.boton{
+.boton {
   // position: relative;
   // right: 2vh;
   // top: 3vh;
+}
+
+.chat-header{
+  --background: var(--neutral-50);
+  height: 8vh;
+}
+
+.chat-container {
+  overflow: scroll;
+}
+
+.chat-footer{
+  //display: flex;
+    .optional-toolbar{
+
+      audio::-webkit-media-controls-panel {
+        background-color: var(--neutral-50);
+      }
+    }
+    .main-toolbar{
+      height: 8vh;
+
+      .grabando-audio-container{
+        display: flex;
+        align-items: center;
+
+        .contador-tiempo{
+          display: flex;
+          align-items: center;
+          z-index: 99;
+          background-color: var(--neutral-50);
+          padding-right: 2vw;
+
+          ion-button{
+            color: red;
+            opacity: 0.5;
+          }
+        }
+      }
+
+      .texto-mensaje{
+        border: 0px;
+        border-radius: 5px;
+        background-color: var(--primary-50);
+
+      }
+
+      .texto-mensaje:focus{
+        outline: none !important;
+        border: 1px solid;
+        border-color: var(--primary-700);
+
+      }
+
+    }
+
 }
