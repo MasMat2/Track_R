@@ -397,7 +397,6 @@ export class MensajesComponent{
       this.grabacionCancelada = true;
       this.grabacionIniciada = false;
     });
-    Haptics.impact({style: ImpactStyle.Light});
   }
 
   calcularDuracion(){
