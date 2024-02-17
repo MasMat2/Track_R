@@ -1,7 +1,9 @@
+@import "../../../../../theme/variables.scss";
+
 
 .texto-seccion{
     font-weight: bold;
-    color: #4c0080;
+    color: var(--primary-600);
 }
 
 
@@ -16,25 +18,22 @@
   padding: 0px;
 
 }
-.btn-enviar{
-  margin-top: 200px;
-  margin-bottom: 50px;
-}
 
-ion-button{
-  --color : black;
-  --background: #9BD8AC;
+ion-item{
+  --background: var(--neutral-100);
 }
 
 .correoConfirmado{
 
-  ion-label{
+  p{
+    text-align: center;
     color: red;
   }
 
-  display: flex;
-  align-items: center;
-  text-align: center;
+  ion-button{
+    --background: var(--primary-700);
+    --color: var(--neutral-50);
+  }
 }
 
 .padecimiento-nuevo{
@@ -43,5 +42,11 @@ ion-button{
 
 .seccion{
   padding-bottom: 1em;
+}
+
+.btn-enviar{
+  --background: var(--primary-700);
+  --color: var(--neutral-50);
+  --border-radius: 10px;
 }
 

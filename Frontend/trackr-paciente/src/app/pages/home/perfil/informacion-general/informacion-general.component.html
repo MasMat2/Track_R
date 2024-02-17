@@ -9,12 +9,14 @@
       (ngSubmit)="enviarFormulario(formulario)"
     >
       <ion-grid>
-        <ion-row>
           <div class="correoConfirmado" *ngIf="!informacionUsuario.correoConfirmado">
-            <ion-label>Tu correo aún no está verificado</ion-label>
-            <ion-button (click) ="reenviarConfirmacionCorreo(infoUsuario.correo)" [disabled]="emailsubmiting">Enviar correo de verificación</ion-button>
+            <p>Tu correo aún no está verificado</p>
+            <ion-button
+              (click) ="reenviarConfirmacionCorreo(infoUsuario.correo)" 
+              [disabled]="emailsubmiting">
+              Enviar correo de verificación
+            </ion-button>
           </div>
-        </ion-row>
         <div class="seccion">
           <ion-row>
             <ion-col>
@@ -97,8 +99,8 @@
           </ion-row>
           <ion-row>
             <ion-col size="6">
-                <ion-item class="custom-datetime">
-                  <ion-datetime-button datetime="fechaNacimiento"></ion-datetime-button>
+                <ion-item class="custom-datetime" lines="none">
+                  <ion-datetime-button fill="outline" datetime="fechaNacimiento"></ion-datetime-button>
                   <ion-modal [keepContentsMounted]="true">
                     <ng-template>
                       <ion-datetime
@@ -480,7 +482,7 @@
 
                 </ion-col>
                 <ion-col size="5">
-                  <ion-item class="custom-datetime">
+                  <ion-item class="custom-datetime" lines="none">
                     <ion-datetime-button [datetime]="'fechaDiagnostico' + i"></ion-datetime-button>
                     <ion-modal [keepContentsMounted]="true">
                       <ng-template>
@@ -553,7 +555,7 @@
                 </div>
             </ion-col>
             <ion-col size="5">
-              <ion-item class="custom-datetime">
+              <ion-item class="custom-datetime" lines="none">
                 <ion-datetime-button datetime="fechaDiagnostico"></ion-datetime-button>
                 <ion-modal [keepContentsMounted]="true">
                   <ng-template>
@@ -641,7 +643,7 @@
 
                 </ion-col>
                 <ion-col size="5">
-                  <ion-item class="custom-datetime">
+                  <ion-item class="custom-datetime" lines="none">
                     <ion-datetime-button [datetime]="'fechaDiagnostico' + i"></ion-datetime-button>
                     <ion-modal [keepContentsMounted]="true">
                       <ng-template>
@@ -715,7 +717,7 @@
                 </div>
             </ion-col>
             <ion-col size="5">
-              <ion-item class="custom-datetime">
+              <ion-item class="custom-datetime" lines="none">
                 <ion-datetime-button datetime="fechaDiagnostico"></ion-datetime-button>
                 <ion-modal [keepContentsMounted]="true">
                   <ng-template>
@@ -770,11 +772,9 @@
         </div>
         <ion-row class="mt-4">
           <ion-col>
-              <ion-button [disabled]="submiting"  type="submit">Guardar</ion-button>
+              <ion-button class="btn-enviar" [disabled]="submiting"  type="submit">Guardar</ion-button>
           </ion-col>
         </ion-row>
-        <br>
-        <br>
       </ion-grid>
     </form>
   </div>
