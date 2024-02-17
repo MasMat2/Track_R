@@ -7,7 +7,7 @@ import { WidgetService } from 'src/app/services/dashboard/widget.service';
 import { Observable, combineLatestWith, map, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../layout/header/header.component';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 interface WidgetSeleccionado extends Widget {
   seleccionado: boolean;
@@ -22,7 +22,8 @@ interface WidgetSeleccionado extends Widget {
     CommonModule,
     IonicModule,
     FormsModule,
-    HeaderComponent
+    HeaderComponent,
+    RouterModule
   ],
   providers: [
     WidgetService,
@@ -92,11 +93,13 @@ export class ConfiguracionDashboardPage  implements OnInit {
     const alert = await this.alertController.create({
       header: 'Widgets actualizados',
       message: 'La información se actualizó correctamente',
-      buttons: [{
-        text: 'Ok',
-        handler: () => {
-          this.router.navigate(['/home/dashboard']);
-        }
+      buttons: [
+        {
+          cssClass: 'alert-button-custom', //usar siempre esta clase
+          text: 'Ok',
+          handler: () => {
+            this.router.navigate(['/home/dashboard']);
+          }
       }]
     });
 

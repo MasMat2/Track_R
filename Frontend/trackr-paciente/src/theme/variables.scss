@@ -133,6 +133,12 @@ ion-header {
   background: var(--neutral-100);  
 }
 
+
+//estilo para botones en las alertas
+button.alert-button.alert-button-custom {
+  color: var(--primary-600);
+}
+
 @media (prefers-color-scheme: dark) {
   /*
    * Dark Colors
