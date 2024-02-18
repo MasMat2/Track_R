@@ -93,9 +93,9 @@ export class ConfiguracionDashboardPage  implements OnInit {
     const alert = await this.alertController.create({
       header: 'Widgets actualizados',
       message: 'La información se actualizó correctamente',
+      cssClass: 'custom-alert', //clase en variables.scss (usar siempre)
       buttons: [
         {
-          cssClass: 'alert-button-custom', //usar siempre esta clase
           text: 'Ok',
           handler: () => {
             this.router.navigate(['/home/dashboard']);

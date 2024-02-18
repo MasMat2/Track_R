@@ -50,3 +50,17 @@ ion-item{
   --border-radius: 10px;
 }
 
+.btn-agregar-eliminar{
+  position: relative;
+  font-size: 1em;
+  --ripple-color: var(--primary-300);
+
+  #circulo{
+    color: var(--neutral-400);
+  }
+
+  #icono{
+    position: absolute;
+    color: var(--neutral-50);
+  }
+}

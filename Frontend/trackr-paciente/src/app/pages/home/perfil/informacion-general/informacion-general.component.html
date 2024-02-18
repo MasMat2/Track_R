@@ -104,6 +104,8 @@
                   <ion-modal [keepContentsMounted]="true">
                     <ng-template>
                       <ion-datetime
+                        
+                        color="morado-custom"
                         #fechaNacimiento="ngModel"
                         name="fechaNacimiento"
                         id="fechaNacimiento"
@@ -137,6 +139,7 @@
           <ion-row>
             <ion-col size="6">
               <ion-select
+                [interfaceOptions]="customAlertOptions"
                 #genero="ngModel"
                 id="genero"
                 name="genero"
@@ -280,6 +283,7 @@
           <ion-row>
             <ion-col size="6">
               <ion-select
+                [interfaceOptions]="customAlertOptions"
                 #pais="ngModel"
                 id="pais"
                 name="pais"
@@ -314,6 +318,7 @@
           <ion-row>
             <ion-col size="6">
               <ion-select
+                [interfaceOptions]="customAlertOptions"
                 #estado="ngModel"
                 id="estado"
                 name="estado"
@@ -329,6 +334,7 @@
             </ion-col>
             <ion-col size="6">
               <ion-select
+                [interfaceOptions]="customAlertOptions"
                 #municipio="ngModel"
                 id="municipio"
                 name="municipio"
@@ -345,6 +351,7 @@
           <ion-row>
             <ion-col size="6">
               <ion-select
+                [interfaceOptions]="customAlertOptions"
                 #localidad="ngModel"
                 id="localidad"
                 name="localidad"
@@ -359,6 +366,7 @@
             </ion-col>
             <ion-col size="6">
               <ion-select
+                [interfaceOptions]="customAlertOptions"
                 #colonia="ngModel"
                 id="colonia"
                 name="colonia"
@@ -460,6 +468,7 @@
               <ion-row>
                 <ion-col size="7">
                   <ion-select
+                    [interfaceOptions]="customAlertOptions"
                     disabled="true"
                     #tipoPadecimiento="ngModel"
                     id="tipoPadecimiento"
@@ -487,6 +496,7 @@
                     <ion-modal [keepContentsMounted]="true">
                       <ng-template>
                         <ion-datetime
+                          color="morado-custom"
                           #fechaDiagnostico="ngModel"
                           [id]="'fechaDiagnostico' + i"
                           [name]="'fechaDiagnostico' + i"
@@ -503,6 +513,7 @@
               <ion-row>
                 <ion-col size="8">
                   <ion-select
+                    [interfaceOptions]="customAlertOptions"
                     #doctor="ngModel"
                     id="doctor"
                     [name]="'doctor' + i"
@@ -525,7 +536,10 @@
                 </ion-col>
                 <ion-col size="4">
                   <ion-item lines="none">
-                    <ion-icon (click)="eliminarPadecimiento(i)" name="close-circle-outline" size="large"></ion-icon> <!-- buscar una tacha blanca y circulo gris -->
+                    <ion-button class="btn-agregar-eliminar" fill="clear" (click)="eliminarPadecimiento(i)">
+                      <ion-icon id="circulo" slot="icon-only" name="ellipse" size="large"></ion-icon> 
+                      <ion-icon id="icono" name="close" ></ion-icon>
+                    </ion-button>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -536,6 +550,7 @@
           <ion-row>
             <ion-col size="7">
               <ion-select
+                [interfaceOptions]="customAlertOptions"
                 #tipoPadecimiento="ngModel"
                 id="tipoNuevoPadecimiento"
                 name="tipoNuevoPadecimiento"
@@ -560,6 +575,7 @@
                 <ion-modal [keepContentsMounted]="true">
                   <ng-template>
                     <ion-datetime
+                      color="morado-custom"
                       #fechaDiagnostico="ngModel"
                       id="fechaDiagnostico"
                       name="fechaDiagnostico"
@@ -577,6 +593,7 @@
           <ion-row>
             <ion-col size="8">
               <ion-select
+                [interfaceOptions]="customAlertOptions"
                 #doctor="ngModel"
                 id="doctor"
                 name="doctor"
@@ -596,11 +613,10 @@
             </ion-col>
             <ion-col size="4">
               <ion-item lines="none">
-                <ion-icon
-                  (click)="agregarAntecedente()"
-                  name="add-circle-outline"
-                  size="large">
-                </ion-icon>
+                <ion-button class="btn-agregar-eliminar" fill="clear" (click)="agregarAntecedente()">
+                  <ion-icon id="circulo" slot="icon-only" name="ellipse" size="large"></ion-icon> 
+                  <ion-icon id="icono" name="add" ></ion-icon>
+                </ion-button>
               </ion-item>
               <div *ngIf="nuevoAntecedenteInvalido" class="error">
                 Debe llenar los datos
@@ -621,6 +637,7 @@
               <ion-row>
                 <ion-col size="7">
                   <ion-select
+                    [interfaceOptions]="customAlertOptions"
                     disabled="true"
                     #tipoPadecimiento="ngModel"
                     id="tipoPadecimiento"
@@ -648,6 +665,7 @@
                     <ion-modal [keepContentsMounted]="true">
                       <ng-template>
                         <ion-datetime
+                          color="morado-custom"
                           #fechaDiagnostico="ngModel"
                           [id]="'fechaDiagnostico' + i"
                           [name]="'fechaDiagnostico' + i"
@@ -664,6 +682,7 @@
               <ion-row>
                 <ion-col size="8">
                   <ion-select
+                    [interfaceOptions]="customAlertOptions"
                     #doctor="ngModel"
                     id="doctor"
                     [name]="'doctor' + i"
@@ -686,7 +705,10 @@
                 </ion-col>
                 <ion-col size="4">
                   <ion-item lines="none">
-                    <ion-icon (click)="eliminarPadecimiento(i)" name="close-circle-outline" size="large"></ion-icon> <!-- buscar una tacha blanca y circulo gris -->
+                    <ion-button class="btn-agregar-eliminar" fill="clear" (click)="eliminarPadecimiento(i)">
+                      <ion-icon id="circulo" slot="icon-only" name="ellipse" size="large"></ion-icon> 
+                      <ion-icon id="icono" name="close" ></ion-icon>
+                    </ion-button>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -698,6 +720,7 @@
           <ion-row>
             <ion-col size="7">
               <ion-select
+                [interfaceOptions]="customAlertOptions"
                 #tipoPadecimiento="ngModel"
                 id="tipoNuevoPadecimiento"
                 name="tipoNuevoPadecimiento"
@@ -722,6 +745,7 @@
                 <ion-modal [keepContentsMounted]="true">
                   <ng-template>
                     <ion-datetime
+                      color="morado-custom"
                       #fechaDiagnostico="ngModel"
                       id="fechaDiagnostico"
                       name="fechaDiagnostico"
@@ -739,6 +763,7 @@
           <ion-row>
             <ion-col size="8">
               <ion-select
+                [interfaceOptions]="customAlertOptions"
                 #doctor="ngModel"
                 id="doctor"
                 name="doctor"
@@ -758,11 +783,10 @@
             </ion-col>
             <ion-col size="4">
               <ion-item lines="none">
-                <ion-icon
-                  (click)="agregarDiagnostico()"
-                  name="add-circle-outline"
-                  size="large">
-                </ion-icon>
+                <ion-button class="btn-agregar-eliminar" fill="clear" (click)="agregarDiagnostico()">
+                  <ion-icon id="circulo" slot="icon-only" name="ellipse" size="large"></ion-icon>
+                  <ion-icon id="icono" name="add" ></ion-icon>
+                </ion-button>
               </ion-item>
               <div *ngIf="nuevoDiagnosticoInvalido" class="error">
                 Debe llenar los datos
