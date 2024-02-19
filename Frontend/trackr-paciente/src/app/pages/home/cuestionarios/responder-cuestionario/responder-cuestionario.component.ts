@@ -181,6 +181,7 @@ export class ResponderCuestionarioComponent  implements OnInit {
     const alert = await this.alertController.create({
       header: 'Enviar cuestionario',
       message: '¿Seguro que desea terminar y enviar el cuestionario?',
+      cssClass: 'custom-alert',
       buttons: [
         {text: 'Cancelar'},
         {
@@ -199,6 +200,7 @@ export class ResponderCuestionarioComponent  implements OnInit {
       header: header,
       message: msg,
       buttons: ['Ok'],
+      cssClass: 'custom-alert'
     });
     await alert.present();
   }

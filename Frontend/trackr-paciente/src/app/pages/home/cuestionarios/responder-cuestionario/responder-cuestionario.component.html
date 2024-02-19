@@ -1,6 +1,3 @@
-<ion-header>
-  <app-header></app-header>
-</ion-header>
 <ion-content>
 
   <div class="presentacion" *ngIf="!presentando && !examenTerminado && !blockQuestions">
@@ -102,7 +99,7 @@
     </div>
     <div class="mensaje-final" *ngIf="mostrarMsgFinal">
       <h2>Agradecemos tu tiempo y el valor de tus respuestas.</h2>
-      <ion-button (click)="presentAlertTerminar()" [disabled]="submitting">
+      <ion-button class="btn-finalizar" (click)="presentAlertTerminar()" [disabled]="submitting">
         Finalizar Cuestionario
       </ion-button>
       <div class="contenido-buttons">

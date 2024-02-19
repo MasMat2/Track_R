@@ -15,7 +15,7 @@
           <p>{{examen.fechaExamen}}</p>
           <p>{{examen.horaExamen}}</p>
         </ion-label>
-        <ion-button (click)="responderCuestionario(examen.idExamen)">Contestar</ion-button>
+        <ion-button class="btn-responder" (click)="responderCuestionario(examen.idExamen)">Contestar</ion-button>
 
       </ion-item>
     </div>
@@ -34,9 +34,9 @@
           </ion-label>
           <ion-icon name="chevron-forward"></ion-icon>
         </ion-item>
-        <ion-item class="texto-ver-mas" button="true" (click)="verMas(true)">
+        <ion-item *ngIf="cantidadCuestionariosContestados > 5" class="texto-ver-mas" button="true" (click)="verMas(true)" lines="none">
           <ion-label>
-            Ver Todos (+{{examenContestadoList.length - 5}})
+            Ver Todos (+{{cantidadCuestionariosContestados}})
           </ion-label>
         </ion-item>
       </div>
