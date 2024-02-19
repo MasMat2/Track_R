@@ -546,6 +546,7 @@ export class UsuarioFormularioComponent implements OnInit {
         this.archivoService.obtenerUsuarioImagen(data.idUsuario).subscribe((imagen) => {
           let objectURL = URL.createObjectURL(imagen);
           this.url = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+          this.imagenBase64 = this.url;
         });
       });
     } else {
@@ -618,6 +619,7 @@ export class UsuarioFormularioComponent implements OnInit {
   }
 
   public async editar(): Promise<boolean> {
+    console.log("Se edito")
     this.usuario.contrasenaActualizada = this.usuario.contrasena;
 
     let exito: boolean = false;
@@ -685,7 +687,7 @@ export class UsuarioFormularioComponent implements OnInit {
     }
     else {
       this.onClose(true);
-      this.usuarioImagenService.actualizarImagen(this.url);
+      //this.usuarioImagenService.actualizarImagen(this.url);
     }
   }
 
