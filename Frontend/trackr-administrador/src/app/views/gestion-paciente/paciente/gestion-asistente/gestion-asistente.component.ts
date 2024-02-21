@@ -61,6 +61,7 @@ export class GestionAsistenteComponent implements OnInit {
       } else {
         this.usuarioService.agregarAsistente(asistente.idUsuario).subscribe(() => {
           this.misAsistentes();
+          this.consultarAsistentes();
         });
       }
     });
@@ -70,6 +71,7 @@ export class GestionAsistenteComponent implements OnInit {
   {
     this.usuarioService.eliminarAsistente(asistente.idAsistenteDoctor).subscribe(() => {
       this.misAsistentes();
+      this.consultarAsistentes();
     });
   }
 
