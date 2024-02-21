@@ -39,56 +39,74 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
 
     public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(List<int> idDoctorList)
     {
-        return context.ExpedientePadecimiento
-            .Include(ep => ep.IdExpedienteNavigation)
-            .Include(et => et.IdExpedienteNavigation.ExpedientePadecimiento)
-            .ThenInclude(ep => ep.IdPadecimientoNavigation)
-                .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.UsuarioRol.Any( ur => ur.IdRolNavigation.Clave == GeneralConstant.ClaveRolPaciente) &&
+        return context.ExpedienteDoctor
+                      .Include(x => x.IdExpedienteNavigation)
+                      .Include(x => x.IdExpedienteNavigation.ExpedientePadecimiento)
+                      .ThenInclude(x => x.IdPadecimientoNavigation)
+                      .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.UsuarioRol.Any(ur => ur.IdRolNavigation.Clave == GeneralConstant.ClaveRolPaciente) &&
                        idDoctorList.Contains(ep.IdUsuarioDoctor))
-                .GroupBy(ep => ep.IdExpedienteNavigation.IdUsuario)
-                .Select(group => new UsuarioExpedienteGridDTO
-            {
-                IdExpedienteTrackr = group.Key,
-                IdUsuario = group.Key,
-                DoctorAsociado = group.FirstOrDefault().IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre + " " + group.FirstOrDefault().IdUsuarioDoctorNavigation.ApellidoPaterno,
-                NombreCompleto = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ObtenerNombreCompleto(),
-                Patologias = group.FirstOrDefault().IdExpedienteNavigation.ExpedientePadecimiento.ObtenerPadecimientos(),
-                Edad = (DateTime.Today.Year - group.FirstOrDefault().IdExpedienteNavigation.FechaNacimiento.Year).ToString() + " años",
-                TipoMime = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ImagenTipoMime
-            })
-            .ToList();
+                        .GroupBy(ep => ep.IdExpedienteNavigation.IdUsuario)
+                        .Select(group => new UsuarioExpedienteGridDTO
+                        {
+                            IdExpedienteTrackr = group.Key,
+                            IdUsuario = group.Key,
+                            DoctorAsociado = group.FirstOrDefault().IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre + " " + group.FirstOrDefault().IdUsuarioDoctorNavigation.ApellidoPaterno,
+                            NombreCompleto = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ObtenerNombreCompleto(),
+                            Patologias = group.FirstOrDefault().IdExpedienteNavigation.ExpedientePadecimiento.ObtenerPadecimientos(),
+                            Edad = (DateTime.Today.Year - group.FirstOrDefault().IdExpedienteNavigation.FechaNacimiento.Year).ToString() + " años",
+                            TipoMime = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ImagenTipoMime
+                        })
+                    .ToList();
+        // return context.ExpedientePadecimiento
+        //     .Include(ep => ep.IdExpedienteNavigation)
+        //     .Include(et => et.IdExpedienteNavigation.ExpedientePadecimiento)
+        //     .ThenInclude(ep => ep.IdPadecimientoNavigation)
+        //         .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.UsuarioRol.Any( ur => ur.IdRolNavigation.Clave == GeneralConstant.ClaveRolPaciente) &&
+        //                idDoctorList.Contains(ep.IdUsuarioDoctor))
+        //         .GroupBy(ep => ep.IdExpedienteNavigation.IdUsuario)
+        //         .Select(group => new UsuarioExpedienteGridDTO
+        //     {
+        //         IdExpedienteTrackr = group.Key,
+        //         IdUsuario = group.Key,
+        //         DoctorAsociado = group.FirstOrDefault().IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre + " " + group.FirstOrDefault().IdUsuarioDoctorNavigation.ApellidoPaterno,
+        //         NombreCompleto = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ObtenerNombreCompleto(),
+        //         Patologias = group.FirstOrDefault().IdExpedienteNavigation.ExpedientePadecimiento.ObtenerPadecimientos(),
+        //         Edad = (DateTime.Today.Year - group.FirstOrDefault().IdExpedienteNavigation.FechaNacimiento.Year).ToString() + " años",
+        //         TipoMime = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ImagenTipoMime
+        //     })
+        //     .ToList();
     }
 
     public int VariablesFueraRango(int idUsuario)
     {
         var currentDateUtc = DateTime.UtcNow.Date;
         return context.EntidadEstructuraTablaValor
-            .Where(eetv => eetv.IdTabla == idUsuario && eetv.FueraDeRango == true  && eetv.FechaMuestra.Value.Date == currentDateUtc )
+            .Where(eetv => eetv.IdTabla == idUsuario && eetv.FueraDeRango == true && eetv.FechaMuestra.Value.Date == currentDateUtc)
             .Count();
     }
 
     public int DosisNoTomadas(int idExpediente)
     {
-        var expediente =  context.TratamientoToma
+        var expediente = context.TratamientoToma
             .Join(
             context.TratamientoRecordatorio,
             tt => tt.IdTratamientoRecordatorio,
             tr => tr.IdTratamientoRecordatorio,
-            (tt, tr) => new {TratamientoToma = tt ,  TratamientoRecordatorio = tr}
+            (tt, tr) => new { TratamientoToma = tt, TratamientoRecordatorio = tr }
             )
             .Join(
                 context.ExpedienteTratamiento,
                 temp => temp.TratamientoRecordatorio.IdExpedienteTratamiento,
                 et => et.IdExpedienteTratamiento,
-                (temp , et) => new { temp.TratamientoToma , ExpedienteTratamiento = et}
+                (temp, et) => new { temp.TratamientoToma, ExpedienteTratamiento = et }
             )
-            .Where( x => x.ExpedienteTratamiento.IdExpediente == idExpediente  && x.TratamientoToma.FechaToma == null );
+            .Where(x => x.ExpedienteTratamiento.IdExpediente == idExpediente && x.TratamientoToma.FechaToma == null);
 
-            return expediente.Count();
+        return expediente.Count();
     }
 
-   
-  public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(List<int> idDoctor)
+
+    public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(List<int> idDoctor)
     {
         DateTime fechaInicioSemanaPasada = DateTime.Today.AddDays(-7);
 
@@ -100,12 +118,12 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
             .GroupBy(tt => tt.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdPadecimiento)
             .Select(group => new ApegoTomaMedicamentoDto
             {
-                PadecimientoNombre = group.Select( item => item.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdPadecimientoNavigation.Nombre ).First(),
-                Apego = (decimal) group.Count(tt => tt.FechaToma != null) / group.Count() * 100
+                PadecimientoNombre = group.Select(item => item.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdPadecimientoNavigation.Nombre).First(),
+                Apego = (decimal)group.Count(tt => tt.FechaToma != null) / group.Count() * 100
             })
             .ToList();
     }
-  public IEnumerable<ApegoTomaMedicamentoDto> ApegoTratamientoPorPaciente(int idUsuario)
+    public IEnumerable<ApegoTomaMedicamentoDto> ApegoTratamientoPorPaciente(int idUsuario)
     {
         DateTime fechaInicioSemanaPasada = DateTime.Today.AddDays(-7);
 
@@ -117,8 +135,8 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
             .GroupBy(tt => tt.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdPadecimiento)
             .Select(group => new ApegoTomaMedicamentoDto
             {
-                PadecimientoNombre = group.Select( item => item.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdPadecimientoNavigation.Nombre ).First(),
-                Apego = (decimal) group.Count(tt => tt.FechaToma != null) / group.Count() * 100
+                PadecimientoNombre = group.Select(item => item.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdPadecimientoNavigation.Nombre).First(),
+                Apego = (decimal)group.Count(tt => tt.FechaToma != null) / group.Count() * 100
             })
             .ToList();
     }
@@ -126,19 +144,21 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
     public IEnumerable<RecordatorioUsuarioDto> RecordatoriosPorUsuario(int idUsuario)
     {
         var recordatorios = context.TratamientoRecordatorio
-        .Where( tr => tr.IdExpedienteTratamientoNavigation.IdExpedienteNavigation.IdUsuarioNavigation.IdUsuario == idUsuario  && tr.Activo == true)
-        .Select( tr => new RecordatorioUsuarioDto{
+        .Where(tr => tr.IdExpedienteTratamientoNavigation.IdExpedienteNavigation.IdUsuarioNavigation.IdUsuario == idUsuario && tr.Activo == true)
+        .Select(tr => new RecordatorioUsuarioDto
+        {
             Padecimiento = tr.IdExpedienteTratamientoNavigation.IdPadecimientoNavigation.IdEntidadEstructura,
             Indicaciones = tr.IdExpedienteTratamientoNavigation.Indicaciones,
             Dia = tr.Dia,
-            Tomas = tr.TratamientoToma.Select( tt => new TomaDto {
+            Tomas = tr.TratamientoToma.Select(tt => new TomaDto
+            {
                 FechaToma = tt.FechaToma,
                 FechaEnvio = tt.FechaEnvio,
                 IdTomaTratamiento = tt.IdTomaTratamiento
             }).ToList()
         })
-        .ToList(); 
-        
+        .ToList();
+
         return recordatorios;
     }
 
@@ -153,7 +173,7 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
                     IdUsuario = et.IdUsuario,
                     NombreCompleto = et.IdUsuarioNavigation.ObtenerNombreCompleto(),
                     TipoMime = et.IdUsuarioNavigation.ImagenTipoMime,
-                    Genero = et.IdGeneroNavigation.Descripcion ,
+                    Genero = et.IdGeneroNavigation.Descripcion,
                     Edad = (DateTime.Today.Year - et.FechaNacimiento.Year).ToString(),
                     Colonia = et.IdUsuarioNavigation.Colonia,
                     Ciudad = et.IdUsuarioNavigation.Ciudad,
