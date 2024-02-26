@@ -5,6 +5,10 @@ import { IonicModule, ModalController } from '@ionic/angular';
 import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PlataformaService } from 'src/app/services/dashboard/plataforma.service';
 import { ArchivoGetDTO } from 'src/app/shared/Dtos/archivos/archivo-get-dto';
+import {chevronBack, downloadOutline } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
+
+
 
 @Component({
   selector: 'app-archivo-previsualizar',
@@ -14,11 +18,12 @@ import { ArchivoGetDTO } from 'src/app/shared/Dtos/archivos/archivo-get-dto';
   imports: [CommonModule,IonicModule, NgxExtendedPdfViewerModule],
 })
 export class ArchivoPrevisualizarComponent  implements OnInit {
+  protected tipo: string;
   protected archivo:ArchivoGetDTO;
   protected type:string;
   protected archivoBase64:string;
 
-  constructor(private modalController:ModalController , private plataformaService : PlataformaService) { }
+  constructor(private modalController:ModalController , private plataformaService : PlataformaService) { addIcons({chevronBack, downloadOutline});  }
 
   ngOnInit() {
     this.type = this.archivo.archivoMime.split('/')[0]

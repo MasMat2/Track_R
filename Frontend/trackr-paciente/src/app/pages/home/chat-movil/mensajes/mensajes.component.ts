@@ -13,7 +13,7 @@ import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-s
 import { ArchivoService } from '../../../../shared/http/archivo/archivo.service';
 import { ArchivoFormDTO } from '../../../../shared/Dtos/archivos/archivo-form-dto';
 import { addIcons } from 'ionicons';
-import {cameraOutline, paperPlane, videocamOutline, chevronBack, trash, mic, micOutline, documentOutline } from 'ionicons/icons';
+import {cameraOutline, paperPlane, videocamOutline, chevronBack, trash, mic, micOutline, documentOutline, send } from 'ionicons/icons';
 //Libreria de capacitor para grabar audio
 import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder';
 
@@ -28,6 +28,10 @@ import { finalize, map, takeUntil, takeWhile } from 'rxjs/operators';
 import { Haptics, ImpactStyle } from '@capacitor/haptics'
 import { PressDirective } from 'src/app/shared/directives/press.directive';
 import { SwipeDirective } from 'src/app/shared/directives/swipe.directive';
+import { CapacitorUtils } from '@utils/capacitor-utils';
+import { format } from 'date-fns';
+
+
 
 
 @Component({
@@ -36,6 +40,7 @@ import { SwipeDirective } from 'src/app/shared/directives/swipe.directive';
   styleUrls: ['./mensajes.component.scss'],
   standalone: true,
   imports: [FormsModule, CommonModule, IonicModule, HeaderComponent, PressDirective, SwipeDirective],
+  providers: [CapacitorUtils]
 })
 export class MensajesComponent{
   protected mensajes: ChatMensajeDTO[];
@@ -52,12 +57,13 @@ export class MensajesComponent{
   };
 
   protected escribiendo: boolean = false;
+  protected isModalOpen = false;
   private stop$ = new Subject<any>();
   duracionAudio = '';
   duracion = 0;
   protected timer$: any;
-
   protected archivo?: File = undefined;
+  protected fotoTomada: string;
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild(IonContent) content: IonContent;
   @ViewChild('movableSpan') movableSpan: ElementRef;
@@ -78,7 +84,8 @@ export class MensajesComponent{
     private ChatHubServiceService: ChatHubServiceService,
     private ArchivoService: ArchivoService,
     private plataformaService: PlataformaService,
-    private ModalController:ModalController
+    private ModalController:ModalController,
+    private capacitorUtils: CapacitorUtils
   ) { 
       addIcons({videocamOutline, 
         chevronBack, 
@@ -87,7 +94,9 @@ export class MensajesComponent{
         trash, 
         documentOutline,
         mic,
-        micOutline}); 
+        micOutline,
+        send
+      }); 
     }
 
   ionViewWillEnter() {
@@ -137,6 +146,18 @@ export class MensajesComponent{
       msg.nombre = this.archivo.name;
     }
 
+    if(this.fotoTomada){
+      const fechaActual: Date = new Date();
+      const fechaFormateada: string = format(fechaActual, 'yyyy-MM-dd HH:mm:ss');
+      let nombreFoto = `Trackr-Image_${fechaFormateada}.jpeg`
+      let byte = this.fotoTomada.split(',')[1];
+      msg.archivo = byte;
+      msg.archivoNombre = nombreFoto;
+      msg.archivoTipoMime = "image/jpeg";
+      msg.fechaRealizacion = new Date();
+      msg.nombre = nombreFoto;
+    }
+
     if (this.audio != '') {
       msg.archivo = this.audio;
       msg.archivoNombre = `audio-${Date.now()}.wav`
@@ -153,6 +174,8 @@ export class MensajesComponent{
     }
     this.msg = "";
 
+    this.fotoTomada = "";
+    this.isModalOpen = false;
     this.archivo = undefined;
     this.audio = '';
     this.audio2 = '';
@@ -245,7 +268,6 @@ export class MensajesComponent{
       }
 
       this.ArchivoService.subirArchivo(aux).subscribe(res => {
-        console.log(res)
       })
     }
   }
@@ -275,7 +297,6 @@ export class MensajesComponent{
       // Obtener la URL del archivo creado
       const url = result.uri;
 
-      console.log(url)
 
     } catch (error) {
       console.error('Error al descargar el archivo:', error);
@@ -491,7 +512,28 @@ export class MensajesComponent{
     this.movableSpan.nativeElement.style.transform = `translateX(calc(-50% + ${posicionX}px))`;
   }
 
+  protected async tomarFoto(){
+    this.archivo = undefined;
+    this.audio = '';
+    this.audio2 = '';
+    this.isAudio = false;
 
+    this.fotoTomada = (await this.capacitorUtils.takePicture());
+    this.isModalOpen = true;
+  }
+
+  // onWillDismiss(event: Event) {
+  //   const ev = event as CustomEvent<OverlayEventDetail<string>>;
+  //   if (ev.detail.role === 'confirm') {
+  //     this.message = `Hello, ${ev.detail.data}!`;
+  //   }
+  // }
+
+  cancelarEnviarFoto(){
+    this.msg = "";
+    this.fotoTomada = "";
+    this.isModalOpen = false;
+  }
 
 
 }
