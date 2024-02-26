@@ -29,6 +29,13 @@ public class ExpedienteDoctorController : ControllerBase
         return _expedienteDoctorService.ConsultarExpediente(idUsuario);
     }
 
+    [HttpGet("conImagenes")]
+    public IEnumerable<ExpedienteDoctorConImagenPerfilDTO> ConsultarExpedienteConImagenesPerfil()
+    {
+        int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+        return _expedienteDoctorService.ConsultarExpedienteConImagenesPerfil(idUsuario);
+    }
+
     [HttpGet("selector")]
     public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarSelector()
     {
