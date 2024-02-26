@@ -686,7 +686,8 @@ export class UsuarioFormularioComponent implements OnInit {
       this.onClose(this.usuario.idUsuario);
     }
     else {
-      this.onClose(true);
+      this.onClose(this.usuario.idUsuario);
+      //this.onClose(true);
       //this.usuarioImagenService.actualizarImagen(this.url);
     }
   }
