@@ -70,9 +70,9 @@
   <div class="chat-container">
     <div #scrollContainer class="listado">
       <div style="height: 2vh;"></div>
-      <div *ngFor="let mensaje of mensajes" (click)="validarMeet(mensaje.mensaje)">
+      <div *ngFor="let mensaje of mensajes" >
         <div class="message user" *ngIf="mostrarMensaje(mensaje.idPersona)">
-          <div class="message-bubble">
+          <div class="message-bubble" (click)="validarMeet(mensaje.mensaje)">
             {{mensaje.mensaje}} <br>
             <button class="btn btn-1 archivo" (click)="clickArchivo(mensaje.idArchivo)" *ngIf="mensaje.idArchivo !== 0">
               <i class="fa fa-file" style="font-size: 24px;"></i> {{mensaje.archivoNombre}}
