@@ -347,7 +347,6 @@ namespace TrackrAPI.Services.Seguridad
 
                 usuarioValidatorService.ValidarAgregar(usuario, roles);
                 int idUsuario = usuarioRepository.Agregar(usuario).IdUsuario;
-                int idExpediente = _expedienteTrackrService.AgregarExpedienteNuevoUsuario(idUsuario);
 
                 // Actualizar los roles del usuario
                 List<UsuarioRol> usuarioRols = usuarioDto.IdsRol?
@@ -411,15 +410,21 @@ namespace TrackrAPI.Services.Seguridad
 
                 if(idMedico > 0)
                 {
-                    usuarioValidatorService.ValidarUsuarioEsPaciente(idUsuario);
-                    ExpedienteDoctorDTO expedienteDoctor = new()
-                    {
-                        IdUsuarioDoctor = idMedico,
-                        IdExpediente = idExpediente,
-                    };
 
-                    usuarioValidatorService.ValidarUsuarioEsMedico(idMedico);
-                    this._expedienteDoctorService.Agregar(expedienteDoctor, idUsuario);
+                    if (usuarioValidatorService.ValidarUsuarioEsMedico(idMedico) && usuarioValidatorService.ValidarUsuarioEsPaciente(idUsuario))
+                    {
+                        int idExpediente = _expedienteTrackrService.AgregarExpedienteNuevoUsuario(idUsuario);
+
+                        ExpedienteDoctorDTO expedienteDoctor = new()
+                        {
+                            IdUsuarioDoctor = idMedico,
+                            IdExpediente = idExpediente,
+                        };
+
+                        usuarioValidatorService.ValidarUsuarioEsMedico(idMedico);
+                        this._expedienteDoctorService.Agregar(expedienteDoctor, idUsuario);
+                    }
+                    
                 }
 
 

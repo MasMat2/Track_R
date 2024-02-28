@@ -319,7 +319,7 @@ namespace TrackrAPI.Services.Seguridad
             }
         }
 
-        public void ValidarUsuarioEsMedico(int idUsuario)
+        public bool ValidarUsuarioEsMedico(int idUsuario)
         {
             Usuario usuario = usuarioRepository.Consultar(idUsuario);
 
@@ -330,12 +330,13 @@ namespace TrackrAPI.Services.Seguridad
 
             if(usuario.IdPerfilNavigation.Clave != GeneralConstant.ClavePerfilMedico && usuario.IdPerfilNavigation.Clave != GeneralConstant.ClavePerfilAsistente)
             {
-                throw new CdisException("El usuario no está registrado como médico o asistente.");
+                return false;
             }
 
+            return true;
         }
 
-        public void ValidarUsuarioEsPaciente(int idUsuario)
+        public bool ValidarUsuarioEsPaciente(int idUsuario)
         {
             Usuario usuario = usuarioRepository.Consultar(idUsuario);
 
@@ -346,8 +347,11 @@ namespace TrackrAPI.Services.Seguridad
 
             if (usuario.IdPerfilNavigation.Clave != GeneralConstant.ClavePerfilPaciente)
             {
-                throw new CdisException("El usuario no está registrado como paciente.");
+                return false;
+                //throw new CdisException("El usuario no está registrado como paciente.");
             }
+
+            return true;
 
         }
 
