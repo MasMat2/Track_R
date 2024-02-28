@@ -129,7 +129,6 @@ export class SeccionTablaComponent implements OnInit {
   }
 
   public editar(): void {
-    console.log(this.seleccionado);
     if (this.seleccionado && this.seleccionado.registro) {
       for (const campo of this.seleccionado.registro) {
         const valor = this.seleccionado.registro.find(v => v.claveCampo === campo.claveCampo);
