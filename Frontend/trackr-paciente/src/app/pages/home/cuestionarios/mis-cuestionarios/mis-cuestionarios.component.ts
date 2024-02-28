@@ -26,6 +26,7 @@ export class MisCuestionariosComponent  implements OnInit {
 
   protected examenPendienteList: any[] = [];
   protected examenContestadoList: any[] = [];
+  protected cantidadCuestionariosContestados: number = 0;
   protected mostrarTodosContestados: boolean = false;
 
   constructor(
@@ -60,6 +61,7 @@ export class MisCuestionariosComponent  implements OnInit {
           const fechaFormateada = format(new Date(examen.fechaExamen), 'dd-MM-yyyy');
           return { ...examen, fechaExamen:fechaFormateada};
         });
+        examenes.length > 5 ? this.cantidadCuestionariosContestados = examenes.length -5 : this.cantidadCuestionariosContestados = examenes.length
       }
     })
   }

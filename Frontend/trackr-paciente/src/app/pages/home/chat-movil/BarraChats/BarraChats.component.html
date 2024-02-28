@@ -18,20 +18,20 @@
 </ion-header>
 <ion-content>
   <div class="contactos" *ngIf="verListaDoctores">
-    <div *ngIf="doctorSeleccionado">
-      <ion-grid>
-        <ion-row>
-          <ion-col size="4">
-            <ion-label >Nombre del Chat</ion-label>
-          </ion-col>
-          <ion-col size="4">
-            <ion-input type="text" name="tituloChat" [(ngModel)]="tituloChat"></ion-input>
-          </ion-col>
-          <ion-col size="4">
-            <ion-button (click)="crearChat()">Generar chat</ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+    <div class="generar-chat" *ngIf="doctorSeleccionado">
+        <ion-item lines="none">
+          <ion-input
+            class="nombre-chat" 
+            label="Generar chat: "
+            placeholder="Nombre del chat"
+            labelPlacement="floating" 
+            name="tituloChat" 
+            [(ngModel)]="tituloChat">
+          </ion-input>
+          <ion-button slot="end" (click)="crearChat()" fill="clear">
+            <ion-icon slot="icon-only" name="send"></ion-icon>
+          </ion-button>
+        </ion-item>
     </div>
     <div class="lista-doctores">
         <div
@@ -41,8 +41,8 @@
           >
           <div class="imagen">
             <ion-avatar>
-              <!--img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="profile picture"-->
-              <!-- <img *ngIf="doctor?.urlImagen" [src]="doctor.urlImagen" > -->
+              <ion-img *ngIf="doctor.urlImagen" [src]="doctor.urlImagen" > </ion-img>
+              <ion-img *ngIf="!doctor.urlImagen" alt="profile pic" src="https://ionicframework.com/docs/img/demos/avatar.svg"></ion-img> 
             </ion-avatar>
             <div class="icono-agregar">
               <ion-icon name="add-circle"></ion-icon>
@@ -62,7 +62,7 @@
       <ion-item class="chat" lines="none" button="true" (click)="enviarIdChat(chat.idChat || 0)">
         <ion-avatar slot="start">
           <ion-img *ngIf="chat.urlImagen" [src]="chat.urlImagen" > </ion-img>
-          <!--img alt="profile pic" src="https://ionicframework.com/docs/img/demos/avatar.svg"/--> 
+          <ion-img *ngIf="!chat.urlImagen" alt="profile pic" src="https://ionicframework.com/docs/img/demos/avatar.svg"></ion-img> 
         </ion-avatar>
         <ion-label>
           <h3>

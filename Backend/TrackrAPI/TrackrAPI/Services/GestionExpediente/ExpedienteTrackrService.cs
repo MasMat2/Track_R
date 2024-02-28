@@ -12,6 +12,7 @@ using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionExpediente;
 using TrackrAPI.Repositorys.Inventario;
 using TrackrAPI.Repositorys.Seguridad;
+using TrackrAPI.Services.Archivos;
 using TrackrAPI.Services.Dashboard;
 using TrackrAPI.Services.Seguridad;
 using static System.Net.Mime.MediaTypeNames;
@@ -26,7 +27,8 @@ public class ExpedienteTrackrService
     private readonly IExpedientePadecimientoRepository _expedientePadecimientoRepository;
     private readonly UsuarioWidgetService _usuarioWidgetService;
     private readonly ExpedienteTrackrValidatorService _expedienteTrackrValidatorService;
-    private readonly IAsistenteDoctorRepository _asistenteDoctorRepository; 
+    private readonly IAsistenteDoctorRepository _asistenteDoctorRepository;
+    private readonly ArchivoService _archivoService;
 
     public ExpedienteTrackrService(
         IExpedienteTrackrRepository expedienteTrackrRepository,
@@ -35,7 +37,8 @@ public class ExpedienteTrackrService
         IExpedientePadecimientoRepository expedientePadecimientoRepository,
         UsuarioWidgetService usuarioWidgetService,
         ExpedienteTrackrValidatorService expedienteTrackrValidatorService,
-        IAsistenteDoctorRepository asistenteDoctorRepository 
+        IAsistenteDoctorRepository asistenteDoctorRepository,
+        ArchivoService archivoService
         )
     {
         this._expedienteTrackrRepository = expedienteTrackrRepository;
@@ -44,7 +47,8 @@ public class ExpedienteTrackrService
         this._expedientePadecimientoRepository = expedientePadecimientoRepository;
         _usuarioWidgetService = usuarioWidgetService;
         _expedienteTrackrValidatorService = expedienteTrackrValidatorService;
-        _asistenteDoctorRepository = asistenteDoctorRepository; 
+        _asistenteDoctorRepository = asistenteDoctorRepository;
+        _archivoService = archivoService;
     }
     /// <summary>
     /// Consulta el expediente de un usuario
@@ -75,7 +79,7 @@ public class ExpedienteTrackrService
 
         AgregarPadecimientos(expedienteWrapper.padecimientos, expedienteTrackr.IdExpediente);
 
-        _usuarioWidgetService.modificarSeleccionWidgets(expedienteTrackr.IdUsuario , GeneralConstant.WidgetsDefault);
+        _usuarioWidgetService.modificarSeleccionWidgets(expedienteTrackr.IdUsuario, GeneralConstant.WidgetsDefault);
 
         scope.Complete();
         return expedienteTrackr.IdExpediente;
@@ -174,38 +178,46 @@ public class ExpedienteTrackrService
         }
     }
 
-    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(int idUsuario , int idCompania)
+    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(int idUsuario, int idCompania)
     {
         List<int> idDoctorList = new();
         var esAsistente = _usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente)
                                                     .Any((usuario) => usuario.IdUsuario == idUsuario);
 
-        if(esAsistente){
-           idDoctorList = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idUsuario)
-                                                        .Select( ad => ad.IdUsuario).ToList(); 
+        if (esAsistente)
+        {
+            idDoctorList = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idUsuario)
+                                                         .Select(ad => ad.IdUsuario).ToList();
         }
-        else{
+        else
+        {
             idDoctorList.Add(idUsuario);
         }
 
         IEnumerable<UsuarioExpedienteGridDTO> expedientes = _expedienteTrackrRepository.ConsultarParaGrid(idDoctorList);
-        foreach(UsuarioExpedienteGridDTO expediente in expedientes)
+        foreach (UsuarioExpedienteGridDTO expediente in expedientes)
         {
             if (!string.IsNullOrWhiteSpace(expediente.TipoMime))
             {
-                string filePath = $"Archivos/Usuario/{expediente.IdUsuario}{MimeTypeMap.GetExtension(expediente.TipoMime)}";
-                
-                    //Console.WriteLine("Expediente : " + JsonConvert.SerializeObject(expediente, Formatting.Indented));
-                    //Console.WriteLine("--------------------");
-                if (File.Exists(filePath))
-                {
-                    byte[] imageArray = File.ReadAllBytes(filePath);
+                var img = _archivoService.ObtenerImagenUsuario(expediente.IdUsuario);
 
-                    expediente.ImagenBase64 = Convert.ToBase64String(imageArray);
+                if (img != null)
+                {
+                    expediente.ImagenBase64 = "data:" + img.ArchivoTipoMime + ";base64," + Convert.ToBase64String(img.Archivo1);
                 }
+                // string filePath = $"Archivos/Usuario/{expediente.IdUsuario}{MimeTypeMap.GetExtension(expediente.TipoMime)}";
+
+                //     //Console.WriteLine("Expediente : " + JsonConvert.SerializeObject(expediente, Formatting.Indented));
+                //     //Console.WriteLine("--------------------");
+                // if (File.Exists(filePath))
+                // {
+                //     byte[] imageArray = File.ReadAllBytes(filePath);
+
+                //     expediente.ImagenBase64 = Convert.ToBase64String(imageArray);
+                // }
             }
-                expediente.DosisNoTomadas = _expedienteTrackrRepository.DosisNoTomadas(expediente.IdExpedienteTrackr);
-                expediente.VariablesFueraRango = _expedienteTrackrRepository.VariablesFueraRango(expediente.IdUsuario);
+            expediente.DosisNoTomadas = _expedienteTrackrRepository.DosisNoTomadas(expediente.IdExpedienteTrackr);
+            expediente.VariablesFueraRango = _expedienteTrackrRepository.VariablesFueraRango(expediente.IdUsuario);
 
         }
         expedientes = expedientes.OrderBy(e => e.DoctorAsociado);
@@ -217,8 +229,8 @@ public class ExpedienteTrackrService
         var recordatorios = _expedienteTrackrRepository.RecordatoriosPorUsuario(idUsuario);
 
         return recordatorios
-        .GroupBy( tr => tr.Padecimiento)
-        .Select( recordatoriosPorPad => new TomasTomadasPorPadecimientoDto
+        .GroupBy(tr => tr.Padecimiento)
+        .Select(recordatoriosPorPad => new TomasTomadasPorPadecimientoDto
         {
             IdPadecimiento = recordatoriosPorPad.Key,
             TomasTomadas = recordatoriosPorPad
@@ -236,14 +248,14 @@ public class ExpedienteTrackrService
     {
         var recordatorios = _expedienteTrackrRepository.RecordatoriosPorUsuario(idUsuario);
 
-         return recordatorios
-         .GroupBy( tr => tr.Dia )
-            .Select(recordatoriosPorDia => new TomasTomadasPorDiaDto
-            {
-                Dia = recordatoriosPorDia.Key,
-                TomasTotales = recordatoriosPorDia.Sum(rpd => rpd.Tomas.Count),
-                TomasTomadas = recordatoriosPorDia.Sum(rpd => rpd.Tomas.Count(t => t.FechaToma != null))
-            });
+        return recordatorios
+        .GroupBy(tr => tr.Dia)
+           .Select(recordatoriosPorDia => new TomasTomadasPorDiaDto
+           {
+               Dia = recordatoriosPorDia.Key,
+               TomasTotales = recordatoriosPorDia.Sum(rpd => rpd.Tomas.Count),
+               TomasTomadas = recordatoriosPorDia.Sum(rpd => rpd.Tomas.Count(t => t.FechaToma != null))
+           });
     }
 
     public IEnumerable<TomasTomadasPorPadecimientoDto> RecordatoriosPorPadecimientoHoy(int idUsuario)
@@ -253,14 +265,15 @@ public class ExpedienteTrackrService
         var recordatoriosPorPadecimiento = RecordatoriosPorPadecimiento(idUsuario).ToList();
 
         var tomasATomarHoy = recordatoriosPorPadecimiento
-        .Select( th => new TomasTomadasPorPadecimientoDto{
+        .Select(th => new TomasTomadasPorPadecimientoDto
+        {
             IdPadecimiento = th.IdPadecimiento,
-            TomasTomadas = th.TomasTomadas.Where( t => t.Dia == currentDay).ToList()
+            TomasTomadas = th.TomasTomadas.Where(t => t.Dia == currentDay).ToList()
         });
         return tomasATomarHoy;
 
-    } 
-    public (int TomasTotales, int TomasTomadas) TomasPadecimientoTotalesHoy(int idUsuario , int idPadecimiento)
+    }
+    public (int TomasTotales, int TomasTomadas) TomasPadecimientoTotalesHoy(int idUsuario, int idPadecimiento)
     {
         var recordatoriosPorPadecimientoHoy = RecordatoriosPorPadecimientoHoy(idUsuario).ToList();
 
@@ -291,24 +304,26 @@ public class ExpedienteTrackrService
         };
         return expedienteWrapper;
     }
-            public UsuarioExpedienteSidebarDTO ConsultarParaSidebar(int idUsuario)
+    public UsuarioExpedienteSidebarDTO ConsultarParaSidebar(int idUsuario)
     {
         return _expedienteTrackrRepository.ConsultarParaSidebar(idUsuario);
 
     }
-    public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor , int idCompania)
+    public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor, int idCompania)
     {
         List<int> idDoctorList = new();
         var esAsistente = _usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente)
                                                     .Any((usuario) => usuario.IdUsuario == idDoctor);
 
-        if(esAsistente){
-              idDoctorList = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idDoctor)
-                                                          .Select( ad => ad.IdUsuario).ToList(); 
-          }
-          else{
-                idDoctorList.Add(idDoctor);
-          }
+        if (esAsistente)
+        {
+            idDoctorList = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idDoctor)
+                                                        .Select(ad => ad.IdUsuario).ToList();
+        }
+        else
+        {
+            idDoctorList.Add(idDoctor);
+        }
 
         return _expedienteTrackrRepository.ApegoMedicamentoUsuarios(idDoctorList);
     }

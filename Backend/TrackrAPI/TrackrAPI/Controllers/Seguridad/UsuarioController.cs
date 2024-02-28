@@ -287,7 +287,7 @@ namespace TrackrAPI.Controllers.Seguridad
         public IEnumerable<UsuarioDto> ConsultarAsistentes()
         {
             var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
-            return usuarioService.ConsultarAsistentes((int)usuario.IdCompania);
+            return usuarioService.ConsultarAsistentes((int)usuario.IdCompania , usuario.IdUsuario);
         }
 
         [HttpGet("asistentesPorDoctor")]

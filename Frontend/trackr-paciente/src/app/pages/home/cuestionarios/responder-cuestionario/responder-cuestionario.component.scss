@@ -1,6 +1,9 @@
+@import "../../../../../theme/variables.scss";
+
+
 .texto-seccion{
     font-weight: bold;
-    color: #4c0080;
+    color: var(--primary-700);
 }
 
 .presentacion{
@@ -16,6 +19,11 @@
 
         ion-button{
             width: 50%;
+        }
+
+        .iniciar{
+            --background: var(--primary-400);
+            --color: var(--neutral-50);
         }
     }
 }
@@ -49,6 +57,12 @@
           }
     }
 
+    ion-radio {
+      
+        --color: var(--neutral-400);
+        --color-checked: var(--primary-700);
+      }
+
     .mensaje-final{
         h2{
             margin-top: 3vh;
@@ -56,6 +70,12 @@
 
         ion-button{
             margin-top: 10vh;
+        }
+
+        .btn-finalizar{
+            --border-radius: 10px;
+            --color: var(--neutral-50);
+            --background: var(--primary-700);
         }
     }
 }

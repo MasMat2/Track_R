@@ -74,6 +74,9 @@ export class PacienteComponent implements OnInit {
 
   public columns = [
     { headerName: 'Paciente', field: 'nombreCompleto', minWidth: 150 },
+    { headerName: 'Patologias',field: 'patologias', minWidth:150},
+    { headerName: 'Dosis sin tomar',field: 'dosisNoTomadas', minWidth:150},
+    { headerName: 'Variables Fuera de Rango',field: 'variablesFueraRango', minWidth:150},
     this.columnaEditar,
     this.columnaEliminar,
   ];

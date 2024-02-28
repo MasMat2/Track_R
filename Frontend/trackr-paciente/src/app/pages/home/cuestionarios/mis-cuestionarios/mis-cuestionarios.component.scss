@@ -1,10 +1,13 @@
+@import "../../../../../theme/variables.scss";
+
+
 .contenido{
     margin: .7em;
 }
 
 .texto-seccion{
     font-weight: bold;
-    color: #4c0080;
+    color: var(--primary-600);
 }
 
 .pendientes{
@@ -14,6 +17,11 @@
         margin: 10px;
         --border-width: 2px;
         --border-radius: 20px;
+    }
+
+    .btn-responder{
+        --color: var(--neutral-50);
+        --background: var(--primary-400);
     }
 }
 .contestados{

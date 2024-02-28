@@ -8,4 +8,6 @@ export class UsuarioDoctoresDto {
         public ambito: string;
         public hospital: string;
         public urlImagen? : any;
+        public imagenBase64: string;
+        public tipoMime: string;
 }

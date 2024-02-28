@@ -1,30 +1,31 @@
 
-<ion-header>
-  <app-header></app-header>
-</ion-header>
-
 <ion-content>
   <ion-card>
-    <ion-card-header>
-      <ion-label class="texto-header" >Visualizar en dashboard: </ion-label>
+    <ion-card-header class="header">
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button routerLink="home">
+            <ion-icon name="chevron-back" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-card-title> Visualizar en dashboard: </ion-card-title>
+      </ion-toolbar>
     </ion-card-header>
     <ion-card-content>
-      <ion-icon ></ion-icon>
 
-      <div class="contenido">
-        <div *ngFor="let widget of widgets">
-          <ion-checkbox
-            labelPlacement="end"
-            [(ngModel)]="widget.seleccionado"
-            [checked]="widget.seleccionado"
-          >
-            {{ widget.nombre }}
-          </ion-checkbox>
-
-        </div>
+      <div class="lista-widgets">
+        <ion-list>
+          <ion-item *ngFor="let widget of widgets">
+            <ion-toggle 
+              [(ngModel)]="widget.seleccionado" 
+              [checked]="widget.seleccionado">
+              {{widget.nombre}}
+            </ion-toggle>
+          </ion-item>
+        </ion-list>
       </div>
-      
-      <ion-button class="btn-aceptar" (click)="onAceptar()" disabled="{{submiting}}">Guardar</ion-button>
+  
+      <ion-button class="btn-guardar" (click)="onAceptar()" disabled="{{submiting}}">Guardar</ion-button>
     </ion-card-content>
   </ion-card>
 </ion-content>

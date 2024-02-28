@@ -2,11 +2,14 @@
   <app-header></app-header>
 </ion-header>
 <ion-content>
-  <div class="info-examen">
-    <ion-label>
-      <h1>{{tipoExamen}}</h1>
-    </ion-label>
-  </div>
+  <ion-toolbar class="header">
+    <ion-buttons slot="start">
+      <ion-button routerLink="home">
+        <ion-icon name="chevron-back" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title slot="" >{{tipoExamen}}</ion-title>
+  </ion-toolbar>
   <div class="preguntas">
     <ion-card *ngFor="let reactivo of reactivoList index as i" class="pregunta">
       <ion-card-header>
@@ -26,11 +29,12 @@
           <div class="opciones" *ngIf="!reactivo.necesitaRevision">
           <p>{{reactivo.respuesta}}</p>
           </div>
-          <h2>Su respuesta: <span style="color: black ; font-weight: bold;">{{reactivo.respuestaAlumno}}</span></h2>
+        </ion-label>
+        <ion-label class="respuesta">
+          <h2>Respondió: <span style="color: black ; font-weight: bold;">{{reactivo.respuestaAlumno}}</span></h2>
         </ion-label>
       </ion-card-content>
     </ion-card>
   </div>
-  <ion-button shape="round" expand="full" routerLink="home/cuestionarios">Volver</ion-button>
 </ion-content>
 

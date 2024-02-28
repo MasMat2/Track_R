@@ -1,9 +1,18 @@
+<ion-header>
+    <ion-toolbar class="header">
+        <ion-buttons>
+            <ion-button fill="clear" (click)="regresarBtn()">
+                <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
 <ion-content>
-    <ion-button fill="outline" expand="full" shape="round"  (click)="regresarBtn()">Regresar</ion-button>
+    <div class="contenedor" *ngIf="type !== 'application'">
+        <ion-img class="imagen" [src]="archivoBase64" *ngIf="type === 'image'"></ion-img>
 
-    <ion-img [src]="archivoBase64" *ngIf="type === 'image'"></ion-img>
-
-    <audio controls [src]="archivoBase64" *ngIf="type === 'audio'"></audio>
+        <audio controls [src]="archivoBase64" *ngIf="type === 'audio'"></audio>
+    </div>
 
     <ngx-extended-pdf-viewer
         *ngIf="type === 'application'"
@@ -15,9 +24,14 @@
         [zoom]="'auto'"
     ></ngx-extended-pdf-viewer>
 
-    <ion-button (click)="descargarArchivo()">
-        Descargar
-    </ion-button>
-
 </ion-content>
+<ion-footer>
+    <ion-toolbar>
+        <ion-buttons>
+            <ion-button fill="clear" (click)="descargarArchivo()" >
+                <ion-icon slot="icon-only" name="download-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-footer>
 

@@ -470,9 +470,14 @@ namespace TrackrAPI.Services.Seguridad
             usuarioRepository.Editar(usuario);
         }
 
-        public IEnumerable<UsuarioDto> ConsultarAsistentes(int idCompania)
+        public IEnumerable<UsuarioDto> ConsultarAsistentes(int idCompania , int idUsuario)
         {
             var asistentes = usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente);
+
+            var asistentesDoctorEnSesion = _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(idUsuario);
+
+            // Se filtran los asistentes que ya están asociados al doctor
+            asistentes = asistentes.Where(asistente => !asistentesDoctorEnSesion.Any(asistenteDoctor => asistenteDoctor.IdUsuario == asistente.IdUsuario));
 
             foreach (var asistente in asistentes)
             {

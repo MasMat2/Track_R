@@ -1,24 +1,46 @@
+@import "../../../../theme/variables.scss";
 
-ion-checkbox {
-  --size: 32px;
-  --checkbox-background-checked: #ffffff;
-  --checkmark-color: #7d1e9d; 
+
+.header{
+  ion-toolbar{
+    --background: var(--neutral-50);
+
+   ion-card-title{
+    --color: var(--neutral-600);
+    font-weight: bold;
+   }
+   
+   ion-icon{
+    color: var(--neutral-600);
+   }
+  }
 }
 
-ion-checkbox::part(container) {
-  border-radius: 6px;
-  border: 2px solid black;
+ion-card{
+  --background: var(--neutral-50);
+
+
+  .lista-widgets{
+    ion-item{
+      --background: var(--neutral-50);
+      margin-bottom: .8em;
+    }
+  }
+
+  ion-toggle{
+
+    --track-background: #ddd;
+    --track-background-checked: var(--primary-200);
+
+    --handle-background-checked: var(--primary-600);
+  }
+
+  .btn-guardar{
+    padding-top: 10vh;
+    --background: var(--primary-700);
+    --color: var(--neutral-50);
+    --border-radius: 10px;
+  }
+
 }
 
-.btn-aceptar{
-  padding-top: 3em;
-}
-
-.contenido{
-  margin-left: 2em;
-}
-
-.texto-header{
-  color: #7d1e9d;
-  font-weight: bold;
-}

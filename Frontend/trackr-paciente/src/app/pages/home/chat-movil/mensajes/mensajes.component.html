@@ -24,12 +24,55 @@
 </ion-header>
 
 <ion-content>
+
+  <ion-modal class="enviar-foto-modal" [isOpen]="isModalOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar class="header">
+          <ion-buttons>
+            <ion-button fill="clear" (click)="cancelarEnviarFoto()">
+              <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <div class="contenedor-imagen">
+          <ion-img class="imagen" [src]="fotoTomada"></ion-img>
+        </div>
+      </ion-content>
+      <ion-footer>
+        <ion-toolbar class="footer">
+          <textarea
+            placeholder="Añade un comentario..."
+            *ngIf="!grabacionIniciada"
+            class="texto-mensaje"
+            #descripcion="ngModel"
+            [(ngModel)]="msg"
+            name="mensaje"
+            type="text"
+            maxlength="800"
+            autocomplete="off"
+            rows="1"
+            required
+            (keyup.enter)="enviarMensaje()">
+          </textarea>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="enviarMensaje()">
+              <ion-icon style="color: var(--primary-700);" slot="icon-only" name="send"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-footer>
+    </ng-template>
+  </ion-modal>
+
   <div class="chat-container">
     <div #scrollContainer class="listado">
       <div style="height: 2vh;"></div>
-      <div *ngFor="let mensaje of mensajes" (click)="validarMeet(mensaje.mensaje)">
+      <div *ngFor="let mensaje of mensajes" >
         <div class="message user" *ngIf="mostrarMensaje(mensaje.idPersona)">
-          <div class="message-bubble">
+          <div class="message-bubble" (click)="validarMeet(mensaje.mensaje)">
             {{mensaje.mensaje}} <br>
             <button class="btn btn-1 archivo" (click)="clickArchivo(mensaje.idArchivo)" *ngIf="mensaje.idArchivo !== 0">
               <i class="fa fa-file" style="font-size: 24px;"></i> {{mensaje.archivoNombre}}
@@ -127,7 +170,7 @@
       </textarea>
         
       <ion-buttons slot="end" class="right-buttons" *ngIf="!escribiendoMensaje()">
-        <ion-button *ngIf="!grabacionIniciada">
+        <ion-button *ngIf="!grabacionIniciada" (click)="tomarFoto()">
           <ion-icon slot="icon-only" style="color: var(--primary-700);" name="camera-outline"></ion-icon>
         </ion-button>
         <ion-button 
