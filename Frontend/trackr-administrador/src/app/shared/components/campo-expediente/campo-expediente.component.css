@@ -47,3 +47,11 @@
 .divSwitchNormal .label-input {
   margin-bottom: 0.5rem;
 }
+
+.label-input{
+  width: calc(100% - 32px); /* Ajusta el ancho del label al del input, teniendo en cuenta el padding */
+  white-space: nowrap; /* Evita que el texto se ajuste a nuevas líneas */
+  overflow: hidden; /* Oculta cualquier texto que se extienda más allá del ancho del label */
+  text-overflow: ellipsis; /* Muestra puntos suspensivos si el texto se extiende más allá del ancho del label */
+
+}

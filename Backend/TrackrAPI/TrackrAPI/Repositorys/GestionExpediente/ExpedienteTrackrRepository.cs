@@ -53,7 +53,7 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
                             DoctorAsociado = group.FirstOrDefault().IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre + " " + group.FirstOrDefault().IdUsuarioDoctorNavigation.ApellidoPaterno,
                             NombreCompleto = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ObtenerNombreCompleto(),
                             Patologias = group.FirstOrDefault().IdExpedienteNavigation.ExpedientePadecimiento.ObtenerPadecimientos(),
-                            Edad = (DateTime.Today.Year - group.FirstOrDefault().IdExpedienteNavigation.FechaNacimiento.Year).ToString() + " años",
+                            Edad = (DateTime.Today.Year - group.FirstOrDefault().IdExpedienteNavigation.FechaNacimiento.Year - (DateTime.Today.DayOfYear < group.FirstOrDefault().IdExpedienteNavigation.FechaNacimiento.DayOfYear ? 1 : 0)).ToString() + " años",
                             TipoMime = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ImagenTipoMime
                         })
                     .ToList();
