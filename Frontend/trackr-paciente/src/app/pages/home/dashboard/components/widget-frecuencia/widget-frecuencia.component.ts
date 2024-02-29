@@ -28,7 +28,7 @@ export class WidgetFrecuenciaComponent  implements OnInit {
           const ultimoValor = dataHR.resultData[dataHR.resultData.length - 1].value;
           this.ritmoCardiaco = ultimoValor.toString();
       } else {
-          this.ritmoCardiaco = "No hay datos disponibles";
+          this.ritmoCardiaco = "-";
       }
 
     } catch (error) {
