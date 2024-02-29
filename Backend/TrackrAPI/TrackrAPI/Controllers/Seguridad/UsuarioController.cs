@@ -117,7 +117,7 @@ namespace TrackrAPI.Controllers.Seguridad
             var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
             usuarioDto.IdHospital = (int)usuario.IdHospital;
             usuarioDto.IdCompania = usuario.IdCompania;
-            return usuarioService.Agregar(usuarioDto, (int)usuario.IdHospital);
+            return usuarioService.Agregar(usuarioDto, (int)usuario.IdHospital, usuario.IdUsuario);
         }
 
         [AllowAnonymous]

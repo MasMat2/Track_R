@@ -85,12 +85,12 @@ public class ExpedienteTrackrService
         return expedienteTrackr.IdExpediente;
     }
 
-    public int AgregarExpedienteNuevoUsuario(Usuario usuario)
+    public int AgregarExpedienteNuevoUsuario(int idUsuario)
     {
         using TransactionScope scope = new();
         ExpedienteTrackr expedienteTrackr = new ExpedienteTrackr
         {
-            IdUsuario = usuario.IdUsuario,
+            IdUsuario = idUsuario,
             Numero = "0",
             FechaNacimiento = Utileria.ObtenerFechaActual(),
             Cintura = 1,

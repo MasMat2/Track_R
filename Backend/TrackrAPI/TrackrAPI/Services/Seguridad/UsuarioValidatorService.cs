@@ -319,6 +319,42 @@ namespace TrackrAPI.Services.Seguridad
             }
         }
 
+        public bool ValidarUsuarioEsMedico(int idUsuario)
+        {
+            Usuario usuario = usuarioRepository.Consultar(idUsuario);
+
+            if(usuario == null)
+            {
+                throw new CdisException(MensajeUsuarioExistencia);
+            }
+
+            if(usuario.IdPerfilNavigation.Clave != GeneralConstant.ClavePerfilMedico && usuario.IdPerfilNavigation.Clave != GeneralConstant.ClavePerfilAsistente)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool ValidarUsuarioEsPaciente(int idUsuario)
+        {
+            Usuario usuario = usuarioRepository.Consultar(idUsuario);
+
+            if (usuario == null)
+            {
+                throw new CdisException(MensajeUsuarioExistencia);
+            }
+
+            if (usuario.IdPerfilNavigation.Clave != GeneralConstant.ClavePerfilPaciente)
+            {
+                return false;
+                //throw new CdisException("El usuario no está registrado como paciente.");
+            }
+
+            return true;
+
+        }
+
         /// <summary>
         /// Valida si existe un usuario con las credenciales proporcionadas en el LoginRequest.
         /// </summary>

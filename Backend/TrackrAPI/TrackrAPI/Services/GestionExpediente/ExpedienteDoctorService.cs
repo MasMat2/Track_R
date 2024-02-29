@@ -106,17 +106,34 @@ public class ExpedienteDoctorService
     public void Agregar(ExpedienteDoctorDTO expedienteDoctorDTO, int idUsuario)
     {
 
-        int idExpediente = _expedienteTrackrRepository.ConsultarPorUsuario(idUsuario).IdExpediente;
         int idCompania = _usuarioRepository.ConsultarDto(idUsuario).IdCompania;
-        _expedienteDoctorValidatorService.ValidarAgregar(idExpediente, expedienteDoctorDTO.IdUsuarioDoctor , idCompania);
 
-        var expedienteDoctor = new ExpedienteDoctor
+        if (expedienteDoctorDTO.IdExpediente == 0 || expedienteDoctorDTO.IdExpediente == null)
         {
-            IdUsuarioDoctor = expedienteDoctorDTO.IdUsuarioDoctor,
-            IdExpediente = idExpediente
-        };
+            int idExpediente = _expedienteTrackrRepository.ConsultarPorUsuario(idUsuario).IdExpediente;
+            _expedienteDoctorValidatorService.ValidarAgregar(idExpediente, expedienteDoctorDTO.IdUsuarioDoctor, idCompania);
 
-        _expedienteDoctorRepository.Agregar(expedienteDoctor);
+            var expedienteDoctor = new ExpedienteDoctor
+            {
+                IdUsuarioDoctor = expedienteDoctorDTO.IdUsuarioDoctor,
+                IdExpediente = idExpediente
+            };
+
+            _expedienteDoctorRepository.Agregar(expedienteDoctor);
+        }
+        else
+        {
+            _expedienteDoctorValidatorService.ValidarAgregar(expedienteDoctorDTO.IdExpediente, expedienteDoctorDTO.IdUsuarioDoctor, idCompania);
+
+            var expedienteDoctor = new ExpedienteDoctor
+            {
+                IdUsuarioDoctor = expedienteDoctorDTO.IdUsuarioDoctor,
+                IdExpediente = expedienteDoctorDTO.IdExpediente
+            };
+
+            _expedienteDoctorRepository.Agregar(expedienteDoctor);
+        }
+        
     }
 
 }

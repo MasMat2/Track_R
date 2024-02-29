@@ -36,7 +36,13 @@ export class MuestrasFormularioComponent implements OnInit {
   @Output() consultarValoresFueraRango = new EventEmitter<void>();
   protected day = new Date().getDate();
   protected recomendacion: any;
-  protected dateToday: string = new Date().toISOString();
+
+  protected now = new Date();
+  protected localOffset = this.now.getTimezoneOffset() * 60000;
+  protected localISOTime = (new Date(this.now.getTime() - this.localOffset)).toISOString().slice(0,-1);
+  protected dateToday: string = this.localISOTime;
+
+
   public arbolPadecimiento: PadecimientoMuestraDTO[] = [];
   protected submitting: boolean = false;
   protected fechaSeleccionada: string = this.dateToday;
@@ -91,6 +97,7 @@ export class MuestrasFormularioComponent implements OnInit {
     }
 
    this.agregar(camposAgregados);
+   this.fechaSeleccionada = new Date().toISOString();
    for (const seccionCampo of seccion.seccionesCampo) {
     seccionCampo.valor = ' '
   }
