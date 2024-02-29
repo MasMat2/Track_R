@@ -9,7 +9,7 @@ import {
 
 
 export const requestAuthorization = async (): Promise<void> => {
-    const readPermissions = ['calories', 'stairs', 'activity', 'steps', 'distance', 'duration', 'weight'];
+    const readPermissions = ['calories', 'heartRate', 'activity', 'steps', 'distance', 'duration', 'weight',];
 
     await CapacitorHealthkit.requestAuthorization({
       all: [],
@@ -105,7 +105,7 @@ export const getHR = async (): Promise<QueryOutput<OtherData>> => {
 
         return await CapacitorHealthkit.queryHKitSampleType<OtherData>(queryOptions);
     } catch (error) {
-        console.error('[HealthKit util] Error al obtener la informacion de sangre');       
+        console.error('[HealthKit util] Error al obtener la frecuencia cardiaca');       
         console.error(error);
         throw error; 
     }

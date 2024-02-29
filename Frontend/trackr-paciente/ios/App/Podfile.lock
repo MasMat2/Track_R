@@ -44,7 +44,7 @@ DEPENDENCIES:
   - CapacitorVoiceRecorder (from `../../node_modules/capacitor-voice-recorder`)
   - "CapawesomeCapacitorFilePicker (from `../../node_modules/@capawesome/capacitor-file-picker`)"
   - "CapawesomeCapacitorScreenOrientation (from `../../node_modules/@capawesome/capacitor-screen-orientation`)"
-  - "PerfoodCapacitorHealthkit (from `../../node_modules/@perfood/capacitor-healthkit`)"
+  - PerfoodCapacitorHealthkit (from `../../../../../../../documents/github/capacitor-healthkit`)
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -76,7 +76,7 @@ EXTERNAL SOURCES:
   CapawesomeCapacitorScreenOrientation:
     :path: "../../node_modules/@capawesome/capacitor-screen-orientation"
   PerfoodCapacitorHealthkit:
-    :path: "../../node_modules/@perfood/capacitor-healthkit"
+    :path: "../../../../../../../documents/github/capacitor-healthkit"
 
 SPEC CHECKSUMS:
   Capacitor: 4c0681b47eebeba1f902093d24149cf2f518393e
@@ -95,6 +95,6 @@ SPEC CHECKSUMS:
   CapawesomeCapacitorScreenOrientation: a757a72cd4a113142638c049af61441793721f07
   PerfoodCapacitorHealthkit: 88f6e78b319072c4d0aec439b2fcc14d3f05d311
 
-PODFILE CHECKSUM: 4dcfd305eb548dc30395fbbe6c341e770df62320
+PODFILE CHECKSUM: ac9fb270d99ab01c71263117b4298181ddfa8e9f
 
 COCOAPODS: 1.15.0
