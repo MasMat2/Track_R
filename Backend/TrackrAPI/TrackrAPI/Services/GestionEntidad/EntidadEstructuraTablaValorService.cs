@@ -101,7 +101,8 @@ namespace TrackrAPI.Services.GestionEntidad
                     Numero = ultimoRegistro + 1,
                     ClaveCampo = valorDto.ClaveCampo,
                     Valor = valorDto.Valor,
-                    FueraDeRango = valorDto.FueraDeRango
+                    FueraDeRango = valorDto.FueraDeRango,
+                    FechaMuestra = valorDto.FechaMuestra
                 };
 
                 entidadEstructuraTablaValorRepository.Agregar(valor);

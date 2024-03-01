@@ -127,7 +127,7 @@ export class SeccionTablaComponent implements OnInit {
 
     modalRef.content?.cerrar.subscribe(() => {
       modalRef.hide();
-      this.actualizarGrid();
+      this.obtenerMuestrasGrid();
     });
   }
 
@@ -255,7 +255,8 @@ export class SeccionTablaComponent implements OnInit {
         idEntidadEstructuraTablaValor: campo.idEntidadEstructuraValor,
         claveCampo: campo.clave,
         valor: campo.valor?.toString() ?? '',
-        fueraDeRango: false
+        fueraDeRango: false,
+        fechaMuestra: new Date()
       };
     
       return valor;

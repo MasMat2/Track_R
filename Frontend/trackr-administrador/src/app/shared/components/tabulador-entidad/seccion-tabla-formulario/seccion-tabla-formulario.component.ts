@@ -106,7 +106,8 @@ export class SeccionTablaFormularioComponent implements OnInit {
           idEntidadEstructuraTablaValor: campo.idEntidadEstructuraValor,
           claveCampo: campo.clave,
           valor: campo.valor?.toString() ?? '',
-          fueraDeRango: await this.estaFueraDeRango(campo)
+          fueraDeRango: await this.estaFueraDeRango(campo),
+          fechaMuestra: new Date()
         };
 
         return valor;
@@ -137,31 +138,52 @@ export class SeccionTablaFormularioComponent implements OnInit {
         !(c.idEntidadEstructuraValor > 0) &&
         c.valor !== '' &&
         c.valor &&
-        c.idDominioNavigation?.tipoCampo !== 'Select Múltiple'
+        c.idDominioNavigation?.tipoCampo !== 'Select Múltiple' &&
+        c.clave !== 'ME-fecha' &&
+        c.clave !== 'ME-hora'
     );
+    var fechaSeleccionada = this.campos.find(c => c.clave === 'ME-fecha')?.valor?.toString();
+    var horaSeleccionada = this.campos.find(c => c.clave === 'ME-hora')?.valor?.toString();
+    if (fechaSeleccionada && horaSeleccionada) {
 
-    registro.valores = await Promise.all( camposAgregar.map(
-      async (campo: SeccionCampo) => {
-        const valor: TablaValorDto = {
-          idEntidadEstructuraTablaValor: 0,
-          claveCampo: campo.clave,
-          valor: campo.valor?.toString() ?? '',
-          fueraDeRango: await this.estaFueraDeRango(campo)
-        };
+      let fecha = new Date(fechaSeleccionada);
+      let [hora, minuto] = horaSeleccionada.split(':').map(str => parseInt(str, 10));
+      let milisegundosActuales = new Date().getMilliseconds();
+      fecha.setMilliseconds(milisegundosActuales);
+      fecha.setHours(hora, minuto);
 
-        return valor;
-      }
-    ));
+      let segundosActuales = new Date().getSeconds();
+      fecha.setSeconds(segundosActuales);
 
-    const subscription = this.entidadEstructuraTablaValorService
-      .agregar(registro)
-      .subscribe({
-        next: () => {
-          this.mensajeService.modalExito('Se agregó el registro correctamente');
-          this.cerrar.emit();
-          subscription.unsubscribe();
+
+
+      registro.valores = await Promise.all( camposAgregar.map(
+        async (campo: SeccionCampo) => {
+          const valor: TablaValorDto = {
+            idEntidadEstructuraTablaValor: 0,
+            claveCampo: campo.clave,
+            valor: campo.valor?.toString() ?? '',
+            fueraDeRango: await this.estaFueraDeRango(campo),
+            fechaMuestra: new Date(fecha!)
+          };
+  
+          return valor;
         }
-      });
+      ));
+      
+  
+      const subscription = this.entidadEstructuraTablaValorService
+        .agregar(registro)
+        .subscribe({
+          next: () => {
+            this.mensajeService.modalExito('Se agregó el registro correctamente');
+            this.cerrar.emit();
+            subscription.unsubscribe();
+          }
+        }); 
+
+    }
+
   }
 
   private async estaFueraDeRango(campo: SeccionCampo) {
