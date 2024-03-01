@@ -129,11 +129,43 @@ export class SeccionTablaComponent implements OnInit {
   }
 
   public editar(): void {
+    
     if (this.seleccionado && this.seleccionado.registro) {
+
+      this.limpiarCampos();
+
+
       for (const campo of this.seleccionado.registro) {
-        const valor = this.seleccionado.registro.find(v => v.claveCampo === campo.claveCampo);
-        campo.valor = valor ? valor.valor : '';
+
+
+        const v = this.entidadEstructuraSeccion.campos.find(c => c.clave === campo.claveCampo);
+        const fecha = this.entidadEstructuraSeccion.campos.find(c => c.clave === 'ME-fecha');
+        const hora = this.entidadEstructuraSeccion.campos.find(c => c.clave === 'ME-hora');
+
+        
+        if(v){
+        
+          v.idEntidadEstructuraValor = campo.idEntidadEstructuraTablaValor;
+          v.valor = v ? campo.valor : '';
+          v.habilitado = v === undefined ? false : true;
+        }else{
+
+        }
+        if(fecha) {
+            let fechaMuestra = new Date(campo.fechaMuestra);
+            let fechaFormato = fechaMuestra.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            let horaFormato = fechaMuestra.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            fecha.valor = hora ? `${fechaFormato} ${horaFormato}` : '';
+        }
+        if(hora) {
+            let fechaMuestra = new Date(campo.fechaMuestra);
+            let horaFormato = fechaMuestra.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            hora.valor = fecha ? horaFormato : '';
+        }
+      
       }
+
+
     const initialState = {
       accion: 'Editar',
       numeroRegistro: this.seleccionado.idEntidadEstructuraTablaValor,
@@ -153,12 +185,19 @@ export class SeccionTablaComponent implements OnInit {
 
     modalRef.content?.cerrar.subscribe(() => {
       modalRef.hide();
-      this.actualizarGrid();
+      this.obtenerMuestrasGrid();
     });
   }else{
     return;
   }
 
+  }
+
+  private limpiarCampos(): void {
+    this.entidadEstructuraSeccion.campos.forEach(c => {
+      c.valor = '';
+      c.habilitado = false;
+    });
   }
 
   public async eliminar(): Promise<void> {

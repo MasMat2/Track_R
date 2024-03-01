@@ -79,11 +79,6 @@ export class SeccionTablaFormularioComponent implements OnInit {
   public enviarFormulario(formulario: NgForm): void {
     this.submiting = true;
 
-    if (!formulario.valid) {
-      this.submiting = false;
-      Utileria.validarCamposRequeridos(formulario);
-      return;
-    }
 
     if (this.accion === 'Editar') {
       this.editar();
@@ -102,13 +97,13 @@ export class SeccionTablaFormularioComponent implements OnInit {
 
     const campos = this.campos.filter(
       (c) => c.idDominioNavigation?.tipoCampo !== 'Select Múltiple' &&
-        c.valor && c.valor !== ''
+        c.valor && c.valor !== '' && c.idEntidadEstructuraValor > 0
     );
 
     registro.valores = await Promise.all(campos.map(
       async (campo: SeccionCampo) => {
         const valor: TablaValorDto = {
-          idEntidadEstructuraTablaValor: 0,
+          idEntidadEstructuraTablaValor: campo.idEntidadEstructuraValor,
           claveCampo: campo.clave,
           valor: campo.valor?.toString() ?? '',
           fueraDeRango: await this.estaFueraDeRango(campo)

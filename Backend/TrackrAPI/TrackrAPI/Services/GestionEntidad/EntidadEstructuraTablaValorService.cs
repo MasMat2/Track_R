@@ -24,6 +24,8 @@ namespace TrackrAPI.Services.GestionEntidad
         private readonly IEntidadEstructuraRepository entidadEstructuraRepository;
         private readonly NotificacionDoctorService _notificacionDoctorService;
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IDominioHospitalRepository _dominioHospitalRepository;
+        private readonly IDominioRepository _dominioRepository;
 
         public EntidadEstructuraTablaValorService(
             IEntidadEstructuraTablaValorRepository entidadEstructuraTablaValorRepository,
@@ -31,7 +33,9 @@ namespace TrackrAPI.Services.GestionEntidad
             IExpedientePadecimientoRepository expedientePadecimientoRepository,
             IEntidadEstructuraRepository entidadEstructuraRepository,
             NotificacionDoctorService notificacionDoctorService,
-            IUsuarioRepository usuarioRepository
+            IUsuarioRepository usuarioRepository,
+            IDominioHospitalRepository dominioHospitalRepository,
+            IDominioRepository dominioRepository
             )
         {
             this.entidadEstructuraTablaValorRepository = entidadEstructuraTablaValorRepository;
@@ -40,6 +44,8 @@ namespace TrackrAPI.Services.GestionEntidad
             this.entidadEstructuraRepository = entidadEstructuraRepository;
             _notificacionDoctorService = notificacionDoctorService;
             _usuarioRepository = usuarioRepository;
+            _dominioHospitalRepository = dominioHospitalRepository;
+            _dominioRepository = dominioRepository;
         }
 
         public List<RegistroTablaDto> ConsultarRegistroTablaPorTabulacion(int idEntidadEstructura, int idTabla)
@@ -153,60 +159,44 @@ namespace TrackrAPI.Services.GestionEntidad
             ts.Complete();
         }
 
-        public void Editar(EntidadTablaRegistroDto registro)
+        private bool EstaFueraDeRango(EntidadEstructuraTablaValor valorDb , int idHospital)
+        {
+            var seccionCampo = seccionCampoRepository.ConsultarPorClave(valorDb.ClaveCampo);
+            var dominioHospital = _dominioHospitalRepository.Consultar(idHospital , seccionCampo.IdDominio);
+            decimal? valorMaximo;
+            decimal? valorMinimo;
+
+            if(dominioHospital == null)
+            {
+                var dominio = _dominioRepository.Consultar(seccionCampo.IdDominio);
+                valorMaximo = dominio.ValorMaximo;
+                valorMinimo = dominio.ValorMinimo;
+            }else{
+                valorMaximo = dominioHospital.ValorMaximo;
+                valorMinimo = dominioHospital.ValorMinimo;
+            }
+
+            return int.Parse(valorDb.Valor) > valorMaximo || int.Parse(valorDb.Valor) < valorMinimo;
+        }
+
+
+        public void Editar(EntidadTablaRegistroDto registro, int idUsuario)
         {
             using var ts = new TransactionScope();
 
+            var usuarioSesion = _usuarioRepository.ConsultarDto(idUsuario);
             var valoresDto = registro.Valores;
 
-            var valoresDb = entidadEstructuraTablaValorRepository.ConsultarPorNumeroRegistro(
-                registro.IdEntidadEstructura,
-                registro.IdTabla,
-                registro.Numero);
-
-            var clavesDto = valoresDto.ConvertAll(v => v.ClaveCampo);
-            var clavesDb = valoresDb.Select(v => v.ClaveCampo);
-
-            var valoresEditar = valoresDb
-                .Where(v => clavesDto.Contains(v.ClaveCampo))
-                .ToList();
-
-            foreach (var valor in valoresEditar)
+            foreach (var valorDto in valoresDto)
             {
-                var valorDto = valoresDto.Find(v => v.ClaveCampo == valor.ClaveCampo)!;
+                var valorDb = entidadEstructuraTablaValorRepository.ConsultarPorId(valorDto.IdEntidadEstructuraTablaValor);
 
-                valor.Valor = valorDto.Valor;
-                valor.FueraDeRango = valorDto.FueraDeRango;
 
-                entidadEstructuraTablaValorRepository.Editar(valor);
-            }
+                valorDb.Valor = valorDto.Valor;
+                valorDb.FueraDeRango = EstaFueraDeRango(valorDb, usuarioSesion.IdHospital);
 
-            var valoresAgregar = valoresDto
-                .Where(v => !clavesDb.Contains(v.ClaveCampo))
-                .ToList();
+                entidadEstructuraTablaValorRepository.Editar(valorDb);
 
-            foreach (var valorDto in valoresAgregar)
-            {
-                var valor = new EntidadEstructuraTablaValor()
-                {
-                    IdEntidadEstructura = registro.IdEntidadEstructura,
-                    IdTabla = registro.IdTabla,
-                    Numero = registro.Numero,
-                    ClaveCampo = valorDto.ClaveCampo,
-                    Valor = valorDto.Valor,
-                    FueraDeRango = valorDto.FueraDeRango
-                };
-
-                entidadEstructuraTablaValorRepository.Agregar(valor);
-            }
-
-            var valoresEliminar = valoresDb
-                .Where(v => !clavesDto.Contains(v.ClaveCampo))
-                .ToList();
-
-            foreach (var valor in valoresEliminar)
-            {
-                entidadEstructuraTablaValorRepository.Eliminar(valor);
             }
 
             ts.Complete();

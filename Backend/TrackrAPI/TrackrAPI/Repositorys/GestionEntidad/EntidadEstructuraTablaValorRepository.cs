@@ -23,6 +23,13 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                                 e.IdTabla == idTabla);
         }
 
+        public EntidadEstructuraTablaValor ConsultarPorId(int id)
+        {
+            return context.EntidadEstructuraTablaValor
+                .Include(e => e.IdEntidadEstructuraNavigation)
+                .FirstOrDefault(e => e.IdEntidadEstructuraTablaValor == id);
+        }
+
         public IEnumerable<EntidadEstructuraTablaValor> ConsultarPorPestanaSeccion(int idEntidadEstructura, int idTabla)
         {
             return context.EntidadEstructuraTablaValor
