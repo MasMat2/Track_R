@@ -206,14 +206,14 @@ namespace TrackrAPI.Services.GestionEntidad
         {
             using var ts = new TransactionScope();
 
-            var valores = entidadEstructuraTablaValorRepository.ConsultarPorNumeroRegistro(
-                registro.IdEntidadEstructura,
-                registro.IdTabla,
-                registro.Numero);
+            var valores = registro.Valores;
 
             foreach (var valor in valores)
             {
-                entidadEstructuraTablaValorRepository.Eliminar(valor);
+                var valorDb = entidadEstructuraTablaValorRepository.ConsultarPorId(valor.IdEntidadEstructuraTablaValor);
+                if(valorDb != null){
+                    entidadEstructuraTablaValorRepository.Eliminar(valorDb);
+                }
             }
 
             ts.Complete();

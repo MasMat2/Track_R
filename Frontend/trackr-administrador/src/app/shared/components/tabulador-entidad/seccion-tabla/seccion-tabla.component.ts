@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntidadTablaRegistroDto } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
+import { EntidadTablaRegistroDto, TablaValorDto } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
 import { EntidadEstructuraTablaValorService } from '@http/gestion-entidad/entidad-estructura-tabla-valor.service';
 import { EntidadEstructura } from '@models/gestion-entidad/entidad-estructura';
 import { EntidadEstructuraTablaValor } from '@models/gestion-entidad/entidad-estructura-tabla-valor';
@@ -27,6 +27,8 @@ export class SeccionTablaComponent implements OnInit {
  
  public campos: SeccionCampo = new SeccionCampo();
  public muestras : ExpedienteMuestrasGridDTO[];
+  public readonly EDITAR: string = "Editar";
+  public readonly AGREGAR: string = "Agregar";
 
   public seleccionado?: ExpedienteMuestrasGridDTO;
 
@@ -106,6 +108,7 @@ export class SeccionTablaComponent implements OnInit {
   }
 
   public agregar(): void {
+    this.limpiarCampos(this.AGREGAR);
     const initialState = {
       accion: 'Agregar',
       idTabla: this.idTabla,
@@ -132,7 +135,7 @@ export class SeccionTablaComponent implements OnInit {
     
     if (this.seleccionado && this.seleccionado.registro) {
 
-      this.limpiarCampos();
+      this.limpiarCampos(this.EDITAR);
 
 
       for (const campo of this.seleccionado.registro) {
@@ -193,10 +196,12 @@ export class SeccionTablaComponent implements OnInit {
 
   }
 
-  private limpiarCampos(): void {
+  private limpiarCampos(accion : string): void {
     this.entidadEstructuraSeccion.campos.forEach(c => {
       c.valor = '';
-      c.habilitado = false;
+      c.habilitado = accion == "Editar"? false : true;
+      if(accion == "Agregar")
+        c.requerido = true;
     });
   }
 
@@ -218,6 +223,26 @@ export class SeccionTablaComponent implements OnInit {
       return;
     }
 
+    for (const campo of this.seleccionado.registro) {
+
+
+      const v = this.entidadEstructuraSeccion.campos.find(c => c.clave === campo.claveCampo);
+
+      if(v){
+      
+        v.idEntidadEstructuraValor = campo.idEntidadEstructuraTablaValor;
+        v.valor = v ? campo.valor : '';
+        v.habilitado = v === undefined ? false : true;
+      }
+
+    }
+
+    const campos = this.entidadEstructuraSeccion.campos.filter(
+      (c) => c.idDominioNavigation?.tipoCampo !== 'Select Múltiple' &&
+        c.valor && c.valor !== '' && c.idEntidadEstructuraValor > 0
+    );
+
+
     const registro: EntidadTablaRegistroDto = {
       numero: this.seleccionado.idEntidadEstructuraTablaValor,
       idEntidadEstructura: this.seleccionado.idEntidadEstructura,
@@ -225,12 +250,25 @@ export class SeccionTablaComponent implements OnInit {
       valores: [],
     };
 
+    registro.valores = campos.map((campo: SeccionCampo) => {
+      const valor: TablaValorDto = {
+        idEntidadEstructuraTablaValor: campo.idEntidadEstructuraValor,
+        claveCampo: campo.clave,
+        valor: campo.valor?.toString() ?? '',
+        fueraDeRango: false
+      };
+    
+      return valor;
+    });
+
+
+
     const subscription = this.entidadEstructuraTablaValorService
       .eliminar(registro)
       .subscribe({
         next: () => {
           this.mensajeService.modalExito('Se eliminó el registro correctamente');
-          this.actualizarGrid();
+          this.obtenerMuestrasGrid();
           subscription.unsubscribe();
         }
       });
