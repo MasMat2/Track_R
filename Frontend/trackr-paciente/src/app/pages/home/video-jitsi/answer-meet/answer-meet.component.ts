@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AudioInterface, ParticipantInterface } from '../interfaces/jitsi-interface';
 import { Meta } from '@angular/platform-browser';
 
+
 declare var JitsiMeetExternalAPI: any;
 
 @Component({
@@ -17,8 +18,7 @@ declare var JitsiMeetExternalAPI: any;
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class AnswerMeetComponent  implements OnInit {
-  
+export class AnswerMeetComponent implements OnInit {
   protected localStream: MediaStream;
 
   protected domain: string = "meet.jit.si"; // For self hosted use your domain
@@ -26,8 +26,7 @@ export class AnswerMeetComponent  implements OnInit {
   protected options: any;
   protected api: any;
   protected user: any;
-
-  private meetName : string;
+  private meetName: string;
 
   // For Custom Controls
   isAudioMuted = false;
@@ -37,14 +36,15 @@ export class AnswerMeetComponent  implements OnInit {
     private orientationService: ScreenOrientationService,
     private route: ActivatedRoute,
     private router: Router,
-    private meta: Meta
-    ) { }
+    private meta: Meta,
+  ) { }
 
   ngOnInit() {
+
     this.route.paramMap.subscribe(params => {
       this.meetName = params.get('meet-name')!;
     });
-    
+
     this.orientationService.lockLandscape();
 
     this.iniciarWebCam(); //iniciamos camara y microfono para que pueda ser iniciada una llamada en el iframe de jitsi
@@ -59,7 +59,7 @@ export class AnswerMeetComponent  implements OnInit {
   };
 
   answerMeet(): void {
-    
+
     //Configuración para la nueva sala
     const newRoomOptions = {
       roomName: this.meetName,
@@ -77,10 +77,10 @@ export class AnswerMeetComponent  implements OnInit {
     };
 
     //Crear una nueva instancia de JitsiMeetExternalAPI para la nueva sala
-    const newRoomApi = new JitsiMeetExternalAPI(this.domain, newRoomOptions);
+    this.api = new JitsiMeetExternalAPI(this.domain, newRoomOptions);
 
     // Event handlers para la nueva sala
-    newRoomApi.addEventListeners({
+    this.api.addEventListeners({
       readyToClose: this.handleClose,
       participantLeft: this.handleParticipantLeft,
       participantJoined: this.handleParticipantJoined,
@@ -89,17 +89,35 @@ export class AnswerMeetComponent  implements OnInit {
       audioMuteStatusChanged: this.handleMuteStatus,
       videoMuteStatusChanged: this.handleVideoStatus
     });
+  }
 
+  executeCommand(command: string) {
+    this.api.executeCommand(command);
+    if (command == 'hangup') {
+      this.localStream.getTracks().forEach(track => track.stop());
+      this.router.navigate(['/home']);
+      this.orientationService.lockPortrait();
+      this.api.dispose();
+      this.api.remove();
+
+      return;
+    }
+
+    if (command == 'toggleAudio') {
+      this.isAudioMuted = !this.isAudioMuted;
+    }
+
+    if (command == 'toggleVideo') {
+      this.isVideoMuted = !this.isVideoMuted;
+    }
   }
 
   handleClose = () => {
     console.log("handleClose");
-    this.orientationService.lockPortrait();
   }
 
   handleParticipantLeft = async (participant: ParticipantInterface) => {
     console.log("handleParticipantLeft", participant); // { id: "2baa184e" }
-    const data = await this.getParticipants();
   }
 
   handleParticipantJoined = async (participant: ParticipantInterface) => {
@@ -114,7 +132,6 @@ export class AnswerMeetComponent  implements OnInit {
 
   handleVideoConferenceLeft = () => {
     console.log("handleVideoConferenceLeft");
-    this.router.navigate(['/thank-you']);
   }
 
   handleMuteStatus = (audio: AudioInterface) => {
@@ -131,22 +148,6 @@ export class AnswerMeetComponent  implements OnInit {
         resolve(this.api.getParticipantsInfo()); // get all participants
       }, 500)
     });
-  }
-
-  executeCommand(command: string) {
-    this.api.executeCommand(command);;
-    if (command == 'hangup') {
-      this.router.navigate(['/thank-you']);
-      return;
-    }
-
-    if (command == 'toggleAudio') {
-      this.isAudioMuted = !this.isAudioMuted;
-    }
-
-    if (command == 'toggleVideo') {
-      this.isVideoMuted = !this.isVideoMuted;
-    }
   }
 
 }

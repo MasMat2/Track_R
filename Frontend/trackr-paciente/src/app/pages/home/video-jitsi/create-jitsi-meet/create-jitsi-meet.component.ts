@@ -34,17 +34,17 @@ export class CreateJitsiMeetComponent implements OnInit {
   protected chats$: Observable<ChatDTO[]>;
   protected chats: ChatDTO[] = [];
 
-  domain: string = "meet.jit.si"; // For self hosted use your domain
-  room: any;
-  options: any;
-  api: any;
-  user: any;
+  private domain: string = "meet.jit.si"; // For self hosted use your domain
+  private room: any;
+  private options: any;
+  private roomApi: any;
+  private user: any;
 
   private idChat : string;
 
   // For Custom Controls
-  isAudioMuted = false;
-  isVideoMuted = false;
+  private isAudioMuted = false;
+  private isVideoMuted = false;
 
   constructor(
     private router: Router,
@@ -121,10 +121,10 @@ export class CreateJitsiMeetComponent implements OnInit {
     };
 
     //Crear una nueva instancia de JitsiMeetExternalAPI para la nueva sala
-    const newRoomApi = new JitsiMeetExternalAPI(this.domain, newRoomOptions);
+    this.roomApi = new JitsiMeetExternalAPI(this.domain, newRoomOptions);
 
     // Event handlers para la nueva sala
-    newRoomApi.addEventListeners({
+    this.roomApi.addEventListeners({
       readyToClose: this.handleClose,
       participantLeft: this.handleParticipantLeft,
       participantJoined: this.handleParticipantJoined,
@@ -175,7 +175,7 @@ export class CreateJitsiMeetComponent implements OnInit {
 
   handleVideoConferenceLeft = () => {
     console.log("handleVideoConferenceLeft");
-    this.router.navigate(['/thank-you']);
+    this.router.navigate(['/home']);
   }
 
   handleMuteStatus = (audio: AudioInterface) => {
@@ -189,15 +189,19 @@ export class CreateJitsiMeetComponent implements OnInit {
   getParticipants() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve(this.api.getParticipantsInfo()); // get all participants
+        resolve(this.roomApi.getParticipantsInfo()); // get all participants
       }, 500)
     });
   }
 
   executeCommand(command: string) {
-    this.api.executeCommand(command);;
+    this.roomApi.executeCommand(command);;
     if (command == 'hangup') {
-      this.router.navigate(['/thank-you']);
+      this.localStream.getTracks().forEach(track => track.stop());
+      this.router.navigate(['/home']);
+      this.orientationService.lockPortrait();
+      this.roomApi.dispose();
+      this.roomApi.remove();
       return;
     }
 
