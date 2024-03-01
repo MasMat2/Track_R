@@ -31,7 +31,7 @@
         <img
           [src]="
             paciente.imagenBase64 != undefined
-              ? (paciente.imagenBase64 | urlImagen : paciente?.tipoMime)
+              ? (paciente.imagenBase64)
               : 'assets/img/default-user.jpg'
           "
         />

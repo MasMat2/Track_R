@@ -117,7 +117,7 @@ namespace TrackrAPI.Controllers.Seguridad
             var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
             usuarioDto.IdHospital = (int)usuario.IdHospital;
             usuarioDto.IdCompania = usuario.IdCompania;
-            return usuarioService.Agregar(usuarioDto, (int)usuario.IdHospital);
+            return usuarioService.Agregar(usuarioDto, (int)usuario.IdHospital, usuario.IdUsuario);
         }
 
         [AllowAnonymous]
@@ -287,7 +287,7 @@ namespace TrackrAPI.Controllers.Seguridad
         public IEnumerable<UsuarioDto> ConsultarAsistentes()
         {
             var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
-            return usuarioService.ConsultarAsistentes((int)usuario.IdCompania);
+            return usuarioService.ConsultarAsistentes((int)usuario.IdCompania , usuario.IdUsuario);
         }
 
         [HttpGet("asistentesPorDoctor")]

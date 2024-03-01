@@ -8,12 +8,14 @@ export class PlataformaService {
 
 constructor(private platform : Platform) { }
 
-  public isWeb(): boolean {
-    return this.platform.is('desktop') || this.platform.is('mobileweb');
-  }
+public isWeb(): boolean {
+  const platforms = this.platform.platforms();
+  return platforms.includes('desktop') || platforms.includes('mobileweb');
+}
 
-  public isMobile(): boolean {
-    return this.platform.is('android') || this.platform.is('ios');
-  }
+public isMobile(): boolean {
+  const platforms = this.platform.platforms();
+  return (platforms.includes('android') || platforms.includes('ios')) && !this.isWeb();
+}
 
 }

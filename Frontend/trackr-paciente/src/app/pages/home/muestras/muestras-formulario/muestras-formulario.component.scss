@@ -1,4 +1,6 @@
-@import 'src/app/shared/styles/variables.scss';
+@import '../../../../../theme/variables.scss';
+@import '../../../../shared/styles/variables.scss';
+
 .subtitulo-muestra{
     color: $color-primario
 }
@@ -13,4 +15,8 @@ ion-button
 {
     --color: black; 
     --background: #9BD8AC;
+}
+
+.muestra-accordion{
+    background-color: var(--neutral-100);
 }

@@ -102,25 +102,20 @@ export class CampoExpedienteComponent
   ngOnInit() {
     const dominio = this.campo.idDominioNavigation;
 
-    if (
-      dominio.fechaMinima !== null &&
-      dominio.fechaMaxima !== null
-    ) {
+    if (dominio && dominio.fechaMinima !== null && dominio.fechaMaxima !== null) {
       setTimeout(() => {
-        dominio.fechaMinima = new Date(dominio.fechaMinima);
-        dominio.fechaMaxima = new Date(dominio.fechaMaxima);
-        dominio.fechaMaxima.setHours(23, 59, 59);
+        if (dominio) {
+          dominio.fechaMinima = new Date(dominio.fechaMinima);
+          dominio.fechaMaxima = new Date(dominio.fechaMaxima);
+          dominio.fechaMaxima.setHours(23, 59, 59);
+        }
       }, 500);
     }
 
-    if (
-      dominio.tipoCampo === 'Switch' &&
-      this.campo.valor === undefined
-    ) {
+    if (dominio && dominio.tipoCampo === 'Switch' && this.campo.valor === undefined) {
       this.campo.valor = false;
     }
   }
-
   onCheckboxSelected($event:any, opcion:any) {}
 
   writeValue(obj: any): void {
@@ -153,24 +148,24 @@ export class CampoExpedienteComponent
         this.campo.requerido
           ? Validators.required
           : null,
-        dominio.permiteFueraDeRango
+        dominio?.permiteFueraDeRango
           ? null
-          : Validators.min(dominio.valorMinimo),
-        dominio.permiteFueraDeRango
+          : Validators.min(dominio?.valorMinimo),
+        dominio?.permiteFueraDeRango
           ? null
-          : Validators.max(dominio.valorMaximo),
-        dominio.longitudMaxima !== null
-          ? Validators.maxLength(dominio.longitudMaxima)
+          : Validators.max(dominio?.valorMaximo),
+        dominio?.longitudMaxima !== null
+          ? Validators.maxLength(dominio?.longitudMaxima)
           : null,
       ])
     );
 
-    if (dominio.fechaMaxima !== null || dominio.fechaMinima !== null) {
+    if (dominio?.fechaMaxima !== null || dominio?.fechaMinima !== null) {
       const fechaCampo = new Date(control.value);
       fechaCampo.setHours(0,0,0,0);
 
-      const fechaMaxima = new Date(dominio.fechaMaxima.toString());
-      const fechaMinima = new Date(dominio.fechaMinima.toString());
+      const fechaMaxima = new Date(dominio?.fechaMaxima.toString());
+      const fechaMinima = new Date(dominio?.fechaMinima.toString());
 
       if( fechaCampo > fechaMaxima || fechaCampo < fechaMinima){
         return  { dateInvalid: true }
@@ -204,15 +199,15 @@ export class CampoExpedienteComponent
   cambioFecha() {
     const dominio = this.campo.idDominioNavigation;
 
-    if(dominio.fechaMaxima !== null){
-      if(this.campo.valor && this.campo.valor > dominio.fechaMaxima){
-        this.campo.valor = dominio.fechaMaxima;
+    if(dominio?.fechaMaxima !== null){
+      if(this.campo.valor && this.campo.valor > dominio?.fechaMaxima){
+        this.campo.valor = dominio?.fechaMaxima;
         this.campo.valor.setHours(0,0,0)
       }
     }
-    if(dominio.fechaMinima !== null){
-      if(this.campo.valor && this.campo.valor < dominio.fechaMinima){
-        this.campo.valor = dominio.fechaMinima;
+    if(dominio?.fechaMinima !== null){
+      if(this.campo.valor && this.campo.valor < dominio?.fechaMinima){
+        this.campo.valor = dominio?.fechaMinima;
         this.campo.valor.setHours(0,0,1)
       }
     }

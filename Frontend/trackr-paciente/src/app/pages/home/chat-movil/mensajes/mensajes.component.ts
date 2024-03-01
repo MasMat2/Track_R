@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChatPersonaService } from '@http/chat/chat-persona.service';
-import { IonicModule } from '@ionic/angular';
+import { IonContent, IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { Observable } from 'rxjs';
 import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
@@ -13,13 +13,24 @@ import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-s
 import { ArchivoService } from '../../../../shared/http/archivo/archivo.service';
 import { ArchivoFormDTO } from '../../../../shared/Dtos/archivos/archivo-form-dto';
 import { addIcons } from 'ionicons';
-import { videocamOutline } from 'ionicons/icons';
+import {cameraOutline, paperPlane, videocamOutline, chevronBack, trash, mic, micOutline, documentOutline, send } from 'ionicons/icons';
 //Libreria de capacitor para grabar audio
 import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder';
 
 //Escribir archivos
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
 import { PlataformaService } from 'src/app/services/dashboard/plataforma.service';
+import { ModalController } from '@ionic/angular';
+import { ArchivoPrevisualizarComponent } from './archivo-previsualizar/archivo-previsualizar.component';
+
+import { timer, Subject } from 'rxjs';
+import { finalize, map, takeUntil, takeWhile } from 'rxjs/operators';
+import { Haptics, ImpactStyle } from '@capacitor/haptics'
+import { PressDirective } from 'src/app/shared/directives/press.directive';
+import { SwipeDirective } from 'src/app/shared/directives/swipe.directive';
+import { CapacitorUtils } from '@utils/capacitor-utils';
+import { format } from 'date-fns';
+
 
 
 
@@ -28,12 +39,13 @@ import { PlataformaService } from 'src/app/services/dashboard/plataforma.service
   templateUrl: './mensajes.component.html',
   styleUrls: ['./mensajes.component.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule, IonicModule, HeaderComponent],
+  imports: [FormsModule, CommonModule, IonicModule, HeaderComponent, PressDirective, SwipeDirective],
+  providers: [CapacitorUtils]
 })
-export class MensajesComponent {
+export class MensajesComponent{
   protected mensajes: ChatMensajeDTO[];
   protected idChat: number;
-  protected msg: string;
+  protected msg: string = '';
   protected idUsuario: number;
   protected chatMensajes$: Observable<ChatMensajeDTO[][]>
   protected chatMensajes: ChatMensajeDTO[][]
@@ -43,13 +55,24 @@ export class MensajesComponent {
     titulo: 'Chat',
     idCreadorChat: 0,
   };
+
+  protected escribiendo: boolean = false;
+  protected isModalOpen = false;
+  private stop$ = new Subject<any>();
+  duracionAudio = '';
+  duracion = 0;
+  protected timer$: any;
   protected archivo?: File = undefined;
+  protected fotoTomada: string;
   @ViewChild('fileInput') fileInput!: ElementRef;
-  @ViewChild('scrollContainer') private scrollContainer: ElementRef;
+  @ViewChild(IonContent) content: IonContent;
+  @ViewChild('movableSpan') movableSpan: ElementRef;
+
 
   //Variables para el audio
   protected isAudio: boolean = false;
   protected grabacionIniciada: boolean = false;
+  protected grabacionCancelada: boolean = false;
   protected audio?: string = '';
   protected audio2?: string;
 
@@ -60,8 +83,21 @@ export class MensajesComponent {
     private route: Router,
     private ChatHubServiceService: ChatHubServiceService,
     private ArchivoService: ArchivoService,
-    private plataformaService: PlataformaService
-  ) { addIcons({videocamOutline}); }
+    private plataformaService: PlataformaService,
+    private ModalController:ModalController,
+    private capacitorUtils: CapacitorUtils
+  ) { 
+      addIcons({videocamOutline, 
+        chevronBack, 
+        cameraOutline, 
+        paperPlane, 
+        trash, 
+        documentOutline,
+        mic,
+        micOutline,
+        send
+      }); 
+    }
 
   ionViewWillEnter() {
     this.obtenerIdUsuario();
@@ -110,6 +146,18 @@ export class MensajesComponent {
       msg.nombre = this.archivo.name;
     }
 
+    if(this.fotoTomada){
+      const fechaActual: Date = new Date();
+      const fechaFormateada: string = format(fechaActual, 'yyyy-MM-dd HH:mm:ss');
+      let nombreFoto = `Trackr-Image_${fechaFormateada}.jpeg`
+      let byte = this.fotoTomada.split(',')[1];
+      msg.archivo = byte;
+      msg.archivoNombre = nombreFoto;
+      msg.archivoTipoMime = "image/jpeg";
+      msg.fechaRealizacion = new Date();
+      msg.nombre = nombreFoto;
+    }
+
     if (this.audio != '') {
       msg.archivo = this.audio;
       msg.archivoNombre = `audio-${Date.now()}.wav`
@@ -126,6 +174,8 @@ export class MensajesComponent {
     }
     this.msg = "";
 
+    this.fotoTomada = "";
+    this.isModalOpen = false;
     this.archivo = undefined;
     this.audio = '';
     this.audio2 = '';
@@ -218,19 +268,15 @@ export class MensajesComponent {
       }
 
       this.ArchivoService.subirArchivo(aux).subscribe(res => {
-        console.log(res)
       })
     }
   }
 
   clickArchivo(idArchivo: number) {
-    this.ArchivoService.getArchivo(idArchivo).subscribe(res => {
-      if (this.plataformaService.isMobile()) {
-        this.downloadFileMobile(res.archivo, res.nombre, res.archivoMime)
-      }
-      else if (this.plataformaService.isWeb()) {
-        this.downloadFileWeb(res.archivo, res.nombre, res.archivoMime)
-      }
+    this.ArchivoService.getArchivo(idArchivo).subscribe( async res => {
+      const modal =  await this.ModalController.create({component: ArchivoPrevisualizarComponent,componentProps:{archivo:res}});
+      modal.present();
+
     });
   }
 
@@ -251,7 +297,6 @@ export class MensajesComponent {
       // Obtener la URL del archivo creado
       const url = result.uri;
 
-      console.log(url)
 
     } catch (error) {
       console.error('Error al descargar el archivo:', error);
@@ -289,6 +334,11 @@ export class MensajesComponent {
   }
 
   openFileInput(): void {
+    if(this.audio != ''){
+      this.audio = '';
+      this.audio2 = '';
+      this.isAudio = false;
+    }
     this.fileInput.nativeElement.click();
   }
 
@@ -299,14 +349,12 @@ export class MensajesComponent {
 
   // Esta función se llama después de cada actualización de la vista
   ngAfterViewChecked() {
-    this.scrollToBottom();
+    this.scrollContentToBottom();
   }
 
   // Función para desplazar automáticamente hacia abajo al final de la lista
-  scrollToBottom(): void {
-    try {
-      this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
-    } catch (err) { }
+  scrollContentToBottom(){
+    this.content.scrollToBottom();
   }
 
   eliminarArchivo() {
@@ -314,6 +362,8 @@ export class MensajesComponent {
   }
 
   changeAudio() {
+    this.audio = '';
+    this.audio2 = '';
     this.isAudio = !this.isAudio;
   }
 
@@ -329,21 +379,68 @@ export class MensajesComponent {
     if (this.grabacionIniciada) {
       return;
     }
+
+    //this.changeAudio();
     this.grabacionIniciada = true;
-    VoiceRecorder.startRecording();
+
+    VoiceRecorder.startRecording().then(_ => {
+      this.calcularDuracion();
+    });
+    
   }
 
   detenerGrabacion() {
-    if (!this.grabacionIniciada) {
+    if (!this.grabacionIniciada || this.grabacionCancelada) {
+      this.grabacionCancelada = false;
       return;
+    }
+    if(this.archivo){
+      this.archivo = undefined;
     }
     VoiceRecorder.stopRecording().then((audio: RecordingData) => {
       this.grabacionIniciada = false;
+      this.isAudio = true;
       if (audio.value) {
         this.audio = audio.value.recordDataBase64;
         this.audio2 = 'data:audio/wav;base64,' + audio.value.recordDataBase64;
       }
-    })
+    });
+  }
+
+  cancelarGrabacion() {
+    if (!this.grabacionIniciada) {
+      return;
+    }
+    if(this.archivo){
+      this.archivo = undefined;
+    }
+    VoiceRecorder.stopRecording().then((audio: RecordingData) => {
+      this.grabacionCancelada = true;
+      this.grabacionIniciada = false;
+    });
+  }
+
+  calcularDuracion(){
+    if(!this.grabacionIniciada){
+      this.duracion = 0;
+      this.duracionAudio = '';
+      return;
+    }
+    
+    this.timer$ = timer(0, 1000).pipe(
+      takeUntil(this.stop$),
+      takeWhile(_ => this.duracion >= 0), //Aqui se puede colocar un máximo para el contador
+      finalize(() => {
+        this.duracion = 0; //detiene y reinicia el contador cuando se deja de grabar
+      }),
+      map(_ => {
+        this.duracion= this.duracion + 1;
+        const minutos = Math.floor(this.duracion / 60);
+        const segundos = (this.duracion % 60).toString().padStart(2, '0');
+        this.duracionAudio = `${minutos}:${segundos}`;
+        return this.duracion;
+      })
+    );
   }
 
   crearLlamada() {
@@ -369,5 +466,74 @@ export class MensajesComponent {
 
     }
   }
+
+  //verificar si se está escribiendo un mensaje (mensaje no vacío)
+  escribiendoMensaje(){
+    return !(/^ *$/.test(this.msg))
+  }
+
+  protected presionarGrabarAudio(event: any) {
+    //al presionar empezar a grabar
+    if(event == 'start'){
+      Haptics.impact({style: ImpactStyle.Light}); //pequeña vibración para feedback
+      this.grabar();
+    }
+
+    //al soltar detener la grabación
+    if(event == 'end'){
+      Haptics.impact({style: ImpactStyle.Light}); //pequeña vibración para feedback
+      this.detenerGrabacion();
+    }
+  }
+
+  deslizarCancelarAudio(event: any) {
+
+    if(event.dirX == 'left'){
+
+      //Cuando se mueva 100px desde el origen
+      //Se cancela la grabación
+      if(event.currentX <= event.startX - 100){
+        this.cancelarGrabacion();
+      }
+
+      const relativeX = event.currentX - event.startX + 15; //15px es el threshold especificado en la directiva
+      if(!this.grabacionCancelada){
+        this.updateSpanPosition(relativeX);
+      }
+
+    }
+
+  }
+
+  //función para el efecto de arrastre del span al cancelar el audio
+  updateSpanPosition(posicionX: number): void {
+    //el span se moverá posicionX pixeles a la izquierda, 
+    //donde posicionX es la diferencia entre la posicion actual de tu dedo y el boton del microfono (el inicio)
+    this.movableSpan.nativeElement.style.transform = `translateX(calc(-50% + ${posicionX}px))`;
+  }
+
+  protected async tomarFoto(){
+    this.archivo = undefined;
+    this.audio = '';
+    this.audio2 = '';
+    this.isAudio = false;
+
+    this.fotoTomada = (await this.capacitorUtils.takePicture());
+    this.isModalOpen = true;
+  }
+
+  // onWillDismiss(event: Event) {
+  //   const ev = event as CustomEvent<OverlayEventDetail<string>>;
+  //   if (ev.detail.role === 'confirm') {
+  //     this.message = `Hello, ${ev.detail.data}!`;
+  //   }
+  // }
+
+  cancelarEnviarFoto(){
+    this.msg = "";
+    this.fotoTomada = "";
+    this.isModalOpen = false;
+  }
+
 
 }

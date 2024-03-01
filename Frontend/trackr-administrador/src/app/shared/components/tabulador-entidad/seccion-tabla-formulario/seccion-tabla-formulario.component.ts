@@ -42,14 +42,14 @@ export class SeccionTablaFormularioComponent implements OnInit {
   ngOnInit() {
     if (this.accion === 'Agregar') {
       for (const campo of this.campos) {
-        campo.valor = campo.idDominioNavigation.tipoDato === 'List'
+        campo.valor = campo.idDominioNavigation?.tipoDato === 'List'
           ? undefined
           : '';
       }
     }
     else {
       for (const campo of this.campos) {
-        if (campo.idDominioNavigation.tipoDato === 'List') {
+        if (campo.idDominioNavigation?.tipoDato === 'List') {
           campo.valor = Number(campo.valor);
         }
       }
@@ -101,7 +101,7 @@ export class SeccionTablaFormularioComponent implements OnInit {
     };
 
     const campos = this.campos.filter(
-      (c) => c.idDominioNavigation.tipoCampo !== 'Select Múltiple' &&
+      (c) => c.idDominioNavigation?.tipoCampo !== 'Select Múltiple' &&
         c.valor && c.valor !== ''
     );
 
@@ -142,7 +142,7 @@ export class SeccionTablaFormularioComponent implements OnInit {
         !(c.idEntidadEstructuraValor > 0) &&
         c.valor !== '' &&
         c.valor &&
-        c.idDominioNavigation.tipoCampo !== 'Select Múltiple'
+        c.idDominioNavigation?.tipoCampo !== 'Select Múltiple'
     );
 
     registro.valores = await Promise.all( camposAgregar.map(

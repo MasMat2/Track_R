@@ -6,3 +6,6 @@
     background-color: #8cb369;
 }
 
+td:empty::before {
+    content: '\00a0';
+}

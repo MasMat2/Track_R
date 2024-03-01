@@ -1,18 +1,24 @@
+@import "../../../../theme/variables.scss";
+
+
 ion-tab-bar{
     height: 120px;
     border: none;
     margin-top: 10px;
+    --background: var(--neutral-100);
 }
 
  ion-button{
-    color: black;
+    color: var(--neutral-950);
+    font-weight: bold;
     font-size: 12px;
-    
-    --background-focused: red;
+    width: 120px;
     
 
-    --border-color: #C5C5C5;
+    // --border-color: var(--neutral-200);
+    --border-width: 0;
     --border-radius: 10px;
+    --background: var(--neutral-200);
 
     --padding-top: 0px;
     padding-bottom: 10px;

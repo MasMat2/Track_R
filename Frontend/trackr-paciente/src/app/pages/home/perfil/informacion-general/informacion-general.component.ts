@@ -71,9 +71,16 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
   protected diagnosticoList: ExpedientePadecimientoSelectorDTO[] = [];
   protected antecedenteFiltradoList: ExpedientePadecimientoSelectorDTO[] = [];
   protected diagnosticoFiltradoList: ExpedientePadecimientoSelectorDTO[] = [];
+
+  customAlertOptions = {
+    cssClass: 'custom-select-alert',
+    // header: '',
+    // subHeader: '',
+    // message: '',
+    // translucent: true,
+  };
+
   @ViewChild('formulario') formulario: NgForm;
-
-
   constructor(
     private usuarioService: UsuarioService,
     private paisService: PaisService,
@@ -362,7 +369,8 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
             return true;
           }
         }
-      ]
+      ],
+      cssClass: 'custom-alert'
     });
     alert.present();
     const data = await alert.onDidDismiss();
@@ -375,6 +383,7 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
       header: 'Información actualizada',
       message: 'La información se actualizó correctamente',
       buttons: ['OK'],
+      cssClass: 'custom-alert'
     });
 
     await alert.present();
@@ -385,6 +394,7 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
       header: 'Campos requeridos',
       message: 'Llene todos los campos requeridos',
       buttons: ['OK'],
+      cssClass: 'custom-alert'
     });
 
     await alert.present();

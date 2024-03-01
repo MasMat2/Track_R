@@ -16,7 +16,7 @@ import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
 import { ChatPersonaService } from '../../../../shared/http/chat/chat-persona.service';
 import { FormsModule } from '@angular/forms';
 import { addIcons } from 'ionicons';
-import { addCircle, chatboxOutline } from 'ionicons/icons'
+import { addCircle, chatboxOutline, send } from 'ionicons/icons'
 
 @Component({
   selector: 'app-barra-chats',
@@ -57,7 +57,7 @@ export class BarraChatsComponent {
     private doctoresService : MisDoctoresService,
     private ChatPersonaService:ChatPersonaService
   ) {
-    addIcons({addCircle, chatboxOutline});
+    addIcons({addCircle, chatboxOutline, send});
   }
 
   ionViewWillEnter(){
@@ -76,7 +76,6 @@ export class BarraChatsComponent {
   obtenerChats() {
     this.chats$ = this.ChatHubServiceService.chat$;
     this.chats$.subscribe((chats) => {
-      console.log(chats)
       chats.forEach((chat) => {
         if(chat.imagenBase64 != null){
           let base64String = "data:" +chat.tipoMime + ';base64,' + chat.imagenBase64;
@@ -128,19 +127,15 @@ export class BarraChatsComponent {
   }
 
   consultarDoctores() {
-    this.doctoresService.consultarExpediente().subscribe((doctores => {
-      /*doctores.forEach((doctor) => { 
-        this.archivoService.obtenerUsuarioImagen(doctor.idUsuarioDoctor).subscribe((imgaen) => {
-          let objectURL = URL.createObjectURL(imgaen);
-          let urlImagen = objectURL;
-          let url = this.sanitizer.bypassSecurityTrustUrl(urlImagen);
-          doctor.urlImagen = url;
-        });
-      }
-      )*/
-      
+    this.doctoresService.consultarExpedienteConImagenes().subscribe((doctores) => {
+      doctores.forEach((doctor) => {
+        if(doctor.imagenBase64 != null){
+          let base64String = "data:" +doctor.tipoMime + ';base64,' + doctor.imagenBase64;
+          doctor.urlImagen = base64String;
+        }
+      });
       this.misDoctores = doctores;
-    }));
+    });
   }
 
   doctorClick(idDoctor:number){
@@ -166,6 +161,7 @@ export class BarraChatsComponent {
 
   protected mostrarListaDoctores(){
     this.verListaDoctores = ! this.verListaDoctores;
+    this.doctorSeleccionado = false;
   }
 
   protected buscarChat(event: any){

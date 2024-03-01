@@ -43,8 +43,8 @@ export class VideoJitsiPage implements OnInit {
     private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() { 
-    this.ChatHubServiceService.iniciarConexion();
-    this.ChatMensajeHubService.iniciarConexion();
+    // this.ChatHubServiceService.iniciarConexion();
+    // this.ChatMensajeHubService.iniciarConexion();
 
     this.activatedRoute.paramMap.subscribe(params => {
       this.idChat = params.get('id-chat')!;

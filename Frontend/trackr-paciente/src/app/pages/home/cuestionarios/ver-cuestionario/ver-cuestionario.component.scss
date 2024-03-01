@@ -1,23 +1,41 @@
+@import "../../../../../theme/variables.scss";
 
 
-.info-examen{
-    margin-top: 1em;
-    text-align: center;
-    h1{
-        color: #4c0080;
+.header{
+    --background: var(--neutral-100);
+    ion-title{
+        position: absolute;
+        transform: translateX(-50%);
+        left: 50%;
+        bottom: 25%;
+        color: var(--primary-700);
     }
 }
+
 ion-card{
     border-radius:20px !important;
+
+    ion-card-content{
+        min-height: 15vh;
+    }
 }
+
+
 .pregunta{
     .opciones{
         margin-bottom: 2vh;
     }
     p{
         white-space: pre-wrap;
+        margin-bottom: 5vh;
     }
     h2{
-        color: var(--ion-color-primary);
+        color: var(--primary-600);
     }
+}
+
+.respuesta{
+    position: absolute;
+    bottom: 0;
+    //margin-top: 100px;
 }
