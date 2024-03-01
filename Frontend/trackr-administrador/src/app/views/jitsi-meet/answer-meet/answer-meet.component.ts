@@ -17,7 +17,7 @@ export class AnswerMeetComponent implements OnInit {
   protected domain: string = "meet.jit.si"; // For self hosted use your domain
   protected room: any;
   protected options: any;
-  protected api: any;
+  protected newRoomApi: any;
   protected user: any;
 
   private meetName: string;
@@ -46,7 +46,7 @@ export class AnswerMeetComponent implements OnInit {
   }
 
   answerMeet(): void {
-    
+
     //Configuración para la nueva sala
     const newRoomOptions = {
       roomName: this.meetName,
@@ -84,6 +84,7 @@ export class AnswerMeetComponent implements OnInit {
   };
 
   handleClose = () => {
+    this.newRoomApi.dispose();
     console.log("handleClose");
   }
 
@@ -103,6 +104,7 @@ export class AnswerMeetComponent implements OnInit {
   }
 
   handleVideoConferenceLeft = () => {
+    this.newRoomApi.dispose();
     console.log("handleVideoConferenceLeft");
     this.router.navigate(['/thank-you']);
   }
@@ -118,15 +120,18 @@ export class AnswerMeetComponent implements OnInit {
   getParticipants() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve(this.api.getParticipantsInfo()); // get all participants
+        resolve(this.newRoomApi.getParticipantsInfo()); // get all participants
       }, 500)
     });
   }
 
   executeCommand(command: string) {
-    this.api.executeCommand(command);;
+    this.newRoomApi.executeCommand(command);;
     if (command == 'hangup') {
-      this.router.navigate(['/thank-you']);
+      this.localStream.getTracks().forEach((track) => track.stop());
+      this.newRoomApi.dispose();
+      this.newRoomApi.remove();
+      this.router.navigate(['/administrador/chat']);
       return;
     }
 
