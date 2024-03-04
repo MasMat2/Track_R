@@ -238,7 +238,7 @@ public class ExpedienteTrackrService
             .Select(recordatoriosPorDia => new TomasTomadasPorDiaDto
             {
                 Dia = recordatoriosPorDia.Key,
-                TomasTotales = recordatoriosPorDia.Sum(rpd => rpd.Tomas.Count),
+                TomasTotales = recordatoriosPorDia.Count(),
                 TomasTomadas = recordatoriosPorDia.Sum(rpd => rpd.Tomas.Count(t => t.FechaToma != null))
             }).ToList()
         });
