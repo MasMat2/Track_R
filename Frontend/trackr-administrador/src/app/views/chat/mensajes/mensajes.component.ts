@@ -10,6 +10,8 @@ import { Subject, lastValueFrom } from 'rxjs';
 
 //Libreria de capacitor para grabar audio
 /* import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder'; */
+import { ChatHubServiceService } from '../../../shared/services/chat-hub-service.service';
+import { MensajeService } from '../../../shared/components/mensaje/mensaje.service';
 
 declare var Recorder: any;
 
@@ -43,7 +45,9 @@ export class MensajesComponent {
   constructor(private ChatMensajeHubService:ChatMensajeHubService,
               private ChatPersonaService:ChatPersonaService,
               private ArchivoService:ArchivoService,
-              private router: Router) {}
+              private router: Router,
+              private ChatHubServiceService:ChatHubServiceService,
+              private mensaje:MensajeService) {}
   
   ngOnInit(){
     this.obtenerIdUsuario();
@@ -362,6 +366,19 @@ export class MensajesComponent {
 
 
     }
+  }
+
+  eliminarChat(){
+    this.ChatPersonaService.obtenerPersonasEnChatSelector(this.idChat).subscribe(res => {
+      if(res.length == 1){
+        this.ChatHubServiceService.eliminarChat(this.idChat);
+        this.mensaje.modalExito("Chat eliminado exitosamente");
+      }
+      else{
+        this.mensaje.modalError("El chat solo puede ser eliminado una vez que todos los participantes hayan abandonado el chat");
+      }
+    })
+    
   }
 
 }
