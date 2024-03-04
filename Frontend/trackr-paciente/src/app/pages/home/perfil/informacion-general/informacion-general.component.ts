@@ -24,7 +24,7 @@ import { HeaderComponent } from '../../layout/header/header.component';
 import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
 import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores-selector-dto';
 import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
-import { GeneroSelectorDto } from 'src/app/shared/Dtos/catalogo/genero-selector-dto';
+import { GeneroSelectorDto } from 'src/app/shared/dtos/catalogo/genero-selector-dto';
 import { ConfirmacionCorreoService } from '@http/seguridad/confirmacion-correo.service';
 import { ConfirmarCorreoDto } from '../../../../shared/Dtos/seguridad/confirmar-correo-dto';
 import {GeneroService} from '@http/catalogo/genero.service'

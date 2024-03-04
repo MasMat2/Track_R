@@ -47,7 +47,8 @@ namespace TrackrAPI.Controllers.GestionEntidad
         [HttpPut]
         public void Editar(EntidadTablaRegistroDto registro)
         {
-            entidadEstructuraTablaValorService.Editar(registro);
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            entidadEstructuraTablaValorService.Editar(registro , idUsuario);
         }
 
         [HttpPost("eliminar")]

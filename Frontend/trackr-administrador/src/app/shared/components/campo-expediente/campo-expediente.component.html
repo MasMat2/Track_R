@@ -16,7 +16,7 @@
         autocomplete="off"
         [value]="campo.valor"
         (blur)="onTouched($event)"
-        [disabled]="campo.deshabilitado"
+        [disabled]="!campo.habilitado"
         [ngClass]="{ 'ng-touched': touched }"
       />
     </div>
@@ -49,7 +49,7 @@
         autocomplete="off"
         [value]="campo.valor"
         (blur)="onTouched($event)"
-        [disabled]="campo.deshabilitado"
+        [disabled]="!campo.habilitado"
         [ngClass]="{ 'ng-touched': touched }"
         (keydown.enter)="$event.stopPropagation()"
       ></textarea>
@@ -84,7 +84,7 @@
         [(ngModel)]="campo.valor"
         placeholder="placeHolderSelect"
         [notFoundText]="placeHolderNoOptions"
-        [disabled]="campo.deshabilitado"
+        [disabled]="!campo.habilitado"
       ></ng-select>
       <label
         class="error"
@@ -115,6 +115,7 @@
             [required]="campo.requerido"
             [multiple]="true"
             [closeOnSelect]="false"
+            [disabled]="!campo.habilitado"
             (change)="onSelectMultipleChange($event)"
           >
           </ng-select>
@@ -150,11 +151,11 @@
           : campo.idDominioNavigation.valorMinimo
       "
       [required]="campo.requerido"
-      [deshabilitado]="campo.deshabilitado"
+      [deshabilitado]="!campo.habilitado"
       ngDefaultControl
       [(touchedVar)]="touched"
     ></app-number-input>
-    <!-- Los mensajes de error van contenidos en el componente number-input -->
+    <!-- Los mensajes de error van contenidos en el componente number-input -->  
   </div>
 
   <!-- Tipo Switch -->
@@ -211,7 +212,7 @@
         [bsConfig]="configDate"
         [minDate]="campo.idDominioNavigation.fechaMinima"
         [maxDate]="campo.idDominioNavigation.fechaMaxima"
-        [disabled]="campo.deshabilitado"
+        [disabled]="!campo.habilitado"
         bsDatepicker
         [ngClass]="{ 'ng-touched': touched }"
         (ngModelChange)="cambioFecha()"
@@ -250,7 +251,7 @@
         [name]="campo.idSeccionCampo.toString()"
         [required]="campo.requerido"
         [bsConfig]="configDate"
-        [disabled]="campo.deshabilitado"
+        [disabled]="!campo.habilitado"
         bsDatepicker
         [ngClass]="{ 'ng-touched': touched }"
         (ngModelChange)="cambioFecha()"
@@ -277,7 +278,7 @@
         placeholder="HH/MM"
         [(ngModel)]="campo.valor"
         [name]="campo.idSeccionCampo.toString()"
-        [required]="campo.requerido"
+        [disabled]="!campo.habilitado"
         [ngClass]="{ 'ng-touched': touched }"
       />
     </div>
@@ -304,7 +305,7 @@
         [name]="opcion.valor"
         [id]="opcion.valor"
         (change)="onCheckboxSelected($event, opcion)"
-        [disabled]="campo.deshabilitado"
+        [disabled]="!campo.habilitado"
       />
       <span class="checkmark"></span>
     </label>
@@ -325,7 +326,7 @@
         [value]="opcion.valor"
         [name]="opcion.idDominio.toString()"
         (change)="onCheckboxSelected($event, opcion)"
-        [disabled]="campo.deshabilitado"
+        [disabled]="!campo.habilitado"
       />
       {{ opcion.valor }}
       <span class="checkmark"></span>
@@ -357,7 +358,7 @@
       [required]="campo.requerido"
       ngDefaultControl
       [(touchedVar)]="touched"
-      [deshabilitado]="campo.deshabilitado"
+      [deshabilitado]="!campo.habilitado"
     ></app-number-input>
     <!-- Los mensajes de error van contenidos en el componente number-input -->
   </div>
@@ -387,7 +388,7 @@
       [permitirDecimales]="true"
       ngDefaultControl
       [(touchedVar)]="touched"
-      [deshabilitado]="campo.deshabilitado"
+      [deshabilitado]="!campo.habilitado"
     ></app-number-input>
     <!-- Los mensajes de error van contenidos en el componente number-input -->
   </div>
@@ -417,7 +418,7 @@
       [permitirDecimales]="true"
       ngDefaultControl
       [(touchedVar)]="touched"
-      [deshabilitado]="campo.deshabilitado"
+      [deshabilitado]="!campo.habilitado"
     ></app-number-input>
     <!-- Los mensajes de error van contenidos en el componente number-input -->
   </div>

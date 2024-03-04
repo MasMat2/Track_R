@@ -10,4 +10,5 @@ export interface TablaValorDto {
     claveCampo: string;
     valor: string;
     fueraDeRango: boolean;
+    fechaMuestra: Date;
 }
