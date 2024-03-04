@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Net.Mime;
+using Microsoft.EntityFrameworkCore;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Seguridad;
@@ -11,7 +12,8 @@ public class ChatPersonaRepository : Repository<ChatPersona>, IChatPersonaReposi
     private readonly IAsistenteDoctorRepository _asistenteDoctorRepository;
     public ChatPersonaRepository(TrackrContext context,
                                  IUsuarioRepository usuarioRepository,
-                                 IAsistenteDoctorRepository asistenteDoctorRepository) : base(context) { 
+                                 IAsistenteDoctorRepository asistenteDoctorRepository) : base(context)
+    {
         _usuarioRepository = usuarioRepository;
         _asistenteDoctorRepository = asistenteDoctorRepository;
     }
@@ -61,11 +63,24 @@ public class ChatPersonaRepository : Repository<ChatPersona>, IChatPersonaReposi
     }
     public int ConsultarIdCreador(int idChat)
     {
-        var idCreador =  context.ChatPersona
+        var idCreador = context.ChatPersona
                       .Where(x => x.IdChat == idChat && x.IdTipoNavigation.Clave == GeneralConstant.ClaveTipoUsuarioChatAdmin)
                       .Select(x => x.IdPersona)
                       .FirstOrDefault();
 
         return idCreador;
+    }
+
+    public void AbandonarChat(int idChat, int idPersona)
+    {
+        var persona = context.ChatPersona
+                               .Where(x => x.IdChat == idChat && x.IdPersona == idPersona)
+                               .FirstOrDefault();
+
+        if (persona != null)
+        {
+            context.ChatPersona.Remove(persona);
+            context.SaveChanges();
+        }
     }
 }
