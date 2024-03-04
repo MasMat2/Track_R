@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GeneroSelectorDto } from '../../Dtos/catalogo/genero-selector-dto';
+import { GeneroSelectorDto } from '../../dtos/catalogo/genero-selector-dto';
 
 @Injectable({
   providedIn: 'root'
