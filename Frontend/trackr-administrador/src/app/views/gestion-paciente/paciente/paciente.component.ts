@@ -20,6 +20,7 @@ import { UsuarioService } from '@http/seguridad/usuario.service';
 })
 export class PacienteComponent implements OnInit {
   protected pacientes: UsuarioExpedienteGridDTO[] = [];
+  protected pacientesFiltrados: UsuarioExpedienteGridDTO[] = [];
   protected isVistaCuadricula: boolean = true;
   protected mostrarSidebar: boolean = false;
   protected esAsistente : boolean | null = null;
@@ -164,8 +165,9 @@ export class PacienteComponent implements OnInit {
   protected consultarPacientes(): void {
     lastValueFrom(this.expedienteTrackrService.consultarParaGrid()).then(
       (pacientes: UsuarioExpedienteGridDTO[]) => {
+
         this.pacientes = pacientes;
-        console.log(this.pacientes);
+        this.pacientesFiltrados = pacientes;
       }
     );
   }
@@ -196,6 +198,16 @@ export class PacienteComponent implements OnInit {
     this.usuarioService.esAsistente().subscribe((esAsistente) => {
       this.esAsistente = esAsistente;
     });
+  }
+
+  protected filtrarPacientes(event: any){
+    const text = event.target.value;
+    this.pacientesFiltrados = this.pacientes;
+    if(text && text.trim() != ''){
+      this.pacientesFiltrados = this.pacientesFiltrados.filter((paciente: any) => {
+        return (paciente.nombreCompleto.toLowerCase().indexOf(text.toLowerCase()) > -1);
+      })
+    }
   }
 
 }

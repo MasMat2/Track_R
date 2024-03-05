@@ -310,4 +310,8 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
       }
     )
   }
+
+  selectChange(){
+    console.log(this.programacionExamen.participantes)
+  }
 }

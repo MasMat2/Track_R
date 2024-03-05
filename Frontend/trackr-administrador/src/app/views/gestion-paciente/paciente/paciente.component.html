@@ -126,8 +126,10 @@
                 style="width: 450px"
                 placeholder="Buscar..."
                 aria-label="Buscar"
+                (change)="filtrarPacientes($event)"
+                [disabled]="!isVistaCuadricula"
               />
-              <button class="btn-buscar" type="button">
+              <button class="btn-buscar" type="button" (change)="filtrarPacientes($event)" [disabled]="!isVistaCuadricula">
                 <img class="filter-primario" src="assets/img/svg/ico-18x18-buscar.svg"/>
               </button>
               <div class="d-flex align-items-center" style="color: gray">
@@ -182,7 +184,7 @@
         <div class="col-12">
           <ng-container *ngIf="isVistaCuadricula; else vistaLista">
             <app-paciente-vista-cuadricula
-              [pacientes]="pacientes"
+              [pacientes]="pacientesFiltrados"
               (event)="onGridClick($event)"
             >
             </app-paciente-vista-cuadricula>
