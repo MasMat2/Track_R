@@ -3,7 +3,7 @@ import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChatPersonaService } from '@http/chat/chat-persona.service';
-import { IonContent, IonicModule } from '@ionic/angular';
+import { IonContent, IonicModule, PopoverController } from '@ionic/angular';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { Observable } from 'rxjs';
 import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
@@ -85,7 +85,9 @@ export class MensajesComponent{
     private ArchivoService: ArchivoService,
     private plataformaService: PlataformaService,
     private ModalController:ModalController,
-    private capacitorUtils: CapacitorUtils
+    private capacitorUtils: CapacitorUtils,
+    private PopoverController:PopoverController,
+    private rout: ActivatedRoute
   ) { 
       addIcons({videocamOutline, 
         chevronBack, 
@@ -533,6 +535,22 @@ export class MensajesComponent{
     this.msg = "";
     this.fotoTomada = "";
     this.isModalOpen = false;
+  }
+
+  async abandonarChat(){
+    this.ChatMensajeHubService.abandonarChat(this.idChat);
+
+    let mensaje: ChatMensajeDTO = {
+      idChat:this.idChat,
+      fecha: new Date(),
+      idPersona: 0,
+      mensaje: 'He abandonado el chat',
+      idArchivo: 0
+    }
+    this.ChatMensajeHubService.enviarMensaje(mensaje)
+
+    await this.PopoverController.dismiss()
+    this.regresarBtn();
   }
 
 

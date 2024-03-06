@@ -159,4 +159,12 @@ export class ChatHubServiceService {
 
     await this.connection.invoke('NuevoChat', mensaje, idPersonas);
   }
+
+  public abandonarChat(idChat:number){
+    let chats = this.chatSubject.value
+
+    chats = chats.filter(x => x.idChat != idChat)
+
+    this.chatSubject.next(chats);
+  }
 }

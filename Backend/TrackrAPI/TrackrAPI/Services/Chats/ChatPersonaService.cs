@@ -17,13 +17,13 @@ public class ChatPersonaService
     public void agregarPersonaChat(ChatPersonaFormDTO chatPersonaFormDTO, int idUsuario)
     {
         var idPersonas = chatPersonaFormDTO.IdPersonas;
-        for(var i = 0; i < idPersonas.Count; i++)
+        for (var i = 0; i < idPersonas.Count; i++)
         {
             var chatPersona = new ChatPersona
             {
                 IdChat = chatPersonaFormDTO.IdChat,
                 IdPersona = idPersonas[i],
-                IdTipo = idPersonas[i] == idUsuario? GeneralConstant.IdTipoUsuarioChatAdmin : chatPersonaFormDTO.IdTipo,
+                IdTipo = idPersonas[i] == idUsuario ? GeneralConstant.IdTipoUsuarioChatAdmin : chatPersonaFormDTO.IdTipo,
             };
             _chatPersonaRepository.Agregar(chatPersona);
         }
@@ -54,6 +54,11 @@ public class ChatPersonaService
                                           Nombre = x.IdPersonaNavigation.Nombre + " " + x.IdPersonaNavigation.ApellidoPaterno + " " + x.IdPersonaNavigation.ApellidoMaterno
                                       })
                                       .ToList();
+    }
+
+    public void AbandonarChat(int idChat, int idPersona)
+    {
+        _chatPersonaRepository.AbandonarChat(idChat, idPersona);
     }
 }
 
