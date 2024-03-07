@@ -3,5 +3,15 @@
     flex-direction: column; /* Establece la dirección del contenedor como columna */
     align-items: center; /* Centra los elementos horizontalmente en el contenedor */
     justify-content: center; /* Centra los elementos verticalmente en el contenedor */
+    height: 100%;
     
+}
+
+.hangup-btn {
+    position: absolute;
+    bottom: 0;
+    padding: 0;
+    text-align: end;
+    direction: revert;
+    height: 10%;
 }
