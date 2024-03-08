@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  urlBackend: 'api/'
+  urlBackend: `${window.location.origin}/trackr_dev/api/`
 };
