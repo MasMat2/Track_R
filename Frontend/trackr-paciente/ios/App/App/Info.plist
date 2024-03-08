@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>trackr-paciente</string>
+        <string>trackr-paciente</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -53,5 +53,9 @@
 	<string>Es necesario para obtener los datos de salud</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Es necesario para trabajar con los datos de salud</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Esta aplicación necesita guardar imágenes en tu biblioteca de fotos.</string>
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>Esta aplicación necesita guardar archivos en tu biblioteca de documentos.</string>
 </dict>
 </plist>
