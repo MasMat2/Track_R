@@ -5,7 +5,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
 import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PlataformaService } from 'src/app/services/dashboard/plataforma.service';
 import { ArchivoGetDTO } from 'src/app/shared/Dtos/archivos/archivo-get-dto';
-import {chevronBack, downloadOutline } from 'ionicons/icons';
+import { chevronBack, downloadOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 
 
@@ -15,34 +15,33 @@ import { addIcons } from 'ionicons';
   templateUrl: './archivo-previsualizar.component.html',
   styleUrls: ['./archivo-previsualizar.component.scss'],
   standalone: true,
-  imports: [CommonModule,IonicModule, NgxExtendedPdfViewerModule],
+  imports: [CommonModule, IonicModule, NgxExtendedPdfViewerModule],
 })
-export class ArchivoPrevisualizarComponent  implements OnInit {
+export class ArchivoPrevisualizarComponent implements OnInit {
   protected tipo: string;
-  protected archivo:ArchivoGetDTO;
-  protected type:string;
-  protected archivoBase64:string;
+  protected archivo: ArchivoGetDTO;
+  protected type: string;
+  protected archivoBase64: string;
 
-  constructor(private modalController:ModalController , private plataformaService : PlataformaService) { addIcons({chevronBack, downloadOutline});  }
+  constructor(private modalController: ModalController, private plataformaService: PlataformaService) { addIcons({ chevronBack, downloadOutline }); }
 
   ngOnInit() {
     this.type = this.archivo.archivoMime.split('/')[0]
     this.archivoBase64 = 'data:' + this.archivo.archivoMime + ';base64,' + this.archivo.archivo
   }
 
-  regresarBtn(){
+  regresarBtn() {
     this.modalController.dismiss();
   }
 
-  descargarArchivo(){
-    
+  descargarArchivo() {
     if (this.plataformaService.isMobile()) {
-      
-         this.downloadFileMobile(this.archivo.archivo, this.archivo.nombre, this.archivo.archivoMime)
-       }
-       else if (this.plataformaService.isWeb()) {
-         this.downloadFileWeb(this.archivo.archivo, this.archivo.nombre, this.archivo.archivoMime)
-       }
+
+      this.downloadFileMobile(this.archivo.archivo, this.archivo.nombre, this.archivo.archivoMime)
+    }
+    else if (this.plataformaService.isWeb()) {
+      this.downloadFileWeb(this.archivo.archivo, this.archivo.nombre, this.archivo.archivoMime)
+    }
   }
 
   async downloadFileMobile(fileBase64: string, nombre?: string, mime?: string) {
@@ -52,10 +51,10 @@ export class ArchivoPrevisualizarComponent  implements OnInit {
 
       // Crear un archivo en el sistema de archivos
       const result = await Filesystem.writeFile({
-        path: `${Directory.Data}/${nombre}`,
+        path: `${nombre}`,
         data: fileBase64,
         directory: Directory.External,
-        recursive: true,
+        recursive: true
         //encoding: Encoding.UTF8,
       });
 
