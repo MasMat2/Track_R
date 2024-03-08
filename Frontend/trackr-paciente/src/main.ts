@@ -2,6 +2,7 @@ import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter, withHashLocation } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { provideIonicAngular} from '@ionic/angular/standalone';
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
@@ -21,6 +22,7 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(IonicModule.forRoot({})),
     importProvidersFrom(HttpClientModule),
     provideRouter(routes, withHashLocation()),
+    provideIonicAngular({ mode: 'md' })
   ],
 });
 defineCustomElements(window);

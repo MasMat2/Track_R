@@ -1,0 +1,107 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy ASP.Net Core app to Azure Web App - oncotracker
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      RUTA_FRONTEND_ADMIN: ./Frontend/trackr-administrador
+      RUTA_FRONTEND_PACIENTE: ./Frontend/trackr-paciente
+      RUTA_BACKEND: ./Backend/TrackrAPI/TrackrAPI
+      RUTA_PUBLICADO: ./Publicado
+      RUTA_CSPROJ: ./Backend/TrackrAPI/TrackrAPI/TrackrAPI.csproj
+      SIS_OPERATIVO: linux-x64
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install Dependencies Angular Admin
+        working-directory: ${{ env.RUTA_FRONTEND_ADMIN }}
+        run: npm i --save --legacy-peer-deps
+
+      - name: Frontend Build Admin
+        working-directory: ${{ env.RUTA_FRONTEND_ADMIN }}
+        run: npm run ng -- build --base-href /trackr_dev/ --output-hashing all --c=qa --output-path=../../Backend/TrackrAPI/TrackrAPI/wwwroot/trackr_dev/
+        
+      - name: Create index.html with redirect to /trackr/
+        working-directory: ${{ env.RUTA_BACKEND }}
+        run: |
+          echo '<!DOCTYPE html>' > wwwroot/index.html
+          echo '<html lang="en">' >> wwwroot/index.html
+          echo '<head>' >> wwwroot/index.html
+          echo '  <meta charset="utf-8">' >> wwwroot/index.html
+          echo '</head>' >> wwwroot/index.html
+          echo '<body>' >> wwwroot/index.html
+          echo '    <script type="text/javascript">' >> wwwroot/index.html
+          echo '        if (window.location.pathname === "/") {' >> wwwroot/index.html
+          echo '            window.location.href = "/trackr_dev/";' >> wwwroot/index.html
+          echo '        }' >> wwwroot/index.html
+          echo '    </script>' >> wwwroot/index.html
+          echo '</body>' >> wwwroot/index.html
+          echo '</html>' >> wwwroot/index.html
+
+      - name: Install Dependencies Angular Paciente
+        working-directory: ${{ env.RUTA_FRONTEND_PACIENTE }}
+        run: npm install
+
+      - name: Frontend Build Paciente
+        working-directory: ${{ env.RUTA_FRONTEND_PACIENTE }}
+        run: npm run ng -- build --base-href /trackr_dev_mobile/ --output-hashing all --c=production --output-path=../../Backend/TrackrAPI/TrackrAPI/wwwroot/trackr_dev_mobile/
+
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+
+      - name: dotnet clean
+        working-directory: ${{ env.RUTA_BACKEND }}
+        run: dotnet clean
+
+      - name: Build with dotnet
+        working-directory: ${{ env.RUTA_BACKEND }}
+        run: dotnet build --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish $RUTA_CSPROJ --output $RUTA_PUBLICADO --self-contained false --runtime $SIS_OPERATIVO
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: .net-app
+          path: ${{env.RUTA_PUBLICADO}}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'dev'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: .net-app
+      
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'oncotracker'
+          slot-name: 'dev'
+          package: .
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_240DEDD144974CF8A98A7CC07F49A4AE }}

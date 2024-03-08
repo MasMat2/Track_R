@@ -68,6 +68,8 @@ export class ChatHubServiceService {
       (chats: ChatDTO[]) => this.onCargarChats(chats)
     )
 
+    this.connection.on('EliminarChat', (idChat:number) => this.onEliminarChat(idChat));
+
     this.connectionStatus.next(HubConnectionState.Connecting);
 
     await this.connection.start();
@@ -116,6 +118,14 @@ export class ChatHubServiceService {
     this.chatSubject.next(chats);
   }
 
+  private onEliminarChat(idChat:number){
+    let chats = this.chatSubject.value
+
+    chats = chats.filter(x => x.idChat != idChat)
+
+    this.chatSubject.next(chats);
+  }
+
   private onCargarChats(chats:ChatDTO[]):void{
     this.chatSubject.next(chats)
   }
@@ -151,5 +161,10 @@ export class ChatHubServiceService {
     await this.ensureConnection();
 
     await this.connection.invoke('NuevoChat', mensaje,idPersonas);
+  }
+
+  public async eliminarChat(idChat:number){
+    await this.ensureConnection();
+    await this.connection.invoke('EliminarChat', idChat);
   }
 }

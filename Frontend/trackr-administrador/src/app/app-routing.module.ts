@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouteReuseStrategy, RouterModule, Routes } from '@angular/router';
 import { LayoutAdministradorComponent } from './views/administrador/layout-administrador/layout-administrador.component';
+import { CustomRouteReuseStrategy } from '@utils/custom-route-reuse-strategy';
 
 const routes: Routes = [
   {
@@ -39,5 +40,11 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
+  providers: [
+    {
+      provide: RouteReuseStrategy,
+      useClass: CustomRouteReuseStrategy
+    },
+  ],
 })
 export class AppRoutingModule {}

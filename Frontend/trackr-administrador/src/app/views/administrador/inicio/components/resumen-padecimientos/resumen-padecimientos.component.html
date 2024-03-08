@@ -4,17 +4,52 @@
 
 <div class="card d-inline-flex shadow p-4">
   <div class="d-flex gap-3">
-    <div *ngFor="let padecimiento of padecimientos$ | async">
-      <div class="d-flex flex-column align-items-center gap-3" style="max-width: 80px;">
-        <div class="circle-container">
-          <span class="cantidad-pacientes">{{ padecimiento.cantidadPacientes }}</span>
+
+    <ng-container *ngIf="padecimientosFiltrados.length == 0">
+      <div *ngFor="let padecimiento of padecimientos$ | async">
+        <div class="d-flex flex-column align-items-center gap-3" style="max-width: 80px;">
+          <div class="circle-container">
+            <span class="cantidad-pacientes">{{ padecimiento.cantidadPacientes }}</span>
+          </div>
+          <span class="nombre-padecimiento">{{ padecimiento.nombrePadecimiento }}</span>
         </div>
-        <span class="nombre-padecimiento">{{ padecimiento.nombrePadecimiento }}</span>
       </div>
-    </div>
+    </ng-container>
+
+    <ng-container *ngIf="padecimientosFiltrados.length != 0">
+      <div *ngFor="let padecimiento of padecimientosFiltrados">
+        <div class="d-flex flex-column align-items-center gap-3" style="max-width: 80px;">
+          <div class="circle-container">
+            <span class="cantidad-pacientes">{{ padecimiento.cantidadPacientes }}</span>
+          </div>
+          <span class="nombre-padecimiento">{{ padecimiento.nombrePadecimiento }}</span>
+        </div>
+      </div>
+    </ng-container>
 
     <div class="align-self-center">
-      <i class="fas fa-filter"></i> Filtros
+      <button *ngIf="!filtrando" (click)="activarFiltro()" class="filtro-btn">
+        <i class="fas fa-filter"></i> Filtrar
+      </button>
+      <button *ngIf="filtrando" (click)="activarFiltro()" class="filtro-btn">
+        <i class="fas fa-filter"></i> Filtrar ({{this.cantidadFiltro}}/{{cantidadPadecimientos}})
+      </button>
+    </div>
+    
+    <div class="align-self-center" *ngIf="verFiltro && padecimientos$">
+      <ng-select
+        #filtro="ngModel"
+        name="filtroPadecimientos"
+        class="select-custom"
+        [items]="padecimientos$ | async"
+        bindLabel="nombrePadecimiento"
+        [(ngModel)]="padecimientoFiltroSeleccionadoList"
+        placeholder="Filtro de padecimiento"
+        notFoundText="no encontrado"
+        [multiple]="true"
+        (ngModelChange)="filtrarPadecimientos()"
+      ></ng-select>
     </div>
   </div>
 </div>
+

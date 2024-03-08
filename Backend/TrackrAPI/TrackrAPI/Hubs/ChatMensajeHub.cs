@@ -43,15 +43,15 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
 
         var idPersonas = _chatPersonaRepository.ConsultarPersonasPorChat(mensaje.IdChat).Select(x => x.IdPersona).ToList();
 
-        foreach(var persona in idPersonas)
+        foreach (var persona in idPersonas)
         {
             Clients.User(persona.ToString()).NuevoMensaje(mensaje);
 
             var idAsistentes = _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(persona).Select(x => x.IdUsuario).ToList();
 
-            if(idAsistentes != null)
+            if (idAsistentes != null)
             {
-                foreach(var asistente in idAsistentes)
+                foreach (var asistente in idAsistentes)
                 {
                     Clients.User(asistente.ToString()).NuevoMensaje(mensaje);
                 }
@@ -59,6 +59,15 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
         }
 
         //await Clients.All.NuevoMensaje(mensaje);
+    }
+
+    public async Task AbandonarChat(int idChat)
+    {
+        var idPersona = this.ObtenerIdUsuario();
+
+        _chatPersonaRepository.AbandonarChat(idChat, idPersona);
+
+        await Clients.Caller.AbandonarChat(idChat);
     }
 
     private int ObtenerIdUsuario()

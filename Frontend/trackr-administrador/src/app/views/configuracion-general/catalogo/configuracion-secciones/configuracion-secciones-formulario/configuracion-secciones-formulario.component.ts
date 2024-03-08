@@ -214,7 +214,7 @@ export class ConfiguracionSeccionesFormularioComponent implements OnInit {
   }
 
   public onDeshbilitadoChanged(value: boolean): void {
-    this.campo.deshabilitado = value;
+    this.campo.habilitado = value;
   }
 
   public limpiarFormularioCampos(): void {
