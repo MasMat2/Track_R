@@ -35,7 +35,6 @@ export class ArchivoPrevisualizarComponent  implements OnInit {
   }
 
   descargarArchivo(){
-    
     if (this.plataformaService.isMobile()) {
       
          this.downloadFileMobile(this.archivo.archivo, this.archivo.nombre, this.archivo.archivoMime)
@@ -55,7 +54,7 @@ export class ArchivoPrevisualizarComponent  implements OnInit {
         path: `${Directory.Data}/${nombre}`,
         data: fileBase64,
         directory: Directory.External,
-        recursive: true,
+        recursive: true
         //encoding: Encoding.UTF8,
       });
 
