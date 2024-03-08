@@ -8,5 +8,7 @@ public interface IChatMensajeHub
     Task NuevaConexion(IEnumerable<IEnumerable<ChatMensajeDTO>> mensajes);
     Task NuevoMensaje(ChatMensajeDTO mensaje);
 
+    Task AbandonarChat(int idChat);
+
 }
 

@@ -80,7 +80,7 @@ export class InicioPage implements OnInit {
     .subscribe(async (event: NavigationEnd) =>
      {
       const currentUrl = event.urlAfterRedirects;
-      if (this.previousUrl === '/home/config-dashboard' && currentUrl === '/home/dashboard/inicio') 
+      if (currentUrl === '/home/dashboard/inicio') 
       {
         await this.consultarInfoWidgetsSeguimiento();
 

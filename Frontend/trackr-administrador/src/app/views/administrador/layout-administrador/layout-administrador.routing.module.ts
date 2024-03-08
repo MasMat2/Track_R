@@ -42,6 +42,9 @@ const routes: Routes = [
     loadChildren: () =>
       import('src/app/views/jitsi-meet/jitsi-meet.module')
       .then((m) => m.JitsiMeetModule),
+    data: {
+      doNotReuse: true
+    }
   }
 ];
 

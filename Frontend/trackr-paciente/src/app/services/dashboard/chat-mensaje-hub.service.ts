@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
 import { Constants } from '@utils/constants/constants';
 import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
 import { AuthService } from 'src/app/auth/auth.service';
+import { ChatHubServiceService } from './chat-hub-service.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +30,8 @@ export class ChatMensajeHubService {
 
   private connection: HubConnection;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService,
+              private chatHub:ChatHubServiceService) {
     this.iniciarConexion();
   }
 
@@ -61,6 +63,8 @@ export class ChatMensajeHubService {
     this.connection.on('NuevaConexion', (mensajes: ChatMensajeDTO[][]) =>
       this.onNuevaConexion(mensajes)
     );
+
+    this.connection.on('AbandonarChat', (idChat: number) => this.onAbandonarChat(idChat));
 
     this.connectionStatus.next(HubConnectionState.Connecting);
 
@@ -100,6 +104,19 @@ export class ChatMensajeHubService {
     this.chatMensajeSubject.next(chats);
   }
 
+  private onAbandonarChat(idChat:number){
+    let mensajes = this.chatMensajeSubject.value
+
+    mensajes.forEach( (mensaje,indice) => {
+      if(mensaje.some(x => x.idChat == idChat)){
+        mensajes.splice(indice,1);
+      }
+    })
+
+    this.chatMensajeSubject.next(mensajes);
+    this.chatHub.abandonarChat(idChat);
+  }
+
   private async ensureConnection(): Promise<void> {
     const timeoutms = 10_000;
 
@@ -134,5 +151,11 @@ export class ChatMensajeHubService {
 
     await this.connection.invoke('NuevoMensaje', mensaje);
     
+  }
+
+  public async abandonarChat(idChat:number){
+    await this.ensureConnection();
+
+    await this.connection.invoke('AbandonarChat',idChat);
   }
 }

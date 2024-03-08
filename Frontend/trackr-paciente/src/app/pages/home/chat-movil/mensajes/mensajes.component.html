@@ -19,6 +19,22 @@
       <ion-button fill="clear" (click)="crearLlamada()">
         <ion-icon name="videocam-outline"></ion-icon>
       </ion-button>
+
+      <ion-button fill="clear" id="puntos-trigger">
+        <ion-icon name="ellipsis-vertical-outline" ></ion-icon>
+      </ion-button>
+
+      <ion-popover trigger="puntos-trigger" triggerAction="click">
+        <ng-template>
+          <ion-content>
+            <ion-list>
+              <ion-item (click)="abandonarChat()">Abandonar Chat</ion-item>
+            </ion-list>
+          </ion-content>
+          
+        </ng-template>
+      </ion-popover>
+
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

@@ -11,7 +11,7 @@ export class SeccionCampo {
     public requerido: boolean;
     public orden: number;
     public tamanoColumna: number;
-    public deshabilitado: boolean;
+    public habilitado: boolean;
     public valor?: number[] | boolean | string | Date | number;
     public grupo: string;
     public fila: number;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DominioHospitalDto } from '@dtos/catalogo/dominio-hospital-dto';
+import { DominioHospitalDto } from 'src/app/shared/Dtos/catalogo/dominio-hospital-dto';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 

@@ -11,6 +11,14 @@ import { PacientesPorPadecimientoDTO } from '@dtos/padecimientos/pacientes-por-p
 export class ResumenPadecimientosComponent implements OnInit {
 
   protected padecimientos$: Observable<PacientesPorPadecimientoDTO[]>;
+  protected padecimientosFiltrados: PacientesPorPadecimientoDTO[] = [];
+
+  protected padecimientoFiltroSeleccionadoList: PacientesPorPadecimientoDTO[] = [];
+  protected verFiltro: boolean = false;
+  protected filtrando: boolean = false;
+  protected cantidadPadecimientos: number = 0;
+  protected cantidadFiltro: number = 0;
+
 
   constructor(
     private padecimientoService: PadecimientoService
@@ -18,6 +26,31 @@ export class ResumenPadecimientosComponent implements OnInit {
 
   ngOnInit() {
     this.padecimientos$ = this.padecimientoService.consultarPacientesPorPadecimiento();
+    this.padecimientos$.subscribe(
+      pads => {
+        this.cantidadPadecimientos = pads.length;
+      }
+    )
+  }
+
+  protected filtrarPadecimientos(){
+    if(this.padecimientoFiltroSeleccionadoList && this.padecimientoFiltroSeleccionadoList.length > 0){
+      this.padecimientosFiltrados = this.padecimientoFiltroSeleccionadoList;
+      this.cantidadFiltro = this.padecimientosFiltrados.length;
+      this.filtrando = true;
+    }
+    else{
+      this.padecimientos$.subscribe(
+        pads => {
+          this.padecimientosFiltrados = pads;
+          this.filtrando = false;
+        }
+      )
+    }
+  }
+
+  protected activarFiltro(){
+    this.verFiltro = !this.verFiltro;
   }
 
 }
