@@ -1,0 +1,6 @@
+framework module PerfoodCapacitorHealthkit {
+  umbrella header "PerfoodCapacitorHealthkit-umbrella.h"
+
+  export *
+  module * { export * }
+}

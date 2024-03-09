@@ -1,0 +1,6 @@
+framework module CapawesomeCapacitorScreenOrientation {
+  umbrella header "CapawesomeCapacitorScreenOrientation-umbrella.h"
+
+  export *
+  module * { export * }
+}

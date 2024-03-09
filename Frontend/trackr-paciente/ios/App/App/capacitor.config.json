@@ -1,0 +1,11 @@
+{
+	"appId": "trackr.app",
+	"appName": "trackr-paciente",
+	"webDir": "www",
+	"bundledWebRuntime": false,
+	"plugins": {
+		"CapacitorHttp": {
+			"enabled": true
+		}
+	}
+}

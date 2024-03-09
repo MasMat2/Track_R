@@ -1,0 +1,6 @@
+framework module CapacitorHealthDataPlugin {
+  umbrella header "CapacitorHealthDataPlugin-umbrella.h"
+
+  export *
+  module * { export * }
+}
