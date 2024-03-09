@@ -18,6 +18,8 @@ import { WidgetContainerComponent } from './components/widget-container/widget-c
 import { WidgetType } from './interfaces/widgets';
 import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
 import { ChatHubServiceService } from 'src/app/services/dashboard/chat-hub-service.service';
+import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
+import { PermissionsStatus } from './interfaces/healthconnect-interfaces';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,16 +40,50 @@ import { ChatHubServiceService } from 'src/app/services/dashboard/chat-hub-servi
 })
 export class DashboardPage implements OnInit {
 
+  private hasAllPermissionsHealthConnect: boolean = false;
+
   constructor(
     private widgetService : WidgetService,
     private usuarioWidgetService: UsuarioWidgetService,
     private router: Router,
     private ChatMensajeHubService:ChatMensajeHubService,
-    private ChatHubServiceService:ChatHubServiceService
+    private ChatHubServiceService:ChatHubServiceService,
+    private healthConnectService : HealthConnectService
   ) { }
 
   public ngOnInit(): void {
     this.ChatHubServiceService.iniciarConexion();
-    //this.ChatMensajeHubService.iniciarConexion();
+    console.log('Solicitando permisos:'+JSON.stringify(this.solicitarPermisos()));
+    (async () => {
+      console.log('Solicitando permisos...');
+      await this.solicitarPermisos(); // Asegúrate de esperar a que se complete
+      if (await this.validarPermisosHealthConnect()) {
+        console.log('La aplicación cuenta con todos los permisos de HealthConnect');
+      } else {
+        console.log('La aplicación no cuenta con todos los permisos de HealthConnect');
+        // Considera si necesitas volver a solicitar los permisos aquí o manejar la situación de otra manera
+        this.validarDisponibilidad();
+      }
+    })();
+  }
+
+  async solicitarPermisos(){
+    const res = await this.healthConnectService.requestPermisons();
+    console.log('Permisos solicitados:'+JSON.stringify(res));
+    return res;
+  }
+
+  async validarDisponibilidad(){
+    console.log('Validando disponibilidad de HealthConnect');
+    console.log(await this.healthConnectService.checkAvailability());
+  }
+  async openAppSetting(){
+    await this.healthConnectService.openHealthConnectSetting();
+  }
+
+  async validarPermisosHealthConnect() : Promise<boolean> {
+    const res : PermissionsStatus = await this.healthConnectService.checkHealthPermissions();
+    this.hasAllPermissionsHealthConnect = res.hasAllPermissions;
+    return this.hasAllPermissionsHealthConnect;
   }
 }
