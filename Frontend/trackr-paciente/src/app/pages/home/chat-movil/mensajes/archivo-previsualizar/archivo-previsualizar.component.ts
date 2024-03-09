@@ -50,6 +50,7 @@ export class ArchivoPrevisualizarComponent implements OnInit {
       let downloadDirectory = Directory.Documents
 
       // Crear un archivo en el sistema de archivos
+      await Filesystem.requestPermissions()
       const result = await Filesystem.writeFile({
         path: `${nombre}`,
         data: fileBase64,
