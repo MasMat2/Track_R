@@ -57,5 +57,9 @@
     <string>Esta aplicación necesita guardar imágenes en tu biblioteca de fotos.</string>
     <key>NSDocumentsFolderUsageDescription</key>
     <string>Esta aplicación necesita guardar archivos en tu biblioteca de documentos.</string>
+	<key>UIFileSharingEnabled</key>
+	<string>YES</string>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<string>YES</string>
 </dict>
 </plist>
