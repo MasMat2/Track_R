@@ -13,7 +13,7 @@ import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-s
 import { ArchivoService } from '../../../../shared/http/archivo/archivo.service';
 import { ArchivoFormDTO } from '../../../../shared/Dtos/archivos/archivo-form-dto';
 import { addIcons } from 'ionicons';
-import {cameraOutline, paperPlane, videocamOutline, chevronBack, trash, mic, micOutline, documentOutline, send } from 'ionicons/icons';
+import {cameraOutline, paperPlane, videocamOutline, chevronBack, trash, mic, micOutline, documentOutline, send, ellipsisVerticalOutline } from 'ionicons/icons';
 //Libreria de capacitor para grabar audio
 import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder';
 
@@ -67,6 +67,7 @@ export class MensajesComponent{
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild(IonContent) content: IonContent;
   @ViewChild('movableSpan') movableSpan: ElementRef;
+  @ViewChild('textarea') descripcionTextarea: ElementRef;
 
 
   //Variables para el audio
@@ -97,7 +98,8 @@ export class MensajesComponent{
         documentOutline,
         mic,
         micOutline,
-        send
+        send,
+        ellipsisVerticalOutline
       }); 
     }
 
@@ -552,6 +554,13 @@ export class MensajesComponent{
 
     await this.PopoverController.dismiss()
     this.regresarBtn();
+  }
+
+  ajustarAlturaTextarea(event: Event) {
+    const textarea = this.descripcionTextarea.nativeElement;
+    textarea.style.height = 'auto'; 
+    textarea.style.height = Math.min(textarea.scrollHeight, 60) + 'px';
+    //textarea.style.height = textarea.scrollHeight + 'px'; 
   }
 
 

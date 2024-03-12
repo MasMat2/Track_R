@@ -171,6 +171,7 @@
       </ion-buttons>
 
       <textarea
+        #textarea
         *ngIf="!grabacionIniciada"
         class="texto-mensaje"
         #descripcion="ngModel"
@@ -182,7 +183,8 @@
         style="width: 100%"
         rows="1"
         required
-        (keyup.enter)="enviarMensaje()">
+        (keyup.enter)="enviarMensaje()"
+        (input)="ajustarAlturaTextarea($event)">
       </textarea>
         
       <ion-buttons slot="end" class="right-buttons" *ngIf="!escribiendoMensaje()">
