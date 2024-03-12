@@ -200,6 +200,7 @@ export class MensajesComponent{
     this.chatMensajes$.subscribe((res) => {
       this.chatMensajes = res;
       this.obtenerChatSeleccionado();
+      this.scrollContentToBottom()
     });
   }
 

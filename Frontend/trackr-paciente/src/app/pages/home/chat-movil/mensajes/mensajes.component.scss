@@ -1,8 +1,13 @@
 @import "../../../../../../src/theme/variables.scss";
+ion-content{
+  --background: url('../../../../../assets/background_pattern.svg');
+}
+
 .message {
   margin-bottom: 10px;
   overflow: hidden;
 }
+
 
 .user .message-bubble {
   background-color: var(--primary-700);
@@ -42,9 +47,13 @@
 
 .listado {
   height: 100%;
+  min-height: 100%;
   overflow-y: auto;
   align-self: flex-end;
   background-color: var(--primary-50);
+  
+  background-image: url('../../../../../assets/background_pattern.svg');
+  background-size: auto;
 }
 
 .final {
