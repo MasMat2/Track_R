@@ -90,10 +90,11 @@ export class ChatMovilComponent implements OnInit {
 
   obtenerUltimoMensaje(): void {
     let ultimoMensaje = this.mensajes.map(
-      (arr) => arr[arr.length - 1]?.mensaje || ''
+      (arr) =>{ return {mensajes: arr[arr.length - 1]?.mensaje || '', chat: arr[0]?.idChat || 0}}
     );
+    
     this.chats.forEach((x, index) => {
-      x.ultimoMensaje = ultimoMensaje[index];
+      x.ultimoMensaje = ultimoMensaje.filter(y => y.chat == x.idChat)[0]?.mensajes || '';
     });
   }
 }
