@@ -140,74 +140,77 @@
     </ion-toolbar>
 
     <ion-toolbar class="main-toolbar">
-      <div class="grabando-audio-container" *ngIf="grabacionIniciada">
-        <div class="contador-tiempo">
-          <ion-buttons slot="start">
-            <ion-button fill="clear" disabled>
-              <ion-icon size="small" slot="icon-only" name="mic"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-          <span *ngIf="timer$ | async">
-            {{duracionAudio}}
+      <div [ngClass]="{'contenedor-principal2': !alturaTextAreaAlterada}" class="contenedor-principal1">
+        <div class="grabando-audio-container" *ngIf="grabacionIniciada">
+          <div class="contador-tiempo">
+            <ion-buttons slot="start">
+              <ion-button fill="clear" disabled>
+                <ion-icon style="color: red;" size="small" slot="icon-only" name="mic-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <span *ngIf="timer$ | async">
+              {{duracionAudio}}
+            </span>
+          </div>
+          <span #movableSpan style="position: absolute; transform: translateX(-50%); left: 50%;">
+            Desliza para cancelar
+            <ion-icon style="position: absolute; right: -10%; bottom: 18%;" slot="icon-only" name="chevron-back"></ion-icon>
           </span>
         </div>
-        <span #movableSpan style="position: absolute; transform: translateX(-50%); left: 50%;">
-          Desliza para cancelar
-          <ion-icon style="position: absolute; right: -10%; bottom: 18%;" slot="icon-only" name="chevron-back"></ion-icon>
-        </span>
-      </div>
 
-      <ion-buttons slot="start" class="left-buttons" *ngIf="!grabacionIniciada">
-        <ion-button fill="clear" (click)="openFileInput()">
-          <ion-icon slot="icon-only" style="color: var(--primary-700);" name="document-outline"></ion-icon>
-        </ion-button>
-        <input
-            type="file"
-            id="fileInput"
-            #fileInput
-            style="display: none"
-            (change)="onFileSelected($event)"
-          />
-      </ion-buttons>
-
-      <textarea
-        #textarea
-        *ngIf="!grabacionIniciada"
-        class="texto-mensaje"
-        #descripcion="ngModel"
-        [(ngModel)]="msg"
-        name="mensaje"
-        type="text"
-        maxlength="800"
-        autocomplete="off"
-        style="width: 100%"
-        rows="1"
-        required
-        (keyup.enter)="enviarMensaje()"
-        (input)="ajustarAlturaTextarea($event)">
-      </textarea>
-        
-      <ion-buttons slot="end" class="right-buttons" *ngIf="!escribiendoMensaje()">
-        <ion-button *ngIf="!grabacionIniciada" (click)="tomarFoto()">
-          <ion-icon slot="icon-only" style="color: var(--primary-700);" name="camera-outline"></ion-icon>
-        </ion-button>
-        <ion-button 
-          appSwipe 
-          appPress 
-          (press)="presionarGrabarAudio($event)" 
-          (swipe)="deslizarCancelarAudio($event)">
-          <ion-icon slot="icon-only" style="color: var(--primary-700);" name="mic-outline"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-      <ion-buttons slot="end" class="left-buttons" *ngIf="escribiendoMensaje()">
-        <div class="form-group">
-          <ion-button type="submit" (click)="enviarMensaje()" [disabled]="msg === '' || msg === undefined">
-            <ion-icon slot="icon-only" style="color: var(--primary-700);" name="paper-plane"></ion-icon>
-          </ion-button>
+        <div class="contenedor-izquierda">
+          <ion-buttons slot="start" class="left-buttons" *ngIf="!grabacionIniciada">
+            <ion-button fill="clear" (click)="openFileInput()">
+              <ion-icon slot="icon-only" name="document-outline"></ion-icon>
+            </ion-button>
+            <input
+                type="file"
+                id="fileInput"
+                #fileInput
+                style="display: none"
+                (change)="onFileSelected($event)"
+              />
+          </ion-buttons>
         </div>
-      </ion-buttons>
-      
+
+        <div class="contenedor-central" *ngIf="!grabacionIniciada">
+          <textarea
+            #textarea
+            class="texto-mensaje"
+            #descripcion="ngModel"
+            [(ngModel)]="msg"
+            name="mensaje"
+            type="text"
+            maxlength="800"
+            autocomplete="off"
+            rows="1"
+            required
+            (keyup.enter)="enviarMensaje()"
+            (input)="ajustarAlturaTextarea($event)">
+        </textarea>
+        </div>
+        
+          <div class="contenedor-derecha">
+            <ion-buttons slot="end" class="right-buttons" *ngIf="!escribiendoMensaje()">
+              <ion-button *ngIf="!grabacionIniciada" (click)="tomarFoto()">
+                <ion-icon slot="icon-only" name="camera-outline"></ion-icon>
+              </ion-button>
+              <ion-button 
+                appSwipe 
+                appPress 
+                (press)="presionarGrabarAudio($event)" 
+                (swipe)="deslizarCancelarAudio($event)">
+                <ion-icon [ngStyle]="{'color': grabacionIniciada ? 'var(--primary-700)' : 'var(--neutral-500)'}" slot="icon-only" name="mic-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <ion-buttons slot="end" class="right-buttons" *ngIf="escribiendoMensaje()">
+                <ion-button type="submit" (click)="enviarMensaje()" [disabled]="msg === '' || msg === undefined">
+                  <ion-icon slot="icon-only" style="color: var(--primary-700);" name="paper-plane"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+          </div>
+      </div>
     </ion-toolbar>
-    
+
   </div>
 </ion-footer>

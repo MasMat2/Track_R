@@ -64,6 +64,7 @@ export class MensajesComponent{
   protected timer$: any;
   protected archivo?: File = undefined;
   protected fotoTomada: string;
+  protected alturaTextAreaAlterada: boolean = false;
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild(IonContent) content: IonContent;
   @ViewChild('movableSpan') movableSpan: ElementRef;
@@ -129,6 +130,12 @@ export class MensajesComponent{
       this.msg = '';
       return;
     }
+
+    
+    //regresar el tamaño del textarea a normal
+    const textarea = this.descripcionTextarea.nativeElement;
+    textarea.style.height = 'auto';
+    this.alturaTextAreaAlterada = false;
 
     let msg: ChatMensajeDTO = {
       fecha: new Date(),
@@ -559,8 +566,10 @@ export class MensajesComponent{
   ajustarAlturaTextarea(event: Event) {
     const textarea = this.descripcionTextarea.nativeElement;
     textarea.style.height = 'auto'; 
-    textarea.style.height = Math.min(textarea.scrollHeight, 60) + 'px';
-    //textarea.style.height = textarea.scrollHeight + 'px'; 
+
+    textarea.scrollHeight > 40 ? this.alturaTextAreaAlterada = true : this.alturaTextAreaAlterada = false;
+
+    textarea.style.height = textarea.scrollHeight + 'px';
   }
 
 

@@ -87,7 +87,7 @@ ion-content{
       }
     }
     .main-toolbar{
-      height: 8vh;
+      max-height: 15vh;
 
       .grabando-audio-container{
         display: flex;
@@ -107,18 +107,53 @@ ion-content{
         }
       }
 
-      .texto-mensaje{
-        border: 0px;
-        border-radius: 5px;
-        background-color: var(--primary-50);
-
+      .contenedor-principal1{
+        display: flex;
+        justify-content: space-between;
+        ion-icon{
+          color: var(--neutral-500);
+        }
       }
 
-      .texto-mensaje:focus{
-        outline: none !important;
-        border: 1px solid;
-        border-color: var(--primary-700);
+      //Si la altura del textarea no ha sido alterada por tener varias lineas, 
+      //los botones estarán centrados con el textarea
+      .contenedor-principal2{
+        align-items: center;
+      }
 
+      .contenedor-izquierda{
+        display: flex;
+        align-items: flex-end !important;
+      }
+
+      .contenedor-central{
+        display: flex;
+        align-items: flex-end;
+        margin-bottom: 12px;
+        margin-top: 12px;
+        width: 100%;
+
+        .texto-mensaje{
+          border: 1px solid;
+          border-color: var(--primary-100);
+          border-radius: 5px;
+          background-color: var(--primary-50);
+          max-height: 100px !important;
+          padding: 8px;
+          width: 100%;
+        }
+  
+        .texto-mensaje:focus{
+          outline: none !important;
+          //border: 0px solid;
+        }
+
+        
+      }
+
+      .contenedor-derecha{
+        display: flex;
+        align-items: flex-end;
       }
 
     }
@@ -127,15 +162,8 @@ ion-content{
 
 .enviar-foto-modal{
 
-
   ion-content{
     --background: var(--neutral-950);
-  }
-  .header{
-
-  }
-
-  .footer{
   }
 
   .contenedor-imagen{
