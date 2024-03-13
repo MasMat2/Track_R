@@ -5,7 +5,7 @@ import { TableModule } from 'primeng/table';
 import { Observable } from 'rxjs';
 import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
 import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-service.service';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { ChatMensajeHubService } from '../../../../services/dashboard/chat-mensaje-hub.service';
 import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
@@ -17,6 +17,7 @@ import { ChatPersonaService } from '../../../../shared/http/chat/chat-persona.se
 import { FormsModule } from '@angular/forms';
 import { addIcons } from 'ionicons';
 import { addCircle, chatboxOutline, send } from 'ionicons/icons'
+import { NuevoChatDoctoresComponent } from './nuevo-chat-doctores/nuevo-chat-doctores.component';
 
 @Component({
   selector: 'app-barra-chats',
@@ -55,7 +56,8 @@ export class BarraChatsComponent {
     private archivoService : ArchivoService,
     private sanitizer : DomSanitizer,
     private doctoresService : MisDoctoresService,
-    private ChatPersonaService:ChatPersonaService
+    private ChatPersonaService:ChatPersonaService,
+    private modalCtrl:ModalController
   ) {
     addIcons({addCircle, chatboxOutline, send});
   }
@@ -159,9 +161,16 @@ export class BarraChatsComponent {
     this.doctorSeleccionado = false;
   }
 
-  protected mostrarListaDoctores(){
-    this.verListaDoctores = ! this.verListaDoctores;
-    this.doctorSeleccionado = false;
+  protected async mostrarListaDoctores(){
+    let tab = await this.modalCtrl.create({
+      component: NuevoChatDoctoresComponent,
+      componentProps: {
+        doctores: this.misDoctores
+      }
+    });
+    tab.present();
+    // this.verListaDoctores = ! this.verListaDoctores;
+    // this.doctorSeleccionado = false;
   }
 
   protected buscarChat(event: any){
