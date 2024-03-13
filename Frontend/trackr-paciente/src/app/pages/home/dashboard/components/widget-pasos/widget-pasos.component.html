@@ -1,4 +1,4 @@
-<app-widget title="Pasos" iconClass="walk" colorBackground="#E0B58E" colorTitle="#F4F4F4">
+<app-widget title="Pasos" iconClass="walk" colorBackground="#E0B58E" colorTitle="#F4F4F4" (click)="updateDataSteps()">
   <div style=" width: 100%; padding-left: 40%;">
     <div class="container d-flex align-items-center gap-2">
 
@@ -6,7 +6,7 @@
         <!-- Distancia -->
         <div class="">
           <div class="value">
-            <span class="valor">{{ distancia | number }}</span><span class="medida"></span>
+            <span class="valor">{{ pasos }}</span><span class="medida"></span>
           </div>
           <div class="label">pasos</div>
         </div>

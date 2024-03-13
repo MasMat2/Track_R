@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { WidgetComponent } from '../widget/widget.component';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
 import { GetRecordsOptions } from '../../interfaces/healthconnect-interfaces';
-import { HealthConnect, RecordType } from 'capacitor-health-connect-local';
-import { requestPermissions } from '@utils/healthConect-util';
+import { RecordType } from 'capacitor-health-connect-local';
+
 
 @Component({
   selector: 'app-widget-frecuencia',
@@ -20,16 +20,14 @@ export class WidgetFrecuenciaComponent  implements OnInit {
   protected ritmoCardiaco: number = 0;
   constructor(private healthConnectService: HealthConnectService) { }
 
-  ngOnInit() {}
-  protected readPermissions: RecordType[] = ["Weight", "Steps"];
-  protected writePermissions: RecordType[] = ["Weight", "Steps"];
-
-  async solicitarPermisos(){
-    await HealthConnect.requestHealthPermissions({
-      read: this.readPermissions,
-      write: this.writePermissions
-    });
+  ngOnInit() {
+    this.readRecordsHeartRate();
   }
+
+  updateDataHeartRate(){
+    this.readRecordsHeartRate();
+  }
+
 
   async readRecordsHeartRate(): Promise<void> {
     const current = new Date();

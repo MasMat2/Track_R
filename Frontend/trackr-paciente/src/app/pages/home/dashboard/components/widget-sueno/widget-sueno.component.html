@@ -1,4 +1,4 @@
-<app-widget title="Sueño" iconClass="moon" colorBackground="#4B443C" colorTitle="#F4F4F4">
+<app-widget title="Sueño" iconClass="moon" colorBackground="#4B443C" colorTitle="#F4F4F4" (click)="updateDataSleepSession()>
   <ion-grid>
     <ion-col>
       <ion-row>
@@ -6,7 +6,7 @@
         <ion-col class="sueno-total">
           <ion-row>
             <ion-label>
-              <span class="valor"> {{ tiempoDormido }} h {{ minutostiempoDormido }} min </span>
+              <span class="valor"> {{ totalSuenoHoras }} h {{ totalSuenoMin  }} min </span>
             </ion-label>
           </ion-row>
 
@@ -18,19 +18,19 @@
         </ion-col>
 
         <ion-col>
-          <!-- Sueño rem  -->
+          <!-- Sueño REM  -->
           <ion-row>
             <ion-label>
-              <span class="valor">{{ horasMinDiarias }} h {{ minutosMinDiarias }} min </span>
+              <span class="valor">{{ totalSuenoREMHoras  }} h {{ totalSuenoREMMin }} min </span>
             </ion-label>
             <ion-label>
-              sueño rem
+              sueño REM
             </ion-label>
           </ion-row>
           <!-- Sueño profundo -->
           <ion-row>
             <ion-label>
-              <span class="valor"> {{ suenoProfundo }} h {{ minsuenoProfundo }} min </span>
+              <span class="valor"> {{ totalSuenoDeepHoras }} h {{ totalSuenoDeepMin }} min </span>
             </ion-label>
             <ion-label>
               sueño profundo

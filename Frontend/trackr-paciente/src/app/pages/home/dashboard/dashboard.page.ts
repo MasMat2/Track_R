@@ -53,15 +53,16 @@ export class DashboardPage implements OnInit {
 
   public ngOnInit(): void {
     this.ChatHubServiceService.iniciarConexion();
-    console.log('Solicitando permisos:'+JSON.stringify(this.solicitarPermisos()));
+
+    //Valida si cuenta con permisos de HealthConnect, en caso de que no los tenga se hace la peticion. 
     (async () => {
       console.log('Solicitando permisos...');
-      await this.solicitarPermisos(); // Asegúrate de esperar a que se complete
+      await this.solicitarPermisos();
       if (await this.validarPermisosHealthConnect()) {
         console.log('La aplicación cuenta con todos los permisos de HealthConnect');
       } else {
         console.log('La aplicación no cuenta con todos los permisos de HealthConnect');
-        // Considera si necesitas volver a solicitar los permisos aquí o manejar la situación de otra manera
+        this.healthConnectService.requestPermisons();
         this.validarDisponibilidad();
       }
     })();
@@ -76,9 +77,6 @@ export class DashboardPage implements OnInit {
   async validarDisponibilidad(){
     console.log('Validando disponibilidad de HealthConnect');
     console.log(await this.healthConnectService.checkAvailability());
-  }
-  async openAppSetting(){
-    await this.healthConnectService.openHealthConnectSetting();
   }
 
   async validarPermisosHealthConnect() : Promise<boolean> {
