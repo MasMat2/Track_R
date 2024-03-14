@@ -35,7 +35,7 @@ jobs:
 
       - name: Frontend Build Admin
         working-directory: ${{ env.RUTA_FRONTEND_ADMIN }}
-        run: npm run ng -- build --base-href /trackr_qa/ --output-hashing all --c=qa --output-path=../../Backend/TrackrAPI/TrackrAPI/wwwroot/trackr_qa/
+        run: npm run ng -- build --base-href /trackr_qa/ --output-hashing all --c=production,azure --output-path=../../Backend/TrackrAPI/TrackrAPI/wwwroot/trackr_qa/
         
       - name: Create index.html with redirect to /trackr/
         working-directory: ${{ env.RUTA_BACKEND }}

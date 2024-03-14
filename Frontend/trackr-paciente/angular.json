@@ -65,16 +65,24 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.qa.ts"
+                  "with": "src/environments/environment.prod.ts"
                 }
               ],
               "outputHashing": "all"
             },
-            "mx": {
+            "qa": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.mx.ts"
+                  "with": "src/environments/environment.qa.ts"
+                }
+              ]
+            },
+            "azure": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.azure.ts"
                 }
               ]
             },
