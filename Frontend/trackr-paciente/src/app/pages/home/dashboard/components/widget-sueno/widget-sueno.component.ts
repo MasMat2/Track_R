@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WidgetComponent } from '../widget/widget.component';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
 import { GetRecordsOptions, HealthConnectAvailabilityStatus } from '../../interfaces/healthconnect-interfaces';
 
@@ -25,7 +25,9 @@ export class WidgetSuenoComponent  implements OnInit {
   protected sleepREM: number = 0;
   protected sleepDeep: number = 0;
 
-  constructor(private healthConnectservice : HealthConnectService) { }
+  constructor(
+    private healthConnectservice : HealthConnectService,
+    private alertController: AlertController) { }
 
   protected totalSuenoHoras: number = 0;
   protected totalSuenoMin: number = 0;
@@ -43,12 +45,18 @@ export class WidgetSuenoComponent  implements OnInit {
     }
   }
 
-  updateDataSleepSession() {
+  async updateDataSleepSession() {
     if(this.availability === "Available"){
       this.readRecordsSleepSession();
     } else {
       console.log('HealthConnect no disponible en este dispositivo, es necesario Android version 14')
-      //pop up avisando que es necesario Android 14
+      const alert = await this.alertController.create({
+        header: 'No disponible',
+        message: 'Funcionalidad solo disponible para Android 14 o superior',
+        buttons: ['OK'],
+      });
+      
+      await alert.present();
     }
   }
 
