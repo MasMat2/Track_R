@@ -3,6 +3,7 @@ import { WidgetComponent } from '../widget/widget.component';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
 import { GetRecordsOptions, HealthConnectAvailabilityStatus } from '../../interfaces/healthconnect-interfaces';
 import { RecordType } from 'capacitor-health-connect-local';
+import { AlertController } from '@ionic/angular';
 
 
 @Component({
@@ -19,7 +20,9 @@ export class WidgetFrecuenciaComponent  implements OnInit {
   private availability: HealthConnectAvailabilityStatus = "Unavailable"; //Disponibilidad de healthConnect
 
   protected ritmoCardiaco: number = 0;
-  constructor(private healthConnectService: HealthConnectService) { }
+  constructor(
+    private healthConnectService: HealthConnectService,
+    private alertController: AlertController) { }
 
   async ngOnInit() {
     await this.validarDisponibilidad();
@@ -29,12 +32,18 @@ export class WidgetFrecuenciaComponent  implements OnInit {
     }
   }
 
-  updateDataHeartRate(){
+  async updateDataHeartRate(){
     if(this.availability === "Available"){
       this.readRecordsHeartRate();
     } else {
       console.log('HealthConnect no disponible en este dispositivo, es necesario Android version 14')
-      //pop up avisando que es necesario Android 14
+      const alert = await this.alertController.create({
+        header: 'No disponible',
+        message: 'Funcionalidad solo disponible para Android 14 o superior',
+        buttons: ['OK'],
+      });
+
+      await alert.present();
     }
   }
 
