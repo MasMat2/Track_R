@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { WidgetComponent } from '../widget/widget.component';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
-import { GetRecordsOptions, StoredRecord } from '../../interfaces/healthconnect-interfaces';
+import { GetRecordsOptions, HealthConnectAvailabilityStatus, StoredRecord } from '../../interfaces/healthconnect-interfaces';
 
 @Component({
   selector: 'app-widget-peso',
@@ -17,6 +17,8 @@ import { GetRecordsOptions, StoredRecord } from '../../interfaces/healthconnect-
 })
 export class WidgetPesoComponent  implements OnInit {
 
+  private availability: HealthConnectAvailabilityStatus = "Unavailable"; //Disponibilidad de healthConnect
+
   protected pesoPerdido: number = 12;
   protected pesoFaltante: number = 5;
   protected dias: number = 40;
@@ -25,12 +27,26 @@ export class WidgetPesoComponent  implements OnInit {
 
   constructor(private healthConnectservice : HealthConnectService) { }
 
-  ngOnInit() {
-    this.readRecordsWeight();
+  async ngOnInit() {
+    await this.validarDisponibilidad();
+    
+    if(this.availability === "Available"){
+      this.readRecordsWeight();
+    }
   }
 
   updateDataWeight(){
-    this.readRecordsWeight();
+    if(this.availability === "Available"){
+      this.readRecordsWeight();
+    } else {
+      console.log('HealthConnect no disponible en este dispositivo, es necesario Android version 14')
+      //pop up avisando que es necesario Android 14
+    }
+  }
+
+  async validarDisponibilidad(){
+    const res = await this.healthConnectservice.checkAvailability();
+    this.availability = res.availability;
   }
 
   async readRecordsWeight(): Promise<void> {
