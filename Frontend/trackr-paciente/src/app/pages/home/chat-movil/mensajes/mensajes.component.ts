@@ -572,5 +572,9 @@ export class MensajesComponent{
     textarea.style.height = textarea.scrollHeight + 'px';
   }
 
+  esAudio(mime?:string):boolean{
+    return mime != null  ? mime.split("/")[0] == 'audio' : false
+  }
+
 
 }
