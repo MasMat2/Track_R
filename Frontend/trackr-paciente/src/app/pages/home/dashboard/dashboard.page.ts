@@ -19,7 +19,7 @@ import { WidgetType } from './interfaces/widgets';
 import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
 import { ChatHubServiceService } from 'src/app/services/dashboard/chat-hub-service.service';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
-import { PermissionsStatus } from './interfaces/healthconnect-interfaces';
+import { HealthConnectAvailabilityStatus, PermissionsStatus } from './interfaces/healthconnect-interfaces';
 
 @Component({
   selector: 'app-dashboard',
@@ -41,6 +41,7 @@ import { PermissionsStatus } from './interfaces/healthconnect-interfaces';
 export class DashboardPage implements OnInit {
 
   private hasAllPermissionsHealthConnect: boolean = false;
+  private availability: HealthConnectAvailabilityStatus = "Unavailable"; //Disponibilidad de healthConnect
 
   constructor(
     private widgetService : WidgetService,
@@ -53,19 +54,22 @@ export class DashboardPage implements OnInit {
 
   public ngOnInit(): void {
     this.ChatHubServiceService.iniciarConexion();
+    this.validarDisponibilidad();
 
     //Valida si cuenta con permisos de HealthConnect, en caso de que no los tenga se hace la peticion. 
-    (async () => {
-      console.log('Solicitando permisos...');
-      await this.solicitarPermisos();
-      if (await this.validarPermisosHealthConnect()) {
-        console.log('La aplicación cuenta con todos los permisos de HealthConnect');
-      } else {
-        console.log('La aplicación no cuenta con todos los permisos de HealthConnect');
-        this.healthConnectService.requestPermisons();
-        this.validarDisponibilidad();
-      }
-    })();
+    if (this.availability === "Available") {
+      (async () => {
+        if (await this.validarPermisosHealthConnect()) {
+          console.log('La aplicación cuenta con todos los permisos de HealthConnect');
+        } else {
+          console.log('La aplicación no cuenta con todos los permisos de HealthConnect');
+          await this.solicitarPermisos();
+          this.validarDisponibilidad();
+        }
+      })();
+    } else {
+      console.log('HealthConnect no está disponible o Android no es 14 o superior, por lo tanto, no se solicitarán permisos.');
+    }
   }
 
   async solicitarPermisos(){
@@ -75,8 +79,8 @@ export class DashboardPage implements OnInit {
   }
 
   async validarDisponibilidad(){
-    console.log('Validando disponibilidad de HealthConnect');
-    console.log(await this.healthConnectService.checkAvailability());
+    const res = await this.healthConnectService.checkAvailability();
+    this.availability = res.availability;
   }
 
   async validarPermisosHealthConnect() : Promise<boolean> {
