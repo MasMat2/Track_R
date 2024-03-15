@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { WidgetComponent } from '../widget/widget.component';
-import { GetRecordsOptions, StoredRecord } from '../../interfaces/healthconnect-interfaces';
+import { GetRecordsOptions, HealthConnectAvailabilityStatus, StoredRecord } from '../../interfaces/healthconnect-interfaces';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
 
 
@@ -18,6 +18,8 @@ import { HealthConnectService } from 'src/app/services/dashboard/health-connect.
 })
 export class WidgetPasosComponent  implements OnInit {
 
+  private availability: HealthConnectAvailabilityStatus = "Unavailable"; //Disponibilidad de healthConnect
+
   //protected pasos: number = 15_000;
   protected meta: number = 10_000;
 
@@ -32,12 +34,26 @@ export class WidgetPasosComponent  implements OnInit {
     private healthConnectservice : HealthConnectService
   ) { }
 
-  ngOnInit() {
-    this.readRecordsSteps();
+  async ngOnInit() {
+    await this.validarDisponibilidad();
+    
+    if(this.availability === "Available"){
+      this.readRecordsSteps();
+    }
   }
 
   updateDataSteps(){
-    this.readRecordsSteps();
+    if(this.availability === "Available"){
+      this.readRecordsSteps();
+    } else {
+      console.log('HealthConnect no disponible en este dispositivo, es necesario Android version 14')
+      //pop up avisando que es necesario Android 14
+    }
+  }
+
+  async validarDisponibilidad(){
+    const res = await this.healthConnectservice.checkAvailability();
+    this.availability = res.availability;
   }
 
   async readRecordsSteps() : Promise<void>{
