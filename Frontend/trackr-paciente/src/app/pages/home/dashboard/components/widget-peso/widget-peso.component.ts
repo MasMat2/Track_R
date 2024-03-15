@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 import { WidgetComponent } from '../widget/widget.component';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
 import { GetRecordsOptions, HealthConnectAvailabilityStatus, StoredRecord } from '../../interfaces/healthconnect-interfaces';
@@ -25,7 +25,9 @@ export class WidgetPesoComponent  implements OnInit {
 
   protected pesoActual: string = '0';
 
-  constructor(private healthConnectservice : HealthConnectService) { }
+  constructor(
+    private healthConnectservice : HealthConnectService,
+    private alertController: AlertController) { }
 
   async ngOnInit() {
     await this.validarDisponibilidad();
@@ -35,12 +37,18 @@ export class WidgetPesoComponent  implements OnInit {
     }
   }
 
-  updateDataWeight(){
+  async updateDataWeight(){
     if(this.availability === "Available"){
       this.readRecordsWeight();
     } else {
       console.log('HealthConnect no disponible en este dispositivo, es necesario Android version 14')
-      //pop up avisando que es necesario Android 14
+      const alert = await this.alertController.create({
+        header: 'No disponible',
+        message: 'Funcionalidad solo disponible para Android 14 o superior',
+        buttons: ['OK'],
+      });
+      
+      await alert.present();
     }
   }
 
