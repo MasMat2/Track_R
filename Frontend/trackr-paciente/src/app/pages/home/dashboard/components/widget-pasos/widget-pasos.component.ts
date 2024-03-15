@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { WidgetComponent } from '../widget/widget.component';
 import { GetRecordsOptions, HealthConnectAvailabilityStatus, StoredRecord } from '../../interfaces/healthconnect-interfaces';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
+import { AlertController } from '@ionic/angular';
 
 
 
@@ -31,8 +32,8 @@ export class WidgetPasosComponent  implements OnInit {
   protected distancia: number;
 
   constructor(
-    private healthConnectservice : HealthConnectService
-  ) { }
+    private healthConnectservice : HealthConnectService,
+    private alertController: AlertController ) { }
 
   async ngOnInit() {
     await this.validarDisponibilidad();
@@ -42,12 +43,18 @@ export class WidgetPasosComponent  implements OnInit {
     }
   }
 
-  updateDataSteps(){
+  async updateDataSteps(){
     if(this.availability === "Available"){
       this.readRecordsSteps();
     } else {
       console.log('HealthConnect no disponible en este dispositivo, es necesario Android version 14')
-      //pop up avisando que es necesario Android 14
+      const alert = await this.alertController.create({
+        header: 'No disponible',
+        message: 'Funcionalidad solo disponible para Android 14 o superior',
+        buttons: ['OK'],
+      });
+      
+      await alert.present();
     }
   }
 
