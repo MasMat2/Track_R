@@ -1,46 +1,153 @@
-@use '../../../theme/custom.scss';
+@import "../../../theme/variables.scss";
 
-.logos{
-  display: flex;
-  margin-top: 10%;
-  padding: 40px;
-  justify-content: center;
+ion-header{
+  border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
+  background: var(--primary-700);
 }
 
-.contenedor-principal {
+ion-content{
+  --background: var(--primary-700);
+}
+
+ion-footer{
+  background: var(--primary-700);
+}
+
+.contenedor-header{
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  height: 12vh;
+  padding: 0 32px 0 32px;
+
+  #oncotrackerlogo{
+    width: 136px;
+    height: 16px;
+  }
+}
+
+
+.contenedor-principal{
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  height: 100%;
+  padding: 0 32px 0 32px;
+
+  .bienvenida{
+    width: 100%;
+    height: 28vh;
+    display: flex;
+    align-items: center;
+    ion-text{
+      h1{
+        color: var(--neutral-50);
+        font-family: var(--font-display);
+        font-size: 9vw;
+        font-weight: 700;
+        line-height: 9vw;
+      }
+
+      p{
+        color: var(--neutral-50);
+        font-family: var(--font-body);
+        font-size: 3.9vw;
+        font-weight: 400;
+        line-height: 3.9vw;
+
+      }
+    }
+  }
+
+  .ilustracion-central{
+    height: 40vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    #ilustracion{
+      width: 100%;
+      max-width: 40vh;
+      max-height: 40vh;
+    }
+  }
+
+  .botones{
+    width: 100%;
+    height: 15vh;
+    display: flex;
+    justify-content: center;
+    padding: 32px 0 0 0;
+
+    ion-button{
+      font-family: var(--font-body);
+      font-weight: bold;
+      font-size: 16px;
+      width: 50%;
+      height: 44px;
+      --border-radius: 8px;
+    }
+
+    #btn-registro{
+     margin-left: 8px;
+      color: var(--neutral-50);
+      --border-color: var(--neutral-50);
+      --border-width: 1px;
+      --box-shadow: 0;
+    }
+
+    #btn-login{
+      margin-right: 8px;
+      color: var(--primary-700);
+      --background: var(--neutral-50);
+      --box-shadow: 0;
+    }
+  }
+
+}
+
+@media (max-width: 310px) {
+  .botones{
+    ion-button{
+      font-size: 12px !important;
+    }
+  }
+}
+
+.contenedor-footer{
   width: 100%;
-  padding: 20px;
-}
-
-.contenedor-botones{
-  padding-bottom: 100px;
-  padding-left: 20px;
-  padding-right: 20px;
+  height: 5vh;
+  display: flex;
   justify-content: center;
-  align-content: center;
-  margin:auto
-}
+  text-align: center;
+  padding: 0 32px 0 32px;
 
-.btn-register {
-  --color: white;
-  --box-shadow: 0;
-}
 
-@media(min-width: 400px){
-  .logos{
-    width: 800px;
-  }
-  .contenedor-botones{
-    width: 400px;
+  p{
+    color: var(--primary-400);
+    font-family: var(--font-body);
+    letter-spacing: 5px;
+    font-weight: 400;
+    font-size: 12px;
   }
 }
 
-.btn-login{
-  --background: var(--neutral-100);
-  --color: var(--primary-700);
-  --box-shadow: 0;
+@media (min-width: 700px) {
+  .bienvenida{
+    ion-text{
+      h1{
+        font-size: 60px !important;
+        line-height: 60px !important;
+      }
+
+      p{
+        font-size: 24px !important;
+        line-height: 24px !important;
+
+      }
+    }
+    
+  }
 }
