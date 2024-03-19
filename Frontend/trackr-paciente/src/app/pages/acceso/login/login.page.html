@@ -5,7 +5,7 @@
       <!-- Logo Christus -->
       <div class="logos">
         <img
-          src="assets\img\svg\CM-SistemaDeSalud-Blanco-.png"
+          src="assets/img/svg/CM-SistemaDeSalud-Blanco-.png"
           alt="logo"
           class="logo"
         />
@@ -37,6 +37,7 @@
                     label-placement="floating"
                     fill="outline"
                     shape="round"
+                    mode ="md"
                   ></ion-input>
                   <div
                     *ngIf="correo.errors?.['required'] && (correo.dirty || correo.touched)"
@@ -67,6 +68,7 @@
                     fill="outline"
                     placeholder="Contraseña"
                     shape="round"
+                    mode ="md"
                   ></ion-input>
                   <div
                     *ngIf="contrasena.errors?.['required'] && (contrasena.dirty || contrasena.touched)"
