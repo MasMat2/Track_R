@@ -10,6 +10,7 @@ import { Observable, from, lastValueFrom, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from './../../environments/environment';
 import { AuthService } from './auth.service';
+import { Constants } from '@utils/constants/constants';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -42,7 +43,7 @@ export class TokenInterceptor implements HttpInterceptor {
         catchError((error) => {
           /* Excepciones controladas por el backend. */
           if (error.status === 409) {
-            this.presentarAlerta(error.error);
+            this.presentarAlerta('Ha sucedido un error', error.error);
           }
           /* Cuando el token enviado en la peticion es invalido, el servidor retorna un error 401 */
           else if (error.status === 401 || error.status === 0) {
@@ -51,7 +52,7 @@ export class TokenInterceptor implements HttpInterceptor {
           /* Errores inesperados */
           else {
             const MENSAJE_ERROR_INESPERADO: string = 'Ocurrió un error inesperado, favor de contactar al administrador del sistema.';
-            this.presentarAlerta(MENSAJE_ERROR_INESPERADO);
+            this.presentarAlerta('Algo Salió Mal.', MENSAJE_ERROR_INESPERADO);
           }
 
           return throwError(() => new Error(error));
@@ -95,13 +96,13 @@ export class TokenInterceptor implements HttpInterceptor {
    * Creación de modal de alerta, para la gestión de errores
    * @param mensaje string a mostrar en la alerta
    */
-  private async presentarAlerta(mensaje: string): Promise<void> {
-    const header = 'Error';
-
+  private async presentarAlerta( header: string, subheader: string): Promise<void> {
     const alert = await this.alertController.create({
       header: header,
-      message: mensaje,
-      buttons: ['Aceptar'],
+      subHeader: subheader,
+      message: Constants.ALERT_ERROR,
+      buttons: ['Cerrar'],
+      cssClass: 'custom-alert-error'
     });
 
     await alert.present();
