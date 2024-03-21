@@ -92,7 +92,6 @@ export class ChatHubServiceService {
     chat.fecha = new Date();
 
     const chats = this.chatSubject.value;
-    console.log(chats)
     chats.push(chat);
     //this.chatSubject.next(chats);
     /*chat.fecha = new Date();

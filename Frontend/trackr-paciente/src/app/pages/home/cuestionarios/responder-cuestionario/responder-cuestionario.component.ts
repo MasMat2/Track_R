@@ -9,6 +9,9 @@ import { Examen } from '@models/examen/examen';
 import { ExamenReactivo } from '@models/examen/examen-reactivo';
 import { Reactivo } from '@models/examen/reactivo';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
+import { GeneralConstant } from '@utils/general-constant';
+import { addIcons } from 'ionicons';
+import { chevronBack, calendarClearOutline, timeOutline, documentTextOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-responder-cuestionario',
@@ -57,9 +60,11 @@ export class ResponderCuestionarioComponent  implements OnInit {
     private examenReactivoService: ExamenReactivoService,
     private route: ActivatedRoute,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
 
-  ) { }
+  ) { 
+    addIcons({chevronBack,calendarClearOutline,timeOutline,documentTextOutline})
+  }
 
   ngOnInit() {
     this.submitting = true;
@@ -203,6 +208,31 @@ export class ResponderCuestionarioComponent  implements OnInit {
       cssClass: 'custom-alert'
     });
     await alert.present();
+  }
+
+  imprimirFecha(fecha:Date){
+    let meses: { [key: number]: string } = {
+      1: 'Enero',
+      2: 'Febrero',
+      3: 'Marzo',
+      4: 'Abril',
+      5: 'Mayo',
+      6: 'Junio',
+      7: 'Julio',
+      8: 'Agosto',
+      9: 'Septiembre',
+      10: 'Octubre',
+      11: 'Noviembre',
+      12: 'Diciembre'
+    };
+
+    let fec = new Date(fecha)
+
+    let dia = fec.getDate();
+    let mes = meses[fec.getMonth() + 1];
+    let anio = fec.getFullYear()
+    
+    return `${mes} ${dia}, ${anio}`;
   }
 
 }

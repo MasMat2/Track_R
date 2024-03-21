@@ -16,6 +16,11 @@ public class ArchivoRepository : Repository<Archivo>, IArchivoRepository
         return context.Archivo.Where(x => x.IdArchivo == idArchivo).Select(x => x.Nombre).FirstOrDefault();
     }
 
+    public string GetFileMime(int idArchivo)
+    {
+        return context.Archivo.Where(x => x.IdArchivo == idArchivo).Select(x => x.ArchivoTipoMime).FirstOrDefault();
+    }
+
     public Archivo? ObtenerImagenUsuario(int idUsuario)
     {
         return context.Archivo

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { alertCircle, checkmarkCircle } from 'ionicons/icons';
 
 @Component({
   selector: 'app-root',
@@ -11,5 +13,7 @@ import { IonicModule } from '@ionic/angular';
   ]
 })
 export class AppComponent {
-  constructor() {}
+  constructor() {
+    addIcons({alertCircle, checkmarkCircle})
+  }
 }
