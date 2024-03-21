@@ -53,16 +53,19 @@ export class DashboardPage implements OnInit {
   public ngOnInit(): void {
     this.ChatHubServiceService.iniciarConexion();
     //this.ChatMensajeHubService.iniciarConexion();
+
+    this.solicitarPermiso();
   }
 
   async solicitarPermiso(){
     const readPermissions = ['calories', 'stairs', 'activity', 'steps', 'distance', 'duration', 'weight'];
 
-    await CapacitorHealthkit.requestAuthorization({
+    console.log('Permisos healthkit: ')
+    console.log('Permisos healthkit: '+await CapacitorHealthkit.requestAuthorization({
       all: [],
       read: readPermissions,
       write: [],
-    });
+    }));
 
   }
 

@@ -25,10 +25,10 @@ export class WidgetPesoComponent  implements OnInit {
   constructor(private healthKitService: HealthkitService) { }
 
   ngOnInit() {
-    this.cargarDatosas();
+    this.cargarDatosWeight();
   }
 
-  async cargarDatosas() {
+  async cargarDatosWeight() {
     try {
       const dataWeight = await this.healthKitService.getWeight();
       //Tomar el ultimo ene l arreglo ya que el usuario puede ingresar varias medidas en un dia
