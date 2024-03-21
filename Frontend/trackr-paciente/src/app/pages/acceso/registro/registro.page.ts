@@ -4,12 +4,18 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HospitalService } from '@http/catalogo/hospital.service';
 import { UsuarioService } from '@http/seguridad/usuario.service';
-import { AlertController, CheckboxCustomEvent, IonicModule } from '@ionic/angular';
+import { AlertController, CheckboxCustomEvent, IonicModule, ModalController } from '@ionic/angular';
 import { Hospital } from '@models/catalogo/hospital';
 import { Usuario } from '@models/usuario';
 import { NgSelectModule } from '@ng-select/ng-select';
 import * as Utileria from '@utils/utileria';
 import { UsuarioNuevoTrackrDto } from 'src/app/shared/Dtos/seguridad/usuario-nuevo-trackr-dto';
+import { addIcons } from 'ionicons';
+import { chevronBack, eyeOutline, eyeOffOutline} from 'ionicons/icons';
+import { Constants } from '@utils/constants/constants';
+import { BehaviorSubject } from 'rxjs';
+import { TerminosYCondicionesComponent } from './components/terminos-y-condiciones/terminos-y-condiciones.component';
+
 
 @Component({
   selector: 'app-registro',
@@ -27,7 +33,16 @@ export class RegistroPage implements OnInit {
   protected idHospital : number;
   protected placeHolderSelectHospital : string = "Seleccione un hospital";
   protected placeHolderNoOptions : string = "No hay hospitales disponibles";
-  
+  protected pswInputType: string = "password";
+  protected mostrarPwd: boolean = false;
+  protected procesoContinuado: boolean = false;
+  protected parteProceso: string = '1';
+  protected spinner: string = Constants.ALERT_SPINNER;
+
+  //Estado de "cargando" para mostrar el alert con spinner
+  cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  cargando$ = this.cargandoSubject.asObservable();
+
   private readonly TERMINOS_Y_CONDICIONES: string = `
 **Términos y Condiciones de Uso de la Aplicación Track.r**
 
@@ -53,8 +68,9 @@ Al utilizar esta aplicación, aceptas estos Términos y Condiciones. Si tienes a
     private usuarioService: UsuarioService,
     private router: Router,
     private alertController: AlertController,
+    private modalController: ModalController,
     private hospitalService : HospitalService
-  ) {}
+  ) { addIcons({chevronBack, eyeOffOutline, eyeOutline}) }
 
   public ngOnInit() {
     this.hospitalService.consultarTodosParaSelector().subscribe(
@@ -66,6 +82,7 @@ Al utilizar esta aplicación, aceptas estos Términos y Condiciones. Si tienes a
 
   protected enviarFormulario(formulario: NgForm): void {
     this.submitting = true;
+    this.cargandoSubject.next(true);
 
     if (!formulario.valid) {
       Utileria.validarCamposRequeridos(formulario);
@@ -83,42 +100,80 @@ Al utilizar esta aplicación, aceptas estos Términos y Condiciones. Si tienes a
 
   private agregar(){
     this.usuarioService.agregarTrackr(this.usuario).subscribe({
+      next: () => {
+      },
       error: ()=> {
-        this.usuario.nombreUsuario = "";
         this.submitting = false;
+        this.cargandoSubject.next(false);
       },
       complete: ()=> {
         this.submitting = false;
-        this.presentAlert();
+        this.cargandoSubject.next(false);
+        this.presentAlertSuccess();
       }
     })
   }
+  
+  protected async presentAlertSuccess() {
 
-  private async presentAlert() {
-    const alert = await this.alertController.create({
-      header: 'Usuario registrado',
-      message: 'Ya puede iniciar sesión, pero debe verificar su correo para usar la app adecuadamente',
+    const alertSuccess = await this.alertController.create({
+      header: '¡Listo, estás registrado!',
+      subHeader: 'Se ha enviado un correo para verificar tu cuenta.',
+      message: Constants.ALERT_SUCCESS,
       buttons: [{
-        text: 'Ok',
+        text: 'De acuerdo',
+        role: 'confirm',
         handler: () => {
-          this.router.navigate(['/acceso/login']);
+          this.router.navigateByUrl('/acceso/login');
         }
-      }]
+      }],
+      cssClass: 'custom-alert-success',
     });
 
-    await alert.present();
+    await alertSuccess.present();
   }
 
   //TODO: Obtener los terminos y condiciones (texto) de la base de datos
   protected async mostrarTerminosYCondiciones() {
-    const alert = await this.alertController.create({
-      header: 'Terminos y Condiciones',
-      message: this.TERMINOS_Y_CONDICIONES,
-      buttons: [{
-        text: 'De acuerdo',
-      },]
+    // const alert = await this.alertController.create({
+    //   header: 'Terminos y Condiciones',
+    //   message: this.TERMINOS_Y_CONDICIONES,
+    //   buttons: [{
+    //     text: 'De acuerdo',
+    //   },]
+    // });
+
+    // await alert.present();
+
+    const modal = await this.modalController.create({
+      component: TerminosYCondicionesComponent,
     });
 
-    await alert.present();
+    modal.present();
+  }
+
+  protected mostrarContrasena(){
+    if(this.mostrarPwd == true){
+      this.mostrarPwd = false;
+      this.pswInputType = "password";
+    }
+    else{
+      this.mostrarPwd = true;
+      this.pswInputType = "text";
+    }
+  }
+
+  protected verificarContrasena(): boolean {
+    if(this.usuario.contrasena != this.confirmarContrasena){
+      return false;
+    }
+
+    return true;
+  }
+
+  protected continuarProceso(input: boolean){
+    this.procesoContinuado = input;
+    this.procesoContinuado == true ? this.parteProceso = "2" : this.parteProceso = "1";
+    this.termsAccepted = this.procesoContinuado;
   }
 }

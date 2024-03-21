@@ -1,85 +1,73 @@
-<div class="background-restablecer"></div>
-
-<div class="contenedor-restablecer">
-  <div>
-    <div class="row">
-      <div class="col-md-12 font-weight-bold text-center">¿Olvidaste tu contraseña?</div>
+<ion-header class="ion-no-border">
+  <div class="contenedor-header">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button routerLink="/acceso/login">
+          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          Atrás
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="contenedor-principal">
+    <div class="mensaje">
+      <ion-text>
+        <h1>¿Olvidaste tu contraseña?</h1>
+        <p>
+          Confirma tu nombre de usuario y recibirás un enlace a tu correo
+          electrónico para restablecer tu contraseña.
+        </p>
+      </ion-text>
     </div>
-    <form
-      *ngIf="!recuperacionCorrecta"
-      #recuperarContrasenaForm="ngForm"
-      novalidate="novalidate"
-      (ngSubmit)="recuperarContrasena(recuperarContrasenaForm)"
-    >
-      <div class="sub-contenedor-login">
-        <div class="row">
-          <div class="col-md-12 titulo-5 mt-3 mb-3">
-            Confirma tu Nombre de Usuario y recibirás un enlace a tu Correo Electrónico para
-            restablecer la contraseña.
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 mt-2">
-            <div class="form-group">
-              <label class="label-input required-label"
-                >Nombre de Usuario</label
-              >
-              <div>
-                <input
-                  #correoModel="ngModel"
+    <div class="formulario">
+      <form
+        #formulario="ngForm"
+        novalidate="novalidate"
+        (ngSubmit)="recuperarContrasena(formulario)"
+      >
+        <div class="contenido-formulario">
+          <ion-list class="inputs">
+            <div class="input">
+              <ion-text><p>Nombre de usuario</p></ion-text>
+              <ion-item lines="none">
+                <ion-button fill="clear" slot="start" disabled>
+                  <ion-icon slot="icon-only" name="person-outline"></ion-icon>
+                </ion-button>
+                <ion-input
+                  #correo="ngModel"
                   [(ngModel)]="usuario.correo"
-                  name="correoRecuperacion"
-                  class="form-control"
+                  id="correo"
+                  name="correo"
                   type="text"
-                  maxlength="100"
-                  required="required"
+                  maxlength="50"
+                  required="true"
                   autocomplete="off"
-                />
-                <div
-                  *ngIf="correoModel.errors && correoModel.touched"
-                  class="error"
+                  placeholder="Escribe tu usuario aquí"
                 >
-                <div *ngIf="correoModel.errors['required']">El nombre de usuario es requerido</div>
-                <div *ngIf="correoModel.errors['formatoCorreo']">
-                  El formato del correo electrónico es incorrecto
-                </div>
-                </div>
-              </div>
+                </ion-input>
+              </ion-item>
             </div>
-          </div>
+          </ion-list>
         </div>
-        <div class="row">
-          <div class="col-md-12 btn-continuar">
-            <ion-button
-              style="width: 100% !important"
-              [disabled]="btnSubmit"
-              type="submit"
-              class="btn-primario"
-            >
-              Confirmar
-            </ion-button>
-          </div>
+        <div class="botones">
+          <ion-button
+            class="btn-login"
+            type="submit"
+            [disabled]="btnSubmit || !formulario.valid"
+          >
+            Confirmar
+          </ion-button>
         </div>
-      </div>
-    </form>
-
-    <div *ngIf="recuperacionCorrecta">
-      <div class="sub-contenedor-login">
-        <div class="row">
-          <div class="col-md-12 mt-3">Consulta tu Bandeja de Entrada.</div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 titulo-5">
-            Acabamos de enviarte un Correo Electrónico a
-            <b>{{ usuario.correoPersonal }}</b> con un enlace para reestablecer la
-            contraseña.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="text-center mt-4">
-      <ion-button fill="clear" routerLink="/acceso/login">Regresar</ion-button>
+      </form>
     </div>
   </div>
-</div>
+  <!-- alerta de cargando cuando se necesite -->
+  <ion-alert
+    [isOpen]="cargando$ | async"
+    [message]="spinner"
+    cssClass="custom-alert-loading"
+  >
+  </ion-alert>
+</ion-content>

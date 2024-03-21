@@ -22,7 +22,7 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(IonicModule.forRoot({})),
     importProvidersFrom(HttpClientModule),
     provideRouter(routes, withHashLocation()),
-    provideIonicAngular({ mode: 'md' })
+    provideIonicAngular({ mode: 'md', innerHTMLTemplatesEnabled:true })
   ],
 });
 defineCustomElements(window);

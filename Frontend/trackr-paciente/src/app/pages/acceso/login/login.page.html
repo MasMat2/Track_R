@@ -1,28 +1,39 @@
-<div class="bgImageContainer"></div>
-<div class="contenedor-principal">
-  <main>
-    <div class="main">
-      <!-- Logo Christus -->
-      <div class="logos">
-        <img
-          src="assets\img\svg\CM-SistemaDeSalud-Blanco-.png"
-          alt="logo"
-          class="logo"
-        />
-      </div>
+<ion-header class="ion-no-border">
+  <div class="contenedor-header">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button routerLink="">
+          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          Atrás
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+</ion-header>
 
-      <!-- Formulario de Login -->
-      <div class="justify-content-center">
-        <form
-          #formulario="ngForm"
-          novalidate="novalidate"
-          (ngSubmit)="enviarFormulario(formulario)"
-        >
-          <div class="sub-contenedor-login">
-            <!-- Input Usuario -->
-            <div class="row">
-              <div class="form-group">
-                <div class="col-md-12">
+<ion-content>
+  <div class="contenedor-principal">
+    <div class="saludo">
+      <ion-text>
+        <h1>¡Hola de nuevo!</h1>
+        <p>Ingresa tu usuario y contraseña para iniciar sesión.</p>
+      </ion-text>
+    </div>
+    <form 
+      #formulario="ngForm"
+      novalidate="novalidate"
+      (ngSubmit)="enviarFormulario(formulario)"
+    >
+      <div class="formulario">
+        <div class="contenido-formulario">
+          
+            <ion-list class="inputs">
+              <div class="input">
+                <ion-text><p>Usuario</p></ion-text>
+                <ion-item lines="none" class="normal-input">
+                  <div class="input-icon">
+                    <ion-icon name="person-outline"></ion-icon>
+                  </div>
                   <ion-input
                     #correo="ngModel"
                     [(ngModel)]="loginRequest.correo"
@@ -32,80 +43,58 @@
                     maxlength="50"
                     required="true"
                     autocomplete="off"
-                    placeholder="Usuario"
-                    label="Usuario"
-                    label-placement="floating"
-                    fill="outline"
-                    shape="round"
-                  ></ion-input>
-                  <div
-                    *ngIf="correo.errors?.['required'] && (correo.dirty || correo.touched)"
-                    class="error"
+                    placeholder="Escribe tu usuario aquí"
                   >
-                    El correo es requerido
-                  </div>
-                </div>
+                  </ion-input>
+                </ion-item>
               </div>
-            </div>
-            <br />
-
-            <!-- Input Contraseña -->
-            <div class="row">
-              <div class="form-group">
-                <div class="col-md-12">
-                  <ion-input
+              <div class="input">
+                <ion-text><p>Contraseña</p></ion-text>
+                <ion-item lines="none" class="password-input">
+                  <ion-input 
                     #contrasena="ngModel"
                     [(ngModel)]="loginRequest.contrasena"
                     id="contrasena"
                     name="contrasena"
-                    type="password"
+                    [type]="pswInputType"
                     autocomplete="off"
                     required="true"
                     maxlength="50"
-                    label="Contraseña"
-                    label-placement="floating"
-                    fill="outline"
-                    placeholder="Contraseña"
-                    shape="round"
-                  ></ion-input>
-                  <div
-                    *ngIf="contrasena.errors?.['required'] && (contrasena.dirty || contrasena.touched)"
-                    class="error"
+                    placeholder="Escribe tu contraseña aquí"
                   >
-                    La contraseña es requerida
+                  </ion-input>
+                  <div class="input-icon">
+                    <ion-button class="btn-mostrar-contrasena" fill="clear"(click)="mostrarContrasena()">
+                      <ion-icon *ngIf="!mostrarPwd" slot="icon-only" name="eye-outline"></ion-icon>
+                      <ion-icon *ngIf="mostrarPwd" slot="icon-only" name="eye-off-outline"></ion-icon>
+                    </ion-button>
                   </div>
-                </div>
+                </ion-item>
               </div>
-            </div>
-
-            <!-- Botón enviar formulario -->
-            <div class="justify-content-center">
-              <div class="contenedor-botones">
-                <div class="row">
-                  <ion-button
-                    class="btn-login"
-                    type="submit"
-                    [disabled]="btnSubmit"
-                  >
-                    Entrar
-                  </ion-button>
-                </div>
-
-                <br />
-                <div class="col-12 text-center mt-4">
-                  <span class="mt-3" style="color: white" [routerLink]="'/acceso/peticion-restablecer-contrasena'">¿Olvidaste tu contraseña?&nbsp;</span>
-                </div>
-                <!-- Botón/link para registrarse -->
-
-                <div class="d-flex justify-content-center btn-register">
-                  <a routerLink="/acceso/registro" style="color: #F4F4F4; font-weight: bold;">Registrarme</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
+            </ion-list>
+        </div>
+        <div class="botones">
+          <ion-button class="btn-login" type="submit" [disabled]="btnSubmit || !formulario.valid">
+            Iniciar Sesión
+          </ion-button>
+          <a routerLink="/acceso/peticion-restablecer-contrasena"  class="recuperar-contrasena">¿Olvidaste tu contraseña?</a>
+        </div>
       </div>
+    </form>
+  </div>
+  <!-- alerta de cargando cuando se necesite -->
+  <ion-alert
+    [isOpen]="cargando$ | async"
+    [message]="spinner"
+    cssClass="custom-alert-loading"
+  >
+  </ion-alert>
+</ion-content>
 
-    </div>
-  </main>
-</div>
+<ion-footer class="ion-no-border" >
+  <div class="contenedor-footer">
+    <ion-text>
+      <p>CHRISTUS MUGUERZA</p>
+    </ion-text>
+  </div>
+</ion-footer>
