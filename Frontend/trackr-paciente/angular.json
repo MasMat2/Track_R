@@ -50,6 +50,9 @@
           },
           "configurations": {
             "production": {
+              "optimization": {
+                "scripts": false
+              },
               "budgets": [
                 {
                   "type": "initial",
@@ -71,6 +74,9 @@
               "outputHashing": "all"
             },
             "qa": {
+              "optimization": {
+                "scripts": false
+              },
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -79,6 +85,9 @@
               ]
             },
             "azure": {
+              "optimization": {
+                "scripts": false
+              },
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
