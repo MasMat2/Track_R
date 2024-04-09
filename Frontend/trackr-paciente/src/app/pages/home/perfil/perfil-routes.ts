@@ -8,6 +8,10 @@ export default [
     component: PerfilPage,
     children: [
       {
+        path: 'inicio-perfil',
+        loadComponent: () => import('./inicio-perfil/inicio-perfil.component').then((m) => m.InicioPerfilComponent)
+      },
+      {
         path: 'mis-doctores',
         data: { breadcrumb: "Mis doctores"},
         loadComponent: () => import('./mis-doctores/mis-doctores.page').then((m) => m.MisDoctoresPage)
@@ -41,7 +45,7 @@ export default [
         path: 'mis-estudios/agregar',
         loadComponent: () => import('./mis-estudios/mis-estudios-formulario/mis-estudios-formulario.component').then((m) => m.MisEstudiosFormularioPage)
       },
-      { path: '**', redirectTo: 'informacion-general', pathMatch: 'full' }
+      { path: '**', redirectTo: 'inicio-perfil', pathMatch: 'full' }
     ]
   },
 ]  as Route[];
