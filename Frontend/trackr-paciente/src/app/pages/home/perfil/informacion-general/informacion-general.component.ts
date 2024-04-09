@@ -29,8 +29,9 @@ import { ConfirmacionCorreoService } from '@http/seguridad/confirmacion-correo.s
 import { ConfirmarCorreoDto } from '../../../../shared/Dtos/seguridad/confirmar-correo-dto';
 import {GeneroService} from '@http/catalogo/genero.service'
 import { addIcons } from 'ionicons';
-import { addCircleOutline, closeCircleOutline } from 'ionicons/icons'
+import { addCircleOutline, closeCircleOutline, chevronBack } from 'ionicons/icons'
 import { OnExit } from 'src/app/shared/guards/exit.guard';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-informacion-general',
@@ -40,6 +41,7 @@ import { OnExit } from 'src/app/shared/guards/exit.guard';
   imports: [
     CommonModule,
     FormsModule,
+    RouterModule,
     ReactiveFormsModule,
     IonicModule,
     HeaderComponent,
@@ -95,7 +97,7 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
     private confirmacionCorreoService: ConfirmacionCorreoService,
     private generoService: GeneroService
   ) {
-    addIcons({addCircleOutline, closeCircleOutline})
+    addIcons({addCircleOutline, closeCircleOutline, chevronBack})
     }
 
   ngOnInit(){

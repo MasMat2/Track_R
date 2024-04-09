@@ -10,6 +10,8 @@ import { RouterModule } from '@angular/router';
 import { url } from 'inspector';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ArchivoService } from '@services/archivo.service';
+import { addIcons } from 'ionicons';
+import { chevronBack, add } from 'ionicons/icons';
 
 
 @Component({
@@ -36,7 +38,7 @@ export class MisDoctoresPage   {
     private alertController: AlertController,
     private archivoService : ArchivoService,
     private sanitizer : DomSanitizer
-  ) { }
+  ) { addIcons({chevronBack, add})}
 
 
 

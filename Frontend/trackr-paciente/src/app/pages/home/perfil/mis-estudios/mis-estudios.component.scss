@@ -1,6 +1,41 @@
 @import 'src/app/shared/styles/data-grid.scss';
 @import "~primeng/resources/primeng.min.css";
 
+
+
+ion-header{
+  border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
+  background: var(--primary-700);
+}
+
+.contenedor-header{
+  background: var(--primary-700);
+  height: 20vh;
+  width: 100%;
+
+  ion-toolbar{
+    height: 100%;
+    width: 100%;
+    --background: url('../../../../../assets/header_light.svg');
+
+    //medidas máximas para que no se estire el svg
+    max-height: 153px;
+    max-width: 390px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 20px;
+
+    ion-button{
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 18px;
+      color: var(--primary-700);
+    }
+  }
+}
+
 .primeng-table th {
     color: #651B73;
   }
