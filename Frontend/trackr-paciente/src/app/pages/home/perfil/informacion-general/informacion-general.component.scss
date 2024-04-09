@@ -5,6 +5,10 @@ ion-header{
   background: var(--primary-700);
 }
 
+ion-content{
+  background: var(--primary-50);
+}
+
 .contenedor-header{
   background: var(--primary-700);
   height: 20vh;
@@ -31,6 +35,28 @@ ion-header{
       color: var(--primary-700);
     }
   }
+}
+
+.contenedor-principal{
+  height: 80vh;
+  background: var(--primary-50);
+
+  .titulo{
+      padding: 16px 32px 16px 32px;
+
+      ion-text{
+          text-align: start;
+          h3{
+              margin: 0;
+              color: var(--primary-700);
+              font-family: var(--font-display);
+              font-size: 24px;
+              font-weight: 700;
+              line-height: 32px;
+          }
+      }
+  }
+
 }
 
 .texto-seccion{

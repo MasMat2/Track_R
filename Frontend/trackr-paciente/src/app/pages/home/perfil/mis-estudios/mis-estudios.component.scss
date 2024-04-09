@@ -36,6 +36,28 @@ ion-header{
   }
 }
 
+.contenedor-principal{
+  height: 80vh;
+  background: var(--primary-50);
+
+  .titulo{
+      padding: 16px 32px 16px 32px;
+
+      ion-text{
+          text-align: start;
+          h3{
+              margin: 0;
+              color: var(--primary-700);
+              font-family: var(--font-display);
+              font-size: 24px;
+              font-weight: 700;
+              line-height: 32px;
+          }
+      }
+  }
+
+}
+
 .primeng-table th {
     color: #651B73;
   }
