@@ -15,10 +15,10 @@ import { WidgetComponent } from '../widget/widget.component';
 })
 export class WidgetPesoComponent  implements OnInit {
 
-  protected pesoPerdido: number = 12;
-  protected pesoFaltante: number = 5;
-  protected pesoActual: number = 61;
-  protected dias: number = 40;
+  protected pesoPerdido: number = 0;
+  protected pesoFaltante: number = 0;
+  protected pesoActual: number = 0;
+  protected dias: number = 0;
 
   constructor() { }
 
