@@ -18,14 +18,14 @@ import { HealthService } from '@services/health.service';
 export class WidgetPasosComponent  implements OnInit {
 
   //protected pasos: number = 15_000;
-  protected meta: number = 10_000;
+  protected meta: number = 0;
 
-  protected metros: number = 10_000;
-  protected horas: number = 10;
-  protected minutos: number = 10;
+  protected metros: number = 0;
+  protected horas: number = 0;
+  protected minutos: number = 0;
 
   protected pasos : HealthData;
-  protected distancia: number;
+  protected distancia: number = 0;
 
   constructor(private healthService: HealthService) { }
 

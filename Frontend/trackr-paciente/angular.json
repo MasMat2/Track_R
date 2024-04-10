@@ -51,7 +51,7 @@
           "configurations": {
             "production": {
               "optimization": {
-                "scripts": false
+                "scripts": true
               },
               "budgets": [
                 {
@@ -75,7 +75,7 @@
             },
             "qa": {
               "optimization": {
-                "scripts": false
+                "scripts": true
               },
               "fileReplacements": [
                 {
@@ -86,7 +86,7 @@
             },
             "azure": {
               "optimization": {
-                "scripts": false
+                "scripts": true
               },
               "fileReplacements": [
                 {

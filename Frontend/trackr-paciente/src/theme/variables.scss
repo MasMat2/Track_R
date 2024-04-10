@@ -171,6 +171,18 @@ ion-alert.custom-alert-success, .custom-alert-error, .custom-alert-loading {
   }
 }
 
+ion-loading.custom-loading {
+  .loading-wrapper {
+    background: #ffffff url("assets/gif/loading.gif") no-repeat center;
+    --height: 30%;
+    --width: 100%;
+    border-radius: 0.8rem;
+    --backdrop-opacity: 0.8;
+    backdrop-opacity: 0.8;
+    
+  }
+}
+
 ion-alert.custom-alert-success, .custom-alert-error{
   .alert-head{
     text-align: center !important;

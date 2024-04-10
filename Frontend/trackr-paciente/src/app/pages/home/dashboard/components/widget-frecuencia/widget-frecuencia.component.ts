@@ -13,7 +13,7 @@ import { WidgetComponent } from '../widget/widget.component';
 export class WidgetFrecuenciaComponent  implements OnInit {
 
 
-  protected ritmoCardiaco: number = 62;
+  protected ritmoCardiaco: number = 0;
   constructor() { }
 
   ngOnInit() {}

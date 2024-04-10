@@ -207,6 +207,7 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
       .agregar(this.programacionExamen)
       .pipe(
         mergeMap((data) => {
+          this.programacionExamen.idProgramacionExamen = data
           this.passToList();
           return this.examenService.actualizar(this.examenList);
         })
@@ -264,6 +265,7 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
       examen.estatus = true;
 
       this.examenList.push(examen);
+      console.log(this.examenList)
     }
   }
 

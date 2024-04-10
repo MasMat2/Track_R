@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { LoginService } from '@http/seguridad/login.service';
-import { IonicModule, AlertController } from '@ionic/angular';
+import { IonicModule, AlertController, LoadingController } from '@ionic/angular';
 import { LoginRequest } from '@models/seguridad/login-request';
 import { LoginResponse } from '@models/seguridad/login-response';
 import { GeneralConstant } from '@utils/general-constant';
@@ -30,6 +30,7 @@ import { BehaviorSubject } from 'rxjs';
 export class LoginPage implements OnInit {
   
   loginRequest: LoginRequest = new LoginRequest();
+  loading : any;
   loginResponse: LoginResponse = new LoginResponse();
   btnSubmit: boolean = false;
   protected pswInputType: string = "password";
@@ -45,16 +46,36 @@ export class LoginPage implements OnInit {
     private loginService: LoginService,
     private router: Router,
     private authService: AuthService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private loadingController: LoadingController
   ) { 
     addIcons({chevronBack, eyeOffOutline, eyeOutline, personOutline})
   }
 
-  
-
-  ngOnInit() {
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      spinner: null,
+      cssClass: 'custom-loading',
+    });
+    return await this.loading.present();
   }
 
+    async dismissLoading() {
+    if (this.loading) {
+      await this.loading.dismiss();
+      this.loading = null;
+    }
+  }
+    
+  ngOnInit() {
+    this.cargando$.subscribe(cargando => {
+      if (cargando) {
+        this.presentLoading();
+      } else {
+        this.dismissLoading();
+  }
+    });
+  }
   /**
    * Valida que los campos del formulario sean requeridos y que el correo y la contraseña no estén vacíos.
    * Si es exitoso, llama al método autenticar.
