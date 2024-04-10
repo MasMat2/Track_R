@@ -110,7 +110,7 @@ export class CrearChatComponent {
       this.ChatHubServiceService.agregarChat(chat,this.personas)
     }
 
-    else if(this.tipo == 2){
+    else if(this.tipo == 2 ){
       this.idPacientesPadecimiento.push(this.idUsuario);
       let chat:ChatDTO ={
         fecha: new Date(),
@@ -119,6 +119,16 @@ export class CrearChatComponent {
         idCreadorChat: this.idUsuario
       }
       this.ChatHubServiceService.agregarChat(chat,this.idPacientesPadecimiento);
+    }
+    else if(this.tipo == 1){
+      this.personas.push(this.idUsuario)
+      let chat: ChatDTO ={
+        fecha: new Date(),
+        habilitado: true,
+        titulo: this.tituloChat,
+        idCreadorChat: this.idUsuario
+      }
+      this.ChatHubServiceService.agregarChat(chat,this.personas)
     }
 
     this.tituloChat = '';
@@ -131,6 +141,7 @@ export class CrearChatComponent {
   obtenerIdPacientesPadecimiento(){
     this.ChatPersonaService.obtenerIdPacientesPadecimiento(this.padecimiento).subscribe(res =>{
       this.idPacientesPadecimiento = res;
+      this.personas = res;
     })
   }
 
@@ -171,6 +182,10 @@ export class CrearChatComponent {
     }
     
     return true;
+  }
+
+  seleccionarTodos(){
+    this.personas = this.expedientes.map(x => x.idUsuario);
   }
   
   

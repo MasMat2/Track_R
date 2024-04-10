@@ -2,7 +2,14 @@
   <div class="row">
     <div class="col-12">
       <div class="titulo-contenedor">
-        Bienvenido,
+        <div class="saludo">
+          <div>
+            Bienvenido
+          </div>
+          <div class="perfil">
+            {{usuario.nombrePerfil}}
+          </div>
+        </div>
         <span class="nombre-doctor">{{ usuario.tituloAcademico }} {{ usuario.nombreCompleto }}</span>
       </div>
 

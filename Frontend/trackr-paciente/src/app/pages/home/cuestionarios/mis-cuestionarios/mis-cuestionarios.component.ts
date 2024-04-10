@@ -29,6 +29,8 @@ export class MisCuestionariosComponent  implements OnInit {
   protected cantidadCuestionariosContestados: number = 0;
   protected mostrarTodosContestados: boolean = false;
 
+  protected segmentoSeleccionado = 'pendientes';
+
   constructor(
     private examenService: ExamenService,
     private router: Router,
@@ -119,6 +121,10 @@ export class MisCuestionariosComponent  implements OnInit {
     });
 
     await alert.present();
+  }
+
+  changeSection(section:string){
+    this.segmentoSeleccionado = section;
   }
 
 }
