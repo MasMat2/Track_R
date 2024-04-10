@@ -60,12 +60,11 @@ export class DashboardPage implements OnInit {
   async solicitarPermiso(){
     const readPermissions = ['calories', 'stairs', 'activity', 'steps', 'distance', 'duration', 'weight'];
 
-    console.log('Permisos healthkit: ')
-    console.log('Permisos healthkit: '+await CapacitorHealthkit.requestAuthorization({
+    await CapacitorHealthkit.requestAuthorization({
       all: [],
       read: readPermissions,
       write: [],
-    }));
+    });
 
   }
 
