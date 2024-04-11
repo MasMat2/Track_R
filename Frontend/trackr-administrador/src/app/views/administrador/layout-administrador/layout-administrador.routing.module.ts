@@ -2,8 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { InicioComponent } from '../inicio/inicio.component';
 import { ChatComponent } from '../../chat/chat.component';
-import { JitsiMeetModule } from '../../jitsi-meet/jitsi-meet.module';
-import { AnswerMeetComponent } from '../../jitsi-meet/answer-meet/answer-meet.component';
+import { VideoChatComponent } from '../../video-chat/video-chat.component';
 
 const routes: Routes = [
   {
@@ -45,7 +44,8 @@ const routes: Routes = [
     data: {
       doNotReuse: true
     }
-  }
+  },
+  { path: 'webrtc/:id', component: VideoChatComponent, data: { breadcrumb: 'Chat' } },
 ];
 
 @NgModule({

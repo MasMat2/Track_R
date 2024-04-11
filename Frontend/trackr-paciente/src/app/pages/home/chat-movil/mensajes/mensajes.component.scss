@@ -189,3 +189,18 @@ ion-content{
 
   }
 }
+
+
+// Video options
+ion-popover {
+  --width: auto;
+}
+
+.video-option {
+  cursor: pointer;
+
+}
+
+.video-option:hover {
+  color: var(--primary-700);
+}

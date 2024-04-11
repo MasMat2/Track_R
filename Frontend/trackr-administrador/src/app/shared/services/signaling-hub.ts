@@ -1,32 +1,28 @@
 import { HubConnectionState, HubConnection, IHttpConnectionOptions, HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { BehaviorSubject, filter, take, timeout, catchError } from "rxjs";
 import { environment } from "src/environments/environment";
-import { AuthService } from "src/app/auth/auth.service";
+import { Constants } from "@utils/constants/constants";
 
 export class SignalingHubBase extends EventTarget{
   protected connectionStatus = new BehaviorSubject<HubConnectionState>(HubConnectionState.Disconnected);
 
   protected connection: HubConnection;
 
-  
   private messaageSource = new BehaviorSubject<string>('');
   message$ = this.messaageSource.asObservable();
 
   constructor(
-    protected endpoint: string,
-    private authService: AuthService
+    protected endpoint: string
   ) {
     super();
   }
 
   public async iniciarConexion() {
-    const token: string | null = await this.authService.obtenerToken();
+    const token: string | null = localStorage.getItem(Constants.TOKEN_KEY);
 
-  
-
-      if (!token) {
-        return;
-      }
+    if (!token) {
+      return;
+    }
 
       const url = `${environment.urlBackend}${this.endpoint}`;
 
