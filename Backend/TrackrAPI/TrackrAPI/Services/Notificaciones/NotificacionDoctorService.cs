@@ -4,6 +4,8 @@ using TrackrAPI.Dtos.Notificaciones;
 using TrackrAPI.Helpers;
 using TrackrAPI.Hubs;
 using TrackrAPI.Repositorys.Notificaciones;
+using TrackrAPI.Repositorys.Seguridad;
+using TrackrAPI.Services.Archivos;
 using TrackrAPI.Services.Seguridad;
 
 namespace TrackrAPI.Services.Notificaciones;
@@ -13,17 +15,20 @@ public class NotificacionDoctorService
     private readonly NotificacionService _notificacionService;
     private readonly NotificacionUsuarioService _notificacionUsuarioService;
     private readonly UsuarioService _usuarioService;
+    private readonly ArchivoService _archivoService;
     private readonly IHubContext<NotificacionDoctorHub, INotificacionDoctorHub> _hubContext;
 
     public NotificacionDoctorService(
         NotificacionService notificacionService,
         NotificacionUsuarioService notificacionUsuarioService,
         UsuarioService usuarioService,
-        IHubContext<NotificacionDoctorHub, INotificacionDoctorHub> hubContext)
+        IHubContext<NotificacionDoctorHub, INotificacionDoctorHub> hubContext,
+        ArchivoService archivoService)
     {
         _notificacionService = notificacionService;
         _notificacionUsuarioService = notificacionUsuarioService;
         _usuarioService = usuarioService;
+        _archivoService = archivoService;
         _hubContext = hubContext;
     }
 
@@ -32,6 +37,7 @@ public class NotificacionDoctorService
         NotificacionUsuarioDto notificacionUsuarioDto,
         int idPaciente)
     {
+        var img = _archivoService.ObtenerImagenUsuario((int)notificacionDto.IdPersona);
         return new NotificacionDoctorDTO(
             notificacionUsuarioDto.IdNotificacionUsuario,
             notificacionUsuarioDto.IdNotificacion,
@@ -42,8 +48,8 @@ public class NotificacionDoctorService
             notificacionUsuarioDto.Visto,
             notificacionDto.IdTipoNotificacion,
             idPaciente,
-            null,
-            null
+            "data:" + img.ArchivoTipoMime + ";base64," + Convert.ToBase64String(img.Archivo1),
+            notificacionDto.IdChat
         );
     }
 

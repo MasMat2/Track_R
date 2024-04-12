@@ -13,7 +13,7 @@ import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-s
 import { ArchivoService } from '../../../../shared/http/archivo/archivo.service';
 import { ArchivoFormDTO } from '../../../../shared/Dtos/archivos/archivo-form-dto';
 import { addIcons } from 'ionicons';
-import {cameraOutline, paperPlane, videocamOutline, chevronBack, trash, mic, micOutline, documentOutline, send } from 'ionicons/icons';
+import {cameraOutline, paperPlane, videocamOutline, chevronBack, trash, mic, micOutline, documentOutline, send, ellipsisVerticalOutline } from 'ionicons/icons';
 //Libreria de capacitor para grabar audio
 import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder';
 
@@ -64,9 +64,11 @@ export class MensajesComponent{
   protected timer$: any;
   protected archivo?: File = undefined;
   protected fotoTomada: string;
+  protected alturaTextAreaAlterada: boolean = false;
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild(IonContent) content: IonContent;
   @ViewChild('movableSpan') movableSpan: ElementRef;
+  @ViewChild('textarea') descripcionTextarea: ElementRef;
 
 
   //Variables para el audio
@@ -97,7 +99,8 @@ export class MensajesComponent{
         documentOutline,
         mic,
         micOutline,
-        send
+        send,
+        ellipsisVerticalOutline
       }); 
     }
 
@@ -127,6 +130,12 @@ export class MensajesComponent{
       this.msg = '';
       return;
     }
+
+    
+    //regresar el tamaño del textarea a normal
+    const textarea = this.descripcionTextarea.nativeElement;
+    textarea.style.height = 'auto';
+    this.alturaTextAreaAlterada = false;
 
     let msg: ChatMensajeDTO = {
       fecha: new Date(),
@@ -200,6 +209,7 @@ export class MensajesComponent{
     this.chatMensajes$.subscribe((res) => {
       this.chatMensajes = res;
       this.obtenerChatSeleccionado();
+      this.scrollContentToBottom()
     });
   }
 
@@ -445,8 +455,29 @@ export class MensajesComponent{
     );
   }
 
-  crearLlamada() {
+  crearLlamadaJitsi() {
     this.route.navigate(['/home/video-jitsi/create-call', this.idChat]);
+  }
+
+  crearLlamadaWebRTC() {
+    let idUsuario = this.idUsuario;
+
+    const newRoomName = `webrtc-${this.idChat}-${idUsuario}`;
+
+    const telefonoEmoji = "📞";
+    let mensaje = `${telefonoEmoji} Te espero la sala ${newRoomName}`;
+
+    let msg: ChatMensajeDTO = {
+      fecha: new Date(),
+      idChat: this.idChat,
+      mensaje: mensaje,
+      idPersona: idUsuario,
+      archivo: '',
+      idArchivo: 0
+    };
+
+    this.ChatMensajeHubService.enviarMensaje(msg);
+    this.route.navigate(['/home/chat']);
   }
 
   contestarLlamada(meetCode: string) {
@@ -454,13 +485,27 @@ export class MensajesComponent{
   }
 
   validarMeet(msj: string) {
-
+    console.log(msj);
     if (msj.includes('trackr-' + this.idChat)) {
       const regex = /trackr-\d{3}-\d+/;
       const match = msj.match(regex);
       if (match && match.length > 0) {
         const codigo = match[0];
         this.contestarLlamada(codigo);
+      } else {
+        console.log("Error al validar codigo meet jitsi.");
+      }
+
+
+    }
+
+    if (msj.includes('webrtc-' + this.idChat)) {
+      const regex = /webrtc-\d{3}-(\d+)/;
+      const match = msj.match(regex);
+      if (match && match.length > 0) {
+        const codigo = match[1];
+        this.route.navigate(['/home/chat', codigo]);
+
       } else {
         console.log("Error al validar codigo meet jitsi.");
       }
@@ -551,6 +596,19 @@ export class MensajesComponent{
 
     await this.PopoverController.dismiss()
     this.regresarBtn();
+  }
+
+  ajustarAlturaTextarea(event: Event) {
+    const textarea = this.descripcionTextarea.nativeElement;
+    textarea.style.height = 'auto'; 
+
+    textarea.scrollHeight > 40 ? this.alturaTextAreaAlterada = true : this.alturaTextAreaAlterada = false;
+
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
+
+  esAudio(mime?:string):boolean{
+    return mime != null  ? mime.split("/")[0] == 'audio' : false
   }
 
 

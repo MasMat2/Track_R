@@ -1,6 +1,264 @@
-
-
+<ion-header class="ion-no-border">
+  <div class="contenedor-header">
+    <ion-toolbar>
+      <!-- boton pagina 1 -->
+      <ion-buttons slot="start" *ngIf="!procesoContinuado">
+        <ion-button routerLink="/acceso">
+          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          Atrás
+        </ion-button>
+      </ion-buttons>
+      <!-- boton pagina 2 -->
+      <ion-buttons slot="start" *ngIf="procesoContinuado">
+        <ion-button (click)="continuarProceso(false)">
+          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          Atrás
+        </ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-text>
+          <p><span style="font-weight: bold;">{{parteProceso}}</span> de <span style="font-weight: bold;">2</span></p>
+        </ion-text>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+</ion-header>
 <ion-content>
+  <div class="contenedor-principal">
+    <div class="mensaje" *ngIf="!procesoContinuado">
+      <ion-text>
+        <h1>Crea tu cuenta.</h1>
+      </ion-text>
+    </div>
+    <div class="mensaje" *ngIf="procesoContinuado">
+      <ion-text>
+        <h1>Cuéntanos sobre ti.</h1>
+      </ion-text>
+    </div>
+    <div class="formulario">
+      <form
+        #formulario="ngForm"
+        (keydown.enter)="$event.preventDefault()"
+        (ngSubmit)="enviarFormulario(formulario)"
+      >
+        <!-- formulario pagina 1 -->
+        <div class="contenido-formulario"  *ngIf="!procesoContinuado">
+          <ion-list class="inputs">
+            <div class="input">
+              <ion-text><p>Correo electrónico</p></ion-text>
+              <ion-item lines="none">
+                <ion-input
+                  #correo="ngModel"
+                  [(ngModel)]="usuario.correoPersonal"
+                  id="correo"
+                  name="correo"
+                  type="email"
+                  maxlength="50"
+                  required="true"
+                  autocomplete="off"
+                  placeholder="nombre@correo.com"
+                  errorText="Email inválido"
+                  email
+                >
+                </ion-input>
+              </ion-item>
+            </div>
+            <div class="input">
+              <ion-text><p>Nombre de usuario</p></ion-text>
+              <ion-item lines="none">
+                <ion-input
+                  #correo="ngModel"
+                  [(ngModel)]="usuario.nombreUsuario"
+                  id="nombreusuario"
+                  name="nombreusuario"
+                  type="text"
+                  maxlength="50"
+                  required="true"
+                  autocomplete="off"
+                  placeholder="Ingresa un nombre de usuario"
+                >
+                </ion-input>
+              </ion-item>
+            </div>
+            <div class="input">
+              <ion-text><p>Contraseña</p></ion-text>
+              <ion-item lines="none" class="password-input">
+                <ion-input
+                  #contrasena="ngModel"
+                  [(ngModel)]="usuario.contrasena"
+                  id="correo"
+                  name="contrasenaName"
+                  [type]="pswInputType"
+                  maxlength="50"
+                  placeholder="Ingresa una contraseña"
+                  [required]="true"
+                  appConfirmacionContrasena="confirmacionContrasenaName"
+                >
+                </ion-input>
+                <div class="input-icon">
+                  <ion-button class="btn-mostrar-contrasena" fill="clear" slot="end" (click)="mostrarContrasena()">
+                    <ion-icon *ngIf="!mostrarPwd" slot="icon-only" name="eye-outline"></ion-icon>
+                    <ion-icon *ngIf="mostrarPwd" slot="icon-only" name="eye-off-outline"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-item>
+            </div>
+            <div class="input">
+              <ion-text><p>Confirmar contraseña</p></ion-text>
+              <ion-item lines="none" class="password-input">
+                <ion-input
+                  #confirmacionContrasena="ngModel"
+                  [(ngModel)]="confirmarContrasena"
+                  id="correo"
+                  name="confirmacionContrasenaName"
+                  [type]="pswInputType"
+                  maxlength="50"
+                  autocomplete="off"
+                  placeholder="Repite tu contraseña"
+                  appConfirmacionContrasena="contrasenaName"
+                  [required]="usuario.contrasena !== '' && usuario.contrasena !== null"
+                >
+                </ion-input>
+                <div class="input-icon">
+                  <ion-button class="btn-mostrar-contrasena" fill="clear" slot="end" (click)="mostrarContrasena()">
+                    <ion-icon *ngIf="!mostrarPwd" slot="icon-only" name="eye-outline"></ion-icon>
+                    <ion-icon *ngIf="mostrarPwd" slot="icon-only" name="eye-off-outline"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-item>
+            </div>
+            <div class="terminos-condiciones">
+              <ion-item lines="none">
+                <ion-label>
+                  Acepto los
+                  <a (click)="mostrarTerminosYCondiciones()">
+                    terminos y condiciones
+                  </a>
+                </ion-label>
+                <ion-checkbox
+                  (ionChange)="changeEvent($event)"
+                  slot="start"
+                  >
+                </ion-checkbox>
+              </ion-item>
+            </div>
+          </ion-list>
+        </div>
+
+        <!-- formulario pagina 2 -->
+        <div class="contenido-formulario" *ngIf="procesoContinuado">
+          <ion-list class="inputs">
+            <div class="input">
+              <ion-text><p>Nombres</p></ion-text>
+              <ion-item lines="none">
+                <ion-input
+                  #nombre="ngModel"
+                  [(ngModel)]="usuario.nombres"
+                  id="nombre"
+                  name="nombre"
+                  type="text"
+                  maxlength="200"
+                  required="true"
+                  autocomplete="off"
+                  placeholder="Escribe tu(s) nombre(s) aquí"
+                >
+                </ion-input>
+              </ion-item>
+            </div>
+            <ion-row>
+              <ion-col size="6">
+                <div class="input" id="apePaterno">
+                  <ion-text><p>Apellido paterno</p></ion-text>
+                  <ion-item lines="none">
+                    <ion-input
+                      #apellidoPaterno="ngModel"
+                      [(ngModel)]="usuario.apellidoPaterno"
+                      id="apellidoPaterno"
+                      name="apellidoPaterno"
+                      type="text"
+                      maxlength="200"
+                      required="true"
+                      autocomplete="off"
+                    >
+                    </ion-input>
+                  </ion-item>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="input" id="apeMaterno">
+                  <ion-text><p>Apellido materno</p></ion-text>
+                  <ion-item lines="none">
+                    <ion-input
+                      #apellidoMaterno="ngModel"
+                      [(ngModel)]="usuario.apellidoMaterno"
+                      id="apellidoMaterno"
+                      name="apellidoMaterno"
+                      type="text"
+                      maxlength="200"
+                      required="true"
+                      autocomplete="off"
+                    >
+                    </ion-input>
+                  </ion-item>
+                </div>
+              </ion-col>
+            </ion-row>
+            <div class="input">
+              <ion-text><p>Teléfono Móvil</p></ion-text>
+              <ion-item lines="none">
+                <ion-input
+                  #telefonoMovil="ngModel"
+                  [(ngModel)]="usuario.telefonoMovil"
+                  id="telefonoMovil"
+                  name="telefonoMovil"
+                  type="tel"
+                  maxlength="10"
+                  required="true"
+                  autocomplete="off"
+                  placeholder="Escribe tu teléfono móvil aquí"
+                >
+                </ion-input>
+              </ion-item>
+            </div>
+          </ion-list>
+        </div>
+        <div class="botones">
+          <!-- boton pagina 1 -->
+          <ion-button
+            *ngIf="!procesoContinuado"
+            class="btn-login"
+            (click)="continuarProceso(true)"
+            [disabled]="!termsAccepted || submitting || !formulario.valid || !verificarContrasena()"
+          >
+            Continuar
+          </ion-button>
+          <!-- boton pagina 2 -->
+          <ion-button
+            *ngIf="procesoContinuado"
+            class="btn-login"
+            type="submit"
+            [disabled]="!termsAccepted || submitting || !formulario.valid"
+          >
+            Guardar
+          </ion-button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- alerta de cargando cuando se necesite -->
+  <ion-alert
+    [isOpen]="cargando$ | async"
+    [message]="spinner"
+    cssClass="custom-alert-loading"
+  >
+  </ion-alert>
+</ion-content>
+
+
+
+
+
+<!-- <ion-content>
   <div class="contenedor">
     <div class="titulo-contenedor">
       <ion-buttons>
@@ -222,4 +480,5 @@
       </form>
     </div>
   </div>
-</ion-content>
+</ion-content> -->
+

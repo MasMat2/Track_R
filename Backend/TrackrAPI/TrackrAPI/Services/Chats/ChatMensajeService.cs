@@ -14,14 +14,14 @@ namespace TrackrAPI.Services.Chats;
 public class ChatMensajeService
 {
     private readonly IChatMensajeRepository _chatMensajeRepository;
-    private readonly IHubContext<ChatMensajeHub,IChatMensajeHub> _hubContext;
+    private readonly IHubContext<ChatMensajeHub, IChatMensajeHub> _hubContext;
     private readonly IChatPersonaRepository _chatPersonaRepository;
     private readonly NotificacionDoctorService _notificacionService;
     private readonly IArchivoRepository _archivoRepository;
     private readonly ArchivoService _archivoService;
 
     public ChatMensajeService(IChatMensajeRepository chatMensajeRepository,
-                              IHubContext<ChatMensajeHub,IChatMensajeHub> hubContext,
+                              IHubContext<ChatMensajeHub, IChatMensajeHub> hubContext,
                               IChatPersonaRepository chatPersonaRepository,
                               NotificacionDoctorService notificacionService,
                               IArchivoRepository archivoRepository,
@@ -40,7 +40,8 @@ public class ChatMensajeService
         var idChats = _chatPersonaRepository.ConsultarChatsPorPersona(IdPersona);
         IEnumerable<IEnumerable<ChatMensajeDTO>> chats = new List<IEnumerable<ChatMensajeDTO>>();
 
-        foreach(var idChat in idChats) {
+        foreach (var idChat in idChats)
+        {
             var aux = _chatMensajeRepository.ObtenerMensajePorChat(idChat.IdChat)
                                             .Select(x => new ChatMensajeDTO
                                             {
@@ -49,15 +50,16 @@ public class ChatMensajeService
                                                 Fecha = x.Fecha,
                                                 IdPersona = x.IdPersona,
                                                 Mensaje = x.Mensaje,
-                                                NombrePersona = x.IdPersonaNavigation.Nombre + "  "+ x.IdPersonaNavigation.ApellidoPaterno + " "+x.IdPersonaNavigation.ApellidoMaterno,
-                                                IdArchivo = (x.IdArchivo != null) ? (int) x.IdArchivo:0,
-                                                ArchivoNombre = (x.IdArchivo != null) ? _archivoService.GetFileName((int)x.IdArchivo):null,
+                                                NombrePersona = x.IdPersonaNavigation.Nombre + "  " + x.IdPersonaNavigation.ApellidoPaterno + " " + x.IdPersonaNavigation.ApellidoMaterno,
+                                                IdArchivo = (x.IdArchivo != null) ? (int)x.IdArchivo : 0,
+                                                ArchivoNombre = (x.IdArchivo != null) ? _archivoService.GetFileName((int)x.IdArchivo) : null,
+                                                ArchivoTipoMime = (x.IdArchivo != null) ? _archivoService.GetFileMime((int)x.IdArchivo) : null
 
                                             });
-           
+
             chats = chats.Append(aux);
         }
-        
+
         return chats;
     }
 
@@ -65,21 +67,21 @@ public class ChatMensajeService
     {
         int? idArchivo = null;
         var idsPersonasChat = _chatPersonaRepository.ConsultarPersonasPorChat(mensaje.IdChat)
-                                                    .Where( cP => cP.IdPersona != mensaje.IdPersona)
+                                                    .Where(cP => cP.IdPersona != mensaje.IdPersona)
                                                     .Select(x => x.IdPersona)
                                                     .Distinct()
                                                     .ToList();
-        var notificacion = new NotificacionDoctorCapturaDTO(mensaje.Mensaje , 2 , mensaje.IdPersona,mensaje.IdPersona,mensaje.IdChat);
-        
+        var notificacion = new NotificacionDoctorCapturaDTO(mensaje.Mensaje, 2, mensaje.IdPersona, mensaje.IdPersona, mensaje.IdChat);
+
         _notificacionService.Notificar(notificacion, idsPersonasChat);
-        
+
         //Subir si existe el archivo
         if (mensaje.ArchivoTipoMime != null)
         {
 
             var archivo = new Archivo
             {
-                Archivo1 = Convert.FromBase64String(mensaje.Archivo.Substring(mensaje.Archivo.LastIndexOf(',') +1)),
+                Archivo1 = Convert.FromBase64String(mensaje.Archivo.Substring(mensaje.Archivo.LastIndexOf(',') + 1)),
                 ArchivoNombre = mensaje.ArchivoNombre,
                 ArchivoTipoMime = mensaje.ArchivoTipoMime,
                 FechaRealizacion = (DateTime)mensaje.FechaRealizacion,
@@ -100,14 +102,14 @@ public class ChatMensajeService
         };
 
 
-        if(idArchivo != null)
+        if (idArchivo != null)
         {
             mensajeAux.IdArchivo = idArchivo;
         }
 
         _chatMensajeRepository.Agregar(mensajeAux);
 
-        return (idArchivo != null) ? (int)idArchivo:0;
+        return (idArchivo != null) ? (int)idArchivo : 0;
     }
 }
 

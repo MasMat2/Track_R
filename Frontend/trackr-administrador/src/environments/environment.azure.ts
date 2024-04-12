@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  urlBackend: 'https://www.atisc.mx/trackr_dev/api/'
+  urlBackend: `${window.location.origin}/api/`
 };

@@ -3,7 +3,7 @@ import { BehaviorSubject, filter, take, timeout, catchError } from "rxjs";
 import { environment } from "src/environments/environment";
 import { AuthService } from "src/app/auth/auth.service";
 
-export class SignalingHubBase extends EventTarget {
+export class SignalingHubBase extends EventTarget{
   protected connectionStatus = new BehaviorSubject<HubConnectionState>(HubConnectionState.Disconnected);
 
   protected connection: HubConnection;
@@ -11,54 +11,52 @@ export class SignalingHubBase extends EventTarget {
   
   private messaageSource = new BehaviorSubject<string>('');
   message$ = this.messaageSource.asObservable();
-  private index = -1;
 
   constructor(
     protected endpoint: string,
     private authService: AuthService
   ) {
     super();
-    this.iniciarConexion();
   }
 
   public async iniciarConexion() {
     const token: string | null = await this.authService.obtenerToken();
 
+  
 
+      if (!token) {
+        return;
+      }
 
-    if (!token) {
-      return;
+      const url = `${environment.urlBackend}${this.endpoint}`;
+
+      const connectionConfig: IHttpConnectionOptions = {
+        accessTokenFactory: () => {
+          return token;
+        },
+        transport: HttpTransportType.LongPolling,
+        // TODO: 2023-03-23 -> Revisar los tipos de transporte (Web Socket, Long Polling, Server Sent Events)
+      };
+
+      this.connection = new HubConnectionBuilder()
+        .configureLogging(LogLevel.Debug)
+        .withUrl(url, connectionConfig)
+        .build();
+
+      this.connection.on(
+        'NewMessage',
+        (obj: any) => this.onNewMessage(obj)
+      );
+      
+      this.connection.on(
+        'LocalId',
+        (local_id: string) => this.onLocalId(local_id)
+      );
+
+      this.connectionStatus.next(HubConnectionState.Connecting);
+
+      await this.connection.start();
     }
-
-    const url = `${environment.urlBackend}${this.endpoint}`;
-
-    const connectionConfig: IHttpConnectionOptions = {
-      accessTokenFactory: () => {
-        return token;
-      },
-      transport: HttpTransportType.LongPolling,
-      // TODO: 2023-03-23 -> Revisar los tipos de transporte (Web Socket, Long Polling, Server Sent Events)
-    };
-
-    this.connection = new HubConnectionBuilder()
-      .configureLogging(LogLevel.Debug)
-      .withUrl(url, connectionConfig)
-      .build();
-
-    this.connection.on(
-      'NewMessage',
-      (obj: any) => this.onNewMessage(obj)
-    );
-    
-    this.connection.on(
-      'LocalId',
-      (local_id: string) => this.onLocalId(local_id)
-    );
-
-    this.connectionStatus.next(HubConnectionState.Connecting);
-
-    await this.connection.start();
-  }
 
   
   public async crearLlamada(caller_id?: string) {
@@ -74,7 +72,7 @@ export class SignalingHubBase extends EventTarget {
   public async sendMessage(obj: any) {
     await this.ensureConnection();
     
-    await this.connection.invoke('SendMessageToPeer', JSON.stringify(obj));
+    await this.connection.invoke('SendMessageToPeer', JSON.stringify(obj), "");
 
     
   }
@@ -84,8 +82,9 @@ export class SignalingHubBase extends EventTarget {
     console.log(obj);
     
     this.messaageSource.next(obj.content);
+    console.log(obj.id);
     await this.connection.invoke('AcknowledgeMessage', obj.id);
-    
+    console.log(`acknowledge message: ${obj.id}`);
   };
 
   protected onLocalId(local_id: any){

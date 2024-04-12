@@ -1,4 +1,4 @@
-<ion-header class="ion-no-border">
+<ion-header class="ion-no-border" >
   <ion-toolbar class="primary-toolbar">
     <ion-title>Chats</ion-title>
     <ion-buttons slot="end">
@@ -12,11 +12,13 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  
+</ion-header>
+<ion-content>
   <ion-toolbar class="barra-busqueda" *ngIf="!verListaDoctores">
     <ion-searchbar show-cancel-button="focus" placeholder="Buscar" animated (ionChange)="buscarChat($event)"></ion-searchbar>
   </ion-toolbar>
-</ion-header>
-<ion-content>
+
   <div class="contactos" *ngIf="verListaDoctores">
     <div class="generar-chat" *ngIf="doctorSeleccionado">
         <ion-item lines="none">
