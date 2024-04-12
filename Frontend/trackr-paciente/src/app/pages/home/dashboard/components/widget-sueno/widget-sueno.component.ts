@@ -19,6 +19,7 @@ import { HealthkitService } from '@services/healthkit.service';
 export class WidgetSuenoComponent  implements OnInit {
 
   constructor(private healthKitService: HealthkitService) { }
+  
   //Estado de healthkit: AsLeep
   protected tiempoDormido: number = 0;
   protected minutostiempoDormido: number = 0;

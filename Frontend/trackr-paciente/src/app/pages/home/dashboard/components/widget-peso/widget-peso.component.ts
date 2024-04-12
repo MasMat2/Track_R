@@ -18,7 +18,6 @@ export class WidgetPesoComponent  implements OnInit {
 
   protected pesoPerdido: number = 12;
   protected pesoFaltante: number = 5;
-  //protected pesoActual: number = 61;
   protected pesoActual: string = "0.0";
   protected dias: number = 40;
 
@@ -31,7 +30,7 @@ export class WidgetPesoComponent  implements OnInit {
   async cargarDatosWeight() {
     try {
       const dataWeight = await this.healthKitService.getWeight();
-      //Tomar el ultimo ene l arreglo ya que el usuario puede ingresar varias medidas en un dia
+      //Tomar el ultimo en el arreglo ya que el usuario puede ingresar varias medidas en un dia
       if (dataWeight.resultData.length > 0) {
         const ultimoElemento = dataWeight.resultData.pop(); 
         this.pesoActual = ultimoElemento!.value.toString();
