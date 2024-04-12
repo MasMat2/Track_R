@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>trackr-paciente</string>
+	<string>trackr-paciente</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -54,11 +54,15 @@
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Es necesario para trabajar con los datos de salud</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-    <string>Esta aplicación necesita guardar imágenes en tu biblioteca de fotos.</string>
-    <key>NSDocumentsFolderUsageDescription</key>
-    <string>Esta aplicación necesita guardar archivos en tu biblioteca de documentos.</string>
+	<string>Esta aplicación necesita guardar imágenes en tu biblioteca de fotos.</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>Esta aplicación necesita guardar archivos en tu biblioteca de documentos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Para que puedas seleccionar y compartir fotos con tus amigos en la aplicación</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>UIFileSharingEnabled</key>
-	<string>YES</string>
+	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<string>YES</string>
 </dict>
