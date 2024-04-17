@@ -1,10 +1,10 @@
 ion-header{
   border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
-  background: var(--primary-700);
+  background: var(--primary-50);
 }
 
 .contenedor-header{
-  background: var(--primary-700);
+  background: var(--primary-50);
   height: 20vh;
   width: 100%;
 
@@ -36,7 +36,8 @@ ion-header{
   background: var(--primary-50);
 
   .titulo{
-      padding: 16px 32px 16px 32px;
+      height: 8vh;
+      padding: 16px 32px 0 32px;
 
       ion-text{
           text-align: start;
