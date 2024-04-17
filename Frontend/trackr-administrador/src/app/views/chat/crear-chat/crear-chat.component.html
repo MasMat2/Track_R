@@ -12,7 +12,8 @@
                  name="destinatario"
                  id="todos"
                  value="1"
-                 [(ngModel)]="tipo">
+                 [(ngModel)]="tipo"
+                 (change)="seleccionarTodos()">
           <label for="todos" class="form-check-label">Todos</label>
         </div>
       </div>

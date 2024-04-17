@@ -1,7 +1,80 @@
+<ion-header>
+  <ion-toolbar class="primary-toolbar">
+      <ion-buttons>
+          <ion-button fill="clear" (click)="cancelar()">
+              <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" (click)="cancelar()">
+            Regresar
+        </ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content>
 
   <div class="presentacion" *ngIf="!presentando && !examenTerminado && !blockQuestions">
-    <h1>Bienvenido al cuestionario en línea: {{examen.tipoExamen}}</h1>
+    <h3>Bienvenido al cuestionario en línea:</h3>
+    <h2 class="morado">{{examen.tipoExamen}}</h2>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="2" style="display: flex; flex-direction: column; justify-content: center;">
+            <div class="circulo">
+              <ion-label class="morado"><ion-icon name="calendar-clear-outline" style="font-size: 3vh;"></ion-icon></ion-label>
+            </div>
+        </ion-col>
+        <ion-col size="10">
+          <ion-grid>
+            <ion-row>
+              <ion-label>Fecha y hora de inicio</ion-label>
+            </ion-row>
+            <ion-row class="morado">
+              <ion-label>{{imprimirFecha(examen.fechaExamen)}} a las {{examen.horaExamen}}</ion-label>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="2" style="display: flex; flex-direction: column; justify-content: center;">
+          <div class="circulo">
+            <ion-label class="morado"><ion-icon name="time-outline" style="font-size: 3vh;"></ion-icon></ion-label>
+          </div>
+      </ion-col>
+        <ion-col size="10">
+          <ion-grid>
+            <ion-row>
+              <ion-label>Duración total</ion-label>
+            </ion-row>
+            <ion-row class="morado">
+              <ion-label>{{examen.duracion}} minutos</ion-label>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="2" style="display: flex; flex-direction: column; justify-content: center;">
+          <div class="circulo">
+            <ion-label class="morado"><ion-icon name="document-text-outline" style="font-size: 3vh;"></ion-icon></ion-label>
+          </div>
+        </ion-col>
+        <ion-col size="10">
+          <ion-grid>
+            <ion-row>
+              <ion-label>Cantidad de reactivos</ion-label>
+            </ion-row>
+            <ion-row class="morado">
+              <ion-label>{{examen.totalPreguntas}} reactivos</ion-label>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <hr>
+    <b>Antes de iniciar:</b>
     <ul>
       <li>
         Antes de responder lea con atención los Reactivos y seleccione la respuesta correcta.
@@ -20,8 +93,8 @@
       </li>
     </ul>
     <div class="presentacion-buttons">
-      <ion-button color="light" class="regresar" (click)="cancelar()">Regresar</ion-button>
-      <ion-button class="iniciar" (click)="consultarReactivos()">Iniciar</ion-button>
+      <!-- <ion-button color="light" class="regresar" (click)="cancelar()">Regresar</ion-button> -->
+      <ion-button style="width: 100vw;" class="iniciar button-solid" (click)="consultarReactivos()">Iniciar</ion-button>
     </div>
   </div>
 

@@ -1,35 +1,30 @@
-<div class="bgImageContainer"></div>
-<div class="contenedor-principal">
-  <main>
-    <div class="main">
-      <!-- Logo Track R -->
-      <div class="logos">
-        <img
-          src="assets/img/svg/CM-SistemaDeSalud-Blanco-.png"
-          alt="TrackR_Logo"
-          style="max-width: none; width: 90vw;"
-        />
-      </div>
-      <br />
-      <div class="fixed-bottom">
-        <!-- Botones -->
-        <div class="contenedor-botones">
-          <!-- Botón Login -->
-          <div class="row">
-            <div class="">
-              <ion-button routerLink="login" class="btn-login"> Login </ion-button>
-            </div>
-          </div>
-          <!-- Botón Registrarme -->
-          <div class="row">
-            <div class="">
-              <ion-button routerLink="registro" class="btn-register" fill="clear">
-                Registrarme
-              </ion-button>
-            </div>
-          </div>
-        </div>
-      </div>
+<ion-header class="ion-no-border">
+  <div class="contenedor-header">
+    <ion-img id="oncotrackerlogo"  src="assets/img/svg/oncotrackerlogo_prov.svg"></ion-img>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="contenedor-principal">
+    <div class="bienvenida">
+      <ion-text>
+        <h1>Bienvenido(a) a Oncotracker.</h1>
+        <p>Descubre un cuidado personalizado. ¡Inicia sesión o crea una cuenta!</p>
+      </ion-text>
     </div>
-  </main>
-</div>
+    <div class="ilustracion-central">
+      <ion-img id="ilustracion"  src="assets/img/svg/login1_illustration.svg"></ion-img>
+    </div>
+    <div class="botones">
+      <ion-button id="btn-login" routerLink="login">Iniciar Sesión</ion-button>
+      <ion-button id="btn-registro" routerLink="registro" fill="outline" >Registrarme</ion-button>
+    </div>
+  </div>
+  
+</ion-content>
+<ion-footer class="ion-no-border">
+  <div class="contenedor-footer">
+    <ion-text>
+      <p>CHRISTUS MUGUERZA</p>
+    </ion-text>
+  </div>
+</ion-footer>

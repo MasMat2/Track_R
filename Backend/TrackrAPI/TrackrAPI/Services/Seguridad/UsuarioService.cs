@@ -1003,7 +1003,7 @@ namespace TrackrAPI.Services.Seguridad
 
         public bool EsAsistente(int idCompania, int idUsuario)
         {
-            return usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente).Any((usuario) => usuario.IdUsuario == idUsuario);
+            return usuarioRepository.ConsultarPorRol(GeneralConstant.ClaveRolAsistente , idCompania).Any((usuario) => usuario.IdUsuario == idUsuario);
         }
 
         public bool EsMedico(int idCompania, int idUsuario)

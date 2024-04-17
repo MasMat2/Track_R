@@ -1,0 +1,25 @@
+@import "../../../../../../theme/variables.scss";
+
+ion-header{
+    ion-title{
+      font-weight: bold;
+    }
+    .primary-toolbar{
+      --background: url('../../../../../../assets/header_light.svg');
+      height: 20vh;
+      color: var(--color-terceario);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+}
+
+ion-content{
+    --background: #F3F4FA;
+}
+
+ion-title{
+    color: var(--color-terceario);
+    font-weight: bold;
+    padding-top: 3vh;
+}

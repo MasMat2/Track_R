@@ -44,6 +44,11 @@ public class ArchivoService
         return _archivoRepository.GetFileName(idArchivo);
     }
 
+    public string GetFileMime(int idArchivo)
+    {
+        return _archivoRepository.GetFileMime(idArchivo);
+    }
+
     public Archivo? ObtenerImagenUsuario(int idUsuario)
     {
         return _archivoRepository.ObtenerImagenUsuario(idUsuario);
