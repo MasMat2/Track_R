@@ -7,6 +7,11 @@
           Atrás
         </ion-button>
       </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button (click)="agregarEstudio()">
+          <ion-icon slot="icon-only" name="add"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-toolbar>
   </div>
 </ion-header>
@@ -17,8 +22,61 @@
         <h3>Mis estudios</h3>
       </ion-text>
     </div>
-    
-    <ion-button fill="outline" expand="block" button fill="outline" routerLink="/home/perfil/mis-estudios/agregar">
+
+    <div class="lista-vacia" *ngIf="listaEstudiosVacia()">
+      <ion-text>
+        <p>Nada Por aquí. <br> Aún no tienes estudios registrados</p>
+      </ion-text>
+      <ion-button fill="outline" (click)="agregarEstudio()">
+        <ion-icon slot="start" name="add"></ion-icon>
+        Añadir estudio
+      </ion-button>
+    </div>
+
+    <div class="barra-busqueda" *ngIf="!listaEstudiosVacia()">
+      <ion-searchbar show-cancel-button="focus" placeholder="Buscar" animated (ionChange)="buscarEstudio($event)"></ion-searchbar>
+    </div>
+    <div class="lista-estudios" *ngIf="!listaEstudiosVacia()">
+      <div *ngIf="!filtrando">
+        <ion-list *ngIf="expedientes$ | async as estudios">
+          <ion-item-sliding *ngFor="let estudio of estudios">
+            <ion-item lines="none" (click)="abrirEstudio(estudio)">
+              <ion-label>
+                <h3>{{estudio.nombre}}</h3>
+                <p>{{estudio.fechaRealizacion | date : "dd/MM/yyyy"}}</p>
+              </ion-label>
+              <ion-icon name="chevron-forward"></ion-icon>
+            </ion-item>
+            <ion-item-options>
+              <ion-item-option expandable (click)="presentarAlertaEliminar(estudio)">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+      </div>
+      <!-- lista de estudios filtrados -->
+      <div *ngIf="filtrando">
+        <ion-list>
+          <ion-item-sliding *ngFor="let estudio of estudiosFiltradosPorBusqueda">
+            <ion-item lines="none" (click)="abrirEstudio(estudio)">
+              <ion-label>
+                <h3>{{estudio.nombre}}</h3>
+                <p>{{estudio.fechaRealizacion | date : "dd/MM/yyyy"}}</p>
+              </ion-label>
+              <ion-icon name="chevron-forward"></ion-icon>
+            </ion-item>
+            <ion-item-options>
+              <ion-item-option expandable (click)="presentarAlertaEliminar(estudio)">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+      </div>
+    </div>
+  
+    <!-- <ion-button fill="outline" expand="block" button fill="outline" routerLink="/home/perfil/mis-estudios/agregar">
       Agregar estudio
     </ion-button>
 
@@ -71,6 +129,6 @@
         </ng-template>
       </p-table>
       </ng-container>
-    </div>
+    </div>  -->
   </div>
 </ion-content>

@@ -1,15 +1,15 @@
-@import 'src/app/shared/styles/data-grid.scss';
-@import "~primeng/resources/primeng.min.css";
+// @import 'src/app/shared/styles/data-grid.scss';
+// @import "~primeng/resources/primeng.min.css";
 
 
 
 ion-header{
   border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
-  background: var(--primary-700);
+  background: var(--primary-50);
 }
 
 .contenedor-header{
-  background: var(--primary-700);
+  background: var(--primary-50);
   height: 20vh;
   width: 100%;
 
@@ -41,7 +41,8 @@ ion-header{
   background: var(--primary-50);
 
   .titulo{
-      padding: 16px 32px 16px 32px;
+      height: 8vh;
+      padding: 16px 32px 0 32px;
 
       ion-text{
           text-align: start;
@@ -56,23 +57,97 @@ ion-header{
       }
   }
 
+  .lista-vacia{
+    height: 72vh;
+    padding-top: 20vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    ion-text{
+        text-align: center;
+        p{
+            font-size: 16px;
+            line-height: 22px;
+            font-family: var(--font-body);
+            color: var(--neutral-500);
+        }
+    }
+
+    ion-button{
+        width: 187px;
+        height: 44px;
+        font-family: var(--font-body);
+        font-weight: bold;
+        font-size: 16px;
+        --border-radius: 8px;
+        color: var(--primary-700);
+        --border-color: var(--primary-700);
+        --border-width: 1px;
+    }
+  }
+
+  .barra-busqueda{
+    height: 10vh;
+    padding: 0 32px 0 32px;
+    ion-searchbar{
+      padding-left: 0;
+      padding-right: 0;
+      --box-shadow: 0;
+      --border-radius: 4.16px;
+    }
+  }
+
+  .lista-estudios{
+    height: 62vh;
+
+    ion-list{
+      background: var(--primary-50);
+      ion-item{
+        --border-width: 0 0 2px 0;
+        --border-color: var(--primary-50);
+
+        ion-label{
+          padding-left: 16px;
+          h3{
+            font-family: var(--font-body);
+            font-size: 16px;
+            color: var(--neutral-900);
+          }
+
+          p{
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: var(--neutral-600);
+
+          }
+        }
+      }
+
+      ion-item-option{
+        background: var(--error-200);
+        color: var(--neutral-50);
+      }
+    }
+  }
+
 }
 
-.primeng-table th {
-    color: #651B73;
-  }
+// .primeng-table th {
+//     color: #651B73;
+//   }
 
-  ion-button {
+//   ion-button {
 
-    --color:black;
-    --border-color: #9BD8AC;
+//     --color:black;
+//     --border-color: #9BD8AC;
 
-    --padding-top: 10px;
-    --padding-bottom: 10px;
-    font-weight: 500;
-  }
+//     --padding-top: 10px;
+//     --padding-bottom: 10px;
+//     font-weight: 500;
+//   }
 
-.tabla{
-    margin-left: 10px;
-    margin-right: 10px;
-  }
+// .tabla{
+//     margin-left: 10px;
+//     margin-right: 10px;
+//   }

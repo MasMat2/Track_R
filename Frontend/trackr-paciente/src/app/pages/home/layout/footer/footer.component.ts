@@ -35,7 +35,7 @@ export class FooterComponent implements OnInit {
   protected mostrarFooter: boolean;
 
   //Rutas donde NO queremos que se muestre el footer (la condición es que la ruta empiece con este string):
-  private rutasNoMostrarFooter: string[] = ['/home/chat-movil/chat/', '/home/perfil/mis-doctores'];
+  private rutasNoMostrarFooter: string[] = ['/home/chat-movil/chat/', '/home/perfil/mis-doctores', '/home/perfil/mis-estudios'];
 
   @ViewChild('tabs') tabs: IonTabs;
   constructor( private router: Router)

@@ -9,6 +9,10 @@ import { ExpedienteEstudioService } from '@services/expediente-estudio.service';
 import { CapacitorUtils } from '@utils/capacitor-utils';
 import { ExpedienteEstudioFormularioCaptura } from 'src/app/shared/dtos/expediente-estudio-formulario-captura-dto';
 import { validarCamposRequeridos } from 'src/app/shared/utils/utileria';
+import { ModalController } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { eyeOutline, personOutline, calendarOutline, cameraOutline, documentOutline, trashOutline} from 'ionicons/icons';
+import { Constants } from '@utils/constants/constants';
 
 @Component({
   selector: 'app-mis-estudios-formulario',
@@ -28,7 +32,9 @@ import { validarCamposRequeridos } from 'src/app/shared/utils/utileria';
 export class MisEstudiosFormularioPage implements OnInit {
   private files: PickedFile[] = [];
   protected isPictureTaken: boolean = false;
+  protected esArchivoSeleccionado: boolean = false;
   protected fecha = new Date();
+  protected fechastring: string = "2023-11-02T01:22:00";
   private image_src: string = '';
   private mimeType: string = '';
   protected btnSubmit = false;
@@ -38,13 +44,13 @@ export class MisEstudiosFormularioPage implements OnInit {
     private capacitorUtil: CapacitorUtils,
     private alertController: AlertController,
     private expedienteEstudioService: ExpedienteEstudioService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private modalController: ModalController,
+  ) {addIcons({eyeOutline, personOutline, calendarOutline, cameraOutline, documentOutline, trashOutline})}
 
   ngOnInit() {}
 
   protected async takePicture() {
-    this.isPictureTaken = true;
     this.image_src = await this.capacitorUtil.takePicture();
 
     const [, data] = this.image_src.split(',');
@@ -53,6 +59,8 @@ export class MisEstudiosFormularioPage implements OnInit {
     this.expedienteEstudio.archivo = data;
     this.expedienteEstudio.archivoTipoMime = mimeType;
     this.expedienteEstudio.archivoNombre = this.generateFileName();
+
+    this.isPictureTaken = true;
   }
 
   protected enviarFormulario(formulario: NgForm) {
@@ -70,6 +78,8 @@ export class MisEstudiosFormularioPage implements OnInit {
     this.expedienteEstudio.archivo = this.files[0].data;
     this.expedienteEstudio.archivoTipoMime = this.files[0].mimeType;
     this.expedienteEstudio.archivoNombre = this.files[0].name;
+
+    this.esArchivoSeleccionado = true;
   }
 
   //temporal o de prueba del nombre de la fotografia cuando se toma o se selecciona
@@ -83,27 +93,53 @@ export class MisEstudiosFormularioPage implements OnInit {
   }
 
   private agregarExpediente() {
-    const MENSAJE_EXITO: string = `El estudio ha sido agregado correctamente`;
-    const subscription = this.expedienteEstudioService
+    this.expedienteEstudioService
       .agregarExpediente(this.expedienteEstudio)
       .subscribe({
         next: () => {
-          this.presentAlert(MENSAJE_EXITO);
-          this.router.navigateByUrl('home/perfil/mis-estudios');
         },
         error: () => {
           this.btnSubmit = false;
         },
+        complete: () => {
+          this.presentarAlertaSuccess();
+        }
       });
   }
 
-  private async presentAlert(mensaje: string) {
-    const alert = await this.alertController.create({
-      header: 'Mis Estudios',
-      message: mensaje,
-      buttons: ['OK'],
+  protected cerrarModal(){
+    this.modalController.dismiss();
+  }
+
+  protected imprimirFecha(){
+    console.log(this.fechastring);
+  }
+
+  protected eliminarAdjunto(){
+    this.expedienteEstudio.archivo = '';
+    this.expedienteEstudio.archivoNombre = '';
+    this.expedienteEstudio.archivoTipoMime = '';
+
+    this.isPictureTaken = false;
+    this.esArchivoSeleccionado = false;
+  }
+
+  protected async presentarAlertaSuccess() {
+
+    const alertSuccess = await this.alertController.create({
+      header: 'Estudio registrado',
+      subHeader: 'El estudio ha sido registrado correctamente',
+      message: Constants.ALERT_SUCCESS,
+      buttons: [{
+        text: 'De acuerdo',
+        role: 'confirm',
+        handler: ()=> {
+          this.modalController.dismiss();
+        }
+      }],
+      cssClass: 'custom-alert-success',
     });
 
-    await alert.present();
+    await alertSuccess.present();
   }
 }
