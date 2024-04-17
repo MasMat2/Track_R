@@ -73,6 +73,7 @@ export class MisDoctoresPage   {
         error: () => {
         },
         complete: () => {
+          this.presentarAlertaEliminadoExitosamente();
           subscription.unsubscribe();
         }
       });
@@ -100,6 +101,25 @@ export class MisDoctoresPage   {
     });
 
     await alert.present();
+  }
+
+  protected async presentarAlertaEliminadoExitosamente() {
+
+    const alertSuccess = await this.alertController.create({
+      header: 'Elemento eliminado exitosamente',
+      //subHeader: 'Acabamos de enviarte un correo electrónico con un enlace para restablecer tu contraseña.',
+      message: Constants.ALERT_SUCCESS,
+      buttons: [{
+        text: 'De acuerdo',
+        role: 'confirm',
+        handler: () => {
+          //this.router.navigateByUrl('/acceso/login');
+        }
+      }],
+      cssClass: 'custom-alert-success',
+    });
+
+    await alertSuccess.present();
   }
 
   protected async AgregarDoctor(){
