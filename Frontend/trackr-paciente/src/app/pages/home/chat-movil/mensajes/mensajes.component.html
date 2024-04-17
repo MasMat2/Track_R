@@ -1,22 +1,16 @@
 <ion-header>
   <ion-toolbar class="chat-header">
     <ion-buttons slot="start">
-      <ion-button
-        fill="clear"
-        routerLink="home/chat-movil"
-        (click)="regresarBtn()"
-      >
+      <ion-button fill="clear" routerLink="home/chat-movil" (click)="regresarBtn()">
         <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title
-      class="ion-text-center ion-align-items-center"
-      style="padding: 1vh 2vw 1vh 2vw; font-size: 1em; font-weight: bold"
-    >
+    <ion-title class="ion-text-center ion-align-items-center"
+      style="padding: 1vh 2vw 1vh 2vw; font-size: 1em; font-weight: bold">
       {{ chat.titulo }}
     </ion-title>
-    <ion-buttons slot="end">
-      <ion-button fill="clear" (click)="crearLlamada()">
+    <ion-buttons slot="end" class="popup-wrapper">
+      <ion-button class="popup-button" fill="clear" id="click-trigger">
         <ion-icon name="videocam-outline"></ion-icon>
       </ion-button>
 
@@ -31,7 +25,18 @@
               <ion-item (click)="abandonarChat()">Abandonar Chat</ion-item>
             </ion-list>
           </ion-content>
+        </ng-template>
+      </ion-popover>
           
+
+      <ion-popover trigger="click-trigger" triggerAction="click" dismiss-on-select="true" size="auto">
+        <ng-template>
+          <ion-content class="ion-padding" (click)="crearLlamadaJitsi()">
+            <div class="video-option">Jitsi</div>
+          </ion-content>
+          <ion-content class="ion-padding" (click)="crearLlamadaWebRTC()">
+            <div class="video-option">WebRTC</div>
+          </ion-content>
         </ng-template>
       </ion-popover>
 
@@ -88,7 +93,7 @@
       <div style="height: 2vh;"></div>
       <div *ngFor="let mensaje of mensajes" >
         <div class="message user" *ngIf="mostrarMensaje(mensaje.idPersona)">
-          <div class="message-bubble" (click)="validarMeet(mensaje.mensaje)">
+          <div class="message-bubble">
             {{mensaje.mensaje}} <br>
             <button class="btn btn-1 archivo" (click)="clickArchivo(mensaje.idArchivo)" *ngIf="mensaje.idArchivo !== 0 && !esAudio(mensaje.archivoTipoMime)">
               <ion-grid>
@@ -112,8 +117,8 @@
           </div>
         </div>
         <div class="message other" *ngIf="!mostrarMensaje(mensaje.idPersona)">
-          <div class="message-bubble">
-            <div class="nombre">{{mensaje.nombrePersona}}</div>
+          <div class="message-bubble" (click)="validarMeet(mensaje.mensaje)">
+            <div class="nombre" *ngIf="!mostrarMensaje(mensaje.idPersona)">{{mensaje.nombrePersona}}</div>
             {{mensaje.mensaje}} <br>
             <button class="btn archivo" (click)="clickArchivo(mensaje.idArchivo)" *ngIf="mensaje.idArchivo !== 0">
               <i class="fa fa-file" style="font-size: 24px;"></i> {{mensaje.archivoNombre}}
@@ -125,7 +130,7 @@
       </div>
     </div>
   </div>
- 
+
 </ion-content>
 
 <ion-footer class="chat-footer">

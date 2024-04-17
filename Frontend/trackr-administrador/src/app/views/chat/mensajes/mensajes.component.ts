@@ -363,8 +363,18 @@ export class MensajesComponent {
       } else {
         console.log("Error al validar codigo meet jitsi.");
       }
+    }
 
+    if (msj.includes('webrtc-' + this.idChat)) {
+      const regex = /webrtc-\d{3}-(\d+)/;
+      const match = msj.match(regex);
+      if (match && match.length > 0) {
+        const codigo = match[1];
+        this.router.navigate(['/administrador/webrtc', codigo]);
 
+      } else {
+        console.log("Error al validar codigo meet webrtc.");
+      }
     }
   }
 

@@ -1,29 +1,28 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
-import { HeaderComponent } from '../../layout/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { SignalingHubService } from '@services/signaling-hub.service';
-import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-video-chat',
-  templateUrl: './video-chat.page.html',
-  styleUrls: ['./video-chat.page.scss'],
+  templateUrl: './video-chat.component.html',
+  styleUrls: ['./video-chat.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
-    IonicModule,
-    HeaderComponent,
+    // IonicModule,
+    // HeaderComponent,
     FormsModule
   ]
-})
-export class VideoChatPage extends EventTarget {
+}) 
+export class VideoChatComponent extends EventTarget implements OnInit, OnDestroy {
   protected pc: RTCPeerConnection;
   protected localStream: MediaStream;
   protected remoteStream: MediaStream;
-  private routerSubscription: Subscription;
+  private destroy$: Subject<void>;
 
   protected servers = {
     iceServers: [
@@ -65,23 +64,23 @@ export class VideoChatPage extends EventTarget {
     private router: Router
     ) {
     super();
-    // this.routerSubscription = this.router.events.subscribe(event => {
-    //   if (event instanceof NavigationStart) {
-    //     this.closeStreams();
-    //   }
-    // });
-    this.start();
   }
+  
+  async ngOnInit(): Promise<void> {
 
-  async start(): Promise<void> {
+    console.log("init1  ");
+    
+    this.destroy$ = new Subject<void>();
 
     await this.signalingHubService.iniciarConexion();
 
     await this.webcamButtonClick();
 
     this.signalingObservers();
+    
 
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.pipe(takeUntil(this.destroy$))
+    .subscribe(params => {
       this.callerId = params.get('id')!;
       console.log(this.callerId);
 
@@ -99,7 +98,8 @@ export class VideoChatPage extends EventTarget {
   }
 
   private signalingObservers() {
-    this.signalingHubService.message$.subscribe((json_string: string) => {
+    this.signalingHubService.message$.pipe(takeUntil(this.destroy$))
+    .subscribe((json_string: string) => {
       if(json_string.length <= 0) return;
 
       var message = JSON.parse(json_string);
@@ -130,7 +130,7 @@ export class VideoChatPage extends EventTarget {
 
   // Caller listener
   calleeConnected = async () => {
-    if(this.is_caller || !this.is_caller){
+    if(this.is_caller){
 
       this.startRTC();
 
@@ -207,21 +207,22 @@ export class VideoChatPage extends EventTarget {
     // Pull tracks from remote stream, add to video stream
     this.pc.ontrack = (event) => {
       event.streams[0].getTracks().forEach((track) => {
-        console.log('Received remote track');
         this.remoteStream.addTrack(track);
       });
     };
 
     this.rtcObservers();
+
   }
 
 
   private rtcObservers() {
-    this.signalingHubService.message$.subscribe((json_string: string) => {
+    this.signalingHubService.message$.pipe(takeUntil(this.destroy$))
+    .subscribe((json_string: string) => {
       if(json_string.length <= 0) return;
 
       var message = JSON.parse(json_string);
-      console.log(message);
+      // console.log(message);
       switch (message.type) {
         case "new-ice-candidate":
           this.pc.addIceCandidate(message.candidate);
@@ -234,7 +235,6 @@ export class VideoChatPage extends EventTarget {
             this.pc.setRemoteDescription(answerDescription);
           };
           break;
-
       }
     });
   }
@@ -247,8 +247,12 @@ export class VideoChatPage extends EventTarget {
     this.buttonState = false;
   };
 
-  ionViewWillLeave = async () => {
+  async ngOnDestroy(): Promise<void> {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.signalingHubService.detenerConexion();
     this.closeStreams();
+    console.log("destroy");
   }
 
   closeStreams = () => {

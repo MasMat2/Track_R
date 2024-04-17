@@ -455,8 +455,29 @@ export class MensajesComponent{
     );
   }
 
-  crearLlamada() {
+  crearLlamadaJitsi() {
     this.route.navigate(['/home/video-jitsi/create-call', this.idChat]);
+  }
+
+  crearLlamadaWebRTC() {
+    let idUsuario = this.idUsuario;
+
+    const newRoomName = `webrtc-${this.idChat}-${idUsuario}`;
+
+    const telefonoEmoji = "📞";
+    let mensaje = `${telefonoEmoji} Te espero la sala ${newRoomName}`;
+
+    let msg: ChatMensajeDTO = {
+      fecha: new Date(),
+      idChat: this.idChat,
+      mensaje: mensaje,
+      idPersona: idUsuario,
+      archivo: '',
+      idArchivo: 0
+    };
+
+    this.ChatMensajeHubService.enviarMensaje(msg);
+    this.route.navigate(['/home/chat']);
   }
 
   contestarLlamada(meetCode: string) {
@@ -464,13 +485,27 @@ export class MensajesComponent{
   }
 
   validarMeet(msj: string) {
-
+    console.log(msj);
     if (msj.includes('trackr-' + this.idChat)) {
       const regex = /trackr-\d{3}-\d+/;
       const match = msj.match(regex);
       if (match && match.length > 0) {
         const codigo = match[0];
         this.contestarLlamada(codigo);
+      } else {
+        console.log("Error al validar codigo meet jitsi.");
+      }
+
+
+    }
+
+    if (msj.includes('webrtc-' + this.idChat)) {
+      const regex = /webrtc-\d{3}-(\d+)/;
+      const match = msj.match(regex);
+      if (match && match.length > 0) {
+        const codigo = match[1];
+        this.route.navigate(['/home/chat', codigo]);
+
       } else {
         console.log("Error al validar codigo meet jitsi.");
       }

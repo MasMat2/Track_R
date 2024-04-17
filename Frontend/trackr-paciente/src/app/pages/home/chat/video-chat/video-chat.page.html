@@ -84,7 +84,7 @@
 
     <ion-row class="ion-justify-content-center">
       <ion-col size="auto">
-        <ion-button id="hangupButton" [disabled]="hangupButtonState">Colgar</ion-button>
+        <ion-button id="hangupButton" (click)="closeStreams()">Colgar</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
