@@ -230,14 +230,15 @@ namespace TrackrAPI.Repositorys.Catalogo
                 .ToList();
         }
 
-        public IEnumerable<HospitalDto> ConsultarTodosParaSelector()
+        public IEnumerable<HospitalDto> ConsultarTodosParaSelector(int idDominio)
         {
             return context.Hospital
                 .OrderBy(h => h.Nombre)
+                .Include(h => h.DominioHospital)
                 .Select(h => new HospitalDto
                 {
                     IdHospital = h.IdHospital,
-                    Nombre = h.Nombre
+                    Nombre = h.DominioHospital.Any( dH => dH.IdDominio == idDominio) ?   h.Nombre : h.Nombre + " ( Indefinido )"
                 })
                 .ToList();
         }

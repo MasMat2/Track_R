@@ -18,6 +18,7 @@ import { DominioHospitalDto } from '@dtos/catalogo/dominio-hospital-dto';
 @Component({
   selector: 'app-dominio-formulario',
   templateUrl: './dominio-formulario.component.html',
+  styleUrls: ['./dominio-formulario.component.scss'],
 })
 export class DominioFormularioComponent implements OnInit {
 
@@ -104,7 +105,7 @@ export class DominioFormularioComponent implements OnInit {
   }
 
   obtenerHospitales(){
-    this.hospitalService.consultarTodosParaSelector().subscribe(res => {
+    this.hospitalService.consultarTodosParaSelector(this.dominio.idDominio).subscribe(res => {
       this.hospitales = res;
     })
   }

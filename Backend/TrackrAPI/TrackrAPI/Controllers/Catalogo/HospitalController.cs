@@ -92,10 +92,10 @@ namespace TrackrAPI.Controllers.Catalogo
 
         [AllowAnonymous]
         [HttpGet]
-        [Route("consultarTodosParaSelector")]
-        public IEnumerable<HospitalDto> ConsultarTodosParaSelector()
+        [Route("consultarTodosParaSelector/{idDominio}")]
+        public IEnumerable<HospitalDto> ConsultarTodosParaSelector(int idDominio)
         {
-            return hospitalService.ConsultarTodosParaSelector();
+            return hospitalService.ConsultarTodosParaSelector(idDominio);
         }
 
         [HttpGet]

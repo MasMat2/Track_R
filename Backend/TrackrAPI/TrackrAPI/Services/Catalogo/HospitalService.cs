@@ -87,9 +87,9 @@ namespace TrackrAPI.Services.Catalogo
             return hospitalRepository.ConsultarPorCompania(idCompania);
         }
 
-        public IEnumerable<HospitalDto> ConsultarTodosParaSelector()
+        public IEnumerable<HospitalDto> ConsultarTodosParaSelector(int idDominio)
         {
-            return hospitalRepository.ConsultarTodosParaSelector();
+            return hospitalRepository.ConsultarTodosParaSelector(idDominio);
         }
 
         public IEnumerable<HospitalDto> ConsultarDisponiblesParaListaPrecio(int? idListaPrecioSeleccionada)
