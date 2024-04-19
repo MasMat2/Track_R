@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { chevronForward, chevronDown, chevronBack} from 'ionicons/icons';
+import { chevronForward, chevronDown} from 'ionicons/icons';
 import { AuthService } from '../../../../auth/auth.service';
 import { AlertController } from '@ionic/angular/standalone';
 import { Constants } from '@utils/constants/constants';
@@ -49,7 +49,6 @@ export class InicioPerfilComponent  implements OnInit {
     addIcons({
       chevronForward,
       chevronDown,
-      chevronBack,
       'persona':'assets/img/svg/user.svg',
       'cruz': 'assets/img/svg/cross.svg', 
       'portapapeles-mas': 'assets/img/svg/clipboard-plus.svg',
