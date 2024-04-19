@@ -34,7 +34,7 @@ export class MisEstudiosFormularioPage implements OnInit {
   protected isPictureTaken: boolean = false;
   protected esArchivoSeleccionado: boolean = false;
   protected fecha = new Date();
-  protected fechastring: string = "2023-11-02T01:22:00";
+  protected fechastring: string = this.fecha.toISOString();
   private image_src: string = '';
   private mimeType: string = '';
   protected btnSubmit = false;
