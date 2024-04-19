@@ -100,7 +100,7 @@ namespace TrackrAPI.Services.Inventario
         public void ValidarEliminar(int idDomicilio)
         {
             ValidarExistencia(idDomicilio);
-            ValidarDependencia(idDomicilio);
+            //ValidarDependencia(idDomicilio);
         }
 
         public void ValidarRequerido(Domicilio domicilio, bool validarSucursal)
@@ -202,29 +202,29 @@ namespace TrackrAPI.Services.Inventario
             }
         }
 
-        public void ValidarDependencia(int idDomicilio)
-        {
-            var domicilio = domicilioRepository.ConsultarDependencias(idDomicilio);
+        //public void ValidarDependencia(int idDomicilio)
+        //{
+        //    var domicilio = domicilioRepository.ConsultarDependencias(idDomicilio);
 
-            if (domicilio.OrdenCompra.Any())
-            {
-                throw new CdisException(MensajeDependenciaOrdenCompra);
-            }
+        //    if (domicilio.OrdenCompra.Any())
+        //    {
+        //        throw new CdisException(MensajeDependenciaOrdenCompra);
+        //    }
 
-            if (domicilio.Pedido.Any())
-            {
-                throw new CdisException(MensajeDependenciaPedido);
-            }
+        //    if (domicilio.Pedido.Any())
+        //    {
+        //        throw new CdisException(MensajeDependenciaPedido);
+        //    }
 
-            if (domicilio.ExpedienteAdministrativoMercancia.Any())
-            {
-                throw new CdisException(MensajeDependenciaExpedienteMercancia);
-            }
+        //    if (domicilio.ExpedienteAdministrativoMercancia.Any())
+        //    {
+        //        throw new CdisException(MensajeDependenciaExpedienteMercancia);
+        //    }
 
-            if (domicilio.ExpedienteAdministrativoViaje.Any())
-            {
-                throw new CdisException(MensajeDependenciaExpedienteViaje);
-            }
-        }
+        //    if (domicilio.ExpedienteAdministrativoViaje.Any())
+        //    {
+        //        throw new CdisException(MensajeDependenciaExpedienteViaje);
+        //    }
+        //}
     }
 }

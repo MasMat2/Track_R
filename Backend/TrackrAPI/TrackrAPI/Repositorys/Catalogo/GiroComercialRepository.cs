@@ -43,7 +43,7 @@ namespace TrackrAPI.Repositorys.Catalogo
             return context.GiroComercial
                 .Where(gc => gc.IdGiroComercial == idGiroComercial)
                 .Include(gc => gc.Compania)
-                .Include(gc => gc.Mercado)
+                //.Include(gc => gc.Mercado)
                 .FirstOrDefault();
         }
     }

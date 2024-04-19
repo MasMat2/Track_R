@@ -26,8 +26,6 @@ namespace TrackrAPI.Models
         public int? IdFlujo { get; set; }
         public int? IdFlujoDetalleAplicado { get; set; }
 
-        public virtual FlujoDetalleAplicado? IdFlujoDetalleAplicadoNavigation { get; set; }
-        public virtual Flujo? IdFlujoNavigation { get; set; }
         public virtual ProyectoElementoTecnica IdProyectoElementoTecnicaNavigation { get; set; } = null!;
         public virtual ProyectoEstatus IdProyectoEstatusNavigation { get; set; } = null!;
         public virtual Usuario? IdUsuarioResponsableNavigation { get; set; }

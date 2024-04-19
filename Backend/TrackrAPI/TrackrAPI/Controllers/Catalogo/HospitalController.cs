@@ -98,11 +98,11 @@ namespace TrackrAPI.Controllers.Catalogo
             return hospitalService.ConsultarTodosParaSelector(idDominio);
         }
 
-        [HttpGet]
-        [Route("consultarDisponiblesParaListaPrecio/{idListaPrecioSeleccionada}")]
-        public IEnumerable<HospitalDto> ConsultarDisponiblesParaListaPrecio(int? idListaPrecioSeleccionada)
-        {
-            return hospitalService.ConsultarDisponiblesParaListaPrecio(idListaPrecioSeleccionada);
-        }
+        //[HttpGet]
+        //[Route("consultarDisponiblesParaListaPrecio/{idListaPrecioSeleccionada}")]
+        //public IEnumerable<HospitalDto> ConsultarDisponiblesParaListaPrecio(int? idListaPrecioSeleccionada)
+        //{
+        //    return hospitalService.ConsultarDisponiblesParaListaPrecio(idListaPrecioSeleccionada);
+        //}
     }
 }

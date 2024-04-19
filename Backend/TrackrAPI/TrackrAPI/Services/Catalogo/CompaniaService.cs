@@ -4,17 +4,13 @@ using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Catalogo;
-using TrackrAPI.Repositorys.Contabilidad;
-using TrackrAPI.Repositorys.GestionEgresos;
 using TrackrAPI.Repositorys.Seguridad;
-using TrackrAPI.Services.Contabilidad;
 using TrackrAPI.Services.Inventario;
 using TrackrAPI.Services.Seguridad;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
-using TrackrAPI.Services.PedidoEnLinea;
 
 namespace TrackrAPI.Services.Catalogo
 {
@@ -22,100 +18,55 @@ namespace TrackrAPI.Services.Catalogo
     {
         private readonly IAccesoPerfilRepository accesoPerfilRepository;
         private readonly IAccesoRepository accesoRepository;
-        private readonly IAgrupadorCuentaContableRepository agrupadorCuentaContableRepository;
         private readonly ICompaniaRepository companiaRepository;
-        private readonly IConceptoRepository conceptoRepository;
-        private readonly IConfiguracionRepository configuracionRepository;
-        private readonly ICuentaContableRepository cuentaContableRepository;
         private readonly IHospitalRepository hospitalRepository;
-        private readonly IImpuestoDetalleRepository impuestoDetalleRepository;
-        private readonly IImpuestoRepository impuestoRepository;
         private readonly IPerfilRepository perfilRepository;
         private readonly IRolRepository rolRepository;
-        private readonly ITipoAuxiliarRepository tipoAuxiliarRepository;
-        private readonly IUbicacionVentaRepository ubicacionVentaRepository;
-        private readonly ITipoFlujoRepository tipoFlujoRepository;
 
-        private readonly AlmacenService almacenService;
         private readonly CompaniaContactoService companiaContactoService;
         private readonly CompaniaValidatorService companiaValidatorService;
         private readonly CorreoHelper correoHelper;
         private readonly GiroComercialService giroComercialService;
         private readonly HospitalService hospitalService;
-        private readonly JerarquiaService jerarquiaService;
-        private readonly PuntoVentaService puntoVentaService;
-        private readonly UsuarioAlmacenService usuarioAlmacenService;
         private readonly UsuarioRolService usuarioRolService;
         private readonly UsuarioService usuarioService;
-        private readonly FlujoService flujoService;
-        private readonly IMercadoRepository mercadoRepository;
 
         private readonly IWebHostEnvironment env;
 
         public CompaniaService(
             IAccesoPerfilRepository accesoPerfilRepository,
             IAccesoRepository accesoRepository,
-            IAgrupadorCuentaContableRepository agrupadorCuentaContableRepository,
             ICompaniaRepository companiaRepository,
-            IConceptoRepository conceptoRepository,
-            IConfiguracionRepository configuracionRepository,
-            ICuentaContableRepository cuentaContableRepository,
             IHospitalRepository hospitalRepository,
-            IImpuestoDetalleRepository impuestoDetalleRepository,
-            IImpuestoRepository impuestoRepository,
             IPerfilRepository perfilRepository,
             IRolRepository rolRepository,
-            ITipoAuxiliarRepository tipoAuxiliarRepository,
-            IUbicacionVentaRepository ubicacionVentaRepository,
-            ITipoFlujoRepository tipoFlujoRepository,
 
-            AlmacenService almacenService,
             CompaniaContactoService companiaContactoService,
             CompaniaValidatorService companiaValidatorService,
             CorreoHelper correoHelper,
             GiroComercialService giroComercialService,
             HospitalService hospitalService,
-            JerarquiaService jerarquiaService,
-            PuntoVentaService puntoVentaService,
-            UsuarioAlmacenService usuarioAlmacenService,
             UsuarioRolService usuarioRolService,
             UsuarioService usuarioService,
-            FlujoService flujoService,
-            IMercadoRepository mercadoRepository,
 
             IWebHostEnvironment env)
         {
             this.accesoPerfilRepository = accesoPerfilRepository;
             this.accesoRepository = accesoRepository;
-            this.agrupadorCuentaContableRepository = agrupadorCuentaContableRepository;
             this.companiaRepository = companiaRepository;
-            this.conceptoRepository = conceptoRepository;
-            this.configuracionRepository = configuracionRepository;
-            this.cuentaContableRepository = cuentaContableRepository;
             this.hospitalRepository = hospitalRepository;
-            this.impuestoDetalleRepository = impuestoDetalleRepository;
-            this.impuestoRepository = impuestoRepository;
             this.perfilRepository = perfilRepository;
             this.rolRepository = rolRepository;
-            this.tipoAuxiliarRepository = tipoAuxiliarRepository;
-            this.ubicacionVentaRepository = ubicacionVentaRepository;
-            this.tipoFlujoRepository = tipoFlujoRepository;
 
-            this.almacenService = almacenService;
             this.companiaContactoService = companiaContactoService;
             this.companiaValidatorService = companiaValidatorService;
             this.correoHelper = correoHelper;
             this.giroComercialService = giroComercialService;
             this.hospitalService = hospitalService;
-            this.jerarquiaService = jerarquiaService;
-            this.puntoVentaService = puntoVentaService;
-            this.usuarioAlmacenService = usuarioAlmacenService;
             this.usuarioRolService = usuarioRolService;
             this.usuarioService= usuarioService;
-            this.flujoService = flujoService;
 
             this.env = env;
-            this.mercadoRepository = mercadoRepository;
         }
 
         public IEnumerable<CompaniaDto> ConsultarPorUsuarioPermiso(int idUsuario)
@@ -151,13 +102,13 @@ namespace TrackrAPI.Services.Catalogo
         public int Agregar(CompaniaDto companiaDto)
         {
             Compania compania = CrearCompaniaDtoModel(companiaDto);
-            AgrupadorCuentaContable agrupadorAtisc = agrupadorCuentaContableRepository.ConsultarPorClave(GeneralConstant.ClaveAgrupadorCuentaAtisc);
+            //AgrupadorCuentaContable agrupadorAtisc = agrupadorCuentaContableRepository.ConsultarPorClave(GeneralConstant.ClaveAgrupadorCuentaAtisc);
 
             compania.Clave = GenerarClave();
             compania.AfectacionContable = false;
             compania.Timbrado = false;
             compania.UsoAlmacen = false;
-            compania.IdAgrupadorCuentaContable = agrupadorAtisc.IdAgrupadorCuentaContable;
+            //compania.IdAgrupadorCuentaContable = agrupadorAtisc.IdAgrupadorCuentaContable;
 
             using var scope = new TransactionScope(
                 TransactionScopeOption.Required,
@@ -176,15 +127,15 @@ namespace TrackrAPI.Services.Catalogo
             AgregarPerfilesDefault(compania);
             int idLocacion = AgregarLocacionDefault(compania);
             int idUsuario = AgregarUsuarioDefault(compania, idLocacion, companiaDto.contrasenaUsuario);
-            int idAlmacen = AgregarAlmacenDefault(compania, idUsuario, idLocacion);
-            int idPuntoVenta = AgregarPuntoDeVentaDefault(idAlmacen, idUsuario);
+            //int idAlmacen = AgregarAlmacenDefault(compania, idUsuario, idLocacion);
+            //int idPuntoVenta = AgregarPuntoDeVentaDefault(idAlmacen, idUsuario);
             AgregarRolesDefaultAdministrador(idUsuario);
-            AgregarCuentasContables(compania);
-            AgregarConceptos(compania);
-            AgregarJerarquiasContabilidad(compania);
-            AgregarImpuestosDefault(compania.IdCompania);
+            //AgregarCuentasContables(compania);
+            //AgregarConceptos(compania);
+            //AgregarJerarquiasContabilidad(compania);
+            //AgregarImpuestosDefault(compania.IdCompania);
             AgregarClientePublicoGeneral(compania, idLocacion);
-            AgregarFlujoDefault(idCompania);
+            //AgregarFlujoDefault(idCompania);
 
             // if (companiaDto.CompaniaContacto != null)
             // {
@@ -210,16 +161,16 @@ namespace TrackrAPI.Services.Catalogo
             int idUsuario = usuarioService.AgregarCliente(usuario);
 
             var rolCliente = new UsuarioRol();
-            var conceptoCuentaPorCobrar = conceptoRepository.ConsultarPorClave(GeneralConstant.ClaveConceptoCuentaPorCobrar, (int)compania.IdCompania);
+            //var conceptoCuentaPorCobrar = conceptoRepository.ConsultarPorClave(GeneralConstant.ClaveConceptoCuentaPorCobrar, (int)compania.IdCompania);
 
             rolCliente.IdUsuario = idUsuario;
             rolCliente.IdRol = rolRepository.ConsultarPorClave(GeneralConstant.ClaveRolCliente).IdRol;
 
-            if (compania.AfectacionContable == true)
-            {
-                rolCliente.IdConcepto = conceptoCuentaPorCobrar != null ? conceptoCuentaPorCobrar.IdConcepto : null;
-                rolCliente.IdCuentaContable = conceptoCuentaPorCobrar != null ? conceptoCuentaPorCobrar.IdCuentaContable : null;
-            }
+            //if (compania.AfectacionContable == true)
+            //{
+            //    rolCliente.IdConcepto = conceptoCuentaPorCobrar != null ? conceptoCuentaPorCobrar.IdConcepto : null;
+            //    rolCliente.IdCuentaContable = conceptoCuentaPorCobrar != null ? conceptoCuentaPorCobrar.IdCuentaContable : null;
+            //}
 
             usuarioRolService.Agregar(rolCliente);
         }
@@ -280,108 +231,108 @@ namespace TrackrAPI.Services.Catalogo
             return usuarioService.Agregar(usuario, idLocacion);
         }
 
-        private int AgregarAlmacenDefault(Compania compania, int idUsuario, int idLocacion)
-        {
-            //Almacén de producción
-            var almacenProduccion = new Almacen();
+        //private int AgregarAlmacenDefault(Compania compania, int idUsuario, int idLocacion)
+        //{
+        //    //Almacén de producción
+        //    var almacenProduccion = new Almacen();
 
-            almacenProduccion.IdCompania = compania.IdCompania;
-            almacenProduccion.Numero = "001";
-            almacenProduccion.Nombre = "Almacén General";
-            almacenProduccion.Descripcion = "Almacén General";
-            almacenProduccion.Calle = compania.Calle;
-            almacenProduccion.NumeroExterior = compania.NumeroExterior;
-            almacenProduccion.NumeroInterior = compania.NumeroInterior;
-            almacenProduccion.Colonia = compania.Colonia;
-            almacenProduccion.Localidad = "Sin Especificar";
-            almacenProduccion.CodigoPostal = compania.CodigoPostal;
-            almacenProduccion.TelefonoUno = compania.Telefono;
-            almacenProduccion.TelefonoDos = compania.Telefono;
-            almacenProduccion.IdEstatusAlmacen = 1;
-            almacenProduccion.IdUsuarioResponsable = idUsuario;
-            almacenProduccion.IdEstado = (int)compania.IdEstado;
-            almacenProduccion.FechaAlta = Utileria.ObtenerFechaActual();
+        //    almacenProduccion.IdCompania = compania.IdCompania;
+        //    almacenProduccion.Numero = "001";
+        //    almacenProduccion.Nombre = "Almacén General";
+        //    almacenProduccion.Descripcion = "Almacén General";
+        //    almacenProduccion.Calle = compania.Calle;
+        //    almacenProduccion.NumeroExterior = compania.NumeroExterior;
+        //    almacenProduccion.NumeroInterior = compania.NumeroInterior;
+        //    almacenProduccion.Colonia = compania.Colonia;
+        //    almacenProduccion.Localidad = "Sin Especificar";
+        //    almacenProduccion.CodigoPostal = compania.CodigoPostal;
+        //    almacenProduccion.TelefonoUno = compania.Telefono;
+        //    almacenProduccion.TelefonoDos = compania.Telefono;
+        //    almacenProduccion.IdEstatusAlmacen = 1;
+        //    almacenProduccion.IdUsuarioResponsable = idUsuario;
+        //    almacenProduccion.IdEstado = (int)compania.IdEstado;
+        //    almacenProduccion.FechaAlta = Utileria.ObtenerFechaActual();
 
-            int idAlmacenProduccion = almacenService.Agregar(almacenProduccion);
+        //    int idAlmacenProduccion = almacenService.Agregar(almacenProduccion);
 
-            var accesoAlmacenProduccion = new UsuarioAlmacen();
+        //    var accesoAlmacenProduccion = new UsuarioAlmacen();
 
-            accesoAlmacenProduccion.IdUsuario = idUsuario;
-            accesoAlmacenProduccion.IdAlmacen = idAlmacenProduccion;
+        //    accesoAlmacenProduccion.IdUsuario = idUsuario;
+        //    accesoAlmacenProduccion.IdAlmacen = idAlmacenProduccion;
 
-            usuarioAlmacenService.Agregar(accesoAlmacenProduccion);
+        //    usuarioAlmacenService.Agregar(accesoAlmacenProduccion);
 
-            //Almacén de producto caduco
-            var almacenCaduco = new Almacen();
+        //    //Almacén de producto caduco
+        //    var almacenCaduco = new Almacen();
 
-            almacenCaduco.IdCompania = compania.IdCompania;
-            almacenCaduco.Numero = "002";
-            almacenCaduco.Nombre = "Almacén Caduco";
-            almacenCaduco.Descripcion = "Almacén Caduco";
-            almacenCaduco.Calle = compania.Calle;
-            almacenCaduco.NumeroExterior = compania.NumeroExterior;
-            almacenCaduco.NumeroInterior = compania.NumeroInterior;
-            almacenCaduco.Colonia = compania.Colonia;
-            almacenCaduco.Localidad = "Sin Especificar";
-            almacenCaduco.CodigoPostal = compania.CodigoPostal;
-            almacenCaduco.TelefonoUno = compania.Telefono;
-            almacenCaduco.TelefonoDos = compania.Telefono;
-            almacenCaduco.IdEstatusAlmacen = 1;
-            almacenCaduco.IdUsuarioResponsable = idUsuario;
-            almacenCaduco.IdEstado = (int)compania.IdEstado;
-            almacenCaduco.FechaAlta = Utileria.ObtenerFechaActual();
+        //    almacenCaduco.IdCompania = compania.IdCompania;
+        //    almacenCaduco.Numero = "002";
+        //    almacenCaduco.Nombre = "Almacén Caduco";
+        //    almacenCaduco.Descripcion = "Almacén Caduco";
+        //    almacenCaduco.Calle = compania.Calle;
+        //    almacenCaduco.NumeroExterior = compania.NumeroExterior;
+        //    almacenCaduco.NumeroInterior = compania.NumeroInterior;
+        //    almacenCaduco.Colonia = compania.Colonia;
+        //    almacenCaduco.Localidad = "Sin Especificar";
+        //    almacenCaduco.CodigoPostal = compania.CodigoPostal;
+        //    almacenCaduco.TelefonoUno = compania.Telefono;
+        //    almacenCaduco.TelefonoDos = compania.Telefono;
+        //    almacenCaduco.IdEstatusAlmacen = 1;
+        //    almacenCaduco.IdUsuarioResponsable = idUsuario;
+        //    almacenCaduco.IdEstado = (int)compania.IdEstado;
+        //    almacenCaduco.FechaAlta = Utileria.ObtenerFechaActual();
 
-            int idAlmacenCaduco = almacenService.Agregar(almacenCaduco);
+        //    int idAlmacenCaduco = almacenService.Agregar(almacenCaduco);
 
-            var accesoAlmacenCaduco = new UsuarioAlmacen();
+        //    var accesoAlmacenCaduco = new UsuarioAlmacen();
 
-            accesoAlmacenCaduco.IdUsuario = idUsuario;
-            accesoAlmacenCaduco.IdAlmacen = idAlmacenCaduco;
+        //    accesoAlmacenCaduco.IdUsuario = idUsuario;
+        //    accesoAlmacenCaduco.IdAlmacen = idAlmacenCaduco;
 
-            usuarioAlmacenService.Agregar(accesoAlmacenCaduco);
+        //    usuarioAlmacenService.Agregar(accesoAlmacenCaduco);
 
-            //Se asigna en almacén default a las áreas de almacen de la locación
-            var locacion = hospitalRepository.Consultar(idLocacion);
-            locacion.IdAlmacenProduccion = idAlmacenProduccion;
-            locacion.IdAlmacenCaduco = idAlmacenCaduco;
-            hospitalService.Editar(locacion);
+        //    //Se asigna en almacén default a las áreas de almacen de la locación
+        //    var locacion = hospitalRepository.Consultar(idLocacion);
+        //    locacion.IdAlmacenProduccion = idAlmacenProduccion;
+        //    locacion.IdAlmacenCaduco = idAlmacenCaduco;
+        //    hospitalService.Editar(locacion);
 
-            return idAlmacenProduccion;
-        }
+        //    return idAlmacenProduccion;
+        //}
 
-        private int AgregarPuntoDeVentaDefault(int idAlmacen, int idUsuario)
-        {
-            var puntoVenta = new PuntoVenta();
+        //private int AgregarPuntoDeVentaDefault(int idAlmacen, int idUsuario)
+        //{
+        //    var puntoVenta = new PuntoVenta();
 
-            puntoVenta.Clave = "001";
-            puntoVenta.Nombre = "Punto de Venta Principal";
-            puntoVenta.Descripcion = "Punto de Venta Principal";
-            puntoVenta.IdAlmacen = idAlmacen;
-            puntoVenta.IdTipoPuntoVenta = 2;
+        //    puntoVenta.Clave = "001";
+        //    puntoVenta.Nombre = "Punto de Venta Principal";
+        //    puntoVenta.Descripcion = "Punto de Venta Principal";
+        //    puntoVenta.IdAlmacen = idAlmacen;
+        //    puntoVenta.IdTipoPuntoVenta = 2;
 
-            int idPuntoVenta = puntoVentaService.Agregar(puntoVenta);
+        //    int idPuntoVenta = puntoVentaService.Agregar(puntoVenta);
 
-            var usuario = usuarioService.Consultar(idUsuario);
-            usuario.IdPuntoVenta = idPuntoVenta;
-            usuarioService.Editar(usuario);
+        //    var usuario = usuarioService.Consultar(idUsuario);
+        //    usuario.IdPuntoVenta = idPuntoVenta;
+        //    usuarioService.Editar(usuario);
 
-            // Se agrega una ubicacion de venta al punto de venta
+        //    // Se agrega una ubicacion de venta al punto de venta
 
-            var ubicacionVenta = new UbicacionVenta();
+        //    var ubicacionVenta = new UbicacionVenta();
 
-            ubicacionVenta.IdPuntoVenta = idPuntoVenta;
-            ubicacionVenta.Nombre = "Mostrador";
-            ubicacionVenta.Clave = "001";
+        //    ubicacionVenta.IdPuntoVenta = idPuntoVenta;
+        //    ubicacionVenta.Nombre = "Mostrador";
+        //    ubicacionVenta.Clave = "001";
 
-            ubicacionVentaRepository.Agregar(ubicacionVenta);
+        //    ubicacionVentaRepository.Agregar(ubicacionVenta);
 
-            // Se le pone la ubicacion de venta default al punto de venta
+        //    // Se le pone la ubicacion de venta default al punto de venta
 
-            puntoVenta.IdUbicacionVenta = ubicacionVenta.IdUbicacionVenta;
-            puntoVentaService.Editar(puntoVenta);
+        //    puntoVenta.IdUbicacionVenta = ubicacionVenta.IdUbicacionVenta;
+        //    puntoVentaService.Editar(puntoVenta);
 
-            return idPuntoVenta;
-        }
+        //    return idPuntoVenta;
+        //}
 
         private void AgregarRolesDefaultAdministrador(int idUsuario)
         {
@@ -404,128 +355,128 @@ namespace TrackrAPI.Services.Catalogo
             usuarioRolService.Agregar(rolGestorFlujo);
         }
 
-        private void AgregarCuentasContables(Compania compania)
-        {
-            if (compania.IdAgrupadorCuentaContable > 0)
-            {
-                var cuentasAcopiar = cuentaContableRepository.ConsultarPorCompaniaBaseYAgrupador((int)compania.IdAgrupadorCuentaContable);
+        //private void AgregarCuentasContables(Compania compania)
+        //{
+        //    if (compania.IdAgrupadorCuentaContable > 0)
+        //    {
+        //        var cuentasAcopiar = cuentaContableRepository.ConsultarPorCompaniaBaseYAgrupador((int)compania.IdAgrupadorCuentaContable);
 
-                foreach(var cuentaAcopiar in cuentasAcopiar)
-                {
-                    cuentaAcopiar.IdCuentaContable = 0;
-                    cuentaAcopiar.IdCompania = compania.IdCompania;
-                    cuentaContableRepository.Agregar(cuentaAcopiar);
-                }
-            }
-        }
+        //        foreach(var cuentaAcopiar in cuentasAcopiar)
+        //        {
+        //            cuentaAcopiar.IdCuentaContable = 0;
+        //            cuentaAcopiar.IdCompania = compania.IdCompania;
+        //            cuentaContableRepository.Agregar(cuentaAcopiar);
+        //        }
+        //    }
+        //}
 
-        private void AgregarConceptos(Compania compania)
-        {
-            var conceptosAcopiar = conceptoRepository.ConsultarPorCompaniaBase();
+        //private void AgregarConceptos(Compania compania)
+        //{
+        //    var conceptosAcopiar = conceptoRepository.ConsultarPorCompaniaBase();
 
-            foreach (var conceptoAcopiar in conceptosAcopiar)
-            {
-                conceptoAcopiar.IdConcepto = 0;
-                conceptoAcopiar.IdCompania = compania.IdCompania;
+        //    foreach (var conceptoAcopiar in conceptosAcopiar)
+        //    {
+        //        conceptoAcopiar.IdConcepto = 0;
+        //        conceptoAcopiar.IdCompania = compania.IdCompania;
 
-                if (conceptoAcopiar.IdCuentaContable > 0)
-                {
-                    string numero = conceptoAcopiar.IdCuentaContableNavigation.Numero;
-                    var cuentaContable = cuentaContableRepository.ConsultarPorNumero(compania.IdCompania, numero);
+        //        if (conceptoAcopiar.IdCuentaContable > 0)
+        //        {
+        //            string numero = conceptoAcopiar.IdCuentaContableNavigation.Numero;
+        //            var cuentaContable = cuentaContableRepository.ConsultarPorNumero(compania.IdCompania, numero);
 
-                    if (cuentaContable != null)
-                    {
-                        conceptoAcopiar.IdCuentaContable = cuentaContable.IdCuentaContable;
-                    }
-                    else
-                    {
-                        conceptoAcopiar.IdCuentaContable = null;
-                    }
+        //            if (cuentaContable != null)
+        //            {
+        //                conceptoAcopiar.IdCuentaContable = cuentaContable.IdCuentaContable;
+        //            }
+        //            else
+        //            {
+        //                conceptoAcopiar.IdCuentaContable = null;
+        //            }
 
-                }
+        //        }
 
-                conceptoRepository.Agregar(conceptoAcopiar);
-            }
-        }
+        //        conceptoRepository.Agregar(conceptoAcopiar);
+        //    }
+        //}
 
-        private void AgregarJerarquiasContabilidad(Compania compania)
-        {
-            List<TipoAuxiliar> auxiliaryTypeList = tipoAuxiliarRepository.ConsultarTodos().ToList();
+        //private void AgregarJerarquiasContabilidad(Compania compania)
+        //{
+        //    List<TipoAuxiliar> auxiliaryTypeList = tipoAuxiliarRepository.ConsultarTodos().ToList();
 
-            // Se agregan las jerarquias estandar
-            foreach (TipoAuxiliar auxiliaryType in auxiliaryTypeList)
-            {
-                Jerarquia hierarchy = new Jerarquia();
-                hierarchy.IdCompania = compania.IdCompania;
-                hierarchy.Estandar = true;
-                hierarchy.Nombre = "Estándar";
-                hierarchy.InvertirSigno = false;
-                hierarchy.IdTipoAuxiliar = auxiliaryType.IdTipoAuxiliar;
+        //    // Se agregan las jerarquias estandar
+        //    foreach (TipoAuxiliar auxiliaryType in auxiliaryTypeList)
+        //    {
+        //        Jerarquia hierarchy = new Jerarquia();
+        //        hierarchy.IdCompania = compania.IdCompania;
+        //        hierarchy.Estandar = true;
+        //        hierarchy.Nombre = "Estándar";
+        //        hierarchy.InvertirSigno = false;
+        //        hierarchy.IdTipoAuxiliar = auxiliaryType.IdTipoAuxiliar;
 
-                if (auxiliaryType.Clave == GeneralConstant.TypeAuxiliaryCodeAccount)
-                {
-                    var jerarquias = jerarquiaService.GetByAccountGroupingDefault((int)compania.IdAgrupadorCuentaContable);
+        //        if (auxiliaryType.Clave == GeneralConstant.TypeAuxiliaryCodeAccount)
+        //        {
+        //            var jerarquias = jerarquiaService.GetByAccountGroupingDefault((int)compania.IdAgrupadorCuentaContable);
 
-                    foreach(var jerarquia in jerarquias)
-                    {
-                        hierarchy = new Jerarquia();
-                        hierarchy = jerarquia;
-                        hierarchy.IdCompania = compania.IdCompania;
+        //            foreach(var jerarquia in jerarquias)
+        //            {
+        //                hierarchy = new Jerarquia();
+        //                hierarchy = jerarquia;
+        //                hierarchy.IdCompania = compania.IdCompania;
 
-                        jerarquiaService.AddByHierarchyBase(hierarchy, jerarquia.IdJerarquia);
-                    }
+        //                jerarquiaService.AddByHierarchyBase(hierarchy, jerarquia.IdJerarquia);
+        //            }
 
-                    continue;
-                }
+        //            continue;
+        //        }
 
-                jerarquiaService.Agregar(hierarchy);
-            }
+        //        jerarquiaService.Agregar(hierarchy);
+        //    }
 
-            // Se agrega la configuracion del mes contable actual
-            var configurationMonth = new Configuracion();
-            configurationMonth.Descripcion = GeneralConstant.ConfiguracionDescripcionMesContableActual;
-            configurationMonth.Clave = GeneralConstant.ConfiguracionMesContableActual;
-            configurationMonth.IdCompania = compania.IdCompania;
-            configurationMonth.Valor = DateTime.Now.Month.ToString();
-            configuracionRepository.Agregar(configurationMonth);
+        //    // Se agrega la configuracion del mes contable actual
+        //    var configurationMonth = new Configuracion();
+        //    configurationMonth.Descripcion = GeneralConstant.ConfiguracionDescripcionMesContableActual;
+        //    configurationMonth.Clave = GeneralConstant.ConfiguracionMesContableActual;
+        //    configurationMonth.IdCompania = compania.IdCompania;
+        //    configurationMonth.Valor = DateTime.Now.Month.ToString();
+        //    configuracionRepository.Agregar(configurationMonth);
 
-            // Se agrega la configuracion del anio contable actual
-            var configurationYear = new Configuracion();
-            configurationYear.Descripcion = GeneralConstant.ConfiguracionDescripcionAnioContableActual;
-            configurationYear.Clave = GeneralConstant.ConfiguracionAnioContableActual;
-            configurationYear.IdCompania = compania.IdCompania;
-            configurationYear.Valor = DateTime.Now.Year.ToString();
-            configuracionRepository.Agregar(configurationYear);
-        }
+        //    // Se agrega la configuracion del anio contable actual
+        //    var configurationYear = new Configuracion();
+        //    configurationYear.Descripcion = GeneralConstant.ConfiguracionDescripcionAnioContableActual;
+        //    configurationYear.Clave = GeneralConstant.ConfiguracionAnioContableActual;
+        //    configurationYear.IdCompania = compania.IdCompania;
+        //    configurationYear.Valor = DateTime.Now.Year.ToString();
+        //    configuracionRepository.Agregar(configurationYear);
+        //}
 
-        public void AgregarImpuestosDefault(int idCompania)
-        {
-            // Se agrega configuracion de impuesto IVA 16%
-            var impuestoIva = new Impuesto();
-            impuestoIva.PorcentajeNeto = 16;
-            impuestoIva.Clave = "001";
-            impuestoIva.Nombre = "IVA 16%";
-            impuestoIva.IdCompania = idCompania;
+        //public void AgregarImpuestosDefault(int idCompania)
+        //{
+        //    // Se agrega configuracion de impuesto IVA 16%
+        //    var impuestoIva = new Impuesto();
+        //    impuestoIva.PorcentajeNeto = 16;
+        //    impuestoIva.Clave = "001";
+        //    impuestoIva.Nombre = "IVA 16%";
+        //    impuestoIva.IdCompania = idCompania;
 
-            impuestoRepository.Agregar(impuestoIva);
+        //    impuestoRepository.Agregar(impuestoIva);
 
-            var detalleIva16 = new ImpuestoDetalle();
-            detalleIva16.Descripcion = "IVA";
-            detalleIva16.IdImpuesto = impuestoIva.IdImpuesto;
-            detalleIva16.IdTipoImpuesto = 2;
-            detalleIva16.Valor = 16;
+        //    var detalleIva16 = new ImpuestoDetalle();
+        //    detalleIva16.Descripcion = "IVA";
+        //    detalleIva16.IdImpuesto = impuestoIva.IdImpuesto;
+        //    detalleIva16.IdTipoImpuesto = 2;
+        //    detalleIva16.Valor = 16;
 
-            impuestoDetalleRepository.Agregar(detalleIva16);
+        //    impuestoDetalleRepository.Agregar(detalleIva16);
 
-            // Sin Impuestos
-            var sinImpuesto = new Impuesto();
-            sinImpuesto.PorcentajeNeto = 0;
-            sinImpuesto.Clave = "002";
-            sinImpuesto.Nombre = "Sin Impuestos";
-            sinImpuesto.IdCompania = idCompania;
+        //    // Sin Impuestos
+        //    var sinImpuesto = new Impuesto();
+        //    sinImpuesto.PorcentajeNeto = 0;
+        //    sinImpuesto.Clave = "002";
+        //    sinImpuesto.Nombre = "Sin Impuestos";
+        //    sinImpuesto.IdCompania = idCompania;
 
-            impuestoRepository.Agregar(sinImpuesto);
-        }
+        //    impuestoRepository.Agregar(sinImpuesto);
+        //}
 
         private void AgregarPerfilesDefault(Compania compania)
         {
@@ -561,23 +512,23 @@ namespace TrackrAPI.Services.Catalogo
             }
         }
 
-        private void AgregarFlujoDefault(int idCompania)
-        {
-            var rolGestorFlujos = rolRepository.ConsultarPorClave(GeneralConstant.ClaveRolGestorFlujos);
-            var tipoFlujoDefault = tipoFlujoRepository.ConsultarPorClave(GeneralConstant.ClaveTipoFlujoDefault);
+        //private void AgregarFlujoDefault(int idCompania)
+        //{
+        //    var rolGestorFlujos = rolRepository.ConsultarPorClave(GeneralConstant.ClaveRolGestorFlujos);
+        //    var tipoFlujoDefault = tipoFlujoRepository.ConsultarPorClave(GeneralConstant.ClaveTipoFlujoDefault);
 
-            Flujo flujoDefault = new()
-            {
-                Clave = "001",
-                Nombre = "Estándar",
-                IdCompania = idCompania,
-                EsDefault = true,
-                IdTipoFlujo = tipoFlujoDefault?.IdTipoFlujo,
-                IdRol = rolGestorFlujos?.IdRol
-            };
+        //    Flujo flujoDefault = new()
+        //    {
+        //        Clave = "001",
+        //        Nombre = "Estándar",
+        //        IdCompania = idCompania,
+        //        EsDefault = true,
+        //        IdTipoFlujo = tipoFlujoDefault?.IdTipoFlujo,
+        //        IdRol = rolGestorFlujos?.IdRol
+        //    };
 
-            flujoService.Agregar(flujoDefault);
-        }
+        //    flujoService.Agregar(flujoDefault);
+        //}
 
         private Compania CrearCompaniaDtoModel(CompaniaDto companiaDto)
         {
@@ -611,15 +562,15 @@ namespace TrackrAPI.Services.Catalogo
 
         public void Editar(Compania companiaFormulario)
         {
-            var compania = companiaRepository.Consultar(companiaFormulario.IdCompania);
+            //var compania = companiaRepository.Consultar(companiaFormulario.IdCompania);
 
-            if (compania.IdGiroComercial != companiaFormulario.IdGiroComercial && compania.MercadoCompania.Any())
-            {
-                var mercadoCompania = compania.MercadoCompania.FirstOrDefault();
-                var mercado = mercadoRepository.Consultar(mercadoCompania.IdMercado);
+            //if (compania.IdGiroComercial != companiaFormulario.IdGiroComercial && compania.MercadoCompania.Any())
+            //{
+            //    var mercadoCompania = compania.MercadoCompania.FirstOrDefault();
+            //    var mercado = mercadoRepository.Consultar(mercadoCompania.IdMercado);
 
-                throw new CdisException($"Para cambiar el giro comercial de la compañía, primero se debe eliminar del mercado {mercado.Nombre}");
-            }
+            //    throw new CdisException($"Para cambiar el giro comercial de la compañía, primero se debe eliminar del mercado {mercado.Nombre}");
+            //}
 
             companiaValidatorService.ValidarEditar(companiaFormulario);
             companiaRepository.Editar(companiaFormulario);

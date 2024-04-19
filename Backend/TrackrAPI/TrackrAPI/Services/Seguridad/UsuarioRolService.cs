@@ -13,21 +13,18 @@ namespace TrackrAPI.Services.Seguridad
     {
         private IUsuarioRolRepository usuarioRolRepository;
         private UsuarioRolValidatorService usuarioRolValidatorService;
-        private IConceptoRepository conceptoRepository;
         private IRolRepository rolRepository;
         private IUsuarioRepository usuarioRepository;
 
         public UsuarioRolService(
             IUsuarioRolRepository usuarioRolRepository,
             UsuarioRolValidatorService usuarioRolValidatorService,
-            IConceptoRepository conceptoRepository,
             IRolRepository rolRepository,
             IUsuarioRepository usuarioRepository
         )
         {
             this.usuarioRolRepository = usuarioRolRepository;
             this.usuarioRolValidatorService = usuarioRolValidatorService;
-            this.conceptoRepository = conceptoRepository;
             this.rolRepository = rolRepository;
             this.usuarioRepository = usuarioRepository;
         }
@@ -67,7 +64,7 @@ namespace TrackrAPI.Services.Seguridad
 
                 foreach (var usuarioRol in usuarioRolList)
                 {
-                    AgregarConceptoCuentaDefault(usuarioRol);
+                    //AgregarConceptoCuentaDefault(usuarioRol);
 
                     usuarioRolRepository.Agregar(usuarioRol);
                 }
@@ -78,7 +75,7 @@ namespace TrackrAPI.Services.Seguridad
 
         public void Agregar(UsuarioRol usuarioRol)
         {
-            AgregarConceptoCuentaDefault(usuarioRol);
+            //AgregarConceptoCuentaDefault(usuarioRol);
 
             usuarioRolValidatorService.ValidarAgregar(usuarioRol);
             usuarioRolRepository.Agregar(usuarioRol);
@@ -96,37 +93,37 @@ namespace TrackrAPI.Services.Seguridad
             usuarioRolRepository.Eliminar(usuarioRol);
         }
 
-        private void AgregarConceptoCuentaDefault(UsuarioRol usuarioRol)
-        {
-            // Sólo se agrega el concepto y cuenta default si no están definidas en el objeto
-            if (usuarioRol.IdConcepto != null || usuarioRol.IdCuentaContable != null)
-                return;
+        //private void AgregarConceptoCuentaDefault(UsuarioRol usuarioRol)
+        //{
+        //    // Sólo se agrega el concepto y cuenta default si no están definidas en el objeto
+        //    if (usuarioRol.IdConcepto != null || usuarioRol.IdCuentaContable != null)
+        //        return;
 
-            Usuario usuario = usuarioRepository.Consultar(usuarioRol.IdUsuario);
-            Rol rol = rolRepository.Consultar(usuarioRol.IdRol);
+        //    Usuario usuario = usuarioRepository.Consultar(usuarioRol.IdUsuario);
+        //    Rol rol = rolRepository.Consultar(usuarioRol.IdRol);
 
-            // La clave del concepto default depende del rol del usuario
-            (string claveConceptoDefault, string nombreConceptoDefault) = rol.Clave switch
-            {
-                GeneralConstant.ClaveRolProveedor => (GeneralConstant.ClaveConceptoCuentaPorPagar, "Cuenta por pagar"),
-                GeneralConstant.ClaveRolCliente => (GeneralConstant.ClaveConceptoCuentaPorCobrar, "Cuenta por cobrar"),
-                _ => ("", ""),
-            };
+        //    // La clave del concepto default depende del rol del usuario
+        //    (string claveConceptoDefault, string nombreConceptoDefault) = rol.Clave switch
+        //    {
+        //        GeneralConstant.ClaveRolProveedor => (GeneralConstant.ClaveConceptoCuentaPorPagar, "Cuenta por pagar"),
+        //        GeneralConstant.ClaveRolCliente => (GeneralConstant.ClaveConceptoCuentaPorCobrar, "Cuenta por cobrar"),
+        //        _ => ("", ""),
+        //    };
 
-            // Si el rol no coincide con alguno de los roles con conceptos default definidos, no se
-            // modifica el concepto ni la cuenta contable.
-            if (claveConceptoDefault == "")
-                return;
+        //    // Si el rol no coincide con alguno de los roles con conceptos default definidos, no se
+        //    // modifica el concepto ni la cuenta contable.
+        //    if (claveConceptoDefault == "")
+        //        return;
 
-            Concepto conceptoDefault = conceptoRepository.ConsultarPorClave(claveConceptoDefault, (int)usuario.IdCompania);
+        //    Concepto conceptoDefault = conceptoRepository.ConsultarPorClave(claveConceptoDefault, (int)usuario.IdCompania);
 
-            if (conceptoDefault == null || conceptoDefault.IdCuentaContable == null)
-            {
-                throw new CdisException($"Es necesario configurar concepto {nombreConceptoDefault} - {claveConceptoDefault}");
-            }
+        //    if (conceptoDefault == null || conceptoDefault.IdCuentaContable == null)
+        //    {
+        //        throw new CdisException($"Es necesario configurar concepto {nombreConceptoDefault} - {claveConceptoDefault}");
+        //    }
 
-            usuarioRol.IdConcepto = conceptoDefault.IdConcepto;
-            usuarioRol.IdCuentaContable = conceptoDefault.IdCuentaContable;
-        }
+        //    usuarioRol.IdConcepto = conceptoDefault.IdConcepto;
+        //    usuarioRol.IdCuentaContable = conceptoDefault.IdCuentaContable;
+        //}
     }
 }

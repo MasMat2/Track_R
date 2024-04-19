@@ -34,13 +34,13 @@ namespace TrackrAPI.Repositorys.Catalogo
         public HospitalDto ConsultarPorID(int idHospital)
         {
             return context.Hospital
-                .Include(h => h.IdBancoNavigation)
+                //.Include(h => h.IdBancoNavigation)
                 .Where(h => h.IdHospital == idHospital)
                 .Select(h => new HospitalDto
                 {
                     IdHospital = h.IdHospital,
                     Nombre = h.Nombre,
-                    NombreBanco = h.IdBancoNavigation.Nombre,
+                    //NombreBanco = h.IdBancoNavigation.Nombre,
                     Cuenta = h.Cuenta,
                     Clabe = h.Clabe
                 })
@@ -134,12 +134,12 @@ namespace TrackrAPI.Repositorys.Catalogo
                 .Where(h => h.IdHospital == idHospital)
                 .Select(h => new Hospital
                 {
-                    Caja = h.Caja,
-                    Cita = h.Cita,
-                    ListaPrecioClinica = h.ListaPrecioClinica,
+                    //Caja = h.Caja,
+                    //Cita = h.Cita,
+                    //ListaPrecioClinica = h.ListaPrecioClinica,
                     Usuario = h.Usuario,
                     HospitalLogotipo = h.HospitalLogotipo,
-                    EntradaPersonal = h.EntradaPersonal
+                    //EntradaPersonal = h.EntradaPersonal
                 })
                 .FirstOrDefault();
         }
@@ -243,17 +243,17 @@ namespace TrackrAPI.Repositorys.Catalogo
                 .ToList();
         }
 
-        public IEnumerable<HospitalDto> ConsultarDisponiblesParaListaPrecio(int? idListaPrecioSeleccionada)
-        {
-            return context.Hospital
-                .OrderBy(h => h.Nombre)
-                .Where(h => !h.ListaPrecioClinica.Any(lpc => lpc.IdClinica == h.IdHospital) || h.ListaPrecioClinica.Any(lpc => lpc.IdListaPrecio == idListaPrecioSeleccionada))
-                .Select(h => new HospitalDto
-                {
-                    IdHospital = h.IdHospital,
-                    Nombre = h.Nombre
-                })
-                .ToList();
-        }
+        //public IEnumerable<HospitalDto> ConsultarDisponiblesParaListaPrecio(int? idListaPrecioSeleccionada)
+        //{
+        //    return context.Hospital
+        //        .OrderBy(h => h.Nombre)
+        //        .Where(h => !h.ListaPrecioClinica.Any(lpc => lpc.IdClinica == h.IdHospital) || h.ListaPrecioClinica.Any(lpc => lpc.IdListaPrecio == idListaPrecioSeleccionada))
+        //        .Select(h => new HospitalDto
+        //        {
+        //            IdHospital = h.IdHospital,
+        //            Nombre = h.Nombre
+        //        })
+        //        .ToList();
+        //}
     }
 }

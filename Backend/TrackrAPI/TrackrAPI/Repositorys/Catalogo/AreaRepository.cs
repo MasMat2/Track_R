@@ -67,12 +67,11 @@ namespace TrackrAPI.Repositorys.Catalogo
              .FirstOrDefault();
         }
 
-        public Area ConsultarDependencias(int idArea)
-        {
-            return context.Area
-                .Include(d => d.Presentacion)
-                .Where(d => d.IdArea == idArea)
-                .FirstOrDefault();
-        }
+        //public Area ConsultarDependencias(int idArea)
+        //{
+        //    return context.Area
+        //        .Where(d => d.IdArea == idArea)
+        //        .FirstOrDefault();
+        //}
     }
 }

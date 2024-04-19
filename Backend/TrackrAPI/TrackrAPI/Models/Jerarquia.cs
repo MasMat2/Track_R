@@ -5,11 +5,6 @@ namespace TrackrAPI.Models
 {
     public partial class Jerarquia
     {
-        public Jerarquia()
-        {
-            JerarquiaEstructura = new HashSet<JerarquiaEstructura>();
-        }
-
         public int IdJerarquia { get; set; }
         public string Nombre { get; set; } = null!;
         public bool InvertirSigno { get; set; }
@@ -18,7 +13,5 @@ namespace TrackrAPI.Models
         public int IdTipoAuxiliar { get; set; }
 
         public virtual Compania IdCompaniaNavigation { get; set; } = null!;
-        public virtual TipoAuxiliar IdTipoAuxiliarNavigation { get; set; } = null!;
-        public virtual ICollection<JerarquiaEstructura> JerarquiaEstructura { get; set; }
     }
 }

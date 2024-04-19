@@ -15,7 +15,7 @@ namespace TrackrAPI.Repositorys.Catalogo
         public Hospital ConsultarPorUsuario(int idUsuario);
         public Hospital ConsultarConDependencias(int idHospital);
         public IEnumerable<HospitalDto> ConsultarTodosParaSelector(int idDominio);
-        public IEnumerable<HospitalDto> ConsultarDisponiblesParaListaPrecio(int? idListaPrecioSeleccionada);
+        // public IEnumerable<HospitalDto> ConsultarDisponiblesParaListaPrecio(int? idListaPrecioSeleccionada);
         public HospitalDto ConsultarPorID(int idHospital);
         public HospitalDto ConsultarDefaultPorCompania(int idCompania);
     }
