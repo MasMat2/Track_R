@@ -37,6 +37,12 @@ export class WidgetSuenoComponent  implements OnInit {
 
   async cargarDatos() {
     try {
+      this.tiempoDormido = 0;
+      this.minutostiempoDormido = 0;
+      this.suenoHorasREM = 0;
+      this.suenoMinutosREM = 0;
+      this.suenoHorasProfundo = 0;
+      this.suenoMinutosProfundo = 0;
       
       const dataSleep = await this.healthKitService.getActivitySleep();
 
