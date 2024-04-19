@@ -12,7 +12,9 @@ import { Observable } from 'rxjs';
 import { UsuarioService } from '@http/seguridad/usuario.service';
 import { UsuarioExpedienteGridDTO } from 'src/app/shared/Dtos/seguridad/usuario-expediente-grid-dto copy';
 import { InformacionPerfilDto } from 'src/app/shared/Dtos/perfil/informacion-perfil-dto';
-import { TerminosYCondicionesComponent } from '@pages/acceso/registro/components/terminos-y-condiciones/terminos-y-condiciones.component';
+import { TerminosYCondicionesComponent } from '@sharedComponents/terminos-y-condiciones/terminos-y-condiciones.component';
+import { InfoLibreriasOpenSourceComponent } from '@sharedComponents/info-librerias-opensource/info-librerias-opensource.component';
+
 
 @Component({
   selector: 'app-inicio-perfil',
@@ -117,6 +119,14 @@ export class InicioPerfilComponent  implements OnInit {
   protected async mostrarTerminosYCondiciones() {
     const modal = await this.modalController.create({
       component: TerminosYCondicionesComponent,
+    });
+
+    modal.present();
+  }
+
+  protected async mostrarInfoLibreriasOpenSource() {
+    const modal = await this.modalController.create({
+      component: InfoLibreriasOpenSourceComponent,
     });
 
     modal.present();
