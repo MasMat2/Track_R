@@ -707,6 +707,24 @@ namespace TrackrAPI.Repositorys.Seguridad
             return informacionGeneralDto;
 
         }
+
+        public InformacionPerfilTrackrDTO ConsultarInformacionPerfilTrackr(int idUsuario)
+        {
+            var usuario = context.Usuario.
+                Where(u => u.IdUsuario == idUsuario).FirstOrDefault();
+
+            var informacionPerfilDto = new InformacionPerfilTrackrDTO
+            {
+                Nombre = usuario.Nombre,
+                ApellidoPaterno = usuario.ApellidoPaterno,
+                ApellidoMaterno = usuario.ApellidoMaterno,
+                Correo = usuario.Correo,
+            };
+
+            return informacionPerfilDto;
+
+        }
+
         public IEnumerable<UsuarioDto> ConsultarParaEncabezado(int idUsuario)
         {
             return context.Usuario

@@ -16,6 +16,7 @@ using DocumentFormat.OpenXml.Office.CustomXsn;
 using TrackrAPI.Services.GestionExpediente;
 using TrackrAPI.Repositorys.Archivos;
 using TrackrAPI.Dtos.GestionExpediente.ExpedienteDoctor;
+using TrackrAPI.Dtos.Archivos;
 
 namespace TrackrAPI.Services.Seguridad
 {
@@ -934,6 +935,26 @@ namespace TrackrAPI.Services.Seguridad
         public InformacionGeneralDTO ConsultarInformacionGeneralTrackr(int idUsuario)
         {
             return usuarioRepository.ConsultarInformacionGeneralTrackr(idUsuario);
+        }
+
+        public InformacionPerfilTrackrDTO ConsultarInformacionPerfilTrackr(int idUsuario)
+        {
+            var infoPerfil = usuarioRepository.ConsultarInformacionPerfilTrackr(idUsuario);
+            var fotoPerfil = _archivoRepository.ObtenerImagenUsuario(idUsuario);
+            if(fotoPerfil != null)
+            {
+                var fotoPerfilDto = new ArchivoDTO
+                {
+                    Archivo = Convert.ToBase64String(fotoPerfil.Archivo1),
+                    ArchivoMime = fotoPerfil.ArchivoTipoMime,
+                    IdArchivo = fotoPerfil.IdArchivo,
+                    Nombre = fotoPerfil.ArchivoNombre
+                };
+
+                infoPerfil.ImagenBase64 = fotoPerfilDto;
+            }
+
+            return infoPerfil;
         }
 
         public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion, int idUsuario)

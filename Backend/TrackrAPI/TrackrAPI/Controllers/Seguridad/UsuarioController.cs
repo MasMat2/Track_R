@@ -271,6 +271,12 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultarInformacionGeneralTrackr(Utileria.ObtenerIdUsuarioSesion(this));
         }
 
+        [HttpGet("consultarInformacionPerfil")]
+        public InformacionPerfilTrackrDTO ConsultarInformacionPerfil()
+        {
+            return usuarioService.ConsultarInformacionPerfilTrackr(Utileria.ObtenerIdUsuarioSesion(this));
+        }
+
         [HttpPut("actualizarInformacionGeneral")]
         public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion)
         {
