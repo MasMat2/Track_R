@@ -3,4 +3,5 @@ export class ArchivoDto{
     public archivo:any; 
     public nombreArchivo:string; 
     public tipoMime:string;
+    public archivoMime:string;
 }
