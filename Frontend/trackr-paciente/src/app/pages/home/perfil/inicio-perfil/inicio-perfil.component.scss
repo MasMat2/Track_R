@@ -4,7 +4,7 @@ ion-header{
 }
  
 ion-content{
-    //height: 100%
+    --background: var(--primary-50);
 }
 
 .contenedor-header{
@@ -49,8 +49,6 @@ ion-content{
         top: -68px; //sobresalido al header
         z-index: 9999;
         
-        //height: calc(100% + 44px); // 68px que sobresalen arriba - 24px de espacio entre el footer y el card
-        height: 100%;
         width: calc(100% - 64px); // 32px de espacio a cada lado
         border-radius: 16px;
 
@@ -129,17 +127,31 @@ ion-content{
                 min-height: 64px;
             }
 
-            .opciones-info-general, .opciones-mas-informacion{
-                ion-item{
-                    --background:rgba(244, 244, 244, 0.5);
-                }
+            .accordion-item{
+                --inner-padding-end: 0;
 
-                ion-item::part(native){
-                    padding-left: 60px;
+                ion-accordion-group{
+                    width: 100%;
+                    ion-accordion{
+                        ion-item{
+                            ion-icon{
+                                color: var(--neutral-200) !important;
+                            }
+                        }
+
+                        .accordion-option{
+                            --background: rgba(244, 244, 244, 0.5);
+                            ;
+                        }
+                    }
                 }
             }
+
+            .accordion-item::part(native){
+                padding: 0;
+
+            }
         }
-        
     }
 
 }
@@ -157,9 +169,9 @@ ion-content{
     }
 }
 
-@media (max-height: 700px){
+// @media (max-height: 700px){
 
-    .card{
-        height: calc(100% + 48px) !important; 
-    }
-}
+//     .card{
+//         //height: calc(100% + 48px) !important; 
+//     }
+// }

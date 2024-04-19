@@ -21,26 +21,30 @@
       </div>
       <div class="lista">
         <ion-list lines="full">
-          <ion-item button (click)="DropDownInformacionGeneral()">
-            <ion-icon slot="start" name="persona"></ion-icon>
-            <ion-label>Informacion general</ion-label>
-            <ion-icon *ngIf="!mostrarOpcionesInfoGeneral" slot="end" name="chevron-forward"></ion-icon>
-            <ion-icon *ngIf="mostrarOpcionesInfoGeneral" slot="end" name="chevron-down"></ion-icon>
+          <ion-item class="accordion-item">
+            <ion-accordion-group>
+              <ion-accordion value="info-general">
+                <ion-item slot="header">
+                  <ion-icon slot="start" name="persona"></ion-icon>
+                  <ion-label>Informacion general</ion-label>
+                  <ion-icon slot="end" class="ion-accordion-toggle-icon" name="chevron-down"></ion-icon>
+                </ion-item>
+  
+                <ion-item slot="content" class="accordion-option" button (click)="navigateInformacionGeneral()">
+                  <ion-label>General</ion-label>
+                </ion-item>
+                <ion-item slot="content" class="accordion-option" button (click)="navigateInformacionGeneral()">
+                  <ion-label>Domicilio</ion-label>
+                </ion-item>
+                <ion-item slot="content" class="accordion-option" button (click)="navigateInformacionGeneral()">
+                  <ion-label>Antecedentes</ion-label>
+                </ion-item>
+                <ion-item slot="content" class="accordion-option" button (click)="navigateInformacionGeneral()">
+                  <ion-label>Diagnosticos</ion-label>
+                </ion-item>
+              </ion-accordion>
+            </ion-accordion-group>
           </ion-item>
-          <div *ngIf="mostrarOpcionesInfoGeneral" class="opciones-info-general">
-            <ion-item button (click)="navigateInformacionGeneral()">
-              <ion-label>General</ion-label>
-            </ion-item>
-            <ion-item button (click)="navigateInformacionGeneral()">
-              <ion-label>Domicilio</ion-label>
-            </ion-item>
-            <ion-item button (click)="navigateInformacionGeneral()">
-              <ion-label>Antecedentes</ion-label>
-            </ion-item>
-            <ion-item button (click)="navigateInformacionGeneral()">
-              <ion-label>Diagnosticos</ion-label>
-            </ion-item>
-          </div>
           <ion-item button (click)="navigateMisDoctores()">
             <ion-icon slot="start" name="cruz"></ion-icon>
             <ion-label>Mis doctores</ion-label>
@@ -56,20 +60,25 @@
             <ion-label>Mis estudios</ion-label>
             <ion-icon slot="end" name="chevron-forward"></ion-icon>
           </ion-item>
-          <ion-item button (click)="DropDownMasInformacion()">
-            <ion-icon slot="start" name="informacion"></ion-icon>
-            <ion-label>Más información</ion-label>
-            <ion-icon *ngIf="!mostrarOpcionesMasInformacion" slot="end" name="chevron-forward"></ion-icon>
-            <ion-icon *ngIf="mostrarOpcionesMasInformacion" slot="end" name="chevron-down"></ion-icon>
+
+          <ion-item class="accordion-item" >
+            <ion-accordion-group>
+              <ion-accordion value="mas-info">
+                <ion-item slot="header">
+                  <ion-icon slot="start" name="informacion"></ion-icon>
+                  <ion-label>Más información</ion-label>
+                  <ion-icon slot="end" class="ion-accordion-toggle-icon" name="chevron-down"></ion-icon>
+                </ion-item>
+  
+                <ion-item slot="content" button class="accordion-option" (click)="mostrarTerminosYCondiciones()">
+                  <ion-label>Términos y condiciones</ion-label>
+                </ion-item>
+                <ion-item slot="content" button class="accordion-option" (click)="mostrarInfoLibreriasOpenSource()">
+                  <ion-label>Bibliotecas de código abierto</ion-label>
+                </ion-item>
+              </ion-accordion>
+            </ion-accordion-group>
           </ion-item>
-          <div *ngIf="mostrarOpcionesMasInformacion" class="opciones-mas-informacion">
-            <ion-item button (click)="mostrarTerminosYCondiciones()">
-              <ion-label>Términos y condiciones</ion-label>
-            </ion-item>
-            <ion-item button (click)="mostrarInfoLibreriasOpenSource()">
-              <ion-label>Bibliotecas de código abierto</ion-label>
-            </ion-item>
-          </div>
           <ion-item button lines="none" (click)="presentarAlertaCerrarSesion()" style="--color-activated: var(--error-200);">
             <ion-icon slot="start" name="cerrar-sesion" style="stroke: var(--error-200);"></ion-icon>
             <ion-label style="color: var(--error-200);" >Cerrar sesión</ion-label>
