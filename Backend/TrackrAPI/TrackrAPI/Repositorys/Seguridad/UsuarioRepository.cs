@@ -708,6 +708,74 @@ namespace TrackrAPI.Repositorys.Seguridad
 
         }
 
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarAntecedentesUsuarioTrackr(int idUsuario)
+        {
+            var usuario = context.Usuario.
+                Where(u => u.IdUsuario == idUsuario)
+                    .Include(u => u.ExpedienteTrackr)
+                    .ThenInclude(u => u.ExpedientePadecimiento)
+                    .ThenInclude(ep => ep.IdPadecimientoNavigation)
+                    .Include(u => u.ExpedienteTrackr)
+                    .ThenInclude(u => u.ExpedientePadecimiento)
+                    .ThenInclude(ep => ep.IdUsuarioDoctorNavigation)
+                    .ThenInclude(ud => ud.IdTituloAcademicoNavigation)
+                    .FirstOrDefault();
+
+            var expediente = usuario.ExpedienteTrackr.FirstOrDefault();
+
+            var padecimientos = expediente.ExpedientePadecimiento;
+
+            var antecedentesUsuario = padecimientos.Select(p => new ExpedientePadecimientoDTO
+            {
+                IdPadecimiento = p.IdPadecimiento,
+                IdExpedientePadecimiento = p.IdExpedientePadecimiento,
+                NombrePadecimiento = p.IdPadecimientoNavigation?.Nombre,
+                IdUsuarioDoctor = p.IdUsuarioDoctor,
+                NombreDoctor = p.IdUsuarioDoctorNavigation.Nombre,
+                ApellidosDoctor = p.IdUsuarioDoctorNavigation.ApellidoPaterno + " " + p.IdUsuarioDoctorNavigation.ApellidoMaterno,
+                TituloDoctor = p.IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre,
+                FechaDiagnostico = p.FechaDiagnostico,
+                EsAntecedente = p.IdPadecimientoNavigation.EsAntecedente,
+            }).Where( p => p.EsAntecedente == true);
+
+
+            return antecedentesUsuario;
+        }
+
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarDiagnosticosUsuarioTrackr(int idUsuario)
+        {
+            var usuario = context.Usuario.
+                Where(u => u.IdUsuario == idUsuario)
+                    .Include(u => u.ExpedienteTrackr)
+                    .ThenInclude(u => u.ExpedientePadecimiento)
+                    .ThenInclude(ep => ep.IdPadecimientoNavigation)
+                    .Include(u => u.ExpedienteTrackr)
+                    .ThenInclude(u => u.ExpedientePadecimiento)
+                    .ThenInclude(ep => ep.IdUsuarioDoctorNavigation)
+                    .ThenInclude(ud => ud.IdTituloAcademicoNavigation)
+                    .FirstOrDefault();
+
+            var expediente = usuario.ExpedienteTrackr.FirstOrDefault();
+
+            var padecimientos = expediente.ExpedientePadecimiento;
+
+            var diagnosticosUsuario = padecimientos.Select(p => new ExpedientePadecimientoDTO
+            {
+                IdPadecimiento = p.IdPadecimiento,
+                IdExpedientePadecimiento = p.IdExpedientePadecimiento,
+                NombrePadecimiento = p.IdPadecimientoNavigation?.Nombre,
+                IdUsuarioDoctor = p.IdUsuarioDoctor,
+                NombreDoctor = p.IdUsuarioDoctorNavigation.Nombre,
+                ApellidosDoctor = p.IdUsuarioDoctorNavigation.ApellidoPaterno + " " + p.IdUsuarioDoctorNavigation.ApellidoMaterno,
+                TituloDoctor = p.IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre,
+                FechaDiagnostico = p.FechaDiagnostico,
+                EsAntecedente = p.IdPadecimientoNavigation.EsAntecedente,
+            }).Where(p => p.EsAntecedente == false);
+
+
+            return diagnosticosUsuario;
+        }
+
         public InformacionPerfilTrackrDTO ConsultarInformacionPerfilTrackr(int idUsuario)
         {
             var usuario = context.Usuario.

@@ -17,6 +17,7 @@ using TrackrAPI.Services.GestionExpediente;
 using TrackrAPI.Repositorys.Archivos;
 using TrackrAPI.Dtos.GestionExpediente.ExpedienteDoctor;
 using TrackrAPI.Dtos.Archivos;
+using TrackrAPI.Dtos.GestionExpediente;
 
 namespace TrackrAPI.Services.Seguridad
 {
@@ -955,6 +956,16 @@ namespace TrackrAPI.Services.Seguridad
             }
 
             return infoPerfil;
+        }
+
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarAntecedentesUsuarioTrackr(int idUsuario)
+        {
+            return usuarioRepository.ConsultarAntecedentesUsuarioTrackr(idUsuario);
+        }
+
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarDiagnosticosUsuarioTrackr(int idUsuario)
+        {
+            return usuarioRepository.ConsultarDiagnosticosUsuarioTrackr(idUsuario);
         }
 
         public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion, int idUsuario)
