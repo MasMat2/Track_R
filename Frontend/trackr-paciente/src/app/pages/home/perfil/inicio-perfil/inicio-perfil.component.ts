@@ -66,6 +66,18 @@ export class InicioPerfilComponent  implements OnInit {
     this.router.navigateByUrl("home/perfil/informacion-general");
   }
 
+  protected navigateInformacionDomicilio(){
+    this.router.navigateByUrl("home/perfil/informacion-general");
+  }
+
+  protected navigateInformacionAntecedentes(){
+    this.router.navigateByUrl("home/perfil/informacion-general/antecedentes");
+  }
+
+  protected navigateInformacionDiagnosticos(){
+    this.router.navigateByUrl("home/perfil/informacion-general/diagnosticos");
+  }
+
   protected navigateMisDoctores(){
     this.router.navigateByUrl("home/perfil/mis-doctores");
   }

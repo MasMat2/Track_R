@@ -320,6 +320,27 @@ ion-alert.custom-alert-delete{
   }
 }
 
+//estilos para selectores que usen popover como interface
+ion-popover.custom-select-popover{
+
+  .item-radio-checked{
+    --background: var(--primary-200);
+    --background-focused: var(--primary-50);
+    --background-hover: var(--primary-50);
+  }
+}
+
+ion-popover.custom-select-popover::part(content) {
+  //--width: 100%;
+  border-radius: 8px;
+}
+
+ion-modal.custom-sheet-modal{
+  --height: auto;
+  --border-radius: 16px 16px 0 0;
+}
+
+
 //estilos para selectores que usen alert como interface
 // ion-alert.custom-select-alert {
 //   //botones inferiores

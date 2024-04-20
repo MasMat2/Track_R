@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { UsuarioNuevoTrackrDto } from '../../Dtos/seguridad/usuario-nuevo-trackr-dto';
 import { UsuarioDto } from '../../Dtos/perfil/usuario-dto';
 import { InformacionPerfilDto } from '../../Dtos/perfil/informacion-perfil-dto';
+import { ExpedientePadecimientoDto } from '@dtos/seguridad/expediente-padecimiento-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,14 @@ export class UsuarioService {
 
   consultarInformacionPerfil(): Observable<InformacionPerfilDto>{
     return this.http.get<InformacionPerfilDto>(this.url + 'consultarInformacionPerfil');
+  }
+
+  consultarAntecedentesUsuario(): Observable<ExpedientePadecimientoDto[]>{
+    return this.http.get<ExpedientePadecimientoDto[]>(this.url + 'consultarInfoAntecedentes');
+  }
+
+  consultarDiagnosticosUsuario(): Observable<ExpedientePadecimientoDto[]>{
+    return this.http.get<ExpedientePadecimientoDto[]>(this.url + 'consultarInfoDiagnosticos');
   }
 
   actualizarInformacionGeneral(informacion: InformacionGeneralDto){

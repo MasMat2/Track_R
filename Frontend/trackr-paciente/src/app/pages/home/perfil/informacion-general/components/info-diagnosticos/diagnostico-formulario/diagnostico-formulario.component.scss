@@ -1,0 +1,122 @@
+.contenedor-principal{
+    .titulo{
+        padding: 32px 32px 0 32px;
+
+        ion-text{
+            text-align: start;
+            h1{
+                margin: 0;
+                color: var(--primary-700);
+                font-family: var(--font-display);
+                font-size: 24px;
+                font-weight: 700;
+                line-height: 32px;
+            }
+        }
+    }
+
+    .formulario{
+
+        .contenido-formulario{
+
+            .inputs{
+                background: transparent;
+                padding: 0 32px 0 32px;
+        
+                .input{
+                  padding-top: 16px;
+                  ion-text{
+                    p{
+                      margin-bottom: 8px;
+                      font-family: var(--font-body);
+                      font-weight: 400;
+                      font-size: 16px;
+                      line-height: 22px;
+                      color: var(--neutral-700);
+                    }
+                  }
+        
+                  ion-item{
+                    width: 100%;
+                    --border-width: 1px ;
+                    --border-color: var(--neutral-300);
+                    --border-radius: 8px;
+                    --background: transparent;
+        
+                    //iconos en los inputs
+                    .input-icon{
+                      width: 32px;
+                      height: 100%;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      ion-icon{
+                        font-size: 24px;
+                        color: var(--neutral-600);
+                      }
+                    }
+                  }
+        
+                  ion-item.date-input{
+                    ion-datetime-button{
+                        max-width: calc(100% - 40px );
+                        width: 100%;
+                    }
+
+                    ion-datetime-button::part(native){ //boton html dentro del ion-datetime-button
+                        width: 100%;
+                        text-align: start;
+                        background: transparent;
+                        color: var(--neutral-900);
+                    }
+
+                    .input-icon{
+                      position: absolute;
+                      right: 0;
+                      margin-right: 16px !important;
+                    }
+                  }
+
+                  ion-item.select-input{
+
+                    ion-select::part(icon){
+                        position: absolute;
+                        right: 0;
+                        color: var(--neutral-600);
+                        width: 24px;
+                        height: 24px;
+                    }
+
+                  }
+                }
+            }
+        }
+
+        .botones{
+            background: var(--neutral-50);
+            height: 15vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 32px 36px 32px;
+        
+            .guardar{
+              font-family: var(--font-body);
+              font-size: 16px;
+              width: 100%;
+              max-width: 600px;
+              height: 44px;
+              --border-radius: 8px;
+              color: var(--neutral-50);
+              --background: var(--primary-700);
+              --box-shadow: 0;
+            }
+
+            .guardar.button-disabled{
+                opacity: 1;
+                --background: var(--primary-300);
+            }
+        }
+    }
+}
