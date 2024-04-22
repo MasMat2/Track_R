@@ -99,7 +99,7 @@ namespace TrackrAPI.Services.GestionEntidad
                     IdEntidadEstructura = registro.IdEntidadEstructura,
                     IdTabla = registro.IdTabla,
                     Numero = ultimoRegistro + 1,
-                    ClaveCampo = valorDto.ClaveCampo,
+                    IdSeccion = valorDto.IdSeccionVariable,
                     Valor = valorDto.Valor,
                     FueraDeRango = valorDto.FueraDeRango,
                     FechaMuestra = valorDto.FechaMuestra
@@ -114,23 +114,18 @@ namespace TrackrAPI.Services.GestionEntidad
         public async Task AgregarMuestra(TablaValorMuestraDTO[] muestraDTO, int idUsuario)
         {
             using var ts = new TransactionScope();
-            var entidadEstructuraMuestra = entidadEstructuraRepository.ConsultarPorClave(GeneralConstant.ClaveEntidadEstructuraMuestra);
-            if (entidadEstructuraMuestra == null)
-            {
-                throw new CdisException("No existe la entidad estructura con clave 006");
-            }
-            var entidadEstructuraMuestraHijo = entidadEstructuraRepository.ConsultarHijos(entidadEstructuraMuestra.IdEntidadEstructura).FirstOrDefault();
-            if (entidadEstructuraMuestra == null)
-            {
-                throw new CdisException("No existe la entidad estructura hijo de la entidad estructura con clave 006");
-            }
+         
+            
             foreach (var muestra in muestraDTO)
             {
-
+                    var idSeccion = seccionCampoRepository.Consultar(muestra.IdSeccionVariable).IdSeccion;
+                    var IdEntidadEstructuraHijo = entidadEstructuraRepository.ConsultarPorEntidadSeccionVariable(idSeccion).IdEntidadEstructuraPadre;
+                    
+                
                 var muestraAAgregar = new EntidadEstructuraTablaValor()
                 {
-                    IdEntidadEstructura = entidadEstructuraMuestraHijo.IdEntidadEstructura,
-                    ClaveCampo = muestra.ClaveCampo,
+                    IdEntidadEstructura = (int) IdEntidadEstructuraHijo,
+                    IdSeccion = muestra.IdSeccionVariable,
                     IdTabla = idUsuario,
                     Valor = muestra.Valor,
                     FechaMuestra = muestra.FechaMuestra,
@@ -140,7 +135,7 @@ namespace TrackrAPI.Services.GestionEntidad
                 if ((bool)muestraAAgregar.FueraDeRango)
                 {
                     List<int> idsDoctores =  this.expedientePadecimientoRepository.ConsultarIdsDoctorPorUsuario(idUsuario);
-                    string nombreVariable = this.seccionCampoRepository.ConsultarPorClave(muestraAAgregar.ClaveCampo).Descripcion;
+                    string nombreVariable = this.seccionCampoRepository.Consultar(muestraAAgregar.IdSeccion).Descripcion;
                     string nombrePaciente  = _usuarioRepository.ConsultarDto(idUsuario).Nombre;
                     var notificacion = new NotificacionDoctorCapturaDTO(
 
@@ -162,7 +157,7 @@ namespace TrackrAPI.Services.GestionEntidad
 
         private bool EstaFueraDeRango(EntidadEstructuraTablaValor valorDb , int idHospital)
         {
-            var seccionCampo = seccionCampoRepository.ConsultarPorClave(valorDb.ClaveCampo);
+            var seccionCampo = seccionCampoRepository.Consultar(valorDb.IdSeccion);
             var dominioHospital = _dominioHospitalRepository.Consultar(idHospital , seccionCampo.IdDominio);
             decimal? valorMaximo;
             decimal? valorMinimo;
@@ -223,7 +218,7 @@ namespace TrackrAPI.Services.GestionEntidad
         public IEnumerable<ValoresFueraRangoGridDTO> ConsultarValores(int idPadecimiento, int idUsuario, bool? fueraRango)
         {
             var columnas = this.seccionCampoRepository.ConsultarSeccionesPadecimientos(idPadecimiento);
-            var clavesCampos = columnas.Select(c => c.ClaveCampo).ToList();
+            var clavesCampos = columnas.Select(c => c.IdSeccionVariable).ToList();
 
             var valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorCampos(idUsuario, clavesCampos, fueraRango);
 
@@ -231,7 +226,7 @@ namespace TrackrAPI.Services.GestionEntidad
 
             foreach (var valor in valores)
             {
-                var columnaCorrespondiente = columnas.FirstOrDefault(c => c.ClaveCampo == valor.ClaveCampo);
+                var columnaCorrespondiente = columnas.FirstOrDefault(c => c.IdSeccionVariable == valor.IdSeccion);
 
                 if (columnaCorrespondiente != null)
                 {
@@ -276,7 +271,7 @@ namespace TrackrAPI.Services.GestionEntidad
             return valoresFueraRangoGridDTOs;
         }
 
-        public Dictionary<string, List<ValoresHistogramaDTO>> ConsultarValoresPorClaveCampo(string claveCampo, int idUsuario, string fechaFiltro)
+        public Dictionary<string, List<ValoresHistogramaDTO>> ConsultarValoresPorClaveCampo(int idSeccionVariable, int idUsuario, string fechaFiltro)
         {
             DateTime fecha = DateTime.Now;
 
@@ -284,64 +279,64 @@ namespace TrackrAPI.Services.GestionEntidad
             {
                 case "hoy":
                     fecha = fecha.AddHours(-24); // Desde las últimas 24 horas
-                    var valoresHoy = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    var valoresHoy = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(idSeccionVariable, idUsuario, fecha);
                     return AgruparPorHoy(valoresHoy);
                 case "1 semana":
                     fecha = fecha.AddDays(-7); // Desde los últimos 7 días
-                    var valoresSemana = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    var valoresSemana = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(idSeccionVariable, idUsuario, fecha);
                     return AgruparPorSemana(valoresSemana);
                 case "2 semanas":
                     fecha = fecha.AddDays(-14); // Desde los últimos 14 días
-                    var valoresDosSemanas = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    var valoresDosSemanas = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(idSeccionVariable, idUsuario, fecha);
                     return AgruparPorSemana(valoresDosSemanas);
                 case "3 semanas":
                     fecha = fecha.AddDays(-21); // Desde las últimas 3 semanas
-                    var valoresTresSemanas = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    var valoresTresSemanas = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(idSeccionVariable, idUsuario, fecha);
                     return AgruparPorSemana(valoresTresSemanas);
                 case "1 mes":
                     fecha = fecha.AddMonths(-1); // Desde el último mes
-                    var valoresUnMes = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    var valoresUnMes = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(idSeccionVariable, idUsuario, fecha);
                     return AgruparPorSemana(valoresUnMes);
                 case "2 meses":
                     fecha = fecha.AddMonths(-2); // Desde los últimos 2 meses
-                    var valoresDosMeses = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    var valoresDosMeses = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(idSeccionVariable, idUsuario, fecha);
                     return AgruparPorSemana(valoresDosMeses);
                 default:
                     throw new CdisException("Filtro de fecha no reconocido");
             }
         }
 
-        public ValoresPorCampoGridDTO ConsultarValoresPorClaveCampoParaGrid(string claveCampo, int idUsuario, string fechaFiltro)
+        public ValoresPorCampoGridDTO ConsultarValoresPorClaveCampoParaGrid(int idSeccionVariable, int idUsuario, string fechaFiltro)
         {
             DateTime fecha = DateTime.Now;
             var valoresGrid = new ValoresPorCampoGridDTO(){ 
-                unidadMedida = seccionCampoRepository.ConsultarUnidadDeMedidaPorClaveCampo(claveCampo) };
+                unidadMedida = seccionCampoRepository.ConsultarUnidadDeMedidaPorClaveCampo(idSeccionVariable) };
 
             switch (fechaFiltro.ToLower())
             {
                 case "hoy":
                     fecha = fecha.AddHours(-24); // Desde las últimas 24 horas
-                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(idSeccionVariable, idUsuario, fecha);
                     return valoresGrid;
                 case "1 semana":
                     fecha = fecha.AddDays(-7); // Desde los últimos 7 días
-                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(idSeccionVariable, idUsuario, fecha);
                     return valoresGrid;
                 case "2 semanas":
                     fecha = fecha.AddDays(-14); // Desde los últimos 14 días
-                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(idSeccionVariable, idUsuario, fecha);
                     return valoresGrid;
                 case "3 semanas":
                     fecha = fecha.AddDays(-21); // Desde las últimas 3 semanas
-                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(idSeccionVariable, idUsuario, fecha);
                     return valoresGrid;
                 case "1 mes":
                     fecha = fecha.AddDays(-30); // Desde el último mes
-                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(idSeccionVariable, idUsuario, fecha);
                     return valoresGrid;
                 case "2 meses":
                     fecha = fecha.AddDays(-60); // Desde los últimos 2 meses
-                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, fecha);
+                    valoresGrid.valores = entidadEstructuraTablaValorRepository.ConsultarValoresPorClaveCampo(idSeccionVariable, idUsuario, fecha);
                     return valoresGrid;
                 default:
                     throw new CdisException("Filtro de fecha no reconocido");

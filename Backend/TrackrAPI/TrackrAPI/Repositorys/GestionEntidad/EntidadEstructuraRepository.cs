@@ -206,5 +206,14 @@ namespace TrackrAPI.Repositorys.GestionEntidad
 
             return prueba;
         }
+
+        public EntidadEstructura? ConsultarPorEntidadSeccionVariable(int idSeccionCampo)
+        {
+            return context.EntidadEstructura
+                .Where(e => e.IdSeccion == idSeccionCampo && e.IdEntidadEstructuraPadre != null)
+                .FirstOrDefault();
+        }
+
+      
     }
 }
