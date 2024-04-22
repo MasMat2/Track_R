@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { IonicModule, ModalController } from '@ionic/angular';
+import { chevronBack } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
 
 @Component({
   selector: 'app-imagen-visor',
@@ -19,6 +21,7 @@ export class ImagenVisorComponent  implements OnInit {
   protected imageSrc: SafeResourceUrl;
 
   constructor(private sanitizer: DomSanitizer,private modalController:ModalController) {
+    addIcons({chevronBack})
   }
 
   ngOnInit(

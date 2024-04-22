@@ -1,0 +1,23 @@
+.contenedor-header{
+    height: 12vh;
+    display: flex;
+    align-items: flex-end;
+    background: var(--neutral-50);
+    ion-toolbar{
+      --background: var(--neutral-50);
+  
+      ion-title{
+        font-family: var(--font-body);
+        font-size: 16px;
+        color: var(--neutral-900);
+      }
+    }
+  }
+
+  .contendor-principal{
+    height: 80vh;
+    background: var(--primary-50);
+  }
+  .contenedor-footer{
+    height: 8vh;
+  }

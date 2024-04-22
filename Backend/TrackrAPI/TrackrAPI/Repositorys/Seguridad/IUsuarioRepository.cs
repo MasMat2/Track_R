@@ -4,6 +4,7 @@ using TrackrAPI.Dtos.Perfil;
 using TrackrAPI.Models;
 using System;
 using System.Collections.Generic;
+using TrackrAPI.Dtos.GestionExpediente;
 
 namespace TrackrAPI.Repositorys.Seguridad
 {
@@ -45,7 +46,11 @@ namespace TrackrAPI.Repositorys.Seguridad
         //public Usuario ConsultarDependencias(int idUsuario);
         public IEnumerable<UsuarioDto> ConsultarPorNombre(string filtro);
         public InformacionGeneralDTO ConsultarInformacionGeneralTrackr(int idUsuario);
-       
+        public InformacionPerfilTrackrDTO ConsultarInformacionPerfilTrackr(int idUsuario);
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarAntecedentesUsuarioTrackr(int idUsuario);
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarDiagnosticosUsuarioTrackr(int idUsuario);
+
+
        public UsuarioDomicilioDto ConsultaDomicilioPorId(int? idUsuario);
     }
 }

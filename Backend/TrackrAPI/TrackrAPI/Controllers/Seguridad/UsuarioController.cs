@@ -8,6 +8,7 @@ using TrackrAPI.Services.Seguridad;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using TrackrAPI.Dtos.GestionExpediente;
 
 namespace TrackrAPI.Controllers.Seguridad
 {
@@ -269,6 +270,24 @@ namespace TrackrAPI.Controllers.Seguridad
         public InformacionGeneralDTO ConsultarInformacionGeneral()
         {
             return usuarioService.ConsultarInformacionGeneralTrackr(Utileria.ObtenerIdUsuarioSesion(this));
+        }
+
+        [HttpGet("consultarInformacionPerfil")]
+        public InformacionPerfilTrackrDTO ConsultarInformacionPerfil()
+        {
+            return usuarioService.ConsultarInformacionPerfilTrackr(Utileria.ObtenerIdUsuarioSesion(this));
+        }
+
+        [HttpGet("consultarInfoAntecedentes")]
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarInformacionAntecedentes()
+        {
+            return usuarioService.ConsultarAntecedentesUsuarioTrackr(Utileria.ObtenerIdUsuarioSesion(this));
+        }
+
+        [HttpGet("consultarInfoDiagnosticos")]
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarInformacionDiagnosticos()
+        {
+            return usuarioService.ConsultarDiagnosticosUsuarioTrackr(Utileria.ObtenerIdUsuarioSesion(this));
         }
 
         [HttpPut("actualizarInformacionGeneral")]

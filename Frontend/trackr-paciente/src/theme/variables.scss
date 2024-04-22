@@ -143,8 +143,8 @@ ion-header {
 }
 
 
-//Alertas personalizadas
-ion-alert.custom-alert-success, .custom-alert-error, .custom-alert-loading {
+//Alertas personalizadas (tamaño y bordes)
+ion-alert.custom-alert-success, .custom-alert-error, .custom-alert-loading, .custom-alert-delete {
   .alert-wrapper{
     border-radius: 16px !important;
     min-width: 327px !important;
@@ -183,7 +183,8 @@ ion-loading.custom-loading {
   }
 }
 
-ion-alert.custom-alert-success, .custom-alert-error{
+//Alertas personalizadas (fuentes y distribucion)
+ion-alert.custom-alert-success, .custom-alert-error, .custom-alert-delete{
   .alert-head{
     text-align: center !important;
     padding-top: 92px !important;
@@ -239,6 +240,7 @@ ion-alert.custom-alert-success, .custom-alert-error{
       text-align: center !important;
       font-family: var(--font-body);
       font-size: 16px;
+      text-transform: none;
       span{
         justify-content: center !important;
       }
@@ -246,6 +248,8 @@ ion-alert.custom-alert-success, .custom-alert-error{
 
   }
 }
+
+//Alertas personalizadas (ajustes individuales)
 
 ion-alert.custom-alert-success{
   .alert-message{
@@ -305,6 +309,49 @@ ion-alert.custom-alert-loading{
 
   }
 }
+
+ion-alert.custom-alert-delete{
+  .alert-message{
+    ion-icon{
+      color: var(--error-200) !important;
+    }
+  }
+
+  .alert-button-group {
+    justify-content: space-between;
+    button.alert-button {
+      max-width: 130px;
+      background: var(--error-200);
+    }
+
+    button.alert-button-role-cancel{
+      color: var(--error-200);
+      border: 1px solid var(--error-200);
+      background: transparent;
+    }
+  }
+}
+
+//estilos para selectores que usen popover como interface
+ion-popover.custom-select-popover{
+
+  .item-radio-checked{
+    --background: var(--primary-200);
+    --background-focused: var(--primary-50);
+    --background-hover: var(--primary-50);
+  }
+}
+
+ion-popover.custom-select-popover::part(content) {
+  //--width: 100%;
+  border-radius: 8px;
+}
+
+ion-modal.custom-sheet-modal{
+  --height: auto;
+  --border-radius: 16px 16px 0 0;
+}
+
 
 //estilos para selectores que usen alert como interface
 // ion-alert.custom-select-alert {

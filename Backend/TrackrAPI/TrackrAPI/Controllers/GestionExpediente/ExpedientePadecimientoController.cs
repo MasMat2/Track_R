@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Helpers;
 using TrackrAPI.Services.GestionExpediente;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -40,6 +41,17 @@ namespace TrackrAPI.Controllers.GestionExpediente
             return expedientePadecimientoService.ConsultarParaGridPorUsuario(idUsuario);
         }
 
+        [HttpDelete("{idExpedientePadecimiento}")]
+        public void EliminarExpedientePadecimiento(int idExpedientePadecimiento)
+        {
+            expedientePadecimientoService.Eliminar(idExpedientePadecimiento);
+        }
+
+        [HttpPost("agregarExpedientePadecimiento")]
+        public int AgregarExpedientePadecimiento(AgregarExpedientePadecimientoDTO expedientePadecimientoDTO)
+        {
+            return expedientePadecimientoService.AgregarPadecimiento(expedientePadecimientoDTO, Utileria.ObtenerIdUsuarioSesion(this));
+        }
 
     }
 }
