@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
 import { EntidadEstructura } from '@models/gestion-entidad/entidad-estructura';
+import { SeccionCampo } from '@models/gestion-entidad/seccion-campo';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -19,6 +20,10 @@ export class EntidadEstructuraService {
 
   public consultarPorEntidadParaSelector(idEntidad: number): Observable<EntidadEstructura[]> {
     return this.http.get<EntidadEstructura[]>(this.dataUrl + `consultarPorEntidadParaSelector/${idEntidad}`);
+  }
+
+  public valoresVariablesPadecimiento(): Observable<SeccionCampo[]> {
+    return this.http.get<SeccionCampo[]>(this.dataUrl + `valoresVariablesPadecimiento`);
   }
 
   public agregar(entidadEstructuras: EntidadEstructura[]): Observable<void> {

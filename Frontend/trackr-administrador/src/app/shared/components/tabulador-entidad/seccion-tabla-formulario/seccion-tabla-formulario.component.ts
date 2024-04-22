@@ -104,7 +104,7 @@ export class SeccionTablaFormularioComponent implements OnInit {
       async (campo: SeccionCampo) => {
         const valor: TablaValorDto = {
           idEntidadEstructuraTablaValor: campo.idEntidadEstructuraValor,
-          claveCampo: campo.clave,
+          idSeccionVariable: campo.idSeccionCampo,
           valor: campo.valor?.toString() ?? '',
           fueraDeRango: await this.estaFueraDeRango(campo),
           fechaMuestra: new Date()
@@ -161,7 +161,7 @@ export class SeccionTablaFormularioComponent implements OnInit {
         async (campo: SeccionCampo) => {
           const valor: TablaValorDto = {
             idEntidadEstructuraTablaValor: 0,
-            claveCampo: campo.clave,
+            idSeccionVariable: campo.idSeccionCampo,
             valor: campo.valor?.toString() ?? '',
             fueraDeRango: await this.estaFueraDeRango(campo),
             fechaMuestra: new Date(fecha!)

@@ -1,4 +1,4 @@
 export class ExpedienteColumnaSelectorDTO{
-    clave: string;
+    idSeccionVariable: number;
     variable: string;
 }

@@ -24,17 +24,17 @@ namespace TrackrAPI.Dtos.Contabilidad
         {
         }
 
-        public PolizaDetalleGridDto(PolizaDetalle polizaDetalle)
-        {
-            IdImpuestoDetalle = polizaDetalle.IdImpuestoDetalle;
-            IdImpuesto = polizaDetalle.IdImpuesto;
-            IdCuentaContable = polizaDetalle.IdCuentaContable;
-            IdPolizaDetalle = polizaDetalle.IdPolizaDetalle;
-            IdAuxiliar = polizaDetalle.IdAuxiliar;
-            Cargo = polizaDetalle.Cargo;
-            Abono = polizaDetalle.Abono;
-            Renglon = polizaDetalle.Renglon;
-            Concepto = polizaDetalle.Concepto;
-        }
+        //public PolizaDetalleGridDto(PolizaDetalle polizaDetalle)
+        //{
+        //    IdImpuestoDetalle = polizaDetalle.IdImpuestoDetalle;
+        //    IdImpuesto = polizaDetalle.IdImpuesto;
+        //    IdCuentaContable = polizaDetalle.IdCuentaContable;
+        //    IdPolizaDetalle = polizaDetalle.IdPolizaDetalle;
+        //    IdAuxiliar = polizaDetalle.IdAuxiliar;
+        //    Cargo = polizaDetalle.Cargo;
+        //    Abono = polizaDetalle.Abono;
+        //    Renglon = polizaDetalle.Renglon;
+        //    Concepto = polizaDetalle.Concepto;
+        //}
     }
 }

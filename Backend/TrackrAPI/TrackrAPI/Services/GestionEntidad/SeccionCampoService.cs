@@ -41,7 +41,7 @@ namespace TrackrAPI.Services.GestionEntidad
             {
                 seccionesUnicas.Add(new ExpedienteColumnaSelectorDTO
                 {
-                    Clave = seccion.ClaveCampo,
+                    IdSeccionVariable = seccion.IdSeccionVariable,
                     Variable = seccion.Parametro,
                 });
             }
@@ -74,7 +74,7 @@ namespace TrackrAPI.Services.GestionEntidad
                     List<SeccionCampo> seccionesCampoList = new List<SeccionCampo>();
                     foreach (var seccionCampoDTO in seccion)
                     {
-                        var seccionCampo = seccionCampoRepository.ConsultarPorClaveConDependencia(seccionCampoDTO.ClaveCampo);
+                        var seccionCampo = seccionCampoRepository.ConsultarPorClaveConDependencia(seccionCampoDTO.IdSeccionVariable);
                         if(seccionCampo == null)
                         {
                             continue;
@@ -92,6 +92,7 @@ namespace TrackrAPI.Services.GestionEntidad
         public void Agregar(SeccionCampo seccionCampo)
         {
             seccionCampoValidatorService.ValidarAgregar(seccionCampo);
+            seccionCampo.Grupo = seccionCampo.IdSeccionNavigation.Clave + " - " + seccionCampo.Clave;
             seccionCampoRepository.Agregar(seccionCampo);
         }
 

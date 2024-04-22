@@ -54,26 +54,26 @@ namespace TrackrAPI.Repositorys.GestionEntidad
             return ultimoRegistro?.Numero ?? 0;
         }
 
-        public string ConsultarUltimoValor(int idUsuario  , string clave)
+        public string ConsultarUltimoValor(int idUsuario  , int idSeccionVariable)
         {
             return context.EntidadEstructuraTablaValor
-                    .Where(eetv => eetv.IdTabla == idUsuario && eetv.ClaveCampo == "ME-" + clave)
+                    .Where(eetv => eetv.IdTabla == idUsuario && eetv.IdSeccion == idSeccionVariable)
                     .OrderByDescending(eetv => eetv.FechaMuestra)
                     .Take(1).FirstOrDefault().Valor; // Tomar solo la muestra más reciente
         }
 
-        public bool ExisteValorEnEntidadEstructura(int idUsuario, string clave)
+        public bool ExisteValorEnEntidadEstructura(int idUsuario, int idSeccionVariable)
         {
-            return context.EntidadEstructuraTablaValor.Any(eetv => eetv.IdTabla == idUsuario && eetv.ClaveCampo == "ME-" + clave);
+            return context.EntidadEstructuraTablaValor.Any(eetv => eetv.IdTabla == idUsuario && eetv.IdSeccion == idSeccionVariable);
         }
 
-        public IEnumerable<EntidadEstructuraTablaValor> ConsultarValoresPorCampos(int idExpediente, IEnumerable<string> claveCampos, bool? fueraRango)
+        public IEnumerable<EntidadEstructuraTablaValor> ConsultarValoresPorCampos(int idExpediente, List<int> claveCampos, bool? fueraRango)
         {
             // Inicia la consulta
             var currentDay = DateTime.UtcNow.Date;
             var queryValoresCampos = context.EntidadEstructuraTablaValor
                 .Include(ep => ep.IdEntidadEstructuraNavigation)
-                .Where(ep => claveCampos.Contains(ep.ClaveCampo)
+                .Where(ep => claveCampos.Contains( (int) ep.IdSeccion)
                     && ep.IdTabla == idExpediente && ep.FechaMuestra.Value.Date == currentDay);
 
             // Si fueraRango tiene un valor, añade la condición a la consulta
@@ -86,11 +86,11 @@ namespace TrackrAPI.Repositorys.GestionEntidad
             return queryValoresCampos;
         }
 
-        public IEnumerable<ValoresHistogramaDTO> ConsultarValoresPorClaveCampo(string claveCampo, int idUsuario, DateTime fechaFiltro)
+        public IEnumerable<ValoresHistogramaDTO> ConsultarValoresPorClaveCampo(int idSeccionVariable, int idUsuario, DateTime fechaFiltro)
         {
             return context.EntidadEstructuraTablaValor
                 .Include(etv => etv.IdEntidadEstructuraNavigation)
-                .Where(etv => etv.ClaveCampo == claveCampo
+                .Where(etv => etv.IdSeccion == idSeccionVariable
                     && etv.IdTabla == idUsuario
                     && etv.FechaMuestra >= fechaFiltro)
                 .Select(etv => new ValoresHistogramaDTO
@@ -116,7 +116,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                                 IdEntidadEstructuraTablaValor = registro.IdEntidadEstructuraTablaValor,
                                 Numero = registro.Numero,
                                 IdEntidadEstructura = registro.IdEntidadEstructura,
-                                ClaveCampo = registro.ClaveCampo,
+                                IdSeccionVariable = (int) registro.IdSeccion,
                                 Valor = registro.Valor,
                                 IdTabla = registro.IdTabla,
                                 FueraDeRango = registro.FueraDeRango,

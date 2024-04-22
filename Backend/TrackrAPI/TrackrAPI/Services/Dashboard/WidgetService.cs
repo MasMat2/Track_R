@@ -108,7 +108,7 @@ public class WidgetService
                     NombreSeccion = group.First().IdSeccionNavigation.Nombre,
                     SeccionClave = group.First().IdSeccionNavigation.Clave,
                     Variables = group.SelectMany(ee => ee.IdSeccionNavigation.SeccionCampo
-                                                        .Where(sC => _entidadEstructuraTablaValorRepository.ExisteValorEnEntidadEstructura(idUsuario, sC.Clave))
+                                                        .Where(sC => _entidadEstructuraTablaValorRepository.ExisteValorEnEntidadEstructura(idUsuario, sC.IdSeccionCampo))
                                                         .Select(sC =>
                                                         {
                                                             return new VariableDTO
@@ -118,7 +118,7 @@ public class WidgetService
                                                                 MostrarDashboard = sC.MostrarDashboard,
                                                                 IconoClase = sC.IdIconoNavigation?.Clase,
                                                                 unidadMedida = sC.IdDominioNavigation.UnidadMedida,
-                                                                ValorVariable = _entidadEstructuraTablaValorRepository.ConsultarUltimoValor(idUsuario, sC.Clave)
+                                                                ValorVariable = _entidadEstructuraTablaValorRepository.ConsultarUltimoValor(idUsuario, sC.IdSeccionCampo)
                                                             };
                                                         })
                                                         .Take(2)

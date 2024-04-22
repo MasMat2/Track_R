@@ -35,16 +35,16 @@
         >
             <ng-template pTemplate="header">
                 <tr>
-                    <th *ngFor="let columna of entidadEstructuraSeccion.campos">
+                    <th *ngFor="let columna of seccionCampoList">
                         {{ columna.descripcion }}
                     </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-muestra>
                   <tr [pSelectableRow]="muestra" (click)="seleccionar(muestra)">  
-                    <td *ngFor="let columna of entidadEstructuraSeccion.campos ; let last = last">
+                    <td *ngFor="let columna of seccionCampoList ; let last = last">
                         <div *ngFor="let muestras of muestra.registro; let first = first" [ngClass]="last ? obtenerValorEstilo(muestra, first) : '' ">
-                            {{ obtenerValor(columna.clave, muestras , first, last) }}
+                            {{ obtenerValor(columna.clave, muestras , first, last , columna.idSeccionCampo) }}
                         </div>
                     </td>
                  </tr>   

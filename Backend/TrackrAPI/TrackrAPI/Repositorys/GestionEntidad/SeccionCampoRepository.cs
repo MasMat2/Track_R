@@ -15,7 +15,10 @@ namespace TrackrAPI.Repositorys.GestionEntidad
 
         public SeccionCampo? Consultar(int idSeccionCampo)
         {
-            return context.SeccionCampo.Where(e => e.IdSeccionCampo == idSeccionCampo).ToList().FirstOrDefault();
+            return context.SeccionCampo
+            .Include( sC => sC.IdSeccionNavigation)
+                .ThenInclude( s => s.EntidadEstructura)
+            .Where(e => e.IdSeccionCampo == idSeccionCampo).ToList().FirstOrDefault();
         }
 
         public SeccionCampo? Consultar(string descripcion)
@@ -31,10 +34,10 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Where(e => e.Clave == clave)
                 .FirstOrDefault();
         }
-        public SeccionCampo? ConsultarPorClaveConDependencia(string clave)
+        public SeccionCampo? ConsultarPorClaveConDependencia(int idSeccionVariable)
         {
             return context.SeccionCampo
-                .Where(e => e.Clave == clave)
+                .Where(e => e.IdSeccionCampo == idSeccionVariable)
                 .Include(e=> e.IdDominioNavigation)
                 .Include(e=> e.IdSeccionNavigation)
                 .FirstOrDefault();
@@ -96,7 +99,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Select(sc =>
                     new ExpedienteColumnaDTO {
                         Parametro = sc.Descripcion,
-                        ClaveCampo = "ME-" + sc.Clave,
+                        IdSeccionVariable = sc.IdSeccionCampo,
                         ClaveSeccion = sc.IdSeccionNavigation.Clave,
                         Variable = sc.IdSeccionNavigation.Nombre,
                         ValorMinimo = sc.IdDominioNavigation.ValorMinimo,
@@ -113,17 +116,17 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                     new ExpedienteColumnaDTO
                     {
                         Parametro = sc.Descripcion,
-                        ClaveCampo = "ME-" + sc.Clave,
+                        IdSeccionVariable = sc.IdSeccionCampo,
                         Variable = sc.IdSeccionNavigation.Nombre,
                         ValorMinimo = sc.IdDominioNavigation.ValorMinimo,
                         ValorMaximo = sc.IdDominioNavigation.ValorMaximo
                     });
         }
 
-        public string ConsultarUnidadDeMedidaPorClaveCampo(string claveCampo)
+        public string ConsultarUnidadDeMedidaPorClaveCampo(int idSeccionVariable)
         {
             return context.SeccionCampo
-                .Where(sc => sc.Clave == claveCampo)
+                .Where(sc => sc.IdSeccionCampo == idSeccionVariable)
                 .Include(sc => sc.IdDominioNavigation)
                 .Select(sc => sc.IdDominioNavigation.UnidadMedida).FirstOrDefault();
 
