@@ -45,7 +45,7 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   protected HEADER_GRID = 'Bitacora de muestras';
   private idPadecimiento: string;
   protected variableList: ExpedienteColumnaSelectorDTO[];
-  protected claveVariable: string;
+  protected idSeccionVariable: number;
   protected filtroTiempo: string = "hoy" ?? "1 semana";
   protected valoresCampo: ValoresClaveCampoGridDto;
   protected valorMin: number | null;
@@ -121,23 +121,26 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
       this.idPadecimiento = params.get('id') ?? '';
     });
 
+    console.log(this.idSeccionVariable);
     this.consultarSeccionesPadecimiento();
     
   }
 
   protected onChangeVariable(event: Event): void {
+    console.log(this.idSeccionVariable);
     if(event != null && this.filtroTiempo != null){
-      this.actualizarDatos(event.toString(), this.filtroTiempo);
+       this.actualizarDatos(this.idSeccionVariable, this.filtroTiempo); 
     }
   }
 
   protected onFiltroChange(event: MatChipListboxChange): void {
-    if(this.claveVariable != null && event != null){
-      this.actualizarDatos(this.claveVariable, event.toString());
+    if(this.idSeccionVariable != null && event != null){
+      console.log(this.idSeccionVariable);
+      this.actualizarDatos(this.idSeccionVariable, event.toString());
     }
   }
 
-  private actualizarDatos(filtroClave: string, filtroTiempo: string): void {
+  private actualizarDatos(filtroClave: number, filtroTiempo: string): void {
     lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresPorClaveCampoUsuarioSesion(filtroClave, filtroTiempo))
       .then((valoresPorClaveCampo) => {
         let data:any = {};
