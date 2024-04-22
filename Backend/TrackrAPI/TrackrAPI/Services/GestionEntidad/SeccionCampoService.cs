@@ -92,6 +92,7 @@ namespace TrackrAPI.Services.GestionEntidad
         public void Agregar(SeccionCampo seccionCampo)
         {
             seccionCampoValidatorService.ValidarAgregar(seccionCampo);
+            seccionCampo.Grupo = seccionCampo.IdSeccionNavigation.Clave + " - " + seccionCampo.Clave;
             seccionCampoRepository.Agregar(seccionCampo);
         }
 

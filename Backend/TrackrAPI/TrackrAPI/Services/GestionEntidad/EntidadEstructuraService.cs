@@ -160,5 +160,34 @@ namespace TrackrAPI.Services.GestionEntidad
         {
             return entidadEstructuraRepository.ConsultarAntecedentesParaSelector();
         }
+
+        public IEnumerable<SeccionCampo>  ValoresVariablesPadecimiento(int idUsuario)
+        {
+            var variables = entidadEstructuraRepository.ValoresVariablesPadecimiento(idUsuario);
+            var variablesDto = variables
+                .Where(v => v.IdSeccionNavigation != null)
+                .SelectMany(v => v.IdSeccionNavigation.SeccionCampo)
+                .GroupBy(sc => sc.IdSeccionCampo)
+                .Select(g => g.First()) 
+                .Select(sc => new SeccionCampo
+                { 
+                    IdSeccionCampo = sc.IdSeccionCampo, 
+                    Clave = sc.Clave, 
+                    Descripcion = sc.Descripcion, 
+                    IdDominio = sc.IdDominio, 
+                    IdSeccion = sc.IdSeccion, 
+                    Requerido = sc.Requerido, 
+                    Orden = sc.Orden, 
+                    TamanoColumna = sc.TamanoColumna, 
+                    Deshabilitado = sc.Deshabilitado, 
+                    Grupo = sc.IdSeccionNavigation.Clave + " - " + sc.IdSeccionNavigation.Nombre, 
+                    Fila = sc.Fila, 
+                    IdIcono = sc.IdIcono, 
+                    MostrarDashboard = sc.MostrarDashboard ,
+                    IdDominioNavigation = sc.IdDominioNavigation,
+                })
+                .ToList();
+            return variablesDto;
+        }
     }
 }

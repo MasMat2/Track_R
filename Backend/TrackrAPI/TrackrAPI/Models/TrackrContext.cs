@@ -967,8 +967,6 @@ namespace TrackrAPI.Models
 
                 entity.ToTable("EntidadEstructuraTablaValor", "Configuracion");
 
-                entity.Property(e => e.ClaveCampo).HasMaxLength(50);
-
                 entity.Property(e => e.FechaMuestra).HasColumnType("datetime");
 
                 entity.HasOne(d => d.IdEntidadEstructuraNavigation)
@@ -976,6 +974,12 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdEntidadEstructura)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__EntidadEs__IdEnt__09353BAD");
+
+                entity.HasOne(d => d.IdSeccionNavigation)
+                    .WithMany(p => p.EntidadEstructuraTablaValor)
+                    .HasForeignKey(d => d.IdSeccion)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__EntidadEs__IdSec__432CD318");
             });
 
             modelBuilder.Entity<EntidadEstructuraValor>(entity =>

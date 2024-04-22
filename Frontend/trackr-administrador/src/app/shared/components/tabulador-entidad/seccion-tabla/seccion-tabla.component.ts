@@ -15,6 +15,8 @@ import { toDateString } from '../../../utils/utileria';
 import { SeccionCampo } from '@models/gestion-entidad/seccion-campo';
 import { first } from 'rxjs/operators';
 import { sum } from 'lodash';
+import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
+import { Dominio } from '@models/catalogo/dominio';
 
 @Component({
   selector: 'app-seccion-tabla',
@@ -25,8 +27,9 @@ export class SeccionTablaComponent implements OnInit {
   @Input() public entidadEstructuraSeccion: EntidadEstructura;
   @Input() public idTabla: number;
  
- public campos: SeccionCampo = new SeccionCampo();
+ public campos: SeccionCampo[] = [];
  public muestras : ExpedienteMuestrasGridDTO[];
+ public seccionCampoList : SeccionCampo[] = [];
   public readonly EDITAR: string = "Editar";
   public readonly AGREGAR: string = "Agregar";
 
@@ -36,14 +39,61 @@ export class SeccionTablaComponent implements OnInit {
     private modalService: BsModalService,
     private mensajeService: MensajeService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
+    private entidadEstructuraService : EntidadEstructuraService
   ) { }
 
   ngOnInit() {
     this.entidadEstructuraSeccion.campos.sort((a, b) => a.orden - b.orden);
-    this.obtenerMuestrasGrid();
-    this.campos.descripcion = 'Fuera De Rango';
-    this.campos.clave = 'F-Rango';
-    this.entidadEstructuraSeccion.campos.push(this.campos);
+    this.valoresVariablesPadecimiento();
+  }
+
+  //Determina las variables de los padecimientos que tiene el usuario
+  private valoresVariablesPadecimiento() {
+    this.entidadEstructuraService.valoresVariablesPadecimiento().subscribe((data) => {
+  
+        this.agregarFechaHora();
+        this.seccionCampoList = this.seccionCampoList.concat(data);
+        this.campos = this.campos.concat(data);
+        this.agregarFueraDeRango();
+        this.obtenerMuestrasGrid();
+    });
+  }
+    private agregarFechaHora() {
+        var fecha = new SeccionCampo();
+        fecha.idDominioNavigation = new Dominio();
+        fecha.clave = 'ME-fecha';
+        fecha.descripcion = 'Fecha de Muestra';
+        fecha.grupo = 'Fecha';
+        fecha.idDominioNavigation.tipoCampo = 'Date';
+        fecha.idDominioNavigation.longitudMaxima = 10;
+        fecha.requerido = true;
+        fecha.habilitado = true;
+
+        fecha.fila = 1;
+        fecha.orden = 1;
+
+        var hora = new SeccionCampo();
+        hora.idDominioNavigation = new Dominio();
+        hora.clave = 'ME-hora';
+        hora.descripcion = 'Hora de Muestra';
+        hora.grupo = 'Fecha';
+        hora.idDominioNavigation.tipoCampo = 'Time';
+        hora.idDominioNavigation.longitudMaxima = 5;
+        hora.fila = 1;
+        hora.orden = 1;
+        hora.requerido = true;
+        
+
+        this.seccionCampoList.unshift(fecha, hora);
+        this.campos.unshift(fecha, hora);
+    }
+    
+  private agregarFueraDeRango() {
+    var fueraDeRango = new SeccionCampo();
+    fueraDeRango.clave = 'F-Rango';
+    fueraDeRango.descripcion = 'Fuera de Rango';
+    fueraDeRango.orden = 1000;
+    this.seccionCampoList.push(fueraDeRango);
   }
 
   private obtenerMuestrasGrid() {
@@ -68,8 +118,7 @@ export class SeccionTablaComponent implements OnInit {
   }
 
 
-  public obtenerValor(claveColumna: string, valores: ExpedienteMuestrasRegistroDTO , firstRegistro : boolean , lastColumna : boolean) : string  {
-
+  public obtenerValor(claveColumna: string, valores: ExpedienteMuestrasRegistroDTO , firstRegistro : boolean , lastColumna : boolean, idSeccionValor : number) : string  {
     if(lastColumna && firstRegistro)
       return ' _ ';
 
@@ -92,7 +141,7 @@ export class SeccionTablaComponent implements OnInit {
       return horaYMinuto;
     }
 
-    if(claveColumna == valores.claveCampo)
+    if(idSeccionValor == valores.idSeccionVariable)
             return valores.valor;
       
     return '';        
@@ -114,7 +163,7 @@ export class SeccionTablaComponent implements OnInit {
       idTabla: this.idTabla,
       idPestanaSeccion: this.entidadEstructuraSeccion.idEntidadEstructura,
       nombreSeccion: this.entidadEstructuraSeccion.nombre,
-      campos: this.entidadEstructuraSeccion.campos,
+      campos: this.campos,
     };
 
     const modalRef = this.modalService.show(
@@ -141,9 +190,9 @@ export class SeccionTablaComponent implements OnInit {
       for (const campo of this.seleccionado.registro) {
 
 
-        const v = this.entidadEstructuraSeccion.campos.find(c => c.clave === campo.claveCampo);
-        const fecha = this.entidadEstructuraSeccion.campos.find(c => c.clave === 'ME-fecha');
-        const hora = this.entidadEstructuraSeccion.campos.find(c => c.clave === 'ME-hora');
+        const v = this.seccionCampoList.find(c => c.idSeccionCampo === campo.idSeccionVariable);
+        const fecha = this.seccionCampoList.find(c => c.clave === 'ME-fecha');
+        const hora = this.seccionCampoList.find(c => c.clave === 'ME-hora');
 
         
         if(v){
@@ -175,7 +224,7 @@ export class SeccionTablaComponent implements OnInit {
       idTabla: this.idTabla,
       idPestanaSeccion: this.entidadEstructuraSeccion.idEntidadEstructura,
       nombreSeccion: this.entidadEstructuraSeccion.nombre,
-      campos: this.entidadEstructuraSeccion.campos,
+      campos: this.campos,
     };
 
     const modalRef = this.modalService.show(
@@ -197,7 +246,7 @@ export class SeccionTablaComponent implements OnInit {
   }
 
   private limpiarCampos(accion : string): void {
-    this.entidadEstructuraSeccion.campos.forEach(c => {
+    this.campos.forEach(c => {
       c.valor = '';
       c.habilitado = accion == "Editar"? false : true;
       if(accion == "Agregar")
@@ -226,7 +275,7 @@ export class SeccionTablaComponent implements OnInit {
     for (const campo of this.seleccionado.registro) {
 
 
-      const v = this.entidadEstructuraSeccion.campos.find(c => c.clave === campo.claveCampo);
+      const v = this.seccionCampoList.find(c => c.clave === campo.claveCampo);
 
       if(v){
       
@@ -237,7 +286,7 @@ export class SeccionTablaComponent implements OnInit {
 
     }
 
-    const campos = this.entidadEstructuraSeccion.campos.filter(
+    const campos = this.seccionCampoList.filter(
       (c) => c.idDominioNavigation?.tipoCampo !== 'Select Múltiple' &&
         c.valor && c.valor !== '' && c.idEntidadEstructuraValor > 0
     );
@@ -253,7 +302,7 @@ export class SeccionTablaComponent implements OnInit {
     registro.valores = campos.map((campo: SeccionCampo) => {
       const valor: TablaValorDto = {
         idEntidadEstructuraTablaValor: campo.idEntidadEstructuraValor,
-        claveCampo: campo.clave,
+        idSeccionVariable: campo.idSeccionCampo,
         valor: campo.valor?.toString() ?? '',
         fueraDeRango: false,
         fechaMuestra: new Date()

@@ -94,9 +94,11 @@ namespace TrackrAPI.Services.GestionEntidad
 
             foreach (var valorDto in registro.Valores)
             {
+                var idSeccion = seccionCampoRepository.Consultar(valorDto.IdSeccionVariable).IdSeccion;
+                var idEntidadEstructura = entidadEstructuraRepository.ConsultarPorEntidadSeccionVariable(idSeccion).IdEntidadEstructuraPadre;
                 var valor = new EntidadEstructuraTablaValor()
                 {
-                    IdEntidadEstructura = registro.IdEntidadEstructura,
+                    IdEntidadEstructura = (int) idEntidadEstructura,
                     IdTabla = registro.IdTabla,
                     Numero = ultimoRegistro + 1,
                     IdSeccion = valorDto.IdSeccionVariable,
