@@ -73,6 +73,7 @@
                 [(ngModel)]="idPais"
                 [placeholder]="placeHolderSelect"
                 [notFoundText]="placeHolderNoOptions"
+                appendTo="body"
               ></ng-select>
               <div
                 *ngIf="paisLst.errors?.['required'] && paisLst.touched"

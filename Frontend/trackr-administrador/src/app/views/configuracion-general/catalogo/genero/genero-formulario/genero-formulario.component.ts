@@ -15,8 +15,8 @@ export class GeneroFormularioComponent implements OnInit {
     protected placeHolderSelect = GeneralConstant.PLACEHOLDER_DROPDOWN;
     public onClose: any;
     public accion: string;
-    private mensajeAgregar = 'El genero ha sido agregado';
-    private mensajeEditar = 'El genero ha sido modificado';
+    private mensajeAgregar = 'El género ha sido agregado';
+    private mensajeEditar = 'El género ha sido modificado';
     protected btnSubmit = false;
     protected genero = new GeneroDto();
     
