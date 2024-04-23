@@ -36,20 +36,22 @@
             </div>
   
           <div class="col-md-2 justify-content-between align-items-center ">
-            <label class="label-input required-label">Fecha</label>
-          <div>
-            <input
-              [(ngModel)] = "recomendacion.fecha"
-              name="fechaAlta"
-              class="form-control"
-              type="text"
-              maxlength="50"
-              autocomplete="off"
-              required
-              [disabled]="true"
-              bsDatepicker
-            />
-  
+            <div class="form-group">
+              <label class="label-input required-label" style="font-size: 12px;">Fecha</label>
+              <div class="calendario">
+                <input
+                  [(ngModel)] = "recomendacion.fecha"
+                  name="fechaAlta"
+                  class="form-control"
+                  type="text"
+                  maxlength="50"
+                  autocomplete="off"
+                  required
+                  [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+                  [disabled]="true"
+                  bsDatepicker
+                />
+              </div>
           </div>
         </div>
       
@@ -80,7 +82,7 @@
 
       <div class="row">
         <div class="col-md-12">
-          <label class="label-input required-label pt-1" style="color: gray;" >A quién se enviará el mensaje</label>
+          <label class="label-input required-label pt-1" style="color: gray; font-size: 12px;" >A quién se enviará el mensaje</label>
         </div>
 
         <div class="col-md-6">
@@ -91,7 +93,7 @@
                    id="todos"
                    value="1"
                    [(ngModel)]="recomendacion.tipo">
-            <label for="todos" class="form-check-label">Todos</label>
+            <label for="todos" class="form-check-label" style="font-size: 12px;">Todos</label>
           </div>
 
           <div class="form-check gap">
@@ -101,7 +103,7 @@
                    id="padecimiento"
                    value="2"
                    [(ngModel)]="recomendacion.tipo">
-            <label for="padecimiento" class="form-check-label">Pacientes por padecimiento</label>
+            <label for="padecimiento" class="form-check-label" style="font-size: 12px;">Pacientes por padecimiento</label>
           </div>
 
           <div class="form-check gap">
@@ -111,7 +113,7 @@
                    id="pacientes"
                    value="3"
                    [(ngModel)]="recomendacion.tipo">
-            <label for="pacientes" class="form-check-label">Pacientes</label>
+            <label for="pacientes" class="form-check-label" style="font-size: 12px;">Pacientes</label>
           </div>
         </div>
 

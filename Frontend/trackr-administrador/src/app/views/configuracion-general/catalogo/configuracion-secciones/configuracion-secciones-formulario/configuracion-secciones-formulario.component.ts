@@ -40,16 +40,13 @@ export class ConfiguracionSeccionesFormularioComponent implements OnInit {
   public camposList: SeccionCampo[];
   public columnsCampos = [
     { headerName: 'Clave', field: 'clave', minWidth: 30 },
-    { headerName: 'Descripción', field: 'descripcion', minWidth: 30 },
-    { headerName: 'Dominio', field: 'nombreDominio', minWidth: 30 },
-    { headerName: 'Orden', field: 'orden', minWidth: 30 },
-    { headerName: 'Requerido', field: 'requerido', minWidth: 30, valueGetter: (params: any) => this.convertirSiNo(params.data)},
-    { headerName: 'Sección', field: 'grupo', minWidth: 30 },
-    { headerName: 'Fila', field: 'fila', minWidth: 30 },
-    { 
-      headerName: 'Mostrar dashboard',
-      field: 'mostrarDashboard',
-      minWidth: 30,
+    { headerName: 'Descripción', field: 'descripcion', minWidth: 50 },
+    { headerName: 'Dominio', field: 'nombreDominio', minWidth: 40 },
+    { headerName: 'Orden', field: 'orden', minWidth: 20 },
+    { headerName: 'Requerido', field: 'requerido', minWidth: 20, valueGetter: (params: any) => this.convertirSiNo(params.data)},
+    { headerName: 'Sección', field: 'grupo', minWidth: 20 },
+    { headerName: 'Fila', field: 'fila', minWidth: 20 },
+    { headerName: 'Mostrar dashboard', field: 'mostrarDashboard', minWidth: 30,
       valueFormatter: (params: any) => params.value ? 'Si' : 'No', // Muestra "Si" o "No"
     }
   ];
