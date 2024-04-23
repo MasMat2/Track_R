@@ -12,11 +12,24 @@ namespace TrackrAPI.Controllers.Seguridad
     public class LoginController : ControllerBase
     {
         private LoginService loginService;
+        private readonly RsaService rsaService;
 
-        public LoginController(LoginService loginService)
+
+        public LoginController(LoginService loginService,
+            RsaService rsaService)
         {
             this.loginService = loginService;
+            this.rsaService = rsaService;
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("obtenerLlavePublica")]
+        public string ObtenerLlavePublica()
+        {
+            return this.rsaService.ExportPublicKey();
+        }
+  
 
         [AllowAnonymous]
         [HttpPost]

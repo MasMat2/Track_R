@@ -17,6 +17,7 @@ using TrackrAPI.Helpers;
 using TrackrAPI.Hubs;
 using TrackrAPI.Models;
 using TrackrAPI.Services.GestionEntidad;
+using TrackrAPI.Services.Seguridad;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,6 +66,10 @@ builder.Services.Scan(scan => scan
     .AsSelf()
     .WithTransientLifetime()
 );
+
+
+// Cambiar de Transient (por builder.Services.Scan) a Singleton
+builder.Services.AddSingleton<RsaService>();
 
 // Crea una nueva instancia de JwtSettings y la configura con los valores del appsettings.json
 var jwtSettings = new JwtSettings();

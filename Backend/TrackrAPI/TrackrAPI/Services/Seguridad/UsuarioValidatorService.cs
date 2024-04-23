@@ -3,9 +3,8 @@ using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Catalogo;
 using TrackrAPI.Repositorys.Seguridad;
-using System.Collections.Generic;
-using System.Linq;
 using TrackrAPI.Repositorys.GestionExpediente;
+using System.Text;
 
 namespace TrackrAPI.Services.Seguridad
 {
@@ -18,6 +17,7 @@ namespace TrackrAPI.Services.Seguridad
         private IConfirmacionCorreoRepository _confirmacionCorreoRepository;
         private readonly IExpedienteTrackrRepository _expedienteTrackrRepository;
         private readonly SimpleAES simpleAES;
+        private readonly RsaService rsaService;
 
 
         public UsuarioValidatorService(
@@ -26,7 +26,8 @@ namespace TrackrAPI.Services.Seguridad
             IRolRepository rolRepository,
             SimpleAES simpleAES,
             IConfirmacionCorreoRepository confirmacionCorreoRepository,
-            IExpedienteTrackrRepository expedienteTrackrRepository
+            IExpedienteTrackrRepository expedienteTrackrRepository,
+            RsaService rsaService
         )
         {
             this.usuarioRepository = usuarioRepository;
@@ -35,6 +36,7 @@ namespace TrackrAPI.Services.Seguridad
             this.simpleAES = simpleAES;
             this._confirmacionCorreoRepository = confirmacionCorreoRepository;
             _expedienteTrackrRepository = expedienteTrackrRepository;
+            this.rsaService = rsaService;
         }
 
         private readonly string MensajeContrasenaRequerida = "La contraseña es requerida";
@@ -366,7 +368,12 @@ namespace TrackrAPI.Services.Seguridad
         /// </remarks>
         public Usuario ValidateUserExists(LoginRequest loginRequest , bool esMobile)
         {
-            string encryptedPassword = simpleAES.EncryptToString(loginRequest.Contrasena);
+
+            var decodedBytes = Convert.FromBase64String(loginRequest.Contrasena);
+            var decryptedBytes = this.rsaService.Decrypt(decodedBytes);
+            
+            var password = Encoding.UTF8.GetString(decryptedBytes);
+            string encryptedPassword = simpleAES.EncryptToString(password);
             //Usuario 
             Usuario userFromRepo = usuarioRepository.Login(loginRequest.Correo, encryptedPassword, loginRequest.ClaveTipoUsuario);
 
