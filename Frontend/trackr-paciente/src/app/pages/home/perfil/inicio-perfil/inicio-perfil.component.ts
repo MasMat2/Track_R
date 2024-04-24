@@ -30,9 +30,6 @@ import { InfoLibreriasOpenSourceComponent } from '@sharedComponents/info-libreri
 })
 export class InicioPerfilComponent  implements OnInit {
 
-  protected mostrarOpcionesInfoGeneral: boolean = false;
-  protected mostrarOpcionesMasInformacion: boolean = false;
-
   protected informacionPerfil$: Observable<InformacionPerfilDto>;
   protected infoPerfil: InformacionPerfilDto;
   protected fotoPerfilUrl: string;
@@ -116,17 +113,7 @@ export class InicioPerfilComponent  implements OnInit {
 
     await alert.present();
   }
-
-  protected DropDownInformacionGeneral(){
-    this.mostrarOpcionesMasInformacion = false;
-    this.mostrarOpcionesInfoGeneral = !this.mostrarOpcionesInfoGeneral;
-  }
-
-  protected DropDownMasInformacion(){
-    this.mostrarOpcionesInfoGeneral = false;
-    this.mostrarOpcionesMasInformacion = !this.mostrarOpcionesMasInformacion;
-  }
-
+  
   protected async mostrarTerminosYCondiciones() {
     const modal = await this.modalController.create({
       component: TerminosYCondicionesComponent,
