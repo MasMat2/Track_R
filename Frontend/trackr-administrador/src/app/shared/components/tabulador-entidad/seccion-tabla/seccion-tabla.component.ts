@@ -49,7 +49,7 @@ export class SeccionTablaComponent implements OnInit {
 
   //Determina las variables de los padecimientos que tiene el usuario
   private valoresVariablesPadecimiento() {
-    this.entidadEstructuraService.valoresVariablesPadecimiento().subscribe((data) => {
+    this.entidadEstructuraService.valoresVariablesPadecimiento(this.idTabla).subscribe((data) => {
   
         this.agregarFechaHora();
         this.seccionCampoList = this.seccionCampoList.concat(data);

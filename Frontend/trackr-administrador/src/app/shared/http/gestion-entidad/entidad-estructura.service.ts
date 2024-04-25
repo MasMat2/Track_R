@@ -22,8 +22,8 @@ export class EntidadEstructuraService {
     return this.http.get<EntidadEstructura[]>(this.dataUrl + `consultarPorEntidadParaSelector/${idEntidad}`);
   }
 
-  public valoresVariablesPadecimiento(): Observable<SeccionCampo[]> {
-    return this.http.get<SeccionCampo[]>(this.dataUrl + `valoresVariablesPadecimiento`);
+  public valoresVariablesPadecimiento(idUsuario : number): Observable<SeccionCampo[]> {
+    return this.http.get<SeccionCampo[]>(this.dataUrl + `valoresVariablesPadecimiento/${idUsuario}`);
   }
 
   public agregar(entidadEstructuras: EntidadEstructura[]): Observable<void> {
