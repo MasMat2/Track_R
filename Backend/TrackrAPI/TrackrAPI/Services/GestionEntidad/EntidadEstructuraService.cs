@@ -3,6 +3,7 @@ using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionEntidad;
 using System.Transactions;
 using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Repositorys.Dashboard;
 
 namespace TrackrAPI.Services.GestionEntidad
 {
@@ -10,15 +11,17 @@ namespace TrackrAPI.Services.GestionEntidad
     {
         private readonly IEntidadEstructuraRepository entidadEstructuraRepository;
         private readonly EntidadEstructuraValidatorService entidadEstructuraValidatorService;
-
+        private readonly IWidgetRepository _widgetRepository;
         public EntidadEstructuraService
         (
             IEntidadEstructuraRepository entidadEstructuraRepository,
-            EntidadEstructuraValidatorService entidadEstructuraValidatorService
+            EntidadEstructuraValidatorService entidadEstructuraValidatorService,
+            IWidgetRepository widgetRepository
         )
         {
             this.entidadEstructuraRepository = entidadEstructuraRepository;
             this.entidadEstructuraValidatorService = entidadEstructuraValidatorService;
+            _widgetRepository = widgetRepository;
         }
 
         public IEnumerable<EntidadEstructuraDto> ConsultarPorEntidadParaSelector(int idEntidad)
@@ -92,7 +95,19 @@ namespace TrackrAPI.Services.GestionEntidad
         };
 
             entidadEstructuraValidatorService.ValidarAgregar(entidadEstructura);
-            entidadEstructuraRepository.Agregar(entidadEstructura);
+            var entidadAgregada = entidadEstructuraRepository.Agregar(entidadEstructura);
+
+            if(estructuraDto.IdEntidadEstructuraPadre == null)
+            {
+                var widget = new Widget
+                {
+                    Clave = estructuraDto.Clave,
+                    Nombre = "Seguimiento " + estructuraDto.Nombre,
+                    IdPadecimiento = entidadAgregada.IdEntidadEstructura,
+                };
+                _widgetRepository.Agregar(widget);
+            }
+          
 
             estructuraDto.IdEntidadEstructura = entidadEstructura.IdEntidadEstructura;
         }

@@ -77,10 +77,9 @@ namespace TrackrAPI.Controllers.GestionEntidad
             return entidadEstructuraService.ConsultarDiagnosticosParaSelector();
         }
 
-        [HttpGet("valoresVariablesPadecimiento")]
-        public IEnumerable<SeccionCampo> ValoresVariablesPadecimiento()
+        [HttpGet("valoresVariablesPadecimiento/{idUsuario}")]
+        public IEnumerable<SeccionCampo> ValoresVariablesPadecimiento(int idUsuario)
         {
-            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
             return entidadEstructuraService.ValoresVariablesPadecimiento(idUsuario);
         }
     }
