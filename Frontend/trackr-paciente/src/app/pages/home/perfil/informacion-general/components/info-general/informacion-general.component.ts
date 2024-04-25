@@ -9,7 +9,7 @@ import { MunicipioService } from '@http/catalogo/municipio.service';
 import { PaisService } from '@http/catalogo/pais.service';
 import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
 import { UsuarioService } from '@http/seguridad/usuario.service';
-import { AlertController, IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule, ModalController } from '@ionic/angular';
 import * as Utileria from '@utils/utileria';
 import { Observable, lastValueFrom, of, tap } from 'rxjs';
 import { ColoniaSelectorDto } from 'src/app/shared/dtos/catalogo/colonia-selector-dto';
@@ -20,18 +20,20 @@ import { PaisSelectorDto } from 'src/app/shared/dtos/catalogo/pais-selector-dto'
 import { InformacionGeneralDto } from 'src/app/shared/dtos/perfil/informacion-general-dto';
 import { ExpedientePadecimientoDto } from 'src/app/shared/dtos/seguridad/expediente-padecimiento-dto';
 import { ExpedientePadecimientoSelectorDTO } from 'src/app/shared/dtos/seguridad/expediente-padecimiento-selector-dto';
-import { HeaderComponent } from '../../layout/header/header.component';
+import { HeaderComponent } from '../../../../layout/header/header.component';
 import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
 import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores-selector-dto';
 import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
 import { GeneroSelectorDto } from 'src/app/shared/dtos/catalogo/genero-selector-dto';
 import { ConfirmacionCorreoService } from '@http/seguridad/confirmacion-correo.service';
-import { ConfirmarCorreoDto } from '../../../../shared/Dtos/seguridad/confirmar-correo-dto';
+import { ConfirmarCorreoDto } from '../../../../../../shared/Dtos/seguridad/confirmar-correo-dto';
 import {GeneroService} from '@http/catalogo/genero.service'
 import { addIcons } from 'ionicons';
-import { addCircleOutline, closeCircleOutline, chevronBack } from 'ionicons/icons'
+import { addCircleOutline, closeCircleOutline, chevronBack, arrowDown, chevronDown, chevronUp } from 'ionicons/icons'
 import { OnExit } from 'src/app/shared/guards/exit.guard';
 import { RouterModule } from '@angular/router';
+import { IonIcon } from '@ionic/angular/standalone';
+import { GeneroFormularioComponent } from './genero-formulario/genero-formulario.component';
 
 @Component({
   selector: 'app-informacion-general',
@@ -44,7 +46,7 @@ import { RouterModule } from '@angular/router';
     RouterModule,
     ReactiveFormsModule,
     IonicModule,
-    HeaderComponent,
+    HeaderComponent
   ]
 })
 export class InformacionGeneralComponent implements OnInit , OnExit {
@@ -62,13 +64,15 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
   protected nuevoDiagnostico: ExpedientePadecimientoDto = new ExpedientePadecimientoDto();
   protected nuevoAntecedenteInvalido = false;
   protected nuevoDiagnosticoInvalido = false;
+  protected nombreGenero : string;
+  protected modalGeneroAbierto : boolean = false;
 
   protected paisList: PaisSelectorDto[] = [];
   protected estadoList: EstadoSelectorDto[] = [];
   protected municipioList: municipioSelectorDto[] = [];
   protected localidadList: LocalidadSelectorDto[] = [];
   protected coloniaList: ColoniaSelectorDto[] = [];
-  protected generoList: GeneroSelectorDto[] = [];
+
   protected antecedenteList: ExpedientePadecimientoSelectorDTO[] = [];
   protected diagnosticoList: ExpedientePadecimientoSelectorDTO[] = [];
   protected antecedenteFiltradoList: ExpedientePadecimientoSelectorDTO[] = [];
@@ -83,6 +87,7 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
   };
 
   @ViewChild('formulario') formulario: NgForm;
+  generoList: GeneroSelectorDto[];
   constructor(
     private usuarioService: UsuarioService,
     private paisService: PaisService,
@@ -95,19 +100,44 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
     private doctoresService: MisDoctoresService,
     private alertController: AlertController,
     private confirmacionCorreoService: ConfirmacionCorreoService,
-    private generoService: GeneroService
+    private generoService: GeneroService,
+    private modalController: ModalController
   ) {
-    addIcons({addCircleOutline, closeCircleOutline, chevronBack})
+    addIcons({addCircleOutline, closeCircleOutline, chevronBack, chevronDown, chevronUp, 'informacion': 'assets/img/svg/info.svg'})
     }
 
-  ngOnInit(){
-    this.consultarGeneros();
+  async ngOnInit(){
+   
+    await this.consultarGeneros();
     this.obtenerUsuario();
     this.consultarPaises();
   }
 
   ionViewWillEnter(){
     this.consultarDoctores();
+  }
+
+
+  async openGeneroModal() {
+    const modal = await this.modalController.create({
+      component: GeneroFormularioComponent,
+      breakpoints : [0, 1],
+      initialBreakpoint: 1,
+      cssClass: 'custom-sheet-modal',
+      componentProps: {
+        genero: this.infoUsuario.idGenero
+      }
+    });
+
+    await modal.present();
+    this.modalGeneroAbierto = true;
+    const { data } = await modal.onWillDismiss();
+    if (data) {
+      this.infoUsuario.idGenero = data.idGenero;
+      this.nombreGenero = data.nombreGenero;
+    }
+    
+    this.modalGeneroAbierto = false;
   }
 
   private async consultarPaises(): Promise<void> {
@@ -238,7 +268,7 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
     }));
   }
 
-  private consultarGeneros() {
+  private async consultarGeneros() {
     this.generoService.consultarGeneros().subscribe(
       generos => {
         this.generoList = generos;
@@ -251,7 +281,8 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
       tap(
         (data) => {
           this.infoUsuario = data;
-
+          const genero = this.generoList.find(genero => genero.idGenero === this.infoUsuario.idGenero);
+          this.nombreGenero = genero ? genero.descripcion : '';
           this.consultarEstados(this.infoUsuario.idPais);
           this.consultarMunicipios(this.infoUsuario.idEstado);
           this.consultarLocalidades(this.infoUsuario.idEstado);
@@ -274,7 +305,7 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
   protected calcularEdad(){
     let fechaNacimiento = new Date(this.infoUsuario.fechaNacimiento);
     let edadObject = Utileria.diferenciaFechas(fechaNacimiento, new Date());
-    let edadString = edadObject.years + ' años, ' + edadObject.months + ' meses, ' + edadObject.days + ' días';
+    let edadString = edadObject.years + ' años ';
     this.edadUsuario = edadString;
   }
 
@@ -282,7 +313,6 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
     this.submiting = true;
 
     if(formulario.invalid){
-      console.log('Formulario inválido');
       Utileria.validarCamposRequeridos(formulario);
       this.presentAlertError();
       this.submiting = false;

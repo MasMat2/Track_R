@@ -1,0 +1,5 @@
+<div class="genero-container" *ngIf="generoList">
+  <ion-item *ngFor="let genero of generoList" button lines="none" (click)="seleccionar(genero)">
+    {{genero.descripcion}}
+  </ion-item>
+</div>
