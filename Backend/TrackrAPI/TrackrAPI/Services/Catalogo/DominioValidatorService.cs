@@ -107,10 +107,10 @@ namespace TrackrAPI.Services.Catalogo
                 throw new CdisException(MensajeDominioDetalleDependecia);
             }
 
-            if (dominio.ExpedienteCampo.Any())
-            {
-                throw new CdisException(MensajeExpedienteCampoDependecia);
-            }
+            //if (dominio.ExpedienteCampo.Any())
+            //{
+            //    throw new CdisException(MensajeExpedienteCampoDependecia);
+            //}
         }
     }
 }

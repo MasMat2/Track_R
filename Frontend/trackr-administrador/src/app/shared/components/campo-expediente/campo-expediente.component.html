@@ -36,7 +36,7 @@
   <!-- Tipo TextArea -->
   <div *ngIf="campo.idDominioNavigation?.tipoCampo === 'TextArea'">
     <label class="label-input required-label"
-      >{{ campo.descripcion }} {{ campo.requerido ? " textarea*" : "" }}</label
+      >{{ campo.descripcion }} {{ campo.requerido ? " *" : "" }}</label
     >
     <div>
       <textarea
@@ -71,7 +71,7 @@
 
   <div *ngIf="campo.idDominioNavigation?.tipoCampo === 'Select'">
     <label class="label-input required-label"
-      >{{ campo.descripcion }} {{ campo.requerido ? "select *" : "" }}</label
+      >{{ campo.descripcion }} {{ campo.requerido ? "*" : "" }}</label
     >
     <div>
       <ng-select
@@ -99,7 +99,7 @@
     <div class="col-md-4">
       <div class="form-group">
         <label class="label-input required-label"
-          >{{ campo.descripcion }} {{ campo.requerido ? "select multiple *" : "" }}</label
+          >{{ campo.descripcion }} {{ campo.requerido ? "*" : "" }}</label
         >
         <div>
           <ng-select
@@ -132,7 +132,7 @@
   <!-- Tipo Numerico -->
   <div *ngIf="campo.idDominioNavigation?.tipoCampo === 'Number'">
     <label class="label-input required-label"
-      >{{ campo.descripcion }} {{ campo.requerido ? " number *" : "" }}</label
+      >{{ campo.descripcion }} {{ campo.requerido ? "*" : "" }}</label
     >
     <app-number-input
       #campoNumberModel="ngModel"
@@ -188,16 +188,17 @@
     </label>
   </div>
 
-  <!-- Tipo Date -->
-  <div
+  <div class="row">
+    <div
     *ngIf="
       campo.idDominioNavigation?.tipoCampo === 'Date' &&
       campo.idDominioNavigation.fechaMaxima !== null &&
       campo.idDominioNavigation.fechaMinima !== null
     "
+    class="col-md-4"
   >
     <label class="label-input required-label"
-      >{{ campo.descripcion }} {{ campo.requerido ? "fecha *" : "" }}</label
+      >{{ campo.descripcion }} {{ campo.requerido ? "*" : "" }}</label
     >
     <div class="calendario">
       <input
@@ -207,11 +208,8 @@
         autocomplete="off"
         placeholder="dd/mm/aaaa"
         [(ngModel)]="campo.valor"
-        [name]="campo.idSeccionCampo.toString()"
         [required]="campo.requerido"
         [bsConfig]="configDate"
-        [minDate]="campo.idDominioNavigation.fechaMinima"
-        [maxDate]="campo.idDominioNavigation.fechaMaxima"
         [disabled]="!campo.habilitado"
         bsDatepicker
         [ngClass]="{ 'ng-touched': touched }"
@@ -236,9 +234,10 @@
       (campo.idDominioNavigation.fechaMaxima === null ||
         campo.idDominioNavigation.fechaMinima === null)
     "
+    class="col-md-4"
   >
     <label class="label-input required-label"
-      >{{ campo.descripcion }} {{ campo.requerido ? "date *" : "" }}</label
+      >{{ campo.descripcion }} {{ campo.requerido ? "*" : "" }}</label
     >
     <div class="calendario">
       <input
@@ -248,7 +247,6 @@
         autocomplete="off"
         placeholder="dd/mm/aaaa"
         [(ngModel)]="campo.valor"
-        [name]="campo.idSeccionCampo.toString()"
         [required]="campo.requerido"
         [bsConfig]="configDate"
         [disabled]="!campo.habilitado"
@@ -259,15 +257,15 @@
     </div>
     <label
       class="error"
-      *ngIf="campoDate.errors?.['required'] && (campoDate.touched || touched) "
+       *ngIf="campoDate.errors?.['required'] && (campoDate.touched || touched) "
       >La fecha es requerida</label
     >
   </div>
 
   <!-- Tipo time -->
-  <div *ngIf="campo.idDominioNavigation?.tipoCampo === 'Time'">
+  <div  *ngIf="campo.idDominioNavigation?.tipoCampo === 'Time'" class="col-md-4">
     <label class="label-input required-label"
-      >{{ campo.descripcion }} {{ campo.requerido ? " hora*" : "" }}</label
+      >{{ campo.descripcion }} {{ campo.requerido ? "*" : "" }}</label
     >
     <div class="">
       <input
@@ -277,7 +275,6 @@
         autocomplete="off"
         placeholder="HH/MM"
         [(ngModel)]="campo.valor"
-        [name]="campo.idSeccionCampo.toString()"
         [disabled]="!campo.habilitado"
         [ngClass]="{ 'ng-touched': touched }"
       />
@@ -289,6 +286,9 @@
     >
   </div>
 
+  </div>
+  <!-- Tipo Date -->
+  
   <!-- Tipo Radio Checkbox -->
   <div *ngIf="campo.idDominioNavigation?.tipoCampo === 'Checkbox'">
     <label class="label-input required-label">{{ campo.descripcion }} checkbox </label>
@@ -336,7 +336,7 @@
   <!-- Tipo Numerico General -->
   <div *ngIf="campo.idDominioNavigation?.tipoCampo === 'Numerico General'">
     <label class="label-input required-label"
-      >{{ campo.descripcion }} {{ campo.requerido ? "general *" : "" }}</label
+      >{{ campo.descripcion }} {{ campo.requerido ? "*" : "" }}</label
     >
     <app-number-input
       #campoNumberModel="ngModel"
@@ -366,7 +366,7 @@
   <!-- Tipo Decimal General -->
   <div *ngIf="campo.idDominioNavigation?.tipoCampo === 'Decimal General'">
     <label class="label-input required-label"
-      >{{ campo.descripcion }} {{ campo.requerido ? "decimal general *" : "" }}</label
+      >{{ campo.descripcion }} {{ campo.requerido ? "*" : "" }}</label
     >
     <app-number-input
       #campoNumberModel="ngModel"
@@ -396,7 +396,7 @@
   <!-- Tipo Temperatura -->
   <div *ngIf="campo.idDominioNavigation?.tipoCampo === 'Temperatura'">
     <label class="label-input required-label"
-      >{{ campo.descripcion }} {{ campo.requerido ? "temperatura *" : "" }}</label
+      >{{ campo.descripcion }} {{ campo.requerido ? "*" : "" }}</label
     >
     <app-number-input
       #campoNumberModel="ngModel"

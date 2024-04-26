@@ -5,6 +5,7 @@ using TrackrAPI.Models;
 using TrackrAPI.Services.GestionEntidad;
 using System.Collections.Generic;
 using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Controllers.GestionEntidad
 {
@@ -74,6 +75,12 @@ namespace TrackrAPI.Controllers.GestionEntidad
         public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarDiagnosticosParaSelector()
         {
             return entidadEstructuraService.ConsultarDiagnosticosParaSelector();
+        }
+
+        [HttpGet("valoresVariablesPadecimiento/{idUsuario}")]
+        public IEnumerable<SeccionCampo> ValoresVariablesPadecimiento(int idUsuario)
+        {
+            return entidadEstructuraService.ValoresVariablesPadecimiento(idUsuario);
         }
     }
 }

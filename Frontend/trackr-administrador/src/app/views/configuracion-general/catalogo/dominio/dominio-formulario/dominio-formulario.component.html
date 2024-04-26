@@ -3,21 +3,18 @@
   <div class="modal-content">
     <div class="modal-header">
       <div>{{ accion }} Dominio</div>
-      <button
-        type="button"
-        class="close pull-right"
-        aria-label="Close"
-        (click)="cancelar()"
-      >
+      <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
         <i class="far fa-times-circle"></i>
       </button>
     </div>
-    <form
-      (keydown.enter)="$event.preventDefault()"
-      #formulario="ngForm"
-      (ngSubmit)="enviarFormulario(formulario)"
-      novalidate="novalidate"
-    >
+
+    <div class="modal-body">
+      <form
+        (keydown.enter)="$event.preventDefault()"
+        #formulario="ngForm"
+        (ngSubmit)="enviarFormulario(formulario)"
+        novalidate="novalidate"
+      >
       <div class="modal-body" id="modal">
         <div class="row">
           <div class="col-md-4">
@@ -236,7 +233,8 @@
           </div>
 
           <div class="col-md-2">
-            <label class="label-input required-label">Permite Fuera de Rango</label>
+            <div class="form-group">
+            <label class="label-input required-label" style="font-size: 11px;">Permite Fuera de Rango</label>
             <div class="form-group radion-bottom">
               <label class="switch">
                 <input
@@ -252,6 +250,7 @@
                 </div>
               </label>
             </div>
+          </div>
           </div>
         </div>
 
@@ -371,18 +370,14 @@
           </div>
         </form>
       </div>
-
-      <div class="modal-footer">
-        <div class="text-right">
-          <button
-            [disabled]="btnSubmit"
-            type="submit"
-            class="btn-primario btn-margin-left"
-          >
-            Guardar
-          </button>
-        </div>
-      </div>
     </form>
   </div>
+  
+      <div class="modal-footer">
+        <div class="text-right">
+          <button type ="button" class="btn-secundario mr-3" (click)="cancelar();">Cancelar</button>
+          <button [disabled]="btnSubmit" type="submit" class="btn-primario btn-margin-left">Guardar</button>
+        </div>
+      </div>
+
 </div>

@@ -85,6 +85,7 @@
                   [placeholder]="placeHolderSelect"
                   [notFoundText]="placeHolderNoOptions"
                   [required]="true"
+                  appendTo="body"
                 ></ng-select>
                 <div *ngIf="Municipio.errors?.['required'] && Municipio.touched" class="error">
                 El municipio es requerido

@@ -1,12 +1,8 @@
 import { Route } from "@angular/router";
-import { ChatPage } from "./chat/chat.page";
-import { CuestionariosPage } from "./cuestionarios/cuestionarios.page";
-import { DashboardPage } from "./dashboard/dashboard.page";
 import { HomePage } from "./home.page";
 import { MuestrasPage } from "./muestras/muestras.page";
-import { ChatMovilComponent as ChatMovilPage } from "./chat-movil/chat-movil.page";
 import { ConfiguracionDashboardPage } from "./configuracion-dashboard/configuracion-dashboard.page";
-import { VideoJitsiPage } from "./video-jitsi/video-jitsi.page";
+import { VideoChatPage } from "./video-chat/video-chat.page";
 
 
 export default [
@@ -14,7 +10,8 @@ export default [
     path: '',
     component: HomePage,
     children: [
-      { path: 'chat', component: ChatPage, data: { breadcrumb: 'Chat' } },
+      { path: 'chat/:id', component: VideoChatPage, data: { breadcrumb: 'Chat' } },
+      { path: 'chat', component: VideoChatPage, data: { breadcrumb: 'Chat' } },
       { path: 'video-jitsi', loadChildren: () => import('./video-jitsi/video-jitsi-routes') },
       { path: 'chat-movil', loadChildren: () => import('./chat-movil/chat-movil-routes') },
       { path: 'clinicos', component: MuestrasPage, data: { breadcrumb: 'Muestras' } },

@@ -10,3 +10,4 @@ Log
 TrackrAPI/Archivos/Usuario/*
 !TrackrAPI/Archivos/Usuario/default.svg
 .config/
+TrackrAPI.csproj.user

@@ -18,7 +18,7 @@ namespace TrackrAPI.Repositorys.Catalogo
         {
             return context.Compania
                 .Include(c => c.IdTipoCompaniaNavigation)
-                .Include(c => c.MercadoCompania)
+                //.Include(c => c.MercadoCompania)
                 .Where(c => c.IdCompania == idCompania)
                 .FirstOrDefault();
         }

@@ -310,12 +310,12 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
   }
 
   private async agregarEntidadEstructura(estructuras: EntidadEstructura[]) {
-    return this.entidadEstructuraService.agregar(estructuras).toPromise()
+     return this.entidadEstructuraService.agregar(estructuras).toPromise()
       .then(async (data) => {
         await this.actualizarInformacion();
         this.mensajeService.modalExito(this.MENSAJE_EXITO_AGREGAR_ESTRUCTURA);
       })
-      .catch((error) => { });
+      .catch((error) => { }); 
   }
 
   public async eliminarEntidadEstructura(jerarquia: EntidadEstructura): Promise<void> {

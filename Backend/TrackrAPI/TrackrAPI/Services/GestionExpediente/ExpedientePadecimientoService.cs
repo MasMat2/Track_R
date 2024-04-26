@@ -1,5 +1,6 @@
 ﻿using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Helpers;
+using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionExpediente;
 using TrackrAPI.Repositorys.Seguridad;
 
@@ -10,16 +11,19 @@ namespace TrackrAPI.Services.GestionExpediente
         private IExpedientePadecimientoRepository expedientePadecimientoRepository;
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IAsistenteDoctorRepository _asistenteDoctorRepository;
+        private readonly IExpedienteTrackrRepository _expedienteTrackrRepository;
 
         public ExpedientePadecimientoService(
             IExpedientePadecimientoRepository expedientePadecimientoRepository,
             IUsuarioRepository usuarioRepository,
-            IAsistenteDoctorRepository asistenteDoctorRepository
+            IAsistenteDoctorRepository asistenteDoctorRepository,
+            IExpedienteTrackrRepository expedienteTrackrRepository
             )
         {
             this.expedientePadecimientoRepository = expedientePadecimientoRepository;
             _usuarioRepository = usuarioRepository;
             _asistenteDoctorRepository = asistenteDoctorRepository;
+            _expedienteTrackrRepository = expedienteTrackrRepository;
 
         }
 
@@ -60,5 +64,32 @@ namespace TrackrAPI.Services.GestionExpediente
             return expedientePadecimientoRepository.ConsultarParaGridPorUsuario(idUsuario);
         }
 
+        public void Eliminar(int idExpedientePadecimiento)
+        {
+            var expedientePadecimiento = expedientePadecimientoRepository.Consultar(idExpedientePadecimiento) ?? throw new CdisException("El padecimiento no se encuentra registrado en este expediente"); ;
+            expedientePadecimientoRepository.Eliminar(expedientePadecimiento);
+        }
+
+        public int AgregarPadecimiento(AgregarExpedientePadecimientoDTO expedientePadecimientoDto, int idUsuario)
+        {
+            var expedienteUsuario = _expedienteTrackrRepository.ConsultarPorUsuario(idUsuario) ?? throw new CdisException("El usuario no tiene expediente aún");
+            var expedientePadecimientoExistente = expedientePadecimientoRepository.ConsultarPorUsuario(idUsuario).Where(ep => ep.IdPadecimiento == expedientePadecimientoDto.IdPadecimiento).FirstOrDefault();
+
+            if(expedientePadecimientoExistente != null)
+            {
+                throw new CdisException("El padecimiento ya está asociado a este expediente");
+            }
+
+            var expedientePadecimiento = new ExpedientePadecimiento
+            {
+                IdExpediente = expedienteUsuario.IdExpediente,
+                FechaDiagnostico = expedientePadecimientoDto.FechaDiagnostico,
+                IdPadecimiento = expedientePadecimientoDto.IdPadecimiento,
+                IdUsuarioDoctor = expedientePadecimientoDto.IdUsuarioDoctor
+            };
+
+            return expedientePadecimientoRepository.Agregar(expedientePadecimiento).IdExpedientePadecimiento;
+
+        }
     }
 }

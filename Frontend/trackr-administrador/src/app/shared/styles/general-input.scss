@@ -3,6 +3,7 @@
 .form-control {
   border: 1px #d9d9d9 solid;
   color: #000000;
+  font-size: 0.80rem;
   border-radius: $border-radius-inputs !important;
   height: calc(1.5em + 0.75rem + 7px) !important;
 }
@@ -18,7 +19,7 @@
     z-index: 1002;
     background-color: white;
     padding: 0 5px;
-    font-size: 13px;
+    font-size: 11px;
     color: gray;
   }
 }
@@ -158,9 +159,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .switch {
   position: relative;
   display: inline-block;
-  width: 70px;
-  height: 30px;
   margin-bottom: 0;
+  top: 4px;
+  height: calc(1.5em + 0.75rem + 7px);
+  width: 100px;
+  //width: 70px;
+  //height: 30px;
+  //margin-bottom: 0;
 }
 
 .switch input {

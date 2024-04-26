@@ -5,17 +5,6 @@ namespace TrackrAPI.Models
 {
     public partial class Domicilio
     {
-        public Domicilio()
-        {
-            Devolucion = new HashSet<Devolucion>();
-            ExpedienteAdministrativoMercancia = new HashSet<ExpedienteAdministrativoMercancia>();
-            ExpedienteAdministrativoViaje = new HashSet<ExpedienteAdministrativoViaje>();
-            Necesidad = new HashSet<Necesidad>();
-            OrdenCompra = new HashSet<OrdenCompra>();
-            Pedido = new HashSet<Pedido>();
-            Remision = new HashSet<Remision>();
-        }
-
         public int IdDomicilio { get; set; }
         public string? Calle { get; set; }
         public string? NumeroExterior { get; set; }
@@ -42,17 +31,9 @@ namespace TrackrAPI.Models
         public virtual Compania? IdCompaniaNavigation { get; set; }
         public virtual Estado IdEstadoNavigation { get; set; } = null!;
         public virtual Localidad? IdLocalidadNavigation { get; set; }
-        public virtual MetodoPago? IdMetodoPagoNavigation { get; set; }
         public virtual Municipio? IdMunicipioNavigation { get; set; }
         public virtual Pais? IdPaisNavigation { get; set; }
         public virtual Usuario? IdUsuarioNavigation { get; set; }
         public virtual Usuario? IdUsuarioRepartidorNavigation { get; set; }
-        public virtual ICollection<Devolucion> Devolucion { get; set; }
-        public virtual ICollection<ExpedienteAdministrativoMercancia> ExpedienteAdministrativoMercancia { get; set; }
-        public virtual ICollection<ExpedienteAdministrativoViaje> ExpedienteAdministrativoViaje { get; set; }
-        public virtual ICollection<Necesidad> Necesidad { get; set; }
-        public virtual ICollection<OrdenCompra> OrdenCompra { get; set; }
-        public virtual ICollection<Pedido> Pedido { get; set; }
-        public virtual ICollection<Remision> Remision { get; set; }
     }
 }

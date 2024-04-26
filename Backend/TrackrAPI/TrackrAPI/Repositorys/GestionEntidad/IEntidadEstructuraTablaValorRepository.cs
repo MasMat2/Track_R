@@ -12,10 +12,10 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         public IEnumerable<EntidadEstructuraTablaValor> ConsultarPorPestanaSeccion(int idEntidadEstructura, int idTabla);
         public IEnumerable<EntidadEstructuraTablaValor> ConsultarPorNumeroRegistro(int idEntidadEstructura, int idTabla, int numeroRegistro);
         int ConsultarUltimoRegistro(int idEntidadEstructura, int idTabla);
-        public IEnumerable<EntidadEstructuraTablaValor> ConsultarValoresPorCampos(int idExpediente, IEnumerable<string> claveCampos, bool? fueraRango);
-        public IEnumerable<ValoresHistogramaDTO> ConsultarValoresPorClaveCampo(string claveCampo, int idUsuario, DateTime fecha);
+        public IEnumerable<EntidadEstructuraTablaValor> ConsultarValoresPorCampos(int idExpediente, List<int> idsSeccionVariable, bool? fueraRango);
+        public IEnumerable<ValoresHistogramaDTO> ConsultarValoresPorClaveCampo(int idSeccionVariable, int idUsuario, DateTime fecha);
         public IEnumerable<ExpedienteMuestrasGridDTO> ConsultarGridMuestras(int idUsuario);
-        public string ConsultarUltimoValor(int idUsuario  , string clave);
-        public bool ExisteValorEnEntidadEstructura(int idUsuario, string clave);
+        public string ConsultarUltimoValor(int idUsuario  , int idSeccionVariable);
+        public bool ExisteValorEnEntidadEstructura(int idUsuario, int idSeccionVariable);
     }
 }

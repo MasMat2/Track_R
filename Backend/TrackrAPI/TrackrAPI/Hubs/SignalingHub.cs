@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading;
 using System.Collections.Concurrent;
+using DocumentFormat.OpenXml.Drawing.Charts;
 
 namespace TrackrAPI.Hubs;
 
@@ -12,8 +13,9 @@ public class SignalingHub : Hub<ISignalingHub>
 
     private static readonly ConcurrentDictionary<string, Queue<Message>> _messageQueues = new ConcurrentDictionary<string, Queue<Message>>();
 
-    private static readonly ConcurrentDictionary<string, string> peer_ids = new ConcurrentDictionary<string, string>();
-    private readonly int _ackTimeoutMilliseconds = 500;
+    private static readonly ConcurrentDictionary<string, string> _peer_ids = new ConcurrentDictionary<string, string>();
+    private readonly int _ackTimeoutMilliseconds = 2000;
+    private readonly int _maxFailedTries = 5;
 
     CancellationTokenSource _cts = new CancellationTokenSource();
 
@@ -22,8 +24,17 @@ public class SignalingHub : Hub<ISignalingHub>
 
     public override async Task OnConnectedAsync()
     {
+        string idUsuarioSesion = ObtenerIdUsuario().ToString();
+        await Groups.AddToGroupAsync(Context.ConnectionId, idUsuarioSesion);
         await base.OnConnectedAsync();
     }
+
+    // public override async Task OnDisconnectedAsync(Exception exception)
+    // {
+    //     string idUsuarioSesion = ObtenerIdUsuario();
+    //     await Groups.RemoveFromGroupAsync(Context.ConnectionId, idUsuarioSesion);
+    //     await base.OnDisconnectedAsync(exception);
+    // }
 
     public async Task CrearLlamada(string? caller_id)
     {       
@@ -33,43 +44,58 @@ public class SignalingHub : Hub<ISignalingHub>
         // Exchange id with peer
         if(caller_id != null){
             
-            peer_ids.GetOrAdd(local_id, caller_id);
-            peer_ids.GetOrAdd(caller_id, local_id);
+            // Set connectins and clear queues
+            _peer_ids.AddOrUpdate(local_id, caller_id, (key, oldValue) => RemoveRemote(key, oldValue, caller_id));
+            _messageQueues[local_id] = new Queue<Message>();
+
+            _peer_ids.AddOrUpdate(caller_id, local_id, (key, oldValue) => RemoveRemote(key, oldValue, local_id));
+            _messageQueues[caller_id] = new Queue<Message>();
 
             SendMessageToPeer($"{{\"type\": \"callee-connected\"}}");
         }
         else{
             // Send local id to the caller, to share with the callee
-            Clients.Client(local_id).LocalId(local_id);
+            // Clients.Client(local_id).LocalId(local_id);
+            Clients.Group(local_id).LocalId(local_id);
         }
 
     }
     
 
-public async Task SendMessageToPeer(string message)
-{
-    Console.WriteLine($"Send Message: {message}");
-    string peerId = peer_ids.GetOrAdd(ObtenerIdUsuario(), "");
-    if (!_messageQueues.ContainsKey(peerId))
+
+
+    public string RemoveRemote(string key, string old_id, string new_id)
     {
-        _messageQueues[peerId] = new Queue<Message>();
+        Console.WriteLine(key, old_id, new_id);
+        if (old_id != new_id)
+        {
+            var message = $"{{\"type\": \"remove-remote\"}}";
+            _messageQueues[old_id] = new Queue<Message>();
+            SendMessageToPeer(message, old_id);
+        }
+        return new_id;
     }
+    public async Task SendMessageToPeer(string message, string peerId = "")
+    {
+        // Console.WriteLine($"Send Message: {message}");
+        peerId = peerId == "" ? _peer_ids.GetOrAdd(ObtenerIdUsuario(), ""): peerId;
 
-    var messageObj = new Message { Id = Guid.NewGuid().ToString(), Content = message };
-    _messageQueues[peerId].Enqueue(messageObj);
+        var messageObj = new Message { Id = Guid.NewGuid().ToString(), Content = message };
+        _messageQueues[peerId].Enqueue(messageObj);
 
-    if(_messageQueues[peerId].Count == 1){ // Start the timer if this is the first message
-        await TrySendNextMessage(peerId); 
+        if (_messageQueues[peerId].Count == 1){ // Start the timer if this is the first message
+            await TrySendNextMessage(peerId); 
+        }
     }
-}
 
     private async Task TrySendNextMessage(string peerId)
     {
         if (_messageQueues.TryGetValue(peerId, out var queue) && queue.Any())
         {
             var message = queue.Peek();
-            Console.WriteLine($"Sending message: {message.Id}, Count: {queue.Count}");
-            await Clients.Client(peerId).NewMessage(message);
+            Console.WriteLine($"Sending message: {message.Id}, Count: {queue.Count}, PeerId: {peerId}");
+            // await Clients.Client(peerId).NewMessage(message);
+            await Clients.Group(peerId).NewMessage(message);
             StartAckTimeoutTimer(peerId, message);
         }
     }
@@ -88,7 +114,6 @@ public async Task SendMessageToPeer(string message)
                 queue.Dequeue(); // Remove the message that has been acknowledged
             }
         }
-        await TrySendNextMessage(localId); // Try to send the next message
     }
 
     private void StartAckTimeoutTimer(string peerId, Message message)
@@ -112,13 +137,20 @@ public async Task SendMessageToPeer(string message)
             var message = queue.Peek();
             if (message.Id == messageId)
             {
-                await TrySendNextMessage(peerId);
+                message.Tries++;
+                Console.WriteLine($"Failed Tries: {message.Tries}");
+                if(message.Tries >= _maxFailedTries && queue.Any()){
+                    queue.Dequeue();
+                }
             }
+
+            await TrySendNextMessage(peerId);
+
         }
     }
 
 
-    private string ObtenerIdUsuario()
+    private string ObtenerConnectionId()
     {
         if (Context.ConnectionId is null)
         {
@@ -133,5 +165,19 @@ public async Task SendMessageToPeer(string message)
         return Context.ConnectionId;
     }
 
-}
+    private string ObtenerIdUsuario()
+    {
+        if (Context.UserIdentifier is null)
+        {
+            throw new Exception("No se pudo obtener el id del usuario");
+        }
 
+        if (!int.TryParse(Context.UserIdentifier, out int idUsuario))
+        {
+            throw new Exception("No se pudo obtener el id del usuario");
+        }
+
+        return $"{idUsuario}";
+    }
+
+}

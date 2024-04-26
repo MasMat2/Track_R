@@ -16,6 +16,8 @@ using DocumentFormat.OpenXml.Office.CustomXsn;
 using TrackrAPI.Services.GestionExpediente;
 using TrackrAPI.Repositorys.Archivos;
 using TrackrAPI.Dtos.GestionExpediente.ExpedienteDoctor;
+using TrackrAPI.Dtos.Archivos;
+using TrackrAPI.Dtos.GestionExpediente;
 
 namespace TrackrAPI.Services.Seguridad
 {
@@ -29,7 +31,6 @@ namespace TrackrAPI.Services.Seguridad
         private UsuarioValidatorService usuarioValidatorService;
         private CorreoHelper correoHelper;
         private SimpleAES simpleAES;
-        private CarritoService carritoService;
         private UsuarioLocacionService usuarioLocacionService;
         private IEstadoRepository estadoRepository;
         private IDomicilioRepository domicilioRepository;
@@ -37,7 +38,6 @@ namespace TrackrAPI.Services.Seguridad
         private IColoniaRepository coloniaRepository;
         private UsuarioRolService usuarioRolService;
         private RolService rolService;
-        private BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService;
         private ConfirmacionCorreoService _confirmacionCorreoService;
         private ExpedienteTrackrService _expedienteTrackrService;
         private UsuarioRolService _usuarioRolService;
@@ -54,7 +54,6 @@ namespace TrackrAPI.Services.Seguridad
             UsuarioValidatorService usuarioValidatorService,
             CorreoHelper correoHelper,
             SimpleAES simpleAES,
-            CarritoService carritoService,
             IEstadoRepository estadoRepository,
             IPerfilRepository perfilRepository,
             UsuarioLocacionService usuarioLocacionService,
@@ -63,7 +62,6 @@ namespace TrackrAPI.Services.Seguridad
             IColoniaRepository coloniaRepository,
             UsuarioRolService usuarioRolService,
             RolService rolService,
-            BitacoraMovimientoUsuarioService bitacoraMovimientoUsuarioService,
             ConfirmacionCorreoService confirmacionCorreoService,
             ExpedienteTrackrService expedienteTrackrService,
             IAsistenteDoctorRepository asistenteDoctorRepository,
@@ -79,14 +77,12 @@ namespace TrackrAPI.Services.Seguridad
             this.tipoUsuarioRepository = tipoUsuarioRepository;
             this.correoHelper = correoHelper;
             this.estadoRepository = estadoRepository;
-            this.carritoService = carritoService;
             this.usuarioLocacionService = usuarioLocacionService;
             this.domicilioRepository = domicilioRepository;
             this.domicilioValidatorService = domicilioValidatorService;
             this.coloniaRepository = coloniaRepository;
             this.usuarioRolService = usuarioRolService;
             this.rolService = rolService;
-            this.bitacoraMovimientoUsuarioService = bitacoraMovimientoUsuarioService;
             this._confirmacionCorreoService = confirmacionCorreoService;
             this._expedienteTrackrService = expedienteTrackrService;
             _asistenteDoctorRepository = asistenteDoctorRepository;
@@ -111,10 +107,10 @@ namespace TrackrAPI.Services.Seguridad
             return usuarioRepository.ConsultarDto(idUsuario);
         }
 
-        public Usuario ConsultarPorNotaVentaDetalle(int idNotaVentaDetalle)
-        {
-            return usuarioRepository.ConsultarPorNotaVentaDetalle(idNotaVentaDetalle);
-        }
+        //public Usuario ConsultarPorNotaVentaDetalle(int idNotaVentaDetalle)
+        //{
+        //    return usuarioRepository.ConsultarPorNotaVentaDetalle(idNotaVentaDetalle);
+        //}
 
         public Usuario ConsultarPublicoEnGeneral(int idCompania)
         {
@@ -162,10 +158,10 @@ namespace TrackrAPI.Services.Seguridad
             return usuarioRepository.ConsultarParaPuntoVenta(idCompania);
         }
 
-        public IEnumerable<UsuarioDto> ConsultarClinicosActivos(string claveTipoUsuario, Usuario usuario)
-        {
-            return usuarioRepository.ConsultarClinicosActivos(claveTipoUsuario, (int)usuario.IdHospital);
-        }
+        //public IEnumerable<UsuarioDto> ConsultarClinicosActivos(string claveTipoUsuario, Usuario usuario)
+        //{
+        //    return usuarioRepository.ConsultarClinicosActivos(claveTipoUsuario, (int)usuario.IdHospital);
+        //}
 
         public Usuario UsuarioEncabezado(int idUsuario)
         {
@@ -184,19 +180,19 @@ namespace TrackrAPI.Services.Seguridad
             return usuarioRepository.ConsultarEncabezado(idUsuario);
         }
 
-        public UsuarioEncabezadoDto ConsultarEncabezadoPedidoEnLinea(int idUsuario, string empresa, string token)
-        {
-            if (idUsuario <= 0)
-            {
-                var total = carritoService.ConsultarAgregadoPorToken(token);
-                var encabezadoDto = new UsuarioEncabezadoDto();
-                // encabezadoDto.Logotipo = empresaComercial.Logotipo;
-                encabezadoDto.CantidadCarrito = total;
-                return encabezadoDto;
-            }
+        //public UsuarioEncabezadoDto ConsultarEncabezadoPedidoEnLinea(int idUsuario, string empresa, string token)
+        //{
+        //    if (idUsuario <= 0)
+        //    {
+        //        var total = carritoService.ConsultarAgregadoPorToken(token);
+        //        var encabezadoDto = new UsuarioEncabezadoDto();
+        //        // encabezadoDto.Logotipo = empresaComercial.Logotipo;
+        //        encabezadoDto.CantidadCarrito = total;
+        //        return encabezadoDto;
+        //    }
 
-            return usuarioRepository.ConsultarEncabezado(idUsuario);
-        }
+        //    return usuarioRepository.ConsultarEncabezado(idUsuario);
+        //}
 
         public IEnumerable<UsuarioDto> ConsultarPorTipoUsuario(string claveTipoUsurio, int idCompania)
         {
@@ -214,7 +210,7 @@ namespace TrackrAPI.Services.Seguridad
             Usuario usuario = usuarioRepository.Consultar(idUsuario);
             usuarioValidatorService.ValidarEliminar(idUsuario);
             usuario.Habilitado = false;
-            bitacoraMovimientoUsuarioService.Agregar(GeneralConstant.TipoMovimientoUsuarioEliminacion, "Eliminación del usuario " + usuario.ObtenerNombreCompleto(), null);
+            //bitacoraMovimientoUsuarioService.Agregar(GeneralConstant.TipoMovimientoUsuarioEliminacion, "Eliminación del usuario " + usuario.ObtenerNombreCompleto(), null);
             usuarioRepository.Editar(usuario);
         }
 
@@ -588,7 +584,7 @@ namespace TrackrAPI.Services.Seguridad
                 .ToList();
 
             usuarioValidatorService.ValidarEditar(usuario, roles);
-            bitacoraMovimientoUsuarioService.Agregar(GeneralConstant.TipoMovimientoUsuarioEdicion, "Edición del usuario " + usuario.ObtenerNombreCompleto(), null);
+            //bitacoraMovimientoUsuarioService.Agregar(GeneralConstant.TipoMovimientoUsuarioEdicion, "Edición del usuario " + usuario.ObtenerNombreCompleto(), null);
             usuarioRepository.Editar(usuario);
         }
 
@@ -687,18 +683,18 @@ namespace TrackrAPI.Services.Seguridad
             return usuarioRepository.ConsultarBusquedaGridFiltro(filtro);
         }
 
-        public IEnumerable<UsuarioDto> ConsultarPorRolActivosParaSelector(List<int> roles, int idCompania, int idHospital)
-        {
-            List<UsuarioDto> usuarios = new List<UsuarioDto>();
-            foreach (var rol in roles)
-            {
-                var usersTempo = usuarioRepository.ConsultarPorRolActivosParaSelector(rol, idCompania, idHospital);
-                usuarios.AddRange(usersTempo);
-            }
-            return usuarios.GroupBy(p => p.IdUsuario)
-                            .Select(g => g.First())
-                            .ToList();
-        }
+        //public IEnumerable<UsuarioDto> ConsultarPorRolActivosParaSelector(List<int> roles, int idCompania, int idHospital)
+        //{
+        //    List<UsuarioDto> usuarios = new List<UsuarioDto>();
+        //    foreach (var rol in roles)
+        //    {
+        //        var usersTempo = usuarioRepository.ConsultarPorRolActivosParaSelector(rol, idCompania, idHospital);
+        //        usuarios.AddRange(usersTempo);
+        //    }
+        //    return usuarios.GroupBy(p => p.IdUsuario)
+        //                    .Select(g => g.First())
+        //                    .ToList();
+        //}
 
         public IEnumerable<UsuarioDto> ConsultarPorRolCompaniaParaSelector(List<int> roles, int idCompania)
         {
@@ -726,10 +722,10 @@ namespace TrackrAPI.Services.Seguridad
                             .ToList();
         }
 
-        public IEnumerable<UsuarioDto> ConsultarUsuariosParaRegistrarEntrada(int idHospital)
-        {
-            return usuarioRepository.ConsultarUsuariosParaRegistrarEntrada(idHospital);
-        }
+        //public IEnumerable<UsuarioDto> ConsultarUsuariosParaRegistrarEntrada(int idHospital)
+        //{
+        //    return usuarioRepository.ConsultarUsuariosParaRegistrarEntrada(idHospital);
+        //}
         public UsuarioDto ConsultarMedico(string cedula)
         {
             var medico = usuarioRepository.ConsultarMedico(cedula);
@@ -934,6 +930,36 @@ namespace TrackrAPI.Services.Seguridad
         public InformacionGeneralDTO ConsultarInformacionGeneralTrackr(int idUsuario)
         {
             return usuarioRepository.ConsultarInformacionGeneralTrackr(idUsuario);
+        }
+
+        public InformacionPerfilTrackrDTO ConsultarInformacionPerfilTrackr(int idUsuario)
+        {
+            var infoPerfil = usuarioRepository.ConsultarInformacionPerfilTrackr(idUsuario);
+            var fotoPerfil = _archivoRepository.ObtenerImagenUsuario(idUsuario);
+            if(fotoPerfil != null)
+            {
+                var fotoPerfilDto = new ArchivoDTO
+                {
+                    Archivo = Convert.ToBase64String(fotoPerfil.Archivo1),
+                    ArchivoMime = fotoPerfil.ArchivoTipoMime,
+                    IdArchivo = fotoPerfil.IdArchivo,
+                    Nombre = fotoPerfil.ArchivoNombre
+                };
+
+                infoPerfil.ImagenBase64 = fotoPerfilDto;
+            }
+
+            return infoPerfil;
+        }
+
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarAntecedentesUsuarioTrackr(int idUsuario)
+        {
+            return usuarioRepository.ConsultarAntecedentesUsuarioTrackr(idUsuario);
+        }
+
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarDiagnosticosUsuarioTrackr(int idUsuario)
+        {
+            return usuarioRepository.ConsultarDiagnosticosUsuarioTrackr(idUsuario);
         }
 
         public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion, int idUsuario)

@@ -147,25 +147,25 @@ namespace TrackrAPI.Services.Catalogo
 
         public void ValidarDependencia(Hospital hospital)
         {
-            if (hospital.Cita.Any())
-            {
-                throw new CdisException("El hospital tiene asociada al menos una cita y no se puede eliminar");
-            }
+            //if (hospital.Cita.Any())
+            //{
+            //    throw new CdisException("El hospital tiene asociada al menos una cita y no se puede eliminar");
+            //}
 
-            if (hospital.ListaPrecioClinica.Any())
-            {
-                throw new CdisException("El hospital tiene asociada al menos una lista de precio y no se puede eliminar");
-            }
+            //if (hospital.ListaPrecioClinica.Any())
+            //{
+            //    throw new CdisException("El hospital tiene asociada al menos una lista de precio y no se puede eliminar");
+            //}
 
             if (hospital.Usuario.Any())
             {
                 throw new CdisException("El hospital tiene asociado al menos un usuario administrador y no se puede eliminar");
             }
 
-            if (hospital.EntradaPersonal.Any())
-            {
-                throw new CdisException("El hospital tiene asociado al menos una entrada de personal registrada y no se puede eliminar");
-            }
+            //if (hospital.EntradaPersonal.Any())
+            //{
+            //    throw new CdisException("El hospital tiene asociado al menos una entrada de personal registrada y no se puede eliminar");
+            //}
         }
 
         public void ValidarConfiguracionAlmacen(Hospital locacion)

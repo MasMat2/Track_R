@@ -82,7 +82,7 @@ namespace TrackrAPI.Repositorys.Seguridad
         public Rol ConsultarDependencias(int idRol)
         {
             return context.Rol
-                .Include(e => e.TipoComisionDetalle)
+                //.Include(e => e.TipoComisionDetalle)
                 .Include(e => e.UsuarioRol)
                 .Where(e => e.IdRol == idRol)
                 .FirstOrDefault();

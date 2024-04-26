@@ -143,8 +143,8 @@ ion-header {
 }
 
 
-//Alertas personalizadas
-ion-alert.custom-alert-success, .custom-alert-error, .custom-alert-loading {
+//Alertas personalizadas (tamaño y bordes)
+ion-alert.custom-alert-success, .custom-alert-error, .custom-alert-loading, .custom-alert-delete {
   .alert-wrapper{
     border-radius: 16px !important;
     min-width: 327px !important;
@@ -183,7 +183,67 @@ ion-loading.custom-loading {
   }
 }
 
-ion-alert.custom-alert-success, .custom-alert-error{
+.input {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  --border-radius: 8px 8px !important;
+
+  ion-label {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--neutral-700);
+  }
+
+  ion-input {
+    color: var(--neutral-800);
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --padding-bottom: 12px;
+    --padding-top: 12px;
+    --border-radius: 8px 8px !important;
+
+    max-height: 50px;
+
+    #unidadMedida {
+      color: var(--neutral-300);
+    }
+  }
+
+  .error {
+    color: var(--error-200);
+    font-size: .8rem;
+    display: flex;
+    align-items: center;
+    font-family: var(--font-body);
+    gap: 6px;
+
+    ion-icon {
+      stroke: var(--error-200);
+      color: var(--error-200);
+
+    }
+  }
+
+  //en caso de ser datetime
+
+  .custom-datetime {
+    border-radius: 30px;
+    border: 1px solid var(--neutral-300);
+    border-radius: 8px;
+    padding: 0px;
+
+    --background: var(--primary-50);
+
+
+  }
+
+
+
+}
+
+//Alertas personalizadas (fuentes y distribucion)
+ion-alert.custom-alert-success, .custom-alert-error, .custom-alert-delete{
   .alert-head{
     text-align: center !important;
     padding-top: 92px !important;
@@ -239,6 +299,7 @@ ion-alert.custom-alert-success, .custom-alert-error{
       text-align: center !important;
       font-family: var(--font-body);
       font-size: 16px;
+      text-transform: none;
       span{
         justify-content: center !important;
       }
@@ -246,6 +307,8 @@ ion-alert.custom-alert-success, .custom-alert-error{
 
   }
 }
+
+//Alertas personalizadas (ajustes individuales)
 
 ion-alert.custom-alert-success{
   .alert-message{
@@ -306,6 +369,49 @@ ion-alert.custom-alert-loading{
   }
 }
 
+ion-alert.custom-alert-delete{
+  .alert-message{
+    ion-icon{
+      color: var(--error-200) !important;
+    }
+  }
+
+  .alert-button-group {
+    justify-content: space-between;
+    button.alert-button {
+      max-width: 130px;
+      background: var(--error-200);
+    }
+
+    button.alert-button-role-cancel{
+      color: var(--error-200);
+      border: 1px solid var(--error-200);
+      background: transparent;
+    }
+  }
+}
+
+//estilos para selectores que usen popover como interface
+ion-popover.custom-select-popover{
+
+  .item-radio-checked{
+    --background: var(--primary-200);
+    --background-focused: var(--primary-50);
+    --background-hover: var(--primary-50);
+  }
+}
+
+ion-popover.custom-select-popover::part(content) {
+  //--width: 100%;
+  border-radius: 8px;
+}
+
+ion-modal.custom-sheet-modal{
+  --height: auto;
+  --border-radius: 16px 16px 0 0;
+}
+
+
 //estilos para selectores que usen alert como interface
 // ion-alert.custom-select-alert {
 //   //botones inferiores
@@ -363,7 +469,7 @@ ion-alert.custom-alert-loading{
     --ion-color-tertiary-shade: #5d58e0;
     --ion-color-tertiary-tint: #7974ff;
 
-    --ion-color-success: #2fdf75;
+    --ion-color-success: var(--primary-600);
     --ion-color-success-rgb: 47,223,117;
     --ion-color-success-contrast: #000000;
     --ion-color-success-contrast-rgb: 0,0,0;
@@ -377,12 +483,12 @@ ion-alert.custom-alert-loading{
     --ion-color-warning-shade: #e0bb2e;
     --ion-color-warning-tint: #ffd948;
 
-    --ion-color-danger: #ff4961;
-    --ion-color-danger-rgb: 255,73,97;
-    --ion-color-danger-contrast: #ffffff;
-    --ion-color-danger-contrast-rgb: 255,255,255;
-    --ion-color-danger-shade: #e04055;
-    --ion-color-danger-tint: #ff5b71;
+    --ion-color-danger: var(--error-200);
+    --ion-color-danger-rgb: var(--error-200);
+    --ion-color-danger-contrast: var(--error-200);
+    --ion-color-danger-contrast-rgb: var(--error-200);
+    --ion-color-danger-shade: var(--error-200);
+    --ion-color-danger-tint: var(--error-200);
 
     --ion-color-dark: #f4f5f8;
     --ion-color-dark-rgb: 244,245,248;

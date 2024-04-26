@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '../../layout/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { SignalingHubService } from '@services/signaling-hub.service';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-video-chat',
@@ -17,10 +19,11 @@ import { SignalingHubService } from '@services/signaling-hub.service';
     FormsModule
   ]
 })
-export class VideoChatPage extends EventTarget implements OnInit {
+export class VideoChatPage extends EventTarget {
   protected pc: RTCPeerConnection;
   protected localStream: MediaStream;
   protected remoteStream: MediaStream;
+  private routerSubscription: Subscription;
 
   protected servers = {
     iceServers: [
@@ -54,18 +57,48 @@ export class VideoChatPage extends EventTarget implements OnInit {
   protected callerId: string;
   protected buttonState = true;
   protected hangupButtonState = true;
-  protected caller = false;
+  protected is_caller = false;
 
-  constructor(private signalingHubService: SignalingHubService) {
+  constructor(
+    private signalingHubService: SignalingHubService,
+    private route: ActivatedRoute,
+    private router: Router
+    ) {
     super();
-    this.pc = new RTCPeerConnection(this.servers);
+    // this.routerSubscription = this.router.events.subscribe(event => {
+    //   if (event instanceof NavigationStart) {
+    //     this.closeStreams();
+    //   }
+    // });
+    this.start();
   }
 
-  ngOnInit(): void {
-    this.setUpObserver();
+  async start(): Promise<void> {
+
+    await this.signalingHubService.iniciarConexion();
+
+    await this.webcamButtonClick();
+
+    this.signalingObservers();
+
+    this.route.paramMap.subscribe(params => {
+      this.callerId = params.get('id')!;
+      console.log(this.callerId);
+
+      if(!this.callerId){
+        console.log("calling");
+        this.is_caller = true;
+        this.signalingHubService.crearLlamada();
+
+      }else{
+        console.log("answering");
+        this.is_caller = false;
+        this.signalingHubService.crearLlamada(this.callerId);
+      }
+    });
   }
 
-  private setUpObserver() {
+  private signalingObservers() {
     this.signalingHubService.message$.subscribe((json_string: string) => {
       if(json_string.length <= 0) return;
 
@@ -73,101 +106,97 @@ export class VideoChatPage extends EventTarget implements OnInit {
       console.log(message);
       switch (message.type) {
 
-        case "callee-connected":
-          
-          this.dispatchEvent(new Event('calleeConnected'));
-          break;
-
         case "local-id":
           this.callerId = message.local_id;
           break;
 
-        case "new-ice-candidate":
-          this.pc.addIceCandidate(message.candidate);
+        case "callee-connected":
+          this.calleeConnected();
           break;
 
         case "video-offer":  
-          if (!this.pc.currentRemoteDescription && message?.offer) {
-            const offerDescription = new RTCSessionDescription(message.offer);
-            this.pc.setRemoteDescription(offerDescription);
-            this.dispatchEvent(new Event('offerReceived'));
+          if (message?.offer) {
+            this.offerReceived(message.offer);
           };
           break;
 
-        case "video-answer":
-          if (!this.pc.currentRemoteDescription && message?.answer) {
-            const answerDescription = new RTCSessionDescription(message.answer);
-            this.pc.setRemoteDescription(answerDescription);
-          };
+        case "remove-remote":
+          console.log('remove-remote');
+          this.remoteStream = new MediaStream();
           break;
       }
     });
+  }
 
-    // Caller listener
-    this.addEventListener('calleeConnected', async () => {
+  // Caller listener
+  calleeConnected = async () => {
+    if(this.is_caller || !this.is_caller){
 
-      if(this.caller){
+      this.startRTC();
 
-        // Get candidates for caller, save to db
-        this.pc.onicecandidate = (event) => {
-          event.candidate && this.signalingHubService.sendMessage({
-            type: "new-ice-candidate",
-            candidate: event.candidate
-          });
-        };
-
-        // Create offer
-        const offerDescription = await this.pc.createOffer();
-        await this.pc.setLocalDescription(offerDescription);
-
-        const offer = {
-          sdp: offerDescription.sdp,
-          type: offerDescription.type,
-        };
-
-        await this.signalingHubService.sendMessage({
-          type: "video-offer",
-          offer: offer
-        });
-
-        this.hangupButtonState = false;
-      }    
-    });
-
-    // Callee listener
-    this.addEventListener('offerReceived', async () => {
-
-      console.log("offerReceived");
+      // Get candidates for caller, save to db
       this.pc.onicecandidate = (event) => {
         event.candidate && this.signalingHubService.sendMessage({
           type: "new-ice-candidate",
           candidate: event.candidate
         });
       };
-  
-      console.log("answer");
-      const answerDescription = await this.pc.createAnswer();
-      await this.pc.setLocalDescription(answerDescription);
-  
-      const answer = {
-        type: answerDescription.type,
-        sdp: answerDescription.sdp,
+
+      // Create offer
+      const offerDescription = await this.pc.createOffer();
+      await this.pc.setLocalDescription(offerDescription);
+
+      const offer = {
+        sdp: offerDescription.sdp,
+        type: offerDescription.type,
       };
-  
-      console.log("send answer");
-      await this.signalingHubService.sendMessage(({
-        type: "video-answer",
-        answer: answer
-      }));
-      
-    });
+
+      await this.signalingHubService.sendMessage({
+        type: "video-offer",
+        offer: offer
+      });
+
+      this.hangupButtonState = false;
+    }    
   }
 
+  // Callee listener
+  offerReceived = async (offer: any) => {
+    
+    console.log("offerReceived");
+    this.startRTC();
 
-  // 1. Setup media sources
+    if (!this.pc.currentRemoteDescription) {
+      const offerDescription = new RTCSessionDescription(offer);
+      this.pc.setRemoteDescription(offerDescription);
+    };
+    
+    this.pc.onicecandidate = (event) => {
+      event.candidate && this.signalingHubService.sendMessage({
+        type: "new-ice-candidate",
+        candidate: event.candidate
+      });
+    };
 
-  webcamButtonClick = async () => {
-    this.localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    console.log("answer");
+    const answerDescription = await this.pc.createAnswer();
+    await this.pc.setLocalDescription(answerDescription);
+
+    const answer = {
+      type: answerDescription.type,
+      sdp: answerDescription.sdp,
+    };
+
+    console.log("send answer");
+    await this.signalingHubService.sendMessage(({
+      type: "video-answer",
+      answer: answer
+    }));
+    
+  }
+
+  startRTC (): void{
+    this.pc = new RTCPeerConnection(this.servers);
     this.remoteStream = new MediaStream();
 
     // Push tracks from local stream to peer connection
@@ -178,41 +207,80 @@ export class VideoChatPage extends EventTarget implements OnInit {
     // Pull tracks from remote stream, add to video stream
     this.pc.ontrack = (event) => {
       event.streams[0].getTracks().forEach((track) => {
+        console.log('Received remote track');
         this.remoteStream.addTrack(track);
       });
     };
 
-    this.buttonState = false;
+    this.rtcObservers();
+  }
 
+
+  private rtcObservers() {
+    this.signalingHubService.message$.subscribe((json_string: string) => {
+      if(json_string.length <= 0) return;
+
+      var message = JSON.parse(json_string);
+      console.log(message);
+      switch (message.type) {
+        case "new-ice-candidate":
+          this.pc.addIceCandidate(message.candidate);
+          break;
+
+
+        case "video-answer":
+          if (!this.pc.currentRemoteDescription && message?.answer) {
+            const answerDescription = new RTCSessionDescription(message.answer);
+            this.pc.setRemoteDescription(answerDescription);
+          };
+          break;
+
+      }
+    });
+  }
+
+
+  // 1. Setup media sources
+  webcamButtonClick = async () => {
+    this.localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+
+    this.buttonState = false;
   };
+
+  ionViewWillLeave = async () => {
+    this.closeStreams();
+  }
+
+  closeStreams = () => {
+    console.log(this.localStream, this.remoteStream);
+
+    if (this.localStream) {
+      this.localStream.getTracks().forEach(track => track.stop());
+    }
+
+    if (this.remoteStream) {
+      this.remoteStream.getTracks().forEach(track => track.stop());
+    }
+  }
 
   // 2. Create an offer
   callButtonClick = async () => {
-
-    this.caller = true;
-    this.signalingHubService.crearLlamada();
-
-    // Wait for peer id to send offer and candidates
-
-    // const waitForPeerConnection = new Promise((resolve) => {
-    //   this.signalingHubService.addEventListener('peerconnected', resolve);
-    // });
+    // this.is_caller = true;
     
-    // await waitForPeerConnection;
+    // console.log("calling");
+    
+    // this.signalingHubService.crearLlamada();
   };
 
   // 3. Answer the call with the unique ID
   answerButtonClick = async () => {
+    // this.is_caller = false;
+    // const caller_id = this.callerId;
 
-    this.caller = false;
-    const caller_id = this.callerId;
+    // console.log("wait");
+    // console.log("resolving");
 
-    console.log("wait");
-
-    console.log("resolving");
-
-
-    await this.signalingHubService.crearLlamada(caller_id);
-
+    // await this.signalingHubService.crearLlamada(caller_id);
   }
+
 }

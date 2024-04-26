@@ -224,19 +224,19 @@ namespace TrackrAPI.Repositorys.Seguridad
                 .ToList();
         }
 
-        public IEnumerable<UsuarioDto> ConsultarClinicosActivos(string claveTipoUsuario, int idHospital)
-        {
-            return
-                context.Usuario
-                .Where(u => u.UsuarioRol.Any(ur => ur.IdRolNavigation.Clave == claveTipoUsuario)
-                                        && u.EntradaPersonalIdUsuarioNavigation.Any(ep => ep.IdHospital == idHospital && ep.Habilitado))
-                .Select(u => new UsuarioDto
-                {
-                    IdUsuario = u.IdUsuario,
-                    NombreCompleto = u.ObtenerNombreCompleto(),
-                })
-                .ToList();
-        }
+        //public IEnumerable<UsuarioDto> ConsultarClinicosActivos(string claveTipoUsuario, int idHospital)
+        //{
+        //    return
+        //        context.Usuario
+        //        .Where(u => u.UsuarioRol.Any(ur => ur.IdRolNavigation.Clave == claveTipoUsuario)
+        //                                && u.EntradaPersonalIdUsuarioNavigation.Any(ep => ep.IdHospital == idHospital && ep.Habilitado))
+        //        .Select(u => new UsuarioDto
+        //        {
+        //            IdUsuario = u.IdUsuario,
+        //            NombreCompleto = u.ObtenerNombreCompleto(),
+        //        })
+        //        .ToList();
+        //}
 
         public UsuarioDto ConsultarDto(int idUsuario)
         {
@@ -281,7 +281,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                     SueldoDiario = u.SueldoDiario,
                     IdArea = u.IdArea,
                     ClaveTipoUsuario = u.IdTipoUsuarioNavigation.Clave,
-                    IdExpediente = u.Expediente.FirstOrDefault().IdExpediente,
+                    //IdExpediente = u.Expediente.FirstOrDefault().IdExpediente,
                     IdRegimenFiscal = u.IdRegimenFiscal,
                     NumeroLicencia = u.NumeroLicencia,
                     DiasPago = u.DiasPago != null
@@ -307,7 +307,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                             .Include(u => u.UsuarioRol)
                                 .ThenInclude(u => u.IdRolNavigation)
                             .Include(u => u.IdHospitalNavigation)
-                            .Include(u => u.EntradaPersonalIdUsuarioNavigation)
+                            //.Include(u => u.EntradaPersonalIdUsuarioNavigation)
                             .Include(u => u.IdCompaniaNavigation)
                             .Include(u => u.IdRegimenFiscalNavigation)
                             .Include( u => u.AsistenteDoctorIdAsistenteNavigation)
@@ -388,21 +388,21 @@ namespace TrackrAPI.Repositorys.Seguridad
             return usuario.FirstOrDefault();
         }
 
-        public IEnumerable<UsuarioDto> ConsultarPorRolActivosParaSelector(int rol, int idCompania, int idHospital)
-        {
+        //public IEnumerable<UsuarioDto> ConsultarPorRolActivosParaSelector(int rol, int idCompania, int idHospital)
+        //{
 
-            return context.Usuario
-                      .Include(u => u.EntradaPersonalIdUsuarioNavigation)
-                      .Where(e => e.UsuarioRol.Where(u => u.IdRol == rol).Count() > 0
-                      && e.UsuarioLocacion.Any(ul => ul.IdLocacionNavigation.IdCompania == idCompania)
-                      && e.EntradaPersonalIdUsuarioNavigation.Any(ep => ep.IdHospital == idHospital && ep.Habilitado == true))
-                      .Select(e => new UsuarioDto
-                      {
-                          IdUsuario = e.IdUsuario,
-                          NombreCompleto = e.ObtenerNombreCompleto()
-                      }
-                      ).ToList();
-        }
+        //    return context.Usuario
+        //              .Include(u => u.EntradaPersonalIdUsuarioNavigation)
+        //              .Where(e => e.UsuarioRol.Where(u => u.IdRol == rol).Count() > 0
+        //              && e.UsuarioLocacion.Any(ul => ul.IdLocacionNavigation.IdCompania == idCompania)
+        //              && e.EntradaPersonalIdUsuarioNavigation.Any(ep => ep.IdHospital == idHospital && ep.Habilitado == true))
+        //              .Select(e => new UsuarioDto
+        //              {
+        //                  IdUsuario = e.IdUsuario,
+        //                  NombreCompleto = e.ObtenerNombreCompleto()
+        //              }
+        //              ).ToList();
+        //}
 
         public IEnumerable<UsuarioDto> ConsultarPorRolCompaniaParaSelector(int rol, int idCompania)
         {
@@ -440,17 +440,17 @@ namespace TrackrAPI.Repositorys.Seguridad
                 .Any(ur => ur.IdUsuario == idUsuario && ur.IdRolNavigation.Clave == claveRol);
         }
 
-        public IEnumerable<UsuarioDto> ConsultarUsuariosParaRegistrarEntrada(int idHospital)
-        {
-            return context.Usuario
-                .Where(u => u.IdHospital == idHospital && !u.EntradaPersonalIdUsuarioNavigation.Any(ep => ep.IdUsuario == u.IdUsuario && ep.Habilitado))
-                .Select(u => new UsuarioDto
-                {
-                    IdUsuario = u.IdUsuario,
-                    NombreCompleto = u.ObtenerNombreCompleto()
-                })
-                .ToList();
-        }
+        //public IEnumerable<UsuarioDto> ConsultarUsuariosParaRegistrarEntrada(int idHospital)
+        //{
+        //    return context.Usuario
+        //        .Where(u => u.IdHospital == idHospital && !u.EntradaPersonalIdUsuarioNavigation.Any(ep => ep.IdUsuario == u.IdUsuario && ep.Habilitado))
+        //        .Select(u => new UsuarioDto
+        //        {
+        //            IdUsuario = u.IdUsuario,
+        //            NombreCompleto = u.ObtenerNombreCompleto()
+        //        })
+        //        .ToList();
+        //}
 
         public UsuarioDto ConsultarMedico(string cedula)
         {
@@ -547,14 +547,14 @@ namespace TrackrAPI.Repositorys.Seguridad
             return usuario.FirstOrDefault();
         }
 
-        public Usuario ConsultarPorNotaVentaDetalle(int idNotaVentaDetalle)
-        {
-            var usuario =
-                from nvd in context.NotaVentaDetalle
-                where nvd.IdNotaVentaDetalle == idNotaVentaDetalle
-                select nvd.IdNotaVentaNavigation.IdUsuarioClienteNavigation;
-            return usuario.FirstOrDefault();
-        }
+        //public Usuario ConsultarPorNotaVentaDetalle(int idNotaVentaDetalle)
+        //{
+        //    var usuario =
+        //        from nvd in context.NotaVentaDetalle
+        //        where nvd.IdNotaVentaDetalle == idNotaVentaDetalle
+        //        select nvd.IdNotaVentaNavigation.IdUsuarioClienteNavigation;
+        //    return usuario.FirstOrDefault();
+        //}
 
         public IEnumerable<UsuarioDto> ConsultarParaPuntoVenta(int idCompania)
         {
@@ -603,24 +603,24 @@ namespace TrackrAPI.Repositorys.Seguridad
                 .Where(u => u.IdHospital == idCompania);
         }
 
-        public IEnumerable<Usuario> ConsultarParaReporteProductividad(int idCompania)
-        {
-            return context.Usuario
-                .Include(u => u.UsuarioRol)
-                .Include(u => u.Comision)
-                    .ThenInclude(c => c.IdNotaVentaDetalleNavigation)
-                .Include(u => u.EntradaPersonalIdUsuarioNavigation)
-                .Where(u => u.IdHospital == idCompania);
-        }
+        //public IEnumerable<Usuario> ConsultarParaReporteProductividad(int idCompania)
+        //{
+        //    return context.Usuario
+        //        .Include(u => u.UsuarioRol)
+        //        .Include(u => u.Comision)
+        //            .ThenInclude(c => c.IdNotaVentaDetalleNavigation)
+        //        .Include(u => u.EntradaPersonalIdUsuarioNavigation)
+        //        .Where(u => u.IdHospital == idCompania);
+        //}
 
-        public Usuario ConsultarDependencias(int idUsuario)
-        {
-            return context.Usuario
-                .Include(u => u.OrdenCompraIdUsuarioProveedorNavigation)
-                    .ThenInclude(oc => oc.IdEstatusOrdenCompraNavigation)
-                .Where(u => u.IdUsuario == idUsuario)
-                .FirstOrDefault();
-        }
+        //public Usuario ConsultarDependencias(int idUsuario)
+        //{
+        //    return context.Usuario
+        //        .Include(u => u.OrdenCompraIdUsuarioProveedorNavigation)
+        //            .ThenInclude(oc => oc.IdEstatusOrdenCompraNavigation)
+        //        .Where(u => u.IdUsuario == idUsuario)
+        //        .FirstOrDefault();
+        //}
 
         public IEnumerable<UsuarioDto> ConsultarPorNombre(string filtro)
         {
@@ -707,6 +707,92 @@ namespace TrackrAPI.Repositorys.Seguridad
             return informacionGeneralDto;
 
         }
+
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarAntecedentesUsuarioTrackr(int idUsuario)
+        {
+            var usuario = context.Usuario.
+                Where(u => u.IdUsuario == idUsuario)
+                    .Include(u => u.ExpedienteTrackr)
+                    .ThenInclude(u => u.ExpedientePadecimiento)
+                    .ThenInclude(ep => ep.IdPadecimientoNavigation)
+                    .Include(u => u.ExpedienteTrackr)
+                    .ThenInclude(u => u.ExpedientePadecimiento)
+                    .ThenInclude(ep => ep.IdUsuarioDoctorNavigation)
+                    .ThenInclude(ud => ud.IdTituloAcademicoNavigation)
+                    .FirstOrDefault();
+
+            var expediente = usuario.ExpedienteTrackr.FirstOrDefault();
+
+            var padecimientos = expediente.ExpedientePadecimiento;
+
+            var antecedentesUsuario = padecimientos.Select(p => new ExpedientePadecimientoDTO
+            {
+                IdPadecimiento = p.IdPadecimiento,
+                IdExpedientePadecimiento = p.IdExpedientePadecimiento,
+                NombrePadecimiento = p.IdPadecimientoNavigation?.Nombre,
+                IdUsuarioDoctor = p.IdUsuarioDoctor,
+                NombreDoctor = p.IdUsuarioDoctorNavigation.Nombre,
+                ApellidosDoctor = p.IdUsuarioDoctorNavigation.ApellidoPaterno + " " + p.IdUsuarioDoctorNavigation.ApellidoMaterno,
+                TituloDoctor = p.IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre,
+                FechaDiagnostico = p.FechaDiagnostico,
+                EsAntecedente = p.IdPadecimientoNavigation.EsAntecedente,
+            }).Where( p => p.EsAntecedente == true);
+
+
+            return antecedentesUsuario;
+        }
+
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarDiagnosticosUsuarioTrackr(int idUsuario)
+        {
+            var usuario = context.Usuario.
+                Where(u => u.IdUsuario == idUsuario)
+                    .Include(u => u.ExpedienteTrackr)
+                    .ThenInclude(u => u.ExpedientePadecimiento)
+                    .ThenInclude(ep => ep.IdPadecimientoNavigation)
+                    .Include(u => u.ExpedienteTrackr)
+                    .ThenInclude(u => u.ExpedientePadecimiento)
+                    .ThenInclude(ep => ep.IdUsuarioDoctorNavigation)
+                    .ThenInclude(ud => ud.IdTituloAcademicoNavigation)
+                    .FirstOrDefault();
+
+            var expediente = usuario.ExpedienteTrackr.FirstOrDefault();
+
+            var padecimientos = expediente.ExpedientePadecimiento;
+
+            var diagnosticosUsuario = padecimientos.Select(p => new ExpedientePadecimientoDTO
+            {
+                IdPadecimiento = p.IdPadecimiento,
+                IdExpedientePadecimiento = p.IdExpedientePadecimiento,
+                NombrePadecimiento = p.IdPadecimientoNavigation?.Nombre,
+                IdUsuarioDoctor = p.IdUsuarioDoctor,
+                NombreDoctor = p.IdUsuarioDoctorNavigation.Nombre,
+                ApellidosDoctor = p.IdUsuarioDoctorNavigation.ApellidoPaterno + " " + p.IdUsuarioDoctorNavigation.ApellidoMaterno,
+                TituloDoctor = p.IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre,
+                FechaDiagnostico = p.FechaDiagnostico,
+                EsAntecedente = p.IdPadecimientoNavigation.EsAntecedente,
+            }).Where(p => p.EsAntecedente == false);
+
+
+            return diagnosticosUsuario;
+        }
+
+        public InformacionPerfilTrackrDTO ConsultarInformacionPerfilTrackr(int idUsuario)
+        {
+            var usuario = context.Usuario.
+                Where(u => u.IdUsuario == idUsuario).FirstOrDefault();
+
+            var informacionPerfilDto = new InformacionPerfilTrackrDTO
+            {
+                Nombre = usuario.Nombre,
+                ApellidoPaterno = usuario.ApellidoPaterno,
+                ApellidoMaterno = usuario.ApellidoMaterno,
+                Correo = usuario.Correo,
+            };
+
+            return informacionPerfilDto;
+
+        }
+
         public IEnumerable<UsuarioDto> ConsultarParaEncabezado(int idUsuario)
         {
             return context.Usuario

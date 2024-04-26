@@ -1,9 +1,15 @@
-import { NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { UsuarioDoctorDto } from 'src/app/shared/Dtos/usuario-doctor-dto';
 import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores-selector-dto';
+import { addIcons } from 'ionicons';
+import { close, checkmark } from 'ionicons/icons';
+import { FormsModule } from '@angular/forms';
+import { ModalController } from '@ionic/angular/standalone';
+import { Constants } from '@utils/constants/constants';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-doctores-formulario',
@@ -12,15 +18,17 @@ import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores
   standalone: true,
   imports: [
     IonicModule,
-    NgFor
+    FormsModule,
+    CommonModule,
   ]
 })
 export class DoctoresFormularioPage {
 
   constructor(
     private doctoresService: MisDoctoresService,
-    private alertController: AlertController
-  ) {}
+    private alertController: AlertController,
+    private modarCtrl: ModalController,
+  ) {addIcons({close, checkmark})}
 
   ionViewWillEnter() {
     this.consultarSelector();
@@ -28,12 +36,17 @@ export class DoctoresFormularioPage {
 
   protected currentDoctor: UsuarioDoctorDto;
   protected doctoresSelector: UsuarioDoctoresSelectorDto[];
+  protected spinner: string = Constants.ALERT_SPINNER;
 
-  seleccionDoctor(ev: any) {
-    this.currentDoctor = ev.target.value;
+  cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  cargando$ = this.cargandoSubject.asObservable();
+
+  seleccionDoctor(doctor: any) {
+    this.currentDoctor = doctor;
   }
 
   protected agregar() {
+    this.cargandoSubject.next(true);
 
     const MENSAJE_EXITO: string = `El doctor ha sido agregado correctamente`;
     const MENSAJE_REQUERIMIENTO: string = `Seleccione un doctor`;
@@ -46,11 +59,16 @@ export class DoctoresFormularioPage {
     const subscription = this.doctoresService.agregar(this.currentDoctor)
       .subscribe({
         next: () => {
-          this.presentAlert(MENSAJE_EXITO);
+          //this.presentAlert(MENSAJE_EXITO);
           this.consultarSelector();
         },
-        error: () => { },
+        error: () => {
+          this.cargandoSubject.next(false);
+          
+         },
         complete: () => {
+          this.cargandoSubject.next(false);
+          this.presentAlertSuccess();
           subscription.unsubscribe();
         }
       }
@@ -72,5 +90,32 @@ export class DoctoresFormularioPage {
 
     await alert.present();
   }
+
+  protected cerrarModal(){
+    this.modarCtrl.dismiss();
+  }
+
+  protected async presentAlertSuccess() {
+
+    const alertSuccess = await this.alertController.create({
+      header: 'Doctor Asignado',
+      subHeader: 'El doctor ha sido asignado exitosamente.',
+      message: Constants.ALERT_SUCCESS,
+      buttons: [{
+        text: 'De acuerdo',
+        role: 'confirm',
+        handler: () => {
+          this.cerrarModal();
+        }
+      }],
+      cssClass: 'custom-alert-success',
+    });
+
+    await alertSuccess.present();
+  }
+  // protected seleccionarDoctor(doctor: UsuarioDoctoresSelectorDto){
+  //   console.log(doctor);
+  //   //this.currentDoctor = idDoctor;
+  // }
 
 }

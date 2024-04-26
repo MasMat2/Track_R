@@ -38,10 +38,10 @@ export class RecomendacionGeneralComponent {
   public gridOptions : GridOptions;
   public HEADER_GRID = 'Recomendaciones';
   public columns = [
-    { headerName: 'Num', valueGetter: (params: any) => params.node.rowIndex + 1, maxWidth: 70 },
+    { headerName: 'Núm.', valueGetter: (params: any) => params.node.rowIndex + 1, maxWidth: 70 },
     { headerName: 'Fecha', field: 'fecha', maxWidth: 90},
-    { headerName: 'Recomendacion', field: 'descripcion', minWidth: 150 },
-    { headerName: 'A quien se enviará el mensaje', field: 'tipo', maxwidth: 90},
+    { headerName: 'Recomendación', field: 'descripcion', minWidth: 150 },
+    { headerName: 'A quién se enviará el mensaje', field: 'tipo', maxwidth: 90},
     { headerName: 'Administrador', field: 'doctor', minWidth: 80 },
   ];
   public recomendacionesList$: Observable<ExpedienteRecomendacionGridDTO[]>;
