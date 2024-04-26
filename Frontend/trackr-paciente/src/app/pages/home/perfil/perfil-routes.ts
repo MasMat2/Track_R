@@ -31,6 +31,10 @@ export default [
         loadComponent: () => import('./informacion-general/components/info-diagnosticos/info-diagnosticos.component').then((m)=> m.InfoDiagnosticosComponent)
       },
       {
+        path: 'informacion-general/domicilio',
+        loadComponent: () => import('./informacion-general/components/info-domicilio/info-domicilio.component').then((m)=> m.InfoDomicilioComponent)
+      },
+      {
         path: 'mis-tratamientos',
         data: { breadcrumb: "Mis tratamientos"},
         loadComponent: () => import('./mis-tratamientos/mis-tratamientos.page').then((m) => m.MisTratamientosPage)

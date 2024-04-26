@@ -24,7 +24,6 @@ import { HeaderComponent } from '../../../../layout/header/header.component';
 import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
 import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores-selector-dto';
 import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
-import { GeneroSelectorDto } from 'src/app/shared/dtos/catalogo/genero-selector-dto';
 import { ConfirmacionCorreoService } from '@http/seguridad/confirmacion-correo.service';
 import { ConfirmarCorreoDto } from '../../../../../../shared/Dtos/seguridad/confirmar-correo-dto';
 import {GeneroService} from '@http/catalogo/genero.service'
@@ -33,7 +32,8 @@ import { addCircleOutline, closeCircleOutline, chevronBack, arrowDown, chevronDo
 import { OnExit } from 'src/app/shared/guards/exit.guard';
 import { RouterModule } from '@angular/router';
 import { IonIcon } from '@ionic/angular/standalone';
-import { GeneroFormularioComponent } from './genero-formulario/genero-formulario.component';
+import { GeneroSelectorDto } from '@dtos/catalogo/genero-selector-dto';
+import { CatalogoFormularioComponent } from './catalogo-formulario/catalogo-formulario.component';
 
 @Component({
   selector: 'app-informacion-general',
@@ -120,12 +120,12 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
 
   async openGeneroModal() {
     const modal = await this.modalController.create({
-      component: GeneroFormularioComponent,
+      component: CatalogoFormularioComponent,
       breakpoints : [0, 1],
       initialBreakpoint: 1,
       cssClass: 'custom-sheet-modal',
       componentProps: {
-        genero: this.infoUsuario.idGenero
+        generoList: this.generoList
       }
     });
 
@@ -133,8 +133,8 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
     this.modalGeneroAbierto = true;
     const { data } = await modal.onWillDismiss();
     if (data) {
-      this.infoUsuario.idGenero = data.idGenero;
-      this.nombreGenero = data.nombreGenero;
+      this.infoUsuario.idGenero = data.id;
+      this.nombreGenero = data.descripcion;
     }
     
     this.modalGeneroAbierto = false;
