@@ -103,6 +103,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                 context.Usuario
                 .Include(u => u.UsuarioRol).ThenInclude(u => u.IdRolNavigation)
                 .Include(u => u.IdCompaniaNavigation)
+                .Include(u => u.UsuarioLocacion)
                 .Where(u => u.UsuarioLocacion.Any(ul => ul.IdLocacionNavigation.IdCompania == idCompania) || u.IdCompania == idCompania)
                 .Select(u => new UsuarioGridDto
                 {
@@ -122,7 +123,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                     IdDepartamento = u.IdDepartamento,
                     IdEstado = u.IdEstado,
                     IdHospital = u.IdHospital,
-                    IdPerfil = u.IdPerfil,
+                    IdPerfil = u.UsuarioLocacion.First().IdPerfil,
                     IdPuntoVenta = u.IdPuntoVenta,
                     IdTipoUsuario = u.IdTipoUsuario,
                     IdTituloAcademico = u.IdTituloAcademico,
@@ -133,7 +134,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                     Username = u.Username,
                     NombreCompleto = u.ObtenerNombreCompleto(),
                     IdPais = u.IdEstadoNavigation.IdPais,
-                    NombrePerfil = u.IdPerfilNavigation.Nombre,
+                    NombrePerfil = u.UsuarioLocacion.First().IdPerfilNavigation.Nombre,
                     NombreTipoUsuario = u.IdTipoUsuarioNavigation.Nombre,
                     Roles = u.UsuarioRol.ObtenerRoles(),
                     NombreCompania = u.IdCompaniaNavigation.Nombre,
@@ -183,45 +184,46 @@ namespace TrackrAPI.Repositorys.Seguridad
                 .ToList();
         }
 
-        public IEnumerable<UsuarioDto> ConsultarPorPerfil(int idCompania , string clavePerfil){
-             return
-                context.Usuario
-                .Where(u => u.IdPerfilNavigation.Clave == clavePerfil
-                    && (u.UsuarioLocacion.Any(ul => ul.IdLocacionNavigation.IdCompania == idCompania) || u.IdCompania == idCompania))
-                .Select(u => new UsuarioDto
-                {
-                    IdUsuario = u.IdUsuario,
-                    Nombre = u.Nombre,
-                    ApellidoPaterno = u.ApellidoPaterno,
-                    ApellidoMaterno = u.ApellidoMaterno,
-                    Correo = u.Correo,
-                    CorreoPersonal = u.CorreoPersonal,
-                    Calle = u.Calle,
-                    Cedula = u.Cedula,
-                    Ciudad = u.Ciudad,
-                    CodigoPostal = u.CodigoPostal,
-                    Colonia = u.Colonia,
-                    Habilitado = u.Habilitado,
-                    IdCompania = u.IdCompania,
-                    IdDepartamento = u.IdDepartamento,
-                    IdEstado = u.IdEstado,
-                    IdHospital = u.IdHospital,
-                    IdPerfil = u.IdPerfil,
-                    IdPuntoVenta = u.IdPuntoVenta,
-                    IdTipoUsuario = u.IdTipoUsuario,
-                    IdTituloAcademico = u.IdTituloAcademico,
-                    ImagenTipoMime = u.ImagenTipoMime,
-                    NumeroExterior = u.NumeroExterior,
-                    NumeroInterior = u.NumeroInterior,
-                    TelefonoMovil = u.TelefonoMovil,
-                    Username = u.Username,
-                    NombreCompleto = u.ObtenerNombreCompleto() + (u.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioMedicoExterno
-                                                  ? (" (" + u.IdTipoUsuarioNavigation.Nombre + ")") : ""),
-                    IdPais = u.IdEstadoNavigation.IdPais,
-                    NombrePerfil = u.IdPerfilNavigation.Nombre,
-                    Rfc = u.Rfc
-                })
-                .ToList();
+        public IEnumerable<UsuarioDto> ConsultarPorPerfil(int idCompania, string clavePerfil)
+        {
+            return
+               context.Usuario
+               .Where(u => u.IdPerfilNavigation.Clave == clavePerfil
+                   && (u.UsuarioLocacion.Any(ul => ul.IdLocacionNavigation.IdCompania == idCompania) || u.IdCompania == idCompania))
+               .Select(u => new UsuarioDto
+               {
+                   IdUsuario = u.IdUsuario,
+                   Nombre = u.Nombre,
+                   ApellidoPaterno = u.ApellidoPaterno,
+                   ApellidoMaterno = u.ApellidoMaterno,
+                   Correo = u.Correo,
+                   CorreoPersonal = u.CorreoPersonal,
+                   Calle = u.Calle,
+                   Cedula = u.Cedula,
+                   Ciudad = u.Ciudad,
+                   CodigoPostal = u.CodigoPostal,
+                   Colonia = u.Colonia,
+                   Habilitado = u.Habilitado,
+                   IdCompania = u.IdCompania,
+                   IdDepartamento = u.IdDepartamento,
+                   IdEstado = u.IdEstado,
+                   IdHospital = u.IdHospital,
+                   IdPerfil = u.IdPerfil,
+                   IdPuntoVenta = u.IdPuntoVenta,
+                   IdTipoUsuario = u.IdTipoUsuario,
+                   IdTituloAcademico = u.IdTituloAcademico,
+                   ImagenTipoMime = u.ImagenTipoMime,
+                   NumeroExterior = u.NumeroExterior,
+                   NumeroInterior = u.NumeroInterior,
+                   TelefonoMovil = u.TelefonoMovil,
+                   Username = u.Username,
+                   NombreCompleto = u.ObtenerNombreCompleto() + (u.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioMedicoExterno
+                                                 ? (" (" + u.IdTipoUsuarioNavigation.Nombre + ")") : ""),
+                   IdPais = u.IdEstadoNavigation.IdPais,
+                   NombrePerfil = u.IdPerfilNavigation.Nombre,
+                   Rfc = u.Rfc
+               })
+               .ToList();
         }
 
         //public IEnumerable<UsuarioDto> ConsultarClinicosActivos(string claveTipoUsuario, int idHospital)
@@ -310,7 +312,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                             //.Include(u => u.EntradaPersonalIdUsuarioNavigation)
                             .Include(u => u.IdCompaniaNavigation)
                             .Include(u => u.IdRegimenFiscalNavigation)
-                            .Include( u => u.AsistenteDoctorIdAsistenteNavigation)
+                            .Include(u => u.AsistenteDoctorIdAsistenteNavigation)
                           where u.IdUsuario == idUsuario
                           select u;
             return usuario.FirstOrDefault();
@@ -736,7 +738,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                 TituloDoctor = p.IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre,
                 FechaDiagnostico = p.FechaDiagnostico,
                 EsAntecedente = p.IdPadecimientoNavigation.EsAntecedente,
-            }).Where( p => p.EsAntecedente == true);
+            }).Where(p => p.EsAntecedente == true);
 
 
             return antecedentesUsuario;
