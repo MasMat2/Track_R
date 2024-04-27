@@ -165,7 +165,7 @@ public class ExpedienteRecomendacionGeneralService
     {
         _expedienteRecomendacionValidator.ValidarAgregarGeneral(expedienteRecomendacionGeneralFormDTO);
         var recomendacionGeneral = _expedienteRecomendacionGeneralRepository.Consultar((int)expedienteRecomendacionGeneralFormDTO.IdExpedienteRecomendacionesGenerales);
-        
+
         recomendacionGeneral.Descripcion = expedienteRecomendacionGeneralFormDTO.Descripcion;
 
         _expedienteRecomendacionGeneralRepository.Editar(recomendacionGeneral);
@@ -175,12 +175,13 @@ public class ExpedienteRecomendacionGeneralService
     {
         var recomendacion = _expedienteRecomendacionGeneralRepository.Consultar(IdExpedienteRecomendacionGeneral);
 
-        return new ExpedienteRecomendacionGeneralFormDTO 
+        return new ExpedienteRecomendacionGeneralFormDTO
         {
             IdExpedienteRecomendacionesGenerales = (int)recomendacion.IdExpedienteRecomendacionesGenerales,
             Tipo = (int)recomendacion.Tipo,
             Descripcion = recomendacion.Descripcion,
-            IdDoctor = recomendacion.IdAdministrador
+            IdDoctor = recomendacion.IdAdministrador,
+            Fecha = recomendacion.FechaRealizacion
         };
     }
 
