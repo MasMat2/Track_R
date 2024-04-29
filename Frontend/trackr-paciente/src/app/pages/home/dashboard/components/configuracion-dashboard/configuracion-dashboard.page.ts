@@ -6,8 +6,12 @@ import { UsuarioWidgetService } from 'src/app/services/dashboard/usuario-widget.
 import { WidgetService } from 'src/app/services/dashboard/widget.service';
 import { Observable, combineLatestWith, map, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { HeaderComponent } from '../layout/header/header.component';
+//import { HeaderComponent } from '../layout/header/header.component';
 import { Router, RouterModule } from '@angular/router';
+import { addIcons } from 'ionicons';
+import { chevronBack } from 'ionicons/icons';
+import { ModalController } from '@ionic/angular/standalone';
+import { Constants } from '@utils/constants/constants';
 
 interface WidgetSeleccionado extends Widget {
   seleccionado: boolean;
@@ -22,7 +26,6 @@ interface WidgetSeleccionado extends Widget {
     CommonModule,
     IonicModule,
     FormsModule,
-    HeaderComponent,
     RouterModule
   ],
   providers: [
@@ -36,8 +39,9 @@ export class ConfiguracionDashboardPage  implements OnInit {
     private widgetService: WidgetService,
     private usuarioWidgetService: UsuarioWidgetService,
     private alertController: AlertController,
-    private router: Router
-  ) { }
+    private router: Router,
+    private modalController: ModalController
+  ) { addIcons({chevronBack})}
 
   protected widgets: WidgetSeleccionado[] = [];
   protected submiting = false;
@@ -82,27 +86,40 @@ export class ConfiguracionDashboardPage  implements OnInit {
 
       this.usuarioWidgetService.modificarPorUsuarioEnSesion(seleccionados).subscribe({
         next: () => {
-          this.presentAlert();
+          this.presentAlertSuccess();
           this.submiting = false;
         }
       });
 
   }
 
-  private async presentAlert() {
-    const alert = await this.alertController.create({
+
+  protected async presentAlertSuccess() {
+
+    const alertSuccess = await this.alertController.create({
       header: 'Widgets actualizados',
-      message: 'La información se actualizó correctamente',
-      cssClass: 'custom-alert', //clase en variables.scss (usar siempre)
-      buttons: [
-        {
-          text: 'Ok',
-          handler: () => {
-            this.router.navigate(['/home/dashboard']);
-          }
-      }]
+      subHeader: 'La información se ha actualizado correctamente.',
+      message: Constants.ALERT_SUCCESS,
+      buttons: [{
+        text: 'De acuerdo',
+        role: 'confirm',
+        handler: () => {
+          this.cerrarModalConfirmar();
+        }
+      }],
+      cssClass: 'custom-alert-success',
     });
 
-    await alert.present();
+    await alertSuccess.present();
   }
+
+  protected cerrarModalCancelar(){
+    return this.modalController.dismiss(null, 'cancel');
+  }
+
+  protected cerrarModalConfirmar(){
+    return this.modalController.dismiss(null, 'confirm');
+  }
+
+  
 }
