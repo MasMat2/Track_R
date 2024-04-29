@@ -1,0 +1,177 @@
+ion-header{
+    border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
+    background: var(--primary-800);
+}
+ 
+ion-content{
+    --background: var(--primary-50);
+}
+
+.contenedor-header{
+    background: var(--primary-800);
+    height: 30vh;
+    width: 100%;
+
+    ion-toolbar{
+        height: 100%;
+        width: 100%;
+        --background: url('../../../../../assets/header_dark.svg');
+
+        //medidas máximas para que no se estire el svg
+        max-height: 153px;
+        max-width: 390px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding-bottom: 20px;
+
+        ion-title{
+        padding-left: 32px;
+        color: var(--primary-50);
+        font-family: var(--font-display);
+        font-size: 24px;
+        }
+    }
+}
+
+.contenedor-principal{
+    position: relative;
+    height: calc(100% - 30vh);
+    background: var(--primary-50);
+    display: flex;
+    justify-content: center;
+    padding-left: 32px;
+    padding-right: 32px;
+
+    .card{
+        position: absolute;
+        top: -68px; //sobresalido al header
+        z-index: 9999;
+        
+        width: calc(100% - 64px); // 32px de espacio a cada lado
+        border-radius: 16px;
+
+        background: var(--neutral-50);
+        
+        .datos{
+            display: flex;
+            position: relative;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+
+            .avatar{
+                margin-top: -46px;
+                background: transparent;
+                z-index: 9999;
+    
+                ion-avatar{
+                    width: 31vw;
+                    height: 31vw;
+                    border: 8px solid var(--neutral-50);
+                }
+            }
+
+            .nombre{
+                ion-text{
+
+                    p {
+                        font-family: var(--font-body);
+                        margin: 0;
+                        text-align: center;
+                    }
+
+                    #name{
+                        color: var(--neutral-900);
+                        font-size: 24px;
+                    }
+
+                    #username{
+                        color: var(--neutral-500);
+                        font-size: 16px;
+                    }
+                }
+
+            }
+        }
+
+        .lista{
+            position: relative;
+            height: 100%;
+            width: 100%;
+            background: transparent;
+
+            ion-list{
+                padding-bottom: 0;
+                background: transparent;
+            }
+
+            ion-item{
+                --background: transparent;
+                --color-activated: var(--primary-700);
+                ion-icon{
+                    stroke: var(--primary-700); //para los custom icons
+                    color: var(--neutral-200); //para los chevron de ionicons
+                    margin: 12px;
+                    margin-left: 0;
+                }
+                ion-label{
+                    font-family: var(--font-body);
+                    font-size: 16px;
+                }
+            }
+
+            ion-item::part(native){
+                padding-left: 24px;
+                min-height: 64px;
+            }
+
+            .accordion-item{
+                --inner-padding-end: 0;
+
+                ion-accordion-group{
+                    width: 100%;
+                    ion-accordion{
+                        ion-item{
+                            ion-icon{
+                                color: var(--neutral-200) !important;
+                            }
+                        }
+
+                        .accordion-option{
+                            --background: rgba(244, 244, 244, 0.5);
+                            ;
+                        }
+                    }
+                }
+            }
+
+            .accordion-item::part(native){
+                padding: 0;
+
+            }
+        }
+    }
+
+}
+
+@media (max-height: 750px){
+
+    .card{
+        top: -32px !important; //menos sobresalido
+
+        .lista{
+            ion-item::part(native){
+                min-height: 48px !important; //items más pequeños
+            }
+        }
+    }
+}
+
+// @media (max-height: 700px){
+
+//     .card{
+//         //height: calc(100% + 48px) !important; 
+//     }
+// }

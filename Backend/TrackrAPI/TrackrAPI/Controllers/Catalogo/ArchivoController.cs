@@ -92,40 +92,40 @@ namespace TrackrAPI.Controllers.Catalogo
             string path;
             string tipoMime;
 
-            if (string.IsNullOrWhiteSpace(usuario.ImagenTipoMime))
-            {
-                path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
-                tipoMime = "image/svg+xml";
-            }
-            else
-            {
-                var archivo = archivoService.ObtenerImagenUsuario(idUsuario);
-                if (archivo == null)
-                {
-                    path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
-                    tipoMime = "image/svg+xml";
-                }
-                else
-                {
-                    MemoryStream ms = new MemoryStream();
+            // if (string.IsNullOrWhiteSpace(usuario.ImagenTipoMime))
+            // {
+            //     path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
+            //     tipoMime = "image/svg+xml";
+            // }
+            // else
+            // {
+            var archivo = archivoService.ObtenerImagenUsuario(idUsuario);
+            // if (archivo == null)
+            // {
+            //     path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
+            //     tipoMime = "image/svg+xml";
+            // }
+            // else
+            // {
+            MemoryStream ms = new MemoryStream();
 
-                    BinaryFormatter binForm = new BinaryFormatter();
-                    ms.Write(archivo.Archivo1, 0, archivo.Archivo1.Length);
-                    ms.Seek(0, SeekOrigin.Begin);
-                    return File(ms, archivo.ArchivoTipoMime);
+            BinaryFormatter binForm = new BinaryFormatter();
+            ms.Write(archivo.Archivo1, 0, archivo.Archivo1.Length);
+            ms.Seek(0, SeekOrigin.Begin);
+            return File(ms, archivo.ArchivoTipoMime);
 
-                }
+            // }
 
 
-                // path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"{usuario.IdUsuario}{ MimeTypeMap.GetExtension(usuario.ImagenTipoMime)}");
-                // tipoMime = usuario.ImagenTipoMime;
+            // path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"{usuario.IdUsuario}{ MimeTypeMap.GetExtension(usuario.ImagenTipoMime)}");
+            // tipoMime = usuario.ImagenTipoMime;
 
-                // if (!System.IO.File.Exists(path))
-                // {
-                //     path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
-                //     tipoMime = "image/svg+xml";
-                // }
-            }
+            // if (!System.IO.File.Exists(path))
+            // {
+            //     path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
+            //     tipoMime = "image/svg+xml";
+            // }
+            // }
 
             var imageFileStream = System.IO.File.OpenRead(path);
 

@@ -83,7 +83,7 @@ export class MuestrasFormularioComponent implements OnInit {
     for (const seccionCampo of seccion.seccionesCampo) {
       if (seccionCampo.valor) {
         camposAgregados.push({
-          claveCampo: seccionCampo.clave,
+          idSeccionVariable: seccionCampo.idSeccionCampo,
           valor: seccionCampo.valor.toString(),
           fueraDeRango: await this.estaFueraDeRango(seccionCampo),
           fechaMuestra: new Date(fechaSeleccionada)

@@ -1,7 +1,6 @@
 ﻿using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Seguridad;
-using TrackrAPI.Repositorys.Distribucion;
 using TrackrAPI.Repositorys.Catalogo;
 using System.Collections.Generic;
 using TrackrAPI.Helpers;
@@ -14,14 +13,12 @@ namespace TrackrAPI.Services.Seguridad
         private UsuarioLocacionValidatorService usuarioLocacionValidatorService;
         private IPerfilRepository perfilRepository;
         private ICompaniaRepository companiaRepository;
-        private ITipoEmpleadoRepository tipoEmpleadoRepository;
         private IUsuarioRepository usuarioRepository;
         private IHospitalRepository hospitalRepository;
         public UsuarioLocacionService(IUsuarioLocacionRepository usuarioLocacionRepository,
             UsuarioLocacionValidatorService usuarioLocacionValidatorService,
             IPerfilRepository perfilRepository,
             ICompaniaRepository companiaRepository,
-            ITipoEmpleadoRepository tipoEmpleadoRepository,
             IUsuarioRepository usuarioRepository,
             IHospitalRepository hospitalRepository)
         {
@@ -29,7 +26,6 @@ namespace TrackrAPI.Services.Seguridad
             this.usuarioLocacionValidatorService = usuarioLocacionValidatorService;
             this.perfilRepository = perfilRepository;
             this.companiaRepository = companiaRepository;
-            this.tipoEmpleadoRepository = tipoEmpleadoRepository;
             this.usuarioRepository = usuarioRepository;
             this.hospitalRepository = hospitalRepository;
         }

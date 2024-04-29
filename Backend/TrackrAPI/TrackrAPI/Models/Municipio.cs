@@ -11,8 +11,6 @@ namespace TrackrAPI.Models
             Compania = new HashSet<Compania>();
             Direccion = new HashSet<Direccion>();
             Domicilio = new HashSet<Domicilio>();
-            ExpedienteDatoSocial = new HashSet<ExpedienteDatoSocial>();
-            ExpedientePacienteInformacion = new HashSet<ExpedientePacienteInformacion>();
             Hospital = new HashSet<Hospital>();
             Usuario = new HashSet<Usuario>();
         }
@@ -27,8 +25,6 @@ namespace TrackrAPI.Models
         public virtual ICollection<Compania> Compania { get; set; }
         public virtual ICollection<Direccion> Direccion { get; set; }
         public virtual ICollection<Domicilio> Domicilio { get; set; }
-        public virtual ICollection<ExpedienteDatoSocial> ExpedienteDatoSocial { get; set; }
-        public virtual ICollection<ExpedientePacienteInformacion> ExpedientePacienteInformacion { get; set; }
         public virtual ICollection<Hospital> Hospital { get; set; }
         public virtual ICollection<Usuario> Usuario { get; set; }
     }

@@ -8,6 +8,7 @@ using TrackrAPI.Services.Seguridad;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using TrackrAPI.Dtos.GestionExpediente;
 
 namespace TrackrAPI.Controllers.Seguridad
 {
@@ -31,14 +32,14 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultarEncabezado(Utileria.ObtenerIdUsuarioSesion(this));
         }
 
-        [HttpGet]
-        [Route("consultarEncabezadoPedidoEnLinea/{empresa}")]
-        public UsuarioEncabezadoDto ConsultarEncabezadoPedidoEnLinea(string empresa)
-        {
-            int idUsuario = Utileria.TryObtenerIdUsuarioSesion(this);
-            string token = Utileria.ObtenerToken(this);
-            return usuarioService.ConsultarEncabezadoPedidoEnLinea(idUsuario, empresa, token);
-        }
+        //[HttpGet]
+        //[Route("consultarEncabezadoPedidoEnLinea/{empresa}")]
+        //public UsuarioEncabezadoDto ConsultarEncabezadoPedidoEnLinea(string empresa)
+        //{
+        //    int idUsuario = Utileria.TryObtenerIdUsuarioSesion(this);
+        //    string token = Utileria.ObtenerToken(this);
+        //    return usuarioService.ConsultarEncabezadoPedidoEnLinea(idUsuario, empresa, token);
+        //}
 
         [HttpGet]
         [Route("existeUsuarioLogeado")]
@@ -63,13 +64,13 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultarPorRol(claveRol, (int)usuario.IdCompania);
         }
 
-        [HttpGet]
-        [Route("consultarClinicosActivos/{claveTipoUsuario}")]
-        public IEnumerable<UsuarioDto> ConsultarClinicosActivos(string claveTipoUsuario)
-        {
-            var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
-            return usuarioService.ConsultarClinicosActivos(claveTipoUsuario, usuario);
-        }
+        //[HttpGet]
+        //[Route("consultarClinicosActivos/{claveTipoUsuario}")]
+        //public IEnumerable<UsuarioDto> ConsultarClinicosActivos(string claveTipoUsuario)
+        //{
+        //    var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
+        //    return usuarioService.ConsultarClinicosActivos(claveTipoUsuario, usuario);
+        //}
 
         [HttpGet]
         [Route("consultarTipoDeUsuarioEnSesion")]
@@ -169,13 +170,13 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultarGeneral((int)usuario.IdCompania);
         }
 
-        [HttpPost]
-        [Route("ConsultarPorRolActivosParaSelector")]
-        public IEnumerable<UsuarioDto> ConsultarPorRolParaSelector(List<int> roles)
-        {
-            var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
-            return usuarioService.ConsultarPorRolActivosParaSelector(roles, (int)usuario.IdCompania, (int)usuario.IdHospital);
-        }
+        //[HttpPost]
+        //[Route("ConsultarPorRolActivosParaSelector")]
+        //public IEnumerable<UsuarioDto> ConsultarPorRolParaSelector(List<int> roles)
+        //{
+        //    var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
+        //    return usuarioService.ConsultarPorRolActivosParaSelector(roles, (int)usuario.IdCompania, (int)usuario.IdHospital);
+        //}
 
         [HttpPost]
         [Route("ConsultarPorRolCompaniaParaSelector")]
@@ -193,13 +194,13 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultarPorRolCompaniaParaSelectorDomicilio(roles, (int)usuario.IdCompania);
         }
 
-        [HttpGet]
-        [Route("consultarUsuariosParaRegistrarEntrada")]
-        public IEnumerable<UsuarioDto> ConsultarUsuariosParaRegistrarEntrada()
-        {
-            var idHospital = (int)usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this)).IdHospital;
-            return usuarioService.ConsultarUsuariosParaRegistrarEntrada(idHospital);
-        }
+        //[HttpGet]
+        //[Route("consultarUsuariosParaRegistrarEntrada")]
+        //public IEnumerable<UsuarioDto> ConsultarUsuariosParaRegistrarEntrada()
+        //{
+        //    var idHospital = (int)usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this)).IdHospital;
+        //    return usuarioService.ConsultarUsuariosParaRegistrarEntrada(idHospital);
+        //}
         [HttpGet]
         [Route("consultarParaPuntoVenta")]
         public IEnumerable<UsuarioDto> ConsultarParaPuntoVenta()
@@ -269,6 +270,24 @@ namespace TrackrAPI.Controllers.Seguridad
         public InformacionGeneralDTO ConsultarInformacionGeneral()
         {
             return usuarioService.ConsultarInformacionGeneralTrackr(Utileria.ObtenerIdUsuarioSesion(this));
+        }
+
+        [HttpGet("consultarInformacionPerfil")]
+        public InformacionPerfilTrackrDTO ConsultarInformacionPerfil()
+        {
+            return usuarioService.ConsultarInformacionPerfilTrackr(Utileria.ObtenerIdUsuarioSesion(this));
+        }
+
+        [HttpGet("consultarInfoAntecedentes")]
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarInformacionAntecedentes()
+        {
+            return usuarioService.ConsultarAntecedentesUsuarioTrackr(Utileria.ObtenerIdUsuarioSesion(this));
+        }
+
+        [HttpGet("consultarInfoDiagnosticos")]
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarInformacionDiagnosticos()
+        {
+            return usuarioService.ConsultarDiagnosticosUsuarioTrackr(Utileria.ObtenerIdUsuarioSesion(this));
         }
 
         [HttpPut("actualizarInformacionGeneral")]

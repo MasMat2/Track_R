@@ -5,6 +5,11 @@ namespace TrackrAPI.Models
 {
     public partial class SeccionCampo
     {
+        public SeccionCampo()
+        {
+            EntidadEstructuraTablaValor = new HashSet<EntidadEstructuraTablaValor>();
+        }
+
         public int IdSeccionCampo { get; set; }
         public string Clave { get; set; } = null!;
         public string Descripcion { get; set; } = null!;
@@ -22,5 +27,6 @@ namespace TrackrAPI.Models
         public virtual Dominio IdDominioNavigation { get; set; } = null!;
         public virtual Icono? IdIconoNavigation { get; set; }
         public virtual Seccion IdSeccionNavigation { get; set; } = null!;
+        public virtual ICollection<EntidadEstructuraTablaValor> EntidadEstructuraTablaValor { get; set; }
     }
 }

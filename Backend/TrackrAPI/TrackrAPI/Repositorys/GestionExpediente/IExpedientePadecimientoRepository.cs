@@ -5,6 +5,7 @@ namespace TrackrAPI.Repositorys.GestionExpediente
 {
     public interface IExpedientePadecimientoRepository : IRepository<ExpedientePadecimiento>
     {
+        public ExpedientePadecimiento Consultar(int idExpedientePadecimiento);
         public IEnumerable<ExpedientePadecimientoDTO> Consultar(List<int> idDoctor);
         public IEnumerable<ExpedientePadecimientoDTO> ConsultarPorUsuario(int idUsuario);
         public IEnumerable<ExpedientePadecimientoGridDTO> ConsultarParaGridPorUsuario(int idUsuario);

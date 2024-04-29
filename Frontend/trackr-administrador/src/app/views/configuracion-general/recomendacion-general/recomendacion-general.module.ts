@@ -11,6 +11,7 @@ import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { FormularioService } from '@services/formulario.service';
 import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
 import { ExpedienteTrackrService } from '@http/seguridad/expediente-trackr.service';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { ExpedienteTrackrService } from '@http/seguridad/expediente-trackr.servi
     FormsModule,
     MatExpansionModule,
     GridGeneralModule, 
+    BsDatepickerModule,
     NgSelectModule
   ],
   declarations: [RecomendacionGeneralComponent],

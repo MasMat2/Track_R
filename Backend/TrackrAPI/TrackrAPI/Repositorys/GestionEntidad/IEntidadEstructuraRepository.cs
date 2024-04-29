@@ -12,6 +12,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         EntidadEstructura? ConsultarTabulacionDuplicada(string clave, string nombre, int idEntidad);
         IEnumerable<EntidadEstructura> ConsultarPorEntidad(int idEntidad);
         IEnumerable<EntidadEstructura> ConsultarPorEntidad(string clave);
+        EntidadEstructura? ConsultarPorEntidadSeccionVariable(int idSeccionCampo);
         IEnumerable<EntidadEstructura> ConsultarPorEntidadSeccion(int idEntidad, int idSeccion);
         IEnumerable<EntidadEstructuraDto> ConsultarPadres(int idEntidad);
         IEnumerable<EntidadEstructuraDto> ConsultarHijos(int idEntidadEstructuraPadre);

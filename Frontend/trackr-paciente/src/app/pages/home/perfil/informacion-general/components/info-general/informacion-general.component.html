@@ -1,0 +1,330 @@
+
+
+<ion-header class="ion-no-border">
+  <div class="contenedor-header">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button routerLink="inicio-perfil">
+          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          Atrás
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="contenedor-principal">
+    <div class="titulo">
+      <ion-text>
+        <h3>General</h3>
+      </ion-text>
+    </div>
+  
+
+    <div *ngIf="informacionUsuario$ | async as informacionUsuario">
+      <form
+        #formulario="ngForm"
+        novalidate="novalidate"
+        (ngSubmit)="enviarFormulario(formulario)"
+      >
+        <ion-grid>
+            <div class="correoConfirmado" *ngIf="!informacionUsuario.correoConfirmado">
+              <p>Tu correo aún no está verificado</p>
+              <ion-button
+                (click) ="reenviarConfirmacionCorreo(infoUsuario.correo)" 
+                [disabled]="emailsubmiting">
+                Enviar correo de verificación
+              </ion-button>
+            </div>
+            <div class="seccion">
+              <ion-row>
+                <ion-col size="12">
+                  <div class="input">
+                    <ion-label>
+                      Nombre(s)
+                    </ion-label>
+                    <ion-input
+                      #nombres="ngModel"
+                      id="nombre"
+                      name="nombre"
+                      fill="outline"
+                      type="text"
+                      required="true"
+                      maxlength="50"
+                      autocomplete="off"
+                      placeholder="Nombres"
+                      [(ngModel)]="informacionUsuario.nombre">
+                    </ion-input>
+                    <div
+                      *ngIf="nombres.errors?.['required'] && (nombres.dirty || nombres.touched)"
+                      class="error"
+                    >
+                      <ion-icon slot="start" name="informacion"></ion-icon>
+                      El nombre es requerido
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+            
+              <ion-row>
+                <ion-col size="6">
+                  <div class="input">
+                    <ion-label>
+                      Apellido Paterno
+                    </ion-label>
+                    <ion-input
+                      #apellidoPaterno="ngModel"
+                      id="apePaterno"
+                      name="apellidoPaterno"
+                      fill="outline"
+                      type="text"
+                      required="true"
+                      maxlength="50"
+                      autocomplete="off"
+                      placeholder="Apellido Paterno"
+                      [(ngModel)]="informacionUsuario.apellidoPaterno">
+                    </ion-input>
+                    <div
+                      *ngIf="apellidoPaterno.errors?.['required'] && (apellidoPaterno.dirty || apellidoPaterno.touched)"
+                      class="error"
+                    >
+                      El apellido paterno es requerido
+                    </div>
+                  </div>
+                </ion-col>
+                <ion-col size="6">
+                  <div class="input">
+                    <ion-label>
+                      Apellido Materno
+                    </ion-label>
+                    <ion-input
+                      #apellidoMaterno="ngModel"
+                      id="apeMaterno"
+                      name="apellidoMaterno"
+                      fill="outline"
+                      type="text"
+                      required="true"
+                      maxlength="50"
+                      autocomplete="off"
+                      placeholder="Apellido Materno"
+                      [(ngModel)]="informacionUsuario.apellidoMaterno">
+                    </ion-input>
+                    <div
+                      *ngIf="apellidoMaterno.errors?.['required'] && (apellidoMaterno.dirty || apellidoMaterno.touched)"
+                      class="error"
+                    >
+                      El apellido materno es requerido
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+            
+              <ion-row>
+                <ion-col size="12">
+                  <div class="input">
+                    <ion-label>
+                      Fecha de Nacimiento
+                    </ion-label>
+                    <ion-item class="custom-datetime" lines="none">
+                      <ion-datetime-button  datetime="fechaNacimiento"></ion-datetime-button>
+                      <ion-modal [keepContentsMounted]="true">
+                        <ng-template>
+                          <ion-datetime
+                          color="morado-custom"
+                          #fechaNacimiento="ngModel"
+                          name="fechaNacimiento"
+                          id="fechaNacimiento"
+                          presentation="date"
+                          showDefaultButtons="true"
+                          locale="es-ES"
+                          required="true"
+                          (ionChange)="calcularEdad()"
+                          [(ngModel)]="informacionUsuario.fechaNacimiento">
+                        </ion-datetime>
+                        </ng-template>
+                      </ion-modal>
+                    </ion-item>
+                  </div>
+                </ion-col>
+                
+              </ion-row>
+
+              <ion-row>
+                <ion-col size="12">
+                  <div class="input">
+                    <ion-label>
+                      Edad
+                    </ion-label>
+                    <ion-input
+                      id="edad"
+                      name="edad"
+                      fill="outline"
+                      shape="round"
+                      type="text"
+                      readonly="true"
+                      disabled="true"
+                      required="true"
+                      [(ngModel)]="edadUsuario">
+                    </ion-input>
+                  </div>
+                </ion-col>
+              </ion-row>
+            
+              <ion-row>
+                <ion-col size="12">
+                  <div class="input">
+                    <ion-label>
+                      Género
+                    </ion-label>
+
+                    <ion-input
+                    id="genero1"
+                    name="genero1"
+                    fill="outline"
+                    shape="round"
+                    type="text"
+                    readonly="true"
+                    [ngModel]="nombreGenero"
+                    >
+
+                    <ion-icon *ngIf="!modalGeneroAbierto" slot="end" name="chevron-down" (click)="openGeneroModal()"></ion-icon>
+                    <ion-icon *ngIf="modalGeneroAbierto" slot="end" name="chevron-up"></ion-icon>
+                  </ion-input>
+
+                  
+                  </div>
+                </ion-col>
+                
+              </ion-row>
+
+              <ion-row>
+                <ion-col size="6">
+                  <div class="input">
+                    <ion-label>
+                      Peso (kg)
+                    </ion-label>
+                    <ion-input
+                      #peso="ngModel"
+                      id="peso"
+                      name="peso"
+                      fill="outline"
+                      shape="round"
+                      type="text"
+                      required="true"
+                      autocomplete="off"
+                      placeholder="Peso kg"
+                      [(ngModel)]="informacionUsuario.peso">
+
+                      <ion-label id="unidadMedida" slot="end">
+                        Kg
+                      </ion-label>
+                    </ion-input>
+                    <div
+                      *ngIf="peso.errors?.['required'] && (peso.dirty || peso.touched)"
+                      class="error"
+                    >
+                      El peso es requerido
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="6">
+                  <div class="input">
+                    <ion-label>
+                      Estatura 
+                    </ion-label>
+                    <ion-input
+                      #estatura="ngModel"
+                      id="estatura"
+                      name="estatura"
+                      fill="outline"
+                      shape="round"
+                      type="text"
+                      required="true"
+                      autocomplete="off"
+                      placeholder="Estatura cm"
+                      [(ngModel)]="informacionUsuario.estatura">
+                      <ion-label id="unidadMedida" slot="end">
+                        cm
+                      </ion-label>
+                    </ion-input>
+                    <div
+                      *ngIf="estatura.errors?.['required'] && (estatura.dirty || estatura.touched)"
+                      class="error"
+                    >
+                      La medida de estatura es requerida
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+            
+        
+              <ion-row>
+                <ion-col size="12">
+                  <div class="input">
+                    <ion-label>
+                      Teléfono móvil
+                    </ion-label>
+                    <ion-input
+                      #telefono="ngModel"
+                      id="telefono"
+                      name="telefono"
+                      fill="outline"
+                      shape="round"
+                      type="text"
+                      required="true"
+                      maxlength="10"
+                      autocomplete="off"
+                      placeholder="Teléfono móvil"
+                      [(ngModel)]="informacionUsuario.telefonoMovil">
+                    </ion-input>
+                    <div
+                      *ngIf="telefono.errors?.['required'] && (telefono.dirty || telefono.touched)"
+                      class="error"
+                    >
+                      El número de teléfono es requerido
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+            
+              <ion-row>
+                <ion-col size="12">
+                  <div class="input">
+                    <ion-label>
+                      Correo electrónico
+                    </ion-label>
+                    <ion-input
+                      #correo="ngModel"
+                      id="correo"
+                      name="correo"
+                      fill="outline"
+                      shape="round"
+                      type="text"
+                      required="true"
+                      maxlength="50"
+                      autocomplete="off"
+                      placeholder="Correo electrónico"
+                      [(ngModel)]="informacionUsuario.correoPersonal">
+                    </ion-input>
+                    <div
+                      *ngIf="correo.errors?.['required'] && (correo.dirty || correo.touched)"
+                      class="error"
+                    >
+                      El correo electrónico es requerido
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </div>
+               <ion-row class="mt-4">
+            <ion-col>
+                <ion-button class="btn-enviar" [disabled]="submiting"  type="submit">Guardar</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
+    </div>
+  </div>
+</ion-content>

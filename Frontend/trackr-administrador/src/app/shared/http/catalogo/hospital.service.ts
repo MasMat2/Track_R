@@ -60,13 +60,13 @@ export class HospitalService {
     return this.http.get<Hospital[]>(this.dataUrl + 'consultarHospitalesPorUsuario');
   }
 
-  consultarTodosParaSelector() {
-    return this.http.get<Hospital[]>(this.dataUrl + 'consultarTodosParaSelector');
+  consultarTodosParaSelector(idDominio : number) {
+    return this.http.get<Hospital[]>(this.dataUrl + 'consultarTodosParaSelector/' + idDominio);
   }
 
-  consultarDisponiblesParaListaPrecio(idListaPrecioSeleccionada: number) {
-    return this.http.get<Hospital[]>(this.dataUrl + `consultarDisponiblesParaListaPrecio/${idListaPrecioSeleccionada}`);
-  }
+  // consultarDisponiblesParaListaPrecio(idListaPrecioSeleccionada: number) {
+  //   return this.http.get<Hospital[]>(this.dataUrl + `consultarDisponiblesParaListaPrecio/${idListaPrecioSeleccionada}`);
+  // }
 
   consultarPorCompaniaSesion() {
     return this.http.get<Hospital[]>(this.dataUrl + 'consultarPorCompaniaSesion');

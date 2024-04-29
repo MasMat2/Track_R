@@ -20,7 +20,6 @@ namespace TrackrAPI.Models
         public bool? Estatus { get; set; }
         public int? IdFlujo { get; set; }
 
-        public virtual Flujo? IdFlujoNavigation { get; set; }
         public virtual GuiaElementoTecnica IdGuiaElementoTecnicaNavigation { get; set; } = null!;
         public virtual ICollection<GuiaActividadEvidencia> GuiaActividadEvidencia { get; set; }
     }

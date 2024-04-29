@@ -8,11 +8,7 @@ namespace TrackrAPI.Models
         public RegimenFiscal()
         {
             Compania = new HashSet<Compania>();
-            ComplementoPago = new HashSet<ComplementoPago>();
-            FacturaIdRegimenFiscalNavigation = new HashSet<Factura>();
-            FacturaIdRegimenFiscalReceptorNavigation = new HashSet<Factura>();
             Hospital = new HashSet<Hospital>();
-            SatMovimiento = new HashSet<SatMovimiento>();
             Usuario = new HashSet<Usuario>();
         }
 
@@ -21,11 +17,7 @@ namespace TrackrAPI.Models
         public string Nombre { get; set; } = null!;
 
         public virtual ICollection<Compania> Compania { get; set; }
-        public virtual ICollection<ComplementoPago> ComplementoPago { get; set; }
-        public virtual ICollection<Factura> FacturaIdRegimenFiscalNavigation { get; set; }
-        public virtual ICollection<Factura> FacturaIdRegimenFiscalReceptorNavigation { get; set; }
         public virtual ICollection<Hospital> Hospital { get; set; }
-        public virtual ICollection<SatMovimiento> SatMovimiento { get; set; }
         public virtual ICollection<Usuario> Usuario { get; set; }
     }
 }

@@ -12,6 +12,14 @@ namespace TrackrAPI.Repositorys.GestionExpediente
             base.context = context;
         }
 
+
+        public ExpedientePadecimiento Consultar(int idExpedientePadecimiento)
+        {
+            return context.ExpedientePadecimiento
+                .Where(ee => ee.IdExpedientePadecimiento == idExpedientePadecimiento)
+                .FirstOrDefault();
+        }
+
         public IEnumerable<ExpedientePadecimientoDTO> Consultar(List<int> idDoctor)
         {
             return context.ExpedientePadecimiento

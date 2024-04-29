@@ -2,10 +2,13 @@
 
 .ng-select .ng-select-container {
   border-radius: $border-radius-inputs;
+  padding: 0.25rem 0 0.25rem 0.25rem;
+  font-size: 0.80rem;
 }
 
 .ng-dropdown-panel {
   z-index: 999999 !important;
+  width: 40px;
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {

@@ -67,7 +67,7 @@ export class ConfiguracionSeccionesComponent implements OnInit {
     this.bsModalRef = this.modalService.show(
       ConfiguracionSeccionesFormularioComponent,
       {
-        initialState, ... GeneralConstant.CONFIG_MODAL_LARGE
+        initialState, ... GeneralConstant.CONFIG_MODAL_MEDIUM
       }
     );
   }

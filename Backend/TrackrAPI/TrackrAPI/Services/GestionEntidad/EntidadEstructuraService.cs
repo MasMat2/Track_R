@@ -3,6 +3,7 @@ using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionEntidad;
 using System.Transactions;
 using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Repositorys.Dashboard;
 
 namespace TrackrAPI.Services.GestionEntidad
 {
@@ -10,15 +11,17 @@ namespace TrackrAPI.Services.GestionEntidad
     {
         private readonly IEntidadEstructuraRepository entidadEstructuraRepository;
         private readonly EntidadEstructuraValidatorService entidadEstructuraValidatorService;
-
+        private readonly IWidgetRepository _widgetRepository;
         public EntidadEstructuraService
         (
             IEntidadEstructuraRepository entidadEstructuraRepository,
-            EntidadEstructuraValidatorService entidadEstructuraValidatorService
+            EntidadEstructuraValidatorService entidadEstructuraValidatorService,
+            IWidgetRepository widgetRepository
         )
         {
             this.entidadEstructuraRepository = entidadEstructuraRepository;
             this.entidadEstructuraValidatorService = entidadEstructuraValidatorService;
+            _widgetRepository = widgetRepository;
         }
 
         public IEnumerable<EntidadEstructuraDto> ConsultarPorEntidadParaSelector(int idEntidad)
@@ -92,7 +95,19 @@ namespace TrackrAPI.Services.GestionEntidad
         };
 
             entidadEstructuraValidatorService.ValidarAgregar(entidadEstructura);
-            entidadEstructuraRepository.Agregar(entidadEstructura);
+            var entidadAgregada = entidadEstructuraRepository.Agregar(entidadEstructura);
+
+            if(estructuraDto.IdEntidadEstructuraPadre == null)
+            {
+                var widget = new Widget
+                {
+                    Clave = estructuraDto.Clave,
+                    Nombre = "Seguimiento " + estructuraDto.Nombre,
+                    IdPadecimiento = entidadAgregada.IdEntidadEstructura,
+                };
+                _widgetRepository.Agregar(widget);
+            }
+          
 
             estructuraDto.IdEntidadEstructura = entidadEstructura.IdEntidadEstructura;
         }
@@ -159,6 +174,35 @@ namespace TrackrAPI.Services.GestionEntidad
         public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarAntecedentesParaSelector()
         {
             return entidadEstructuraRepository.ConsultarAntecedentesParaSelector();
+        }
+
+        public IEnumerable<SeccionCampo>  ValoresVariablesPadecimiento(int idUsuario)
+        {
+            var variables = entidadEstructuraRepository.ValoresVariablesPadecimiento(idUsuario);
+            var variablesDto = variables
+                .Where(v => v.IdSeccionNavigation != null)
+                .SelectMany(v => v.IdSeccionNavigation.SeccionCampo)
+                .GroupBy(sc => sc.IdSeccionCampo)
+                .Select(g => g.First()) 
+                .Select(sc => new SeccionCampo
+                { 
+                    IdSeccionCampo = sc.IdSeccionCampo, 
+                    Clave = sc.Clave, 
+                    Descripcion = sc.Descripcion, 
+                    IdDominio = sc.IdDominio, 
+                    IdSeccion = sc.IdSeccion, 
+                    Requerido = sc.Requerido, 
+                    Orden = sc.Orden, 
+                    TamanoColumna = sc.TamanoColumna, 
+                    Deshabilitado = sc.Deshabilitado, 
+                    Grupo = sc.IdSeccionNavigation.Clave + " - " + sc.IdSeccionNavigation.Nombre, 
+                    Fila = sc.Fila, 
+                    IdIcono = sc.IdIcono, 
+                    MostrarDashboard = sc.MostrarDashboard ,
+                    IdDominioNavigation = sc.IdDominioNavigation,
+                })
+                .ToList();
+            return variablesDto;
         }
     }
 }

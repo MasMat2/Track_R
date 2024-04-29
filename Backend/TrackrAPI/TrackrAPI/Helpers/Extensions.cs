@@ -70,20 +70,20 @@ namespace TrackrAPI.Helpers
             return padecimientoString;
         }
 
-        public static string ObtenerNombrePaciente(this ExpedientePacienteInformacion expediente)
-        {
-            return (expediente.Nombre + " " + expediente.ApellidoPaterno + " " + expediente.ApellidoMaterno).Trim();
-        }
+        //public static string ObtenerNombrePaciente(this ExpedientePacienteInformacion expediente)
+        //{
+        //    return (expediente.Nombre + " " + expediente.ApellidoPaterno + " " + expediente.ApellidoMaterno).Trim();
+        //}
 
-        public static string ObtenerNombreCompleto(this Paciente paciente)
-        {
-            if (paciente == null)
-            {
-                return string.Empty;
-            }
+        //public static string ObtenerNombreCompleto(this Paciente paciente)
+        //{
+        //    if (paciente == null)
+        //    {
+        //        return string.Empty;
+        //    }
 
-            return (paciente.Nombre + " " + paciente.ApellidoPaterno + " " + paciente.ApellidoMaterno).Trim();
-        }
+        //    return (paciente.Nombre + " " + paciente.ApellidoPaterno + " " + paciente.ApellidoMaterno).Trim();
+        //}
 
         public static string FormatoFecha(this DateTime date)
         {
@@ -140,122 +140,122 @@ namespace TrackrAPI.Helpers
                 localidad + ", " + estado + ", " + pais + ", C.P. " + domicilio.CodigoPostal;
         }
 
-        public static string ObtenerDireccionAlmacen(this Almacen almacen)
-        {
-            if (almacen == null)
-            {
-                return string.Empty;
-            }
+        //public static string ObtenerDireccionAlmacen(this Almacen almacen)
+        //{
+        //    if (almacen == null)
+        //    {
+        //        return string.Empty;
+        //    }
 
-            return almacen.Calle + "#" + almacen.NumeroExterior + ", Col. " + almacen.Colonia + ", " + almacen.Localidad + ", " + almacen.IdEstadoNavigation.Nombre + " C.P." + almacen.CodigoPostal;
-        }
+        //    return almacen.Calle + "#" + almacen.NumeroExterior + ", Col. " + almacen.Colonia + ", " + almacen.Localidad + ", " + almacen.IdEstadoNavigation.Nombre + " C.P." + almacen.CodigoPostal;
+        //}
 
-        public static string ObtenerDireccionProveedor(this Proveedor proveedor)
-        {
-            if (proveedor == null)
-            {
-                return string.Empty;
-            }
+        //public static string ObtenerDireccionProveedor(this Proveedor proveedor)
+        //{
+        //    if (proveedor == null)
+        //    {
+        //        return string.Empty;
+        //    }
 
-            return proveedor.Calle + " #" + proveedor.NumeroExterior + ", Col. " + proveedor.Colonia + ", " + proveedor.Localidad + ", " + proveedor.IdEstadoNavigation.Nombre + ", C.P. " + proveedor.CodigoPostal;
-        }
+        //    return proveedor.Calle + " #" + proveedor.NumeroExterior + ", Col. " + proveedor.Colonia + ", " + proveedor.Localidad + ", " + proveedor.IdEstadoNavigation.Nombre + ", C.P. " + proveedor.CodigoPostal;
+        //}
 
-        public static string OfertaEspecial(this ICollection<TipoDescuentoDetalle> lista)
-        {
-            string ofertaEspecial = "";
+        //public static string OfertaEspecial(this ICollection<TipoDescuentoDetalle> lista)
+        //{
+        //    string ofertaEspecial = "";
 
-            if (lista.Any())
-            {
-                var dias = new List<string>();
+        //    if (lista.Any())
+        //    {
+        //        var dias = new List<string>();
 
-                if (lista.Any(tdd => tdd.DiasSemana.Contains("Lu"))) dias.Add("Lu");
-                if (lista.Any(tdd => tdd.DiasSemana.Contains("Ma"))) dias.Add("Ma");
-                if (lista.Any(tdd => tdd.DiasSemana.Contains("Mi"))) dias.Add("Mi");
-                if (lista.Any(tdd => tdd.DiasSemana.Contains("Ju"))) dias.Add("Ju");
-                if (lista.Any(tdd => tdd.DiasSemana.Contains("Vi"))) dias.Add("Vi");
-                if (lista.Any(tdd => tdd.DiasSemana.Contains("S�"))) dias.Add("S�");
-                if (lista.Any(tdd => tdd.DiasSemana.Contains("Do"))) dias.Add("Do");
+        //        if (lista.Any(tdd => tdd.DiasSemana.Contains("Lu"))) dias.Add("Lu");
+        //        if (lista.Any(tdd => tdd.DiasSemana.Contains("Ma"))) dias.Add("Ma");
+        //        if (lista.Any(tdd => tdd.DiasSemana.Contains("Mi"))) dias.Add("Mi");
+        //        if (lista.Any(tdd => tdd.DiasSemana.Contains("Ju"))) dias.Add("Ju");
+        //        if (lista.Any(tdd => tdd.DiasSemana.Contains("Vi"))) dias.Add("Vi");
+        //        if (lista.Any(tdd => tdd.DiasSemana.Contains("S�"))) dias.Add("S�");
+        //        if (lista.Any(tdd => tdd.DiasSemana.Contains("Do"))) dias.Add("Do");
 
-                if (dias.Count == 1)
-                {
-                    foreach (var tdd in dias)
-                    {
-                        ofertaEspecial += tdd;
-                    }
-                }
-                else
-                {
-                    int j = 1;
-                    foreach (var tdd in dias)
-                    {
-                        ofertaEspecial += tdd;
+        //        if (dias.Count == 1)
+        //        {
+        //            foreach (var tdd in dias)
+        //            {
+        //                ofertaEspecial += tdd;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            int j = 1;
+        //            foreach (var tdd in dias)
+        //            {
+        //                ofertaEspecial += tdd;
 
-                        if (j != dias.Count())
-                        {
-                            ofertaEspecial += ", ";
-                        }
-                        j++;
-                    }
-                }
+        //                if (j != dias.Count())
+        //                {
+        //                    ofertaEspecial += ", ";
+        //                }
+        //                j++;
+        //            }
+        //        }
 
-                ofertaEspecial += " | ";
+        //        ofertaEspecial += " | ";
 
-                if (lista.Any(tdd => tdd.TodoElDia)) ofertaEspecial += "24 Hrs " + (lista.Any(tdd => !tdd.TodoElDia) ? "- " : "");
+        //        if (lista.Any(tdd => tdd.TodoElDia)) ofertaEspecial += "24 Hrs " + (lista.Any(tdd => !tdd.TodoElDia) ? "- " : "");
 
-                var listaTmp = lista.Where(tdd => !tdd.TodoElDia).ToList();
-                int i = 1;
-                foreach (var tdd in listaTmp)
-                {
-                    if (!tdd.TodoElDia)
-                    {
-                        ofertaEspecial += tdd.HorarioInicial.ToString("hh\\:mm") + " a " + tdd.HorarioFinal.ToString("hh\\:mm") + " ";
-                    }
-                    else
-                    {
-                        i++;
-                        continue;
-                    }
+        //        var listaTmp = lista.Where(tdd => !tdd.TodoElDia).ToList();
+        //        int i = 1;
+        //        foreach (var tdd in listaTmp)
+        //        {
+        //            if (!tdd.TodoElDia)
+        //            {
+        //                ofertaEspecial += tdd.HorarioInicial.ToString("hh\\:mm") + " a " + tdd.HorarioFinal.ToString("hh\\:mm") + " ";
+        //            }
+        //            else
+        //            {
+        //                i++;
+        //                continue;
+        //            }
 
-                    if (i < listaTmp.Count())
-                    {
-                        ofertaEspecial += "- ";
-                    }
+        //            if (i < listaTmp.Count())
+        //            {
+        //                ofertaEspecial += "- ";
+        //            }
 
-                    i++;
-                }
+        //            i++;
+        //        }
 
-                ofertaEspecial += "| ";
+        //        ofertaEspecial += "| ";
 
-                i = 1;
-                foreach (var tdd in lista)
-                {
-                    ofertaEspecial += (int)tdd.Porcentaje + " % ";
+        //        i = 1;
+        //        foreach (var tdd in lista)
+        //        {
+        //            ofertaEspecial += (int)tdd.Porcentaje + " % ";
 
-                    if (i < lista.Count())
-                    {
-                        ofertaEspecial += "- ";
-                    }
+        //            if (i < lista.Count())
+        //            {
+        //                ofertaEspecial += "- ";
+        //            }
 
-                    i++;
-                }
-            }
-            else
-            {
-                ofertaEspecial = "Ninguna";
-            }
+        //            i++;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        ofertaEspecial = "Ninguna";
+        //    }
 
-            return ofertaEspecial;
-        }
+        //    return ofertaEspecial;
+        //}
 
-        public static string NumeroNombre(this CuentaContable cuentaContable)
-        {
-            if(cuentaContable == null)
-            {
-                return string.Empty;
-            }
+        //public static string NumeroNombre(this CuentaContable cuentaContable)
+        //{
+        //    if(cuentaContable == null)
+        //    {
+        //        return string.Empty;
+        //    }
 
-            return cuentaContable.Numero + " - " + cuentaContable.Nombre;
-        }
+        //    return cuentaContable.Numero + " - " + cuentaContable.Nombre;
+        //}
         public static string ClaveNombre(this RegimenFiscal regimenFiscal)
         {
             if(regimenFiscal == null)
@@ -275,88 +275,88 @@ namespace TrackrAPI.Helpers
             return ayudaSeccion.Clave + " - " + ayudaSeccion.Nombre;
         }
 
-        public static string NombreTipoCuentaContable(this TipoCuentaContable tipoCuentaContable)
-        {
-            return tipoCuentaContable.Nombre;
-        }
+        //public static string NombreTipoCuentaContable(this TipoCuentaContable tipoCuentaContable)
+        //{
+        //    return tipoCuentaContable.Nombre;
+        //}
 
-        public static string ObtenerDetalle(this ICollection<TipoComisionDetalle> tipoComisionDetalles)
-        {
-            string detalle = "";
-
-
-            if (tipoComisionDetalles.Any())
-            {
-                int i = 1;
-
-                foreach (var tipoComisionDetalle in tipoComisionDetalles)
-                {
-                    detalle += tipoComisionDetalle.IdRolNavigation.Nombre + " - " +
-                        (tipoComisionDetalle.Porcentaje != null ?
-                            tipoComisionDetalle.Porcentaje + " %" : "$ " + tipoComisionDetalle.Monto.ToString());
-
-                    if (i < tipoComisionDetalles.Count())
-                    {
-                        detalle += " | ";
-                    }
-
-                    i++;
-                }
+        //public static string ObtenerDetalle(this ICollection<TipoComisionDetalle> tipoComisionDetalles)
+        //{
+        //    string detalle = "";
 
 
-            }
-            else
-            {
-                detalle = "Ninguna";
-            }
+        //    if (tipoComisionDetalles.Any())
+        //    {
+        //        int i = 1;
 
-            return detalle;
-        }
-        public static string ObtenerClinicas(this ICollection<ListaPrecioClinica> listaPrecioCLinicas)
-        {
-            string clinicas = "";
-            int i = 1;
+        //        foreach (var tipoComisionDetalle in tipoComisionDetalles)
+        //        {
+        //            detalle += tipoComisionDetalle.IdRolNavigation.Nombre + " - " +
+        //                (tipoComisionDetalle.Porcentaje != null ?
+        //                    tipoComisionDetalle.Porcentaje + " %" : "$ " + tipoComisionDetalle.Monto.ToString());
 
-            foreach (var listaPrecioClinica in listaPrecioCLinicas)
-            {
-                clinicas += listaPrecioClinica.IdClinicaNavigation.Nombre;
+        //            if (i < tipoComisionDetalles.Count())
+        //            {
+        //                detalle += " | ";
+        //            }
 
-                if (i == listaPrecioCLinicas.Count())
-                {
-                    clinicas += " ";
-                }
-                else
-                {
-                    clinicas += ", ";
-                }
-                i++;
-            }
+        //            i++;
+        //        }
 
-            return clinicas;
-        }
 
-        public static string ObtenerNombreUsuarios(this ICollection<Comision> listaComisiones)
-        {
-            string usuarios = "";
-            int i = 1;
+        //    }
+        //    else
+        //    {
+        //        detalle = "Ninguna";
+        //    }
 
-            foreach (var c in listaComisiones)
-            {
-                usuarios += c.IdUsuarioNavigation.ObtenerNombreCompleto();
+        //    return detalle;
+        //}
+        //public static string ObtenerClinicas(this ICollection<ListaPrecioClinica> listaPrecioCLinicas)
+        //{
+        //    string clinicas = "";
+        //    int i = 1;
 
-                if (i == listaComisiones.Count())
-                {
-                    usuarios += " ";
-                }
-                else
-                {
-                    usuarios += ", ";
-                }
-                i++;
-            }
+        //    foreach (var listaPrecioClinica in listaPrecioCLinicas)
+        //    {
+        //        clinicas += listaPrecioClinica.IdClinicaNavigation.Nombre;
 
-            return usuarios;
-        }
+        //        if (i == listaPrecioCLinicas.Count())
+        //        {
+        //            clinicas += " ";
+        //        }
+        //        else
+        //        {
+        //            clinicas += ", ";
+        //        }
+        //        i++;
+        //    }
+
+        //    return clinicas;
+        //}
+
+        //public static string ObtenerNombreUsuarios(this ICollection<Comision> listaComisiones)
+        //{
+        //    string usuarios = "";
+        //    int i = 1;
+
+        //    foreach (var c in listaComisiones)
+        //    {
+        //        usuarios += c.IdUsuarioNavigation.ObtenerNombreCompleto();
+
+        //        if (i == listaComisiones.Count())
+        //        {
+        //            usuarios += " ";
+        //        }
+        //        else
+        //        {
+        //            usuarios += ", ";
+        //        }
+        //        i++;
+        //    }
+
+        //    return usuarios;
+        //}
 
         public static string RemoveDiacritics(this String s)
         {
@@ -373,19 +373,19 @@ namespace TrackrAPI.Helpers
             return stringBuilder.ToString();
         }
 
-        public static decimal ObtenerPrecioUltimaCompra(this Kardex kardex)
-        {
-            var ultimaCompra = kardex.IdArticuloNavigation.OrdenCompraDetalle
-                                                    .OrderByDescending(t => t.IdOrdenCompraNavigation.FechaEmision)
-                                                    .FirstOrDefault();
+        //public static decimal ObtenerPrecioUltimaCompra(this Kardex kardex)
+        //{
+        //    var ultimaCompra = kardex.IdArticuloNavigation.OrdenCompraDetalle
+        //                                            .OrderByDescending(t => t.IdOrdenCompraNavigation.FechaEmision)
+        //                                            .FirstOrDefault();
 
-            if(ultimaCompra == null)
-            {
-                return 0;
-            }
+        //    if(ultimaCompra == null)
+        //    {
+        //        return 0;
+        //    }
 
-            return ultimaCompra.PrecioUnitario;
-        }
+        //    return ultimaCompra.PrecioUnitario;
+        //}
 
         public static IEnumerable<TSource> DistinctBy<TSource, TKey> (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
@@ -404,60 +404,60 @@ namespace TrackrAPI.Helpers
             return System.Math.Abs(valor) * (-1);
         }
 
-        public static string ObtenerNombreCategoria(this Presentacion presentacion)
-        {
-            const string defaultString = "Sin Especificar";
+        //public static string ObtenerNombreCategoria(this Presentacion presentacion)
+        //{
+        //    const string defaultString = "Sin Especificar";
 
-            var categoria = presentacion.PresentacionArticulo?.FirstOrDefault()?.IdArticuloNavigation?.IdCategoriaNavigation;
+        //    var categoria = presentacion.PresentacionArticulo?.FirstOrDefault()?.IdArticuloNavigation?.IdCategoriaNavigation;
 
-            return categoria != null ? categoria.Nombre : defaultString;
-        }
+        //    return categoria != null ? categoria.Nombre : defaultString;
+        //}
 
-        public static string ObtenerNombreSubCategoria(this Presentacion presentacion)
-        {
-            const string defaultString = "Sin Especificar";
+        //public static string ObtenerNombreSubCategoria(this Presentacion presentacion)
+        //{
+        //    const string defaultString = "Sin Especificar";
 
-            var subCategoria = presentacion.PresentacionArticulo?.FirstOrDefault()?.IdArticuloNavigation?.IdSubCategoriaNavigation;
+        //    var subCategoria = presentacion.PresentacionArticulo?.FirstOrDefault()?.IdArticuloNavigation?.IdSubCategoriaNavigation;
 
-            return subCategoria != null ? subCategoria.Nombre : defaultString;
-        }
+        //    return subCategoria != null ? subCategoria.Nombre : defaultString;
+        //}
 
-        public static string ObtenerNombreSubSubCategoria(this Presentacion presentacion)
-        {
-            const string defaultString = "Sin Especificar";
+        //public static string ObtenerNombreSubSubCategoria(this Presentacion presentacion)
+        //{
+        //    const string defaultString = "Sin Especificar";
 
-            var subSubCategoria = presentacion.PresentacionArticulo?.FirstOrDefault()?.IdArticuloNavigation?.IdSubSubCategoriaNavigation;
+        //    var subSubCategoria = presentacion.PresentacionArticulo?.FirstOrDefault()?.IdArticuloNavigation?.IdSubSubCategoriaNavigation;
 
-            return subSubCategoria != null ? subSubCategoria.Nombre : defaultString;
-        }
+        //    return subSubCategoria != null ? subSubCategoria.Nombre : defaultString;
+        //}
 
-        public static List<UsuarioDto> ObtenerUsuariosResponsables(this FlujoDetalle flujoDetalle)
-        {
-            var flujoDetalleResponsable = flujoDetalle.FlujoDetalleResponsable;
+        //public static List<UsuarioDto> ObtenerUsuariosResponsables(this FlujoDetalle flujoDetalle)
+        //{
+        //    var flujoDetalleResponsable = flujoDetalle.FlujoDetalleResponsable;
 
-            var responsables = flujoDetalleResponsable.Select(f => new UsuarioDto
-            {
-                IdUsuario = f.IdUsuario,
-                NombreCompleto = f.IdUsuarioNavigation.ObtenerNombreCompleto()
-            })
-            .ToList();
+        //    var responsables = flujoDetalleResponsable.Select(f => new UsuarioDto
+        //    {
+        //        IdUsuario = f.IdUsuario,
+        //        NombreCompleto = f.IdUsuarioNavigation.ObtenerNombreCompleto()
+        //    })
+        //    .ToList();
 
-            return responsables;
-        }
+        //    return responsables;
+        //}
 
-        public static List<UsuarioDto> ObtenerUsuariosResponsables(this FlujoDetalleAplicado flujoDetalleAplicado)
-        {
-            var flujoDetalleAplicadoResponsable = flujoDetalleAplicado.FlujoDetalleAplicadoResponsable;
+        //public static List<UsuarioDto> ObtenerUsuariosResponsables(this FlujoDetalleAplicado flujoDetalleAplicado)
+        //{
+        //    var flujoDetalleAplicadoResponsable = flujoDetalleAplicado.FlujoDetalleAplicadoResponsable;
 
-            var responsables = flujoDetalleAplicadoResponsable.Select(f => new UsuarioDto
-            {
-                IdUsuario = f.IdUsuario,
-                NombreCompleto = f.IdUsuarioNavigation.ObtenerNombreCompleto()
-            })
-            .ToList();
+        //    var responsables = flujoDetalleAplicadoResponsable.Select(f => new UsuarioDto
+        //    {
+        //        IdUsuario = f.IdUsuario,
+        //        NombreCompleto = f.IdUsuarioNavigation.ObtenerNombreCompleto()
+        //    })
+        //    .ToList();
 
-            return responsables;
-        }
+        //    return responsables;
+        //}
 
         public static IEnumerable<T> Select<T>(this IDataReader reader, Func<IDataReader, T> projection)
         {

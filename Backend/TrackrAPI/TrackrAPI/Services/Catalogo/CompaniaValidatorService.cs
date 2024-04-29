@@ -2,20 +2,16 @@
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Catalogo;
-using TrackrAPI.Repositorys.Contabilidad;
 
 namespace TrackrAPI.Services.Catalogo
 {
     public class CompaniaValidatorService
     {
         private ICompaniaRepository companiaRepository;
-        private IPolizaRepository polizaRepository;
 
-        public CompaniaValidatorService(ICompaniaRepository companiaRepository,
-            IPolizaRepository polizaRepository)
+        public CompaniaValidatorService(ICompaniaRepository companiaRepository)
         {
             this.companiaRepository = companiaRepository;
-            this.polizaRepository = polizaRepository;
         }
 
         private readonly string MensajeNombreRequerido = "El nombre es requerido";
@@ -69,23 +65,23 @@ namespace TrackrAPI.Services.Catalogo
             ValidarFormato(compania);
             ValidarRango(compania);
             ValidarExistencia(compania.IdCompania);
-            ValidarTienePolizasGeneradas(compania);
+            //ValidarTienePolizasGeneradas(compania);
         }
 
-        public void ValidarTienePolizasGeneradas(Compania compania)
-        {
-            var companiaConsultada = companiaRepository.Consultar(compania.IdCompania);
+        //public void ValidarTienePolizasGeneradas(Compania compania)
+        //{
+        //    var companiaConsultada = companiaRepository.Consultar(compania.IdCompania);
 
-            if(compania.IdMoneda != companiaConsultada.IdMoneda)
-            {
-                var tienePolizasGeneradas = polizaRepository.TienePolizasGeneradas(compania.IdCompania);
+        //    if(compania.IdMoneda != companiaConsultada.IdMoneda)
+        //    {
+        //        var tienePolizasGeneradas = polizaRepository.TienePolizasGeneradas(compania.IdCompania);
 
-                if(tienePolizasGeneradas)
-                {
-                    throw new CdisException("No se puede cambiar la moneda porque hay polizas generadas");
-                }
-            }
-        }
+        //        if(tienePolizasGeneradas)
+        //        {
+        //            throw new CdisException("No se puede cambiar la moneda porque hay polizas generadas");
+        //        }
+        //    }
+        //}
 
         public void ValidarRequerido(Compania compania)
         {

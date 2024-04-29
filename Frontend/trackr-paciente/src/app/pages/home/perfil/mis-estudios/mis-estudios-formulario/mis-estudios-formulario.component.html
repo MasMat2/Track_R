@@ -1,3 +1,118 @@
+<ion-header class="ion-no-border">
+  <div class="contenedor-header">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="cerrarModal()">
+          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          Atrás
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="contenedor-principal">
+    <div class="titulo">
+      <ion-text>
+        <h3>Añadir estudio</h3>
+      </ion-text>
+    </div>
+
+    <div class="formulario">
+      <form
+        (keydown.enter)="$event.preventDefault()"
+        #formulario="ngForm"
+        (ngSubmit)="enviarFormulario(formulario)"
+        novalidate="novalidate"
+      >
+        <div class="contenido-formulario">
+          <ion-list class="inputs">
+            <div class="input" style="padding-top: 0;">
+              <ion-text><p>Fecha de estudio</p></ion-text>
+              <ion-item lines="none" class="date-input">
+                <ion-datetime-button datetime="fechaRealizacion"></ion-datetime-button>
+                <div class="input-icon">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                </div>
+              </ion-item>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime
+                    presentation="date"
+                    color="morado-custom"
+                    #fechaRealizacion="ngModel"
+                    name="fechaRealizacion"
+                    id="fechaRealizacion"
+                    showDefaultButtons="true"
+                    locale="es-ES"
+                    required
+                    [(ngModel)]="fechastring"
+                    (ionChange)="imprimirFecha()"
+                  ></ion-datetime>
+                </ng-template>
+              </ion-modal>
+            </div>
+            <div class="input">
+              <ion-text><p>Nombre de estudio</p></ion-text>
+              <ion-item lines="none">
+                <ion-input
+                  #nombreEstudio="ngModel"
+                  [(ngModel)]="expedienteEstudio.nombre"
+                  id="nombreEstudio"
+                  name="nombreEstudio"
+                  type="text"
+                  maxlength="200"
+                  required
+                  autocomplete="off"
+                >
+                </ion-input>
+              </ion-item>
+            </div>
+          </ion-list>
+
+          <div class="adjuntar-elemento">
+
+            <div class="botones-adjuntar" *ngIf="!expedienteEstudio.archivo">
+              <div class="boton-adjuntar">
+                <ion-button (click)="takePicture()">
+                  <ion-icon slot="icon-only" name="camera-outline"></ion-icon>
+                </ion-button>
+                <ion-text><p>Adjuntar imagen</p></ion-text>
+              </div>
+              <div class="boton-adjuntar">
+                <ion-button (click)="agregarArchivo()">
+                  <ion-icon slot="icon-only" name="document-outline"></ion-icon>
+                </ion-button >
+                <ion-text><p>Cargar documento</p></ion-text>
+              </div>
+            </div>
+
+            <div class="previsualizacion" *ngIf="expedienteEstudio.archivo" [ngStyle]="{'height': esArchivoSeleccionado  ? '64px' : ''}">
+              <ion-img [src]="'data:image/png;base64,' + expedienteEstudio.archivo" *ngIf="expedienteEstudio.archivoTipoMime !== 'application/pdf' "></ion-img>
+              <div class="datos-archivo">
+                <ion-text><p>{{expedienteEstudio.archivoNombre}}</p></ion-text>
+                <ion-button (click)="eliminarAdjunto()">
+                  <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="botones">
+          <ion-button class="guardar" [disabled]="btnSubmit || !formulario.valid" type="submit">Guardar</ion-button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ion-content>
+
+
+
+
+
+
+<!-- 
 <div class="container">
     <form
       (keydown.enter)="$event.preventDefault()"
@@ -75,8 +190,5 @@
         <ion-button [disabled]="btnSubmit" type="submit" class="boton-guardar">Guardar</ion-button>
       </ion-grid>
 
- 
- 
-   
     </form>
-</div>  
+</div>  -->
