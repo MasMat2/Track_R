@@ -437,6 +437,31 @@
         </div>-->
       </div>
 
+      <div class="row">
+        <!-- Regimen Fiscal -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label" >Regimen Fiscal</label>
+            <div>
+              <ng-select
+                #regimenFiscal="ngModel"
+                name="regimenFiscal"
+                [required]="true"
+                bindLabel="nombre"
+                bindValue="idRegimenFiscal"
+                [items]="regimenFiscalList"
+                [(ngModel)]="compania.idRegimenFiscal"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+              <div *ngIf="regimenFiscal.errors?.['required'] && regimenFiscal.touched" class="error">
+                El regimen fiscal es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div *ngIf="desdeLogin" class="row">
 
         <!-- Contraseña -->
