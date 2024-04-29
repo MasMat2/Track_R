@@ -17,7 +17,8 @@ export class UsuarioWidgetService {
         tap(claves => {
           for (const clave of claves) {
             if (!isWidgetType(clave)) {
-              throw new Error(`Clave de Widget Inválida: ${clave}`);
+              console.error(`Clave de Widget Inválida: ${clave}`);
+              //throw new Error(`Clave de Widget Inválida: ${clave}`);
             }
           }
         }),
