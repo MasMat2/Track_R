@@ -1,9 +1,9 @@
 import { Type } from "@angular/core";
-import { WidgetPasosComponent } from "../components/widget-pasos/widget-pasos.component";
-import { WidgetPesoComponent } from "../components/widget-peso/widget-peso.component";
-import { WidgetFrecuenciaComponent } from "../components/widget-frecuencia/widget-frecuencia.component";
-import { WidgetSuenoComponent } from "../components/widget-sueno/widget-sueno.component";
-import { WidgetSeguimientoComponent } from "../components/widget-seguimiento/widget-seguimiento.component";
+import { WidgetPasosComponent } from "../components/widgets/widget-pasos/widget-pasos.component";
+import { WidgetPesoComponent } from "../components/widgets/widget-peso/widget-peso.component";
+import { WidgetFrecuenciaComponent } from "../components/widgets/widget-frecuencia/widget-frecuencia.component";
+import { WidgetSuenoComponent } from "../components/widgets/widget-sueno/widget-sueno.component";
+import { WidgetSeguimientoComponent } from "../components/widgets/widget-seguimiento/widget-seguimiento.component";
 
 // Todos los tipos de widgets posibles
 //Claves provisionales aquí y en la BD

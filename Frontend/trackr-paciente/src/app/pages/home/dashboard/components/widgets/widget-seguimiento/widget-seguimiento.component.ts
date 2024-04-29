@@ -3,6 +3,8 @@ import { WidgetComponent } from '../widget/widget.component';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { addIcons } from 'ionicons';
+import { chevronForward } from 'ionicons/icons';
 
 @Component({
   selector: 'app-widget-seguimiento',
@@ -40,6 +42,7 @@ export class WidgetSeguimientoComponent  implements OnInit {
   @Input() claseTratamiento: string;
 
   constructor() {
+    addIcons({chevronForward})
   }
 
   ngOnInit() {}

@@ -1,8 +1,9 @@
  <!-- 1 Variable -->
  <div *ngIf="tipoWidget === 1" class="widget-hover">
   <app-widget
-  title="Seguimiento de {{ nombrePadecimiento }}"
-  colorTitle="#656565"
+  title="{{ nombrePadecimiento }}"
+  colorTitle="var(--primary-950)"
+  widgetClass="seguimiento"
 >
   <div class="container d-flex justify-content-center gap-5">
     <div class="dato">
@@ -15,7 +16,7 @@
     <div class="dato">
 
       <span class="nombre">{{ nombreTratamiento }}</span>
-      <span class="valor"> {{tomasTomadas }} / {{ tomasTotales }} </span>
+      <span class="valor"> {{tomasTomadas }}/{{ tomasTotales }} </span>
     </div>
   </div>
 </app-widget>
@@ -23,8 +24,9 @@
 <!-- 2 Variables -->
 <div *ngIf="tipoWidget === 2"  class="widget-hover">
   <app-widget
-  title="Seguimiento de {{ nombrePadecimiento }}"
-  colorTitle="#656565"
+  title="{{ nombrePadecimiento }}"
+  colorTitle="var(--primary-950)"
+  widgetClass="seguimiento"
 >
   <div class="d-flex justify-content-center gap-5">
     <div class="col">
@@ -89,14 +91,15 @@
 <!-- 1 Variable y un circlo-->
 <div *ngIf="tipoWidget === 3"  class="widget-hover">
   <app-widget
-  title="Seguimiento de {{ nombrePadecimiento }}"
-  colorTitle="#656565"
+  title="{{ nombrePadecimiento }}"
+  colorTitle="var(--primary-950)"
+  widgetClass="seguimiento"
 >
-    <div class="container d-flex align-items-center gap-2">
+    <div class="container d-flex align-items-center gap-5">
       <div class="dato">
         <div class="counter d-flex flex-column align-items-center">
           <div class="circle-container">
-            <div class="valor">{{ valorVariable | number }}</div>
+            <div class="valor" style="align-self: center;">{{ valorVariable | number }}</div>
             <div class="label">{{unidadVariable}}</div>
           </div>
         </div>
@@ -105,11 +108,9 @@
       <div class="dato">
 
         <span class="nombre">{{ nombreTratamiento }}</span>
-        <span class="valor">{{ tomasTomadas }} / {{ tomasTotales }}</span>
+        <span class="valor">{{ tomasTomadas }}/{{ tomasTotales }}</span>
       </div>
     </div>
-
-
   </app-widget>
 </div>
 

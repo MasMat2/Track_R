@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { VarDirective } from 'src/app/shared/directives/var.directive';
-import { WIDGETS, WidgetDictionary, WidgetType } from '../../interfaces/widgets';
+import { WIDGETS, WidgetDictionary, WidgetType } from '../../../interfaces/widgets';
 import { WidgetComponent } from '../widget/widget.component';
 
 @Component({

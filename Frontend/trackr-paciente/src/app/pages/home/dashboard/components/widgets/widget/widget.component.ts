@@ -18,6 +18,7 @@ export class WidgetComponent  implements OnInit {
 
   @Input() public title: string;
   @Input() public iconClass?: string;
+  @Input() public widgetClass?: string; //(seguimiento o salud)
   @Input() public colorBackground?: string;
   @Input() public colorTitle?: string;
 
