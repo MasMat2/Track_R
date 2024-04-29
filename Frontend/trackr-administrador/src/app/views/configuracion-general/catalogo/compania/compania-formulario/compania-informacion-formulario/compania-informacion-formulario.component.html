@@ -172,7 +172,19 @@
           <div class="form-group">
             <label class="label-input required-label">Colonia</label>
             <div>
-              <input
+              <ng-select
+                      #colonia="ngModel"
+                      name="coloniaName"
+                      class="select-custom"
+                      [items]="coloniaList"
+                      bindLabel="nombre"
+                      bindValue="nombre"
+                      [(ngModel)]="compania.colonia"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                      [disabled]="compania.codigoPostal?.length != 5"
+                    ></ng-select>
+              <!-- <input
                 #colonia="ngModel"
                 [(ngModel)]="compania.colonia"
                 name="colonia"
@@ -180,7 +192,7 @@
                 type="text"
                 [required]="true"
                 maxlength="100"
-              />
+              /> -->
             </div>
             <div *ngIf="colonia.errors?.['required'] && colonia.touched" class="error">
               La colonia es requerida

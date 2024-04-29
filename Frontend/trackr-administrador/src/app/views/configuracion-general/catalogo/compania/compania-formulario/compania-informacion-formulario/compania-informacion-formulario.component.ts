@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { EstadoSelectorDto } from '@dtos/catalogo/estado-selector-dto';
 import { MunicipioSelectorDto } from '@dtos/catalogo/municipio-selector-dto';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
+import { ColoniaService } from '@http/catalogo/colonia.service';
 import { CompaniaLogotipoService } from '@http/catalogo/compania-logotipo.service';
 import { CompaniaService } from '@http/catalogo/compania.service';
 import { EstadoService } from '@http/catalogo/estado.service';
@@ -16,6 +17,7 @@ import { RegimenFiscalService } from '@http/catalogo/regimen-fiscal.service';
 import { TipoCompaniaService } from '@http/catalogo/tipo-compania.service';
 import { AgrupadorCuentaContableService } from '@http/contabilidad/agrupador-cuenta-contable.service';
 import { AccesoService } from '@http/seguridad/acceso.service';
+import { Colonia } from '@models/catalogo/colonia';
 import { Compania } from '@models/catalogo/compania';
 import { CompaniaContacto } from '@models/catalogo/compania-contacto';
 import { CompaniaLogotipo } from '@models/catalogo/compania-logotipo';
@@ -68,6 +70,7 @@ export class CompaniaInformacionFormularioComponent implements OnInit {
   public paisList: Pais[] = [];
   public estadoList: EstadoSelectorDto[] = [];
   public ciudadList: MunicipioSelectorDto[] = [];
+  public coloniaList: Colonia[] = [];
   public ladaList: Lada[] = [];
   public regimenFiscalList: RegimenFiscal[] = [];
   public agrupadorCuentaList: AgrupadorCuentaContable[] = [];
@@ -127,7 +130,8 @@ export class CompaniaInformacionFormularioComponent implements OnInit {
     private regimenFiscalService: RegimenFiscalService,
     private router: Router,
     private tipoCompaniaService: TipoCompaniaService,
-    private companiaLogotipoService: CompaniaLogotipoService
+    private companiaLogotipoService: CompaniaLogotipoService,
+    private coloniaService:ColoniaService
   ) { }
 
   async ngOnInit() {
@@ -147,6 +151,10 @@ export class CompaniaInformacionFormularioComponent implements OnInit {
     if (this.accion === GeneralConstant.COMPONENT_ACCION_EDITAR) {
       this.consultarLogotipo(this.idCompania);
       await this.consultarCompania(this.idCompania);
+    }
+
+    if(this.compania.codigoPostal){
+      this.consultarColonias(this.compania.codigoPostal);
     }
 
     this.urlFrontend = Utileria.obtenerUrlComprasEnLineaFrontend();
@@ -297,8 +305,18 @@ export class CompaniaInformacionFormularioComponent implements OnInit {
 
     this.consultarMunicipios(codigos[0].idEstado);
 
+    this.consultarColonias(codigos[0].codigoPostal1);
+
     this.compania.idEstado = codigos[0].idEstado;
     this.compania.idMunicipio = codigos[0].idMunicipio;
+  }
+
+  private async consultarColonias(codigoPostal: string): Promise<void> {
+    const colonias = codigoPostal && codigoPostal.length === 5
+      ? await this.coloniaService.consultarPorCodigoParaSelector(codigoPostal).toPromise()
+      : [];
+
+    this.coloniaList = colonias ?? [];
   }
 
   public onFileChangeLogotipo(event: any): void {
