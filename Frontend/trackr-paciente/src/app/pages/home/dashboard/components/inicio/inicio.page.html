@@ -1,18 +1,37 @@
-<ion-header>
-  <app-header></app-header>
-</ion-header>
 <ion-content>
-  <div class="contenedor">
-    <div class="titulo-contenedor">
-      <ion-title>Dashboard</ion-title>
-      <ion-buttons>
-        <ion-button (click) = "mostrarConfiguracionDashboard()" class="config-dashboard">
-          <ion-icon slot="icon-only" name="menu"></ion-icon>
-        </ion-button>
-      </ion-buttons>
+  <div class="contenedor-header">
+    <div class="contenedor-toolbar">
+      <ion-toolbar>
+        <div class="avatar">
+          <ion-avatar>
+            <img [src]="fotoPerfilUrl" alt="profile-pic">
+          </ion-avatar>
+        </div>
+        <div class="toolbar">
+          <ion-text>
+            <h3>¡Hola, {{infoHeader?.nombre}}!</h3>
+            <p>Bienvenido(a) de nuevo.</p>
+          </ion-text>
+          <ion-buttons slot="end">
+            <ion-button (click)="abrirConfiguracionDashboard()">
+              <ion-icon name="settings-outline"></ion-icon>
+            </ion-button>
+            <app-notificaciones-page></app-notificaciones-page>
+          </ion-buttons>
+        </div>
+      </ion-toolbar>
     </div>
-    <div class="cuerpo-contenedor">
+  </div>
+  <div class="contenedor-principal">
+    <div class="widgets-salud">
       <app-widget-container [widgetKeys]="selectedUserWidgets"></app-widget-container>
+    </div>
+    <div class="texto-seccion">
+      <ion-text>
+        <p>Seguimiento de padecimientos</p>
+      </ion-text>
+    </div>
+    <div class="widgets-seguimiento">
       <ion-grid>
         <ion-row *ngIf="padecimientosList">
           <ion-col [size] = "12" *ngFor="let padecimiento of padecimientosList">
