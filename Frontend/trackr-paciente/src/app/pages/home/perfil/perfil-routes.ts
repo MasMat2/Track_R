@@ -20,7 +20,7 @@ export default [
         path: 'informacion-general',
         canDeactivate : [ExitGuard],
         data: { breadcrumb: "Informacion General"},
-        loadComponent: () => import('./informacion-general/informacion-general.component').then((m) => m.InformacionGeneralComponent)
+        loadComponent: () => import('./informacion-general/components/info-general/informacion-general.component').then((m) => m.InformacionGeneralComponent)
       },
       {
         path: 'informacion-general/antecedentes',
@@ -29,6 +29,10 @@ export default [
       {
         path: 'informacion-general/diagnosticos',
         loadComponent: () => import('./informacion-general/components/info-diagnosticos/info-diagnosticos.component').then((m)=> m.InfoDiagnosticosComponent)
+      },
+      {
+        path: 'informacion-general/domicilio',
+        loadComponent: () => import('./informacion-general/components/info-domicilio/info-domicilio.component').then((m)=> m.InfoDomicilioComponent)
       },
       {
         path: 'mis-tratamientos',

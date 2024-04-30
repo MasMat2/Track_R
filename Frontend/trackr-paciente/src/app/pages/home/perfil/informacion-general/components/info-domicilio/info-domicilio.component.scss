@@ -1,4 +1,4 @@
-@import "../../../../../theme/variables.scss";
+@import "../../../../../../../theme/variables.scss";
 
 ion-header{
   border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
@@ -6,8 +6,11 @@ ion-header{
 }
 
 ion-content{
-  background: var(--primary-50);
+  --background: var(--primary-50);
 }
+
+
+
 
 .contenedor-header{
   background: var(--primary-50);
@@ -17,7 +20,7 @@ ion-content{
   ion-toolbar{
     height: 100%;
     width: 100%;
-    --background: url('../../../../../assets/header_light.svg');
+    --background: url('../../../../../../../assets/header_light.svg');
 
     //medidas máximas para que no se estire el svg
     max-height: 153px;
@@ -38,12 +41,12 @@ ion-content{
 }
 
 .contenedor-principal{
+  margin: 0vh 32px;
+  margin-bottom: 30vh;
   height: 80vh;
-  background: var(--primary-50);
 
   .titulo{
-    height: 8vh;
-      padding: 16px 32px 0 32px;
+    height: 4vh;
 
       ion-text{
           text-align: start;
@@ -66,17 +69,7 @@ ion-content{
 }
 
 
-.input-fill-outline.input-shape-round {
-  --border-color: lightgrey;
-  border: 0px;
-}
 
-.custom-datetime {
-  border: 1px solid lightgrey;
-  border-radius: 30px;
-  padding: 0px;
-
-}
 
 ion-item{
   --background: var(--neutral-100);
@@ -123,3 +116,4 @@ ion-item{
     color: var(--neutral-50);
   }
 }
+

@@ -7,7 +7,7 @@ import { WidgetSeguimientoComponent } from "../components/widgets/widget-seguimi
 
 // Todos los tipos de widgets posibles
 //Claves provisionales aquí y en la BD
-export const ALL_WIDGET_TYPES = [
+let ALL_WIDGET_TYPES = [
   'w-fre',
   'w-pas',
   'w-sue',
@@ -20,7 +20,7 @@ export const ALL_WIDGET_TYPES = [
   'D003',
   'D004'
 
-] as const;
+];
 
 // Union Type de los tipos de widget
 export type WidgetType = typeof ALL_WIDGET_TYPES[number];
@@ -57,3 +57,11 @@ export const WIDGETS: WidgetDictionary = {
   'D004' : {class: WidgetSeguimientoComponent, columns: 12},
 
 };
+
+export function getAllWidgetTypes() {
+  return ALL_WIDGET_TYPES;
+}
+
+export function setAllWidgetTypes(newTypes: string[]) {
+  ALL_WIDGET_TYPES = newTypes;
+}

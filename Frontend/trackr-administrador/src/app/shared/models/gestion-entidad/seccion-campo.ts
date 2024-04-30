@@ -1,5 +1,6 @@
 import { Dominio } from "@models/catalogo/dominio";
 import { DominioDetalle } from "@models/catalogo/dominio-detalle";
+import { Seccion } from './seccion';
 
 export class SeccionCampo {
 
@@ -22,6 +23,7 @@ export class SeccionCampo {
     public idDominioNavigation: Dominio;
     public listaOpciones: DominioDetalle[];
     public idEntidadEstructuraValor: number;
+    public idSeccionNavigation : Seccion;
 
     constructor() {}
 }

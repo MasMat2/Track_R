@@ -138,6 +138,11 @@ public class WidgetService
         return _widgetRepository.ConsultarTipo();
     }
 
+    public IEnumerable<string> ConsultarClaves()
+    {
+        return _widgetRepository.ConsultarTodos().Select(tipo => tipo.Clave);
+    }
+
     private bool EsWidgetSeleccionado(int usuarioId, string clave)
     {
         var widget = _usuarioWidgetRepository.ConsultarSeleccionadoPorClave(usuarioId, clave);

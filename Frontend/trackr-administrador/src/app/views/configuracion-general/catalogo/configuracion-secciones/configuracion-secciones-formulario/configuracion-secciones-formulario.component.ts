@@ -44,7 +44,7 @@ export class ConfiguracionSeccionesFormularioComponent implements OnInit {
     { headerName: 'Dominio', field: 'nombreDominio', minWidth: 40 },
     { headerName: 'Orden', field: 'orden', minWidth: 20 },
     { headerName: 'Requerido', field: 'requerido', minWidth: 20, valueGetter: (params: any) => this.convertirSiNo(params.data)},
-    { headerName: 'Sección', field: 'grupo', minWidth: 20 },
+    { headerName: 'Grupo', field: 'grupo', minWidth: 20 },
     { headerName: 'Fila', field: 'fila', minWidth: 20 },
     { headerName: 'Mostrar dashboard', field: 'mostrarDashboard', minWidth: 30,
       valueFormatter: (params: any) => params.value ? 'Si' : 'No', // Muestra "Si" o "No"
@@ -173,6 +173,7 @@ export class ConfiguracionSeccionesFormularioComponent implements OnInit {
   }
 
   private async agregarCampo(campo: SeccionCampo): Promise<boolean> {
+    campo.idSeccionNavigation = this.seccion;
     return this.seccionCampoService.agregar(campo)
       .toPromise()
       .then(() => true)

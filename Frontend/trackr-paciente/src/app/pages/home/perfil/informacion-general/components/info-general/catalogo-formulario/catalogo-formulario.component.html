@@ -1,0 +1,5 @@
+<div class="catalogo-container" *ngIf="catalogoList">
+  <ion-item *ngFor="let registro of catalogoList" button lines="none" (click)="seleccionar(registro)">
+    {{registro.descripcion}}
+  </ion-item>
+</div>

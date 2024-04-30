@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -2649,7 +2649,7 @@ namespace TrackrAPI.Models
                 entity.HasKey(e => e.IdUsuarioWidget)
                     .HasName("PK_IdUuarioWidget");
 
-                entity.ToTable("UsuarioWidget", "Trackr");
+                entity.ToTable("UsuarioWidget", "Configuracion");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
                     .WithMany(p => p.UsuarioWidget)

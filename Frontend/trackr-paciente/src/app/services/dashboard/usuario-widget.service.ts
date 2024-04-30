@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { WidgetType, isWidgetType } from '@pages/home/dashboard/interfaces/widgets';
-import { Observable, map, tap } from 'rxjs';
+import { getAllWidgetTypes, WidgetType, isWidgetType, setAllWidgetTypes } from '@pages/home/dashboard/interfaces/widgets';
+import { Observable, lastValueFrom, map, switchMap, tap } from 'rxjs';
 
 @Injectable()
 export class UsuarioWidgetService {
@@ -10,12 +10,13 @@ export class UsuarioWidgetService {
   constructor(
     private http: HttpClient
   ) { }
-
-  public consultarPorUsuarioEnSesion(): Observable<WidgetType[]> {
-    return this.http.get<string[]>(this.dataUrl + 'usuario')
-      .pipe(
-        tap(claves => {
-          for (const clave of claves) {
+public consultarPorUsuarioEnSesion(): Observable<WidgetType[]> {
+  return this.obtenerTiposDeWidgets().pipe(
+    switchMap(clavesExistentes => {
+      setAllWidgetTypes(clavesExistentes);
+      return this.http.get<string[]>(this.dataUrl + 'usuario').pipe(
+        tap(clavesUsuario => {
+          for (const clave of clavesUsuario) {
             if (!isWidgetType(clave)) {
               console.error(`Clave de Widget Inválida: ${clave}`);
               //throw new Error(`Clave de Widget Inválida: ${clave}`);
@@ -24,6 +25,12 @@ export class UsuarioWidgetService {
         }),
         map(claves => claves as WidgetType[])
       );
+    })
+  );
+}
+
+  public obtenerTiposDeWidgets(): Observable<string[]> {
+    return this.http.get<string[]>(this.dataUrl + 'widget-types');
   }
 
   public modificarPorUsuarioEnSesion(seleccionWidgets: string[]){
