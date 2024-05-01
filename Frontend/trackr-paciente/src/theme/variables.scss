@@ -137,14 +137,14 @@ ion-content {
   --background: var(--neutral-100);
 }
 
-ion-header {
-  border-radius: 10px;
-  background: var(--neutral-100);
-}
+// ion-header {
+//   border-radius: 10px;
+//   background: var(--neutral-100);
+// }
 
 
 //Alertas personalizadas (tamaño y bordes)
-ion-alert.custom-alert-success, .custom-alert-error, .custom-alert-loading, .custom-alert-delete {
+ion-alert.custom-alert-success, .custom-alert-error, .custom-alert-loading, .custom-alert-delete, .custom-alert-choice {
   .alert-wrapper{
     border-radius: 16px !important;
     min-width: 327px !important;
@@ -242,8 +242,9 @@ ion-loading.custom-loading {
 
 }
 
+
 //Alertas personalizadas (fuentes y distribucion)
-ion-alert.custom-alert-success, .custom-alert-error, .custom-alert-delete{
+ion-alert.custom-alert-success, .custom-alert-error, .custom-alert-delete, .custom-alert-choice{
   .alert-head{
     text-align: center !important;
     padding-top: 92px !important;
@@ -265,21 +266,24 @@ ion-alert.custom-alert-success, .custom-alert-error, .custom-alert-delete{
       font-size: 16px;
       font-weight: 400;
       line-height: 19px;
+      white-space: pre-line; //Poder colocar saltos de linea "\n"
     }
   }
   
   .alert-message{
-    height: 0px !important;
+    height: 48px !important;
+    width: 48px !important;
+    border-radius: 50% !important;
     padding: 0 !important;
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
 
-    font-size: 48px !important;
-    ion-icon{
-      position: absolute;
-      top: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: var(--primary-700);
-    }
+    //background-image: url();
+    //background-color: ;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   .alert-button-group {
@@ -308,13 +312,14 @@ ion-alert.custom-alert-success, .custom-alert-error, .custom-alert-delete{
   }
 }
 
+
 //Alertas personalizadas (ajustes individuales)
 
 ion-alert.custom-alert-success{
+
   .alert-message{
-    ion-icon{
-      color: var(--primary-700) !important;
-    }
+    background-image: url(./assets/svg/check.svg);
+    background-color: var(--primary-700);
   }
 
   .alert-button-group {
@@ -325,10 +330,10 @@ ion-alert.custom-alert-success{
 }
 
 ion-alert.custom-alert-error{
+
   .alert-message{
-    ion-icon{
-      color: var(--error-200) !important;
-    }
+    background-image: url(./assets/svg/info.svg);
+    background-color: var(--error-200);
   }
 
   .alert-button-group {
@@ -370,10 +375,10 @@ ion-alert.custom-alert-loading{
 }
 
 ion-alert.custom-alert-delete{
+
   .alert-message{
-    ion-icon{
-      color: var(--error-200) !important;
-    }
+    background-image: url(assets/svg/trash-2.svg);
+    background-color: var(--error-200);
   }
 
   .alert-button-group {
@@ -389,6 +394,41 @@ ion-alert.custom-alert-delete{
       background: transparent;
     }
   }
+}
+
+ion-alert.custom-alert-choice{
+
+  .alert-head{
+    h2.alert-title{
+      color: var(--primary-700) !important;
+    }
+  }
+
+  .alert-message{
+    background-image: url(assets/svg/pill.svg);
+    background-color: var(--primary-700);
+  }
+
+  .alert-button-group {
+    justify-content: space-between;
+    button.alert-button {
+      max-width: 130px;
+      color: var(--neutral-50);
+      background: var(--primary-700);
+      font-size: 12px !important;
+    }
+
+    button.alert-button-role-cancel{
+      color: var(--primary-700);
+      border: 1px solid var(--primary-700);
+      background: transparent;
+    }
+  }
+  
+}
+
+ion-alert.custom-alert-choice{
+
 }
 
 //estilos para selectores que usen popover como interface
