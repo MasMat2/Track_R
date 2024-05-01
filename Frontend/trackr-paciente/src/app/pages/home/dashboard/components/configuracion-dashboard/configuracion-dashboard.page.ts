@@ -4,10 +4,9 @@ import { IonicModule, AlertController } from '@ionic/angular';
 import { Widget } from 'src/app/models/dashboard/widget';
 import { UsuarioWidgetService } from 'src/app/services/dashboard/usuario-widget.service';
 import { WidgetService } from 'src/app/services/dashboard/widget.service';
-import { Observable, combineLatestWith, map, tap } from 'rxjs';
+import { combineLatestWith, map } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-//import { HeaderComponent } from '../layout/header/header.component';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { chevronBack } from 'ionicons/icons';
 import { ModalController } from '@ionic/angular/standalone';
@@ -35,11 +34,12 @@ interface WidgetSeleccionado extends Widget {
 })
 export class ConfiguracionDashboardPage  implements OnInit {
 
+  protected seleccionWidgetsModificada: boolean = false;
+
   constructor(
     private widgetService: WidgetService,
     private usuarioWidgetService: UsuarioWidgetService,
     private alertController: AlertController,
-    private router: Router,
     private modalController: ModalController
   ) { addIcons({chevronBack})}
 
@@ -80,17 +80,27 @@ export class ConfiguracionDashboardPage  implements OnInit {
   
   protected onAceptar(): void {
     this.submiting = true;
-    const seleccionados = this.widgets
-      .filter(widget => widget.seleccionado)
-      .map(widget => widget.clave);
+
+    //realizar la llamada http para actualizar solamente si se modificó algo
+    if(this.seleccionWidgetsModificada){
+      const seleccionados = this.widgets
+        .filter(widget => widget.seleccionado)
+        .map(widget => widget.clave);
 
       this.usuarioWidgetService.modificarPorUsuarioEnSesion(seleccionados).subscribe({
         next: () => {
-          this.presentAlertSuccess();
           this.submiting = false;
+        },
+        error: () => {
+          this.submiting = true
+        },
+        complete: ()=> {
+          this.presentAlertSuccess();
         }
       });
-
+    }
+    else
+      this.cerrarModalCancelar();
   }
 
 
@@ -117,7 +127,7 @@ export class ConfiguracionDashboardPage  implements OnInit {
     return this.modalController.dismiss(null, 'cancel');
   }
 
-  protected cerrarModalConfirmar(){
+  private cerrarModalConfirmar(){
     return this.modalController.dismiss(null, 'confirm');
   }
 

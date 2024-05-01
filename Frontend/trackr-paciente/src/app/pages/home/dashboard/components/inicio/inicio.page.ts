@@ -46,6 +46,8 @@ import { NotificacionesPageComponent } from '../notificaciones/notificacionesPag
 export class InicioPage implements OnInit {
 
   protected selectedUserWidgets: WidgetType[] = [];
+  protected listaWidgetsSaludVacia: boolean = false;
+
   protected padecimientosUsuarioList : UsuarioPadecimientosDTO[];
   protected padecimientosList : PadecimientoDTO[];
   //private previousUrl: string;
@@ -106,7 +108,7 @@ export class InicioPage implements OnInit {
     modal.present();
 
     const {data, role} = await modal.onWillDismiss();
-
+    console.log(role)
     if(role === 'confirm'){
       this.consultarInfoWidgetsSeguimiento();
       this.consultarWidgets();
@@ -120,7 +122,22 @@ export class InicioPage implements OnInit {
   }
 
   public async consultarWidgets(){
-    this.selectedUserWidgets = await lastValueFrom(this.usuarioWidgetService.consultarPorUsuarioEnSesion());
+    //this.selectedUserWidgets = await lastValueFrom(this.usuarioWidgetService.consultarPorUsuarioEnSesion());
+
+    this.usuarioWidgetService.consultarPorUsuarioEnSesion().subscribe({
+      next: (widgets) => {
+        console.log(widgets);
+        this.selectedUserWidgets = widgets;
+        this.listaWidgetsSaludVacia = this.esListaWidgetsSaludVacia(widgets);
+      }
+    })
+  }
+
+  //TODO: cambiar a algo menos hardcodeado usando la bd y el api
+  private esListaWidgetsSaludVacia(widgets: string[]){
+    //los widgets de salud empiezan con "w" (w-pas, w-fre, etc)
+    const widgetsSalud = widgets.filter(w => w.startsWith('w'));
+    return widgetsSalud.length == 0;
   }
 
   protected mostrarSeguimiento(idPadecimiento: any){

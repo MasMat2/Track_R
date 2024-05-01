@@ -2,7 +2,7 @@
   <div class="contenedor-header">
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-button routerLink="inicio-perfil" (click)="cerrarModalCancelar()">
+        <ion-button (click)="cerrarModalCancelar()">
           <ion-icon slot="start" name="chevron-back"></ion-icon>
           Atrás
         </ion-button>
@@ -23,7 +23,8 @@
           <ion-toggle
             mode="ios" 
             [(ngModel)]="widget.seleccionado" 
-            [checked]="widget.seleccionado">
+            [checked]="widget.seleccionado"
+            (ngModelChange)="seleccionWidgetsModificada = true">
             {{widget.nombre}}
           </ion-toggle>
         </ion-item>

@@ -22,16 +22,20 @@
       </ion-toolbar>
     </div>
   </div>
-  <div class="contenedor-principal">
+  <div class="contenedor-principal" 
+    [ngStyle]="!listaWidgetsSaludVacia ? {'display': 'flex', 'flex-direction': 'column'} : {}">
+
     <div class="widgets-salud">
-      <app-widget-container [widgetKeys]="selectedUserWidgets"></app-widget-container>
-    </div>
-    <div class="texto-seccion">
-      <ion-text>
-        <p>Seguimiento de padecimientos</p>
-      </ion-text>
+      <div class="contenedor-widgets">
+        <app-widget-container [widgetKeys]="selectedUserWidgets"></app-widget-container>
+      </div>
     </div>
     <div class="widgets-seguimiento">
+      <div class="texto-seccion">
+        <ion-text>
+          <p>Seguimiento de padecimientos</p>
+        </ion-text>
+      </div>
       <ion-grid>
         <ion-row *ngIf="padecimientosList">
           <ion-col [size] = "12" *ngFor="let padecimiento of padecimientosList">

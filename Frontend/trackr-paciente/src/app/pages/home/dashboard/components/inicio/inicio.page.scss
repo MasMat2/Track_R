@@ -84,9 +84,6 @@
 .contenedor-principal{
   height: calc(100% - 30vh);
   background: var(--primary-50);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   padding-left: 32px;
   padding-right: 32px;
 
@@ -98,16 +95,16 @@
     width: 100%;
   }
 
-  .texto-seccion{
-    width: 100%;
-    ion-text{
-      font-family: var(--font-body);
-      font-size: 16px;
-      text-align: start;
-    }
-  }
-
   .widgets-seguimiento{
+    .texto-seccion{
+      width: 100%;
+      ion-text{
+        font-family: var(--font-body);
+        font-size: 16px;
+        text-align: start;
+      }
+    }
+
     width: 100%;
     background: transparent;
 
