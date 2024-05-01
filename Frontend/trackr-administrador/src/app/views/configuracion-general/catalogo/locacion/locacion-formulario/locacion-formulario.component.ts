@@ -457,15 +457,14 @@ export class HospitalFormularioComponent implements OnInit {
     const [funcion, mensaje] = acciones[this.accion];
 
     try {
-      await funcion();
+      funcion();
+      this.modalMensajeService.modalExito(mensaje);
+      this.regresar();
     }
     catch(error) {
       this.btnSubmit = false;
       return;
     }
-
-    this.modalMensajeService.modalExito(mensaje);
-    this.regresar();
   }
 
   public regresar(): void {
