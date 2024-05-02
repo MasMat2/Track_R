@@ -9,6 +9,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { DominioFormularioComponent } from './dominio-formulario/dominio-formulario.component';
 import { DominioComponent } from './dominio.component';
 import { DominioRoutingModule } from './dominio.routing.module';
+import { DominioHospitalFormularioComponent } from './dominio-formulario/dominio-hospital-formulario/dominio-hospital-formulario.component';
 
 @NgModule({
     imports: [
@@ -21,7 +22,8 @@ import { DominioRoutingModule } from './dominio.routing.module';
     ],
     declarations: [
       DominioComponent,
-      DominioFormularioComponent
+      DominioFormularioComponent,
+      DominioHospitalFormularioComponent
     ],
     entryComponents: [DominioFormularioComponent],
     providers: [

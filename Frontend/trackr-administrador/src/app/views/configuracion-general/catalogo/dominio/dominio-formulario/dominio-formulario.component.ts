@@ -14,6 +14,8 @@ import { HospitalService } from '../../../../../shared/http/catalogo/hospital.se
 import { Hospital } from '@models/catalogo/hospital';
 import { DominioHospitalService } from '../../../../../shared/http/catalogo/dominio-hospital.service';
 import { DominioHospitalDto } from '@dtos/catalogo/dominio-hospital-dto';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { DominioHospitalFormularioComponent } from './dominio-hospital-formulario/dominio-hospital-formulario.component';
 
 @Component({
   selector: 'app-dominio-formulario',
@@ -86,7 +88,8 @@ export class DominioFormularioComponent implements OnInit {
     private dominioDetalleService: DominioDetalleService,
     private sessionService: SessionService,
     private hospitalService:HospitalService,
-    private dominioHospitalService:DominioHospitalService
+    private dominioHospitalService:DominioHospitalService,
+    private modalService:BsModalService
   ) {}
 
   public ngOnInit(): void {
@@ -94,6 +97,7 @@ export class DominioFormularioComponent implements OnInit {
 
     if (this.accion === GeneralConstant.COMPONENT_ACCION_EDITAR) {
       this.dominio = this.data;
+      console.log(this.dominio)
       this.onDisable();
       this.consultarGrid();
     } else {
@@ -308,18 +312,31 @@ export class DominioFormularioComponent implements OnInit {
   }
 
   protected onGridClickHospital(gridData: { accion: string; data: Hospital }){
-    this.tituloEditar = `Editando Dominio para ${gridData.data.nombre}`;
+    //this.tituloEditar = `Editando Dominio para ${gridData.data.nombre}`;
     if(gridData.accion === GeneralConstant.GRID_ACCION_EDITAR){
       this.dominioHospitalService.obtenerDominioHospital(this.dominio.idDominio,gridData.data.idHospital).subscribe(res => {
+        let accion:string;
         if(res != null){
           this.dominioHospital = res
+          accion = GeneralConstant.MODAL_ACCION_EDITAR;
         }
         else{
           this.dominioHospital = {
             idDominio: this.dominio.idDominio,
             idHospital: gridData.data.idHospital
           };
+          accion = GeneralConstant.MODAL_ACCION_AGREGAR;
         }
+
+        //Crear modal
+        const initialState = {
+          accion,
+          dominioHospital:this.dominioHospital
+        };
+        let bsModalRef = this.modalService.show(
+          DominioHospitalFormularioComponent,
+          {initialState, ... GeneralConstant.CONFIG_MODAL_MEDIUM, id: 'modalDominioHospital'}
+        );
       })
     }
     if(gridData.accion === GeneralConstant.GRID_ACCION_ELIMINAR){
