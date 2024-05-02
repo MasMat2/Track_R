@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DominioDetalleService } from '@http/catalogo/dominio-detalle.service';
 import { Dominio } from '@models/catalogo/dominio';
@@ -97,7 +97,6 @@ export class DominioFormularioComponent implements OnInit {
 
     if (this.accion === GeneralConstant.COMPONENT_ACCION_EDITAR) {
       this.dominio = this.data;
-      console.log(this.dominio)
       this.onDisable();
       this.consultarGrid();
     } else {
@@ -151,6 +150,7 @@ export class DominioFormularioComponent implements OnInit {
 
   //Funcion para el boton guardar
   public enviarFormulario(formulario: NgForm): void {
+    console.log("click")
     this.btnSubmit = true;
     if (!formulario.valid) {
       this.formularioService.validarCamposRequeridos(formulario);
@@ -168,7 +168,7 @@ export class DominioFormularioComponent implements OnInit {
     }
 
     //Guardar en BD DominioHospital
-    this.dominioHospitalService.obtenerDominioHospital(this.dominioHospital.idDominio,this.dominioHospital.idHospital).subscribe(res => {
+    /* this.dominioHospitalService.obtenerDominioHospital(this.dominioHospital.idDominio,this.dominioHospital.idHospital).subscribe(res => {
       if(res != null){
         this.dominioHospitalService.editarDominioHospital(this.dominioHospital).subscribe(res => {})
       }
@@ -177,7 +177,7 @@ export class DominioFormularioComponent implements OnInit {
           this.dominioHospitalService.guardarDominioHospital(this.dominioHospital).subscribe(res => {})
         } 
       }
-    })
+    }) */
   }
 
   public enviarFormularioDetalle(formulario: NgForm): void {
@@ -337,6 +337,10 @@ export class DominioFormularioComponent implements OnInit {
           DominioHospitalFormularioComponent,
           {initialState, ... GeneralConstant.CONFIG_MODAL_MEDIUM, id: 'modalDominioHospital'}
         );
+        bsModalRef.onHide?.subscribe( () => {
+          this.obtenerHospitales();
+        })
+
       })
     }
     if(gridData.accion === GeneralConstant.GRID_ACCION_ELIMINAR){
