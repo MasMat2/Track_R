@@ -120,7 +120,7 @@ export class DominioComponent implements OnInit {
 
       this.bsModalRef = this.modalService.show(
         DominioFormularioComponent,
-        { initialState, ... GeneralConstant.CONFIG_MODAL_MEDIUM}
+        { initialState, ... GeneralConstant.CONFIG_MODAL_MEDIUM, id:'modalDominioFormulario'}
       );
 
       this.bsModalRef.content.dominio = dataModal;
