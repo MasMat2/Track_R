@@ -307,6 +307,7 @@
           <app-grid-general
           [data]="hospitales"
           [children]="[{ headerName: 'Hospital', field: 'nombre', minWidth: 150 }]"
+          [disableDelete]="true"
           (event)="onGridClickHospital($event)"
           *ngIf="this.accion === 'Editar'"
           >
