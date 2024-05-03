@@ -61,7 +61,8 @@ builder.Services.Scan(scan => scan
     .FromAssemblyOf<Program>()
     .AddClasses(c => c.InNamespaces("TrackrAPI.Services")
         // TODO: 2023-05-25 -> Implementar IService para evitar estas excepciones
-        .Where(type => !typeof(EntidadService.ActualizacionExpedienteParams).IsAssignableFrom(type))
+        .Where(type => !typeof(EntidadService.ActualizacionExpedienteParams).IsAssignableFrom(type) &&
+                type != typeof(RsaService))
     )
     .AsSelf()
     .WithTransientLifetime()
