@@ -100,21 +100,21 @@ namespace TrackrAPI.Controllers.Catalogo
             // else
             // {
             var archivo = archivoService.ObtenerImagenUsuario(idUsuario);
-            // if (archivo == null)
-            // {
-            //     path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
-            //     tipoMime = "image/svg+xml";
-            // }
-            // else
-            // {
-            MemoryStream ms = new MemoryStream();
+            if (archivo == null)
+            {
+                path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
+                tipoMime = "image/svg+xml";
+            }
+            else
+            {
+                MemoryStream ms = new MemoryStream();
 
-            BinaryFormatter binForm = new BinaryFormatter();
-            ms.Write(archivo.Archivo1, 0, archivo.Archivo1.Length);
-            ms.Seek(0, SeekOrigin.Begin);
-            return File(ms, archivo.ArchivoTipoMime);
+                BinaryFormatter binForm = new BinaryFormatter();
+                ms.Write(archivo.Archivo1, 0, archivo.Archivo1.Length);
+                ms.Seek(0, SeekOrigin.Begin);
+                return File(ms, archivo.ArchivoTipoMime);
 
-            // }
+            }
 
 
             // path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"{usuario.IdUsuario}{ MimeTypeMap.GetExtension(usuario.ImagenTipoMime)}");

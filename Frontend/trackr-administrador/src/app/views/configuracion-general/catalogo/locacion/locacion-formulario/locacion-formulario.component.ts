@@ -426,7 +426,7 @@ export class HospitalFormularioComponent implements OnInit {
       .editar(this.hospital)
       .toPromise();
 
-    if (this.hospitalLogotipo !== undefined && this.hospitalLogotipo.imagenBase64 != null) {
+    if (this.hospitalLogotipo !== undefined && this.hospitalLogotipo !== null && this.hospitalLogotipo.imagenBase64 != null) {
       this.hospitalLogotipo.idHospital = this.hospital.idHospital;
 
       await this.hospitalLogotipoService
@@ -460,10 +460,10 @@ export class HospitalFormularioComponent implements OnInit {
       await funcion();
     }
     catch(error) {
+      console.log(error)
       this.btnSubmit = false;
       return;
     }
-
     this.modalMensajeService.modalExito(mensaje);
     this.regresar();
   }

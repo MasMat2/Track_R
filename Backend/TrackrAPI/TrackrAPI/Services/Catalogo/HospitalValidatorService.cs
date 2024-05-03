@@ -47,18 +47,18 @@ namespace TrackrAPI.Services.Catalogo
         private static readonly int LongitudCuenta = 50;
         private static readonly int LongitudCable = 50;
 
-        private readonly string MensajeNombreLongitud = $"La longitud máxima del nombre son {LongitudNombre } caracteres";
-        private readonly string MensajeRFCLongitud = $"La longitud máxima del RFC son { LongitudRFC } caracteres";
-        private readonly string MensajeCalleLongitud = $"La longitud máxima de la calle son { LongitudCalle } caracteres";
-        private readonly string MensajeNumInteriorLongitud = $"La longitud máxima del núm. interior son { LongitudNumInterior } caracteres";
-        private readonly string MensajeExteriorLongitud = $"La longitud máxima del núm. exterior son { LongitudExterior } caracteres";
-        private readonly string MensajeColoniaLongitud = $"La longitud máxima de la colonia son { LongitudColonia } caracteres";
-        private readonly string MensajeCiudadLongitud = $"La longitud máxima del la cuidad son { LongitudCiudad } caracteres";
-        private readonly string MensajeCodigoPostalLongitud = $"La longitud máxima del código postal son { LongitudCodigoPostal } caracteres";
-        private readonly string MensajeTelefonoLongitud = $"La longitud máxima del teléfono son { LongitudTelefono } caracteres";
-        private readonly string MensajeCorreoElectronicoLongitud = $"La longitud máxima del correo electrónico son { LongitudCorreoElectronico} caracteres";
-        private readonly string MensajeCuentaLongitud = $"La longitud máxima de la cuenta son { LongitudCuenta } caracteres";
-        private readonly string MensajeCableLongitud = $"La longitud máxima de la CLABE son { LongitudCable } caracteres";
+        private readonly string MensajeNombreLongitud = $"La longitud máxima del nombre son {LongitudNombre} caracteres";
+        private readonly string MensajeRFCLongitud = $"La longitud máxima del RFC son {LongitudRFC} caracteres";
+        private readonly string MensajeCalleLongitud = $"La longitud máxima de la calle son {LongitudCalle} caracteres";
+        private readonly string MensajeNumInteriorLongitud = $"La longitud máxima del núm. interior son {LongitudNumInterior} caracteres";
+        private readonly string MensajeExteriorLongitud = $"La longitud máxima del núm. exterior son {LongitudExterior} caracteres";
+        private readonly string MensajeColoniaLongitud = $"La longitud máxima de la colonia son {LongitudColonia} caracteres";
+        private readonly string MensajeCiudadLongitud = $"La longitud máxima del la cuidad son {LongitudCiudad} caracteres";
+        private readonly string MensajeCodigoPostalLongitud = $"La longitud máxima del código postal son {LongitudCodigoPostal} caracteres";
+        private readonly string MensajeTelefonoLongitud = $"La longitud máxima del teléfono son {LongitudTelefono} caracteres";
+        private readonly string MensajeCorreoElectronicoLongitud = $"La longitud máxima del correo electrónico son {LongitudCorreoElectronico} caracteres";
+        private readonly string MensajeCuentaLongitud = $"La longitud máxima de la cuenta son {LongitudCuenta} caracteres";
+        private readonly string MensajeCableLongitud = $"La longitud máxima de la CLABE son {LongitudCable} caracteres";
 
         public void ValidarAgregar(Hospital hospital)
         {
@@ -190,10 +190,11 @@ namespace TrackrAPI.Services.Catalogo
                 return locacionPredeterminada.IdHospital;
             }
             // No se encuentra un flujo estándar existente y el flujo actual no esta configurado para ser estándar.
-            else if (locacion.Predeterminada == false)
+            //Se comentarizó esta parte temporalmente para que se agregue la compañía
+            /* else if (locacion.Predeterminada == false)
             {
                 throw new CdisException("Es necesario configurar la locación estándar de la compañía");
-            }
+            } */
 
             // Se intenta Eliminar / Editar la locacion predeterminada actual
             if ((esEliminar || locacion.Predeterminada == false) && locacion.IdHospital == locacionPredeterminada.IdHospital)

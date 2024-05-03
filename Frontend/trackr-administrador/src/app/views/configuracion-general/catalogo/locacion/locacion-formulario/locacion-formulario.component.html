@@ -160,7 +160,19 @@
             <div class="form-group">
               <label class="label-input required-label">Colonia</label>
               <div>
-                <input
+                <ng-select
+                  #colonia="ngModel"
+                  name="ccoloniaName"
+                  bindLabel="colonia"
+                  bindValue="colonia"
+                  [items]="codigoPostalList"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                  [(ngModel)]="campoColonia"
+                  [required]="true"
+                  (ngModelChange)= "onChangeColonia($event.value)"
+                ></ng-select>
+                <!-- <input
                   #colonia="ngModel"
                   [(ngModel)]="campoColonia"
                   name="ccoloniaName"
@@ -175,7 +187,7 @@
                   [required]="true"
                   autocomplete="new-colonia"
                   appFormatoAlfanumerico
-                />
+                /> -->
                 <div *ngIf="colonia.errors?.['required'] && colonia.touched" class="error">
                   La colonia es requerida
                 </div>
@@ -650,10 +662,10 @@
             </div>
           </div> -->
         </div>
-        <div class="row" *ngIf="this.hospital.idHospital > 0">
+        <div class="row" *ngIf="this.hospital.idHospital > 0 && false">
           <div class="col-sm-12"><label class="subseccion">Configuración de Certificados</label></div>
         </div>
-        <div class="row mb-3" *ngIf="this.hospital.idHospital > 0">
+        <div class="row mb-3" *ngIf="this.hospital.idHospital > 0 && false">
           <div class="col-md-6">
             <button type="button" (click)="configurarCertificados()" class="btn-terceario ml-3">Configurar</button>
           </div>

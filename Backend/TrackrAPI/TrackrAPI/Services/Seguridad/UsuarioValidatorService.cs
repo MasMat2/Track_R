@@ -147,7 +147,7 @@ namespace TrackrAPI.Services.Seguridad
             if (!string.IsNullOrEmpty(usuario.Rfc))
             {
                 Validator.ValidarRequerido(usuario.CodigoPostal, MensajeCodigoPostalRequerido);
-                Validator.ValidarRequerido(usuario.IdRegimenFiscal, MensajeRegimenFiscalRequerido);
+                //Validator.ValidarRequerido(usuario.IdRegimenFiscal, MensajeRegimenFiscalRequerido);
             }
 
             //MetodoPago metodoPagoCredito = metodoPagoRepository.ConsultarPorClave(GeneralConstant.ClaveMetodoPagoCredito);
@@ -321,12 +321,12 @@ namespace TrackrAPI.Services.Seguridad
         {
             Usuario usuario = usuarioRepository.Consultar(idUsuario);
 
-            if(usuario == null)
+            if (usuario == null)
             {
                 throw new CdisException(MensajeUsuarioExistencia);
             }
 
-            if(usuario.IdPerfilNavigation.Clave != GeneralConstant.ClavePerfilMedico && usuario.IdPerfilNavigation.Clave != GeneralConstant.ClavePerfilAsistente)
+            if (usuario.IdPerfilNavigation.Clave != GeneralConstant.ClavePerfilMedico && usuario.IdPerfilNavigation.Clave != GeneralConstant.ClavePerfilAsistente)
             {
                 return false;
             }
@@ -366,33 +366,33 @@ namespace TrackrAPI.Services.Seguridad
         /// 3. Si no se encuentra un usuario coincidente, se lanza una excepción CdisException con un mensaje de error.
         /// 4. Si se encuentra un usuario coincidente, se devuelve el objeto Usuario correspondiente.
         /// </remarks>
-        public Usuario ValidateUserExists(LoginRequest loginRequest , bool esMobile)
+        public Usuario ValidateUserExists(LoginRequest loginRequest, bool esMobile)
         {
 
             var decodedBytes = Convert.FromBase64String(loginRequest.Contrasena);
             var decryptedBytes = this.rsaService.Decrypt(decodedBytes);
-            
+
             var password = Encoding.UTF8.GetString(decryptedBytes);
             string encryptedPassword = simpleAES.EncryptToString(password);
             //Usuario 
             Usuario userFromRepo = usuarioRepository.Login(loginRequest.Correo, encryptedPassword, loginRequest.ClaveTipoUsuario);
 
-           
+
 
             if (userFromRepo == null)
             {
                 throw new CdisException("Usuario y/o contraseña incorrectos");
             }
 
-            ValidarUsuarioExpediente(userFromRepo.IdUsuario , esMobile);
+            ValidarUsuarioExpediente(userFromRepo.IdUsuario, esMobile);
             return userFromRepo;
         }
 
-        public Usuario ValidarUsuarioExpediente(int idUsuario , bool esMobile)
+        public Usuario ValidarUsuarioExpediente(int idUsuario, bool esMobile)
         {
             var expediente = _expedienteTrackrRepository.ConsultarPorUsuario(idUsuario);
 
-            if(expediente == null && esMobile)
+            if (expediente == null && esMobile)
             {
                 throw new CdisException("El usuario no cuenta con expediente médico");
             }
