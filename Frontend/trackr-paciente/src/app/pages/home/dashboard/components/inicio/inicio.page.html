@@ -22,8 +22,9 @@
       </ion-toolbar>
     </div>
   </div>
+  <!-- el display cambia en funcion de si hay o no hay widgets de salud presentes (porque esos sobresalen al header) -->
   <div class="contenedor-principal" 
-    [ngStyle]="!listaWidgetsSaludVacia ? {'display': 'flex', 'flex-direction': 'column'} : {}">
+    [ngStyle]="!listaWidgetsSaludVacia ? {'display': 'flex', 'flex-direction': 'column'} : {}"> 
 
     <div class="widgets-salud">
       <div class="contenedor-widgets">

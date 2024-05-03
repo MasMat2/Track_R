@@ -427,10 +427,6 @@ ion-alert.custom-alert-choice{
   
 }
 
-ion-alert.custom-alert-choice{
-
-}
-
 //estilos para selectores que usen popover como interface
 ion-popover.custom-select-popover{
 
@@ -439,6 +435,30 @@ ion-popover.custom-select-popover{
     --background-focused: var(--primary-50);
     --background-hover: var(--primary-50);
   }
+}
+
+//estilos para selectores que usen action sheet como interface
+ion-action-sheet.custom-select-action-sheet{
+
+  .action-sheet-group{
+    border-radius: 16px 16px 0 0;
+    padding-top: 32px !important;
+  }
+
+  .action-sheet-group-cancel{
+    border-radius: 0;
+    padding-top: 0 !important;
+    padding-bottom: 32px !important;
+  }
+
+  .action-sheet-cancel{
+    color: var(--primary-700) !important;
+  }
+  // .item-radio-checked{
+  //   --background: var(--primary-200);
+  //   --background-focused: var(--primary-50);
+  //   --background-hover: var(--primary-50);
+  // }
 }
 
 ion-popover.custom-select-popover::part(content) {

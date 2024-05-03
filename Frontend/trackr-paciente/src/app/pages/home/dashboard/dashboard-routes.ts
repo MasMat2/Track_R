@@ -1,7 +1,7 @@
 import { Routes, RouterModule, Route } from '@angular/router';
 import { DashboardPage } from './dashboard.page';
 import { InicioPage } from './components/inicio/inicio.page';
-import { SeguimientoPadecimientoComponent } from './components/widgets/seguimiento-padecimiento/seguimiento-padecimiento.component';
+import { SeguimientoPadecimientoComponent } from './components/seguimiento-padecimiento/seguimiento-padecimiento.component';
 
 export default [
   {

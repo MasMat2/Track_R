@@ -16,6 +16,9 @@ import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.m
 import { ColDef, ValueGetterParams } from 'ag-grid-community';
 import {format} from 'date-fns'
 import { ValoresClaveCampoGridDto } from 'src/app/shared/Dtos/gestion-entidades/valores-clave-campo-grid-dto';
+import { addIcons } from 'ionicons';
+import { ValoresPorClaveCampo } from 'src/app/shared/Dtos/gestion-expediente/valores-clave-campo';
+import { ValoresHistogramaDTO } from '../../../../../shared/Dtos/gestion-entidades/valores-histograma-dto';
 
 
 @Component({
@@ -46,12 +49,45 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   private idPadecimiento: string;
   protected variableList: ExpedienteColumnaSelectorDTO[];
   protected idSeccionVariable: number;
-  protected filtroTiempo: string = "hoy" ?? "1 semana";
+  protected filtroTiempo: string;
   protected valoresCampo: ValoresClaveCampoGridDto;
   protected valorMin: number | null;
   protected valorMax: number | null;
   protected fechaMin: string;
   protected fechaMax: string;
+
+  protected seleccionadaVariable: boolean = false;
+  protected seleccionadoFiltroTiempo: boolean = false;
+  protected seleccionVacia: boolean = true;
+  protected labelHistograma: string = "";
+  protected mostrarTodoLista: boolean = false;
+  protected valoresfiltroTiempo = [
+    {
+      label: 'Hoy',
+      value : 'hoy' 
+    },
+    {
+      label: '1 Semana',
+      value : '1 semana' 
+    },
+    {
+      label: '2 Semanas',
+      value : '2 semanas' 
+    },
+    {
+      label: '3 Semanas',
+      value : '3 semanas' 
+    },
+    {
+      label: '1 Mes',
+      value : '1 mes' 
+    },
+    {
+      label: '2 Meses',
+      value : '2 meses' 
+    },
+  ]
+
 
 
   // Configuración Columnas Data Grid
@@ -72,23 +108,32 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   ];
 
   //Configuracion colores para histograma
+  // private readonly backgroundColor = [
+  //   'rgba(255, 99, 132, 0.8)',
+  //   'rgba(255, 159, 64, 0.8)',
+  //   'rgba(255, 205, 86, 0.8)',
+  //   'rgba(75, 192, 192, 0.8)',
+  //   'rgba(54, 162, 235, 0.8)',
+  //   'rgba(153, 102, 255, 0.8)',
+  //   'rgba(201, 203, 207, 0.8)'
+  // ];
   private readonly backgroundColor = [
-    'rgba(255, 99, 132, 0.8)',
-    'rgba(255, 159, 64, 0.8)',
-    'rgba(255, 205, 86, 0.8)',
-    'rgba(75, 192, 192, 0.8)',
-    'rgba(54, 162, 235, 0.8)',
-    'rgba(153, 102, 255, 0.8)',
-    'rgba(201, 203, 207, 0.8)'
+    'rgba(105, 94, 147, 1)',
+    'rgba(105, 94, 147, 1)',
+    'rgba(105, 94, 147, 1)',
+    'rgba(105, 94, 147, 1)',
+    'rgba(105, 94, 147, 1)',
+    'rgba(105, 94, 147, 1)',
+    'rgba(105, 94, 147, 1)',
   ];
   private readonly borderColor = [
-    'rgb(255, 99, 132)',
-    'rgb(255, 159, 64)',
-    'rgb(255, 205, 86)',
-    'rgb(75, 192, 192)',
-    'rgb(54, 162, 235)',
-    'rgb(153, 102, 255)',
-    'rgb(201, 203, 207)'
+    'rgba(105, 94, 147, 1)',
+    'rgba(105, 94, 147, 1)',
+    'rgba(105, 94, 147, 1)',
+    'rgba(105, 94, 147, 1)',
+    'rgba(105, 94, 147, 1)',
+    'rgba(105, 94, 147, 1)',
+    'rgba(105, 94, 147, 1)',
   ];
 
   // Configuraciones Histograma
@@ -102,7 +147,19 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
         data: [],
         backgroundColor: this.backgroundColor,
         borderColor: this.borderColor,
-        borderWidth: 1
+        borderWidth: 1,
+      }
+    ],
+  };
+
+  public barChartEmptyData: ChartData<'bar'> = {
+    labels: this.barChartLabels,
+    datasets: [
+      {
+        data: [],
+        backgroundColor: this.backgroundColor,
+        borderColor: this.borderColor,
+        borderWidth: 1,
       }
     ],
   };
@@ -114,28 +171,40 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
   
-    ) { }
+    ) { addIcons({
+      'chevron-left': 'assets/img/svg/chevron-left.svg',
+      'chevron-right': 'assets/img/svg/chevron-right.svg',
+      'chevron-down': 'assets/img/svg/chevron-down.svg',
+      'chevron-up': 'assets/img/svg/chevron-up.svg',
+      'arrow-up': 'assets/img/svg/arrow-up.svg',
+      'arrow-down': 'assets/img/svg/arrow-down.svg',
+    }) }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.idPadecimiento = params.get('id') ?? '';
     });
 
-    console.log(this.idSeccionVariable);
     this.consultarSeccionesPadecimiento();
     
   }
 
   protected onChangeVariable(event: Event): void {
-    console.log(this.idSeccionVariable);
+    this.seleccionadaVariable = true;
     if(event != null && this.filtroTiempo != null){
+      this.seleccionVacia = false;
        this.actualizarDatos(this.idSeccionVariable, this.filtroTiempo); 
     }
   }
 
   protected onFiltroChange(event: MatChipListboxChange): void {
+    if(event == undefined){
+      this.seleccionadoFiltroTiempo = false;
+      this.asignarSeleccionVacia();
+    }
     if(this.idSeccionVariable != null && event != null){
-      console.log(this.idSeccionVariable);
+      this.seleccionVacia = false;
+      this.seleccionadoFiltroTiempo = true;
       this.actualizarDatos(this.idSeccionVariable, event.toString());
     }
   }
@@ -144,7 +213,7 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
     lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresPorClaveCampoUsuarioSesion(filtroClave, filtroTiempo))
       .then((valoresPorClaveCampo) => {
         let data:any = {};
-        if(filtroTiempo != "Hoy"){
+        if(filtroTiempo != "hoy"){
           if(!valoresPorClaveCampo.hasOwnProperty('Do')){
             data['Do'] = []
           }else{
@@ -186,35 +255,41 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
         }
 
         // Transforma los datos para usar en la gráfica
-      const labels = Object.keys(valoresPorClaveCampo);
-      if(labels == null || !(labels.length > 0)){
-        this.limpiarHistograma();
-        return
-      }
+        const labels = Object.keys(valoresPorClaveCampo);
+        if(labels == null || !(labels.length > 0)){
+          this.limpiarHistograma();
+          return
+        }
       
-      const datasets = valoresPorClaveCampo[labels[0]].map((_, index) => {
-        return {
-          data: Object.keys(data).map(label => data[label][index]?.valor ?? 0),
-          backgroundColor: this.backgroundColor[index],
-          borderColor: this.borderColor[index],
-          borderWidth: 1,
+        const datasets = valoresPorClaveCampo[labels[0]].map((_, index) => {
+          return {
+            data: Object.keys(data).map(label => data[label][index]?.valor ?? 0),
+            backgroundColor: this.backgroundColor[index],
+            borderColor: this.borderColor[index],
+            borderWidth: 1,
+          };
+        });
+
+        // Actualiza las etiquetas y datos en la configuración de la gráfica
+        this.barChartData = {
+          labels: Object.keys(data),
+          datasets: datasets,
         };
-      });
 
-      // Actualiza las etiquetas y datos en la configuración de la gráfica
-      this.barChartData = {
-        labels: Object.keys(data),
-        datasets: datasets,
-      };
-
-      // Redibuja la gráfica
-      this.chart?.update();
+        // Redibuja la gráfica
+        this.chart?.update();
       });
 
       //Consulta los valores para Grid y Max/Min
       lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresPorClaveCampoParaGridUsuarioSesion(filtroClave, filtroTiempo))
       .then((response) => {
         this.valoresCampo = response;
+        if(response.valores.length == 0)
+          this.seleccionVacia = true;
+        else
+          this.seleccionVacia = false;
+
+        this.labelHistograma = this.obtenerLabelRangoDeFechas( this.filtroTiempo,response.valores);
 
         //Max
         const { maxValor, fechaMax } = this.valoresCampo.valores.reduce(
@@ -249,6 +324,16 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
     });
     this.chart?.update();
   }
+
+  private asignarSeleccionVacia(){
+    this.seleccionVacia = true;
+
+    this.barChartData = this.barChartEmptyData;
+    this.labelHistograma = "";
+    this.valorMax = null;
+    this.valorMin = null;
+    this.chart?.update();
+  }
     
   private consultarSeccionesPadecimiento(): void {
     lastValueFrom(this.seccionCampoService.consultarSeccionesPadecimientos(this.idPadecimiento))
@@ -260,6 +345,48 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
 
   regresarBtn(){
     this.router.navigate(['home/dashboard']);
+  }
+
+  //Para obtener el label de la grafica ("Abril - Mayo") o ("Hoy, 8 de abril 2024")
+  obtenerLabelRangoDeFechas(filtroTiempo: string, valores: ValoresHistogramaDTO[]): string {
+    const nombresMeses: string[] = [
+      "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+
+    if (valores.length === 0) {
+        return "";
+    }
+
+    if(filtroTiempo == "hoy"){
+
+      const fecha: Date = new Date(valores[0].fechaMuestra);
+
+      const dia: number = fecha.getDate();
+      const mes: string = nombresMeses[fecha.getMonth()];
+      const año: number = fecha.getFullYear();
+
+      return `Hoy, ${dia} de ${mes} ${año}`;
+    }
+    else{
+      const fechasDate: Date[] = valores.map(obj => new Date(obj.fechaMuestra));
+      const fechaMasAntigua: Date = new Date(Math.min(...fechasDate.map(date => date.getTime())));
+      const fechaMasReciente: Date = new Date(Math.max(...fechasDate.map(date => date.getTime())));
+  
+      const mesAnterior: string = nombresMeses[fechaMasAntigua.getMonth()];
+      const mesReciente: string = nombresMeses[fechaMasReciente.getMonth()];
+
+      if(mesAnterior == mesReciente)
+        return `${mesAnterior}`;
+
+      return `${mesAnterior} - ${mesReciente}`;
+    }
+  }
+
+  protected mostrarTodo(){
+    this.mostrarTodoLista = true;
+
+    //abrir modal de lista completa con busqueda
   }
 
 

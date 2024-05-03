@@ -11,7 +11,7 @@ import { WidgetType } from '../../interfaces/widgets';
 import { UsuarioPadecimientosDTO } from 'src/app/shared/Dtos/gestion-expediente/usuario-padecimientos-dto';
 import { PadecimientoDTO } from 'src/app/shared/Dtos/gestion-expediente/padecimiento-dto';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
-import { SeguimientoPadecimientoComponent } from '../widgets/seguimiento-padecimiento/seguimiento-padecimiento.component';
+import { SeguimientoPadecimientoComponent } from '../seguimiento-padecimiento/seguimiento-padecimiento.component';
 import { NotificacionPacienteService } from '@http/gestion-perfil/notificacion-paciente.service';
 import { Observable, lastValueFrom } from 'rxjs';
 import { addIcons } from 'ionicons';
@@ -108,7 +108,6 @@ export class InicioPage implements OnInit {
     modal.present();
 
     const {data, role} = await modal.onWillDismiss();
-    console.log(role)
     if(role === 'confirm'){
       this.consultarInfoWidgetsSeguimiento();
       this.consultarWidgets();
@@ -126,7 +125,6 @@ export class InicioPage implements OnInit {
 
     this.usuarioWidgetService.consultarPorUsuarioEnSesion().subscribe({
       next: (widgets) => {
-        console.log(widgets);
         this.selectedUserWidgets = widgets;
         this.listaWidgetsSaludVacia = this.esListaWidgetsSaludVacia(widgets);
       }
