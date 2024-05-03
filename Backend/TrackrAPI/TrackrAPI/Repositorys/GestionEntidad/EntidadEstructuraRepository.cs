@@ -168,6 +168,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Where(e => (e.Tabulacion == true) &&
                             (e.IdEntidadNavigation.Clave == GeneralConstant.ClaveEntidadPadecimiento) &&
                             (e.EsAntecedente == true))
+                .Where(e => e.InverseIdEntidadEstructuraPadreNavigation.Any()) // Solo los que tienen hijos (variables)
                 .Select(e => new ExpedientePadecimientoSelectorDTO
                 {
                     IdPadecimiento = e.IdEntidadEstructura,
@@ -181,6 +182,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Where(e => (e.Tabulacion == true) &&
                             (e.IdEntidadNavigation.Clave == GeneralConstant.ClaveEntidadPadecimiento) &&
                             (e.EsAntecedente == false))
+                .Where(e => e.InverseIdEntidadEstructuraPadreNavigation.Any()) // Solo los que tienen hijos (variables)
                 .Select(e => new ExpedientePadecimientoSelectorDTO
                 {
                     IdPadecimiento = e.IdEntidadEstructura,
