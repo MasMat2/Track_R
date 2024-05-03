@@ -9,6 +9,7 @@ import { GeneralConstant } from '@utils/general-constant';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { ModalController } from '@ionic/angular/standalone';
+import { Constants } from '@utils/constants/constants';
 
 @Component({
   selector: 'app-notificaciones',
@@ -71,7 +72,8 @@ export class NotificacionesComponent  implements OnInit
       await this.notificacionHubService.marcarComoVista(notificacion.id);
       if(notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA)
       {
-        await this.modalTomarToma(notificacion.mensaje);
+        //await this.modalTomarToma(notificacion.mensaje);
+        await this.presentAlertTomarTratamiento(notificacion)
       } 
     }
     this.consultarNotificaciones();
@@ -80,14 +82,6 @@ export class NotificacionesComponent  implements OnInit
         this.modalController.dismiss();
       }
   }
-
-  // iconMappings: any = {
-  //   1: { class: 'fa-solid fa-earth-americas', color: '#671e75' },
-  //   2: { class: 'fa-solid fa-comment-dots', color: '#671e75' },
-  //   4 : { class: 'fa-solid fa-user', color: '#671e75' },
-  //   5: { class: 'fa-regular fa-circle-user', color: '#671e75' },
-  //   6: { class: 'fa-solid fa-capsules', color: '#671e75' }
-  // };
 
   //iconos correspondientes de lucidIcons
   iconMappings: any = {
@@ -98,19 +92,44 @@ export class NotificacionesComponent  implements OnInit
     6: { name: 'pill'}
   };
 
-  protected async modalTomarToma(mensaje : string) {
+  protected async presentAlertTomarTratamiento(notificacion : NotificacionPacientePopOverDto){
+    const MENSAJE_TOMA = '¿Tomó la dosis a tiempo?'
     const alert = await this.alertController.create({
-      header: 'Tomar toma',
-      message: mensaje,
-      buttons: [{
-        text: 'Tomar',
-        handler: () => {
-          this.notificacionPacienteService.actualizarWidgets();
+      header: notificacion.titulo,
+      subHeader: `${notificacion.mensaje} \n ${MENSAJE_TOMA}`,
+      buttons: [
+        {
+          text: 'No tomé la dosis', 
+          role: 'cancel',
+        },
+        {
+          text: 'Sí tomé la dosis',
+          role: 'confirm',
+          handler: () => {
+            //Falta la realizacion de la toma
+            this.notificacionPacienteService.actualizarWidgets();
+          }
         }
-      },]
+      ],
+      cssClass: 'custom-alert-choice'
     });
 
     await alert.present();
+  }
+
+  protected async presentAlertSuccess() {
+
+    const alertSuccess = await this.alertController.create({
+      header: 'Tratamiento registrado',
+      subHeader: 'Se ha registrado correctamente la toma del tratamiento.',
+      buttons: [{
+        text: 'De acuerdo',
+        role: 'confirm',
+      }],
+      cssClass: 'custom-alert-success',
+    });
+
+    await alertSuccess.present();
   }
 
   protected cerrarModal(){

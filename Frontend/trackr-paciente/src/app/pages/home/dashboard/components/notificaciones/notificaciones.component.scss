@@ -1,3 +1,6 @@
+@import "../../../../../../theme/variables.scss";
+
+
 ion-header{
   border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
   background: var(--primary-50);
@@ -114,10 +117,6 @@ ion-header{
 
     ion-item::part(native){
       padding-left: 0;
-    }
-
-    .notificacion-vista{
-      //--background: var(--neutral-50);
     }
     
     .notificacion-vista::part(native){
