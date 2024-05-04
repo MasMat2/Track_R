@@ -15,9 +15,9 @@
           label-placement="floating"
           fill="outline"
           shape="round"
-          [(ngModel)]="claveVariable"
+          [(ngModel)]="idSeccionVariable"
           (ngModelChange)="onChangeVariable($event)">
-            <ion-select-option *ngFor="let variable of variableList" [value]="variable.clave">{{variable.variable}}</ion-select-option>
+            <ion-select-option *ngFor="let variable of variableList" [value]="variable.idSeccionVariable">{{variable.variable}}</ion-select-option>
         </ion-select>
     </ion-col>
     </ion-row>

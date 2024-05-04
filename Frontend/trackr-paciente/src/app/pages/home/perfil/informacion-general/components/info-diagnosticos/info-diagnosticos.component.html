@@ -1,0 +1,49 @@
+<ion-header class="ion-no-border">
+  <div class="contenedor-header">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button routerLink="inicio-perfil">
+          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          Atrás
+        </ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button (click)="AgregarDiagnostico()">
+          <ion-icon slot="icon-only" name="add"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="contenedor-principal">
+    <div class="titulo">
+      <ion-text>
+        <h3>Diagnosticos</h3>
+      </ion-text>
+    </div>
+    <div class="lista-vacia" *ngIf="listaDiagnosticosVacia()">
+      <ion-text>
+        <p>Nada Por aquí. <br> Aún no hay diagnosticos registrados.</p>
+      </ion-text>
+      <ion-button fill="outline" (click)="AgregarDiagnostico()">
+        <ion-icon slot="start" name="add"></ion-icon>
+        Añadir diagnostico
+      </ion-button>
+    </div>
+    <div class="lista-diagnosticos" *ngIf="!listaDiagnosticosVacia()">
+      <ion-list>
+        <ion-item *ngFor="let diagnostico of misDiagnosticos" lines="none">
+          <ion-label>
+            <h3>{{diagnostico.nombrePadecimiento}}</h3>
+            <p>{{diagnostico.fechaDiagnostico | date : "dd/MM/yyyy"}}</p>
+            <p>{{diagnostico.tituloDoctor}} {{diagnostico.nombreDoctor}} {{diagnostico.apellidosDoctor}}</p>
+          </ion-label>
+          <ion-button slot="end" fill="clear" (click)="presentarAlertaEliminarDiagnostico(diagnostico)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+</ion-content>

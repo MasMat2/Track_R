@@ -11,10 +11,12 @@ namespace TrackrAPI.Controllers.Dashboard;
 public class UsuarioWidgetController : ControllerBase
 {
     private readonly UsuarioWidgetService _usuarioWidgetService;
+    private readonly WidgetService _widgetService;
 
-    public UsuarioWidgetController(UsuarioWidgetService usuarioWidgetService)
+    public UsuarioWidgetController(UsuarioWidgetService usuarioWidgetService, WidgetService widgetService)
     {
         _usuarioWidgetService = usuarioWidgetService;
+        _widgetService = widgetService;
     }
 
     [HttpGet("usuario")]
@@ -31,5 +33,12 @@ public class UsuarioWidgetController : ControllerBase
 
         _usuarioWidgetService.modificarSeleccionWidgets(idUsuarioSesion, widgets);
 
+    }
+
+    
+    [HttpGet("widget-types")]
+    public IEnumerable<string> ConsultarClaves()
+    {
+        return _widgetService.ConsultarClaves();
     }
 }

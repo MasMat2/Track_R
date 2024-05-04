@@ -132,16 +132,16 @@ namespace TrackrAPI.Repositorys.Inventario
                 .Where(d => d.IdUsuario == idUsuario);
         }
 
-        public Domicilio ConsultarDependencias(int idDomicilio)
-        {
-            return context.Domicilio
-                .Include(d => d.OrdenCompra)
-                .Include(d => d.Pedido)
-                .Include(d => d.ExpedienteAdministrativoMercancia)
-                .Include(d => d.ExpedienteAdministrativoViaje)
-                .Where(d => d.IdDomicilio == idDomicilio)
-                .FirstOrDefault();
-        }
+        //public Domicilio ConsultarDependencias(int idDomicilio)
+        //{
+        //    return context.Domicilio
+        //        .Include(d => d.OrdenCompra)
+        //        .Include(d => d.Pedido)
+        //        .Include(d => d.ExpedienteAdministrativoMercancia)
+        //        .Include(d => d.ExpedienteAdministrativoViaje)
+        //        .Where(d => d.IdDomicilio == idDomicilio)
+        //        .FirstOrDefault();
+        //}
 
         public IEnumerable<DomicilioSelectorDto> ConsultarParaSelector(int idCompania)
         {

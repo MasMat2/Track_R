@@ -7,7 +7,7 @@
       contain: size layout style  !important; //necesario para que el tab central pueda sobresalir
       border-radius: 20px 20px 0 0;
       width: 100%;
-      height: 8.7vh;
+      height: 10vh;
 
       ion-tab-button:not(.tab-central){ //todos los tabs excepto el central
         --background: transparent;

@@ -7,10 +7,6 @@ namespace TrackrAPI.Models
     {
         public Rol()
         {
-            Flujo = new HashSet<Flujo>();
-            FlujoDetalle = new HashSet<FlujoDetalle>();
-            PedidoPresentacion = new HashSet<PedidoPresentacion>();
-            TipoComisionDetalle = new HashSet<TipoComisionDetalle>();
             UsuarioRol = new HashSet<UsuarioRol>();
         }
 
@@ -21,10 +17,6 @@ namespace TrackrAPI.Models
         public bool? Filtrado { get; set; }
 
         public virtual Compania? IdCompaniaNavigation { get; set; }
-        public virtual ICollection<Flujo> Flujo { get; set; }
-        public virtual ICollection<FlujoDetalle> FlujoDetalle { get; set; }
-        public virtual ICollection<PedidoPresentacion> PedidoPresentacion { get; set; }
-        public virtual ICollection<TipoComisionDetalle> TipoComisionDetalle { get; set; }
         public virtual ICollection<UsuarioRol> UsuarioRol { get; set; }
     }
 }

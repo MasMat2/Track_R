@@ -17,6 +17,7 @@ using TrackrAPI.Helpers;
 using TrackrAPI.Hubs;
 using TrackrAPI.Models;
 using TrackrAPI.Services.GestionEntidad;
+using TrackrAPI.Services.Seguridad;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,11 +61,16 @@ builder.Services.Scan(scan => scan
     .FromAssemblyOf<Program>()
     .AddClasses(c => c.InNamespaces("TrackrAPI.Services")
         // TODO: 2023-05-25 -> Implementar IService para evitar estas excepciones
-        .Where(type => !typeof(EntidadService.ActualizacionExpedienteParams).IsAssignableFrom(type))
+        .Where(type => !typeof(EntidadService.ActualizacionExpedienteParams).IsAssignableFrom(type) &&
+                type != typeof(RsaService))
     )
     .AsSelf()
     .WithTransientLifetime()
 );
+
+
+// Cambiar de Transient (por builder.Services.Scan) a Singleton
+builder.Services.AddSingleton<RsaService>();
 
 // Crea una nueva instancia de JwtSettings y la configura con los valores del appsettings.json
 var jwtSettings = new JwtSettings();

@@ -114,10 +114,10 @@ namespace TrackrAPI.Services.Seguridad
                 throw new CdisException(MensajeUsuarioRolDependencia);
             }
 
-            if (usuarioRolDep.TipoComisionDetalle.Any())
-            {
-                throw new CdisException(MensajeTipoComisionDetalleDependencia);
-            }
+            //if (usuarioRolDep.TipoComisionDetalle.Any())
+            //{
+            //    throw new CdisException(MensajeTipoComisionDetalleDependencia);
+            //}
         }
     }
 }

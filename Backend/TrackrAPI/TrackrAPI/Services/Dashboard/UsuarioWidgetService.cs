@@ -24,7 +24,9 @@ namespace TrackrAPI.Services.Dashboard
         public void modificarSeleccionWidgets(int usuarioId, IEnumerable<string> widgets)
         {
             _usuarioWidgetRepository.EliminarPorUsuario(usuarioId);
-
+          
+            if(widgets.Any())
+            {
             foreach ( var widget in widgets) {
 
                 var widgetExistente = _widgetRepository.consultarPorClave(widget);
@@ -40,6 +42,9 @@ namespace TrackrAPI.Services.Dashboard
 
                 _usuarioWidgetRepository.Agregar(nuevoUsuarioWidget);
             }
+            }
+                
+           
         }
     }
 }

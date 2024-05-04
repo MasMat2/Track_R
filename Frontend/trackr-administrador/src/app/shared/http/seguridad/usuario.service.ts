@@ -64,9 +64,9 @@ export class UsuarioService {
     return this.http.get<Usuario[]>(this.url + `consultarPorTipoUsuario/${claveTipoUsuario}`);
   }
 
-  consultarClinicosActivos(claveTipoUsuario: string) {
-    return this.http.get<Usuario[]>(this.url + `consultarClinicosActivos/${claveTipoUsuario}`);
-  }
+  // consultarClinicosActivos(claveTipoUsuario: string) {
+  //   return this.http.get<Usuario[]>(this.url + `consultarClinicosActivos/${claveTipoUsuario}`);
+  // }
 
   agregar(usuario: Usuario) {
     return this.http.post<number>(this.url + 'agregar', usuario);
@@ -91,9 +91,9 @@ export class UsuarioService {
     return this.http.get<Usuario[]>(this.url + 'consultarParaPuntoVenta');
   }
 
-  ConsultarPorRolActivosParaSelector(roles: number[]) {
-    return this.http.post<Usuario[]>(this.url + `ConsultarPorRolActivosParaSelector`, roles);
-  }
+  // ConsultarPorRolActivosParaSelector(roles: number[]) {
+  //   return this.http.post<Usuario[]>(this.url + `ConsultarPorRolActivosParaSelector`, roles);
+  // }
 
   ConsultarPorRolCompaniaParaSelector(roles: number[]) {
     return this.http.post<Usuario[]>(this.url + `ConsultarPorRolCompaniaParaSelector`, roles);
@@ -103,9 +103,9 @@ export class UsuarioService {
     return this.http.post<Usuario[]>(this.url + `ConsultarPorRolCompaniaParaSelectorDomicilio`, roles);
   }
 
-  consultarUsuariosParaRegistrarEntrada() {
-    return this.http.get<Usuario[]>(this.url + 'consultarUsuariosParaRegistrarEntrada');
-  }
+  // consultarUsuariosParaRegistrarEntrada() {
+  //   return this.http.get<Usuario[]>(this.url + 'consultarUsuariosParaRegistrarEntrada');
+  // }
 
   consultarMedico(cedula: string) {
     return this.http.get<Usuario>(this.url + `consultarMedico/${cedula}`);

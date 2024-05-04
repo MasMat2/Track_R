@@ -90,6 +90,13 @@ namespace TrackrAPI.Controllers.Catalogo
             return hospitalService.ConsultarDto((int)usuario.IdHospital);
         }
 
+        [HttpGet]
+        [Route("consultarTodosParaSelector/{idDominio}")]
+        public IEnumerable<HospitalDto> ConsultarTodosParaSelector(int idDominio)
+        {
+            return hospitalService.ConsultarTodosParaSelector(idDominio);
+        }
+
         [AllowAnonymous]
         [HttpGet]
         [Route("consultarTodosParaSelector")]
@@ -98,11 +105,11 @@ namespace TrackrAPI.Controllers.Catalogo
             return hospitalService.ConsultarTodosParaSelector();
         }
 
-        [HttpGet]
-        [Route("consultarDisponiblesParaListaPrecio/{idListaPrecioSeleccionada}")]
-        public IEnumerable<HospitalDto> ConsultarDisponiblesParaListaPrecio(int? idListaPrecioSeleccionada)
-        {
-            return hospitalService.ConsultarDisponiblesParaListaPrecio(idListaPrecioSeleccionada);
-        }
+        //[HttpGet]
+        //[Route("consultarDisponiblesParaListaPrecio/{idListaPrecioSeleccionada}")]
+        //public IEnumerable<HospitalDto> ConsultarDisponiblesParaListaPrecio(int? idListaPrecioSeleccionada)
+        //{
+        //    return hospitalService.ConsultarDisponiblesParaListaPrecio(idListaPrecioSeleccionada);
+        //}
     }
 }

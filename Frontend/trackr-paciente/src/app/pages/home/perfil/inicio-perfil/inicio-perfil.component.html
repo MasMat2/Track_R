@@ -1,0 +1,91 @@
+<ion-content>
+  <div class="contenedor-header">
+    <ion-toolbar>
+      <ion-title>Mi Perfil</ion-title>
+    </ion-toolbar>
+  </div>
+  <div class="contenedor-principal">
+    <div class="card">
+      <div class="datos">
+        <div class="avatar">
+          <ion-avatar>
+            <img alt="foto perfil" [src]="fotoPerfilUrl"/>
+          </ion-avatar>
+        </div>
+        <div class="nombre">
+          <ion-text>
+            <p id="name">{{infoPerfil?.nombre}} {{infoPerfil?.apellidoMaterno}}</p>
+            <p id="username">{{infoPerfil?.correo}}</p>
+          </ion-text>
+        </div>
+      </div>
+      <div class="lista">
+        <ion-list lines="full">
+          <ion-item class="accordion-item">
+            <ion-accordion-group>
+              <ion-accordion value="info-general">
+                <ion-item slot="header">
+                  <ion-icon slot="start" name="persona"></ion-icon>
+                  <ion-label>Informacion general</ion-label>
+                  <ion-icon slot="end" class="ion-accordion-toggle-icon" name="chevron-down"></ion-icon>
+                </ion-item>
+  
+                <ion-item slot="content" class="accordion-option" button (click)="navigateInformacionGeneral()">
+                  <ion-label>General</ion-label>
+                </ion-item>
+                <ion-item slot="content" class="accordion-option" button (click)="navigateInformacionDomicilio()">
+                  <ion-label>Domicilio</ion-label>
+                </ion-item>
+                <ion-item slot="content" class="accordion-option" button (click)="navigateInformacionAntecedentes()">
+                  <ion-label>Antecedentes</ion-label>
+                </ion-item>
+                <ion-item slot="content" class="accordion-option" button (click)="navigateInformacionDiagnosticos()">
+                  <ion-label>Diagnosticos</ion-label>
+                </ion-item>
+              </ion-accordion>
+            </ion-accordion-group>
+          </ion-item>
+          <ion-item button (click)="navigateMisDoctores()">
+            <ion-icon slot="start" name="cruz"></ion-icon>
+            <ion-label>Mis doctores</ion-label>
+            <ion-icon slot="end" name="chevron-forward"></ion-icon>
+          </ion-item>
+          <ion-item button (click)="navigateMisTratamientos()">
+            <ion-icon slot="start" name="pildora"></ion-icon>
+            <ion-label>Mis tratamientos</ion-label>
+            <ion-icon slot="end" name="chevron-forward"></ion-icon>
+          </ion-item>
+          <ion-item button (click)="navigateMisEstudios()">
+            <ion-icon slot="start" name="portapapeles-mas"></ion-icon>
+            <ion-label>Mis estudios</ion-label>
+            <ion-icon slot="end" name="chevron-forward"></ion-icon>
+          </ion-item>
+
+          <ion-item class="accordion-item" >
+            <ion-accordion-group>
+              <ion-accordion value="mas-info">
+                <ion-item slot="header">
+                  <ion-icon slot="start" name="informacion"></ion-icon>
+                  <ion-label>Más información</ion-label>
+                  <ion-icon slot="end" class="ion-accordion-toggle-icon" name="chevron-down"></ion-icon>
+                </ion-item>
+  
+                <ion-item slot="content" button class="accordion-option" (click)="mostrarTerminosYCondiciones()">
+                  <ion-label>Términos y condiciones</ion-label>
+                </ion-item>
+                <ion-item slot="content" button class="accordion-option" (click)="mostrarInfoLibreriasOpenSource()">
+                  <ion-label>Bibliotecas de código abierto</ion-label>
+                </ion-item>
+              </ion-accordion>
+            </ion-accordion-group>
+          </ion-item>
+          <ion-item button lines="none" (click)="presentarAlertaCerrarSesion()" style="--color-activated: var(--error-200);">
+            <ion-icon slot="start" name="cerrar-sesion" style="stroke: var(--error-200);"></ion-icon>
+            <ion-label style="color: var(--error-200);" >Cerrar sesión</ion-label>
+            <ion-icon slot="end" name="chevron-forward"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -35,12 +35,12 @@ export class EntidadEstructuraTablaValorService {
   //   return this.http.get<ValoresFueraRangoGridDTO[]>(this.dataUrl + `valoresTodasVariables/${idPadecimiento}/${idUsuario}`);
   // }
 
-  public consultarValoresPorClaveCampoUsuarioSesion(claveCampo: string, filtroTiempo: string): Observable<ValoresPorClaveCampo> {
-    return this.http.get<ValoresPorClaveCampo>(this.dataUrl + `valoresPorClaveCampo/usuarioSesion/${claveCampo}/${filtroTiempo}`);
+  public consultarValoresPorClaveCampoUsuarioSesion(idSeccionVariable: number, filtroTiempo: string): Observable<ValoresPorClaveCampo> {
+    return this.http.get<ValoresPorClaveCampo>(this.dataUrl + `valoresPorClaveCampo/usuarioSesion/${idSeccionVariable}/${filtroTiempo}`);
   }
 
-  public consultarValoresPorClaveCampoParaGridUsuarioSesion(claveCampo: string, filtroTiempo: string): Observable<any> {
-    return this.http.get<any>(this.dataUrl + `valoresPorClaveCampoParaGrid/usuarioSesion/${claveCampo}/${filtroTiempo}`);
+  public consultarValoresPorClaveCampoParaGridUsuarioSesion(idSeccionVariable: number, filtroTiempo: string): Observable<any> {
+    return this.http.get<any>(this.dataUrl + `valoresPorClaveCampoParaGrid/usuarioSesion/${idSeccionVariable}/${filtroTiempo}`);
   }
 
 }

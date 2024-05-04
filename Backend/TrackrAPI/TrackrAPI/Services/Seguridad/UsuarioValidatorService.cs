@@ -2,11 +2,9 @@
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Catalogo;
-using TrackrAPI.Repositorys.GestionCaja;
 using TrackrAPI.Repositorys.Seguridad;
-using System.Collections.Generic;
-using System.Linq;
 using TrackrAPI.Repositorys.GestionExpediente;
+using System.Text;
 
 namespace TrackrAPI.Services.Seguridad
 {
@@ -15,30 +13,30 @@ namespace TrackrAPI.Services.Seguridad
 
         private IUsuarioRepository usuarioRepository;
         private IUsuarioRolRepository usuarioRolRepository;
-        private IMetodoPagoRepository metodoPagoRepository;
         private IRolRepository rolRepository;
         private IConfirmacionCorreoRepository _confirmacionCorreoRepository;
         private readonly IExpedienteTrackrRepository _expedienteTrackrRepository;
         private readonly SimpleAES simpleAES;
+        private readonly RsaService rsaService;
 
 
         public UsuarioValidatorService(
             IUsuarioRepository usuarioRepository,
             IUsuarioRolRepository usuarioRolRepository,
-            IMetodoPagoRepository metodoPagoRepository,
             IRolRepository rolRepository,
             SimpleAES simpleAES,
             IConfirmacionCorreoRepository confirmacionCorreoRepository,
-            IExpedienteTrackrRepository expedienteTrackrRepository
+            IExpedienteTrackrRepository expedienteTrackrRepository,
+            RsaService rsaService
         )
         {
             this.usuarioRepository = usuarioRepository;
             this.usuarioRolRepository = usuarioRolRepository;
-            this.metodoPagoRepository = metodoPagoRepository;
             this.rolRepository = rolRepository;
             this.simpleAES = simpleAES;
             this._confirmacionCorreoRepository = confirmacionCorreoRepository;
             _expedienteTrackrRepository = expedienteTrackrRepository;
+            this.rsaService = rsaService;
         }
 
         private readonly string MensajeContrasenaRequerida = "La contraseña es requerida";
@@ -100,11 +98,11 @@ namespace TrackrAPI.Services.Seguridad
                 ValidarEliminar(usuario.IdUsuario);
             }
 
-            if (roles != null)
-            {
-                List<Rol> rolesEliminados = ObtenerRolesEliminados(usuario, roles);
-                ValidarDependencias(usuario.IdUsuario, rolesEliminados, true);
-            }
+            //if (roles != null)
+            //{
+            //    List<Rol> rolesEliminados = ObtenerRolesEliminados(usuario, roles);
+            //    //ValidarDependencias(usuario.IdUsuario, rolesEliminados, true);
+            //}
         }
 
         public void ValidarEliminar(int idUsuario)
@@ -116,27 +114,27 @@ namespace TrackrAPI.Services.Seguridad
                 .Select(usuarioRol => rolRepository.Consultar(usuarioRol.IdRol))
                 .ToList();
 
-            ValidarDependencias(idUsuario, roles, false);
+            //ValidarDependencias(idUsuario, roles, false);
         }
 
-        public void ValidarDependencias(int idUsuario, List<Rol> roles, bool esEdicion)
-        {
-            string contexto = esEdicion
-                ? " eliminar el rol "
-                : " desactivar el usuario";
+        //public void ValidarDependencias(int idUsuario, List<Rol> roles, bool esEdicion)
+        //{
+        //    string contexto = esEdicion
+        //        ? " eliminar el rol "
+        //        : " desactivar el usuario";
 
-            Usuario usuario = usuarioRepository.ConsultarDependencias(idUsuario);
+        //    Usuario usuario = usuarioRepository.ConsultarDependencias(idUsuario);
 
-            if (roles.Any(rol => rol.Clave == GeneralConstant.ClaveRolProveedor))
-            {
-                contexto += esEdicion ? "proveedor" : "";
+        //    if (roles.Any(rol => rol.Clave == GeneralConstant.ClaveRolProveedor))
+        //    {
+        //        contexto += esEdicion ? "proveedor" : "";
 
-                if (usuario.OrdenCompraIdUsuarioProveedorNavigation.Any(oc => oc.IdEstatusOrdenCompraNavigation.Clave == GeneralConstant.ClaveEstatusOrdenCompraPorSurtir))
-                {
-                    throw new CdisException(MensajeDependenciaOrdenCompra + contexto);
-                }
-            }
-        }
+        //        if (usuario.OrdenCompraIdUsuarioProveedorNavigation.Any(oc => oc.IdEstatusOrdenCompraNavigation.Clave == GeneralConstant.ClaveEstatusOrdenCompraPorSurtir))
+        //        {
+        //            throw new CdisException(MensajeDependenciaOrdenCompra + contexto);
+        //        }
+        //    }
+        //}
 
         public void ValidarRequeridos(Usuario usuario, List<Rol> roles)
         {
@@ -149,14 +147,14 @@ namespace TrackrAPI.Services.Seguridad
             if (!string.IsNullOrEmpty(usuario.Rfc))
             {
                 Validator.ValidarRequerido(usuario.CodigoPostal, MensajeCodigoPostalRequerido);
-                Validator.ValidarRequerido(usuario.IdRegimenFiscal, MensajeRegimenFiscalRequerido);
+                //Validator.ValidarRequerido(usuario.IdRegimenFiscal, MensajeRegimenFiscalRequerido);
             }
 
-            MetodoPago metodoPagoCredito = metodoPagoRepository.ConsultarPorClave(GeneralConstant.ClaveMetodoPagoCredito);
-            if (usuario.IdMetodoPago != null && usuario.IdMetodoPago == metodoPagoCredito.IdMetodoPago)
-            {
-                Validator.ValidarRequerido(usuario.DiasPago, MensajeDiasPagoRequeridos);
-            }
+            //MetodoPago metodoPagoCredito = metodoPagoRepository.ConsultarPorClave(GeneralConstant.ClaveMetodoPagoCredito);
+            //if (usuario.IdMetodoPago != null && usuario.IdMetodoPago == metodoPagoCredito.IdMetodoPago)
+            //{
+            //    Validator.ValidarRequerido(usuario.DiasPago, MensajeDiasPagoRequeridos);
+            //}
 
             // Validación dependiente de los roles. Esta validación es opcional si roles es null
             if (roles == null)
@@ -179,14 +177,14 @@ namespace TrackrAPI.Services.Seguridad
             Validator.ValidarLongitudMaximaString(usuario.TelefonoMovil, LongitudMaximaTelefono, MensajeLongitudTelefono);
             Validator.ValidarLongitudMaximaString(usuario.Ciudad, LongitudMaximaCien, MensajeLongitudCiudad);
 
-            int diasMinimos = 0;
-            MetodoPago metodoPagoCredito = metodoPagoRepository.ConsultarPorClave(GeneralConstant.ClaveMetodoPagoCredito);
-            if (usuario.IdMetodoPago != null && usuario.IdMetodoPago == metodoPagoCredito.IdMetodoPago)
-            {
-                diasMinimos = 1;
-            }
+            //int diasMinimos = 0;
+            //MetodoPago metodoPagoCredito = metodoPagoRepository.ConsultarPorClave(GeneralConstant.ClaveMetodoPagoCredito);
+            //if (usuario.IdMetodoPago != null && usuario.IdMetodoPago == metodoPagoCredito.IdMetodoPago)
+            //{
+            //    diasMinimos = 1;
+            //}
 
-            Validator.ValidarRangoEntero(usuario.DiasPago, diasMinimos, 365, $"Los días de pago deben ser entre {diasMinimos} y 365");
+            //Validator.ValidarRangoEntero(usuario.DiasPago, diasMinimos, 365, $"Los días de pago deben ser entre {diasMinimos} y 365");
         }
 
         public void ValidarFormatos(Usuario usuario)
@@ -323,12 +321,12 @@ namespace TrackrAPI.Services.Seguridad
         {
             Usuario usuario = usuarioRepository.Consultar(idUsuario);
 
-            if(usuario == null)
+            if (usuario == null)
             {
                 throw new CdisException(MensajeUsuarioExistencia);
             }
 
-            if(usuario.IdPerfilNavigation.Clave != GeneralConstant.ClavePerfilMedico && usuario.IdPerfilNavigation.Clave != GeneralConstant.ClavePerfilAsistente)
+            if (usuario.IdPerfilNavigation.Clave != GeneralConstant.ClavePerfilMedico && usuario.IdPerfilNavigation.Clave != GeneralConstant.ClavePerfilAsistente)
             {
                 return false;
             }
@@ -368,28 +366,33 @@ namespace TrackrAPI.Services.Seguridad
         /// 3. Si no se encuentra un usuario coincidente, se lanza una excepción CdisException con un mensaje de error.
         /// 4. Si se encuentra un usuario coincidente, se devuelve el objeto Usuario correspondiente.
         /// </remarks>
-        public Usuario ValidateUserExists(LoginRequest loginRequest , bool esMobile)
+        public Usuario ValidateUserExists(LoginRequest loginRequest, bool esMobile)
         {
-            string encryptedPassword = simpleAES.EncryptToString(loginRequest.Contrasena);
+
+            var decodedBytes = Convert.FromBase64String(loginRequest.Contrasena);
+            var decryptedBytes = this.rsaService.Decrypt(decodedBytes);
+
+            var password = Encoding.UTF8.GetString(decryptedBytes);
+            string encryptedPassword = simpleAES.EncryptToString(password);
             //Usuario 
             Usuario userFromRepo = usuarioRepository.Login(loginRequest.Correo, encryptedPassword, loginRequest.ClaveTipoUsuario);
 
-           
+
 
             if (userFromRepo == null)
             {
                 throw new CdisException("Usuario y/o contraseña incorrectos");
             }
 
-            ValidarUsuarioExpediente(userFromRepo.IdUsuario , esMobile);
+            ValidarUsuarioExpediente(userFromRepo.IdUsuario, esMobile);
             return userFromRepo;
         }
 
-        public Usuario ValidarUsuarioExpediente(int idUsuario , bool esMobile)
+        public Usuario ValidarUsuarioExpediente(int idUsuario, bool esMobile)
         {
             var expediente = _expedienteTrackrRepository.ConsultarPorUsuario(idUsuario);
 
-            if(expediente == null && esMobile)
+            if (expediente == null && esMobile)
             {
                 throw new CdisException("El usuario no cuenta con expediente médico");
             }

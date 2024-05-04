@@ -49,7 +49,7 @@ namespace TrackrAPI.Services.Catalogo
 
         public void ValidarEliminar(Area area)
         {
-            ValidarDependencias(area.IdArea);
+            //ValidarDependencias(area.IdArea);
         }
 
         public void ValidarRequerido(Area area)
@@ -96,15 +96,15 @@ namespace TrackrAPI.Services.Catalogo
             }
         }
 
-        public void ValidarDependencias(int idArea)
-        {
-            var area = areaRepository.ConsultarDependencias(idArea);
+        //public void ValidarDependencias(int idArea)
+        //{
+        //    var area = areaRepository.ConsultarDependencias(idArea);
 
-            if (area.Presentacion.Any())
-            {
-                throw new CdisException(MensajeUsuarioDependencia);
-            }
-        }
+        //    if (area.Presentacion.Any())
+        //    {
+        //        throw new CdisException(MensajeUsuarioDependencia);
+        //    }
+        //}
     }
 }
 

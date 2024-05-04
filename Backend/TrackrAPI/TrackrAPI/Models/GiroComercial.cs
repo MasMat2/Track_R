@@ -8,7 +8,6 @@ namespace TrackrAPI.Models
         public GiroComercial()
         {
             Compania = new HashSet<Compania>();
-            Mercado = new HashSet<Mercado>();
         }
 
         public int IdGiroComercial { get; set; }
@@ -16,6 +15,5 @@ namespace TrackrAPI.Models
         public string Nombre { get; set; } = null!;
 
         public virtual ICollection<Compania> Compania { get; set; }
-        public virtual ICollection<Mercado> Mercado { get; set; }
     }
 }

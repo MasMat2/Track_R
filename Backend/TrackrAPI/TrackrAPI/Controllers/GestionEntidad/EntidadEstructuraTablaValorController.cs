@@ -82,24 +82,24 @@ namespace TrackrAPI.Controllers.GestionEntidad
             return entidadEstructuraTablaValorService.ConsultarValores(idPadecimiento, idUsuario, null);
         }
 
-        [HttpGet("valoresPorClaveCampo/{claveCampo}/{idUsuario}/{filtroTiempo}")]
-        public Dictionary<string, List<ValoresHistogramaDTO>> ConsultarValoresPorClaveCampoFiltro(string claveCampo, int idUsuario, string filtroTiempo)
+        [HttpGet("valoresPorClaveCampo/{idSeccionVariable}/{idUsuario}/{filtroTiempo}")]
+        public Dictionary<string, List<ValoresHistogramaDTO>> ConsultarValoresPorClaveCampoFiltro(int idSeccionVariable, int idUsuario, string filtroTiempo)
         {
-            return entidadEstructuraTablaValorService.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, filtroTiempo);
+            return entidadEstructuraTablaValorService.ConsultarValoresPorClaveCampo(idSeccionVariable, idUsuario, filtroTiempo);
         }
 
-        [HttpGet("valoresPorClaveCampo/usuarioSesion/{claveCampo}/{filtroTiempo}")]
-        public Dictionary<string, List<ValoresHistogramaDTO>> ConsultarValoresPorClaveCampoFiltroUsuarioSesion(string claveCampo, string filtroTiempo)
+        [HttpGet("valoresPorClaveCampo/usuarioSesion/{idSeccionVariable}/{filtroTiempo}")]
+        public Dictionary<string, List<ValoresHistogramaDTO>> ConsultarValoresPorClaveCampoFiltroUsuarioSesion(int idSeccionVariable, string filtroTiempo)
         {
             int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
-            return entidadEstructuraTablaValorService.ConsultarValoresPorClaveCampo(claveCampo, idUsuario, filtroTiempo);
+            return entidadEstructuraTablaValorService.ConsultarValoresPorClaveCampo(idSeccionVariable, idUsuario, filtroTiempo);
         }
 
-        [HttpGet("valoresPorClaveCampoParaGrid/usuarioSesion/{claveCampo}/{filtroTiempo}")]
-        public ValoresPorCampoGridDTO ConsultarValoresPorClaveCampoParaGridUsuarioSesion(string claveCampo, string filtroTiempo)
+        [HttpGet("valoresPorClaveCampoParaGrid/usuarioSesion/{idSeccionVariable}/{filtroTiempo}")]
+        public ValoresPorCampoGridDTO ConsultarValoresPorClaveCampoParaGridUsuarioSesion(int idSeccionVariable, string filtroTiempo)
         {
             int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
-            return entidadEstructuraTablaValorService.ConsultarValoresPorClaveCampoParaGrid(claveCampo, idUsuario, filtroTiempo);
+            return entidadEstructuraTablaValorService.ConsultarValoresPorClaveCampoParaGrid(idSeccionVariable, idUsuario, filtroTiempo);
         }
 
         [HttpGet("grid/{idUsuario}")]

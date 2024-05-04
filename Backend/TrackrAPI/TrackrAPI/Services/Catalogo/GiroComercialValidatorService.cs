@@ -112,10 +112,10 @@ namespace TrackrAPI.Services.Catalogo
                 throw new CdisException(MensajeDependenciaCompania);
             }
 
-            if (giroComercial.Mercado.Any())
-            {
-                throw new CdisException(MensajeDependenciaMercado);
-            }
+            //if (giroComercial.Mercado.Any())
+            //{
+            //    throw new CdisException(MensajeDependenciaMercado);
+            //}
         }
     }
 }

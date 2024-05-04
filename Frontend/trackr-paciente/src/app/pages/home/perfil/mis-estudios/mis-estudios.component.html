@@ -1,57 +1,78 @@
+<ion-header class="ion-no-border">
+  <div class="contenedor-header">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button routerLink="inicio-perfil">
+          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          Atrás
+        </ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button (click)="agregarEstudio()">
+          <ion-icon slot="icon-only" name="add"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+</ion-header>
 <ion-content>
-  <ion-button fill="outline" expand="block" button fill="outline" routerLink="/home/perfil/mis-estudios/agregar">
-    Agregar estudio
-  </ion-button>
+  <div class="contenedor-principal">
+    <div class="titulo">
+      <ion-text>
+        <h3>Mis estudios</h3>
+      </ion-text>
+    </div>
 
-  <div style="color: grey; font-size: large; margin-top: 30px">
-    Mis estudios
+    <div class="lista-vacia" *ngIf="listaEstudiosVacia()">
+      <ion-text>
+        <p>Nada Por aquí. <br> Aún no tienes estudios registrados</p>
+      </ion-text>
+      <ion-button fill="outline" (click)="agregarEstudio()">
+        <ion-icon slot="start" name="add"></ion-icon>
+        Añadir estudio
+      </ion-button>
+    </div>
+
+    <div class="barra-busqueda" *ngIf="!listaEstudiosVacia()">
+      <ion-searchbar show-cancel-button="focus" placeholder="Buscar" animated (ionChange)="buscarEstudio($event)"></ion-searchbar>
+    </div>
+    <div class="lista-estudios" *ngIf="!listaEstudiosVacia()">
+      <div *ngIf="!filtrando">
+        <ion-list *ngIf="expedientes$ | async as estudios">
+          <ion-item-sliding *ngFor="let estudio of estudios">
+            <ion-item lines="none" (click)="abrirEstudio(estudio)" [detail]="true">
+              <ion-label>
+                <h3>{{estudio.nombre}}</h3>
+                <p>{{estudio.fechaRealizacion | date : "dd/MM/yyyy"}}</p>
+              </ion-label>
+            </ion-item>
+            <ion-item-options>
+              <ion-item-option expandable (click)="presentarAlertaEliminar(estudio)">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+      </div>
+      <!-- lista de estudios filtrados -->
+      <div *ngIf="filtrando">
+        <ion-list>
+          <ion-item-sliding *ngFor="let estudio of estudiosFiltradosPorBusqueda">
+            <ion-item lines="none" (click)="abrirEstudio(estudio)">
+              <ion-label>
+                <h3>{{estudio.nombre}}</h3>
+                <p>{{estudio.fechaRealizacion | date : "dd/MM/yyyy"}}</p>
+              </ion-label>
+              <ion-icon name="chevron-forward"></ion-icon>
+            </ion-item>
+            <ion-item-options>
+              <ion-item-option expandable (click)="presentarAlertaEliminar(estudio)">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+      </div>
+    </div>
   </div>
-
-  <div class="tabla">
-
-    <ng-container *ngIf="expedientes$ | async as data">
-      <p-table
-      class="primeng-table"
-      [value]="data"
-      [tableStyle]="{ 'min-width': '100%' }"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Núm.</th>
-          <th>Estudio</th>
-          <th>Fecha</th>
-          <th></th>
-          <th></th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-expediente>
-        <tr>
-          <td>{{ expediente.idExpedienteEstudio }}</td>
-          <td>{{ expediente.nombre }}</td>
-          <td>{{ expediente.fechaRealizacion | date : "dd/MM/yyyy" }}</td>
-          <td>
-            <ng-container
-              *ngIf="expediente.archivoTipoMime === 'application/pdf'"
-            >
-              <i class="far fa-file-pdf" (click)="onVer(expediente)"></i>
-            </ng-container>
-            <ng-container
-              *ngIf="
-                expediente.archivoTipoMime === 'image/png' ||
-                expediente.archivoTipoMime === 'image/jpeg' ||
-                expediente.archivoTipoMime === 'image/gif'
-              "
-            >
-              <i class="fas fa-file-image" (click)="onVerImagen(expediente)"></i>
-            </ng-container>
-          </td>
-          <td>
-            <i class="far fa-times-circle" (click)="eliminar(expediente)"></i>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-    </ng-container>
-  </div>
-
 </ion-content>

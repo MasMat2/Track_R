@@ -6,5 +6,6 @@ export class ExpedienteMuestrasRegistroDTO{
     valor: string;
     idTabla: number;
     fueraDeRango : boolean;
+    idSeccionVariable : number;
     fechaMuestra : Date;
 }

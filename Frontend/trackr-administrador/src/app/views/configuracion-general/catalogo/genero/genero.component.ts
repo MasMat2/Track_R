@@ -19,13 +19,14 @@ export class GeneroComponent implements OnInit {
     public  tieneAccesoAgregar = false;
     public readonly accesoEditar = CodigoAcceso.EDITAR_GENERO;
     public readonly accesoEliminar = CodigoAcceso.ELIMINAR_GENERO;
-    public  readonly HEADER_GRID = 'Generos';
-    private readonly MENSAJE_EXITO_ELIMINAR = 'El genero ha sido eliminado';
-    private readonly TITULO_MODAL_ELIMINAR = 'Eliminar Genero';
+    public  readonly HEADER_GRID = 'Géneros';
+    private readonly MENSAJE_EXITO_ELIMINAR = 'El género ha sido eliminado';
+    private readonly TITULO_MODAL_ELIMINAR = 'Eliminar Género';
     public generoList: GeneroDto[];
 
     public columns: ColDef[] =  [
-        {headerName: 'Genero', field: 'descripcion', minWidth: 150}
+        {headerName: 'Id', field: 'idGenero', maxWidth: 150},
+        {headerName: 'Género', field: 'descripcion', minWidth: 600}
     ];
     
     constructor(
@@ -88,7 +89,7 @@ export class GeneroComponent implements OnInit {
     eliminar(genero: Genero) {
         this.modalMensajeService
         .modalConfirmacion(
-            '¿Desea eliminar el genero <strong>'+genero.descripcion+'</strong>',
+            '¿Desea eliminar el género <strong>'+genero.descripcion+'</strong>',
             this.TITULO_MODAL_ELIMINAR,
             GeneralConstant.ICONO_CRUZ
             )

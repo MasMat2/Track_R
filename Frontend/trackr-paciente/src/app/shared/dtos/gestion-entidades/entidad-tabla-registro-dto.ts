@@ -7,13 +7,13 @@ export interface EntidadTablaRegistroDto {
 
 export interface TablaValorDto {
     idEntidadEstructuraTablaValor: number;
-    claveCampo: string;
+    idSeccionVariable: number;
     valor: string;
     fueraDeRango: boolean;
 }
 
 export interface TablaValorMuestraDTO {
-    claveCampo: string;
+    idSeccionVariable: number;
     valor: string;
     fueraDeRango: boolean;
     fechaMuestra: Date;

@@ -12,7 +12,7 @@ namespace TrackrAPI.Repositorys.Catalogo
         public Area Consultar(string nombre);
         public Area ConsultarPorClave(string clave);
         public Area ConsultarExistencia(string clave, string nombre);
-        public Area ConsultarDependencias(int idArea);
+        //public Area ConsultarDependencias(int idArea);
 
     }
 }

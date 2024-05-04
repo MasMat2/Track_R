@@ -1,0 +1,177 @@
+<ion-header class="ion-no-border">
+  <div class="contenedor-header">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button routerLink="inicio-perfil">
+          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          Atrás
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="contenedor-principal">
+    <div class="titulo">
+      <ion-text>
+        <h3>Domicilio</h3>
+      </ion-text>
+    </div>
+
+    <div *ngIf="informacionUsuario$ | async as informacionUsuario">
+      <form #formulario="ngForm" novalidate="novalidate" (ngSubmit)="enviarFormulario(formulario)">
+        <ion-grid>
+
+          <div class="seccion">
+            <ion-row>
+              <ion-col size="6">
+                <div class="input">
+                  <ion-label>País</ion-label>
+                  <ion-input  #pais="ngModel" id="pais" name="pais"
+                    fill="outline" (click)="openPaisModal()" [ngModel]="nombrePais" readonly="true">
+                    <ion-icon *ngIf="!modalEstadoAbierto" slot="end" name="chevron-down" ></ion-icon>
+                    <ion-icon *ngIf="modalEstadoAbierto" slot="end" name="chevron-up"></ion-icon>
+                  </ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="input">
+                  <ion-label>Código Postal</ion-label>
+                  <ion-input #codigoPostal="ngModel" id="codigoPostal" name="codigoPostal" fill="outline" type="text"
+                    [disabled]="!informacionUsuario.idPais" [maxlength]="esPaisExtranjero ? null : 5"
+                    [minlength]="esPaisExtranjero ? null : 5" placeholder="Código Postal"
+                    (ionChange)="onChangeCodigoPostal()" [(ngModel)]="informacionUsuario.codigoPostal">
+                  </ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+
+
+
+            <ion-row>
+              <ion-col size="12">
+                <div class="input">
+                  <ion-label>Estado</ion-label>
+                  <ion-input  id="estado" name="estado"
+                    fill="outline" [disabled]="!informacionUsuario.idPais" [ngModel] = "nombreEstado" readonly="true" (click)="openEstadoModal()">
+                    <ion-icon *ngIf="!modalEstadoAbierto" slot="end" name="chevron-down" ></ion-icon>
+                    <ion-icon *ngIf="modalEstadoAbierto" slot="end" name="chevron-up"></ion-icon>
+                  </ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+
+
+            <ion-row>
+              <ion-col size="6">
+                <div class="input">
+                  <ion-label>Municipio</ion-label>
+                  <ion-input  #municipio="ngModel" id="municipio"
+                    name="municipio" fill="outline" [disabled]="!informacionUsuario.idEstado" readonly="true"
+                    [ngModel]="nombreMunicipio">
+                    <ion-icon *ngIf="!modalMunicipioAbierto" slot="end" name="chevron-down" (click)="openMunicipioModal()"></ion-icon>
+                    <ion-icon *ngIf="modalMunicipioAbierto" slot="end" name="chevron-up"></ion-icon>
+                  </ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="input">
+                  <ion-label>Localidad</ion-label>
+                  <ion-input #localidad="ngModel" id="localidad"
+                    name="localidad" fill="outline" [disabled]="!informacionUsuario.idEstado"
+                    [ngModel]="nombreLocalidad" readonly="true" (click)="openLocalidadModal()">
+                    <ion-icon *ngIf="!modalLocalidadAbierto" slot="end" name="chevron-down" ></ion-icon>
+                    <ion-icon *ngIf="modalLocalidadAbierto" slot="end" name="chevron-up"></ion-icon>
+                  </ion-input>
+                </div>
+
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="12">
+                <div class="input">
+                  <ion-label>Colonia</ion-label>
+                  <ion-input  #colonia="ngModel" id="colonia" name="colonia"
+                    fill="outline" [disabled]="informacionUsuario.codigoPostal?.length !== 5"
+                    [ngModel]="nombreColonia" (click)="openColoniaModal()" readonly="true" required="true">
+                    <ion-icon *ngIf="!modalColoniaAbierto" slot="end" name="chevron-down" ></ion-icon>
+                    <ion-icon *ngIf="modalColoniaAbierto" slot="end" name="chevron-up"></ion-icon>
+                  </ion-input>
+
+                  <div
+                  *ngIf="colonia.errors?.['required'] && (colonia.dirty || colonia.touched)"
+                  class="error"
+                >
+                  <ion-icon slot="start" name="informacion"></ion-icon>
+                  La colonia es requerida
+                </div>
+                </div>
+
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="12">
+                <div class="input">
+                  <ion-label>Calle</ion-label>
+                  <ion-input #calle="ngModel" id="calle" name="calle" fill="outline" type="text" maxlength="50"
+                    autocomplete="off" placeholder="Calle" [(ngModel)]="informacionUsuario.calle">
+                  </ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="6">
+
+                <div class="input">
+                  <ion-label>Núm. exterior</ion-label>
+                  <ion-input #numExterior="ngModel" id="numExterior" name="numExterior" fill="outline" type="text"
+                    maxlength="6" autocomplete="off" placeholder="Número Exterior"
+                    [(ngModel)]="informacionUsuario.numeroExterior">
+                  </ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="input">
+                  <ion-label>Núm. Interior</ion-label>
+                  <ion-input #numInterior="ngModel" id="numInterior" name="numInterior" fill="outline" type="text"
+                    maxlength="6" autocomplete="off" placeholder="Número Interior"
+                    [(ngModel)]="informacionUsuario.numeroInterior">
+                  </ion-input>
+                </div>
+
+              </ion-col>
+            </ion-row>
+
+
+            <ion-row>
+              <ion-col size="12">
+                <div class="input">
+                  <ion-label>Entre calles</ion-label>
+                  <ion-input #entreCalles="ngModel" id="entreCalles" name="entreCalles" fill="outline" type="text"
+                    maxlength="50" autocomplete="off" placeholder="Entre calles"
+                    [(ngModel)]="informacionUsuario.entreCalles">
+                  </ion-input>
+                </div>
+
+              </ion-col>
+            </ion-row>
+
+          </div>
+
+          <ion-row class="mt-4">
+            <ion-col>
+              <ion-button class="btn-enviar" [disabled]="submiting" type="submit">Guardar</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
+    </div>
+
+
+
+
+  </div>

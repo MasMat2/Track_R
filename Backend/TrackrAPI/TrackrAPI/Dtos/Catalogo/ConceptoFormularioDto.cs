@@ -21,19 +21,19 @@ namespace TrackrAPI.Dtos.Catalogo
 
         }
 
-        public ConceptoFormularioDto(Concepto concepto)
-        {
-            IdConcepto = concepto.IdConcepto;
-            IdCompania = (int)concepto.IdCompania;
-            Clave = concepto.Clave;
-            Nombre = concepto.Nombre;
-            IdsTipoConcepto = new();
-            TipoMovimiento = concepto.TipoMovimiento;
-            IdCuentaContable = concepto.IdCuentaContable;
-            Operativo = concepto.Operativo;
-            IdSatProductoServicio = concepto.IdSatProductoServicio;
-            IdSatUnidad = concepto.IdSatUnidad;
-            IdTipoAuxiliar = concepto.IdTipoAuxiliar;
-        }
+        //public ConceptoFormularioDto(Concepto concepto)
+        //{
+        //    IdConcepto = concepto.IdConcepto;
+        //    IdCompania = (int)concepto.IdCompania;
+        //    Clave = concepto.Clave;
+        //    Nombre = concepto.Nombre;
+        //    IdsTipoConcepto = new();
+        //    TipoMovimiento = concepto.TipoMovimiento;
+        //    IdCuentaContable = concepto.IdCuentaContable;
+        //    Operativo = concepto.Operativo;
+        //    IdSatProductoServicio = concepto.IdSatProductoServicio;
+        //    IdSatUnidad = concepto.IdSatUnidad;
+        //    IdTipoAuxiliar = concepto.IdTipoAuxiliar;
+        //}
     }
 }

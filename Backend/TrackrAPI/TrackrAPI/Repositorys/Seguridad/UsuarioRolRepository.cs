@@ -38,11 +38,11 @@ namespace TrackrAPI.Repositorys.Seguridad
                 {
                     IdUsuarioRol = ur.IdUsuarioRol,
                     IdRol = ur.IdRol,
-                    IdCuentaContable = ur.IdConceptoNavigation.IdCuentaContable,
+                    //IdCuentaContable = ur.IdConceptoNavigation.IdCuentaContable,
                     NombreRol = ur.IdRolNavigation.Nombre,
-                    CuentaContable = ur.IdCuentaContableNavigation.NumeroNombre(),
+                    //CuentaContable = ur.IdCuentaContableNavigation.NumeroNombre(),
                     ClaveRol = ur.IdRolNavigation.Clave,
-                    Concepto = ur.IdConceptoNavigation.Nombre,
+                    //Concepto = ur.IdConceptoNavigation.Nombre,
                     IdConcepto = ur.IdConcepto
                 })
                 .ToList();

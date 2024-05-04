@@ -168,6 +168,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Where(e => (e.Tabulacion == true) &&
                             (e.IdEntidadNavigation.Clave == GeneralConstant.ClaveEntidadPadecimiento) &&
                             (e.EsAntecedente == true))
+                .Where(e => e.InverseIdEntidadEstructuraPadreNavigation.Any()) // Solo los que tienen hijos (variables)
                 .Select(e => new ExpedientePadecimientoSelectorDTO
                 {
                     IdPadecimiento = e.IdEntidadEstructura,
@@ -181,6 +182,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Where(e => (e.Tabulacion == true) &&
                             (e.IdEntidadNavigation.Clave == GeneralConstant.ClaveEntidadPadecimiento) &&
                             (e.EsAntecedente == false))
+                .Where(e => e.InverseIdEntidadEstructuraPadreNavigation.Any()) // Solo los que tienen hijos (variables)
                 .Select(e => new ExpedientePadecimientoSelectorDTO
                 {
                     IdPadecimiento = e.IdEntidadEstructura,
@@ -191,8 +193,10 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         //Dado un idUsuario, devuelve el valor mas reciente de las variables que mostrarDashboard = true de sus respectivos padecimientos
         public IEnumerable<EntidadEstructura> ValoresVariablesPadecimiento(int idUsuario)
         {
-            var prueba =  context.EntidadEstructura
+           return  context.EntidadEstructura
                 .Include(ee => ee.IdEntidadEstructuraPadreNavigation)
+                    .ThenInclude(ee => ee.ExpedientePadecimiento)
+                        .ThenInclude(eP => eP.IdExpedienteNavigation)
                 .Include(ee => ee.IdEntidadNavigation)
                 .Include(ee => ee.IdSeccionNavigation)
                     .ThenInclude(sC => sC.SeccionCampo)
@@ -200,11 +204,24 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Include(sC => sC.IdSeccionNavigation.SeccionCampo)
                          .ThenInclude(sC => sC.IdIconoNavigation)
                 .Include(ee => ee.EntidadEstructuraTablaValor)
+                .Include(ee => ee.ExpedientePadecimiento)
+                    .ThenInclude(eP => eP.IdExpedienteNavigation)
                 .Include(ee => ee.IdEntidadEstructuraPadreNavigation.IdIconoNavigation)
                 .Include(ee => ee.IdEntidadEstructuraPadreNavigation.IdTipoWidgetNavigation)
-                    .Where(ee => ee.IdEntidadEstructuraPadre != null).ToList();
-
-            return prueba;
+                  .Include(sC => sC.IdSeccionNavigation.SeccionCampo)
+                         .ThenInclude(sC => sC.IdDominioNavigation)
+                         .Where(ee => ee.IdEntidadEstructuraPadre != null)
+                         .Where( ee => ee.IdEntidadEstructuraPadreNavigation.ExpedientePadecimiento.Any(eP => eP.IdExpedienteNavigation.IdUsuario == idUsuario))
+                         .ToList();
         }
+
+        public EntidadEstructura? ConsultarPorEntidadSeccionVariable(int idSeccionCampo)
+        {
+            return context.EntidadEstructura
+                .Where(e => e.IdSeccion == idSeccionCampo && e.IdEntidadEstructuraPadre != null)
+                .FirstOrDefault();
+        }
+
+      
     }
 }

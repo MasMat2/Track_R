@@ -1,60 +1,50 @@
 
+<ion-header class="ion-no-border">
+  <div class="contenedor-header">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button routerLink="inicio-perfil">
+          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          Atrás
+        </ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button (click)="AgregarDoctor()">
+          <ion-icon slot="icon-only" name="add"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+</ion-header>
 <ion-content>
-    <div class="container">    
-    <h3>
-      Mis Doctores / Auxiliares
-    </h3>
-
-    <ion-list >
-      <ion-card *ngFor="let doctor of misDoctores">
-
-        <ion-card-header>
-          Doctor/especialidad/hospital
-        </ion-card-header>
-
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <div class="img-container">
-
-              <img alt="{{doctor.urlImagen}} d" [src]="doctor.urlImagen" />
-            </div>
-            
-          </ion-thumbnail>
-
-          <ion-label>
-            <ion-row>
-              {{doctor.nombre}}
-            </ion-row>
-
-            <ion-row>
-              {{doctor.ambito}}
-            </ion-row>
-
-            <ion-row>
-              {{doctor.hospital}}
-            </ion-row>
-          </ion-label>
-
-          <ion-button fill="outline" size="small" color="light" slot="end" (click)="eliminar(doctor)">
-            <ion-icon name="close"></ion-icon>
-          </ion-button>
-
-        </ion-item>
-      </ion-card>
-    </ion-list>
-
-    <div class="justify-content-center">
-      <ion-button fill="outline">
-          <ion-tab-button size="default" tab ='mis-doctores/agregar'>
-            Agregar Doctor / Auxiliar
-          </ion-tab-button>
+  <div class="contenedor-principal">
+    <div class="titulo">
+      <ion-text>
+        <h3>Mis doctores</h3>
+      </ion-text>
+    </div>
+    <div class="lista-vacia" *ngIf="listaDoctoresVacia()">
+      <ion-text>
+        <p>Nada Por aquí. <br> Aún no tienes doctores asignados</p>
+      </ion-text>
+      <ion-button fill="outline" (click)="AgregarDoctor()">
+        <ion-icon slot="start" name="add"></ion-icon>
+        Añadir doctor
       </ion-button>
     </div>
-
-    <div style="height: 200px;">
-
+    <div class="lista-doctores" *ngIf="!listaDoctoresVacia()">
+      <ion-list>
+        <ion-item *ngFor="let doctor of misDoctores" lines="none">
+          <ion-label>
+            <h3>{{doctor.nombre}}</h3>
+            <p>{{doctor.ambito}}</p>
+            <p>{{doctor.hospital}}</p>
+          </ion-label>
+          <ion-button slot="end" fill="clear" (click)="presentarAlertaEliminar(doctor)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
     </div>
-
-
   </div>
 </ion-content>

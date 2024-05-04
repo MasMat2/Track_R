@@ -75,7 +75,7 @@ namespace TrackrAPI.Repositorys.Catalogo
         {
             return context.Dominio
                 .Include(e => e.DominioDetalle)
-                .Include(e => e.ExpedienteCampo)
+                //.Include(e => e.ExpedienteCampo)
                 .Where(e => e.IdDominio == idDominio)
                 .FirstOrDefault();
         }

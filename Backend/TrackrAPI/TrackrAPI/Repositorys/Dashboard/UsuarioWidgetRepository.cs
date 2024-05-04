@@ -29,6 +29,7 @@ namespace TrackrAPI.Repositorys.Dashboard
     {
             var widgets = context.UsuarioWidget.Where(w => w.IdUsuario == usuarioId);
             context.UsuarioWidget.RemoveRange(widgets);
+            context.SaveChanges();
     }
 
    }

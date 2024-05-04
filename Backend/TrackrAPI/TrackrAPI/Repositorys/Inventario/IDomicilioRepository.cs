@@ -13,7 +13,7 @@ namespace TrackrAPI.Repositorys.Inventario
         public IEnumerable<DomicilioGridDto> ConsultarPorEstado(int idEstado);
         public Domicilio ConsultarPorDomicilio(Domicilio domicilio);
         public IEnumerable<Domicilio> ConsultarPorUsuario(int idUsuario);
-        public Domicilio ConsultarDependencias(int idDomicilio);
+        //public Domicilio ConsultarDependencias(int idDomicilio);
         public IEnumerable<DomicilioSelectorDto> ConsultarParaSelector(int idCompania);
     }
 }

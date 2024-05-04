@@ -2,8 +2,6 @@
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Catalogo;
-using TrackrAPI.Repositorys.Contabilidad;
-using TrackrAPI.Repositorys.GestionCaja;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,32 +12,17 @@ namespace TrackrAPI.Services.Catalogo
     public class HospitalService
     {
         private IHospitalRepository hospitalRepository;
-        private ICajaRepository cajaRepository;
-        private ICajaTurnoRepository cajaTurnoRepository;
-        private IListaPrecioClinicaRepository listaPrecioClinicaRepository;
-        private IListaPrecioRepository listaPrecioRepository;
         private ICompaniaRepository companiaRepository;
-        private ITipoActivoRepository tipoActivoRepository;
         private HospitalValidatorService hospitalValidatorService;
         private HospitalLogotipoService hospitalLogotipoService;
 
         public HospitalService(IHospitalRepository hospitalRepository,
-            ICajaRepository cajaRepository,
-            ICajaTurnoRepository cajaTurnoRepository,
-            IListaPrecioClinicaRepository listaPrecioClinicaRepository,
-            IListaPrecioRepository listaPrecioRepository,
             ICompaniaRepository companiaRepository,
-            ITipoActivoRepository tipoActivoRepository,
             HospitalValidatorService hospitalValidatorService,
             HospitalLogotipoService hospitalLogotipoService)
         {
             this.hospitalRepository = hospitalRepository;
-            this.cajaRepository = cajaRepository;
-            this.cajaTurnoRepository = cajaTurnoRepository;
-            this.listaPrecioClinicaRepository = listaPrecioClinicaRepository;
             this.companiaRepository = companiaRepository;
-            this.tipoActivoRepository = tipoActivoRepository;
-            this.listaPrecioRepository = listaPrecioRepository;
             this.hospitalValidatorService = hospitalValidatorService;
             this.hospitalLogotipoService = hospitalLogotipoService;
         }
@@ -87,15 +70,19 @@ namespace TrackrAPI.Services.Catalogo
             return hospitalRepository.ConsultarPorCompania(idCompania);
         }
 
+        public IEnumerable<HospitalDto> ConsultarTodosParaSelector(int idDominio)
+        {
+            return hospitalRepository.ConsultarTodosParaSelector(idDominio);
+        }
         public IEnumerable<HospitalDto> ConsultarTodosParaSelector()
         {
             return hospitalRepository.ConsultarTodosParaSelector();
         }
 
-        public IEnumerable<HospitalDto> ConsultarDisponiblesParaListaPrecio(int? idListaPrecioSeleccionada)
-        {
-            return hospitalRepository.ConsultarDisponiblesParaListaPrecio(idListaPrecioSeleccionada);
-        }
+        //public IEnumerable<HospitalDto> ConsultarDisponiblesParaListaPrecio(int? idListaPrecioSeleccionada)
+        //{
+        //    return hospitalRepository.ConsultarDisponiblesParaListaPrecio(idListaPrecioSeleccionada);
+        //}
 
         public int Agregar(Hospital hospital)
         {
@@ -114,47 +101,47 @@ namespace TrackrAPI.Services.Catalogo
                     hospitalRepository.Editar(locacionPredeterminadaAntigua);
                 }
 
-                var listaPrecio = new ListaPrecio()
-                {
-                    Nombre = "Lista de precio base",
-                    Clave = $"Base-{hospital.IdHospital}",
-                    FechaAlta = DateTime.Now,
-                    FechaInicioVigencia = DateTime.Today,
-                    FechaFinVigencia = DateTime.Today.AddYears(1),
-                    Observaciones = "Ninguna",
-                    TodasClinicas = false
-                };
+                //var listaPrecio = new ListaPrecio()
+                //{
+                //    Nombre = "Lista de precio base",
+                //    Clave = $"Base-{hospital.IdHospital}",
+                //    FechaAlta = DateTime.Now,
+                //    FechaInicioVigencia = DateTime.Today,
+                //    FechaFinVigencia = DateTime.Today.AddYears(1),
+                //    Observaciones = "Ninguna",
+                //    TodasClinicas = false
+                //};
 
-                listaPrecioRepository.Agregar(listaPrecio);
+                //listaPrecioRepository.Agregar(listaPrecio);
 
-                var listaPrecioClinica = new ListaPrecioClinica()
-                {
-                    IdClinica = hospital.IdHospital,
-                    IdListaPrecio = listaPrecio.IdListaPrecio
-                };
+                //var listaPrecioClinica = new ListaPrecioClinica()
+                //{
+                //    IdClinica = hospital.IdHospital,
+                //    IdListaPrecio = listaPrecio.IdListaPrecio
+                //};
 
-                listaPrecioClinicaRepository.Agregar(listaPrecioClinica);
+                //listaPrecioClinicaRepository.Agregar(listaPrecioClinica);
 
                 // Se agrega la caja automatica
 
-                var cajaAutomatica = new Caja();
-                cajaAutomatica.Automatica = true;
-                cajaAutomatica.Nombre = "Caja automática";
-                cajaAutomatica.Descripcion = "Caja automática para los pagos en línea, depósitos y transferencias";
-                cajaAutomatica.IdHospital = hospital.IdHospital;
-                cajaAutomatica.IdTipoActivo = tipoActivoRepository.ConsultarPorClave(GeneralConstant.ClaveTipoActivoCirculanteCaja).IdTipoActivo;
+                //var cajaAutomatica = new Caja();
+                //cajaAutomatica.Automatica = true;
+                //cajaAutomatica.Nombre = "Caja automática";
+                //cajaAutomatica.Descripcion = "Caja automática para los pagos en línea, depósitos y transferencias";
+                //cajaAutomatica.IdHospital = hospital.IdHospital;
+                //cajaAutomatica.IdTipoActivo = tipoActivoRepository.ConsultarPorClave(GeneralConstant.ClaveTipoActivoCirculanteCaja).IdTipoActivo;
 
-                cajaRepository.Agregar(cajaAutomatica);
+                //cajaRepository.Agregar(cajaAutomatica);
 
                 // Se agrega la caja 1
-                var caja = new Caja();
-                caja.Automatica = false;
-                caja.Nombre = "Caja 1";
-                caja.Descripcion = "Caja 1";
-                caja.IdHospital = hospital.IdHospital;
-                caja.IdTipoActivo = tipoActivoRepository.ConsultarPorClave(GeneralConstant.ClaveTipoActivoCirculanteCaja).IdTipoActivo;
+                //var caja = new Caja();
+                //caja.Automatica = false;
+                //caja.Nombre = "Caja 1";
+                //caja.Descripcion = "Caja 1";
+                //caja.IdHospital = hospital.IdHospital;
+                //caja.IdTipoActivo = tipoActivoRepository.ConsultarPorClave(GeneralConstant.ClaveTipoActivoCirculanteCaja).IdTipoActivo;
 
-                cajaRepository.Agregar(caja);
+                //cajaRepository.Agregar(caja);
 
                 scope.Complete();
 
@@ -192,11 +179,11 @@ namespace TrackrAPI.Services.Catalogo
                 // var cajaTurnos = cajaTurnoRepository.ConsultarPorHotel(idHotel).ToList();
                 // cajaTurnoRepository.Eliminar(cajaTurnos);
 
-                var cajas = cajaRepository.ConsultarPorHotel(idHotel);
-                foreach (var caja in cajas)
-                {
-                    cajaRepository.Eliminar(caja);
-                }
+                //var cajas = cajaRepository.ConsultarPorHotel(idHotel);
+                //foreach (var caja in cajas)
+                //{
+                //    cajaRepository.Eliminar(caja);
+                //}
 
                 foreach (var imagen in hospital.HospitalLogotipo)
                 {

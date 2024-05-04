@@ -160,7 +160,19 @@
             <div class="form-group">
               <label class="label-input required-label">Colonia</label>
               <div>
-                <input
+                <ng-select
+                  #colonia="ngModel"
+                  name="ccoloniaName"
+                  bindLabel="colonia"
+                  bindValue="colonia"
+                  [items]="codigoPostalList"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                  [(ngModel)]="campoColonia"
+                  [required]="true"
+                  (ngModelChange)= "onChangeColonia($event.value)"
+                ></ng-select>
+                <!-- <input
                   #colonia="ngModel"
                   [(ngModel)]="campoColonia"
                   name="ccoloniaName"
@@ -175,7 +187,7 @@
                   [required]="true"
                   autocomplete="new-colonia"
                   appFormatoAlfanumerico
-                />
+                /> -->
                 <div *ngIf="colonia.errors?.['required'] && colonia.touched" class="error">
                   La colonia es requerida
                 </div>
@@ -267,29 +279,36 @@
           <div class="col-md-4">
             <div class="form-group">
               <label class="label-input required-label">Teléfono (10 dígitos)</label>
-              <div class="d-flex">
-                <ng-select
-                  class="lada-input"
-                  #ladaModel="ngModel"
-                  name="ladaName"
-                  bindLabel="claveNumero"
-                  bindValue="idLada"
-                  [items]="ladaList"
-                  [required]="true"
-                  [(ngModel)]="hospital.idLada"
-                  [placeholder]="placeHolderSelect"
-                ></ng-select>
-                <input
-                  #telefono="ngModel"
-                  [(ngModel)]="hospital.telefono"
-                  name="telefono"
-                  class="form-control"
-                  type="text"
-                  [required]="true"
-                  maxlength="10"
-                  minlength="10"
-                  appFormatoTelefono
-                />
+              <div class="row">
+                <!-- Lada -->
+                <div class="col-4 pr-0">
+                  <ng-select
+                    class="lada-input"
+                    #ladaModel="ngModel"
+                    name="ladaName"
+                    bindLabel="claveNumero"
+                    bindValue="idLada"
+                    [items]="ladaList"
+                    [required]="true"
+                    [(ngModel)]="hospital.idLada"
+                    [placeholder]="placeHolderSelect"
+                  ></ng-select>
+                </div>
+
+                <!-- Dígitos -->
+                <div class="col-8">
+                  <input
+                    #telefono="ngModel"
+                    [(ngModel)]="hospital.telefono"
+                    name="telefono"
+                    class="form-control"
+                    type="text"
+                    [required]="true"
+                    maxlength="10"
+                    minlength="10"
+                    appFormatoTelefono
+                  />
+                </div>
               </div>
               <div *ngIf="telefono.errors?.['formatoTelefono']" class="error">
                 El teléfono tiene un formato inválido
@@ -391,7 +410,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-4">
+          <!-- <div class="col-md-4">
             <div class="form-group">
               <label class="label-input required-label">Banco</label>
               <div>
@@ -411,7 +430,7 @@
                 El banco es requerido
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="col-md-4">
             <div class="form-group">
               <label class="label-input required-label">Cuenta</label>
@@ -485,7 +504,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-4">
+          <!-- <div class="col-md-4">
             <div class="form-group">
               <label class="label-input required-label">Lista de precios Default</label>
               <div>
@@ -505,8 +524,8 @@
                 La lista de precios default es requerida
               </div>
             </div>
-          </div>
-          <div class="col-md-4">
+          </div> -->
+          <!-- <div class="col-md-4">
             <div class="form-group">
               <label class="label-input required-label">Lista de precios Compras en línea</label>
               <div>
@@ -526,8 +545,8 @@
                 La lista de precios compras en línea es requerida
               </div>
             </div>
-          </div>
-          <div class="col-md-4">
+          </div> -->
+          <!-- <div class="col-md-4">
             <label class="label-input required-label">Predeterminada</label>
             <div class="form-group radion-bottom">
               <label class="switch">
@@ -544,14 +563,14 @@
                 </div>
               </label>
             </div>
-          </div>
+          </div> -->
         </div>
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-sm-12"><label class="subseccion">Logotipo de Locación</label></div>
-        </div>
+        </div> -->
 
         <!-- Input -->
-        <div class="row mb-4">
+        <!-- <div class="row mb-4">
           <div class="col-md-6">
             <div>
               <div class="custom-file">
@@ -572,11 +591,11 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <div *ngIf="hospitalLogotipo?.imagenBase64 || hospitalLogotipo?.src">
+        <!-- <div *ngIf="hospitalLogotipo?.imagenBase64 || hospitalLogotipo?.src"> -->
           <!-- Nombre -->
-          <div class="row mb-3">
+          <!-- <div class="row mb-3">
             <div
               class="col-md-6 d-flex"
               style="word-break:break-all; gap: 10px;"
@@ -589,10 +608,10 @@
                 (click)="eliminarLogotipo()"
               />
             </div>
-          </div>
+          </div> -->
 
           <!-- Imagen -->
-          <div class="row mb-3">
+          <!-- <div class="row mb-3">
             <div class="col-md-6">
               <img
                 [src]="hospitalLogotipo?.imagenBase64
@@ -602,13 +621,13 @@
                 width="200px" />
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-sm-12"><label class="subseccion">Configuración de Áreas de Almacén</label></div>
-        </div>
+        </div> -->
         <div class="row mb-3">
-          <div class="form-group col-md-6">
+          <!-- <div class="form-group col-md-6">
             <label class="label-input required-label">Almacén Producción</label>
             <ng-select
               #almacenProduccionLst="ngModel"
@@ -624,8 +643,8 @@
             <div *ngIf="almacenProduccionLst.errors?.['required'] && almacenProduccionLst.touched" class="error">
               El almacén es requerido
             </div>
-          </div>
-          <div class="form-group col-md-6">
+          </div> -->
+          <!-- <div class="form-group col-md-6">
             <label class="label-input required-label">Almacén Caduco</label>
             <ng-select
               #almacenCaducoLst="ngModel"
@@ -641,20 +660,20 @@
             <div *ngIf="almacenCaducoLst.errors?.['required'] && almacenCaducoLst.touched" class="error">
               El almacén es requerido
             </div>
-          </div>
+          </div> -->
         </div>
-        <div class="row" *ngIf="this.hospital.idHospital > 0">
+        <div class="row" *ngIf="this.hospital.idHospital > 0 && false">
           <div class="col-sm-12"><label class="subseccion">Configuración de Certificados</label></div>
         </div>
-        <div class="row mb-3" *ngIf="this.hospital.idHospital > 0">
+        <div class="row mb-3" *ngIf="this.hospital.idHospital > 0 && false">
           <div class="col-md-6">
             <button type="button" (click)="configurarCertificados()" class="btn-terceario ml-3">Configurar</button>
           </div>
         </div>
       </div>
-      <div class="text-center mt-5">
-        <button type="button" (click)="regresar()" class="btn-secundario mr-3">&lang;&lang; Regresar</button>
-        <button type="submit" class="btn-primario ml-3" [disabled]="btnSubmit">Guardar</button>
+      <div class="modal-footer">
+        <button type="button" (click)="regresar()" class="btn-secundario mr-3">Cancelar</button>
+        <button type="submit" class="btn-primario mr-3" [disabled]="btnSubmit">Guardar</button>
       </div>
     </form>
   </div>

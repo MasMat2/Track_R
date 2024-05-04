@@ -1,4 +1,38 @@
-ion-title {
-    color: #c897d8;
+
+ion-header{
+
+}
+
+ion-content{  
+  
+}
+
+.contenedor-header{
+  height: 12vh;
+  display: flex;
+  align-items: flex-end;
+  background: var(--neutral-50);
+  ion-toolbar{
+    --background: var(--neutral-50);
+
+    ion-title{
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: var(--neutral-900);
+    }
   }
+}
+
+.contenedor-principal{
+  height: 80vh;
+  background: var(--primary-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.contenedor-footer{
+  height: 8vh;
+}
 

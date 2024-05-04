@@ -172,7 +172,19 @@
           <div class="form-group">
             <label class="label-input required-label">Colonia</label>
             <div>
-              <input
+              <ng-select
+                      #colonia="ngModel"
+                      name="coloniaName"
+                      class="select-custom"
+                      [items]="coloniaList"
+                      bindLabel="nombre"
+                      bindValue="nombre"
+                      [(ngModel)]="compania.colonia"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                      [disabled]="compania.codigoPostal?.length != 5"
+                    ></ng-select>
+              <!-- <input
                 #colonia="ngModel"
                 [(ngModel)]="compania.colonia"
                 name="colonia"
@@ -180,7 +192,7 @@
                 type="text"
                 [required]="true"
                 maxlength="100"
-              />
+              /> -->
             </div>
             <div *ngIf="colonia.errors?.['required'] && colonia.touched" class="error">
               La colonia es requerida
@@ -211,31 +223,7 @@
       </div>
 
       <div class="row">
-        <!-- Número Interior -->
-        <div class="col-md-2">
-          <div class="form-group">
-            <label class="label-input required-label"
-              >Núm. Interior</label
-            >
-            <div>
-              <input
-                #numeroInterior="ngModel"
-                [(ngModel)]="compania.numeroInterior"
-                name="numeroInterior"
-                class="form-control"
-                type="text"
-                [required]="false"
-                maxlength="6"
-                appFormatoAlfanumerico
-              />
-            </div>
-            <div *ngIf="numeroInterior.errors?.['formatoAlfanumerico'] && numeroInterior.touched" class="error">
-              El núm. interior tiene un formato inválido
-            </div>
-          </div>
-        </div>
-
-        <!-- Número Exterior -->
+         <!-- Número Exterior -->
         <div class="col-md-2">
           <div class="form-group">
             <label class="label-input required-label"
@@ -261,6 +249,30 @@
             </div>
           </div>
         </div>
+
+        <!-- Número Interior -->
+        <div class="col-md-2">
+        <div class="form-group">
+          <label class="label-input required-label"
+            >Núm. Interior</label
+          >
+          <div>
+            <input
+              #numeroInterior="ngModel"
+              [(ngModel)]="compania.numeroInterior"
+              name="numeroInterior"
+              class="form-control"
+              type="text"
+              [required]="false"
+              maxlength="6"
+              appFormatoAlfanumerico
+            />
+          </div>
+          <div *ngIf="numeroInterior.errors?.['formatoAlfanumerico'] && numeroInterior.touched" class="error">
+            El núm. interior tiene un formato inválido
+          </div>
+        </div>
+      </div>
 
         <!-- Teléfono -->
         <div class="col-md-4">
@@ -406,7 +418,7 @@
           </div>
         </div>
 
-        <div *ngIf="!desdeLogin" class="col-md-2">
+        <!-- <div *ngIf="!desdeLogin" class="col-md-2">
           <label class="label-input required-label">Uso Almacén</label>
           <div class="form-group radion-bottom">
             <label class="switch">
@@ -424,15 +436,40 @@
               </div>
             </label>
           </div>
-        </div>
+        </div> -->
 
-        <!-- URL -->
+        <!-- URL 
         <div class="col-md-4" *ngIf="compania.clave">
           <div class="form-group">
             <label class="label-input required-label" >URL Sistema Compras en Línea</label>
             <a [href]="urlFrontend + compania.clave + '/login'" target="_blank">
               {{ urlFrontend + compania.clave + "/login" }}
             </a>
+          </div>
+        </div>-->
+      </div>
+
+      <div class="row">
+        <!-- Regimen Fiscal -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="label-input required-label" >Regimen Fiscal</label>
+            <div>
+              <ng-select
+                #regimenFiscal="ngModel"
+                name="regimenFiscal"
+                [required]="true"
+                bindLabel="nombre"
+                bindValue="idRegimenFiscal"
+                [items]="regimenFiscalList"
+                [(ngModel)]="compania.idRegimenFiscal"
+                [placeholder]="placeHolderSelect"
+                [notFoundText]="placeHolderNoOptions"
+              ></ng-select>
+              <div *ngIf="regimenFiscal.errors?.['required'] && regimenFiscal.touched" class="error">
+                El regimen fiscal es requerido
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -503,7 +540,6 @@
                   autocomplete="off"
                   accept="image/jpeg,image/png"
                   (change)="onFileChangeLogotipo($event)"
-                  [disabled]="companiaLogotipo"
                 />
                 <label class="custom-file-label" for="companiaLogotipo">
                   {{ companiaLogotipo?.nombreImagen }}
@@ -545,11 +581,11 @@
       </div>
 
       <!-- Sección de Contabilidad -->
-      <div class="subseccion">Contabilidad</div>
+      <!-- <div class="subseccion">Contabilidad</div> -->
 
-      <div class="row">
+      <!-- <div class="row"> -->
         <!-- Régimen Fiscal -->
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <div class="form-group">
             <label class="label-input required-label" >Régimen Fiscal</label>
             <div>
@@ -571,8 +607,8 @@
           </div>
         </div>
 
-        <!-- Agrupador de Cuenta Contable -->
-        <div class="col-md-4" *ngIf="esEditar()">
+        Agrupador de Cuenta Contable -->
+        <!-- <div class="col-md-4" *ngIf="esEditar()">
           <div class="form-group">
             <label class="label-input required-label" >Agrupador de Cuenta Contable</label>
             <div>
@@ -589,10 +625,10 @@
               ></ng-select>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Moneda -->
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <div class="form-group">
             <label class="label-input required-label">Moneda</label>
             <div>
@@ -613,11 +649,11 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <div class="row" *ngIf="esEditar()">
+      <!-- <div class="row" *ngIf="esEditar()">-->
         <!-- Afectación Contable -->
-        <div class="col-md-2">
+        <!-- <div class="col-md-2">
           <label class="label-input required-label">Afectación Contable</label>
           <div class="form-group radion-bottom">
             <label class="switch">
@@ -634,10 +670,10 @@
               </div>
             </label>
           </div>
-        </div>
+        </div>-->
 
         <!-- Timbrado -->
-        <div class="col-md-2">
+        <!-- <div class="col-md-2">
           <label class="label-input required-label">Timbrado</label>
           <div class="form-group radion-bottom">
             <label class="switch">
@@ -655,7 +691,7 @@
             </label>
           </div>
         </div>
-      </div>
+      </div>-->
 
       <!-- Sección Datos de Contacto -->
       <div *ngIf="desdeLogin">
@@ -826,22 +862,9 @@
       </div>
 
       <!-- Guardar y cancelar -->
-      <!-- <div class="text-center mt-3"></div> -->
-      <div class="text-center mt-3">
-        <button
-          type="button"
-          class="btn-secundario mr-3"
-          (click)="regresar()"
-        >
-          &lang;&lang; Regresar
-        </button>
-        <button
-          type="submit"
-          class="btn-primario mr-3"
-          [disabled]="btnSubmit"
-          *ngIf="tieneAccesoEditar"
-        >Guardar
-        </button>
+      <div class="modal-footer">
+        <button type="button" class="btn-secundario mr-3" (click)="regresar()">Cancelar</button>
+        <button type="submit" class="btn-primario mr-3" [disabled]="btnSubmit" *ngIf="tieneAccesoEditar">Guardar</button>
       </div>
 
     </form>

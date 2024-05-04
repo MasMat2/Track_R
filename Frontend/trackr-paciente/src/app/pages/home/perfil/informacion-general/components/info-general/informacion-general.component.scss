@@ -1,0 +1,119 @@
+@import "../../../../../../../theme/variables.scss";
+
+ion-header{
+  border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
+  background: var(--primary-50);
+}
+
+ion-content{
+  --background: var(--primary-50);
+}
+
+
+
+
+.contenedor-header{
+  background: var(--primary-50);
+  height: 20vh;
+  width: 100%;
+
+  ion-toolbar{
+    height: 100%;
+    width: 100%;
+    --background: url('../../../../../../../assets/header_light.svg');
+
+    //medidas máximas para que no se estire el svg
+    max-height: 153px;
+    max-width: 390px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 20px;
+
+    ion-button{
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 18px;
+      color: var(--primary-700);
+    }
+  }
+}
+
+.contenedor-principal{
+  margin: 3vh 32px;
+  margin-bottom: 40vh;
+  height: 80vh;
+
+  .titulo{
+    height: 4vh;
+
+      ion-text{
+          text-align: start;
+          h3{
+              margin: 0;
+              color: var(--primary-700);
+              font-family: var(--font-display);
+              font-size: 24px;
+              font-weight: 700;
+              line-height: 32px;
+          }
+      }
+  }
+
+}
+
+.texto-seccion{
+    font-weight: bold;
+    color: var(--primary-600);
+}
+
+
+
+
+ion-item{
+  --background: var(--neutral-100);
+}
+
+.correoConfirmado{
+
+  p{
+    text-align: center;
+    color: red;
+  }
+
+  ion-button{
+    --background: var(--primary-700);
+    --color: var(--neutral-50);
+  }
+}
+
+.padecimiento-nuevo{
+  padding-top: 2em;
+}
+
+.seccion{
+  padding-bottom: 1em;
+}
+
+.btn-enviar{
+  --background: var(--primary-700);
+  --color: var(--neutral-50);
+  --border-radius: 10px;
+}
+
+.btn-agregar-eliminar{
+  position: relative;
+  font-size: 1em;
+  --ripple-color: var(--primary-300);
+
+  #circulo{
+    color: var(--neutral-400);
+  }
+
+  #icono{
+    position: absolute;
+    color: var(--neutral-50);
+  }
+}
+
