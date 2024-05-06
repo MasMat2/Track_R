@@ -219,28 +219,6 @@
                   </div>
 
                   <div class="row row-icono" *ngIf="esNuevaPestana">
-                    <!-- Icono -->
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label class="label-input required-label">Icono Menú</label>
-                        <div class="d-flex">
-                          <i
-                            *ngIf="entidadEstructura.idIcono"
-                            class="{{ getIconClass (entidadEstructura.idIcono) }} + 'icono-acceso'"
-                          ></i>
-                          <ng-select
-                            name="IconoName"
-                            [(ngModel)]="entidadEstructura.idIcono"
-                            style="width: 100%"
-                            bindLabel="nombre"
-                            bindValue="idIcono"
-                            [items]="iconoList"
-                            [placeholder]="placeHolderSelect"
-                          ></ng-select>
-                        </div>
-                      </div>
-                    </div>
-
                     <!-- Tipo Widget -->
                     <div class="col-md-6">
                       <div class="form-group">
