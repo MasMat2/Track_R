@@ -5,6 +5,6 @@ export class ExpedienteConsumoMedicamentoGridDto{
     unidad : string;
     indicaciones : string;
     padecimiento : string;
-    fechaToma : Date;
-    fechaEnvio : Date;
+    fechaToma : string;
+    horaToma : string;
 }
