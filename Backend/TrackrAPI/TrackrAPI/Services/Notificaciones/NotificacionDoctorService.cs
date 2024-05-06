@@ -1,5 +1,6 @@
 using System.Transactions;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Hosting.Internal;
 using TrackrAPI.Dtos.Notificaciones;
 using TrackrAPI.Helpers;
 using TrackrAPI.Hubs;
@@ -17,19 +18,23 @@ public class NotificacionDoctorService
     private readonly UsuarioService _usuarioService;
     private readonly ArchivoService _archivoService;
     private readonly IHubContext<NotificacionDoctorHub, INotificacionDoctorHub> _hubContext;
+    
+    private readonly IWebHostEnvironment _hostingEnvironment;
 
     public NotificacionDoctorService(
         NotificacionService notificacionService,
         NotificacionUsuarioService notificacionUsuarioService,
         UsuarioService usuarioService,
         IHubContext<NotificacionDoctorHub, INotificacionDoctorHub> hubContext,
-        ArchivoService archivoService)
+        ArchivoService archivoService,
+        IWebHostEnvironment hostingEnvironment)
     {
         _notificacionService = notificacionService;
         _notificacionUsuarioService = notificacionUsuarioService;
         _usuarioService = usuarioService;
         _archivoService = archivoService;
         _hubContext = hubContext;
+        _hostingEnvironment = hostingEnvironment;
     }
 
     private NotificacionDoctorDTO Mapear(
@@ -38,6 +43,20 @@ public class NotificacionDoctorService
         int idPaciente)
     {
         var img = _archivoService.ObtenerImagenUsuario((int)notificacionDto.IdPersona);
+        string imgData;
+
+        if(img is null)
+        {
+            var path = Path.Combine(_hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
+            var tipoMime = "image/svg+xml";
+            var imgDefault = File.ReadAllBytes(path);
+            imgData = "data:" + tipoMime + ";base64," + Convert.ToBase64String(imgDefault);
+        }
+        else
+        {
+            imgData = "data:" + img.ArchivoTipoMime + ";base64," + Convert.ToBase64String(img.Archivo1);
+        }
+
         return new NotificacionDoctorDTO(
             notificacionUsuarioDto.IdNotificacionUsuario,
             notificacionUsuarioDto.IdNotificacion,
@@ -48,7 +67,7 @@ public class NotificacionDoctorService
             notificacionUsuarioDto.Visto,
             notificacionDto.IdTipoNotificacion,
             idPaciente,
-            "data:" + img.ArchivoTipoMime + ";base64," + Convert.ToBase64String(img.Archivo1),
+            imgData,
             notificacionDto.IdChat
         );
     }
