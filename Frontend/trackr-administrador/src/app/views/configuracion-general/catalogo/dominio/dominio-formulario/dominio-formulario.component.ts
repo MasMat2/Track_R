@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DominioDetalleService } from '@http/catalogo/dominio-detalle.service';
 import { Dominio } from '@models/catalogo/dominio';
@@ -14,6 +14,8 @@ import { HospitalService } from '../../../../../shared/http/catalogo/hospital.se
 import { Hospital } from '@models/catalogo/hospital';
 import { DominioHospitalService } from '../../../../../shared/http/catalogo/dominio-hospital.service';
 import { DominioHospitalDto } from '@dtos/catalogo/dominio-hospital-dto';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { DominioHospitalFormularioComponent } from './dominio-hospital-formulario/dominio-hospital-formulario.component';
 
 @Component({
   selector: 'app-dominio-formulario',
@@ -86,7 +88,8 @@ export class DominioFormularioComponent implements OnInit {
     private dominioDetalleService: DominioDetalleService,
     private sessionService: SessionService,
     private hospitalService:HospitalService,
-    private dominioHospitalService:DominioHospitalService
+    private dominioHospitalService:DominioHospitalService,
+    private modalService:BsModalService
   ) {}
 
   public ngOnInit(): void {
@@ -147,6 +150,7 @@ export class DominioFormularioComponent implements OnInit {
 
   //Funcion para el boton guardar
   public enviarFormulario(formulario: NgForm): void {
+    console.log("click")
     this.btnSubmit = true;
     if (!formulario.valid) {
       this.formularioService.validarCamposRequeridos(formulario);
@@ -164,7 +168,7 @@ export class DominioFormularioComponent implements OnInit {
     }
 
     //Guardar en BD DominioHospital
-    this.dominioHospitalService.obtenerDominioHospital(this.dominioHospital.idDominio,this.dominioHospital.idHospital).subscribe(res => {
+    /* this.dominioHospitalService.obtenerDominioHospital(this.dominioHospital.idDominio,this.dominioHospital.idHospital).subscribe(res => {
       if(res != null){
         this.dominioHospitalService.editarDominioHospital(this.dominioHospital).subscribe(res => {})
       }
@@ -173,7 +177,7 @@ export class DominioFormularioComponent implements OnInit {
           this.dominioHospitalService.guardarDominioHospital(this.dominioHospital).subscribe(res => {})
         } 
       }
-    })
+    }) */
   }
 
   public enviarFormularioDetalle(formulario: NgForm): void {
@@ -308,18 +312,35 @@ export class DominioFormularioComponent implements OnInit {
   }
 
   protected onGridClickHospital(gridData: { accion: string; data: Hospital }){
-    this.tituloEditar = `Editando Dominio para ${gridData.data.nombre}`;
+    //this.tituloEditar = `Editando Dominio para ${gridData.data.nombre}`;
     if(gridData.accion === GeneralConstant.GRID_ACCION_EDITAR){
       this.dominioHospitalService.obtenerDominioHospital(this.dominio.idDominio,gridData.data.idHospital).subscribe(res => {
+        let accion:string;
         if(res != null){
           this.dominioHospital = res
+          accion = GeneralConstant.MODAL_ACCION_EDITAR;
         }
         else{
           this.dominioHospital = {
             idDominio: this.dominio.idDominio,
             idHospital: gridData.data.idHospital
           };
+          accion = GeneralConstant.MODAL_ACCION_AGREGAR;
         }
+
+        //Crear modal
+        const initialState = {
+          accion,
+          dominioHospital:this.dominioHospital
+        };
+        let bsModalRef = this.modalService.show(
+          DominioHospitalFormularioComponent,
+          {initialState, ... GeneralConstant.CONFIG_MODAL_MEDIUM, id: 'modalDominioHospital'}
+        );
+        bsModalRef.onHide?.subscribe( () => {
+          this.obtenerHospitales();
+        })
+
       })
     }
     if(gridData.accion === GeneralConstant.GRID_ACCION_ELIMINAR){

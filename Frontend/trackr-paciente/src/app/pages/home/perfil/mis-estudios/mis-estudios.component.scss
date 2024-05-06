@@ -106,6 +106,8 @@ ion-header{
       ion-item{
         --border-width: 0 0 2px 0;
         --border-color: var(--primary-50);
+        --detail-icon-opacity: 1;
+        --detail-icon-color: var(--neutral-900);
 
         ion-label{
           padding-left: 16px;
@@ -128,26 +130,11 @@ ion-header{
         background: var(--error-200);
         color: var(--neutral-50);
       }
+
+      // ion-item::part(detail-icon){
+
+      // }
     }
   }
 
 }
-
-// .primeng-table th {
-//     color: #651B73;
-//   }
-
-//   ion-button {
-
-//     --color:black;
-//     --border-color: #9BD8AC;
-
-//     --padding-top: 10px;
-//     --padding-bottom: 10px;
-//     font-weight: 500;
-//   }
-
-// .tabla{
-//     margin-left: 10px;
-//     margin-right: 10px;
-//   }

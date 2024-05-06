@@ -1,18 +1,42 @@
-<ion-header>
-  <app-header></app-header>
-</ion-header>
 <ion-content>
-  <div class="contenedor">
-    <div class="titulo-contenedor">
-      <ion-title>Dashboard</ion-title>
-      <ion-buttons>
-        <ion-button (click) = "mostrarConfiguracionDashboard()" class="config-dashboard">
-          <ion-icon slot="icon-only" name="menu"></ion-icon>
-        </ion-button>
-      </ion-buttons>
+  <div class="contenedor-header">
+    <div class="contenedor-toolbar">
+      <ion-toolbar>
+        <div class="avatar">
+          <ion-avatar>
+            <img [src]="fotoPerfilUrl" alt="profile-pic">
+          </ion-avatar>
+        </div>
+        <div class="toolbar">
+          <ion-text>
+            <h3>¡Hola, {{infoHeader?.nombre}}!</h3>
+            <p>Bienvenido(a) de nuevo.</p>
+          </ion-text>
+          <ion-buttons slot="end">
+            <ion-button (click)="abrirConfiguracionDashboard()">
+              <ion-icon name="settings-outline"></ion-icon>
+            </ion-button>
+            <app-notificaciones-page></app-notificaciones-page>
+          </ion-buttons>
+        </div>
+      </ion-toolbar>
     </div>
-    <div class="cuerpo-contenedor">
-      <app-widget-container [widgetKeys]="selectedUserWidgets"></app-widget-container>
+  </div>
+  <!-- el display cambia en funcion de si hay o no hay widgets de salud presentes (porque esos sobresalen al header) -->
+  <div class="contenedor-principal" 
+    [ngStyle]="!listaWidgetsSaludVacia ? {'display': 'flex', 'flex-direction': 'column'} : {}"> 
+
+    <div class="widgets-salud">
+      <div class="contenedor-widgets">
+        <app-widget-container [widgetKeys]="selectedUserWidgets"></app-widget-container>
+      </div>
+    </div>
+    <div class="widgets-seguimiento">
+      <div class="texto-seccion">
+        <ion-text>
+          <p>Seguimiento de padecimientos</p>
+        </ion-text>
+      </div>
       <ion-grid>
         <ion-row *ngIf="padecimientosList">
           <ion-col [size] = "12" *ngFor="let padecimiento of padecimientosList">
@@ -26,18 +50,15 @@
                   nombreVariable="{{padecimiento.variables[0]?.descripcion}}"
                   valorVariable="{{padecimiento.variables[0]?.valorVariable}}"
                   unidadVariable="{{padecimiento.variables[0]?.unidadMedida}}"
-                  claseVariable="{{ padecimiento.variables[0]?.iconoClase }} + icono-seguimiento"
 
                   nombreVariable2="{{padecimiento.variables[1]?.descripcion}}"
                   valorVariable2="{{padecimiento.variables[1]?.valorVariable}}"
                   unidadVariable2="{{padecimiento.variables[1]?.unidadMedida}}"
-                  claseVariable2="{{ padecimiento.variables[1]?.iconoClase }} + icono-seguimiento"
 
 
                   nombreTratamiento="Medicamento"
                   valorTratamiento="2U"
                   unidadTratamiento="Humalog Mix 25 Plum"
-                  claseTratamiento="{{ padecimiento.iconoClase }} + icono-seguimiento"
 
                   (click) = "mostrarSeguimiento(padecimiento.idPadecimiento)"
               ></app-widget-seguimiento>

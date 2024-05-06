@@ -70,7 +70,7 @@ namespace TrackrAPI.Controllers.Catalogo
                 fileCount++;
             }
 
-            System.IO.File.WriteAllBytes(filePath, Convert.FromBase64String(companiaLogotipoBase64.ImagenBase64));
+            //System.IO.File.WriteAllBytes(filePath, Convert.FromBase64String(companiaLogotipoBase64.ImagenBase64));
 
             companiaLogotipoService.Agregar(companiaLogotipo);
         }

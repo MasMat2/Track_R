@@ -22,33 +22,12 @@ export class ExpedienteConsumoMedicamentoComponent implements OnInit {
   protected readonly HEADER_GRID: string = 'Consumo Medicamentos';
   protected consumoMedicamento$: Observable<ExpedienteConsumoMedicamentoGridDto[]>;
   protected columns: ColDef[] = [
-    { headerName: 'Núm.', field: 'idTomaTratamiento', minWidth: 50 },
     { headerName: 'Fármaco', field: 'farmaco', minWidth: 150 },
     { headerName: 'Cantidad', field: 'cantidad', minWidth: 50 },
     { headerName: 'Unidad', field: 'unidad', minWidth: 50 },
     { headerName: 'Padecimiento', field: 'padecimiento', minWidth: 150 },
-    { 
-      headerName: 'Día ', 
-      field: 'fechaToma',  
-      minWidth: 50,
-      cellRenderer: (params: ICellRendererParams) => {
-        return moment(params.data.fechaToma).format('DD/MM/YYYY');
-      },
-      valueGetter: (params: ValueGetterParams) => {
-        return moment(params.data.fechaToma).format('DD/MM/YYYY');
-      },
-     },
-    { 
-      headerName: 'Horario (h)', 
-      field: 'fechaToma', 
-      minWidth: 50,
-      cellRenderer: (params: ICellRendererParams) => {
-        return moment(params.data.fechaToma, 'HH:mm:ss').format('LT');
-      },
-      valueGetter: (params: ValueGetterParams) => {
-        return moment(params.data.fechaToma, 'HH:mm:ss').format('LT');
-      },
-     }
+    { headerName: 'Fecha Establecida', field: 'fechaEstablecida', minWidth: 50},
+    { headerName: 'Fecha Tomada', field: 'fechaTomada', minWidth: 50,}
   ];
 
   constructor(

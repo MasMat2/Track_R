@@ -1,7 +1,6 @@
 import { Route } from "@angular/router";
 import { HomePage } from "./home.page";
 import { MuestrasPage } from "./muestras/muestras.page";
-import { ConfiguracionDashboardPage } from "./configuracion-dashboard/configuracion-dashboard.page";
 import { VideoChatPage } from "./video-chat/video-chat.page";
 
 
@@ -16,7 +15,6 @@ export default [
       { path: 'chat-movil', loadChildren: () => import('./chat-movil/chat-movil-routes') },
       { path: 'clinicos', component: MuestrasPage, data: { breadcrumb: 'Muestras' } },
       { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard-routes'), data: { breadcrumb: 'Inicio' }},
-      { path: 'config-dashboard', component: ConfiguracionDashboardPage},
       { path: 'cuestionarios',loadChildren: () => import('./cuestionarios/cuestionarios-routes')  ,data: { breadcrumb: 'Cuestionario' } },
       { path: 'perfil', loadChildren: () => import('./perfil/perfil-routes'), data: { breadcrumb: 'Perfil' } },
       { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }

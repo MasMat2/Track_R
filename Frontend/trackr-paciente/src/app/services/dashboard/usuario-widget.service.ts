@@ -18,7 +18,8 @@ public consultarPorUsuarioEnSesion(): Observable<WidgetType[]> {
         tap(clavesUsuario => {
           for (const clave of clavesUsuario) {
             if (!isWidgetType(clave)) {
-              throw new Error(`Clave de Widget Inválida: ${clave}`);
+              console.error(`Clave de Widget Inválida: ${clave}`);
+              //throw new Error(`Clave de Widget Inválida: ${clave}`);
             }
           }
         }),

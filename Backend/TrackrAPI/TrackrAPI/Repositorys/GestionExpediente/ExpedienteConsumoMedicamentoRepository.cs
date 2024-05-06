@@ -29,8 +29,8 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                     Unidad = x.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.Unidad,
                     Indicaciones = x.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.Indicaciones,
                     Padecimiento = x.IdTratamientoRecordatorioNavigation.IdExpedienteTratamientoNavigation.IdPadecimientoNavigation.Nombre ?? string.Empty,
-                    FechaToma = x.FechaToma,
-                    FechaEnvio = x.FechaEnvio,
+                    FechaEstablecida = x.FechaEnvio.ToString("dd/MM/yyyy HH:mm:ss"),
+                    FechaTomada = x.FechaToma.HasValue ? x.FechaToma.Value.ToString("dd/MM/yyyy HH:mm:ss") : "N/A"
                 }) 
                 .ToList();
 

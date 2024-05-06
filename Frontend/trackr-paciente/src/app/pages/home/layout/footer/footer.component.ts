@@ -39,7 +39,8 @@ export class FooterComponent implements OnInit {
     '/home/chat-movil/chat/', 
     '/home/perfil/mis-doctores', 
     '/home/perfil/mis-estudios',
-    '/home/perfil/informacion-general'
+    '/home/perfil/informacion-general',
+    '/home/dashboard/seguimiento'
   ];
 
   @ViewChild('tabs') tabs: IonTabs;
