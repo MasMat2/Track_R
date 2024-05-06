@@ -1,0 +1,43 @@
+<ion-header class="ion-no-border">
+  <div class="contenedor-header">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="cerrarModalCancelar()">
+          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          Atrás
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="contenedor-principal">
+    <div class="titulo">
+      <ion-text>
+        <h3>Visualizar en dashboard:</h3>
+      </ion-text>
+    </div>
+    <div class="lista-widgets">
+      <ion-list lines="none">
+        <ion-item *ngFor="let widget of widgets">
+          <ion-toggle
+            mode="ios" 
+            [(ngModel)]="widget.seleccionado" 
+            [checked]="widget.seleccionado"
+            (ngModelChange)="seleccionWidgetsModificada = true">
+            {{widget.nombre}}
+          </ion-toggle>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+</ion-content>
+<ion-footer class="ion-no-border">
+  <div class="contenedor-footer">
+    <div class="botones">
+      <ion-button class="guardar" (click)="onAceptar()" [disabled]="submiting">Guardar</ion-button>
+    </div>
+  </div>
+</ion-footer>
+
+
