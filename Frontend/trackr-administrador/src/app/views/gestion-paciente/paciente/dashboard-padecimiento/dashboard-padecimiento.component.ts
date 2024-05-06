@@ -35,7 +35,7 @@ export class DashboardPadecimientoComponent implements OnInit {
   public bitacoraMuestras: ValoresFueraRangoGridDTO[] = [];
 
   // Variables
-  public claveVariable: string;
+  public idSeccionCampo: number;
   public variableList: ExpedienteColumnaSelectorDTO[] = [];
   protected filtroTiempo: string;
 
@@ -146,17 +146,17 @@ export class DashboardPadecimientoComponent implements OnInit {
 
   protected onChangeVariable(event: Event): void {
     if(event != null && this.filtroTiempo != null){
-      this.actualizarHistograma(event.toString(), this.filtroTiempo);
+      this.actualizarHistograma(this.idSeccionCampo, this.filtroTiempo);
     }
   }
 
   protected onFiltroChange(event: MatChipListboxChange): void {
-    if(this.claveVariable != null && event != null){
-      this.actualizarHistograma(this.claveVariable, event.toString());
+    if(this.idSeccionCampo != null && event != null){
+      this.actualizarHistograma(this.idSeccionCampo, event.toString());
     }
   }
 
-  private actualizarHistograma(filtroClave: string, filtroTiempo: string): void {
+  private actualizarHistograma(filtroClave: number, filtroTiempo: string): void {
     lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresPorClaveCampo(filtroClave, this.idUsuario, filtroTiempo))
       .then((valoresPorClaveCampo) => {
         // Transforma los datos para usar en la gráfica
