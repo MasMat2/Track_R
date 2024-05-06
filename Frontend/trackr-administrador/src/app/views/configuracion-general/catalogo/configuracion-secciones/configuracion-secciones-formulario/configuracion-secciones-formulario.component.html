@@ -214,27 +214,7 @@
               </div>
             </div>
 
-               <!-- Icono -->
-               <div class="col-md-2 ">
-                <div class="form-group">
-                  <label class="label-input required-label">Icono Padecimiento</label>
-                  <div class="d-flex">
-                    <i
-                      *ngIf="campo.idIcono"
-                      class="{{ getIconClass(campo.idIcono)  + ' icono-acceso' }}"
-                    ></i>
-                    <ng-select
-                      name="IconoName"
-                      style="width: 100%"
-                      bindLabel="nombre"
-                      bindValue="idIcono"
-                      [items]="iconoList"
-                      [(ngModel)]="campo.idIcono"
-                      [placeholder]="placeHolderSelect"
-                    ></ng-select>
-                  </div>
-                </div>
-              </div>
+
 
             <div class="col-md-2 align-items-center d-flex" style="font-size: 12px;">
               <label>
