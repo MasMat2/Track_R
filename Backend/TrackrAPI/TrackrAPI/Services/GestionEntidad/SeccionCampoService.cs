@@ -90,6 +90,49 @@ namespace TrackrAPI.Services.GestionEntidad
             }
             return padecimientoMuestras;
         }
+
+        public IEnumerable<PadecimientoMuestraDTO> ConsultarSeccionesPadecimientosGeneral2(int idUsuario)
+        {
+            List<PadecimientoMuestraDTO> padecimientoMuestras = new List<PadecimientoMuestraDTO>();
+            // Obtener todos los padecimientos que tiene el Usuario
+            List<ExpedientePadecimientoDTO> padecimientos = expedientePadecimientoRepository.ConsultarPorUsuario(idUsuario).ToList();
+            foreach (var padecimiento in padecimientos)
+            {
+                var padecimientoMuestra = new PadecimientoMuestraDTO();
+                padecimientoMuestra.IdPadecimiento = padecimiento.IdPadecimiento;
+                padecimientoMuestra.NombrePadecimiento = padecimiento.NombrePadecimiento;
+                // Obtener cada sección del padecimiento actual
+                List<ExpedienteColumnaDTO> secciones = seccionCampoRepository.ConsultarSeccionesPadecimientos(padecimiento.IdPadecimiento).ToList();
+                List<SeccionMuestraDTO> seccionesList = new List<SeccionMuestraDTO>();
+                // Agrupar las secciones por su ClaveSeccion
+                var seccionesAgrupadas = secciones.GroupBy(x => x.ClaveSeccion);
+                foreach (var seccion in seccionesAgrupadas)
+                {
+                    var seccionMuestraDTO = new SeccionMuestraDTO();
+                    seccionMuestraDTO.ClaveCampo = seccion.Key;
+                    // Ponerle nombre a la seccion que agrupó
+                    seccionMuestraDTO.NombreSeccionCampo = seccion.Where(x => x.ClaveSeccion == seccion.Key).FirstOrDefault().Variable;
+                    List<SeccionCampo> seccionesCampoList = new List<SeccionCampo>();
+                    foreach (var seccionCampoDTO in seccion)
+                    {
+                        var seccionCampo = seccionCampoRepository.ConsultarPorClaveConDependencia(seccionCampoDTO.IdSeccionVariable);
+                        if (seccionCampo == null)
+                        {
+                            continue;
+                        }
+                        seccionesCampoList.Add(seccionCampo); //Cambiar a SeccionCampo
+                    }
+                    seccionMuestraDTO.SeccionesCampo = seccionesCampoList;
+                    seccionesList.Add(seccionMuestraDTO);
+                }
+                padecimientoMuestra.SeccionMuestraDTOs = seccionesList;
+                padecimientoMuestras.Add(padecimientoMuestra);
+            }
+            return padecimientoMuestras;
+        }
+
+
+
         public void Agregar(SeccionCampo seccionCampo)
         {
             seccionCampoValidatorService.ValidarAgregar(seccionCampo);
