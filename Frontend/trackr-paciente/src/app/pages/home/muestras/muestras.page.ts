@@ -2,13 +2,15 @@ import { SharedModule } from '@sharedComponents/shared.module';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
 import { EntidadEstructuraTablaValorService } from '@http/gestion-expediente/entidad-estructura-tabla-valor.service';
 import { IonicModule } from '@ionic/angular';
 import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.module';
 import { lastValueFrom } from 'rxjs';
 import { HeaderComponent } from '../layout/header/header.component';
 import { MuestrasFormularioComponent } from './muestras-formulario/muestras-formulario.component';
+import { addIcons } from 'ionicons';
+import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
+import { AlertController, ModalController } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-muestras',
@@ -29,22 +31,24 @@ import { MuestrasFormularioComponent } from './muestras-formulario/muestras-form
   ]
 })
 export class MuestrasPage implements OnInit {
+
   // Variables
   protected valoresFueraRango: ValoresFueraRangoGridDTO[];
-  protected HEADER_GRID = 'Valores Fuera de Rango';
-  protected idPadecimiento: number;
-
-  // Configuración Columnas Data Grid
-  protected columns = [
-    { headerName: 'Sección', field: 'variable', minWidth: 20 },
-    { headerName: 'Campo', field: 'parametro', minWidth: 10 },
-    { headerName: 'Fecha & Hora', field: 'fechaHora', minWidth: 10, sortable: true, sort: 'desc' },
-    { headerName: 'Valor', field: 'valorRegistrado', minWidth: 10 },
-  ];
+  protected now = new Date();
+  protected localOffset = this.now.getTimezoneOffset() * 60000;
+  protected localISOTime = (new Date(this.now.getTime() - this.localOffset)).toISOString().slice(0,-1);
+  protected dateToday: string = this.localISOTime;
+  protected fechaSeleccionada: string = this.dateToday;
 
   constructor(
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
-    ) { }
+    private modalController: ModalController,
+    private alertController: AlertController
+  ) { addIcons({
+      'plus': 'assets/img/svg/plus.svg',
+      'calendar': 'assets/img/svg/calendar.svg',
+      'clock-2': 'assets/img/svg/clock-2.svg'
+    }) }
 
   ngOnInit() {
     this.consultarValoresFueraRango();
@@ -53,9 +57,53 @@ export class MuestrasPage implements OnInit {
   public consultarValoresFueraRango(): void {
     lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresFueraRangoUsuarioSesion())
       .then((valoresFueraRango: ValoresFueraRangoGridDTO[]) => {
+        console.log(valoresFueraRango);
         this.valoresFueraRango = valoresFueraRango;
+        console.log(this.valoresFueraRango);
       }
     );
+  }
+
+  protected listaValoresVacia(){
+    return this.valoresFueraRango?.length <= 0;
+  }
+
+  protected onFechaChange(){
+    console.log(this.dateToday);
+    console.log(this.fechaSeleccionada);
+  }
+
+  protected async AgregarDatosClinicos(){
+    const modal = await this.modalController.create({
+      component: MuestrasFormularioComponent,
+      componentProps: {fechaSeleccionada: this.fechaSeleccionada},
+      breakpoints : [0, 1],
+      initialBreakpoint: 1,
+      cssClass: 'custom-sheet-modal'
+      
+    });
+ 
+    await modal.present();
+
+    const {data, role} = await modal.onWillDismiss();
+
+    if(role == 'confirm'){
+      this.presentarAlertSuccess();
+      this.consultarValoresFueraRango();
+    }
+  }
+
+  protected async presentarAlertSuccess() {
+    const alertSuccess = await this.alertController.create({
+      header: 'Datos registrados exitosamente.',
+      buttons: [{
+        text: 'De acuerdo',
+        role: 'confirm'
+      }],
+      cssClass: 'custom-alert-success',
+    });
+
+    await alertSuccess.present();
   }
 
 }

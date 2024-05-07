@@ -104,7 +104,8 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                         Variable = sc.IdSeccionNavigation.Nombre,
                         ValorMinimo = sc.IdDominioNavigation.ValorMinimo,
                         ValorMaximo = sc.IdDominioNavigation.ValorMaximo,
-                        MostrarDashboard = sc.MostrarDashboard
+                        MostrarDashboard = sc.MostrarDashboard,
+                        UnidadMedida = sc.IdDominioNavigation.UnidadMedida,
                     });
         }
 
