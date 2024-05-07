@@ -1,26 +1,98 @@
-<ion-header>
-  <app-header></app-header>
-</ion-header>
-
-<ion-content>
-  <div class="contenedor">
-  <div class="titulo-contenedor">
-    <h3 style="text-align: center;"> Datos clínicos </h3>
+<ion-header class="ion-no-border">
+  <div class="contenedor-header">
+    <ion-toolbar>
+      <ion-title>Datos clínicos</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="AgregarDatosClinicos()">
+          <ion-icon slot="icon-only" name="plus"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
   </div>
-  <div class="cuerpo-contenedor">
+</ion-header> 
+<ion-content>
+  <div class="contenedor-principal">
+    <div class="selector-tiempo">
+      <div class="label">
+        <ion-text><p>Fecha y hora</p></ion-text>
+      </div>
+      <div class="datetime-buttons">
+        <div class="datetime-input" id="date-picker">
+          <ion-item lines="none" class="date-input">
+            <ion-icon name="calendar" slot="start"></ion-icon>
+            <ion-datetime-button datetime="date"></ion-datetime-button>
+          </ion-item>
 
-    <label class="subtitulo-muestra">Valores Fuera de Rango</label>
-    <app-grid-general
-      [headerName]="HEADER_GRID"
-      [data]="valoresFueraRango"
-      [children]="columns"
-      [disableDelete]="true"
-      [disableEdit]="true"
-      [disableXLS]="true"
-    >
-    </app-grid-general>
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                presentation="date"
+                id="date"
+                name="dateName"
+                [max]="dateToday"
+                [(ngModel)]="fechaSeleccionada"
+                color="morado-custom"
+                locale="es-MX"
+                showDefaultButtons="true"
+                cancelText="Cancelar"
+                doneText="Ok"
+                (ionChange)="onFechaChange()">
+              </ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </div>
+        <div class="datetime-input" id="time-picker">
+          <ion-item lines="none" class="date-input">
+            <ion-icon name="clock-2" slot="start"></ion-icon>
+            <ion-datetime-button datetime="time"></ion-datetime-button>
+          </ion-item>
 
-    <app-muestras-formulario (consultarValoresFueraRango) = "consultarValoresFueraRango()"></app-muestras-formulario>
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                presentation="time"
+                id="time"
+                name="timeName"
+                [max]="dateToday"
+                [(ngModel)]="fechaSeleccionada"
+                color="morado-custom"
+                locale="es-MX"
+                showDefaultButtons="true"
+                cancelText="Cancelar"
+                doneText="Ok"
+                (ionChange)="onFechaChange()"
+                hourCycle="h12">
+              </ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </div>
+      </div>
+    </div>
+    <div class="lista-valores">
+      <div class="label">
+        <ion-text><p>Valores fuera de rango</p></ion-text>
+      </div>
+      <div class="lista-vacia" *ngIf="listaValoresVacia()">
+        <ion-text>
+          <p>Nada Por aquí. <br> Aún no hay valores fuera de rango.</p>
+        </ion-text>
+      </div>
+      <ion-list lines="full" *ngIf="!listaValoresVacia()">
+        <ion-item *ngFor="let valor of valoresFueraRango">
+          <ion-label>
+            <h3>
+              <span id="valor">{{valor.valorRegistrado}}</span>
+              <span id="medida"> {{valor.unidadMedida}}</span>
+            </h3>
+            <p>
+              <span>{{valor.variable}}</span>
+              <span> &bull; </span>
+              <span>{{valor.parametro}}</span>
+            </p>
+            <p>{{valor.fechaHora | date: "MMMM d, y 'a las' h:mm a" : '' : 'es-MX'}}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
     </div>
   </div>
 </ion-content>

@@ -1,21 +1,21 @@
 import { SharedModule } from '@sharedComponents/shared.module';
 import { EntidadEstructuraTablaValorService } from './../../../../shared/http/gestion-expediente/entidad-estructura-tabla-valor.service';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
-import { EntidadTablaRegistroDto, TablaValorDto, TablaValorMuestraDTO } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
-import { PadecimientoMuestraDTO } from '@dtos/gestion-expediente/padecimiento-muestra-dto';
+import { TablaValorMuestraDTO } from '@dtos/gestion-entidades/entidad-tabla-registro-dto';
 import { SeccionCampoService } from '@http/gestion-entidad/seccion-campo.service';
 import { IonicModule } from '@ionic/angular';
 import { SeccionCampo } from '@models/gestion-expediente/seccion-campo';
 import { CampoExpedienteModule } from '@sharedComponents/campo-expediente/campo-expediente.module';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
-import * as Utileria from '@utils/utileria';
 import { SeccionMuestraDTO } from '@dtos/gestion-expediente/seccion-muestra-dto';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
 import { DominioHospitalService } from '@http/catalogo/dominio-hospital.service';
-
+import { PadecimientoMuestraDTO } from '@dtos/gestion-expediente/padecimiento-muestra-dto';
+import { addIcons } from 'ionicons';
+import { validarCamposRequeridos } from '@utils/utileria';
+import { AlertController, ModalController } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -29,85 +29,98 @@ import { DominioHospitalService } from '@http/catalogo/dominio-hospital.service'
     SharedModule,
     CommonModule,
     CampoExpedienteModule],
-    providers: [SeccionCampoService]
+    providers: [SeccionCampoService, EntidadEstructuraTablaValorService,]
 })
 export class MuestrasFormularioComponent implements OnInit {
 
-  @Output() consultarValoresFueraRango = new EventEmitter<void>();
-  protected day = new Date().getDate();
-  protected recomendacion: any;
-
-  protected now = new Date();
-  protected localOffset = this.now.getTimezoneOffset() * 60000;
-  protected localISOTime = (new Date(this.now.getTime() - this.localOffset)).toISOString().slice(0,-1);
-  protected dateToday: string = this.localISOTime;
-
-
-  public arbolPadecimiento: PadecimientoMuestraDTO[] = [];
+  protected arbolPadecimiento: PadecimientoMuestraDTO[] = [];
+  protected fechaSeleccionada: string; //Viene desde muestrasPage
+  protected padecimientoSeleccionado: PadecimientoMuestraDTO;
+  protected seccionSeleccionada: SeccionMuestraDTO;
+  protected seccionYaSeleccionada: boolean = false;
   protected submitting: boolean = false;
-  protected fechaSeleccionada: string = this.dateToday;
+
   constructor(
     private seccionCampoService: SeccionCampoService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
     private router : Router,
-    private dominioHospitalService:DominioHospitalService
-    ) { 
-      this.router.events
-      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
-      .subscribe(async (event: NavigationEnd) =>
-       {
-        const currentUrl = event.urlAfterRedirects;
-        if ( currentUrl === '/home/clinicos') 
-        {
-          this.consultarArbol();
+    private dominioHospitalService:DominioHospitalService,
+    private modalController: ModalController,
+    private alertController: AlertController
+  ) { 
+
+      addIcons({ 
+        'chevron-up': 'assets/img/svg/chevron-up.svg',
+        'chevron-down': 'assets/img/svg/chevron-down.svg'
+      })
+      // this.router.events
+      // .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      // .subscribe(async (event: NavigationEnd) =>
+      //  {
+      //   const currentUrl = event.urlAfterRedirects;
+      //   if ( currentUrl === '/home/clinicos') 
+      //   {
+      //     this.consultarArbol();
   
-        }
-      });
+      //   }
+      // });
     }
 
   ngOnInit() {
     this.consultarArbol();
   }
 
-  protected consultarArbol(){
+  private consultarArbol(){
     lastValueFrom(this.seccionCampoService.consultarPorSeccion())
     .then((arbolPadecimiento: PadecimientoMuestraDTO[]) => {
       this.arbolPadecimiento = arbolPadecimiento;
+      console.log(arbolPadecimiento);
+      console.log(this.arbolPadecimiento);
     });
   }
+  
 
-  public async enviarFormulario(seccion: SeccionMuestraDTO, fechaSeleccionada: string) {
+  protected async enviarFormulario(formulario: NgForm) {
     this.submitting = true;
+
+    console.log(this.seccionSeleccionada);
+    if (!formulario.valid) {
+      validarCamposRequeridos(formulario);
+      return;
+    }
+
     const camposAgregados: TablaValorMuestraDTO[] = [];
   
-    for (const seccionCampo of seccion.seccionesCampo) {
+    for (const seccionCampo of this.seccionSeleccionada.seccionesCampo) {
       if (seccionCampo.valor) {
         camposAgregados.push({
           idSeccionVariable: seccionCampo.idSeccionCampo,
           valor: seccionCampo.valor.toString(),
           fueraDeRango: await this.estaFueraDeRango(seccionCampo),
-          fechaMuestra: new Date(fechaSeleccionada)
+          fechaMuestra: new Date(this.fechaSeleccionada)
         });
       }
     }
-  
+    console.log(camposAgregados);
     if (camposAgregados.length === 0) {
       this.submitting = false;
       return;
     }
 
-   this.agregar(camposAgregados);
-   this.fechaSeleccionada = new Date().toISOString();
-   for (const seccionCampo of seccion.seccionesCampo) {
-    seccionCampo.valor = ' '
-  }
+    this.agregar(camposAgregados);
   }
 
-  public agregar(campoAgregar: TablaValorMuestraDTO[]): void {
+  private agregar(campoAgregar: TablaValorMuestraDTO[]): void {
     this.entidadEstructuraTablaValorService.agregarMuestra(campoAgregar).subscribe(
       {
+        next: ()=> {
+          this.submitting = false;
+          this.padecimientoSeleccionado = new PadecimientoMuestraDTO();
+          this.seccionSeleccionada = new SeccionMuestraDTO();
+          this.seccionYaSeleccionada = false;
+        },
         complete : () => {
-          this.consultarValoresFueraRango.emit();
+          this.modalController.dismiss(null, 'confirm');
         }
       }
     );
@@ -136,8 +149,6 @@ export class MuestrasFormularioComponent implements OnInit {
 
     const min = dominio.valorMinimo;
     const max = dominio.valorMaximo;
-    console.log(min)
-    console.log(max)
 
     const valor = Number(campo.valor);
 
@@ -146,4 +157,28 @@ export class MuestrasFormularioComponent implements OnInit {
     return fueraDeRango;
   }
 
+  protected onChangePadecimiento(){
+    this.seccionSeleccionada = new SeccionMuestraDTO();
+    this.seccionYaSeleccionada = false;
+  }
+
+  protected onChangeSeccion(){
+    this.seccionYaSeleccionada = true;
+  }
+
+  protected valoresInputValidos(){
+    for (const seccionCampo of this.seccionSeleccionada.seccionesCampo) {
+      
+      const number = Number.parseFloat(seccionCampo.valor?.toString() ?? '');
+      if(Number.isNaN(number)){
+        //this.presentarAlertaErrorInput();
+        return false;
+      }
+      else{
+        return true;
+      }
+    }
+
+    return true;
+  }
 }

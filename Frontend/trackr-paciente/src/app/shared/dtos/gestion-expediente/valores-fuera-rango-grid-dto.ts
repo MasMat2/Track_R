@@ -1,8 +1,9 @@
 export class ValoresFueraRangoGridDTO{
     nombrePadecimiento: string;
-    nombreSeccion: string;
-    descripcionSeccionCampo: string;
-    fechaMuestra: string;
-    valorEntidadEstructuraValor: string;
+    variable: string;
+    parametro: string;
+    fechaHora: string;
+    valorRegistrado: string;
     valorReferencia: string;
+    unidadMedida: string;
 }
