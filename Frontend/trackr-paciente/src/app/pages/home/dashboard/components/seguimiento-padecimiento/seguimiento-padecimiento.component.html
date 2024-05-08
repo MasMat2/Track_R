@@ -1,127 +1,150 @@
-<ion-header>
-  <app-header></app-header>
+<ion-header class="ion-no-border">
+  <div class="contenedor-header">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="regresarBtn()">
+          <ion-icon slot="start" name="chevron-left"></ion-icon>
+          Atrás
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
 </ion-header>
 <ion-content>
-  <ion-button expand="full" shape="round" routerLink="home/dashboard">Regresar</ion-button>
-
-  <ion-title class="ion-text-center ion-align-items-center" style="padding-top: 1vh; padding-bottom: 1vh; padding: 0;">Seguimiento padecimiento</ion-title>
-  <div class = "contenedor">
-    <ion-row>
-      <ion-col size="12">
-        <ion-select
-          id="variable"
-          name="variable"
-          label="Variable"
-          label-placement="floating"
-          fill="outline"
-          shape="round"
-          [(ngModel)]="idSeccionVariable"
-          (ngModelChange)="onChangeVariable($event)">
-            <ion-select-option *ngFor="let variable of variableList" [value]="variable.idSeccionVariable">{{variable.variable}}</ion-select-option>
-        </ion-select>
-    </ion-col>
-    </ion-row>
-    <div class ="contenedor-texto-variable">
-      <ion-row>
-        <ion-col>
-          <ion-label>Nivel de variable</ion-label>
-        </ion-col>
-      </ion-row>
+  <div class="contenedor-principal">
+    <div class="titulo">
+      <ion-text>
+        <h3>Seguimiento de padecimiento</h3>
+      </ion-text>
     </div>
-
-    <!-- Chip Opciones Filtrado -->
-    <div class="contenedor-filtro">
-      <div>
-      <mat-chip-listbox
-        aria-label="Filtro Tiempo"
-        (ngModelChange)="onFiltroChange($event)"
-        [(ngModel)]="filtroTiempo"
-      >
-      <ion-row>
-        <ion-col size="12">
-          <mat-chip-option value="Hoy">Hoy</mat-chip-option>
-          <mat-chip-option value="1 Semana">1 Semana</mat-chip-option>
-          <mat-chip-option value = "2 Semanas">2 Semanas</mat-chip-option>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size="12">
-          <mat-chip-option value = "3 Semanas">3 Semanas</mat-chip-option>
-          <mat-chip-option value = "1 Mes">1 Mes</mat-chip-option>
-          <mat-chip-option value = "2 Meses">2 Meses</mat-chip-option>
-        </ion-col>
-      </ion-row>
-      </mat-chip-listbox>
+    <div class="selector-variable">
+      <div class="inputs">
+        <div class="input">
+          <ion-text><p>Seleccionar variable</p></ion-text>
+          <ion-item lines="none" class="select-input">
+            <ion-select 
+              id="variable"
+              name="variableName"
+              interface="action-sheet"
+              [interfaceOptions]="{cssClass: 'custom-select-action-sheet'}"
+              cancelText="Cancelar"
+              toggleIcon="chevron-down"
+              placeholder="Seleccionar" 
+              required
+              [(ngModel)]="idSeccionVariable"
+              (ngModelChange)="onChangeVariable($event)">
+              <ion-select-option 
+                *ngFor="let variable of variableList" 
+                [value]="variable.idSeccionVariable">
+                {{variable.variable}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
       </div>
     </div>
-
-    <ion-row class="etiqueta-extremos">
-      <span>Valor más Bajo - Más alto</span>
-    </ion-row>
-
-    <!--Valor más alto y más bajo-->
-    <ion-row>
-      <ion-col size="6" class="circulo">
-        <div class="contenedor-label-valores-extremos">
-          <ion-label class="label-valores-extremos">
-            <ion-row>
-              <div class="etiqueta">Más bajo</div>
-            </ion-row>
-            <ion-row>
-              <div class="fecha">{{fechaMin}}</div>
-            </ion-row>
-          </ion-label>
-        </div>
-        <div class="circle-container d-flex flex-column align-items-center">
-          <div class="valores-extremos">
-            <span class="valor">{{valorMin}}</span>
-            <span class="unidad">{{valoresCampo?.unidadMedida}}</span>
-          </div>
-        </div>
-      </ion-col>
-      <ion-col size="6">
-        <div class="contenedor-label-valores-extremos">
-          <ion-label class="label-valores-extremos">
-            <ion-row>
-              <div class="etiqueta">Más alto</div>
-            </ion-row>
-            <ion-row>
-              <div class="fecha">{{fechaMax}}</div>
-            </ion-row>
-          </ion-label>
-        </div>
-        <div class="circle-container d-flex flex-column align-items-center">
-          <div class="valores-extremos">
-            <span class="valor">{{valorMax}}</span>
-            <span class="unidad">{{valoresCampo?.unidadMedida}}</span>
-          </div>
-        </div>
-      </ion-col>
-    </ion-row>
-
-    <div class="histograma">
-      <!-- Gráfica / Histograma -->
-      <canvas
-        baseChart
-        [data]="barChartData"
-        [labels]="barChartLabels"
-        [type]="barChartType"
-        [options]="barChartOptions"
-      >
-      </canvas>
+    <div class="filtro-tiempo" *ngIf="seleccionadaVariable">
+      <ion-text><p>Nivel de variable</p></ion-text>
+      <div class="lista-filtros">
+        <mat-chip-listbox
+          aria-label="Filtro Tiempo"
+          (ngModelChange)="onFiltroChange($event)"
+          [(ngModel)]="filtroTiempo">
+          <mat-chip-option *ngFor="let opcion of valoresfiltroTiempo" [value]="opcion.value">{{opcion.label}}</mat-chip-option>
+        </mat-chip-listbox>
+      </div>
     </div>
-    <ion-row class="etiqueta-extremos">
-      <span>Bitácora de muestras</span>
-    </ion-row>
-    <app-grid-general
-        [headerName]="HEADER_GRID"
-        [data]="valoresCampo?.valores"
-        [children]="columns"
-        [disableDelete]="true"
-        [disableEdit]="true"
-        [disableXLS]="true"
-    >
-    </app-grid-general>
+    <div class="valores-extremos" *ngIf="seleccionadoFiltroTiempo">
+      <ion-row>
+        <ion-col>
+          <ion-card>
+            <div class="contenedor">
+              <div class="header">
+                <ion-icon slot="icon-only" name="arrow-down"></ion-icon>
+              </div>
+              <div class="datos">
+                <ion-text>
+                  <p id="label">Valor más bajo</p>
+                  <h3 *ngIf="valorMin"><span id="dato">{{valorMin}}</span><span id="medida"> {{valoresCampo?.unidadMedida}} </span></h3>
+                  <h3 *ngIf="!valorMin"><span id="texto-sin-datos">Sin datos</span></h3>
+                </ion-text>
+              </div>
+            </div>
+            <div id="arrow-down" class="icono-fondo">
+            </div>
+          </ion-card>
+        </ion-col>
+        <ion-col>
+          <ion-card>
+            <div class="contenedor">
+              <div class="header">
+                <ion-icon slot="icon-only" name="arrow-up"></ion-icon>
+              </div>
+              <div class="datos">
+                <ion-text>
+                  <p id="label">Valor más alto</p>
+                  <h3 *ngIf="valorMax"><span id="dato">{{valorMax}}</span><span id="medida"> {{valoresCampo?.unidadMedida}} </span></h3>
+                  <h3 *ngIf="!valorMax"><span id="texto-sin-datos">Sin datos</span></h3>
+                </ion-text>
+              </div>
+            </div>
+            <div id="arrow-up" class="icono-fondo">
+            </div>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </div>
+    <div class="histograma" *ngIf="seleccionadoFiltroTiempo">
+      <ion-card>
+        <div class="header">
+          <ion-text class="fecha"><p>{{labelHistograma}}</p></ion-text>
+        </div>
+        <div class="contenedor">
+          <div class="canvas-histograma">
+            <canvas
+              *ngIf="!seleccionVacia"
+              baseChart
+              [data]="barChartData"
+              [labels]="barChartLabels"
+              [type]="barChartType"
+              [options]="barChartOptions"
+              height="250px"
+            >
+            </canvas>
+            <div *ngIf="seleccionVacia" class="texto-sin-datos">
+              <ion-text><p>Sin datos</p></ion-text>
+            </div>
+          </div>
+          
+        </div>
+      </ion-card>
+    </div>
+    <div class="bitacora-clinicos" *ngIf="seleccionadoFiltroTiempo">
+      <div class="texto-seccion" *ngIf="!seleccionVacia">
+        <ion-text>
+          <h3>Bitacora de datos clínicos</h3>
+          <p>{{filtroTiempo}}</p>
+        </ion-text>
+      </div>
+      <div class="lista" *ngIf="!seleccionVacia">
+        <ion-list *ngIf="valoresCampo">
+          <ion-item lines="full" *ngFor="let valor of valoresCampo.valores.slice(0, 5)">
+            <ion-label class="datos">
+              <p 
+                id="valor" 
+                [ngStyle]="valor.fueraDeRango ? {'color': 'var(--error-200)'} : {}">
+                {{valor.valor}} {{valoresCampo.unidadMedida}} <span *ngIf="valor.fueraDeRango">(Valor fuera de rango)</span>
+              </p>
+              <p id="fecha">{{valor.fechaMuestra | date: 'MMMM d, y, h:mm a' : '' : 'es-MX'}}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item lines="full" detail="true" button (click)="mostrarTodo()">
+            <ion-label id="label-ver-todo" slot="end">Ver todo</ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
   </div>
 </ion-content>
+
 

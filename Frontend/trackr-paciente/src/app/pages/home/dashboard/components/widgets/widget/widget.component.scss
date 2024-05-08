@@ -1,0 +1,72 @@
+@import "../../../../../../../theme/variables.scss";
+
+ion-card {
+  margin-inline: 0px;
+  margin: 0px;
+  border-radius: 10px;
+  height: 100%;
+  padding: 8px 10px;
+  color: #000000;
+}
+
+ion-card-header,
+ion-card-content {
+  padding: 0px;
+}
+
+ion-card-title {
+  font-size: 16px;
+  font-family: var(--font-body);
+  font-weight: bold;
+  padding-left: 5%;
+  padding-top: 5%;
+
+}
+
+ion-card-content {
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.1;
+}
+
+ion-icon {
+  font-size: 15vw;
+  position: absolute;
+  color: var(--neutral-100);
+  left: 0;
+  bottom: 0;
+}
+
+:host ::ng-deep {
+  font-size: 1.2em;
+  // font-weight: bold;
+  line-height: 1;
+}
+
+.label {
+  font-size: 0.4em;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.medida {
+  font-size: 0.4em;
+  font-weight: bold;
+  line-height: 0.5;
+}
+
+ion-card.seguimiento{
+  border-style: solid;
+  border-color: var(--primary-700);
+  border-width: 0 0 0 10px;
+  border-radius: 8px;
+}
+
+ion-card.salud{
+  border: 0;
+  border-radius: 16px;
+  margin: 0;
+  height: 175px;
+}

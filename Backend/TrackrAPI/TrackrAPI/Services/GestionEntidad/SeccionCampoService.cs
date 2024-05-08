@@ -43,6 +43,7 @@ namespace TrackrAPI.Services.GestionEntidad
                 {
                     IdSeccionVariable = seccion.IdSeccionVariable,
                     Variable = seccion.Parametro,
+                    IdSeccionCampo = seccion.IdSeccionVariable
                 });
             }
             

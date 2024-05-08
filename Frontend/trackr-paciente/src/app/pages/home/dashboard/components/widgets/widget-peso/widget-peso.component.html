@@ -1,0 +1,17 @@
+<app-widget
+  title="Peso"
+  iconClass="scale"
+  colorBackground="#9691A8"
+  colorTitle="#F4F4F4"
+  widgetClass="salud"
+  (click)="cargarDatosWeight()"
+>
+  <div class="container d-flex justify-content-center align-items-center">
+
+    <div class="peso-actual">
+      <span class="valor"> {{ pesoActual }} </span>  
+      <span class="unidad">kg</span>
+    </div>
+    
+  </div>
+</app-widget>

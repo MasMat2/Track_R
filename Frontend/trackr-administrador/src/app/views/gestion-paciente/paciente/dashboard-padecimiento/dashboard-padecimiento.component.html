@@ -57,9 +57,9 @@
             class="select-custom"
             [items]="variableList"
             bindLabel="variable"
-            bindValue="clave"
+            bindValue="idSeccionCampo"
             (ngModelChange)="onChangeVariable($event)"
-            [(ngModel)]="claveVariable"
+            [(ngModel)]="idSeccionCampo"
             [placeholder]="placeHolderSelect"
             [notFoundText]="placeHolderNoOptions"
           ></ng-select>

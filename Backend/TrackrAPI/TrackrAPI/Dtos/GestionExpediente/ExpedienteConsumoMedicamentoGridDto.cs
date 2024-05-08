@@ -8,7 +8,7 @@
         public string Unidad { get; set; }
         public string Indicaciones { get; set; } = string.Empty;
         public string Padecimiento { get; set; } = string.Empty;
-        public DateTime FechaEnvio{ get; set; }
-        public DateTime? FechaToma { get; set; }
+        public string? FechaTomada{ get; set; }
+        public string? FechaEstablecida { get; set; }
     }
 }
