@@ -485,9 +485,8 @@ export class MensajesComponent{
   }
 
   validarMeet(msj: string) {
-    console.log(msj);
     if (msj.includes('trackr-' + this.idChat)) {
-      const regex = /trackr-\d{3}-\d+/;
+      const regex = /trackr-\d-\d+/;
       const match = msj.match(regex);
       if (match && match.length > 0) {
         const codigo = match[0];
@@ -500,7 +499,7 @@ export class MensajesComponent{
     }
 
     if (msj.includes('webrtc-' + this.idChat)) {
-      const regex = /webrtc-\d{3}-(\d+)/;
+      const regex = /webrtc-\d-(\d+)/;
       const match = msj.match(regex);
       if (match && match.length > 0) {
         const codigo = match[1];

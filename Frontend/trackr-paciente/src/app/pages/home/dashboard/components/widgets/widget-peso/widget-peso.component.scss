@@ -1,0 +1,25 @@
+@import "../../widgets/styles/circle-container.scss";
+@import "../../../../../../../theme/variables.scss";
+
+.container {
+  padding: 0;
+  position: relative;
+}
+
+.peso-actual {
+  font-size: 1em;
+  color: var(--neutral-100);
+  font-size: 6vw;
+  font-family: var(--font-body);
+  height: 100%;
+  position: absolute;
+  right: 5%;
+  bottom: 0;
+
+  .valor {
+    font-weight: bold;
+  }
+
+  .unidad {
+  }
+}

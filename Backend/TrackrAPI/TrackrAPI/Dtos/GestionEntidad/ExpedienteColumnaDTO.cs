@@ -11,5 +11,6 @@ namespace TrackrAPI.Dtos.GestionEntidad
         public decimal? ValorMinimo { get; set; }
         public decimal? ValorMaximo { get; set; }
         public bool? MostrarDashboard { get; set; }
+        public string? UnidadMedida { get; set; }
     }
 }

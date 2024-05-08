@@ -1,0 +1,9 @@
+<ion-grid>
+  <ion-row>
+    <ng-container *ngFor="let key of widgetKeys">
+      <ion-col *ngVar="WIDGETS[key] as widget" [size]="WIDGETS[key].columns ">
+        <ng-container *ngComponentOutlet="widget?.class"></ng-container>
+      </ion-col>
+    </ng-container>
+  </ion-row>
+</ion-grid>

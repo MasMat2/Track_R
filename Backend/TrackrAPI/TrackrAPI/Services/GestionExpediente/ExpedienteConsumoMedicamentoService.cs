@@ -26,8 +26,8 @@ namespace TrackrAPI.Services.GestionExpediente
                 Unidad = et.Unidad,
                 Indicaciones = et.Indicaciones,
                 Padecimiento = et.Padecimiento?? string.Empty,
-                FechaEnvio = et.FechaEnvio,
-                FechaToma = et.FechaToma,
+                FechaEstablecida = et.FechaEstablecida,
+                FechaTomada = et.FechaTomada
             });
 
             return ExpedienteConsumoMedicamentoDto;

@@ -48,7 +48,6 @@ public class WidgetService
         {
             idExpediente = usuarioNuevo.IdExpediente,
             idPadecimiento = usuarioNuevo.IdPadecimiento,
-            iconoClase = variablesPadecimiento.FirstOrDefault(vp => vp.IdPadecimiento == usuarioNuevo.IdPadecimiento).IconoEntidad,
             nombrePadecimiento = usuarioNuevo.NombrePadecimiento,
             idWidgetPadecimiento = variablesPadecimiento.FirstOrDefault(vp => vp.IdPadecimiento == usuarioNuevo.IdPadecimiento).IdWidgetEntidad,
             descripcion = variablesPadecimiento.FirstOrDefault(vp => vp.IdPadecimiento == usuarioNuevo.IdPadecimiento).DescripcionWidget,
@@ -77,7 +76,6 @@ public class WidgetService
                     Variables = item.variables,
                     IdWidget = item.idWidgetPadecimiento,
                     DescripcionWidget = item.descripcion,
-                    IconoClase = item.iconoClase,
                     TomasTomadas = tomasTomadas,
                     TomasTotales = tomasTotales
                 };
@@ -103,7 +101,6 @@ public class WidgetService
                     IdEntidad = group.First().IdEntidadEstructuraPadreNavigation.IdEntidad,
                     DescripcionWidget = group.First().IdEntidadEstructuraPadreNavigation.IdTipoWidgetNavigation.Descripcion,
                     IdWidgetEntidad = group.First().IdEntidadEstructuraPadreNavigation.IdTipoWidget,
-                    IconoEntidad = group.First().IdEntidadEstructuraPadreNavigation.IdIconoNavigation.Clase,
                     IdSeccion = group.First().IdSeccionNavigation.IdSeccion,
                     NombreSeccion = group.First().IdSeccionNavigation.Nombre,
                     SeccionClave = group.First().IdSeccionNavigation.Clave,
@@ -116,7 +113,6 @@ public class WidgetService
                                                                 VariableClave = sC.Clave,
                                                                 Descripcion = sC.Descripcion,
                                                                 MostrarDashboard = sC.MostrarDashboard,
-                                                                IconoClase = sC.IdIconoNavigation?.Clase,
                                                                 unidadMedida = sC.IdDominioNavigation.UnidadMedida,
                                                                 ValorVariable = _entidadEstructuraTablaValorRepository.ConsultarUltimoValor(idUsuario, sC.IdSeccionCampo)
                                                             };

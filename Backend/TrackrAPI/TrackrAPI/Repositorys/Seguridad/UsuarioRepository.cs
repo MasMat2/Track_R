@@ -668,8 +668,6 @@ namespace TrackrAPI.Repositorys.Seguridad
 
             var expediente = usuario.ExpedienteTrackr.FirstOrDefault();
 
-            var padecimientos = expediente.ExpedientePadecimiento;
-
             var informacionGeneralDto = new InformacionGeneralDTO
             {
                 Nombre = usuario.Nombre,
@@ -693,8 +691,14 @@ namespace TrackrAPI.Repositorys.Seguridad
                 NumeroInterior = usuario.NumeroInterior,
                 NumeroExterior = usuario.NumeroExterior,
                 EntreCalles = usuario.EntreCalles,
-                CorreoConfirmado = usuario.CorreoConfirmado,
-                padecimientos = padecimientos.Select(p => new ExpedientePadecimientoDTO
+                CorreoConfirmado = usuario.CorreoConfirmado
+            };
+            
+            if(expediente.ExpedientePadecimiento != null)
+            {
+                var padecimientos = expediente?.ExpedientePadecimiento;
+            
+                informacionGeneralDto.padecimientos = padecimientos.Select(p => new ExpedientePadecimientoDTO
                 {
                     IdPadecimiento = p.IdPadecimiento,
                     IdExpedientePadecimiento = p.IdExpedientePadecimiento,
@@ -703,8 +707,9 @@ namespace TrackrAPI.Repositorys.Seguridad
                     NombreDoctor = p.IdUsuarioDoctorNavigation.Nombre,
                     FechaDiagnostico = p.FechaDiagnostico,
                     EsAntecedente = p.IdPadecimientoNavigation.EsAntecedente,
-                })
-            };
+                });
+            }
+         
 
             return informacionGeneralDto;
 
