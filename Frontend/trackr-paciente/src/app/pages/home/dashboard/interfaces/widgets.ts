@@ -4,6 +4,7 @@ import { WidgetPesoComponent } from "../components/widgets/widget-peso/widget-pe
 import { WidgetFrecuenciaComponent } from "../components/widgets/widget-frecuencia/widget-frecuencia.component";
 import { WidgetSuenoComponent } from "../components/widgets/widget-sueno/widget-sueno.component";
 import { WidgetSeguimientoComponent } from "../components/widgets/widget-seguimiento/widget-seguimiento.component";
+import { WidgetOmronComponent } from "../components/widgets/widget-omron/widget-omron.component";
 
 // Todos los tipos de widgets posibles
 //Claves provisionales aquí y en la BD
@@ -46,8 +47,9 @@ export const WIDGETS: WidgetDictionary = {
   */
   'w-fre': {class: WidgetFrecuenciaComponent, columns: 6},
   'w-pas': { class: WidgetPasosComponent, columns: 6 },
-  'w-sue' : {class: WidgetSuenoComponent, columns: 7},
-  'w-pes': { class: WidgetPesoComponent, columns: 5 },
+  'w-sue' : {class: WidgetSuenoComponent, columns: 6},
+  'w-pes': { class: WidgetPesoComponent, columns: 6 },
+  'w-omr': { class: WidgetOmronComponent, columns: 12 },
   'A001' : {class: WidgetSeguimientoComponent, columns: 12},
   'A002' : {class: WidgetSeguimientoComponent, columns: 12},
   'A003' : {class: WidgetSeguimientoComponent, columns: 12},
