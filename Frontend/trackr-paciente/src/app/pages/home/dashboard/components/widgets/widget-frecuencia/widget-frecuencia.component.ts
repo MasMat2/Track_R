@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WidgetComponent } from '../widget/widget.component';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
-import { GetRecordsOptions, HealthConnectAvailabilityStatus } from '../../interfaces/healthconnect-interfaces';
+import { GetRecordsOptions, HealthConnectAvailabilityStatus } from '../../../interfaces/healthconnect-interfaces';
 import { RecordType } from 'capacitor-health-connect-local';
 import { AlertController } from '@ionic/angular';
 

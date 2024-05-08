@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { WidgetComponent } from '../widget/widget.component';
-import { GetRecordsOptions, HealthConnectAvailabilityStatus, StoredRecord } from '../../interfaces/healthconnect-interfaces';
+import { GetRecordsOptions, HealthConnectAvailabilityStatus, StoredRecord } from '../../../interfaces/healthconnect-interfaces';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
 import { AlertController } from '@ionic/angular';
 

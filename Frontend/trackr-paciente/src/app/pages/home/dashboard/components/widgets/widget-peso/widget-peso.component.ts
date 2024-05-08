@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { WidgetComponent } from '../widget/widget.component';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
-import { GetRecordsOptions, HealthConnectAvailabilityStatus, StoredRecord } from '../../interfaces/healthconnect-interfaces';
+import { GetRecordsOptions, HealthConnectAvailabilityStatus, StoredRecord } from '../../../interfaces/healthconnect-interfaces';
 
 @Component({
   selector: 'app-widget-peso',

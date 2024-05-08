@@ -3,7 +3,7 @@ import { WidgetComponent } from '../widget/widget.component';
 import { CommonModule } from '@angular/common';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
-import { GetRecordsOptions, HealthConnectAvailabilityStatus } from '../../interfaces/healthconnect-interfaces';
+import { GetRecordsOptions, HealthConnectAvailabilityStatus } from '../../../interfaces/healthconnect-interfaces';
 
 @Component({
   selector: 'app-widget-sueno',
