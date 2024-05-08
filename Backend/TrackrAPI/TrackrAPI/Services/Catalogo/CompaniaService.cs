@@ -64,7 +64,7 @@ namespace TrackrAPI.Services.Catalogo
             this.giroComercialService = giroComercialService;
             this.hospitalService = hospitalService;
             this.usuarioRolService = usuarioRolService;
-            this.usuarioService= usuarioService;
+            this.usuarioService = usuarioService;
 
             this.env = env;
         }
@@ -157,6 +157,7 @@ namespace TrackrAPI.Services.Catalogo
             usuario.IdTipoUsuario = 1;
             usuario.IdCompania = compania.IdCompania;
             usuario.Rfc = GeneralConstant.RFCPublicoGeneral;
+            usuario.IdHospital = idLocacion;
 
             int idUsuario = usuarioService.AgregarCliente(usuario);
 
@@ -223,7 +224,7 @@ namespace TrackrAPI.Services.Catalogo
                 TelefonoMovil = compania.Telefono,
                 Habilitado = true,
                 IdTipoUsuario = 1,
-                IdPerfil = perfilAdministrador.IdPerfil,
+                IdPerfil = perfilAdministrador != null ? perfilAdministrador.IdPerfil : null,
                 Contrasena = contrasena,
                 AdministradorCompania = true
             };
@@ -338,7 +339,7 @@ namespace TrackrAPI.Services.Catalogo
         {
             var rolVendedor = new UsuarioRol();
             rolVendedor.IdUsuario = idUsuario;
-            rolVendedor.IdRol = rolRepository.ConsultarPorClave(GeneralConstant.ClaveRolVendedor).IdRol;
+            rolVendedor.IdRol = rolRepository.ConsultarPorClave(GeneralConstant.ClaveRolMedico).IdRol;
 
             usuarioRolService.Agregar(rolVendedor);
 
@@ -350,7 +351,7 @@ namespace TrackrAPI.Services.Catalogo
 
             var rolGestorFlujo = new UsuarioRol();
             rolGestorFlujo.IdUsuario = idUsuario;
-            rolGestorFlujo.IdRol = rolRepository.ConsultarPorClave(GeneralConstant.ClaveRolGestorFlujos).IdRol;
+            rolGestorFlujo.IdRol = rolRepository.ConsultarPorClave("015").IdRol;
 
             usuarioRolService.Agregar(rolGestorFlujo);
         }
@@ -483,7 +484,7 @@ namespace TrackrAPI.Services.Catalogo
             var companiaBase = companiaRepository.ConsultarPorClave(GeneralConstant.ClaveCompaniaBase);
 
             //Se consultas los perfiles de la compañía base, de acuerdo al tipo de compañía
-            var perfiles = perfilRepository.ConsultarPorTipoCompania((int)compania.IdTipoCompania).ToList();
+            var perfiles = perfilRepository.ConsultarPorCompaniaBase((int)companiaBase.IdCompania).ToList();
 
             //Se copia el perfil "Sin Acceso" de la compañía base, por default
             var perfilSinAcceso = perfilRepository.ConsultarPorClave(GeneralConstant.ClavePerfilSinAcceso, companiaBase.IdCompania);
@@ -492,16 +493,17 @@ namespace TrackrAPI.Services.Catalogo
                 perfiles.Add(perfilSinAcceso);
             }
 
-           foreach(var perfil in perfiles)
+            foreach (var perfil in perfiles)
             {
                 var accesos = accesoRepository.ConsultarPorPerfil(perfil.IdPerfil);
 
                 perfil.IdPerfil = 0;
                 perfil.IdCompania = compania.IdCompania;
+                perfil.IdTipoCompania = compania.IdTipoCompania;
 
                 perfilRepository.Agregar(perfil);
 
-                foreach(var acceso in accesos)
+                foreach (var acceso in accesos)
                 {
                     var accesoPerfil = new AccesoPerfil();
                     accesoPerfil.IdPerfil = perfil.IdPerfil;
@@ -645,7 +647,8 @@ namespace TrackrAPI.Services.Catalogo
 
                 correoHelper.Enviar(correo);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Logger.WriteError(ex, env);
             }
         }

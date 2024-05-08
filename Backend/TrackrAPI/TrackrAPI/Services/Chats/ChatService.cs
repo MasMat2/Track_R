@@ -66,7 +66,7 @@ public class ChatService
         {
             IdChat = x.IdChat,
             Titulo = x.Titulo,
-            Fecha = x.Fecha,
+            Fecha = x.Fecha.ToLocalTime(),
             Habilitado = x.Habilitado
         }).ToList();
 

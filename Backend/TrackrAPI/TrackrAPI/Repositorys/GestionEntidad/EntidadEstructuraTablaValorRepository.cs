@@ -96,7 +96,8 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Select(etv => new ValoresHistogramaDTO
                 {
                     FechaMuestra = etv.FechaMuestra ?? new DateTime(),
-                    Valor = int.Parse(etv.Valor)
+                    Valor = int.Parse(etv.Valor),
+                    FueraDeRango = etv.FueraDeRango,
                 });
         }
 

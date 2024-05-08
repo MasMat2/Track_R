@@ -40,8 +40,8 @@ export class EntidadEstructuraTablaValorService {
     return this.http.get<ValoresFueraRangoGridDTO[]>(this.dataUrl + `valoresTodasVariables/${idPadecimiento}/${idUsuario}`);
   }
 
-  public consultarValoresPorClaveCampo(claveCampo: string, idUsuario: number, filtroTiempo: string): Observable<ValoresPorClaveCampo> {
-    return this.http.get<ValoresPorClaveCampo>(this.dataUrl + `valoresPorClaveCampo/${claveCampo}/${idUsuario}/${filtroTiempo}`);
+  public consultarValoresPorClaveCampo(idSeccionCampo: number, idUsuario: number, filtroTiempo: string): Observable<ValoresPorClaveCampo> {
+    return this.http.get<ValoresPorClaveCampo>(this.dataUrl + `valoresPorClaveCampo/${idSeccionCampo}/${idUsuario}/${filtroTiempo}`);
   }
   
   public consultarValoresFueraRangoUsuario(idUsuario : number) {
