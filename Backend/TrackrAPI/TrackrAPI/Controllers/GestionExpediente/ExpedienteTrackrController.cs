@@ -44,8 +44,8 @@ public class ExpedienteTrackrController : ControllerBase
     [HttpGet("consultarParaGrid/")]
     public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid()
     {
-        var usuario  =  _usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
-        return _expedienteTrackrService.ConsultarParaGrid(usuario.IdUsuario , usuario.IdCompania);
+        var usuario = _usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
+        return _expedienteTrackrService.ConsultarParaGrid(usuario.IdUsuario, usuario.IdCompania);
     }
 
     [HttpDelete("eliminar/{idExpediente}")]
@@ -62,14 +62,20 @@ public class ExpedienteTrackrController : ControllerBase
     [HttpGet("apegoMedicamentoUsuarios")]
     public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios()
     {
-        var usuario  =  _usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
-        return _expedienteTrackrService.ApegoMedicamentoUsuarios(usuario.IdUsuario , usuario.IdCompania);
+        var usuario = _usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
+        return _expedienteTrackrService.ApegoMedicamentoUsuarios(usuario.IdUsuario, usuario.IdCompania);
     }
 
     [HttpGet("apegoTratamientoPorPaciente/{idPaciente}")]
     public IEnumerable<ApegoTomaMedicamentoDto> ApegoTratamientoPorPaciente(int idPaciente)
     {
         return _expedienteTrackrService.ApegoTratamientoPorPaciente(idPaciente);
+    }
+
+    [HttpGet("consultarParaRecomendacionesGenerales/")]
+    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaRecomendacionesGenerales()
+    {
+        return _expedienteTrackrService.ConsultarParaRecomendacionesGenerales();
     }
 
 }

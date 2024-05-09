@@ -332,4 +332,9 @@ public class ExpedienteTrackrService
         return _expedienteTrackrRepository.ApegoTratamientoPorPaciente(idUsuario);
     }
 
+    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaRecomendacionesGenerales()
+    {
+        return _expedienteTrackrRepository.ConsultarParaRecomendacionesGenerales();
+    }
+
 }
