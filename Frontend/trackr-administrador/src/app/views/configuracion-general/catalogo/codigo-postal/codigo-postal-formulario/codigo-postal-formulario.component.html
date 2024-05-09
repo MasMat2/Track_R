@@ -2,7 +2,7 @@
   <div class="barra-lateral-modal"></div>
     <div class="modal-content">
       <div class="modal-header">
-        <div>{{ accion }} Código Postal</div>
+        <div>Código Postal - {{ accion }}</div>
         <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
           <i class="far fa-times-circle"></i>
         </button>
@@ -100,9 +100,7 @@
         <div class="modal-footer">
           <div class="text-center">
             <button type ="button" class="btn-secundario mr-3"(click)="cancelar();">Cancelar</button>
-            <button [disabled]="btnSubmit" type="submit" class="btn-primario btn-margin-left">
-              Guardar
-            </button>
+            <button [disabled]="btnSubmit" type="submit" class="btn-primario btn-margin-left">Guardar</button>
           </div>
         </div>
       </form>

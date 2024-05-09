@@ -25,7 +25,7 @@ export class GeneroComponent implements OnInit {
     public generoList: GeneroDto[];
 
     public columns: ColDef[] =  [
-        {headerName: 'Id', field: 'idGenero', maxWidth: 150},
+        {headerName: 'Clave', field: 'idGenero', maxWidth: 150},
         {headerName: 'Género', field: 'descripcion', minWidth: 600}
     ];
     
@@ -59,7 +59,7 @@ export class GeneroComponent implements OnInit {
     }
 
     agregar(){
-        this.bsModalRef = this.modalService.show(GeneroFormularioComponent, GeneralConstant.CONFIG_MODAL_DEFAULT);
+        this.bsModalRef = this.modalService.show(GeneroFormularioComponent, GeneralConstant.CONFIG_MODAL_MEDIUM);
         this.bsModalRef.content.accion = GeneralConstant.MODAL_ACCION_AGREGAR;
         this.bsModalRef.content.onClose = (cerrar: boolean) => {   
         if(cerrar){

@@ -29,6 +29,7 @@ namespace TrackrAPI.Services.Catalogo
 
             var especialidadDto = new EspecialidadFormularioConsultaDto
             {
+                IdEspecialidad = especialidad.IdEspecialidad,
                 Nombre = especialidad.Nombre
             };
 

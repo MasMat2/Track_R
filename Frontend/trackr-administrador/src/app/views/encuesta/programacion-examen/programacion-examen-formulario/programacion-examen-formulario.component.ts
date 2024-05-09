@@ -48,7 +48,7 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
   public onClose: (actualizar: boolean) => void;
 
   // Grid
-  protected readonly HEADER_GRID: string = 'Exámenes';
+  protected readonly HEADER_GRID: string = 'Encuestas';
 
   private readonly COLUMNA_DETALLE: ColDef = Object.assign(
     {
@@ -201,7 +201,7 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
   }
 
   private agregar(): void {
-    const MENSAJE_AGREGAR: string = 'La programación de examen ha sido agregada';
+    const MENSAJE_AGREGAR: string = 'La programación de Encuesta ha sido agregada';
 
     this.programacionExamenService
       .agregar(this.programacionExamen)
@@ -224,7 +224,7 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
   }
 
   private editar(): void {
-    const MENSAJE_EDITAR: string = 'La programación de examen ha sido modificada';
+    const MENSAJE_EDITAR: string = 'La programación de Encuesta ha sido modificada';
 
     this.programacionExamenService
       .editar(this.programacionExamen)

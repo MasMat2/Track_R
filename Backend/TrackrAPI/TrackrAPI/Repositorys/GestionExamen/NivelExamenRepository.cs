@@ -36,7 +36,9 @@ public class NivelExamenRepository : Repository<NivelExamen>, INivelExamenReposi
             {
                 IdNivelExamen = p.IdNivelExamen,
                 Clave = p.Clave ?? string.Empty,
-                Descripcion = p.Descripcion ?? string.Empty
+                Descripcion = p.Descripcion ?? string.Empty,
+                FechaAlta = p.FechaAlta,
+                Estatus = p.Estatus
             })
             .ToList();
     }
@@ -50,7 +52,9 @@ public class NivelExamenRepository : Repository<NivelExamen>, INivelExamenReposi
             {
                 IdNivelExamen = p.IdNivelExamen,
                 Clave = p.Clave ?? string.Empty,
-                Descripcion = p.Descripcion ?? string.Empty
+                Descripcion = p.Descripcion ?? string.Empty,
+                FechaAlta = p.FechaAlta,
+                Estatus = p.Estatus
             })
             .ToList();
     }
