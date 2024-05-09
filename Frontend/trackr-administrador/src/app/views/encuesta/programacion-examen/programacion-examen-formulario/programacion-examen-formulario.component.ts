@@ -265,7 +265,6 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
       examen.estatus = true;
 
       this.examenList.push(examen);
-      console.log(this.examenList)
     }
   }
 
@@ -313,7 +312,5 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
     )
   }
 
-  selectChange(){
-    console.log(this.programacionExamen.participantes)
-  }
+
 }
