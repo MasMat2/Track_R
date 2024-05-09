@@ -173,7 +173,7 @@
             
               <ion-row>
                 <ion-col size="12">
-                  <div class="input">
+                  <div class="input"  (click)="openGeneroModal()">
                     <ion-label>
                       Género
                     </ion-label>
@@ -188,7 +188,7 @@
                     [ngModel]="nombreGenero"
                     >
 
-                    <ion-icon *ngIf="!modalGeneroAbierto" slot="end" name="chevron-down" (click)="openGeneroModal()"></ion-icon>
+                    <ion-icon *ngIf="!modalGeneroAbierto" slot="end" name="chevron-down"></ion-icon>
                     <ion-icon *ngIf="modalGeneroAbierto" slot="end" name="chevron-up"></ion-icon>
                   </ion-input>
 

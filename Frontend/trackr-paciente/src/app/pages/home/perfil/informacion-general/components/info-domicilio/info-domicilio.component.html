@@ -30,8 +30,8 @@
                   <ion-label>País</ion-label>
                   <ion-input  #pais="ngModel" id="pais" name="pais"
                     fill="outline" (click)="openPaisModal()" [ngModel]="nombrePais" readonly="true">
-                    <ion-icon *ngIf="!modalEstadoAbierto" slot="end" name="chevron-down" ></ion-icon>
-                    <ion-icon *ngIf="modalEstadoAbierto" slot="end" name="chevron-up"></ion-icon>
+                    <ion-icon *ngIf="!modalPaisAbierto" slot="end" name="chevron-down" ></ion-icon>
+                    <ion-icon *ngIf="modalPaisAbierto" slot="end" name="chevron-up"></ion-icon>
                   </ion-input>
                 </div>
               </ion-col>
@@ -65,12 +65,12 @@
 
             <ion-row>
               <ion-col size="6">
-                <div class="input">
+                <div class="input" (click)="openMunicipioModal()">
                   <ion-label>Municipio</ion-label>
                   <ion-input  #municipio="ngModel" id="municipio"
                     name="municipio" fill="outline" [disabled]="!informacionUsuario.idEstado" readonly="true"
                     [ngModel]="nombreMunicipio">
-                    <ion-icon *ngIf="!modalMunicipioAbierto" slot="end" name="chevron-down" (click)="openMunicipioModal()"></ion-icon>
+                    <ion-icon *ngIf="!modalMunicipioAbierto" slot="end" name="chevron-down" ></ion-icon>
                     <ion-icon *ngIf="modalMunicipioAbierto" slot="end" name="chevron-up"></ion-icon>
                   </ion-input>
                 </div>

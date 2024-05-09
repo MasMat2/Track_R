@@ -111,9 +111,7 @@ export class InfoDomicilioComponent  implements OnInit {
   protected async onChangePais() {
     this.esPaisExtranjero = this.infoUsuario.idPais !== this.idPaisMexico;
     this.infoUsuario.idEstado = 0;
-    await this.consultarEstados(this.infoUsuario.idPais);
-
-    this.onChangeEstado();
+    
   }
 
   protected async enviarFormulario(formulario: NgForm){
@@ -321,6 +319,8 @@ private setNombreColonia() {
   async openEstadoModal() {
     if(this.modalEstadoAbierto)
        return;
+    
+    this.modalEstadoAbierto = true;
     const modal = await this.modalController.create({
       component: CatalogoFormularioComponent,
       breakpoints : [0, 0.25, 0.5, 0.75],
@@ -332,11 +332,13 @@ private setNombreColonia() {
     });
 
     await modal.present();
-    this.modalEstadoAbierto = true;
     const { data } = await modal.onWillDismiss();
     if (data) {
       this.infoUsuario.idEstado = data.id;
       this.nombreEstado = data.descripcion;
+
+      this.onChangeEstado();
+    
     }
     
     this.modalEstadoAbierto = false;
@@ -344,6 +346,8 @@ private setNombreColonia() {
   async openMunicipioModal() {
     if(this.modalMunicipioAbierto)
        return;
+      
+    this.modalMunicipioAbierto = true;
     const modal = await this.modalController.create({
       component: CatalogoFormularioComponent,
       breakpoints : [0, 0.25, 0.5, 0.75, 1],
@@ -355,7 +359,6 @@ private setNombreColonia() {
     });
 
     await modal.present();
-    this.modalMunicipioAbierto = true;
     const { data } = await modal.onWillDismiss();
     if (data) {
       this.infoUsuario.idMunicipio = data.id;
@@ -367,6 +370,8 @@ private setNombreColonia() {
   async openLocalidadModal() {
     if(this.modalLocalidadAbierto)
        return;
+      
+    this.modalLocalidadAbierto = true;
     const modal = await this.modalController.create({
       component: CatalogoFormularioComponent,
       breakpoints : [0, 0.25, 0.5, 0.75, 1],
@@ -378,7 +383,6 @@ private setNombreColonia() {
     });
 
     await modal.present();
-    this.modalLocalidadAbierto = true;
     const { data } = await modal.onWillDismiss();
     if (data) {
       this.infoUsuario.idLocalidad = data.id;
@@ -390,6 +394,8 @@ private setNombreColonia() {
   async openColoniaModal() {
     if(this.modalColoniaAbierto)
        return;
+      
+    this.modalColoniaAbierto = true;
     const modal = await this.modalController.create({
       component: CatalogoFormularioComponent,
       breakpoints : [0, 0.25, 0.5, 0.75, 1],
@@ -401,7 +407,6 @@ private setNombreColonia() {
     });
 
     await modal.present();
-    this.modalColoniaAbierto = true;
     const { data } = await modal.onWillDismiss();
     if (data) {
       this.infoUsuario.idLocalidad = data.id;
@@ -413,6 +418,8 @@ private setNombreColonia() {
   async openPaisModal() {
     if(this.modalPaisAbierto)
        return;
+      
+    this.modalPaisAbierto = true;
     const modal = await this.modalController.create({
       component: CatalogoFormularioComponent,
       breakpoints : [0, 0.25, 0.5, 0.75, 1],
@@ -424,16 +431,14 @@ private setNombreColonia() {
     });
 
     await modal.present();
-    this.modalPaisAbierto = true;
     const { data } = await modal.onWillDismiss();
     if (data) {
-      this.infoUsuario.idLocalidad = data.id;
+      this.infoUsuario.idPais  = data.id;
       this.nombrePais= data.descripcion;
     }
-    
+    await this.consultarEstados(this.infoUsuario.idPais);
+
     this.modalPaisAbierto = false;
   }
-
-
 
 }
