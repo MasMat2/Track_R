@@ -35,21 +35,23 @@
           </div>
 
         <div class="col-md-2 justify-content-between align-items-center ">
-          <label class="label-input required-label">Fecha</label>
-        <div>
-          <input
-            [(ngModel)] = "recomendacion.fecha"
-            name="fechaAlta"
-            class="form-control"
-            type="text"
-            maxlength="50"
-            autocomplete="off"
-            required
-            [disabled]="true"
-            bsDatepicker
-          />
-
-        </div>
+          <div class="form-group">
+            <label class="label-input required-label">Fecha</label>
+            <div class="calendario">
+              <input  
+                [(ngModel)] = "recomendacion.fecha"
+                name="fechaAlta"
+                class="form-control"
+                type="text"
+                maxlength="50"
+                autocomplete="off"
+                required
+                [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+                [disabled]="true"
+                bsDatepicker
+              />
+          </div>
+        </div>  
       </div>
     
       <div class="col-md-2 align-items-center d-flex contenedor-agregar" >

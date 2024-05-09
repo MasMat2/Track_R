@@ -53,6 +53,7 @@ export class EspecialidadFormularioComponent extends CrudFormularioBase<Especial
         }),
         map((especialidad: EspecialidadFormularioConsultaDto) => {
           const capturaDto = new EspecialidadFormularioCapturaDto();
+          capturaDto.idEspecialidad = especialidad.idEspecialidad;
           capturaDto.nombre = especialidad.nombre;
 
           return capturaDto;

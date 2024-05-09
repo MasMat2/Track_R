@@ -33,7 +33,7 @@ export class PerfilFormularioComponent implements OnInit {
   public jerarquiaAccesoList: JerarquiaAcceso[] = [];
   public jerarquiaArbolList: JerarquiaEstructuraArbol[] = [];
 
-  public titulo = 'Alta';
+  public titulo = 'Agregar';
   public btnSubmit = false;
 
   // Configuracione default de selects
@@ -121,7 +121,7 @@ export class PerfilFormularioComponent implements OnInit {
       this.perfilService.consultar(this.perfil.idPerfil).subscribe((data) => {
         this.perfil = data;
         this.idsAccesosSeleccionados = data.idsAcceso;
-        this.titulo = 'Modificar';
+        this.titulo = 'Editar';
 
         this.idsAccesosSeleccionados.forEach((idAcceso) => {
           let node: TreeNode = this.treeView.treeModel.getNodeById(`${idAcceso}`);

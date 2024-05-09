@@ -61,7 +61,7 @@ export class AyudaSeccionComponent implements OnInit {
   public agregar() {
     this.bsModalRef = this.modalService.show(
       AyudaSeccionFormularioComponent,
-      GeneralConstant.CONFIG_MODAL_DEFAULT
+      GeneralConstant.CONFIG_MODAL_LARGE
     );
     this.bsModalRef.content.accion = GeneralConstant.MODAL_ACCION_AGREGAR;
     this.bsModalRef.content.onClose = (cerrar: boolean) => {
@@ -75,7 +75,7 @@ export class AyudaSeccionComponent implements OnInit {
   public editar(seccion: AyudaSeccion) {
     this.bsModalRef = this.modalService.show(
       AyudaSeccionFormularioComponent,
-      GeneralConstant.CONFIG_MODAL_DEFAULT
+      GeneralConstant.CONFIG_MODAL_LARGE
     );
     this.bsModalRef.content.accion = GeneralConstant.MODAL_ACCION_EDITAR;
     this.bsModalRef.content.seccion = seccion;

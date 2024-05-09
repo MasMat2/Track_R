@@ -21,7 +21,6 @@ export class CatalogoFormularioComponent implements OnInit {
   protected catalogoList: GenericoSelectorDto[] = [];
 
   ngOnInit() {
-    console.log(this.catalogoList);
   }
 
 

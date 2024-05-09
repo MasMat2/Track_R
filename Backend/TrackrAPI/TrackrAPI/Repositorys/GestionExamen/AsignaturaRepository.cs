@@ -35,7 +35,9 @@ public class AsignaturaRepository : Repository<Asignatura>, IAsignaturaRepositor
             {
                 IdAsignatura = p.IdAsignatura,
                 Clave = p.Clave ?? string.Empty,
-                Descripcion = p.Descripcion ?? string.Empty
+                Descripcion = p.Descripcion ?? string.Empty,
+                FechaAlta = p.FechaAlta,
+                Estatus = p.Estatus
             })
             .ToList();
     }

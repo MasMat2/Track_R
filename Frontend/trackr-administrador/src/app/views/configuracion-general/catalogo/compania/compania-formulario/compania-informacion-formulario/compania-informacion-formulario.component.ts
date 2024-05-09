@@ -46,7 +46,7 @@ export class CompaniaInformacionFormularioComponent implements OnInit {
 
   // Se utilza cuando el componente se llama sin utilizar el componente padre (compania-formulario)
   @Input()
-  public titulo: string = 'Agregar Compañía';
+  public titulo: string = 'Compañía - Agregar';
 
   @Input()
   public idCompania: number;

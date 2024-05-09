@@ -17,7 +17,7 @@
           <div class="row">
             <div class="col-md-12">
               <h1 class="titulo">
-                Bienvenido al Cuestionario en línea <i>{{ examen.tipoExamen }}</i>
+                Bienvenido a la Encuesta en línea <i>{{ examen.tipoExamen }}</i>
               </h1>
             </div>
             <div class="col-md-12 informacionContainer">
@@ -36,7 +36,7 @@
                   Si desea regresar al Reactivo anterior de Clic en el botón Anterior.
                 </li>
                 <li>
-                  Si desea Terminar el examen antes de finalizarlo presione Finalizar Examen.
+                  Si desea Terminar el examen antes de finalizarlo presione Finalizar Encuesta.
                 </li>
               </ul>
             </div>
@@ -53,7 +53,7 @@
                 class="btn-primario btn-margin-left btn-cargar"
                 (click)="consultarReactivos()"
               >
-                Iniciar Examen
+                Iniciar Encuesta
               </button>
             </div>
           </div>
@@ -71,7 +71,7 @@
                 (click)="terminarExamen()"
                 class="finishButton"
                 *ngIf="!blockQuestions"
-                >Finalizar Examen</a
+                >Finalizar Encuesta</a
               >
               <a
                 (click)="cancelar()"
@@ -208,7 +208,7 @@
                 (click)="terminarExamen()"
                 *ngIf="indice + 1 == reactivoList.length && !blockQuestions"
               >
-                Finalizar Examen
+                Finalizar Encuesta
               </button>
             </div>
           </div>
@@ -217,7 +217,7 @@
           <div class="row">
             <div class="col-md-12">
               <h1 class="titulo">
-                Gracias por su participación en el examen
+                Gracias por su participación en la Encuesta
                 <i>{{ examen.tipoExamen }}</i>
               </h1>
               <h2 class="titulo calificacion">
@@ -232,7 +232,7 @@
             <div class="col-md-12 reglasContainer">
               <ul>
                 <li>
-                  Si hay algún problema con la calificación o el examen favor de
+                  Si hay algún problema con la calificación o la Encuesta favor de
                   comunicarse con un representante.
                 </li>
               </ul>
@@ -253,7 +253,3 @@
   </div>
 </div>
 
-<div id="loading-cdis" *ngIf="submitting">
-  <img src="assets/img/spinner.gif" alt="Procesando..." />
-  <span>Procesando... por favor espere</span>
-</div>

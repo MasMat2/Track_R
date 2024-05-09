@@ -37,8 +37,8 @@ export class ReactivoFormularioComponent implements OnInit {
     { nombre: 'e' },
   ];
 
-  private readonly MENSAJE_AGREGAR: string = 'El reactivo ha sido agregado';
-  private readonly MENSAJE_EDITAR: string = 'El reactivo ha sido modificado';
+  private readonly MENSAJE_AGREGAR: string = 'El Reactivo ha sido agregado';
+  private readonly MENSAJE_EDITAR: string = 'El Reactivo ha sido modificado';
 
   // Inputs
   public accion: string;

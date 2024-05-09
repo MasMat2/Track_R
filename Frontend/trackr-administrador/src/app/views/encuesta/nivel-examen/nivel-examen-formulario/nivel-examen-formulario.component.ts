@@ -64,7 +64,7 @@ export class NivelExamenFormularioComponent implements OnInit {
   }
 
   private agregar(): void {
-    const MENSAJE_AGREGAR: string = 'El nivel de examen ha sido agregado';
+    const MENSAJE_AGREGAR: string = 'La Compejidad de Encuesta ha sido agregada';
 
     this.nivelExamenService
       .agregar(this.nivelExamen)
@@ -80,7 +80,7 @@ export class NivelExamenFormularioComponent implements OnInit {
   }
 
   private editar(): void {
-    const MENSAJE_EDITAR: string = 'El nivel de examen ha sido modificado';
+    const MENSAJE_EDITAR: string = 'La Complejidad de Encuesta ha sido modificada';
 
     this.nivelExamenService
       .editar(this.nivelExamen)
