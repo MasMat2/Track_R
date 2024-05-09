@@ -8,6 +8,7 @@ using TrackrAPI.Repositorys.Archivos;
 using TrackrAPI.Repositorys.Chats;
 using TrackrAPI.Services.Archivos;
 using TrackrAPI.Services.Notificaciones;
+using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Services.Chats;
 
@@ -19,13 +20,15 @@ public class ChatMensajeService
     private readonly NotificacionDoctorService _notificacionService;
     private readonly IArchivoRepository _archivoRepository;
     private readonly ArchivoService _archivoService;
+    private readonly SimpleAES _simpleAES;
 
     public ChatMensajeService(IChatMensajeRepository chatMensajeRepository,
                               IHubContext<ChatMensajeHub, IChatMensajeHub> hubContext,
                               IChatPersonaRepository chatPersonaRepository,
                               NotificacionDoctorService notificacionService,
                               IArchivoRepository archivoRepository,
-                              ArchivoService archivoService)
+                              ArchivoService archivoService,
+                              SimpleAES simpleAES)
     {
         _chatMensajeRepository = chatMensajeRepository;
         _hubContext = hubContext;
@@ -33,6 +36,7 @@ public class ChatMensajeService
         _notificacionService = notificacionService;
         _archivoRepository = archivoRepository;
         _archivoService = archivoService;
+        _simpleAES = simpleAES;
     }
 
     public IEnumerable<IEnumerable<ChatMensajeDTO>> ObtenerMensajesPorChat(int IdPersona)
@@ -49,7 +53,7 @@ public class ChatMensajeService
                                                 IdChat = x.IdChat,
                                                 Fecha = x.Fecha,
                                                 IdPersona = x.IdPersona,
-                                                Mensaje = x.Mensaje,
+                                                Mensaje = _simpleAES.DecryptString(x.Mensaje),
                                                 NombrePersona = x.IdPersonaNavigation.Nombre + "  " + x.IdPersonaNavigation.ApellidoPaterno + " " + x.IdPersonaNavigation.ApellidoMaterno,
                                                 IdArchivo = (x.IdArchivo != null) ? (int)x.IdArchivo : 0,
                                                 ArchivoNombre = (x.IdArchivo != null) ? _archivoService.GetFileName((int)x.IdArchivo) : null,
@@ -101,6 +105,9 @@ public class ChatMensajeService
             IdPersona = mensaje.IdPersona,
         };
 
+
+        var encriptedString = _simpleAES.EncryptToString(mensajeAux.Mensaje);
+        mensajeAux.Mensaje = encriptedString;
 
         if (idArchivo != null)
         {
