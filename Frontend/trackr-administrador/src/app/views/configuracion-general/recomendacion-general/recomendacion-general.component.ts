@@ -66,9 +66,8 @@ export class RecomendacionGeneralComponent {
     this.entidadEstructuraService.consultarPadecimientosParaSelector().subscribe(res => {
       this.padecimientos = res
     })
-    this.expedienteTrackrService.consultarParaGrid().subscribe(res =>{
+    this.expedienteTrackrService.consultarParaRecomendacionesGenerales().subscribe(res =>{
       this.expedientes = res;
-      console.log(this.expedientes)
     })
     
    }
