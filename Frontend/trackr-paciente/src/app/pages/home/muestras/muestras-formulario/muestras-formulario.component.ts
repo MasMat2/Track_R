@@ -16,6 +16,8 @@ import { PadecimientoMuestraDTO } from '@dtos/gestion-expediente/padecimiento-mu
 import { addIcons } from 'ionicons';
 import { validarCamposRequeridos } from '@utils/utileria';
 import { AlertController, ModalController } from '@ionic/angular/standalone';
+import { call, swapHorizontalOutline, swapVerticalOutline } from 'ionicons/icons';
+import { GeneralConstant } from '@utils/general-constant';
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -39,6 +41,8 @@ export class MuestrasFormularioComponent implements OnInit {
   protected seccionSeleccionada: SeccionMuestraDTO;
   protected seccionYaSeleccionada: boolean = false;
   protected submitting: boolean = false;
+  protected variablesHealthKit = GeneralConstant.VARIABLES_HEALTHKIT;
+  protected variablesExistenEnHealthKit: boolean = false;
 
   constructor(
     private seccionCampoService: SeccionCampoService,
@@ -51,7 +55,8 @@ export class MuestrasFormularioComponent implements OnInit {
 
       addIcons({ 
         'chevron-up': 'assets/img/svg/chevron-up.svg',
-        'chevron-down': 'assets/img/svg/chevron-down.svg'
+        'chevron-down': 'assets/img/svg/chevron-down.svg',
+        'swap-vertical-outline': 'assets/img/svg/swap-vertical-outline.svg',
       })
       // this.router.events
       // .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
@@ -74,8 +79,6 @@ export class MuestrasFormularioComponent implements OnInit {
     lastValueFrom(this.seccionCampoService.consultarPorSeccion())
     .then((arbolPadecimiento: PadecimientoMuestraDTO[]) => {
       this.arbolPadecimiento = arbolPadecimiento;
-      console.log(arbolPadecimiento);
-      console.log(this.arbolPadecimiento);
     });
   }
   
@@ -101,7 +104,6 @@ export class MuestrasFormularioComponent implements OnInit {
         });
       }
     }
-    console.log(camposAgregados);
     if (camposAgregados.length === 0) {
       this.submitting = false;
       return;
@@ -164,6 +166,7 @@ export class MuestrasFormularioComponent implements OnInit {
 
   protected onChangeSeccion(){
     this.seccionYaSeleccionada = true;
+    this.variablesExistenEnHealthKit = this.seccionSeleccionada.seccionesCampo.every(seccionCampo => this.variablesHealthKit.includes(seccionCampo.clave));
   }
 
   protected valoresInputValidos(){
@@ -180,5 +183,15 @@ export class MuestrasFormularioComponent implements OnInit {
     }
 
     return true;
+  }
+
+  async syncronizeData(){
+    this.seccionSeleccionada.seccionesCampo.forEach(async variable => {
+      await this.callPlugin(variable.uuidIos);
+    });
+  }
+
+  async callPlugin(uuid : string){
+    console.log('Llamando al plugin con uuid: ' + uuid)
   }
 }

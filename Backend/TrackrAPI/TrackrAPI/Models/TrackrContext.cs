@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -35,7 +35,6 @@ namespace TrackrAPI.Models
         public virtual DbSet<CompaniaContacto> CompaniaContacto { get; set; } = null!;
         public virtual DbSet<CompaniaLogotipo> CompaniaLogotipo { get; set; } = null!;
         public virtual DbSet<ConfirmacionCorreo> ConfirmacionCorreo { get; set; } = null!;
-        public virtual DbSet<ConfirmacionCorreo1> ConfirmacionCorreo1 { get; set; } = null!;
         public virtual DbSet<ContenidoExamen> ContenidoExamen { get; set; } = null!;
         public virtual DbSet<Departamento> Departamento { get; set; } = null!;
         public virtual DbSet<DetalleExpedienteRecomendacionesGenerales> DetalleExpedienteRecomendacionesGenerales { get; set; } = null!;
@@ -605,24 +604,6 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdUsuario)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Confirmac__idUsu__3D73F9C2");
-            });
-
-            modelBuilder.Entity<ConfirmacionCorreo1>(entity =>
-            {
-                entity.HasKey(e => e.IdConfirmacionCorreo)
-                    .HasName("PK__Confirma__C8248F4CC682CBCB");
-
-                entity.ToTable("ConfirmacionCorreo");
-
-                entity.Property(e => e.IdConfirmacionCorreo).HasColumnName("idConfirmacionCorreo");
-
-                entity.Property(e => e.Clave).HasMaxLength(500);
-
-                entity.Property(e => e.FechaAlta)
-                    .HasColumnType("datetime")
-                    .HasColumnName("fechaAlta");
-
-                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
             });
 
             modelBuilder.Entity<ContenidoExamen>(entity =>
@@ -2278,7 +2259,15 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.Grupo).HasMaxLength(50);
 
+                entity.Property(e => e.IdAndroid)
+                    .HasMaxLength(36)
+                    .HasColumnName("id_android");
+
                 entity.Property(e => e.MostrarDashboard).HasColumnName("mostrarDashboard");
+
+                entity.Property(e => e.UuidIos)
+                    .HasMaxLength(36)
+                    .HasColumnName("uuid_ios");
 
                 entity.HasOne(d => d.IdDominioNavigation)
                     .WithMany(p => p.SeccionCampo)
