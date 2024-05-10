@@ -17,6 +17,7 @@ import { addIcons } from 'ionicons';
 import { validarCamposRequeridos } from '@utils/utileria';
 import { AlertController, ModalController } from '@ionic/angular/standalone';
 import { call, swapHorizontalOutline, swapVerticalOutline } from 'ionicons/icons';
+import { GeneralConstant } from '@utils/general-constant';
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -40,6 +41,8 @@ export class MuestrasFormularioComponent implements OnInit {
   protected seccionSeleccionada: SeccionMuestraDTO;
   protected seccionYaSeleccionada: boolean = false;
   protected submitting: boolean = false;
+  protected variablesHealthKit = GeneralConstant.VARIABLES_HEALTHKIT;
+  protected variablesExistenEnHealthKit: boolean = false;
 
   constructor(
     private seccionCampoService: SeccionCampoService,
@@ -163,6 +166,7 @@ export class MuestrasFormularioComponent implements OnInit {
 
   protected onChangeSeccion(){
     this.seccionYaSeleccionada = true;
+    this.variablesExistenEnHealthKit = this.seccionSeleccionada.seccionesCampo.every(seccionCampo => this.variablesHealthKit.includes(seccionCampo.clave));
   }
 
   protected valoresInputValidos(){
