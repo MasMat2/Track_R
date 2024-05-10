@@ -4,6 +4,13 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { barChartOutline, scaleOutline } from 'ionicons/icons';
+import { AppLauncher } from '@capacitor/app-launcher';
+
+import { App } from '@capacitor/app';
+
+App.addListener('appStateChange', ({ isActive }) => {
+  console.log('App state changed. Is active?', isActive);
+});
 
 @Component({
   selector: 'app-widget-omron',
@@ -22,17 +29,18 @@ export class WidgetOmronComponent  implements OnInit {
     addIcons({barChartOutline})
    }
 
-  protected suenoActual: number = 0;
-  protected horasMinDiarias: number = 0;
-  protected minutosMinDiarias: number = 0;
-  protected tiempoDormido: number = 0;
-  protected minutostiempoDormido: number = 0;
-  protected suenoProfundo: number = 0;
-  protected minsuenoProfundo: number = 0;
   ngOnInit() {}
 
-   openOmronConnect() {
-    console.log('openOmronConnect');
-   }
+  async openOmronConnect() {
+    try {
+      
+      await AppLauncher.canOpenUrl({ url: 'omronconnect://' }); // El nombre del paquete se obtiene investigandolo desde la app OMRON connect
+      await AppLauncher.openUrl({ url: 'omronconnect://'}); 
+      console.log('Abriendo Omron');
+
+    } catch (error) {
+      console.error('No se puede abrir la aplicación Omron', error);
+    }
+  }
 
 }
