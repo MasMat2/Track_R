@@ -134,6 +134,8 @@ namespace TrackrAPI.Repositorys.Catalogo
                 .Where(h => h.IdHospital == idHospital)
                 .Select(h => new Hospital
                 {
+                    IdCompania = h.IdCompania,
+                    IdHospital = h.IdHospital,
                     //Caja = h.Caja,
                     //Cita = h.Cita,
                     //ListaPrecioClinica = h.ListaPrecioClinica,
@@ -238,7 +240,7 @@ namespace TrackrAPI.Repositorys.Catalogo
                 .Select(h => new HospitalDto
                 {
                     IdHospital = h.IdHospital,
-                    Nombre = h.DominioHospital.Any( dH => dH.IdDominio == idDominio) ?   h.Nombre : h.Nombre + " ( Indefinido )"
+                    Nombre = h.DominioHospital.Any(dH => dH.IdDominio == idDominio) ? h.Nombre : h.Nombre + " ( Indefinido )"
                 })
                 .ToList();
         }
@@ -250,7 +252,7 @@ namespace TrackrAPI.Repositorys.Catalogo
                 .Select(h => new HospitalDto
                 {
                     IdHospital = h.IdHospital,
-                    Nombre = h.Nombre 
+                    Nombre = h.Nombre
                 })
                 .ToList();
         }

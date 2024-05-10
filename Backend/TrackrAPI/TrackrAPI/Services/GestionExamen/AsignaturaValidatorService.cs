@@ -13,7 +13,7 @@ public class AsignaturaValidatorService
         _asignaturaRepository = asignaturaRepository;
     }
 
-    private readonly string MensajeDescripcionRequerido = "La descripcion es requerido";
+    private readonly string MensajeDescripcionRequerido = "La descripción es requerido";
     private readonly string MensajeClaveRequerida = "La clave es requerida";
 
     private static readonly int LongitudDescripcion = 50;
@@ -22,11 +22,11 @@ public class AsignaturaValidatorService
     private readonly string MensajeDescripcionLongitud = $"La longitud máxima de la descripción son {LongitudDescripcion} caracteres";
     private readonly string MensajeClaveLongitud = $"La longitud máxima de la clave son {LongitudClave} caracteres";
 
-    private readonly string MensajeDependencia = "La asignacion tiene reactivos agregados y no se puede eliminar";
+    private readonly string MensajeDependencia = "La }Encuesta tiene reactivos asociados y no se puede eliminar";
 
-    private readonly string MensajeExistencia = "La asignacion que se requería actualizar no existe";
+    private readonly string MensajeExistencia = "La Encuesta que se requería actualizar no existe";
 
-    private readonly string MensajeDuplicado = "La asignatura que intenta agregar ya existe";
+    private readonly string MensajeDuplicado = "la Encuesta que intenta agregar ya existe";
 
     public void ValidarAgregar(Asignatura asignatura)
     {
@@ -50,15 +50,6 @@ public class AsignaturaValidatorService
         Validator.ValidarRequerido(
             asignatura.Descripcion,
             MensajeDescripcionRequerido);
-
-        Validator.ValidarRequerido(
-            asignatura.Clave,
-            MensajeClaveRequerida);
-
-        Validator.ValidarLongitudMaximaString(
-            asignatura.Clave,
-            LongitudClave,
-            MensajeClaveLongitud);
 
         Validator.ValidarLongitudMaximaString(
             asignatura.Descripcion,

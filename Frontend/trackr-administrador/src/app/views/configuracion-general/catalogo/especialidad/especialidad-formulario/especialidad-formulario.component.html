@@ -1,4 +1,4 @@
-<app-modal-base [titulo]="accion + ' ' + nombreEntidad">
+<app-modal-base [titulo]="nombreEntidad + ' - ' + accion">
   <ng-template #modalBody>
     <form
       #formulario="ngForm"
@@ -9,8 +9,27 @@
     >
       <div class="container-fluid">
         <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+                <label class="label-input required-label">Clave</label>
+                <div>
+                    <input 
+                    #IdEspecialidad="ngModel"
+                    [(ngModel)]="entidad.idEspecialidad"
+                    id="idEspecialidad"
+                    name="idEspecialidadName"
+                    class="form-control"
+                    type="text"
+                    maxlength="20"
+                    required="true"
+                    autocomplete="off"
+                    [disabled]="true"
+                    /> 
+                </div>
+            </div>
+        </div>
           <!-- Especialidad -->
-          <div class="col-12 col-md-12">
+          <div class="col-8">
             <div class="form-group">
               <label class="label-input required-label">Especialidad</label>
               <div>
@@ -28,7 +47,7 @@
                   *ngIf="nombre.errors?.['required'] && nombre.touched"
                   class="error"
                 >
-                  La especialidad es requerida
+                  La Especialidad es requerida
                 </div>
               </div>
             </div>

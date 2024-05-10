@@ -19,5 +19,7 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         public IEnumerable<ApegoTomaMedicamentoDto> ApegoTratamientoPorPaciente(int idUsuario);
         public IEnumerable<ExpedienteTrackr> ConsultarExpedientes();
         public IEnumerable<RecordatorioUsuarioDto> RecordatoriosPorUsuario(int idUsuario);
+
+        public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaRecomendacionesGenerales();
     }
 }

@@ -90,10 +90,11 @@ textarea:disabled  {
   color: #54708b;
 }
 
-//
-
 textarea {
   resize: none !important;
+  padding-top: 10px;
+  padding-left: 10px;
+  width: 100%;
 }
 
 app-number-input.ng-invalid.ng-touched.ng-dirty input {

@@ -100,7 +100,7 @@ export class DominioComponent implements OnInit {
 
     this.bsModalRef = this.modalService.show(
       DominioFormularioComponent,
-      { initialState, ... GeneralConstant.CONFIG_MODAL_MEDIUM}
+      { initialState, ... GeneralConstant.CONFIG_MODAL_LARGE}
     );
     this.bsModalRef.content.onClose = (cerrar: boolean) => {
       if (cerrar) {
@@ -120,7 +120,7 @@ export class DominioComponent implements OnInit {
 
       this.bsModalRef = this.modalService.show(
         DominioFormularioComponent,
-        { initialState, ... GeneralConstant.CONFIG_MODAL_MEDIUM, id:'modalDominioFormulario'}
+        { initialState, ... GeneralConstant.CONFIG_MODAL_LARGE, id:'modalDominioFormulario'}
       );
 
       this.bsModalRef.content.dominio = dataModal;

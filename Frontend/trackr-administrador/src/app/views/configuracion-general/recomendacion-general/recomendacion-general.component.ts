@@ -66,9 +66,8 @@ export class RecomendacionGeneralComponent {
     this.entidadEstructuraService.consultarPadecimientosParaSelector().subscribe(res => {
       this.padecimientos = res
     })
-    this.expedienteTrackrService.consultarParaGrid().subscribe(res =>{
+    this.expedienteTrackrService.consultarParaRecomendacionesGenerales().subscribe(res =>{
       this.expedientes = res;
-      console.log(this.expedientes)
     })
     
    }
@@ -83,9 +82,9 @@ export class RecomendacionGeneralComponent {
 
   protected eliminar(idExpedienteRecomendacion : number) : void
   {
-    const MENSAJE_CONFIRMACION : string = '¿Desea eliminar la recomendacion?';
-    const TITULO_MODAL : string = 'Eliminar recomendacion'
-    const MENSAJE_EXITO: string = 'La recomendacion ha sido eliminada';
+    const MENSAJE_CONFIRMACION : string = '¿Desea eliminar la Recomendación?';
+    const TITULO_MODAL : string = 'Eliminar Recomendación'
+    const MENSAJE_EXITO: string = 'La Recomendación ha sido eliminada';
     
     this.mensajeService
     .modalConfirmacion(
@@ -131,8 +130,8 @@ export class RecomendacionGeneralComponent {
       return;
     }
 
-    const MENSAJE_EDITAR: string = 'La recomendacion ha sido editada';
-    const MENSAJE_AGREGAR: string = 'La recomendacion ha sido agregada';
+    const MENSAJE_EDITAR: string = 'La Recomendación ha sido editada';
+    const MENSAJE_AGREGAR: string = 'La Recomendación ha sido agregada';
 
 
     const [observable , mensajeExito] : [Observable<void>  , string] =

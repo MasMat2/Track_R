@@ -45,4 +45,8 @@ export class ExpedienteTrackrService {
         return this.http.get<ApegoTomaMedicamentoDto[]>(this.dataUrl + `apegoTratamientoPorPaciente/${idPaciente}`);
     }
 
+    public consultarParaRecomendacionesGenerales():Observable<UsuarioExpedienteGridDTO[]>{
+        return this.http.get<UsuarioExpedienteGridDTO[]>(this.dataUrl+'consultarParaRecomendacionesGenerales/');
+    }
+
 }
