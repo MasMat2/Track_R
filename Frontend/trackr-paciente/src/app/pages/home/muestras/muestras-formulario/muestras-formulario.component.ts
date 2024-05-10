@@ -17,6 +17,7 @@ import { addIcons } from 'ionicons';
 import { validarCamposRequeridos } from '@utils/utileria';
 import { AlertController, ModalController } from '@ionic/angular/standalone';
 import { call, swapHorizontalOutline, swapVerticalOutline } from 'ionicons/icons';
+import { HealthkitService } from '@services/healthkit.service';
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -47,7 +48,8 @@ export class MuestrasFormularioComponent implements OnInit {
     private router : Router,
     private dominioHospitalService:DominioHospitalService,
     private modalController: ModalController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private healthKitService: HealthkitService
   ) { 
 
       addIcons({ 
@@ -183,11 +185,26 @@ export class MuestrasFormularioComponent implements OnInit {
 
   async syncronizeData(){
     this.seccionSeleccionada.seccionesCampo.forEach(async variable => {
-      await this.callPlugin(variable.uuidIos);
+      await this.callPlugin();
     });
   }
 
-  async callPlugin(uuid : string){
-    console.log('Llamando al plugin con uuid: ' + uuid)
+  async callPlugin(){
+    console.log('Llamando al plugin con uuid: ')
+
+    const bloodPressureSystolic = await this.healthKitService.getBloodPressureSystolic();
+    const bloodPressureDiastolic = await this.healthKitService.getBloodPressureDiastolic();
+    //ultimo uuid de presion arterial sistolica:
+    const uuidSistolica = bloodPressureSystolic.resultData[0].uuid.toString();
+
+    //ultimo valor de presion arterial sistolica
+    const systolic = bloodPressureSystolic.resultData[0].value.toString();
+
+    //ultimo uuid de presion arterial diastolica:
+    const uuidDiastolica = bloodPressureDiastolic.resultData[0].uuid.toString();
+
+    //ultimo valor de presion arterial diastolica
+    const diastolic = bloodPressureDiastolic.resultData[0].value.toString();
+
   }
 }
