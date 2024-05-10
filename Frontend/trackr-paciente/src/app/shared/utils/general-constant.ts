@@ -26,4 +26,12 @@ export class GeneralConstant {
       maxItems: 1
     };
 
+    //Las variables que queramos obtener del plugin a traves del 
+    //boton de sincronizar que está en muestras-formulario.component
+    //deberá ser añadido aquí
+    public static VARIABLES_HEALTHKIT : string[] = [
+      "SE-001",
+      "SE-002"
+  ];
+
 }
