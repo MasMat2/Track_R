@@ -111,6 +111,52 @@ export const getHR = async (): Promise<QueryOutput<OtherData>> => {
     }
 }
 
+export const getBloodPressureSystolic = async (): Promise<QueryOutput<OtherData>> => {
+    try {
+        const current = new Date();
+        const startOfDay = new Date(current.getFullYear(), current.getMonth(), current.getDate(), 0, 0, 0);
+        const endOfDay = new Date(current.getFullYear(), current.getMonth(), current.getDate(), 23, 59, 59);
+        const startDate = startOfDay.toISOString();
+        const endDate = endOfDay.toISOString();
+
+        const queryOptions = {
+            sampleName: SampleNames.BLOOD_PRESSURE_SYSTOLIC,
+            startDate,
+            endDate,
+            limit: 0,
+        };
+
+        return await CapacitorHealthkit.queryHKitSampleType<OtherData>(queryOptions);
+    } catch (error) {
+        console.error('[HealthKit util] Error al obtener la informacion de presion de sangre sistolica');       
+        console.error(error);
+        throw error; 
+    }
+}
+
+export const getBloodPressureDiastolic = async (): Promise<QueryOutput<OtherData>> => {
+    try {
+        const current = new Date();
+        const startOfDay = new Date(current.getFullYear(), current.getMonth(), current.getDate(), 0, 0, 0);
+        const endOfDay = new Date(current.getFullYear(), current.getMonth(), current.getDate(), 23, 59, 59);
+        const startDate = startOfDay.toISOString();
+        const endDate = endOfDay.toISOString();
+
+        const queryOptions = {
+            sampleName: SampleNames.BLOOD_PRESSURE_DIASTOLIC,
+            startDate,
+            endDate,
+            limit: 0,
+        };
+
+        return await CapacitorHealthkit.queryHKitSampleType<OtherData>(queryOptions);
+    } catch (error) {
+        console.error('[HealthKit util] Error al obtener la informacion de presion de sangre diastolica');       
+        console.error(error);
+        throw error; 
+    }
+}
+
 export const isAvailable = async (): Promise<void> => {
     try {
         return await CapacitorHealthkit.isAvailable();
