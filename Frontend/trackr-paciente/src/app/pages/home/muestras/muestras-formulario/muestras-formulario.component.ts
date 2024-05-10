@@ -189,11 +189,11 @@ export class MuestrasFormularioComponent implements OnInit {
 
   async syncronizeData(){
     this.seccionSeleccionada.seccionesCampo.forEach(async variable => {
-      await this.callPlugin();
+      variable.valor = await this.callPlugin(variable.clave);
     });
   }
 
-  async callPlugin(){
+  async callPlugin(claveVariable : string){
     console.log('Llamando al plugin con uuid: ')
 
     const bloodPressureSystolic = await this.healthKitService.getBloodPressureSystolic();
@@ -209,6 +209,12 @@ export class MuestrasFormularioComponent implements OnInit {
 
     //ultimo valor de presion arterial diastolica
     const diastolic = bloodPressureDiastolic.resultData[0].value.toString();
+    if(claveVariable === 'SE-001'){
+      return systolic;
+    }
 
+    if(claveVariable === 'SE-002'){
+      return diastolic;
+    }
   }
 }
