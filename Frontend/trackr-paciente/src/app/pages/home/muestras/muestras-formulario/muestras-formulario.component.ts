@@ -193,9 +193,8 @@ export class MuestrasFormularioComponent implements OnInit {
     });
   }
 
+  //En caso de que no se tengan datos sobre Salud de iOS el valor sera undefined
   async callPlugin(claveVariable : string){
-    console.log('Llamando al plugin con uuid: ')
-
     const bloodPressureSystolic = await this.healthKitService.getBloodPressureSystolic();
     const bloodPressureDiastolic = await this.healthKitService.getBloodPressureDiastolic();
     //ultimo uuid de presion arterial sistolica:
@@ -209,12 +208,14 @@ export class MuestrasFormularioComponent implements OnInit {
 
     //ultimo valor de presion arterial diastolica
     const diastolic = bloodPressureDiastolic.resultData[0].value.toString();
-    if(claveVariable === 'SE-001'){
+    
+    if (claveVariable === 'SE-001') {
       return systolic;
+    } else if (claveVariable === 'SE-002') {
+        return diastolic;
+    } else {
+        return undefined; 
     }
-
-    if(claveVariable === 'SE-002'){
-      return diastolic;
-    }
+    
   }
 }
