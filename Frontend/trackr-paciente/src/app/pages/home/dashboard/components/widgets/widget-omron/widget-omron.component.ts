@@ -34,7 +34,7 @@ export class WidgetOmronComponent  implements OnInit {
   async openOmronConnect() {
     try {
       
-      await AppLauncher.canOpenUrl({ url: 'omronconnect://' }); // El nombre del paquete se obtiene investigandolo desde la app OMRON connect
+      await AppLauncher.canOpenUrl({ url: 'omronconnect://' });
       await AppLauncher.openUrl({ url: 'omronconnect://'}); 
       console.log('Abriendo Omron');
 
