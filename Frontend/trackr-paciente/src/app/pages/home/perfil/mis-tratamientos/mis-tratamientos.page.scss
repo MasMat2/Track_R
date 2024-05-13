@@ -1,7 +1,7 @@
-ion-header{
-  border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
-  background: var(--primary-50);
-}
+// ion-header{
+//   border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
+//   background: var(--primary-50);
+// }
 
 .contenedor-header{
   background: var(--primary-50);
@@ -52,66 +52,170 @@ ion-header{
       }
   }
 
-}
+  .lista-vacia{
+    height: 72vh;
+    padding-top: 20vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
+    ion-text{
+        text-align: center;
+        p{
+            font-size: 16px;
+            line-height: 22px;
+            font-family: var(--font-body);
+            color: var(--neutral-500);
+        }
+    }
 
-
-.input-fill-outline.input-shape-round {
-  --border-color: lightgrey;
-  border: 0px;
-  --background: #e9ecef;
-}
-
-.checkbox-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  .checkbox-label {
-    padding-left: 5px;
+    ion-button{
+        min-width: 187px;
+        height: 44px;
+        font-family: var(--font-body);
+        font-weight: bold;
+        font-size: 16px;
+        --border-radius: 8px;
+        color: var(--primary-700);
+        --border-color: var(--primary-700);
+        --border-width: 1px;
+    }
   }
 
-  ion-checkbox {
-    --checkbox-background-checked: purple;
+  .lista-tratamientos{
+    height: 62vh;
+
+
+    .barra-busqueda{
+      height: 10vh;
+      padding: 0 32px 0 32px;
+      ion-searchbar{
+        padding-left: 0;
+        padding-right: 0;
+        --box-shadow: 0;
+        --border-radius: 4.16px;
+      }
+    }
+
+    ion-list{
+      //background: var(--primary-50);
+      padding: 0;
+      ion-item{
+        --border-width: 0 0 2px 0;
+        --border-color: var(--primary-50);
+        --detail-icon-opacity: 1;
+        --detail-icon-color: var(--neutral-900);
+        --inner-padding-end: 32px;
+        
+
+        ion-thumbnail{
+          border: 1px solid var(--neutral-100);
+          --size: 72px;
+          --border-radius: 8px;
+
+          img{
+            //object-fit: cover !important;
+          }
+        }
+
+        ion-label{
+          margin-top: 24px;
+          margin-bottom: 24px;
+
+          h3{
+            font-family: var(--font-body);
+            font-size: 16px;
+            color: var(--neutral-900);
+          }
+
+          p{
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: var(--neutral-600);
+          }
+        }
+      }
+
+      ion-item::part(native){
+        padding-left: 32px;
+      }
+
+      ion-item-option{
+        background: var(--error-200);
+        color: var(--neutral-50);
+      }
+
+      // ion-item::part(detail-icon){
+
+      // }
+    }
+  }
+
+
+
+}
+
+
+.contenido-viejo{
+
+  .input-fill-outline.input-shape-round {
+    --border-color: lightgrey;
+    border: 0px;
+    --background: #e9ecef;
+  }
+  
+  .checkbox-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  
+    .checkbox-label {
+      padding-left: 5px;
+    }
+  
+    ion-checkbox {
+      --checkbox-background-checked: purple;
+    }
+  }
+  
+  .table-header {
+    color: purple;
+  }
+  
+  .table-row:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  @import 'src/app/shared/styles/variables.scss';
+  .subtitulo-muestra{
+      color: $color-primario
+  }
+  
+  ion-button {
+    --color: black; 
+    font-weight: 100;
+    --border-color: #9BD8AC;
+  }
+  
+  ion-item{
+    margin-top: 13px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  
+  .img {
+    height: 75px;
+    padding: 0;
+    margin: 0;
+    padding-right: 5vh;
+    padding-bottom: 2vh;
   }
 }
 
-.table-header {
-  color: purple;
-}
-
-.table-row:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-.centered {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@import 'src/app/shared/styles/variables.scss';
-.subtitulo-muestra{
-    color: $color-primario
-}
-
-ion-button {
-  --color: black; 
-  font-weight: 100;
-  --border-color: #9BD8AC;
-}
-
-ion-item{
-  margin-top: 13px;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.img {
-  height: 75px;
-  padding: 0;
-  margin: 0;
-  padding-right: 5vh;
-  padding-bottom: 2vh;
-}
 
