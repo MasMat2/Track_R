@@ -20,6 +20,13 @@ public class ExpedienteDoctorRepository : Repository<ExpedienteDoctor>, IExpedie
         .Include(ed => ed.IdUsuarioDoctorNavigation.IdCompaniaNavigation)
         .Where(ed => ed.IdExpediente == idExpediente);
     }
+    public ExpedienteDoctor ConsultarExpedientePorDoctor(int idExpediente , int idUsuarioDoctor){
+        return context.ExpedienteDoctor
+        .Include(ed => ed.IdUsuarioDoctorNavigation)
+        .Include(ed => ed.IdUsuarioDoctorNavigation.IdCompaniaNavigation)
+        .Where(ed => ed.IdExpediente == idExpediente && ed.IdUsuarioDoctor == idUsuarioDoctor)
+        .FirstOrDefault();
+    }
     public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarDoctores(int idCompania)
     {
         return context.Usuario

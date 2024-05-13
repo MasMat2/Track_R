@@ -26,7 +26,8 @@ public class ExpedienteTrackrController : ControllerBase
     [Route("consultarWrapperPorUsuario/{idUsuario}")]
     public ExpedienteWrapper ConsultarWrapperPorUsuario(int idUsuario)
     {
-        return _expedienteTrackrService.ConsultarWrapperPorUsuario(idUsuario);
+        int idDoctor = Utileria.ObtenerIdUsuarioSesion(this);
+        return _expedienteTrackrService.ConsultarWrapperPorUsuario(idUsuario , idDoctor);
     }
 
     [HttpPost("agregarWrapper")]
@@ -38,7 +39,8 @@ public class ExpedienteTrackrController : ControllerBase
     [HttpPost("editarWrapper")]
     public int EditarWrapper(ExpedienteWrapper expedienteWrapper)
     {
-        return _expedienteTrackrService.EditarWrapper(expedienteWrapper);
+        int idUsuario  = Utileria.ObtenerIdUsuarioSesion(this);
+        return _expedienteTrackrService.EditarWrapper(expedienteWrapper, idUsuario);
     }
 
     [HttpGet("consultarParaGrid/")]

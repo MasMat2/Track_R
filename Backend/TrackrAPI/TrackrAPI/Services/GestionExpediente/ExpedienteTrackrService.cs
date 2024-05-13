@@ -29,6 +29,7 @@ public class ExpedienteTrackrService
     private readonly ExpedienteTrackrValidatorService _expedienteTrackrValidatorService;
     private readonly IAsistenteDoctorRepository _asistenteDoctorRepository;
     private readonly ArchivoService _archivoService;
+    private readonly IExpedienteDoctorRepository _expedienteDoctorRepository;
 
     public ExpedienteTrackrService(
         IExpedienteTrackrRepository expedienteTrackrRepository,
@@ -38,7 +39,8 @@ public class ExpedienteTrackrService
         UsuarioWidgetService usuarioWidgetService,
         ExpedienteTrackrValidatorService expedienteTrackrValidatorService,
         IAsistenteDoctorRepository asistenteDoctorRepository,
-        ArchivoService archivoService
+        ArchivoService archivoService,
+        IExpedienteDoctorRepository expedienteDoctorRepository
         )
     {
         this._expedienteTrackrRepository = expedienteTrackrRepository;
@@ -49,6 +51,7 @@ public class ExpedienteTrackrService
         _expedienteTrackrValidatorService = expedienteTrackrValidatorService;
         _asistenteDoctorRepository = asistenteDoctorRepository;
         _archivoService = archivoService;
+        _expedienteDoctorRepository = expedienteDoctorRepository;
     }
     /// <summary>
     /// Consulta el expediente de un usuario
@@ -117,11 +120,25 @@ public class ExpedienteTrackrService
     /// </summary>
     /// <param name="expedienteWrapper">El expediente, el domicilio y el usuario a editar</param>
     /// <returns>El id del expediente editado</returns>
-    public int EditarWrapper(ExpedienteWrapper expedienteWrapper)
+    public int EditarWrapper(ExpedienteWrapper expedienteWrapper, int idDoctor)
     {
         ExpedienteTrackr expedienteTrackr = expedienteWrapper.expediente;
         using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
         {
+
+            var expediente = _expedienteDoctorRepository.ConsultarExpedientePorDoctor(expedienteTrackr.IdExpediente, idDoctor);
+
+            if(expediente == null)
+            {
+                var expedienteDoctor = new ExpedienteDoctor
+                {
+                    IdExpediente = expedienteTrackr.IdExpediente,
+                    IdUsuarioDoctor = idDoctor
+                };
+
+                _expedienteDoctorRepository.Agregar(expedienteDoctor);
+            }
+
             var idUsuario = expedienteWrapper.paciente.IdUsuario;
             _expedienteTrackrValidatorService.ValidarEditar(expedienteTrackr);
 
@@ -197,25 +214,24 @@ public class ExpedienteTrackrService
         IEnumerable<UsuarioExpedienteGridDTO> expedientes = _expedienteTrackrRepository.ConsultarParaGrid(idDoctorList);
         foreach (UsuarioExpedienteGridDTO expediente in expedientes)
         {
-            if (!string.IsNullOrWhiteSpace(expediente.TipoMime))
+
+            var img = _archivoService.ObtenerImagenUsuario(expediente.IdUsuario);
+
+            if (img != null)
             {
-                var img = _archivoService.ObtenerImagenUsuario(expediente.IdUsuario);
-
-                if (img != null)
-                {
-                    expediente.ImagenBase64 = "data:" + img.ArchivoTipoMime + ";base64," + Convert.ToBase64String(img.Archivo1);
-                }
-                // string filePath = $"Archivos/Usuario/{expediente.IdUsuario}{MimeTypeMap.GetExtension(expediente.TipoMime)}";
-
-                //     //Console.WriteLine("Expediente : " + JsonConvert.SerializeObject(expediente, Formatting.Indented));
-                //     //Console.WriteLine("--------------------");
-                // if (File.Exists(filePath))
-                // {
-                //     byte[] imageArray = File.ReadAllBytes(filePath);
-
-                //     expediente.ImagenBase64 = Convert.ToBase64String(imageArray);
-                // }
+                expediente.ImagenBase64 = "data:" + img.ArchivoTipoMime + ";base64," + Convert.ToBase64String(img.Archivo1);
             }
+            // string filePath = $"Archivos/Usuario/{expediente.IdUsuario}{MimeTypeMap.GetExtension(expediente.TipoMime)}";
+
+            //     //Console.WriteLine("Expediente : " + JsonConvert.SerializeObject(expediente, Formatting.Indented));
+            //     //Console.WriteLine("--------------------");
+            // if (File.Exists(filePath))
+            // {
+            //     byte[] imageArray = File.ReadAllBytes(filePath);
+
+            //     expediente.ImagenBase64 = Convert.ToBase64String(imageArray);
+            // }
+
             expediente.DosisNoTomadas = _expedienteTrackrRepository.DosisNoTomadas(expediente.IdExpedienteTrackr);
             expediente.VariablesFueraRango = _expedienteTrackrRepository.VariablesFueraRango(expediente.IdUsuario);
 
@@ -293,14 +309,14 @@ public class ExpedienteTrackrService
     /// </summary>
     /// <param name="idUsuario">Identificador del usuario</param>
     /// <returns>El expedienteWrapper del usuario</returns>
-    public ExpedienteWrapper ConsultarWrapperPorUsuario(int idUsuario)
+    public ExpedienteWrapper ConsultarWrapperPorUsuario(int idUsuario, int idDoctor)
     {
         ExpedienteWrapper expedienteWrapper = new ExpedienteWrapper
         {
             expediente = ConsultarPorUsuario(idUsuario),
             // domicilio = domicilioRepository.ConsultarPorUsuario(idUsuario).FirstOrDefault(),
             paciente = _usuarioRepository.ConsultarDto(idUsuario),
-            padecimientos = _expedientePadecimientoRepository.ConsultarPorUsuario(idUsuario)
+            padecimientos = _expedientePadecimientoRepository.ConsultarPorUsuarioDoctor(idUsuario, idDoctor).ToList()
         };
         return expedienteWrapper;
     }

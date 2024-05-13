@@ -1,46 +1,194 @@
 @import "variables";
 
-// Secciones
-.contenedor {
-    margin-top: 0;
-    -webkit-animation-name: fadeIn;
-    animation-name: fadeIn;
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
+
+
+
+
+
+
+ion-grid.inputs {
+  // background: transparent;
+  padding: 0 32px 0 32px;
+
+  .padding-izquierdo {
+    padding-left: 8px !important;
+  }
+
+  .padding-derecho {
+    padding-right: 8px !important;
+  }
+
 }
 
-.titulo-contenedor {
-    color: var(--color-fuente-secundario);
-    padding: 0.8rem 0 0.5rem 0;
-    font-weight: 600;
-    text-align: center;
-}
-
-.cuerpo-contenedor {
-    // TODO: 2023-04-21 -> Revisar si es necesario el fondo blanco
-    // background-color: #ffffff;
-    padding: 0 0.5rem 1rem 0.5rem;
-}
-
-.form-group {
-    margin-bottom: 0.5rem;
-}
-
-
-.bgImageContainer {
-  z-index: -1;
-  position: fixed;
+.input {
   width: 100%;
-  height: 100%;
-  background: var(--primary-700);
-  background-size: 100% 100%;
-}
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 
-.btn-login{
-  --background: var(--ion-color-primary);
-  --color: black;
-  --box-shadow: 0;
+  ion-label { //label del input
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--neutral-700);
+  }
+
+  .input-text-error { //Error debajo del input
+    color: var(--error-200);
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    font-family: var(--font-body);
+    gap: 6px;
+
+    ion-icon {
+      color: var(--error-200);
+    }
+  }
+
+  ion-item { //contenedor principal del input
+    width: 100%;
+    --border-width: 1px;
+    --border-color: var(--neutral-300);
+    --border-radius: 8px;
+    --background: transparent;
+  }
+  ion-item.input-disabled {
+    --background: var(--primary-100);
+  }
+
+  //Diferentes Tipos de input
+  ion-item.general-input {
+    --inner-padding-end: 0;
+    ion-input {
+      border-width: 0px;
+      --highlight-color-focused: var(--neutral-700);
+      --highlight-color-valid: var(--neutral-700);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 400;
+    }
+  }
+
+  ion-item.date-input {
+    ion-datetime-button {
+      width: 100%;
+    }
+
+    ion-datetime-button::part(native) {
+      width: 100%;
+      padding-left: 8px;
+      text-align: start;
+      background: transparent;
+      color: var(--neutral-500);
+      font-family: var(--font-body);
+      font-size: 16px;
+    }
+  }
+  ion-item.date-input::part(native) {
+    padding-left: 8px;
+  }
+
+  ion-item.select-input {
+    ion-select::part(icon) {
+      position: absolute;
+      right: 0;
+      color: var(--neutral-600);
+      width: 24px;
+      height: 24px;
+    }
+  }
+  ion-item.select-input::part(native) {
+    
+  }
+
+  ion-item.textarea-input {
+    ion-textarea{
+      --highlight-color-focused: var(--neutral-700);
+      --highlight-color-valid: var(--neutral-700);
+    }
+  }
+  
+  ion-item.quantity-selector{
+    min-width: 105px;
+    --inner-padding-end: 0;
+
+    ion-button{
+      margin: 0;
+      --background: transparent;
+      height: 100% !important;
+      --border-radius: 0;
+      --box-shadow: 0;
+      --border-width: 2px;
+      --border-style: solid;
+      --border-color: var(--primary-700);
+      
+      ion-icon{
+        color: var(--primary-700);
+      }
+    }
+    #decrementar{
+      --border-radius: 8px 0 0 8px;
+    }
+    #incrementar{
+      --border-radius: 0 8px 8px 0;
+    }
+    ion-label{
+      width: 100%;
+      text-align: center;
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: var(--neutral-400);
+    }
+  }
+  ion-item.quantity-selector::part(native){
+    padding: 0;
+  }
+
+  
 }
+// // Secciones
+// .contenedor {
+//     margin-top: 0;
+//     -webkit-animation-name: fadeIn;
+//     animation-name: fadeIn;
+//     -webkit-animation-duration: 1s;
+//     animation-duration: 1s;
+// }
+
+// .titulo-contenedor {
+//     color: var(--color-fuente-secundario);
+//     padding: 0.8rem 0 0.5rem 0;
+//     font-weight: 600;
+//     text-align: center;
+// }
+
+// .cuerpo-contenedor {
+//     // TODO: 2023-04-21 -> Revisar si es necesario el fondo blanco
+//     // background-color: #ffffff;
+//     padding: 0 0.5rem 1rem 0.5rem;
+// }
+
+// .form-group {
+//     margin-bottom: 0.5rem;
+// }
+
+
+// .bgImageContainer {
+//   z-index: -1;
+//   position: fixed;
+//   width: 100%;
+//   height: 100%;
+//   background: var(--primary-700);
+//   background-size: 100% 100%;
+// }
+
+// .btn-login{
+//   --background: var(--ion-color-primary);
+//   --color: black;
+//   --box-shadow: 0;
+// }
 
 
 

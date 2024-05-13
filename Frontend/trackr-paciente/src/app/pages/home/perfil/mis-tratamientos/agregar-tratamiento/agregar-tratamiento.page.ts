@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 
 import { Observable } from 'rxjs';
 
@@ -13,6 +12,12 @@ import { HeaderComponent } from '@pages/home/layout/header/header.component';
 
 import { Photo } from '@capacitor/camera';
 import { PhotoService } from '@services/photo.service';
+import {  ModalController } from '@ionic/angular/standalone';
+
+import { addIcons } from 'ionicons';
+
+//TODO:Definir cantidad máxima de fármaco
+const CANTIDAD_MAXIMA = 99;
 
 
 @Component({
@@ -20,38 +25,82 @@ import { PhotoService } from '@services/photo.service';
   templateUrl: './agregar-tratamiento.page.html',
   styleUrls: ['./agregar-tratamiento.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule, HeaderComponent]
+  imports: [
+    IonicModule, 
+    CommonModule, 
+    FormsModule, 
+    ReactiveFormsModule, 
+    HeaderComponent, 
+  ]
 })
 export class AgregarTratamientoPage implements OnInit {
 
   protected formTratamiento: FormGroup;
   protected perfilTratamientoDto: PerfilTratamientoDto;
 
-  protected weekDays: string[] = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'];
+  private cantidadFarmaco: number = 1;
+  protected isModalRecordatorioOpen: boolean = false;
+  protected btnSubmit: boolean = false;
+
+  protected now = new Date();
+  protected localOffset = this.now.getTimezoneOffset() * 60000;
+  protected localISOTime = (new Date(this.now.getTime() - this.localOffset)).toISOString().slice(0,-1);
+  protected dateToday: string = this.localISOTime;
+  protected fechaSeleccionada: string = this.dateToday;
   protected photo?: Photo;
 
-  // Helpers - DateTime modal
-  protected selectedDate = new Date().toISOString();
-  protected dateIndex: string;
-  protected showDateModal: boolean = false;
-  protected hourIndex: number;
-  protected showTimeModal: boolean = false;
+  protected weekDays = [
+     {id: 0 , name: 'L'},
+     {id: 1 , name: 'M'},
+     {id: 2 , name: 'M'},
+     {id: 3 , name: 'J'},
+     {id: 4 , name: 'V'},
+     {id: 5 , name: 'S'},
+     {id: 6 , name: 'D'},
+  ];
 
   // Selectores
   protected padecimientos$: Observable<SelectorDto[]>;
   protected doctores$: Observable<SelectorDto[]>;
 
+  //TODO: Definir tabla de unidades en la BD
+  protected unidades = [
+    {id: 1, nombre: 'mcg'},
+    {id: 2, nombre: 'mg'}, 
+    {id: 3, nombre: 'g'},
+    {id: 4, nombre: 'ml'},
+    {id: 5, nombre: 'tabletas'},
+    {id: 6, nombre: 'cucharadas'}
+  ]
+
   constructor(
     private perfilTratamientoService: PerfilTratamientoService,
     private fb: FormBuilder,
     private photoService: PhotoService,
-    private router: Router) { }
+    private _modalCtrl: ModalController,
+    private alertController: AlertController
+  ) { 
+    addIcons({
+    'chevron-left': 'assets/img/svg/chevron-left.svg',
+    'chevron-right': 'assets/img/svg/chevron-right.svg',
+    'chevron-up': 'assets/img/svg/chevron-up.svg',
+    'chevron-down': 'assets/img/svg/chevron-down.svg',
+    'calendar': 'assets/img/svg/calendar.svg',
+    'clock': 'assets/img/svg/clock-2.svg',
+    'info': 'assets/img/svg/info.svg',
+    'camera': 'assets/img/svg/camera.svg',
+    'minus': 'assets/img/svg/minus.svg',
+    'plus': 'assets/img/svg/plus.svg',
+    'x': 'assets/img/svg/x.svg',
+    'trash-2': 'assets/img/svg/trash-2.svg'
+    })  
+  }
 
   public ngOnInit() {
     this.formTratamiento = this.fb.group({
       fechaRegistro: [(new Date()).toISOString(), Validators.required],
       farmaco: ['', Validators.required],
-      cantidad: ['', Validators.required],
+      cantidad: ['1', Validators.required],
       unidad: ['', Validators.required],
       indicaciones: ['', Validators.required],
       idPadecimiento: ['', Validators.required],
@@ -62,7 +111,7 @@ export class AgregarTratamientoPage implements OnInit {
       imagenBase64: [''],
       recordatorioActivo: [false],
       diaSemana: this.fb.array([false, false, false, false, false, false, false]),
-      horas: this.fb.array([new Date().toISOString()])
+      horas: this.fb.array([])
     },
       { validators: [this.validateDiaSemana(), this.compareDates()] });
 
@@ -87,36 +136,26 @@ export class AgregarTratamientoPage implements OnInit {
   // Camara
   protected async addPhotoToGallery() {
     this.photo = await this.photoService.takePicture();
-  }
-
-  // DateTime Modals
-  protected openTimeModal(n: number) {
-    this.hourIndex = n;
-    this.showTimeModal = true;
-  }
-
-  protected closeTimeModal() {
-    this.horas.at(this.hourIndex).setValue(this.selectedDate);
-    this.showTimeModal = false;
-  }
-
-  protected openDateModal(dateIndex: string) {
-    this.dateIndex = dateIndex;
-    this.showDateModal = true;
-  }
-
-  protected closeDateModal() {
-    this.formTratamiento.controls[this.dateIndex].setValue(this.selectedDate);
-    this.showDateModal = false;
+    console.log(this.photo);
   }
 
   // Recordatorios Horas
   protected removeHour(index: number) {
     this.horas.removeAt(index);
+    //Al eliminar la ultima hora, se desactiva el recordatorio
+    if(this.horas.length === 0){
+      this.formTratamiento.patchValue({ recordatorioActivo: false });
+    }
   };
 
   protected addHour() {
-    this.horas.push(this.fb.control(new Date().toISOString()));
+    //Al agregar la primer hora, se activa el recordatorio
+    if(this.horas.length === 0){
+      this.formTratamiento.patchValue({ recordatorioActivo: true });
+    }
+    const horaSeleccionada = this.fechaSeleccionada;
+    this.horas.push(this.fb.control(horaSeleccionada));
+    this.fechaSeleccionada = this.dateToday;
   };
 
   // Validaciones
@@ -150,6 +189,7 @@ export class AgregarTratamientoPage implements OnInit {
 
   // Enviar
   protected submitForm() {
+    this.btnSubmit = true;
     const formValues = this.formTratamiento.value;
 
     const horasTiempos = formValues.horas.map((hora: string) => {
@@ -171,20 +211,84 @@ export class AgregarTratamientoPage implements OnInit {
       horas: formValues.recordatorioActivo ? horasTiempos : null
 
     };
-
     this.perfilTratamientoDto = tratamientoDto;
 
     this.agregar(this.perfilTratamientoDto);
-
-    this.router.navigateByUrl('/home/perfil/mis-tratamientos');
   };
 
-  protected agregar(perfilTratamientoDto: PerfilTratamientoDto): Promise<boolean> {
-    return this.perfilTratamientoService
-      .agregar(perfilTratamientoDto)
-      .toPromise()
-      .then(() => true)
-      .catch(() => false);
+  protected agregar(perfilTratamientoDto: PerfilTratamientoDto) {
+    this.perfilTratamientoService.agregar(perfilTratamientoDto).subscribe({
+      next: ()=> {
+
+      }, 
+      error: () => {
+        this.btnSubmit = false;
+      },
+      complete: ()=> {
+        this.btnSubmit = false;
+        this.presentarAlertaSuccess();
+      }
+    })
+  }
+
+  protected cerrarModal(rol: string){
+    this._modalCtrl.dismiss(null, rol);
+  }
+
+  protected seleccionarTratamientoPermanente(seleccion: boolean){
+    this.formTratamiento.patchValue({ tratamientoPermanente: seleccion });
+  }
+
+  protected incrementarCantidad(){
+    if(this.cantidadFarmaco < CANTIDAD_MAXIMA){
+      this.cantidadFarmaco += 1;
+      this.formTratamiento.patchValue({ cantidad: (this.cantidadFarmaco) });
+    }
+  }
+
+  protected decrementarCantidad(){
+    if(this.cantidadFarmaco > 0){
+      this.cantidadFarmaco -= 1;
+      this.formTratamiento.patchValue({ cantidad: (this.cantidadFarmaco) });
+    }
+  }
+
+  protected setOpen(isOpen: boolean) {
+    this.isModalRecordatorioOpen = isOpen;
+  }
+
+  protected esDiaSemanaSeleccionado(index: number){
+    const diaSemanaControl = this.formTratamiento.get('diaSemana') as FormArray;
+    const controlEnIndice = diaSemanaControl.at(index);
+
+    return controlEnIndice.value;
+  }
+
+  protected seleccionarDiaRecordatorio(index: number){
+    const diaSemanaControl = this.formTratamiento.get('diaSemana') as FormArray;
+    const controlEnIndice = diaSemanaControl.at(index);
+    controlEnIndice.patchValue(!controlEnIndice.value);
+  }
+
+  protected eliminarAdjunto(){
+    this.photo = undefined;
+  }
+
+  protected async presentarAlertaSuccess() {
+
+    const alertSuccess = await this.alertController.create({
+      header: 'Tratamiento agregado exitosamente',
+      buttons: [{
+        text: 'De acuerdo',
+        role: 'confirm',
+        handler: () => {
+          this.cerrarModal('confirm');
+        }
+      }],
+      cssClass: 'custom-alert-success',
+    });
+
+    await alertSuccess.present();
   }
 
 }

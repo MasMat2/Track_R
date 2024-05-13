@@ -1,10 +1,16 @@
+
 <ion-header class="ion-no-border">
   <div class="contenedor-header">
     <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-button routerLink="inicio-perfil">
-          <ion-icon slot="start" name="chevron-back"></ion-icon>
+      <ion-buttons slot="start" routerLink="inicio-perfil">
+        <ion-button >
+          <ion-icon slot="start" name="chevron-left"></ion-icon>
           Atrás
+        </ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button (click)="agregarTratamiento()">
+          <ion-icon slot="icon-only" name="plus"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
@@ -17,7 +23,78 @@
         <h3>Mis tratamientos</h3>
       </ion-text>
     </div>
-  
+
+    <div class="lista-vacia" *ngIf="false">
+      <ion-text>
+        <p>Nada Por aquí. <br> Aún no tienes tratamientos registrados.</p>
+      </ion-text>
+      <ion-button fill="outline" (click)="agregarTratamiento()">
+        <ion-icon slot="start" name="plus"></ion-icon>
+        Añadir tratamiento
+      </ion-button>
+    </div>
+    <div class="lista-tratamientos" *ngIf="true">
+      <div class="barra-busqueda">
+        <ion-searchbar (ionChange)="buscarTratamiento($event)" show-cancel-button="focus" placeholder="Buscar" animated ></ion-searchbar>
+      </div>
+      <div id="sin-filtrar" *ngIf="!filtrando">
+        <ion-list *ngIf="tratamientos$ | async as tratamientos">
+          <ion-item-sliding *ngFor="let tratamiento of tratamientos">
+            <ion-item lines="none" detail="true">
+              <ion-thumbnail slot="start">
+                <img alt="img" *ngIf="tratamiento.imagenBase64" [src]="'data:image/jpeg;base64,' + tratamiento.imagenBase64" />
+              </ion-thumbnail>
+              <ion-label>
+                <h3>{{tratamiento.farmaco}}</h3>
+                <p>{{tratamiento.cantidad}} {{tratamiento.unidad}}</p>
+                <p>Asociado a: {{tratamiento.padecimiento}}</p>
+              </ion-label>
+            </ion-item>
+            <ion-item-options>
+              <ion-item-option expandable (click)="presentarAlertaEliminar(tratamiento)">
+                <ion-icon slot="icon-only" name="trash-2"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+      </div>
+      <div id="filtrados" *ngIf="filtrando">
+        <ion-list>
+          <ion-item-sliding *ngFor="let tratamiento of tratamientosFiltradosPorBusqueda">
+            <ion-item lines="none" detail="true">
+              <ion-thumbnail slot="start">
+                <img alt="img" *ngIf="tratamiento.imagenBase64" [src]="'data:image/jpeg;base64,' + tratamiento.imagenBase64" />
+              </ion-thumbnail>
+              <ion-label>
+                <h3>{{tratamiento.farmaco}}</h3>
+                <p>{{tratamiento.cantidad}} {{tratamiento.unidad}}</p>
+                <p>Asociado a: {{tratamiento.padecimiento}}</p>
+              </ion-label>
+            </ion-item>
+            <ion-item-options>
+              <ion-item-option expandable (click)="presentarAlertaEliminar(tratamiento)">
+                <ion-icon slot="icon-only" name="trash-2"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+
+
+
+
+
+
+
+
+
+
+<div class="contenido-viejo" *ngIf="false">
+  <!-- <div class="">  
     <ion-list>
       <ion-button expand="block" fill="outline" routerLink="/home/perfil/mis-tratamientos/agregar">
         Agregar tratamiento
@@ -171,5 +248,6 @@
 
       </div>
     </ion-list>
-  </div>
-</ion-content>
+  </div> -->
+
+</div>

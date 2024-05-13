@@ -183,64 +183,64 @@ ion-loading.custom-loading {
   }
 }
 
-.input {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  --border-radius: 8px 8px !important;
+// .input {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 12px;
+//   --border-radius: 8px 8px !important;
 
-  ion-label {
-    font-family: var(--font-body);
-    font-size: 16px;
-    color: var(--neutral-700);
-  }
+//   ion-label {
+//     font-family: var(--font-body);
+//     font-size: 16px;
+//     color: var(--neutral-700);
+//   }
 
-  ion-input {
-    color: var(--neutral-800);
-    --padding-start: 16px;
-    --padding-end: 16px;
-    --padding-bottom: 12px;
-    --padding-top: 12px;
-    --border-radius: 8px 8px !important;
+//   ion-input {
+//     color: var(--neutral-800);
+//     --padding-start: 16px;
+//     --padding-end: 16px;
+//     --padding-bottom: 12px;
+//     --padding-top: 12px;
+//     --border-radius: 8px 8px !important;
 
-    max-height: 50px;
+//     max-height: 50px;
 
-    #unidadMedida {
-      color: var(--neutral-300);
-    }
-  }
+//     #unidadMedida {
+//       color: var(--neutral-300);
+//     }
+//   }
 
-  .error {
-    color: var(--error-200);
-    font-size: .8rem;
-    display: flex;
-    align-items: center;
-    font-family: var(--font-body);
-    gap: 6px;
+//   .error {
+//     color: var(--error-200);
+//     font-size: .8rem;
+//     display: flex;
+//     align-items: center;
+//     font-family: var(--font-body);
+//     gap: 6px;
 
-    ion-icon {
-      stroke: var(--error-200);
-      color: var(--error-200);
+//     ion-icon {
+//       stroke: var(--error-200);
+//       color: var(--error-200);
 
-    }
-  }
+//     }
+//   }
 
-  //en caso de ser datetime
+//   //en caso de ser datetime
 
-  .custom-datetime {
-    border-radius: 30px;
-    border: 1px solid var(--neutral-300);
-    border-radius: 8px;
-    padding: 0px;
+//   .custom-datetime {
+//     border-radius: 30px;
+//     border: 1px solid var(--neutral-300);
+//     border-radius: 8px;
+//     padding: 0px;
 
-    --background: var(--primary-50);
-
-
-  }
+//     --background: var(--primary-50);
 
 
+//   }
 
-}
+
+
+// }
 
 
 //Alertas personalizadas (fuentes y distribucion)

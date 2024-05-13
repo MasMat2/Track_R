@@ -41,46 +41,6 @@
               </div>
             </div>
           </div>
-
-          <div  *ngIf="accion == 'Agregar'" class="col-md-8">
-            <div class="form-group col-md-4">
-              <label class="label-input required-label"
-                >Buscar Usuario</label
-              >
-              <div>
-                <input
-                  #filtroField="ngModel"
-                  [(ngModel)]="filtro"
-                  id="filtroField"
-                  name="filtroName"
-                  class="form-control"
-                  type="text"
-                  maxlength="50"
-                  autocomplete="off"
-                  placeholder="Nombre / RFC"
-                />
-              </div>
-            </div>
-
-            <div class="col-md-2 d-flex align-items-center">
-              <button
-                type="button"
-                (click)="buscar()"
-                [disabled]="btnSubmitBusqueda || !filtro"
-                class="btn-terceario btn-margin-left botonBuscar"
-              >
-                <i class="fas fa-search"></i>
-              </button>
-            </div>
-
-            <div class="contenedor-agregar col-md-2 d-flex align-items-center" (click)="agregarUsuario()">
-              <i class="fas fa-plus-circle"></i><span>Agregar</span>
-            </div>
-          </div>
-   
-  
-        
-  
         
         </div>
           <!-- Fecha Alta Expediente -->
@@ -140,6 +100,53 @@
           </div>    
             </div>
             <!-- Número de Expediente -->
+
+            <div  *ngIf="accion == 'Agregar'" class="row">
+              <div class="form-group col-md-4">
+                <label class="label-input required-label"
+                  >Buscar Usuario</label
+                >
+                <div>
+                  <input
+                    #filtroField="ngModel"
+                    [(ngModel)]="filtro"
+                    id="filtroField"
+                    name="filtroName"
+                    class="form-control"
+                    type="text"
+                    maxlength="50"
+                    autocomplete="off"
+                    placeholder="Nombre / RFC"
+                  />
+                </div>
+              </div>
+  
+              <div class="col-md-1 d-flex align-items-center">
+                <button
+                  type="button"
+                  (click)="buscar()"
+                  [disabled]="btnSubmitBusqueda || !filtro"
+                  class="btn-terceario btn-margin-left botonBuscar"
+                >
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+
+              <div class="col-md-2">
+                <button
+                  type="button"
+                  class="btn-primario mt-3"
+                  (click)="agregarUsuario()"
+                >
+                  Agregar paciente
+                </button>
+              </div>
+              
+  
+              <!-- <div class="contenedor-agregar col-md-2 d-flex align-items-center" (click)="agregarUsuario()">
+                <i class="fas fa-plus-circle"></i><span>Agregar</span>
+              </div> -->
+            </div>
           
       <div class="row">
         <!-- Nombres -->
