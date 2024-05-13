@@ -23,7 +23,7 @@
         </ion-item-divider>
         <ion-item 
           *ngFor="let notificacion of filtrarNotificacionesHoy(notificaciones$ | async)" 
-          [ngClass]="{ 'notificacion-vista': !notificacion.visto }" 
+          [ngClass]="{ 'notificacion-vista': notificacion.visto }"
           [button]="true" 
           [detail]="true"
           lines="none"  
@@ -33,13 +33,11 @@
             slot="start"
             [name]="iconMappings[notificacion.idTipoNotificacion]?.name">
           </ion-icon>
-          <div class="notificacion-label">
-            <ion-label>
-              <h3 class="titulo">{{ notificacion.titulo }}</h3>
-              <p class="mensaje">{{ notificacion.mensaje }}</p>
-              <p class="fecha">{{ notificacion.fecha | date }}</p>
-            </ion-label>
-          </div>
+          <ion-label>
+            <h3 class="titulo">{{ notificacion.titulo }}</h3>
+            <p class="mensaje">{{ notificacion.mensaje }}</p>
+            <p class="fecha">{{ notificacion.fecha | date: 'MMMM d, y': '': 'es-MX' }}</p>
+          </ion-label>
         </ion-item>
 
         <ion-item-divider>
@@ -57,13 +55,11 @@
             slot="start"
             [name]="iconMappings[notificacion.idTipoNotificacion]?.name">
           </ion-icon>
-          <div class="notificacion-label">
-            <ion-label>
-              <h3 class="titulo">{{ notificacion.titulo }}</h3>
-              <p class="mensaje">{{ notificacion.mensaje }}</p>
-              <p class="fecha">{{ notificacion.fecha | date }}</p>
-            </ion-label>
-          </div>
+          <ion-label>
+            <h3 class="titulo">{{ notificacion.titulo }}</h3>
+            <p class="mensaje">{{ notificacion.mensaje }}</p>
+            <p class="fecha">{{ notificacion.fecha | date: 'MMMM d, y': '': 'es-MX' }}</p>
+          </ion-label>
         </ion-item>
 
         <ion-item-divider>
@@ -71,7 +67,7 @@
         </ion-item-divider>
         <ion-item 
           *ngFor="let notificacion of filtrarNotificacionesAnterioresSemana(notificaciones$ | async)" 
-          [ngClass]="{ 'notificacion-vista': !notificacion.visto }" 
+          [ngClass]="{ 'notificacion-vista': notificacion.visto }"
           [button]="true" 
           [detail]="true"
           lines="none"    
@@ -81,13 +77,11 @@
             slot="start"
             [name]="iconMappings[notificacion.idTipoNotificacion]?.name">
           </ion-icon>
-          <div class="notificacion-label">
-            <ion-label>
-              <h3 class="titulo">{{ notificacion.titulo }}</h3>
-              <p class="mensaje">{{ notificacion.mensaje }}</p>
-              <p class="fecha">{{ notificacion.fecha | date }}</p>
-            </ion-label>
-          </div>
+          <ion-label>
+            <h3 class="titulo">{{ notificacion.titulo }}</h3>
+            <p class="mensaje">{{ notificacion.mensaje }}</p>
+            <p class="fecha">{{ notificacion.fecha | date: 'MMMM d, y': '': 'es-MX' }}</p>
+          </ion-label>
         </ion-item>
       </ion-item-group>
     </div>

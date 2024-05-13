@@ -93,26 +93,25 @@ ion-header{
         background: var(--primary-700);
       }
 
-      .notificacion-label{
-        ion-label{
-          .titulo{
-            font-family: var(--font-body);
-            font-size: 16px;
-            color: var(--primary-700);
-          }
-          .mensaje{
-            font-family: var(--font-body);
-            font-size: 16px;
-            color: var(--neutral-900);
-          }
-          .fecha{
-            font-family: var(--font-body);
-            font-size: 14px;
-            color: var(--neutral-400);
-            margin-top: 16px;
-          }
+      ion-label{
+        .titulo{
+          font-family: var(--font-body);
+          font-size: 16px;
+          color: var(--primary-700);
+        }
+        .mensaje{
+          font-family: var(--font-body);
+          font-size: 16px;
+          color: var(--neutral-900);
+        }
+        .fecha{
+          font-family: var(--font-body);
+          font-size: 14px;
+          color: var(--neutral-400);
+          margin-top: 16px;
         }
       }
+      
     }
 
     ion-item::part(native){
