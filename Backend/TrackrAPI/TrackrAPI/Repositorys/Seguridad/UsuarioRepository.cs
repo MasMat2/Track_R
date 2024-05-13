@@ -267,6 +267,7 @@ namespace TrackrAPI.Repositorys.Seguridad
                     IdLocalidad = u.IdLocalidad,
                     IdEstado = u.IdEstado,
                     IdHospital = u.IdHospital,
+                    Hospital = u.IdHospitalNavigation.Nombre,
                     IdPerfil = u.IdPerfil,
                     IdPuntoVenta = u.IdPuntoVenta,
                     IdTipoUsuario = u.IdTipoUsuario,
