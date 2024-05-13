@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Hosting.Internal;
+using Microsoft.Extensions.Hosting.Internal;
 using MimeTypes;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -292,14 +292,14 @@ public class ExpedienteTrackrService
     /// </summary>
     /// <param name="idUsuario">Identificador del usuario</param>
     /// <returns>El expedienteWrapper del usuario</returns>
-    public ExpedienteWrapper ConsultarWrapperPorUsuario(int idUsuario)
+    public ExpedienteWrapper ConsultarWrapperPorUsuario(int idUsuario, int idDoctor)
     {
         ExpedienteWrapper expedienteWrapper = new ExpedienteWrapper
         {
             expediente = ConsultarPorUsuario(idUsuario),
             // domicilio = domicilioRepository.ConsultarPorUsuario(idUsuario).FirstOrDefault(),
             paciente = _usuarioRepository.ConsultarDto(idUsuario),
-            padecimientos = _expedientePadecimientoRepository.ConsultarPorUsuario(idUsuario)
+            padecimientos = _expedientePadecimientoRepository.ConsultarPorUsuarioDoctor(idUsuario, idDoctor).ToList()
         };
         return expedienteWrapper;
     }

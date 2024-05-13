@@ -48,6 +48,22 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                 }).ToList();
         }
 
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarPorUsuarioDoctor(int idUsuario , int idDoctor)
+        {
+            return context.ExpedientePadecimiento
+                .Where(ep => ep.IdExpedienteNavigation.IdUsuario == idUsuario)
+                .Where(ep => ep.IdUsuarioDoctor == idDoctor)
+                .Select(ep => new ExpedientePadecimientoDTO
+                {
+                    IdExpedientePadecimiento = ep.IdExpedientePadecimiento,
+                    IdPadecimiento = ep.IdPadecimiento,
+                    FechaDiagnostico = ep.FechaDiagnostico,
+                    IdExpediente = ep.IdExpediente,
+                    NombrePadecimiento = ep.IdPadecimientoNavigation.Nombre,
+                    clavePadecimiento = ep.IdPadecimientoNavigation.Clave,
+                }).ToList();
+        }
+
         public IEnumerable<ExpedientePadecimientoGridDTO> ConsultarParaGridPorUsuario(int idUsuario)
         {
             return context.ExpedientePadecimiento

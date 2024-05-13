@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Dtos.Seguridad;
@@ -26,7 +26,8 @@ public class ExpedienteTrackrController : ControllerBase
     [Route("consultarWrapperPorUsuario/{idUsuario}")]
     public ExpedienteWrapper ConsultarWrapperPorUsuario(int idUsuario)
     {
-        return _expedienteTrackrService.ConsultarWrapperPorUsuario(idUsuario);
+        int idDoctor = Utileria.ObtenerIdUsuarioSesion(this);
+        return _expedienteTrackrService.ConsultarWrapperPorUsuario(idUsuario , idDoctor);
     }
 
     [HttpPost("agregarWrapper")]
