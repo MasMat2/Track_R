@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Hosting.Internal;
+﻿using Microsoft.Extensions.Hosting.Internal;
 using MimeTypes;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -29,6 +29,7 @@ public class ExpedienteTrackrService
     private readonly ExpedienteTrackrValidatorService _expedienteTrackrValidatorService;
     private readonly IAsistenteDoctorRepository _asistenteDoctorRepository;
     private readonly ArchivoService _archivoService;
+    private readonly IExpedienteDoctorRepository _expedienteDoctorRepository;
 
     public ExpedienteTrackrService(
         IExpedienteTrackrRepository expedienteTrackrRepository,
@@ -38,7 +39,8 @@ public class ExpedienteTrackrService
         UsuarioWidgetService usuarioWidgetService,
         ExpedienteTrackrValidatorService expedienteTrackrValidatorService,
         IAsistenteDoctorRepository asistenteDoctorRepository,
-        ArchivoService archivoService
+        ArchivoService archivoService,
+        IExpedienteDoctorRepository expedienteDoctorRepository
         )
     {
         this._expedienteTrackrRepository = expedienteTrackrRepository;
@@ -49,6 +51,7 @@ public class ExpedienteTrackrService
         _expedienteTrackrValidatorService = expedienteTrackrValidatorService;
         _asistenteDoctorRepository = asistenteDoctorRepository;
         _archivoService = archivoService;
+        _expedienteDoctorRepository = expedienteDoctorRepository;
     }
     /// <summary>
     /// Consulta el expediente de un usuario
@@ -117,11 +120,25 @@ public class ExpedienteTrackrService
     /// </summary>
     /// <param name="expedienteWrapper">El expediente, el domicilio y el usuario a editar</param>
     /// <returns>El id del expediente editado</returns>
-    public int EditarWrapper(ExpedienteWrapper expedienteWrapper)
+    public int EditarWrapper(ExpedienteWrapper expedienteWrapper, int idDoctor)
     {
         ExpedienteTrackr expedienteTrackr = expedienteWrapper.expediente;
         using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
         {
+
+            var expediente = _expedienteDoctorRepository.ConsultarExpedientePorDoctor(expedienteTrackr.IdExpediente, idDoctor);
+
+            if(expediente == null)
+            {
+                var expedienteDoctor = new ExpedienteDoctor
+                {
+                    IdExpediente = expedienteTrackr.IdExpediente,
+                    IdUsuarioDoctor = idDoctor
+                };
+
+                _expedienteDoctorRepository.Agregar(expedienteDoctor);
+            }
+
             var idUsuario = expedienteWrapper.paciente.IdUsuario;
             _expedienteTrackrValidatorService.ValidarEditar(expedienteTrackr);
 

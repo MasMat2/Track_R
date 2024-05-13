@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Dtos.Seguridad;
@@ -39,7 +39,8 @@ public class ExpedienteTrackrController : ControllerBase
     [HttpPost("editarWrapper")]
     public int EditarWrapper(ExpedienteWrapper expedienteWrapper)
     {
-        return _expedienteTrackrService.EditarWrapper(expedienteWrapper);
+        int idUsuario  = Utileria.ObtenerIdUsuarioSesion(this);
+        return _expedienteTrackrService.EditarWrapper(expedienteWrapper, idUsuario);
     }
 
     [HttpGet("consultarParaGrid/")]
