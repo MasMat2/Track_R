@@ -211,7 +211,7 @@ public class ExpedienteTrackrService
             idDoctorList.Add(idUsuario);
         }
 
-        IEnumerable<UsuarioExpedienteGridDTO> expedientes = _expedienteTrackrRepository.ConsultarParaGrid(idDoctorList);
+        IEnumerable<UsuarioExpedienteGridDTO> expedientes = _expedienteTrackrRepository.ConsultarParaGrid(idDoctorList, idCompania);
         foreach (UsuarioExpedienteGridDTO expediente in expedientes)
         {
 
