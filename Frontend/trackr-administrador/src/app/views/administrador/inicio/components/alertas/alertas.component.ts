@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NotificacionDoctorDTO } from '@dtos/notificaciones/notificacion-doctor-dto';
 import { NotificacionDoctorHubService } from '@services/notificacion-doctor-hub.service';
+import { GeneralConstant } from '@utils/general-constant';
 
 @Component({
   selector: 'app-alertas',
@@ -12,6 +13,7 @@ export class AlertasComponent implements OnInit {
   protected pacientesFueraDeRango: number;
   protected solicitudesDeChat: number;
   protected solicitudesDeVideo: number;
+  private tipoNotificacion = GeneralConstant.TIPO_NOTIFICACION;
 
   constructor(
     private notificacionDoctorHubService: NotificacionDoctorHubService
@@ -19,15 +21,15 @@ export class AlertasComponent implements OnInit {
 
   ngOnInit() {
     this.notificacionDoctorHubService.notificaciones$.subscribe((notificaciones) => {
-      this.solicitudesDeChat = this.contar(notificaciones, 2);
-      this.solicitudesDeVideo = this.contar(notificaciones, 3);
-      this.pacientesFueraDeRango = this.contar(notificaciones, 4);
+      this.solicitudesDeChat = this.contar(notificaciones,this.tipoNotificacion.Chat );
+      this.solicitudesDeVideo = this.contar(notificaciones, this.tipoNotificacion.Video);
+      this.pacientesFueraDeRango = this.contar(notificaciones, this.tipoNotificacion.Alerta);
     });
   }
 
-  private contar(notificaciones: NotificacionDoctorDTO[], idTipoNotificacion: number): number {
+  private contar(notificaciones: NotificacionDoctorDTO[], claveNotificacion: string): number {
     return notificaciones
-      .filter((notificacion) => notificacion.idTipoNotificacion === idTipoNotificacion && notificacion.visto === false)
+      .filter((notificacion) => notificacion.claveTipoNotificacion === claveNotificacion && notificacion.visto === false)
       .length;
   }
 

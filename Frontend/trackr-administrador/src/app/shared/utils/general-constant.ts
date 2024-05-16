@@ -443,4 +443,14 @@ export class GeneralConstant {
 
   public static ORIGEN_ESCENARIO_CONFIGURACION_CONTABLE = "configuracion-contable";
   public static ORIGEN_ESCENARIO_SALIDA_PERSONAL = "salida-personal";
+
+  public static  TIPO_NOTIFICACION = {
+    General: 'GRL',
+    Chat: 'CHT',
+    Video: 'VID',
+    Alerta: 'ALT',
+    Recomendacion: 'RCM',
+    Eecordatorio: 'RCD'
+  };
+
 }
