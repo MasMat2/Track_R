@@ -80,8 +80,9 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
     public int VariablesFueraRango(int idUsuario)
     {
         var currentDateUtc = DateTime.UtcNow.Date;
+        var oneMonthAgo = currentDateUtc.AddMonths(-1);
         return context.EntidadEstructuraTablaValor
-            .Where(eetv => eetv.IdTabla == idUsuario && eetv.FueraDeRango == true && eetv.FechaMuestra.Value.Date == currentDateUtc)
+            .Where(eetv => eetv.IdTabla == idUsuario && eetv.FueraDeRango == true && eetv.FechaMuestra.Value.Date <= currentDateUtc && eetv.FechaMuestra.Value.Date >= oneMonthAgo)
             .Count();
     }
 
