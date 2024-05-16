@@ -12,18 +12,21 @@ namespace TrackrAPI.Services.GestionExpediente
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IAsistenteDoctorRepository _asistenteDoctorRepository;
         private readonly IExpedienteTrackrRepository _expedienteTrackrRepository;
+        private readonly IExpedienteDoctorRepository _expedienteDoctorRepository;
 
         public ExpedientePadecimientoService(
             IExpedientePadecimientoRepository expedientePadecimientoRepository,
             IUsuarioRepository usuarioRepository,
             IAsistenteDoctorRepository asistenteDoctorRepository,
-            IExpedienteTrackrRepository expedienteTrackrRepository
+            IExpedienteTrackrRepository expedienteTrackrRepository,
+            IExpedienteDoctorRepository expedienteDoctorRepository
             )
         {
             this.expedientePadecimientoRepository = expedientePadecimientoRepository;
             _usuarioRepository = usuarioRepository;
             _asistenteDoctorRepository = asistenteDoctorRepository;
             _expedienteTrackrRepository = expedienteTrackrRepository;
+            _expedienteDoctorRepository = expedienteDoctorRepository;
 
         }
 
@@ -41,7 +44,7 @@ namespace TrackrAPI.Services.GestionExpediente
                 idDoctorList.Add(idDoctor);
             }
 
-            return expedientePadecimientoRepository.Consultar(idDoctorList);
+            return _expedienteDoctorRepository.ConsultarPacientesPorPadecimiento(idDoctorList);
         }
 
         public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarParaSelector()

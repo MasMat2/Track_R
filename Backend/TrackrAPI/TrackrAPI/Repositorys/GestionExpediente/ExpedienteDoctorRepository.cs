@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Dtos.GestionExpediente.ExpedienteDoctor;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
@@ -70,6 +71,22 @@ public class ExpedienteDoctorRepository : Repository<ExpedienteDoctor>, IExpedie
         var doctoresFaltantes = doctoresCompletos.Where(dc => !doctoresExpediente.Any(de => de.IdUsuarioDoctor == dc.IdUsuarioDoctor)).ToList();
 
         return doctoresFaltantes;
+    }
+
+    public IEnumerable<ExpedientePadecimientoDTO> ConsultarPacientesPorPadecimiento(List<int> idDoctores){
+        return context.ExpedienteDoctor
+        .Where(ed => ed.IdExpedienteNavigation.IdUsuarioNavigation.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioPaciente)
+        .Where( ed => idDoctores.Contains(ed.IdUsuarioDoctor))
+        .SelectMany(
+            ed => ed.IdExpedienteNavigation.ExpedientePadecimiento.Select(
+                ep => new ExpedientePadecimientoDTO{
+                    IdExpedientePadecimiento = ep.IdExpedientePadecimiento,
+                    IdPadecimiento  = ep.IdPadecimiento,
+                    FechaDiagnostico = ep.FechaDiagnostico,
+                    NombrePadecimiento = ep.IdPadecimientoNavigation.Nombre ?? string.Empty 
+                }
+            )   
+        ).ToList();
     }
 
 

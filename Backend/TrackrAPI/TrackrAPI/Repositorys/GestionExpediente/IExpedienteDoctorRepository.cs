@@ -1,3 +1,4 @@
+using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Dtos.GestionExpediente.ExpedienteDoctor;
 using TrackrAPI.Models;
 
@@ -10,5 +11,6 @@ public interface IExpedienteDoctorRepository : IRepository<ExpedienteDoctor>
     public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarSelector(int idExpediente , int idCompania);
     public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarDoctores(int idCompania);
     public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarDoctores();
+    public IEnumerable<ExpedientePadecimientoDTO> ConsultarPacientesPorPadecimiento(List<int> idDoctores);
 
 }
