@@ -27,7 +27,7 @@
           [button]="true" 
           [detail]="true"
           lines="none"  
-          (click)="marcarComoVista(notificacion)">
+          (click)="marcarComoVista($event,notificacion)">
           <div slot="start" class="marcador-visto" *ngIf="!notificacion.visto"></div>
           <ion-icon
             slot="start"
@@ -49,7 +49,7 @@
           [button]="true" 
           [detail]="true"
           lines="none"    
-          (click)="marcarComoVista(notificacion)">
+          (click)="marcarComoVista($event , notificacion)">
           <div slot="start" class="marcador-visto" *ngIf="!notificacion.visto"></div>
           <ion-icon
             slot="start"
@@ -71,7 +71,7 @@
           [button]="true" 
           [detail]="true"
           lines="none"    
-          (click)="marcarComoVista(notificacion)">
+          (click)="marcarComoVista($event, notificacion)">
           <div slot="start" class="marcador-visto" *ngIf="!notificacion.visto"></div>
           <ion-icon
             slot="start"
