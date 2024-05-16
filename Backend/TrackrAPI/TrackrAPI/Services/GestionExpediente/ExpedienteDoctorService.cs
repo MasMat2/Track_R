@@ -93,13 +93,9 @@ public class ExpedienteDoctorService
     {
 
         _expedienteDoctorValidatorService.ValidarEliminar(expedienteDoctorDTO.IdUsuarioDoctor);
-        var expedienteDoctor = new ExpedienteDoctor
-        {
-            IdUsuarioDoctor = expedienteDoctorDTO.IdUsuarioDoctor,
-            IdExpediente = expedienteDoctorDTO.IdExpediente,
-            IdExpedienteDoctor = expedienteDoctorDTO.IdExpedienteDoctor
-        };
 
+        var expedienteDoctor = _expedienteDoctorRepository.ConsultarExpedientePorDoctor(expedienteDoctorDTO.IdExpediente, expedienteDoctorDTO.IdUsuarioDoctor);
+       
         _expedienteDoctorRepository.Eliminar(expedienteDoctor);
     }
 

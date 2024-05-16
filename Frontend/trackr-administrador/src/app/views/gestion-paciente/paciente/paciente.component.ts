@@ -12,6 +12,10 @@ import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { GestionAsistenteComponent } from './gestion-asistente/gestion-asistente.component';
 import { UsuarioService } from '@http/seguridad/usuario.service';
+import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
+import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
+import { UsuarioDoctorDto } from '@dtos/seguridad/usuario-doctor-dto';
+import { Usuario } from '@models/seguridad/usuario';
 
 @Component({
   selector: 'app-paciente',
@@ -19,6 +23,11 @@ import { UsuarioService } from '@http/seguridad/usuario.service';
   styleUrls: ['./paciente.component.scss'],
 })
 export class PacienteComponent implements OnInit {
+
+
+  private TITULO_MODAL_ELIMINAR = 'Eliminar usuario';
+  private MENSAJE_EXITO_ELIMINAR = 'Expediente eliminado correctamente';
+
   protected pacientes: UsuarioExpedienteGridDTO[] = [];
   protected pacientesFiltrados: UsuarioExpedienteGridDTO[] = [];
   protected isVistaCuadricula: boolean = true;
@@ -87,7 +96,9 @@ export class PacienteComponent implements OnInit {
     private expedienteTrackrService: ExpedienteTrackrService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
     private modalService: BsModalService,
-    private usuarioService : UsuarioService
+    private usuarioService : UsuarioService,
+    private misDoctoresService : MisDoctoresService,
+    private modalMensajeService : MensajeService
   ) {}
 
   ngOnInit(): void {
@@ -154,8 +165,25 @@ export class PacienteComponent implements OnInit {
     );
   }
 
-  protected eliminar(data: any): void {
-    this.expedienteTrackrService.eliminar(data.idExpediente);
+  protected eliminar(paciente: UsuarioExpedienteGridDTO): void {
+    this.modalMensajeService
+      .modalConfirmacion(
+        '¿Desea eliminar el usuario <strong>' +
+          paciente.nombreCompleto +
+          '</strong>?',
+        this.TITULO_MODAL_ELIMINAR,
+        GeneralConstant.ICONO_CRUZ
+      )
+      .then((_: any) => {
+        var expedienteDoctorDto = {
+          idExpediente: paciente.idExpedienteTrackr,
+        } as UsuarioDoctorDto;
+
+        this.misDoctoresService.eliminar(expedienteDoctorDto).subscribe(() => {
+          this.modalMensajeService.modalExito(this.MENSAJE_EXITO_ELIMINAR);
+          this.consultarPacientes();
+        });
+      });
   }
 
   /**

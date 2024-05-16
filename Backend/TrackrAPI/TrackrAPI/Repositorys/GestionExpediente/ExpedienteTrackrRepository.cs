@@ -49,7 +49,7 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
                         .GroupBy(ep => ep.IdExpedienteNavigation.IdUsuario)
                         .Select(group => new UsuarioExpedienteGridDTO
                         {
-                            IdExpedienteTrackr = group.Key,
+                            IdExpedienteTrackr = group.FirstOrDefault().IdExpedienteNavigation.IdExpediente,
                             IdUsuario = group.Key,
                             DoctorAsociado = group.FirstOrDefault().IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre + " " + group.FirstOrDefault().IdUsuarioDoctorNavigation.ApellidoPaterno,
                             NombreCompleto = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ObtenerNombreCompleto(),

@@ -47,6 +47,8 @@ public class ExpedienteDoctorController : ControllerBase
     [HttpDelete]
     public void Eliminar(ExpedienteDoctorDTO expedienteDoctorDTO)
     {
+        int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+        expedienteDoctorDTO.IdUsuarioDoctor = idUsuario;
         _expedienteDoctorService.Eliminar(expedienteDoctorDTO);
     }
     [HttpPost]
