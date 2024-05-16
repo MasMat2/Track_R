@@ -59,7 +59,7 @@ export class BarraChatsComponent {
     private ChatPersonaService:ChatPersonaService,
     private modalCtrl:ModalController
   ) {
-    addIcons({addCircle, chatboxOutline, send});
+    addIcons({addCircle, chatboxOutline, send, 'chat-plus': ' ../assets/img/svg/chat-plus.svg'});
   }
 
   ionViewWillEnter(){
