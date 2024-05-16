@@ -97,15 +97,12 @@ export class NotificacionesComponent  implements OnInit
       if(notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA){
         await this.presentAlertTomarTratamiento(notificacion)
       }
-    }
-    
-    if(notificacion.idChat !== null){
-      if(!notificacion.visto){
-        await this.notificacionHubService.marcarComoVista(notificacion.id);
+      await this.notificacionHubService.marcarComoVista(notificacion.id);
+      if(notificacion.idChat !== null){
+        this.modalController.dismiss().then(() => {
+          this.router.navigate(['home','chat-movil','chat',notificacion.idChat]);
+        });
       }
-      this.modalController.dismiss().then(() => {
-        this.router.navigate(['home','chat-movil','chat',notificacion.idChat]);
-      });
     }
 
     this.consultarNotificaciones();   
