@@ -25,11 +25,11 @@ export class ExamenFormularioComponent implements OnInit {
   protected readonly DROPDOWN_PLACEHOLDER: string = DROPDOWN_PLACEHOLDER;
   protected readonly DROPDOWN_NO_OPTIONS: string = DROPDOWN_NO_OPTIONS;
 
-  private MENSAJE_ULTIMO_MINUTO: string = 'Queda un minuto para finalizar la Encuesta';
+  private MENSAJE_ULTIMO_MINUTO: string = 'Queda un minuto para finalizar el Cuestionario';
   private MENSAJE_NO_SUFICIENTES_REACTIVOS: string =
-    'No hay suficientes reactivos para aplicar esta Encuesta';
+    'No hay suficientes reactivos para aplicar este cuestionario';
 
-  private TITULO_MODAL_TERMINAR: string = 'Terminar Encuesta';
+  private TITULO_MODAL_TERMINAR: string = 'Terminar Cuestionario';
 
   // Inputs
   public accion: string;
@@ -192,7 +192,7 @@ export class ExamenFormularioComponent implements OnInit {
   public terminarExamen() {
     this.mensajeService
       .modalConfirmacion(
-        '¿Seguro que deseas terminar la Encuesta?',
+        '¿Seguro que deseas terminar el Cuestionario?',
         this.TITULO_MODAL_TERMINAR,
         GeneralConstant.ICONO_CRUZ
       )

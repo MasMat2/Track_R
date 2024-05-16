@@ -2,7 +2,7 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>Encuesta - {{ accion }}</div>
+      <div>Cuestionarios - {{ accion }}</div>
       <button
         type="button"
         class="close pull-right"
@@ -80,7 +80,7 @@
         <div class="row">
           <div class="col-1" style="width: 60%">
             <div class="form-group">
-              <label class="label-input required-label">Encuesta</label>
+              <label class="label-input required-label">Cuestionario</label>
               <div>
                 <input
                   #descripcion="ngModel"
@@ -96,7 +96,7 @@
                 *ngIf="descripcion.errors?.['required'] && descripcion.touched"
                 class="error"
               >
-                La Encuesta es requerida
+                El Cuestionario es requerida
               </div>
             </div>
           </div>

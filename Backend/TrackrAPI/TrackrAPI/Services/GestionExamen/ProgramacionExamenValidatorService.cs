@@ -15,12 +15,12 @@ public class ProgramacionExamenValidatorService
 
     private readonly string MensajeClaveRequerido = "La clave es requerida";
     private readonly string MensajeResponsableRequerida = "El responsable es requerido";
-    private readonly string MensajeFechaHoraRequerida = "La fecha y hora de la Encuesta es requerida";
-    private readonly string MensajeTipoExamenRequerida = "El tipo de Encuesta es requerido";
+    private readonly string MensajeFechaHoraRequerida = "La fecha y hora del cuestionario es requerida";
+    private readonly string MensajeTipoExamenRequerida = "El tipo cuestionario es requerido";
 
-    private readonly string MensajeDependencia = "La Encuesta programado tiene participantes";
+    private readonly string MensajeDependencia = "El Cuestionario programado tiene participantes";
 
-    private readonly string MensajeExistencia = "La Encuesta que se requería actualizar no existe";
+    private readonly string MensajeExistencia = "El Cuestionario que se requería actualizar no existe";
 
     public void ValidarAgregar(ProgramacionExamen programacionExamen)
     {

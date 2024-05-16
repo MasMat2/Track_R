@@ -16,7 +16,7 @@ import * as Utileria from '@utils/utileria'
 })
 export class ExamenComponent implements OnInit {
 
-  protected readonly HEADER_GRID: string = 'Mis Encuestas';
+  protected readonly HEADER_GRID: string = 'Mis Cuestionarios';
 
   // Grid
   protected examenPendienteList: Examen[] = [];

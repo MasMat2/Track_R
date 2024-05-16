@@ -16,7 +16,7 @@ public class ExamenReactivoValidatorService
     private readonly string MensajeClaveRequerido = "La clave es requerida";
     private readonly string MensajeResponsableRequerida = "El responsable es requerido";
     private readonly string MensajeFechaHoraRequerida = "La fecha y hora del cuestionario es requerida";
-    private readonly string MensajeTipoExamenRequerida = "El tipo de cuestionario es requerido";
+    private readonly string MensajeTipoExamenRequerida = "El tipo cuestionario es requerido";
 
     private readonly string MensajeDependencia = "El cuestionario programado tiene participantes";
 

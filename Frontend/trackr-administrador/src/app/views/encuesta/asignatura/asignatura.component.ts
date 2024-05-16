@@ -17,7 +17,7 @@ import { AsignaturaFormularioComponent } from './asignatura-formulario/asignatur
   templateUrl: './asignatura.component.html',
 })
 export class AsignaturaComponent implements OnInit {
-  protected readonly NOMBRE_ENTIDAD: string = 'Encuestas';
+  protected readonly NOMBRE_ENTIDAD: string = 'Cuestionarios';
 
   // Accesos
   protected tieneAccesoAgregar: boolean = false;
@@ -33,7 +33,7 @@ export class AsignaturaComponent implements OnInit {
     valueGetter: (params: any) => params.data.estatus ? 'Activo' : 'Inactivo' },
   { headerName: 'Fecha Alta', field: 'fechaAlta', maxWidth: 200,
     cellRenderer: (data: any) => { return data.value ? (new Date(data.value)).toLocaleDateString() : '';} },
-    { headerName: 'Encuesta', field: 'descripcion', minWidth: 300, },
+    { headerName: 'Cuestionarios', field: 'descripcion', minWidth: 300, },
   ];
 
   constructor(
@@ -126,9 +126,9 @@ export class AsignaturaComponent implements OnInit {
   }
 
   private eliminar(asignatura: Asignatura): void {
-    const MENSAJE_EXITO: string = 'La Encuesta ha sido eliminada';
-    const TITULO_MODAL: string = 'Eliminar Encuesta';
-    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar la Encuesta: <strong>${asignatura.descripcion}</strong>?`;
+    const MENSAJE_EXITO: string = 'El Cuestionario ha sido eliminado';
+    const TITULO_MODAL: string = 'Eliminar Cuestionario';
+    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar el Cuestionario: <strong>${asignatura.descripcion}</strong>?`;
 
     this.mensajeService
       .modalConfirmacion(

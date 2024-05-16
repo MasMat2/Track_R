@@ -19,7 +19,7 @@ import { ProgramacionExamenFormularioComponent } from './programacion-examen-for
   templateUrl: './programacion-examen.component.html',
 })
 export class ProgramacionExamenComponent implements OnInit {
-  public HEADER_GRID = 'Programación Encuesta';
+  public HEADER_GRID = 'Programación Cuestionarios';
 
   // Accesos
   protected tieneAccesoAgregar: boolean = false;
@@ -32,7 +32,7 @@ export class ProgramacionExamenComponent implements OnInit {
   protected columns: ColDef[] = [
     { headerName: 'Clave', field: 'idProgramacionExamen', minWidth: 50, width: 50, },
     { headerName: 'Responsable', field: 'usuarioResponsable', minWidth: 100, width: 100, },
-    { headerName: 'Tipo de Encuesta', field: 'tipoExamen', minWidth: 100, width: 100, },
+    { headerName: 'Tipo Cuestionario', field: 'tipoExamen', minWidth: 100, width: 100, },
     { headerName: 'Fecha Programada', field: 'fechaExamen', minWidth: 70, width: 70, 
       cellRenderer: (params: ICellRendererParams) => {
         return moment(params.data.fechaExamen).format('DD/MM/YYYY');
@@ -168,13 +168,13 @@ export class ProgramacionExamenComponent implements OnInit {
   }
 
   private eliminar(programacionExamen: ProgramacionExamen): void {
-    const MENSAJE_EXITO: string = 'Programación de Encuesta eliminada exitosamente.';
-    const TITULO_MODAL: string = 'Eliminar Programación de Encuesta';
+    const MENSAJE_EXITO: string = 'Programación del Cuestionario eliminada exitosamente.';
+    const TITULO_MODAL: string = 'Eliminar Programación de Cuestionario';
 
     const fecha = moment(programacionExamen.fechaExamen).format('DD/MM/YYYY');
     const hora = moment(programacionExamen.horaExamen, 'HH:mm:ss').format('LT');
 
-    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar la programación de la Encuesta: <strong>${programacionExamen.tipoExamen} (${fecha} ${hora}) </strong>?`;
+    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar la programación del Cuestionario: <strong>${programacionExamen.tipoExamen} (${fecha} ${hora}) </strong>?`;
 
     this.mensajeService
       .modalConfirmacion(
