@@ -24,6 +24,7 @@ public class ExpedienteTrackrService
     private readonly IExpedienteTrackrRepository _expedienteTrackrRepository;
     private readonly IDomicilioRepository _domicilioRepository;
     private readonly IUsuarioRepository _usuarioRepository;
+    private readonly UsuarioService _usuarioService;
     private readonly IExpedientePadecimientoRepository _expedientePadecimientoRepository;
     private readonly UsuarioWidgetService _usuarioWidgetService;
     private readonly ExpedienteTrackrValidatorService _expedienteTrackrValidatorService;
@@ -40,7 +41,8 @@ public class ExpedienteTrackrService
         ExpedienteTrackrValidatorService expedienteTrackrValidatorService,
         IAsistenteDoctorRepository asistenteDoctorRepository,
         ArchivoService archivoService,
-        IExpedienteDoctorRepository expedienteDoctorRepository
+        IExpedienteDoctorRepository expedienteDoctorRepository,
+        UsuarioService usuarioService
         )
     {
         this._expedienteTrackrRepository = expedienteTrackrRepository;
@@ -52,6 +54,7 @@ public class ExpedienteTrackrService
         _asistenteDoctorRepository = asistenteDoctorRepository;
         _archivoService = archivoService;
         _expedienteDoctorRepository = expedienteDoctorRepository;
+        _usuarioService = usuarioService;
     }
     /// <summary>
     /// Consulta el expediente de un usuario
@@ -195,20 +198,20 @@ public class ExpedienteTrackrService
         }
     }
 
-    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(int idUsuario, int idCompania)
+    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(int idDoctor, int idCompania)
     {
         List<int> idDoctorList = new();
-        var esAsistente = _usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente)
-                                                    .Any((usuario) => usuario.IdUsuario == idUsuario);
+        var esAsistente = _usuarioRepository.ConsultarPorRol(GeneralConstant.ClaveRolAsistente , idCompania)
+                                                .Any((usuario) => usuario.IdUsuario == idDoctor);
 
         if (esAsistente)
         {
-            idDoctorList = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idUsuario)
+            idDoctorList = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idDoctor)
                                                          .Select(ad => ad.IdUsuario).ToList();
         }
         else
         {
-            idDoctorList.Add(idUsuario);
+            idDoctorList.Add(idDoctor);
         }
 
         IEnumerable<UsuarioExpedienteGridDTO> expedientes = _expedienteTrackrRepository.ConsultarParaGrid(idDoctorList, idCompania);
@@ -328,8 +331,8 @@ public class ExpedienteTrackrService
     public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor, int idCompania)
     {
         List<int> idDoctorList = new();
-        var esAsistente = _usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente)
-                                                    .Any((usuario) => usuario.IdUsuario == idDoctor);
+        var esAsistente = _usuarioRepository.ConsultarPorRol(GeneralConstant.ClaveRolAsistente , idCompania)
+                                                .Any((usuario) => usuario.IdUsuario == idDoctor);
 
         if (esAsistente)
         {

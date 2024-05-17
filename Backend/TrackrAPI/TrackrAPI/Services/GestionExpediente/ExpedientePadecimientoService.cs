@@ -3,6 +3,7 @@ using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionExpediente;
 using TrackrAPI.Repositorys.Seguridad;
+using TrackrAPI.Services.Seguridad;
 
 namespace TrackrAPI.Services.GestionExpediente
 {
@@ -10,6 +11,7 @@ namespace TrackrAPI.Services.GestionExpediente
     {
         private IExpedientePadecimientoRepository expedientePadecimientoRepository;
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly UsuarioService _usuarioService;
         private readonly IAsistenteDoctorRepository _asistenteDoctorRepository;
         private readonly IExpedienteTrackrRepository _expedienteTrackrRepository;
         private readonly IExpedienteDoctorRepository _expedienteDoctorRepository;
@@ -19,7 +21,8 @@ namespace TrackrAPI.Services.GestionExpediente
             IUsuarioRepository usuarioRepository,
             IAsistenteDoctorRepository asistenteDoctorRepository,
             IExpedienteTrackrRepository expedienteTrackrRepository,
-            IExpedienteDoctorRepository expedienteDoctorRepository
+            IExpedienteDoctorRepository expedienteDoctorRepository,
+            UsuarioService usuarioService
             )
         {
             this.expedientePadecimientoRepository = expedientePadecimientoRepository;
@@ -27,14 +30,14 @@ namespace TrackrAPI.Services.GestionExpediente
             _asistenteDoctorRepository = asistenteDoctorRepository;
             _expedienteTrackrRepository = expedienteTrackrRepository;
             _expedienteDoctorRepository = expedienteDoctorRepository;
+            _usuarioService = usuarioService;
 
         }
 
         public IEnumerable<ExpedientePadecimientoDTO> Consultar(int idDoctor , int idCompania)
         {
             List<int> idDoctorList = new();
-            var esAsistente = _usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente)
-                                                    .Any((usuario) => usuario.IdUsuario == idDoctor);
+            var esAsistente = _usuarioService.EsAsistente(idCompania, idDoctor);
 
             if(esAsistente){
                idDoctorList = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idDoctor)
