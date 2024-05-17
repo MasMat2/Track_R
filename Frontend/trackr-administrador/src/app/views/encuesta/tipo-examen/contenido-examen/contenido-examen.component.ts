@@ -22,7 +22,7 @@ import { ICONO } from '@utils/constants/font-awesome-icons';
   templateUrl: './contenido-examen.component.html',
 })
 export class ContenidoExamenComponent implements OnInit {
-  protected readonly HEADER_GRID: string = 'Contenido de la Encuesta';
+  protected readonly HEADER_GRID: string = 'Contenido del cuestionario';
 
   // Inputs
   public idTipoExamen: number;
@@ -38,7 +38,7 @@ export class ContenidoExamenComponent implements OnInit {
 
   protected columns: ColDef[] = [
     { headerName: 'Clave', field: 'idContenidoExamen', minWidth: 150, },
-    { headerName: 'Asignatura', field: 'asignatura', minWidth: 150, },
+    { headerName: 'Cuestionario', field: 'asignatura', minWidth: 150, },
     { headerName: 'Complejidad', field: 'nivelExamen', minWidth: 150, },
     { headerName: 'Cantidad de Reactivos', field: 'totalPreguntas', minWidth: 150, },
     { headerName: 'Duración Total (Minutos)', field: 'duracion', minWidth: 150, },
@@ -166,9 +166,9 @@ export class ContenidoExamenComponent implements OnInit {
   }
 
   private eliminar(contenidoExamen: ContenidoExamen): void {
-    const MENSAJE_EXITO: string = 'El contenido de la Encuesta ha sido eliminado';
-    const TITULO_MODAL: string = 'Eliminar Contenido de la Encuesta';
-    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar el contenido del Encuesta: <strong>${contenidoExamen.clave}</strong>?`;
+    const MENSAJE_EXITO: string = 'El contenido del cuestionario ha sido eliminado';
+    const TITULO_MODAL: string = 'Eliminar Contenido del cuestionario';
+    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar el contenido del Cuestionario: <strong>${contenidoExamen.clave}</strong>?`;
 
     this.mensajeService
       .modalConfirmacion(
