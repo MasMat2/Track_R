@@ -187,11 +187,11 @@ export class MuestrasFormularioComponent implements OnInit {
 
   async syncronizeData(){
     this.seccionSeleccionada.seccionesCampo.forEach(async variable => {
-      await this.callPlugin(variable.uuidIos);
+      await this.callPlugin();
     });
   }
 
-  async callPlugin(uuid : string){
-    console.log('Llamando al plugin con uuid: ' + uuid)
+  async callPlugin(){
+    console.log('Llamando al plugin con uuid: ')
   }
 }

@@ -2259,15 +2259,7 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.Grupo).HasMaxLength(50);
 
-                entity.Property(e => e.IdAndroid)
-                    .HasMaxLength(36)
-                    .HasColumnName("id_android");
-
                 entity.Property(e => e.MostrarDashboard).HasColumnName("mostrarDashboard");
-
-                entity.Property(e => e.UuidIos)
-                    .HasMaxLength(36)
-                    .HasColumnName("uuid_ios");
 
                 entity.HasOne(d => d.IdDominioNavigation)
                     .WithMany(p => p.SeccionCampo)

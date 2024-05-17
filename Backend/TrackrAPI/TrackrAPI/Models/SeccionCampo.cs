@@ -23,8 +23,6 @@ namespace TrackrAPI.Models
         public int? Fila { get; set; }
         public int? IdIcono { get; set; }
         public bool? MostrarDashboard { get; set; }
-        public string? UuidIos { get; set; }
-        public string? IdAndroid { get; set; }
 
         public virtual Dominio IdDominioNavigation { get; set; } = null!;
         public virtual Icono? IdIconoNavigation { get; set; }
