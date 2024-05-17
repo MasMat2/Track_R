@@ -105,8 +105,9 @@ export class NotificacionesComponent  implements OnInit
       if(notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA){
         await this.presentAlertTomarTratamiento(notificacion)
       }
-      await this.notificacionHubService.marcarComoVista(notificacion.id);
+      
       if(notificacion.idChat !== null){
+        await this.notificacionHubService.marcarComoVista(notificacion.id);
         this.modalController.dismiss().then(() => {
           this.router.navigate(['home','chat-movil','chat',notificacion.idChat]);
         });
