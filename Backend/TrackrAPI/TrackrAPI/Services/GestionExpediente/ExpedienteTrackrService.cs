@@ -24,7 +24,6 @@ public class ExpedienteTrackrService
     private readonly IExpedienteTrackrRepository _expedienteTrackrRepository;
     private readonly IDomicilioRepository _domicilioRepository;
     private readonly IUsuarioRepository _usuarioRepository;
-    private readonly UsuarioService _usuarioService;
     private readonly IExpedientePadecimientoRepository _expedientePadecimientoRepository;
     private readonly UsuarioWidgetService _usuarioWidgetService;
     private readonly ExpedienteTrackrValidatorService _expedienteTrackrValidatorService;
@@ -41,8 +40,7 @@ public class ExpedienteTrackrService
         ExpedienteTrackrValidatorService expedienteTrackrValidatorService,
         IAsistenteDoctorRepository asistenteDoctorRepository,
         ArchivoService archivoService,
-        IExpedienteDoctorRepository expedienteDoctorRepository,
-        UsuarioService usuarioService
+        IExpedienteDoctorRepository expedienteDoctorRepository
         )
     {
         this._expedienteTrackrRepository = expedienteTrackrRepository;
@@ -54,7 +52,6 @@ public class ExpedienteTrackrService
         _asistenteDoctorRepository = asistenteDoctorRepository;
         _archivoService = archivoService;
         _expedienteDoctorRepository = expedienteDoctorRepository;
-        _usuarioService = usuarioService;
     }
     /// <summary>
     /// Consulta el expediente de un usuario
