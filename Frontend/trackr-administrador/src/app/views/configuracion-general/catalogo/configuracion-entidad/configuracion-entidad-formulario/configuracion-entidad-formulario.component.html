@@ -199,21 +199,23 @@
 
                     <!--Es Antecedente-->
                     <div class="col-md-3">
-                      <label class="label-input required-label">¿Es antecedente?</label>
-                      <div class="form-group switch-flex">
-                        <label class="switch">
-                          <input
-                              #antecedente="ngModel"
-                              name="antecedente"
-                              id="antecedente"
-                              type="checkbox"
-                              [(ngModel)]="entidadEstructura.esAntecedente"
-                          />
-                          <div class="slider round">
-                            <span class="on">Sí</span>
-                            <span class="off">No</span>
-                          </div>
-                        </label>
+                      <div class="form-group">
+                        <label class="label-input required-label">¿Es antecedente?</label>
+                        <div class="form-group switch-flex">
+                          <label class="switch">
+                            <input
+                                #antecedente="ngModel"
+                                name="antecedente"
+                                id="antecedente"
+                                type="checkbox"
+                                [(ngModel)]="entidadEstructura.esAntecedente"
+                            />
+                            <div class="slider round">
+                              <span class="on">Sí</span>
+                              <span class="off">No</span>
+                            </div>
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -236,7 +238,7 @@
                         </div>
                       </div>
                     </div>
-                </div>
+                  </div>
 
                 <!-- Botón Agregar Estructura de Jerarquía -->
                 <div class="row mb-4">
