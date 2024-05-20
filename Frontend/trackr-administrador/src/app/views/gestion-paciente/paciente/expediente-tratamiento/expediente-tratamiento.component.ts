@@ -74,25 +74,25 @@ export class ExpedienteTratamientoComponent implements OnInit {
     { headerName: 'Padecimiento', field: 'padecimiento', minWidth: 150 },
     { 
       headerName: 'Días', 
-      field: 'fechaRegistro',  
-      minWidth: 50,
+      field: 'dias',  
+      /* minWidth: 50,
       cellRenderer: (params: ICellRendererParams) => {
         return moment(params.data.fechaRegistro).format('DD/MM/YYYY');
       },
       valueGetter: (params: ValueGetterParams) => {
         return moment(params.data.fechaRegistro).format('DD/MM/YYYY');
-      },
+      }, */
      },
     { 
       headerName: 'Horario (h)', 
-      field: 'fechaRegistro', 
+      field: 'horas', 
       minWidth: 50,
-      cellRenderer: (params: ICellRendererParams) => {
+      /* cellRenderer: (params: ICellRendererParams) => {
         return moment(params.data.fechaRegistro, 'HH:mm:ss').format('LT');
       },
       valueGetter: (params: ValueGetterParams) => {
         return moment(params.data.fechaRegistro, 'HH:mm:ss').format('LT');
-      },
+      }, */
      }
   ];
 
