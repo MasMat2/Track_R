@@ -1,10 +1,8 @@
 @import "variables";
 
-
-
-
-
-
+ion-button {
+  text-transform: none;
+}
 
 ion-grid.inputs {
   // background: transparent;
@@ -147,6 +145,15 @@ ion-grid.inputs {
   }
 
   
+}
+
+
+ion-modal.image-only-modal{
+  --height: auto;
+  --max-height: 50vh;
+  --max-width: calc(100vw - 64px);
+  --backdrop-opacity: var(--ion-backdrop-opacity, 0.32) !important;
+  --border-radius: 8px;
 }
 // // Secciones
 // .contenedor {

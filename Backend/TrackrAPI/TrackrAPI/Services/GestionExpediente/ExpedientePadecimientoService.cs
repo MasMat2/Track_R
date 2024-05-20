@@ -59,6 +59,10 @@ namespace TrackrAPI.Services.GestionExpediente
         {
             return expedientePadecimientoRepository.ConsultarPorUsuario(idUsuario);
         }
+        public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarPorUsuarioParaSelector(int idUsuario)
+        {
+            return expedientePadecimientoRepository.ConsultarPorUsuarioParaSelector(idUsuario);
+        }
 
         public IEnumerable<PadecimientoFueraRangoDTO> ConsultarValoresFueraRango(int idPadecimiento, int idUsuario)
         {

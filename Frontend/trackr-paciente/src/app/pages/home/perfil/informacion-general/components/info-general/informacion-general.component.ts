@@ -21,7 +21,7 @@ import { InformacionGeneralDto } from 'src/app/shared/dtos/perfil/informacion-ge
 import { ExpedientePadecimientoDto } from 'src/app/shared/dtos/seguridad/expediente-padecimiento-dto';
 import { ExpedientePadecimientoSelectorDTO } from 'src/app/shared/dtos/seguridad/expediente-padecimiento-selector-dto';
 import { HeaderComponent } from '../../../../layout/header/header.component';
-import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
+import { MisDoctoresService } from '@http/gestion-expediente/mis-doctores.service';
 import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores-selector-dto';
 import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
 import { ConfirmacionCorreoService } from '@http/seguridad/confirmacion-correo.service';

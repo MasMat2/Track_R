@@ -1,0 +1,8 @@
+.contenedor-imagen{
+    background: var(--neutral-900);
+}
+
+ion-img::part(image){
+    max-height: 50vh;
+    max-width: calc(100vw - 64px);
+}

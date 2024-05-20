@@ -2,19 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { map, Observable } from 'rxjs';
-
+import { Observable } from 'rxjs';
 import { PerfilTratamientoService } from '@http/gestion-perfil/perfil-tratamiento.service';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { addIcons } from 'ionicons';
-import { PerfilTratamientoDto } from '@dtos/gestion-perfil/perfil-tratamiento-dto';
 import { AlertController } from '@ionic/angular/standalone';
 import { AgregarTratamientoPage } from './agregar-tratamiento/agregar-tratamiento.page';
-import { ro } from 'date-fns/locale';
-
-// interface Tratamiento extends PerfilTratamientoDto {
-//   expandido: boolean;
-// }
+import { DetalleTratamientoComponent } from './detalle-tratamiento/detalle-tratamiento.component';
+import { ExpedienteTratamientoPerfilDto } from 'src/app/shared/Dtos/gestion-perfil/expediente-tratamiento-perfil-dto';
 
 @Component({
   selector: 'app-mis-tratamientos',
@@ -25,13 +20,9 @@ import { ro } from 'date-fns/locale';
 })
 export class MisTratamientosPage implements OnInit {
 
-  protected tratamientos$: Observable<PerfilTratamientoDto[]>;
-  //protected tratamientosFiltrados$: Observable<PerfilTratamientoDto[]>;
-
-  protected tratamientosFiltradosPorBusqueda: PerfilTratamientoDto[];
-  protected tratamientos: PerfilTratamientoDto[];
-
-  //protected weekDays: string[] = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'];
+  protected tratamientos$: Observable<ExpedienteTratamientoPerfilDto[]>;
+  protected tratamientosFiltradosPorBusqueda: ExpedienteTratamientoPerfilDto[];
+  protected tratamientos: ExpedienteTratamientoPerfilDto[];
   protected filtrando: boolean = false;
 
   constructor(
@@ -47,38 +38,24 @@ export class MisTratamientosPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    //this.consultarTratamientos();
-  }
-
-  public ionViewWillEnter() : void
-  {
     this.consultarTratamientos();
   }
 
+  // public ionViewWillEnter() : void
+  // {
+  //   this.consultarTratamientos();
+  // }
+
   protected consultarTratamientos(): void {
     this.tratamientos$ = this.perfilTratamientoService.consultarTratamientos();
-
     this.tratamientos$.subscribe({
       next: (data)=>{
         this.tratamientos = data;
       }
     })
-
-    // this.tratamientos$ = this.perfilTratamientoService.consultarTratamientos().pipe(
-    //   map(tratamientos =>
-    //     tratamientos.map(tratamiento => ({
-    //       ...tratamiento,
-    //       expandido: false
-    //     }))
-    //   )
-    // );
   }
 
-  // public toggleExpandido(tratamiento: Tratamiento) {
-  //   tratamiento.expandido = !tratamiento.expandido;
-  // }
-
-  protected async presentarAlertaEliminar(tratamiento: PerfilTratamientoDto) {
+  protected async presentarAlertaEliminar(tratamiento: ExpedienteTratamientoPerfilDto) {
     const alert = await this.alertController.create({
       header: '¿Seguro que deseas eliminar este elemento?',
       subHeader: 'No podrás recuperarlo',
@@ -107,7 +84,10 @@ export class MisTratamientosPage implements OnInit {
       header: 'Elemento eliminado exitosamente',
       buttons: [{
         text: 'De acuerdo',
-        role: 'confirm'
+        role: 'confirm',
+        handler: ()=> {
+          this.consultarTratamientos();
+        }
       }],
       cssClass: 'custom-alert-success',
     });
@@ -115,21 +95,42 @@ export class MisTratamientosPage implements OnInit {
     await alertSuccess.present();
   }
 
-  private eliminarTratamiento(tratamiento: PerfilTratamientoDto){
-    console.log('Eliminando tratamiento');
-    console.error(tratamiento);
+  private eliminarTratamiento(tratamiento: ExpedienteTratamientoPerfilDto){
+    this.perfilTratamientoService.eliminarTratamiento(tratamiento.idExpedienteTratamiento).subscribe({
+      next: ()=> {
+      },
+      error: ()=> {
+      },
+      complete: ()=> {
+        this.presentarAlertaEliminadoExitosamente();
+      },
+    })
   }
 
   protected async agregarTratamiento(){
     const modal = await this.modalController.create({
       component: AgregarTratamientoPage,
+      componentProps: { accion: 'agregar' }
     })
 
     await modal.present();
 
     await modal.onWillDismiss().then(({data, role}) => {
-      console.log(role)
+      if(role == 'confirm'){
+        this.consultarTratamientos();
+      }
+    })
+  }
 
+  protected async verDetalleTratamiento(_idExpedienteTratamiento: number){
+    const modal = await this.modalController.create({
+      component: DetalleTratamientoComponent,
+      componentProps: {idExpedienteTratamiento: _idExpedienteTratamiento}
+    })
+
+    await modal.present();
+
+    await modal.onWillDismiss().then(({data, role}) => {
       if(role == 'confirm'){
         this.consultarTratamientos();
       }
@@ -138,13 +139,12 @@ export class MisTratamientosPage implements OnInit {
   }
 
   protected buscarTratamiento(event: any){
-    console.log(this.filtrando);
     const text = event.target.value;
 
-    text == '' ? this.filtrando = false : this.filtrando = true; //el filtrado se activa cuando hay texto ingresado
+    text == '' ? this.filtrando = false : this.filtrando = true;
     this.tratamientosFiltradosPorBusqueda = this.tratamientos;
     if(text && text.trim() != ''){
-      this.tratamientosFiltradosPorBusqueda = this.tratamientosFiltradosPorBusqueda.filter((tratamiento: PerfilTratamientoDto) =>{
+      this.tratamientosFiltradosPorBusqueda = this.tratamientosFiltradosPorBusqueda.filter((tratamiento: ExpedienteTratamientoPerfilDto) =>{
         return (tratamiento.farmaco.toLowerCase().indexOf(text.toLowerCase()) > -1 );
       })
     }

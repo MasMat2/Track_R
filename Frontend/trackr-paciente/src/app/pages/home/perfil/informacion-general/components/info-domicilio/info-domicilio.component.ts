@@ -19,7 +19,7 @@ import { MunicipioService } from '@http/catalogo/municipio.service';
 import { PaisService } from '@http/catalogo/pais.service';
 import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
 import { ConfirmacionCorreoService } from '@http/seguridad/confirmacion-correo.service';
-import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
+import { MisDoctoresService } from '@http/gestion-expediente/mis-doctores.service';
 import { AlertController, IonicModule, ModalController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { addCircleOutline, closeCircleOutline, chevronBack, chevronDown, chevronUp } from 'ionicons/icons';

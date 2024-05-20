@@ -26,6 +26,9 @@ export class MisDoctoresService {
     return this.http.get<UsuarioDoctoresSelectorDto[]>(this.url + "selector")
   }
 
+  consultarPorUsuarioParaSelector(): Observable<UsuarioDoctoresSelectorDto[]> {
+    return this.http.get<UsuarioDoctoresSelectorDto[]>(this.url + "selectorPorUsuario")
+  }
 
   public eliminar(doctor: UsuarioDoctorDto) {
     const options = {

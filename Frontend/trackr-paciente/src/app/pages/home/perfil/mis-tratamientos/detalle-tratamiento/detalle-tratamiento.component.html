@@ -1,0 +1,129 @@
+<ion-content>
+    <div class="contenedor-header" [ngStyle]="{'background-image': backgroundUrl}">
+      <div class="contenedor-header-secundario">
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cerrarModal('cancel')">
+              <ion-icon slot="start" name="chevron-left"></ion-icon>
+              Atrás
+            </ion-button>
+          </ion-buttons>
+          <ion-buttons slot="end">
+            <ion-button (click)="abrirModalImagen()">
+              <ion-icon slot="end" name="external-link"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </div>
+    </div>
+  <div class="contenedor-principal">
+    <div class="titulo">
+      <ion-text class="farmaco">
+        <h3>{{tratamiento?.farmaco}}</h3>
+        <p>{{tratamiento?.cantidad}} {{tratamiento?.unidad}}</p>
+      </ion-text>
+      <ion-button (click)="abrirModalEditarTratamiento()">
+        <ion-icon slot="start" name="pen-line"></ion-icon>
+        Editar
+      </ion-button>
+    </div>
+    <div class="info">
+      <ion-text class="parrafo">
+        <h3>Recordatorios</h3>
+        <p>
+          {{textoRecordatorios}}
+        </p>
+      </ion-text>
+      <ion-text class="parrafo">
+        <h3>Indicaciones</h3>
+        <p>
+          {{tratamiento?.indicaciones}}
+        </p>
+      </ion-text>
+      <ion-text class="parrafo">
+        <h3>Asociado a</h3>
+        <p>
+          {{tratamiento?.padecimiento}}
+        </p>
+      </ion-text>
+      <ion-text class="parrafo">
+        <h3>Doctor</h3>
+        <p>
+          {{tratamiento?.tituloDoctor}} {{tratamiento?.nombreDoctor}} {{tratamiento?.apellidosDoctor}}
+        </p>
+      </ion-text>
+      <ion-text class="parrafo">
+        <h3>Fecha de inicio</h3>
+        <p>
+          {{tratamiento?.fechaInicio | date: 'MMMM d, y': '': 'es-MX'}}
+        </p>
+      </ion-text>
+      <ion-text class="parrafo" *ngIf="tratamiento?.fechaFin">
+        <h3>Fecha de fin</h3>
+        <p>
+          {{tratamiento?.fechaFin | date: 'MMMM d, y': '': 'es-MX'}}
+        </p>
+      </ion-text>
+    </div>
+    <div class="botones">
+      <ion-item lines="none" button class="action-button-item" (click)="setOpen(true)">
+        <ion-label>Ver bitacora de consumo</ion-label>
+        <ion-icon slot="end" name="chevron-right"></ion-icon>
+      </ion-item>
+    </div>
+  </div>
+
+  <ion-modal [isOpen]="isModalBitacoraOpen">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <div class="contenedor-header-modal">
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button (click)="setOpen(false)">
+                <ion-icon slot="start" name="chevron-left"></ion-icon>
+                Atrás
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </div>
+      </ion-header>
+      <ion-content>
+        <div class="contenedor-principal-modal">
+          <div class="titulo">
+            <ion-text>
+              <h3>Bitacora de consumo</h3>
+              <p>{{tratamiento?.farmaco}}</p>
+            </ion-text>
+          </div>
+          <div class="filtro" *ngIf="!listaConsumoVacia()">
+            <ion-button (click)="cambiarFiltro()">
+              <ion-icon *ngIf="ordenFiltro == 'ascendente'" slot="start" name="arrow-up"></ion-icon>
+              <ion-icon *ngIf="ordenFiltro == 'descendente'" slot="start" name="arrow-down"></ion-icon>
+                Orden {{ordenFiltro}}
+            </ion-button>
+          </div>
+          <div class="lista">
+            <div class="lista-vacia" *ngIf="listaConsumoVacia()">
+              <ion-text>
+                <p>
+                  Nada por aquí.
+                  <br>
+                  Aún no tienes consumos registrados.
+                </p>
+              </ion-text>
+            </div>
+            <ion-list *ngIf="!listaConsumoVacia()">
+              <ion-item *ngFor="let consumo of tratamiento?.bitacora">
+                <ion-label>
+                  <h3>{{consumo | date: 'MMMM d, y': '': 'es-MX'}}</h3>
+                  <p>{{consumo | date : 'h:mm a'}}</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

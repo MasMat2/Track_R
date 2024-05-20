@@ -90,7 +90,7 @@
     font-family: var(--font-body);
     font-size: 16px;
     font-weight: normal;
-    text-wrap: pretty;
+    text-wrap: wrap !important;
     color: var(--primary-700);
     --background: var(--primary-50);
     --box-shadow: 0;
@@ -234,6 +234,7 @@ ion-header.header-modal {
       width: 40px !important;
       max-width: 40px !important;
       height: 40px !important;
+      --border-radius: 100%;
       max-height: 40px !important;
       --background: transparent;
       --box-shadow: 0;

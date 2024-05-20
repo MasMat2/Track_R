@@ -89,6 +89,13 @@ public class ExpedienteDoctorService
         int idCompania = _usuarioRepository.ConsultarDto(idUsuario).IdCompania;
         return _expedienteDoctorRepository.ConsultarSelector(idExpediente, idCompania);
     }
+
+    public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarPorUsuarioSelector(int idUsuario)
+    {
+        int idExpediente = _expedienteTrackrRepository.ConsultarPorUsuario(idUsuario).IdExpediente;
+        return _expedienteDoctorRepository.ConsultarPorUsuarioParaSelector(idExpediente);
+    }
+
     public void Eliminar(ExpedienteDoctorDTO expedienteDoctorDTO)
     {
 

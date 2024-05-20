@@ -19,11 +19,26 @@ public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>,
             .Where(et => et.IdExpedienteNavigation.IdUsuario == idUsuario);
     }
 
+    public ExpedienteTratamiento ConsultarTratamiento(int idExpedienteTratamiento)
+    {
+        return context.ExpedienteTratamiento
+            .Where(et => et.IdExpedienteTratamiento == idExpedienteTratamiento)
+            .Include(et => et.IdPadecimientoNavigation)
+            .Include(et => et.IdUsuarioDoctorNavigation)
+            .ThenInclude(et => et.IdTituloAcademicoNavigation)
+            .Include(et => et.TratamientoRecordatorio)
+            .ThenInclude(tr => tr.TratamientoToma)
+            .AsSplitQuery()
+            .SingleOrDefault();
+    }
+
     public IEnumerable<ExpedienteTratamiento> ConsultarTratamientos(int idUsuario)
     {
         return context.ExpedienteTratamiento
             .Where(et => et.IdExpedienteNavigation.IdUsuario == idUsuario)
             .Include(et => et.IdPadecimientoNavigation)
+            .Include(et => et.IdUsuarioDoctorNavigation)
+            .ThenInclude(et => et.IdTituloAcademicoNavigation)
             .Include(et => et.TratamientoRecordatorio)
             .ThenInclude(tr => tr.TratamientoToma)
             .AsSplitQuery()
@@ -65,5 +80,24 @@ public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>,
         context.TratamientoRecordatorio.AddRange(recordatorios);
         context.SaveChanges();
     }
+
+    public void EliminarRecordatorios(IEnumerable<TratamientoRecordatorio> recordatorios)
+    {
+        context.TratamientoRecordatorio.RemoveRange(recordatorios);
+        context.SaveChanges();
+    }
+
+    public IEnumerable<TratamientoToma> ConsultarTratamientoTomas(int idTratamientoRecordatorio)
+    {
+        return context.TratamientoToma.Where(tt => tt.IdTratamientoRecordatorio == idTratamientoRecordatorio);
+    }
+
+    public void EliminarTratamientoTomas(IEnumerable<TratamientoToma> tt)
+    {
+        context.TratamientoToma.RemoveRange(tt);
+        context.SaveChanges();
+    }
+
+
 
 }

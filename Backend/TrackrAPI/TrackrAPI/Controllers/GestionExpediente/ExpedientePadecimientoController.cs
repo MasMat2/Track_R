@@ -29,6 +29,13 @@ namespace TrackrAPI.Controllers.GestionExpediente
             return expedientePadecimientoService.ConsultarPorUsuario(idUsuario);
         }
 
+        [HttpGet("consultarPorUsuarioSelector")]
+        public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarPorUsuarioParaSelector()
+        {
+            var idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            return expedientePadecimientoService.ConsultarPorUsuarioParaSelector(idUsuario);
+        }
+
         [HttpGet("valoresFueraRango/{idPadecimiento},{idUsuario}")]
         public IEnumerable<PadecimientoFueraRangoDTO> ConsultarValoresFueraRango(int idPadecimiento, int idUsuario)
         {

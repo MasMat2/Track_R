@@ -39,9 +39,15 @@ public class ExpedienteDoctorController : ControllerBase
     [HttpGet("selector")]
     public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarSelector()
     {
-
         int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
         return _expedienteDoctorService.ConsultarSelector(idUsuario);
+    }
+
+    [HttpGet("selectorPorUsuario")]
+    public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarPorUsuarioParaSelector()
+    {
+        int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+        return _expedienteDoctorService.ConsultarPorUsuarioSelector(idUsuario);
     }
 
     [HttpDelete]

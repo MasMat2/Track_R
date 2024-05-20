@@ -162,8 +162,8 @@
                       toggleIcon="chevron-down"
                       formControlName="idPadecimiento">
                       <ion-select-option 
-                        *ngFor="let padecimiento of padecimientos$| async"
-                        [value]="padecimiento.id">
+                        *ngFor="let padecimiento of padecimientosSelector"
+                        [value]="padecimiento.idPadecimiento">
                         {{padecimiento.nombre}}
                       </ion-select-option>
                     </ion-select>
@@ -193,8 +193,8 @@
                       toggleIcon="chevron-down"                       
                       formControlName="idUsuarioDoctor">
                       <ion-select-option 
-                        *ngFor="let doctor of doctores$ | async"
-                        [value]="doctor.id">
+                        *ngFor="let doctor of doctoresSelector"
+                        [value]="doctor.idUsuarioDoctor">
                         {{doctor.nombre}}
                       </ion-select-option>
                     </ion-select>
