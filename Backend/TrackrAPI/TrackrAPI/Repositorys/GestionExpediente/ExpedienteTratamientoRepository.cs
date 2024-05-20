@@ -5,9 +5,9 @@ using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Repositorys.GestionExpediente;
 
-public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>, IExpedienteTratamientoRepository
+public class ExpedienteTratamientoRepository : Repository<ExpedienteTratamiento>, IExpedienteTratamientoRepository
 {
-    public ExpedienteTratamientoRepository(TrackrContext context): base(context)
+    public ExpedienteTratamientoRepository(TrackrContext context) : base(context)
     {
         base.context = context;
     }
@@ -16,6 +16,7 @@ public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>,
     {
         return context.ExpedienteTratamiento
             .Include(et => et.IdPadecimientoNavigation)
+            .Include(tr => tr.TratamientoRecordatorio)
             .Where(et => et.IdExpedienteNavigation.IdUsuario == idUsuario);
     }
 
@@ -70,13 +71,14 @@ public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>,
     }
 
     public int Agregar(ExpedienteTratamiento expedienteTratamiento)
-    {      
+    {
         var entry = context.ExpedienteTratamiento.Add(expedienteTratamiento);
         context.SaveChanges();
         return entry.Entity.IdExpedienteTratamiento;
     }
 
-    public void AgregarRecordatorios(IEnumerable<TratamientoRecordatorio> recordatorios){
+    public void AgregarRecordatorios(IEnumerable<TratamientoRecordatorio> recordatorios)
+    {
         context.TratamientoRecordatorio.AddRange(recordatorios);
         context.SaveChanges();
     }

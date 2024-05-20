@@ -23,17 +23,60 @@ public class ExpedienteTratamientoService
         var expedienteTratamientos = expedienteTratamientoRepository.ConsultarParaGrid(idUsuario);
 
         var expedienteTratamientosDto = expedienteTratamientos.Select(et => new ExpedienteTratamientoGridDTO
-            {
-                IdExpedienteTratamiento = et.IdExpedienteTratamiento,
-                Farmaco = et.Farmaco,
-                Cantidad = et.Cantidad,
-                Unidad = et.Unidad,
-                Indicaciones = et.Indicaciones,
-                Padecimiento = et.IdPadecimientoNavigation?.Nombre ?? string.Empty,
-                FechaRegistro = et.FechaRegistro
-            });
+        {
+            IdExpedienteTratamiento = et.IdExpedienteTratamiento,
+            Farmaco = et.Farmaco,
+            Cantidad = et.Cantidad,
+            Unidad = et.Unidad,
+            Indicaciones = et.Indicaciones,
+            Padecimiento = et.IdPadecimientoNavigation?.Nombre ?? string.Empty,
+            FechaRegistro = et.FechaRegistro,
+            Dias = et.TratamientoRecordatorio != null ? String.Join('-', this.ObtenerGruposDiasPadecimiento(et).Select(r => r.Dia)) : "",
+            Horas = et.TratamientoRecordatorio != null ? String.Join('-', this.ObtenerGruposDiasPadecimiento(et).Select(r => r.Hora)) : ""
+        });
 
-            return expedienteTratamientosDto;
+        return expedienteTratamientosDto;
+    }
+
+    private IEnumerable<PadecimientoDiasDTO> ObtenerGruposDiasPadecimiento(ExpedienteTratamiento et)
+    {
+        return et.TratamientoRecordatorio.GroupBy(h => h.Hora)
+                                  .Select(tr => new PadecimientoDiasDTO
+                                  {
+                                      Hora = tr.Key.ToString(),
+                                      Dia = String.Join(",", tr.Select(r =>
+                                      {
+                                          if (r.Dia == 1)
+                                          {
+                                              return "Lu";
+                                          }
+                                          else if (r.Dia == 2)
+                                          {
+                                              return "Ma";
+                                          }
+                                          else if (r.Dia == 3)
+                                          {
+                                              return "Mi";
+                                          }
+                                          else if (r.Dia == 4)
+                                          {
+                                              return "Ju";
+                                          }
+                                          else if (r.Dia == 5)
+                                          {
+                                              return "Vi";
+                                          }
+                                          else if (r.Dia == 6)
+                                          {
+                                              return "Sa";
+                                          }
+                                          else if (r.Dia == 7)
+                                          {
+                                              return "Do";
+                                          }
+                                          return "";
+                                      }).ToList())
+                                  }).ToList() ;
     }
 
     // Consultar Tratamientos
@@ -83,7 +126,7 @@ public class ExpedienteTratamientoService
                     Unidad = et.Unidad,
                     Indicaciones = et.Indicaciones,
                     Padecimiento = et.IdPadecimientoNavigation.Nombre,
-                    ImagenBase64  = (et.Imagen != null && et.Imagen.Length > 0) ? System.Convert.ToBase64String(et.Imagen) : "",
+                    ImagenBase64 = (et.Imagen != null && et.Imagen.Length > 0) ? System.Convert.ToBase64String(et.Imagen) : "",
 
                     RecordatorioActivo = recordatorioActivo,
                     DiaSemana = diaSemana,
@@ -186,7 +229,7 @@ public class ExpedienteTratamientoService
             return i;
 
         }
-     }
+    }
 
     private ExpedienteTratamiento MapearTratamiento(ExpedienteTratamientoDetalleDto expedienteTratamientoDto)
     {
@@ -344,7 +387,7 @@ public class ExpedienteTratamientoService
                 }
             }
 
-            // Obtener recordatorios que están en la BD pero no en la petición
+            // Obtener recordatorios que estï¿½n en la BD pero no en la peticiï¿½n
             var recordatoriosEliminados = recordatoriosExistentes
                 .Where(existingRecordatorio =>
                     !recordatorios.Any(peticionRecordatorio =>
@@ -353,7 +396,7 @@ public class ExpedienteTratamientoService
                 .ToList();
 
 
-            // Obtener recordatorios que están en la petición pero no en la BD
+            // Obtener recordatorios que estï¿½n en la peticiï¿½n pero no en la BD
             var recordatoriosAgregados = recordatorios
                 .Where(nuevoRecordatorio =>
                     !recordatoriosExistentes.Any(existingRecordatorio =>
