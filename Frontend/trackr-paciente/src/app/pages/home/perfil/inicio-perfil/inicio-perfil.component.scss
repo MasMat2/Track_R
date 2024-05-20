@@ -110,9 +110,11 @@ ion-content{
             ion-item{
                 --background: transparent;
                 --color-activated: var(--primary-700);
+                --detail-icon-opacity: 1;
+                --detail-icon-font-size: 24px;
+                --detail-icon-color: var(--neutral-200);
                 ion-icon{
-                    stroke: var(--primary-700); //para los custom icons
-                    color: var(--neutral-200); //para los chevron de ionicons
+                    color: var(--primary-700);
                     margin: 12px;
                     margin-left: 0;
                 }
@@ -120,6 +122,10 @@ ion-content{
                     font-family: var(--font-body);
                     font-size: 16px;
                 }
+            }
+
+            ion-item.router-item{
+                --inner-padding-end: 32px !important;
             }
 
             ion-item::part(native){
@@ -135,13 +141,16 @@ ion-content{
                     ion-accordion{
                         ion-item{
                             ion-icon{
+                                color: var(--primary-700);
+                            }
+
+                            ion-icon.ion-accordion-toggle-icon{
                                 color: var(--neutral-200) !important;
                             }
                         }
 
                         .accordion-option{
                             --background: rgba(244, 244, 244, 0.5);
-                            ;
                         }
                     }
                 }

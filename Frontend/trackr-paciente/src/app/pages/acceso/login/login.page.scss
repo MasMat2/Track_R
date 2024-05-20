@@ -7,7 +7,7 @@ ion-header{
 
 ion-content{
   --background: var(--primary-700);
-  //--keyboard-offset: 0px !important;
+  --keyboard-offset: 0px !important;
   
 }
 
@@ -44,7 +44,7 @@ ion-footer{
 }
 
 .contenedor-principal{
-  height: 75vh;
+  min-height: 75vh;
   width: 100%;
 
   .saludo{
@@ -73,12 +73,12 @@ ion-footer{
   }
 
   .formulario{
-    height: 55vh;
+    min-height: calc(100% - 20vh);
     background: var(--primary-50);
     border-radius: 0 64px 0 0;
 
     .contenido-formulario{
-      height: 40vh;
+      min-height: 40vh;
 
       .inputs{
         background: transparent;

@@ -45,20 +45,17 @@
               </ion-accordion>
             </ion-accordion-group>
           </ion-item>
-          <ion-item button (click)="navigateMisDoctores()">
+          <ion-item button (click)="navigateMisDoctores()" detail="true" detailIcon="chevron-right" class="router-item">
             <ion-icon slot="start" name="cruz"></ion-icon>
             <ion-label>Mis doctores</ion-label>
-            <ion-icon slot="end" name="chevron-forward"></ion-icon>
           </ion-item>
-          <ion-item button (click)="navigateMisTratamientos()">
+          <ion-item button (click)="navigateMisTratamientos()" detail="true" detailIcon="chevron-right" class="router-item">
             <ion-icon slot="start" name="pildora"></ion-icon>
             <ion-label>Mis tratamientos</ion-label>
-            <ion-icon slot="end" name="chevron-forward"></ion-icon>
           </ion-item>
-          <ion-item button (click)="navigateMisEstudios()">
+          <ion-item button (click)="navigateMisEstudios()" detail="true" detailIcon="chevron-right" class="router-item">
             <ion-icon slot="start" name="portapapeles-mas"></ion-icon>
             <ion-label>Mis estudios</ion-label>
-            <ion-icon slot="end" name="chevron-forward"></ion-icon>
           </ion-item>
 
           <ion-item class="accordion-item" >
@@ -79,10 +76,9 @@
               </ion-accordion>
             </ion-accordion-group>
           </ion-item>
-          <ion-item button lines="none" (click)="presentarAlertaCerrarSesion()" style="--color-activated: var(--error-200);">
-            <ion-icon slot="start" name="cerrar-sesion" style="stroke: var(--error-200);"></ion-icon>
+          <ion-item button lines="none" detail="true" detailIcon="chevron-right" (click)="presentarAlertaCerrarSesion()" style="--color-activated: var(--error-200);" class="router-item">
+            <ion-icon slot="start" name="cerrar-sesion" style="color: var(--error-200);"></ion-icon>
             <ion-label style="color: var(--error-200);" >Cerrar sesión</ion-label>
-            <ion-icon slot="end" name="chevron-forward"></ion-icon>
           </ion-item>
         </ion-list>
       </div>
