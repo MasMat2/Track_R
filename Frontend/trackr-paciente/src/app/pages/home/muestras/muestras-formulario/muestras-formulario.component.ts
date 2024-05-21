@@ -191,7 +191,7 @@ export class MuestrasFormularioComponent implements OnInit {
 
   async syncronizeData(){
     this.seccionSeleccionada.seccionesCampo.forEach(async variable => {
-      await this.callPlugin(variable.clave);
+      variable.valor = await this.callPlugin(variable.clave);
     });
   }
 
@@ -202,10 +202,10 @@ export class MuestrasFormularioComponent implements OnInit {
       startTime6months.setMonth(startTime6months.getMonth() - 6);
 
       const options: GetRecordsOptions = {
-          type: 'BloodPressure' as RecordType, // Suprime el warning si es necesario
+          type: 'BloodPressure' as RecordType,
           timeRangeFilter: {
               type: 'between',
-              startTime: startTime6months, // Se obtendrán todos los datos de presión arterial desde los últimos 6 meses
+              startTime: startTime6months, 
               endTime: current
           }
       };
@@ -222,7 +222,7 @@ export class MuestrasFormularioComponent implements OnInit {
           if (claveVariable === 'SE-001') {
             return systolic;
           } else if (claveVariable === 'SE-002') {
-              return diastolic;
+            return diastolic;
           } else {
               return undefined; 
           }
@@ -233,7 +233,6 @@ export class MuestrasFormularioComponent implements OnInit {
   } catch (error) {
       console.log('[HealthConnect util] Error reading blood pressure data:', error);
       throw error;
-      return undefined; 
   }
   }
 }
