@@ -16,8 +16,8 @@ import { DROPDOWN_NO_OPTIONS, DROPDOWN_PLACEHOLDER, FORM_ACTION } from '@utils/c
   templateUrl: './contenido-examen-formulario.component.html',
 })
 export class ContenidoExamenFormularioComponent implements OnInit {
-  private readonly MENSAJE_AGREGAR: string = 'El contenido del Cuestionario ha sido agregado';
-  private readonly MENSAJE_EDITAR: string = 'El contenido del Cuestionario ha sido modificado';
+  private readonly MENSAJE_AGREGAR: string = 'El contenido de la Encuesta ha sido agregado';
+  private readonly MENSAJE_EDITAR: string = 'El contenido de la Encuesta ha sido modificado';
 
   public accion: string;
   public esEdicion = false;

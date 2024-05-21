@@ -16,11 +16,11 @@ public class ExamenValidatorService
 
     private readonly string MensajeParticipanteRequerido = "El participante es requerido";
 
-    private readonly string MensajeCantidadReactivos = "No hay suficientes reactivos para aplicar este examen";
+    private readonly string MensajeCantidadReactivos = "No hay suficientes reactivos para aplicar este cuestionario";
 
-    private readonly string MensajeDependencia = "El examen programado tiene participantes";
+    private readonly string MensajeDependencia = "El cuestionario programado tiene participantes";
 
-    private readonly string MensajeExistencia = "La examen que se requería actualizar no existe";
+    private readonly string MensajeExistencia = "El cuestionario que se requería actualizar no existe";
 
     public void ValidarAgregar(Examen examen)
     {

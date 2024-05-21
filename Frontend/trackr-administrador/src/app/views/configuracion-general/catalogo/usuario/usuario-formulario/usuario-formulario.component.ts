@@ -71,7 +71,7 @@ export class UsuarioFormularioComponent implements OnInit {
   @ViewChild('formulario', { static: false }) public formulario: NgForm;
   @ViewChild('codigoPostal', { static: false }) public codigoPostal: NgModel;
 
-  public titulo = 'Alta';
+  public titulo = 'Agregar';
   public accion = 'Agregar';
   public desdeExpediente = false;
   public onClose: any;
@@ -214,7 +214,7 @@ export class UsuarioFormularioComponent implements OnInit {
 
   public ngOnInit(): void {
     if (this.usuario.idUsuario > 0) {
-      this.titulo = 'Modificar';
+      this.titulo = 'Editar';
       this.accion = GeneralConstant.MODAL_ACCION_EDITAR;
       this.esEdicion = true;
       this.consultarPermisos(this.usuario.idUsuario);

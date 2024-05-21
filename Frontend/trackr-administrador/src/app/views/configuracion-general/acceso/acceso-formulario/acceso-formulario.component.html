@@ -1,6 +1,6 @@
 <div class="modal-content">
   <div class="modal-header">
-    {{ titulo }} Acceso
+     Acceso - {{ titulo }}
     <button *ngIf="esModal" type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
       <i class="far fa-times-circle"></i>
     </button>
@@ -200,9 +200,4 @@
       </div>
     </form>
   </div>
-</div>
-
-<div id="loading-cdis" *ngIf="btnSubmit">
-  <img src="assets/img/spinner.gif" alt="Procesando..." />
-  <span>Procesando... por favor espere</span>
 </div>

@@ -113,24 +113,23 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
     this.consultarPaises();
   }
 
-  ionViewWillEnter(){
-    this.consultarDoctores();
-  }
-
 
   async openGeneroModal() {
+    if(this.modalGeneroAbierto){
+      return;
+    }
+    
+    this.modalGeneroAbierto = true;
     const modal = await this.modalController.create({
       component: CatalogoFormularioComponent,
       breakpoints : [0, 1],
       initialBreakpoint: 1,
       cssClass: 'custom-sheet-modal',
       componentProps: {
-        generoList: this.generoList
+        catalogoList: this.generoList.map(genero => ({id: genero.idGenero, descripcion: genero.descripcion})),
       }
     });
-
     await modal.present();
-    this.modalGeneroAbierto = true;
     const { data } = await modal.onWillDismiss();
     if (data) {
       this.infoUsuario.idGenero = data.id;
@@ -269,11 +268,8 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
   }
 
   private async consultarGeneros() {
-    this.generoService.consultarGeneros().subscribe(
-      generos => {
-        this.generoList = generos;
-      }
-    );
+    this.generoList = await lastValueFrom(this.generoService.consultarGeneros());
+    console.log(this.generoList);
   }
 
   private obtenerUsuario(){

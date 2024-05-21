@@ -2,7 +2,7 @@
     <div class="barra-lateral-modal"></div>
     <div class="modal-content">
         <div class="modal-header">
-            <div>{{ accion }} Género</div>
+            <div>Género - {{ accion }} </div>
             <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
                 <i class="far fa-times-circle"></i>
             </button>
@@ -18,9 +18,9 @@
             <div class="modal-body" id="modal">
                 <!--El atributo ngModel es el nombre de la variable donde guardaremos el valor-->
                 <div class="row">
-                  <!--  <div class="col-md-4">
+                  <div class="col-md-4">
                         <div class="form-group">
-                            <label class="label-input required-label">ID Genero</label>
+                            <label class="label-input required-label">Clave</label>
                             <div>
                                 <input 
                                 #IdGenero="ngModel"
@@ -32,14 +32,11 @@
                                 maxlength="20"
                                 required="true"
                                 autocomplete="off"
-                                [disabled]="genero.idGenero > 0"
+                                [disabled]="true"
                                 /> 
-                                <div *ngIf="IdGenero.errors?.['required'] && IdGenero.touched" class="error">
-                                    El Id es requerido
-                                </div>
                             </div>
                         </div>
-                    </div>-->
+                    </div>
                     <div class="col-md-8">
                         <div class="form-group">
                             <label class="label-input required-label">Género</label>
@@ -56,7 +53,7 @@
                                 autocomplete="off"
                                 />
                                 <div *ngIf="Descripcion.errors?.['required'] && Descripcion.touched" class="error">
-                                    La descripción es requerida
+                                    El Género es requerido
                                 </div>
                             </div>
                         </div>

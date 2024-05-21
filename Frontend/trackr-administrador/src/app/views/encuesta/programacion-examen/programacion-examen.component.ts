@@ -19,7 +19,7 @@ import { ProgramacionExamenFormularioComponent } from './programacion-examen-for
   templateUrl: './programacion-examen.component.html',
 })
 export class ProgramacionExamenComponent implements OnInit {
-  public HEADER_GRID = 'Programación Examen';
+  public HEADER_GRID = 'Programación Encuesta';
 
   // Accesos
   protected tieneAccesoAgregar: boolean = false;
@@ -30,29 +30,10 @@ export class ProgramacionExamenComponent implements OnInit {
   protected programacionExamenList: ProgramacionExamen[] = [];
 
   protected columns: ColDef[] = [
-    {
-      headerName: 'Clave',
-      field: 'clave',
-      minWidth: 50,
-      width: 50,
-    },
-    {
-      headerName: 'Responsable',
-      field: 'usuarioResponsable',
-      minWidth: 100,
-      width: 100,
-    },
-    {
-      headerName: 'Tipo de Encuesta',
-      field: 'tipoExamen',
-      minWidth: 100,
-      width: 100,
-    },
-    {
-      headerName: 'Fecha Programada',
-      field: 'fechaExamen',
-      minWidth: 70,
-      width: 70,
+    { headerName: 'Clave', field: 'idProgramacionExamen', minWidth: 50, width: 50, },
+    { headerName: 'Responsable', field: 'usuarioResponsable', minWidth: 100, width: 100, },
+    { headerName: 'Tipo de Encuesta', field: 'tipoExamen', minWidth: 100, width: 100, },
+    { headerName: 'Fecha Programada', field: 'fechaExamen', minWidth: 70, width: 70, 
       cellRenderer: (params: ICellRendererParams) => {
         return moment(params.data.fechaExamen).format('DD/MM/YYYY');
       },
@@ -60,11 +41,7 @@ export class ProgramacionExamenComponent implements OnInit {
         return moment(params.data.fechaExamen).format('DD/MM/YYYY');
       },
     },
-    {
-      headerName: 'Hora Programada',
-      field: 'horaExamen',
-      minWidth: 70,
-      width: 70,
+    { headerName: 'Hora Programada', field: 'horaExamen', minWidth: 70, width: 70, 
       cellRenderer: (params: ICellRendererParams) => {
         return moment(params.data.horaExamen, 'HH:mm:ss').format('LT');
       },
@@ -72,18 +49,8 @@ export class ProgramacionExamenComponent implements OnInit {
         return moment(params.data.horaExamen, 'HH:mm:ss').format('LT');
       },
     },
-    {
-      headerName: 'Duración Total (Min)',
-      field: 'duracion',
-      minWidth: 70,
-      width: 70,
-    },
-    {
-      headerName: 'Porcentaje de avance',
-      field: 'porcentajeAvance',
-      minWidth: 70,
-      width: 70,
-    },
+    { headerName: 'Duración Total (Min)', field: 'duracion', minWidth: 70, width: 70, },
+    { headerName: 'Porcentaje de avance', field: 'porcentajeAvance', minWidth: 70, width: 70, },
   ];
 
   constructor(
@@ -201,13 +168,13 @@ export class ProgramacionExamenComponent implements OnInit {
   }
 
   private eliminar(programacionExamen: ProgramacionExamen): void {
-    const MENSAJE_EXITO: string = 'Programación de examen eliminada exitosamente.';
-    const TITULO_MODAL: string = 'Eliminar Programación de Examen';
+    const MENSAJE_EXITO: string = 'Programación de Encuesta eliminada exitosamente.';
+    const TITULO_MODAL: string = 'Eliminar Programación de Encuesta';
 
     const fecha = moment(programacionExamen.fechaExamen).format('DD/MM/YYYY');
     const hora = moment(programacionExamen.horaExamen, 'HH:mm:ss').format('LT');
 
-    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar la programación de examen: <strong>${programacionExamen.tipoExamen} (${fecha} ${hora}) </strong>?`;
+    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar la programación de la Encuesta: <strong>${programacionExamen.tipoExamen} (${fecha} ${hora}) </strong>?`;
 
     this.mensajeService
       .modalConfirmacion(

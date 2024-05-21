@@ -112,7 +112,7 @@ export class RolComponent implements OnInit {
   public agregar(): void {
     this.bsModalRef = this.modalService.show(
       RolFormularioComponent,
-      GeneralConstant.CONFIG_MODAL_DEFAULT
+      GeneralConstant.CONFIG_MODAL_LARGE
     );
     this.bsModalRef.content.accion = GeneralConstant.MODAL_ACCION_AGREGAR;
     this.bsModalRef.content.onClose = (cerrar: boolean) => {
@@ -126,7 +126,7 @@ export class RolComponent implements OnInit {
     this.rolService.consultar(idRol).subscribe((data) => {
       this.bsModalRef = this.modalService.show(
         RolFormularioComponent,
-        GeneralConstant.CONFIG_MODAL_DEFAULT
+        GeneralConstant.CONFIG_MODAL_LARGE
       );
       this.bsModalRef.content.rol = data;
       this.bsModalRef.content.accion = GeneralConstant.MODAL_ACCION_EDITAR;

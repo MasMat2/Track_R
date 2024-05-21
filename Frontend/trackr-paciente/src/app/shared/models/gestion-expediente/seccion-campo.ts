@@ -15,6 +15,8 @@ export class SeccionCampo {
     public valor?: number[] | boolean | string | Date | number;
     public grupo: string;
     public fila: number;
+    public uuidIos : string;
+    public idAndroid : string;
 
     // Extras - Utilerias
     public idDominioNavigation: Dominio;

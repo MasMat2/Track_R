@@ -47,7 +47,7 @@ public class ExamenRepository : Repository<Examen>, IExamenRepository
             .Select(p => new ExamenGridDto {
                 IdExamen = p.IdExamen,
                 TipoExamen = p.IdProgramacionExamenNavigation.IdTipoExamenNavigation.Nombre ?? string.Empty,
-                FechaExamen = p.IdProgramacionExamenNavigation.FechaExamen,
+                FechaExamen = p.IdProgramacionExamenNavigation.FechaExamen.Value.ToLocalTime(),
                 HoraExamen = p.IdProgramacionExamenNavigation.HoraExamen,
                 Duracion = p.IdProgramacionExamenNavigation.Duracion,
                 TotalPreguntas = p.IdProgramacionExamenNavigation.IdTipoExamenNavigation.TotalPreguntas

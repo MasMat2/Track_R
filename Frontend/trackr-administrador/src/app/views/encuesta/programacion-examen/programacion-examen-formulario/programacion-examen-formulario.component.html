@@ -2,7 +2,7 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>{{ accion }} Programación de Cuestionario</div>
+      <div>Programación de Encuestas - {{ accion }}</div>
       <button
         type="button"
         class="close pull-right"
@@ -26,20 +26,14 @@
               <div>
                 <input
                   #clave="ngModel"
-                  [(ngModel)]="programacionExamen.clave"
+                  [(ngModel)]="programacionExamen.idProgramacionExamen"
                   name="clave"
                   class="form-control"
                   type="text"
                   [required]="true"
-                  [disabled]="accion == 'Editar'"
+                  [disabled]="true"
                   maxlength="30"
                 />
-              </div>
-              <div
-                *ngIf="clave.errors?.['required'] && clave.touched"
-                class="error"
-              >
-                La clave es requerida
               </div>
             </div>
           </div>
@@ -74,7 +68,7 @@
 
           <div class="col-md-5">
             <div class="form-group">
-              <label class="label-input required-label">Tipo de Cuestionario</label>
+              <label class="label-input required-label">Tipo de Encuesta</label>
               <div>
                 <ng-select
                   #tipoExamenLst="ngModel"
@@ -93,7 +87,7 @@
                 *ngIf="tipoExamenLst.errors?.['required'] && tipoExamenLst.touched"
                 class="error"
               >
-                El tipo de cuestionario es requerido
+                El tipo de Encuesta es requerido
               </div>
             </div>
           </div>
@@ -145,7 +139,7 @@
 
           <div class="col-md-3">
             <div class="form-group">
-              <label class="label-input required-label">Fecha del Cuestionario</label>
+              <label class="label-input required-label">Fecha de la Encuesta</label>
               <div class="calendario">
                 <input
                   #fechaExamenName="ngModel"
@@ -165,14 +159,14 @@
                 "
                 class="error"
               >
-                La fecha del cuestionario es requerida
+                La fecha de la Encuesta es requerida
               </div>
             </div>
           </div>
 
           <div class="col-md-3">
             <div class="form-group">
-              <label class="label-input required-label">Hora del Cuestionario</label>
+              <label class="label-input required-label">Hora de la Encuesta</label>
               <div>
                 <input
                   #horaExamen="ngModel"
@@ -187,7 +181,7 @@
                 *ngIf="horaExamen.errors?.['required'] && horaExamen.touched"
                 class="error"
               >
-                La hora del cuestionario es requerida
+                La hora den la Encuesta es requerida
               </div>
             </div>
           </div>
@@ -206,10 +200,10 @@
                   [items]="usuarioList"
                   [multiple]="true"
                   [required]="true"
+                  appendTo="body"
                   [(ngModel)]="programacionExamen.participantes"
                   [placeholder]="DROPDOWN_PLACEHOLDER"
                   [notFoundText]="DROPDOWN_NO_OPTIONS"
-                  (ngModelChange)="selectChange()"
                 ></ng-select>
               </div>
               <div
@@ -257,25 +251,10 @@
 
       <div class="modal-footer">
         <div class="text-right">
-          <button type ="button" 
-            class="btn-secundario mr-3"
-            (click)="cancelar();"
-            >Cancelar
-          </button>
-          <button
-            [disabled]="submitting"
-            type="submit"
-            class="btn-primario btn-margin-left"
-          >
-            Guardar
-          </button>
+          <button type ="button" class="btn-secundario btn-margin-right" (click)="cancelar();">Cancelar</button>
+          <button [disabled]="submitting" type="submit" class="btn-primario btn-margin-left">Guardar</button>
         </div>
       </div>
     </form>
   </div>
-</div>
-
-<div id="loading-cdis" *ngIf="submitting">
-  <img src="assets/img/spinner.gif" alt="Procesando..." />
-  <span>Procesando... por favor espere</span>
 </div>

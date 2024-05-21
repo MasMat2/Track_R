@@ -38,27 +38,39 @@
           </div>
           <div class="input">
             <ion-text><p>Seccion</p></ion-text>
-            <ion-item lines="none" class="select-input">
-              <ion-select 
-                id="seccion"
-                name="seccionName"
-                interface="popover"
-                [interfaceOptions]="{cssClass: 'custom-select-popover'}"
-                toggleIcon="chevron-up"
-                placeholder="Seleccionar"
-                [(ngModel)]="seccionSeleccionada"
-                (ionChange)="onChangeSeccion()"
-                [disabled]="padecimientoSeleccionado == null"
-                required
-                >
-                <ion-select-option 
-                  *ngFor="let seccion of padecimientoSeleccionado?.seccionMuestraDTOs" 
-                  [value]="seccion">
-                  {{ seccion?.nombreSeccionCampo }}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
+            <ion-row>
+              <ion-col >
+                <ion-item lines="none" class="select-input">
+                  <ion-select 
+                    id="seccion"
+                    name="seccionName"
+                    interface="popover"
+                    [interfaceOptions]="{cssClass: 'custom-select-popover'}"
+                    toggleIcon="chevron-up"
+                    placeholder="Seleccionar"
+                    [(ngModel)]="seccionSeleccionada"
+                    (ionChange)="onChangeSeccion()"
+                    [disabled]="padecimientoSeleccionado == null"
+                    required
+                    >
+                    <ion-select-option 
+                      *ngFor="let seccion of padecimientoSeleccionado?.seccionMuestraDTOs" 
+                      [value]="seccion">
+                      {{ seccion?.nombreSeccionCampo }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col [hidden]="!variablesExistenEnHealthKit" size="3">
+                <ion-button *ngIf="variablesExistenEnHealthKit" (click)="syncronizeData()" shape="round" fill="outline" [disabled]="seccionSeleccionada?.seccionesCampo == null">
+                  <ion-icon  name="swap-vertical-outline" ></ion-icon>
+                </ion-button>
+              </ion-col>
+              
+            </ion-row>
+     
           </div>
+          
           <div class="inputs-variables">
             <div class="input" *ngFor="let variable of seccionSeleccionada?.seccionesCampo; let i = index">
               <ion-text><p>{{variable.descripcion}}</p></ion-text>
