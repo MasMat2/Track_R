@@ -1,4 +1,4 @@
-import { HealthConnect, Mass, Record } from 'capacitor-health-connect-local';
+import { HealthConnect, Mass, Pressure, Record } from 'capacitor-health-connect-local';
 import { StoredRecord, RecordType, HealthConnectAvailabilityStatus, GetRecordsOptions, sample} from '../../pages/home/dashboard/interfaces/healthconnect-interfaces';
 
 const recordTypeSteps: RecordType = "Steps";
@@ -171,6 +171,41 @@ export const writeSleepSession = async (): Promise<{ recordIds: string[] }> => {
     } catch (error) {
         console.log('[HealthConnect util] Error write data SleepSession:', error);
         throw error
+    }
+}
+
+export const writeBloodPressure = async (): Promise<{ recordIds: string[] }> => {
+    try {
+        // Current time
+        const currentTime = new Date();
+
+        const systolicPressure: Pressure = {
+            unit: 'millimetersOfMercury',
+            value: 120 // Example systolic pressure value
+        };
+
+        const diastolicPressure: Pressure = {
+            unit: 'millimetersOfMercury',
+            value: 80 // Example diastolic pressure value
+        };
+
+        // Blood pressure record details
+        const record: Record = {
+            type: 'BloodPressure',
+            time: currentTime,
+            zoneOffset: '-06:00',
+            systolic: systolicPressure, 
+            diastolic: diastolicPressure, 
+            bodyPosition: 'sitting_down',
+            measurementLocation: 'left_upper_arm'
+        }
+
+        // Insert the record into HealthConnect
+        const records: Record[] = [record];
+        return await HealthConnect.insertRecords({ records: records });
+    } catch (error) {
+        console.log('[HealthConnect util] Error write blood pressure data:', error);
+        throw error;
     }
 }
 

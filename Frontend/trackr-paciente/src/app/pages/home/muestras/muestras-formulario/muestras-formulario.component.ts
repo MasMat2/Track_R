@@ -18,6 +18,9 @@ import { validarCamposRequeridos } from '@utils/utileria';
 import { AlertController, ModalController } from '@ionic/angular/standalone';
 import { call, swapHorizontalOutline, swapVerticalOutline } from 'ionicons/icons';
 import { GeneralConstant } from '@utils/general-constant';
+import { GetRecordsOptions, Record } from '@pages/home/dashboard/interfaces/healthconnect-interfaces';
+import { RecordType } from 'capacitor-health-connect-local';
+import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -50,7 +53,8 @@ export class MuestrasFormularioComponent implements OnInit {
     private router : Router,
     private dominioHospitalService:DominioHospitalService,
     private modalController: ModalController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private healthConnectservice: HealthConnectService
   ) { 
 
       addIcons({ 
@@ -187,11 +191,49 @@ export class MuestrasFormularioComponent implements OnInit {
 
   async syncronizeData(){
     this.seccionSeleccionada.seccionesCampo.forEach(async variable => {
-      await this.callPlugin(variable.uuidIos);
+      await this.callPlugin(variable.clave);
     });
   }
 
-  async callPlugin(uuid : string){
-    console.log('Llamando al plugin con uuid: ' + uuid)
+  async callPlugin(claveVariable : string){
+    try {
+      const current = new Date();
+      const startTime6months = new Date(current);
+      startTime6months.setMonth(startTime6months.getMonth() - 6);
+
+      const options: GetRecordsOptions = {
+          type: 'BloodPressure' as RecordType, // Suprime el warning si es necesario
+          timeRangeFilter: {
+              type: 'between',
+              startTime: startTime6months, // Se obtendrán todos los datos de presión arterial desde los últimos 6 meses
+              endTime: current
+          }
+      };
+
+      const res = await this.healthConnectservice.readRecords(options);
+      console.log(JSON.stringify(res));
+
+      if (res && res.records && res.records.length > 0) {
+          const ultimoRegistro = res.records[res.records.length - 1] as Record;
+
+          const systolic = ultimoRegistro.systolic!.value;
+          const diastolic = ultimoRegistro.diastolic!.value;
+
+          if (claveVariable === 'SE-001') {
+            return systolic;
+          } else if (claveVariable === 'SE-002') {
+              return diastolic;
+          } else {
+              return undefined; 
+          }
+
+      } else {
+        return undefined; 
+      }
+  } catch (error) {
+      console.log('[HealthConnect util] Error reading blood pressure data:', error);
+      throw error;
+      return undefined; 
+  }
   }
 }

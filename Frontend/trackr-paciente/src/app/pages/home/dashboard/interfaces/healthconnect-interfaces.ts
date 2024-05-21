@@ -1,5 +1,5 @@
 export type HealthConnectAvailabilityStatus = 'Available' | 'NotInstalled' | 'NotSupported' | 'Installed' | 'Unavailable';
-export type RecordType = 'Height' | 'Weight' | 'Steps' | 'BloodGlucose' | 'HeartRate' | 'SleepSession';
+export type RecordType = 'Height' | 'Weight' | 'Steps' | 'BloodGlucose' | 'HeartRate' | 'SleepSession' | 'BloodPressure';
 type RecordBase = {
     metadata: RecordMetadata;
 };
@@ -16,6 +16,8 @@ export type Record = {
     stages?: Stage[],
     title?: String,
     notes?: String,
+    systolic?: Pressure;
+    diastolic?: Pressure;
 } | {
     type: 'HeartRate';
     startTime: Date;
@@ -28,6 +30,8 @@ export type Record = {
     stages?: Stage[],
     title?: String,
     notes?: String,
+    systolic?: Pressure;
+    diastolic?: Pressure;
 } | {
     type: 'HeartRateSeries';
     startTime: Date;
@@ -40,6 +44,8 @@ export type Record = {
     stages?: Stage[],
     title?: String,
     notes?: String,
+    systolic?: Pressure;
+    diastolic?: Pressure;
 } | {
     type: 'SleepSession';
     startTime: Date,
@@ -52,6 +58,8 @@ export type Record = {
     samples?: sample[];
     count?: number,
     weight?: Mass,
+    systolic?: Pressure;
+    diastolic?: Pressure;
     
 } | {
     type: 'ActiveCalories';
@@ -66,6 +74,8 @@ export type Record = {
     stages?: Stage[],
     title?: String,
     notes?: String,
+    systolic?: Pressure;
+    diastolic?: Pressure;
 } | {
     type: 'BasalBodyTemperature';
     time: Date;
@@ -78,6 +88,8 @@ export type Record = {
     weight?: Mass,
     samples?: sample[];
     stages?: Stage[],
+    systolic?: Pressure;
+    diastolic?: Pressure;
 } | {
     type: 'BasalMetabolicRate';
     time: Date;
@@ -91,6 +103,8 @@ export type Record = {
     stages?: Stage[],
     title?: String,
     notes?: String,
+    systolic?: Pressure;
+    diastolic?: Pressure;
 } | {
     type: 'BloodGlucose';
     time: Date;
@@ -107,6 +121,8 @@ export type Record = {
     stages?: Stage[],
     title?: String,
     notes?: String,
+    systolic?: Pressure;
+    diastolic?: Pressure;
 } | {
     type: 'BloodPressure';
     time: Date;
@@ -123,6 +139,7 @@ export type Record = {
     stages?: Stage[],
     title?: String,
     notes?: String,
+    
 } | {
     type: 'Height',
     time: Date,
@@ -136,6 +153,8 @@ export type Record = {
     stages?: Stage[],
     title?: String,
     notes?: String,
+    systolic?: Pressure;
+    diastolic?: Pressure;
 } | {
     type: 'Weight',
     time: Date,
@@ -148,6 +167,8 @@ export type Record = {
     stages?: Stage[],
     title?: String,
     notes?: String,
+    systolic?: Pressure;
+    diastolic?: Pressure;
 };
 export type RecordMetadata = {
     id: string;
