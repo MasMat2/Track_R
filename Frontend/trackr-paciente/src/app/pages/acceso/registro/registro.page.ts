@@ -99,6 +99,7 @@ Al utilizar esta aplicación, aceptas estos Términos y Condiciones. Si tienes a
   }
 
   private agregar(){
+    this.usuario.nombreUsuario = this.usuario.correoPersonal;
     this.usuarioService.agregarTrackr(this.usuario).subscribe({
       next: () => {
       },
