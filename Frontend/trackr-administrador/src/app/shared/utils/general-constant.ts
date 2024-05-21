@@ -45,7 +45,7 @@ export class GeneralConstant {
   public static GRID_ACCION_COMPLEMENTO = 'complementoPago';
   public static GRID_ACCION_PDF_COMPLEMENTO = 'pdfComplemento';
   public static GRID_ACCION_DESCARGAR_PDF = 'descargarPdf';
-
+  public static GRID_ACCION_DESCARGAR_EXCEL = 'descargarExcel';
 
   public static COMPONENT_ACCION_AGREGAR = 'Agregar';
   public static COMPONENT_ACCION_EDITAR = 'Editar';

@@ -58,6 +58,15 @@ public class ExamenReactivoService
         return _examenReactivoRepository.ConsultarReactivosExamen(idExamen);
     }
 
+    public RespuestasExcelDto ConsultarReactivosExamenExcel(int idProgramacionExamen)
+    {
+        var respuestas = _examenReactivoRepository.ConsultarReactivosExamenExcel(idProgramacionExamen);
+
+        return respuestas;
+    }
+
+
+
     public int Agregar(ExamenReactivo examenReactivo)
     {
         _examenReactivoValidatorService.ValidarAgregar(examenReactivo);
@@ -130,4 +139,6 @@ public class ExamenReactivoService
 
         return calificacion;
     }
+
+
 }
