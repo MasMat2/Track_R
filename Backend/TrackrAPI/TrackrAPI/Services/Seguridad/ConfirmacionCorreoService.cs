@@ -142,13 +142,13 @@ namespace TrackrAPI.Services.Seguridad
 
             var usuarioCompleto = _usuarioRepository.ConsultarPorCorreo(correoUsuario);
 
-            string correoEncriptado = _simpleAES.EncryptToString(usuarioCompleto.Correo);
+            string correoEncriptado = _simpleAES.EncryptToString(usuarioCompleto.CorreoPersonal);
 
             string urlFrontEnd = _config.GetSection("AppSettings:UrlFrontEnd").Value;
 
             var logotipoTrackr = await DescargarLogo(urlFrontEnd + "assets/img/logo-trackr.png", "logotrackr");
-            //var logotipoCdis = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-01-Trackr.png", "logocdis");
-            //var logotipoHospital = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-H_C_CEIC.png", "logohospital");
+            var logotipoCdis = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-01-Trackr.png", "logocdis");
+            var logotipoHospital = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-H_C_CEIC.png", "logohospital");
 
             var mensaje =
                 $@"

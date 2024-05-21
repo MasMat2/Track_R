@@ -375,6 +375,7 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
     const confirmarCorreo: ConfirmarCorreoDto = { correo: correoUsuario, token: ""};
     this.confirmacionCorreoService.enviarCorreoConfirmacion(confirmarCorreo).subscribe({
       next: () => {
+        this.emailsubmiting = false;
       }
     });
   }
