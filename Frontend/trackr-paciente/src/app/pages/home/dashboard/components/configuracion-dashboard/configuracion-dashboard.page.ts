@@ -10,7 +10,6 @@ import { RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { chevronBack } from 'ionicons/icons';
 import { ModalController } from '@ionic/angular/standalone';
-import { Constants } from '@utils/constants/constants';
 
 interface WidgetSeleccionado extends Widget {
   seleccionado: boolean;
@@ -109,7 +108,6 @@ export class ConfiguracionDashboardPage  implements OnInit {
     const alertSuccess = await this.alertController.create({
       header: 'Widgets actualizados',
       subHeader: 'La información se ha actualizado correctamente.',
-      message: Constants.ALERT_SUCCESS,
       buttons: [{
         text: 'De acuerdo',
         role: 'confirm',

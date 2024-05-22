@@ -34,7 +34,6 @@ export class PeticionRestablecerContrasenaComponent implements OnInit {
   public usuario = new RestablecerContrasenaDto();
   public btnSubmit = false;
   //public recuperacionCorrecta = false;
-  protected spinner: string = Constants.ALERT_SPINNER;
 
   //Estado de "cargando" para mostrar el alert con spinner
   cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -77,7 +76,6 @@ export class PeticionRestablecerContrasenaComponent implements OnInit {
     const alertSuccess = await this.alertController.create({
       header: '¡Revisa tu correo!',
       subHeader: 'Acabamos de enviarte un correo electrónico con un enlace para restablecer tu contraseña.',
-      message: Constants.ALERT_SUCCESS,
       buttons: [{
         text: 'De acuerdo',
         role: 'confirm',

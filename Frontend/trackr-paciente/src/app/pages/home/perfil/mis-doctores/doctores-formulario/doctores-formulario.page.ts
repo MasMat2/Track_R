@@ -36,7 +36,6 @@ export class DoctoresFormularioPage {
 
   protected currentDoctor: UsuarioDoctorDto;
   protected doctoresSelector: UsuarioDoctoresSelectorDto[];
-  protected spinner: string = Constants.ALERT_SPINNER;
 
   cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   cargando$ = this.cargandoSubject.asObservable();
@@ -100,7 +99,6 @@ export class DoctoresFormularioPage {
     const alertSuccess = await this.alertController.create({
       header: 'Doctor Asignado',
       subHeader: 'El doctor ha sido asignado exitosamente.',
-      message: Constants.ALERT_SUCCESS,
       buttons: [{
         text: 'De acuerdo',
         role: 'confirm',

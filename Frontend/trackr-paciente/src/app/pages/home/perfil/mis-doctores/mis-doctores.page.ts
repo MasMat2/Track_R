@@ -83,7 +83,6 @@ export class MisDoctoresPage   {
     const alert = await this.alertController.create({
       header: '¿Seguro que deseas eliminar este elemento?',
       subHeader: 'No podrás recuperarlo',
-      message: Constants.ALERT_DELETE,
       cssClass: 'custom-alert-delete',
       buttons: [
         {
@@ -108,7 +107,6 @@ export class MisDoctoresPage   {
     const alertSuccess = await this.alertController.create({
       header: 'Elemento eliminado exitosamente',
       //subHeader: 'Acabamos de enviarte un correo electrónico con un enlace para restablecer tu contraseña.',
-      message: Constants.ALERT_SUCCESS,
       buttons: [{
         text: 'De acuerdo',
         role: 'confirm',

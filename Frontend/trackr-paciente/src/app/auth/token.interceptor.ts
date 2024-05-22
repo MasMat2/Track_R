@@ -100,7 +100,6 @@ export class TokenInterceptor implements HttpInterceptor {
     const alert = await this.alertController.create({
       header: header,
       subHeader: subheader,
-      message: Constants.ALERT_ERROR,
       buttons: ['Cerrar'],
       cssClass: 'custom-alert-error'
     });

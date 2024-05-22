@@ -12,7 +12,6 @@ import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { AuthService } from '../../../auth/auth.service';
 import { addIcons } from 'ionicons';
 import { chevronBack, eyeOffOutline, eyeOutline, personOutline } from 'ionicons/icons';
-import { Constants } from '@utils/constants/constants';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -35,8 +34,6 @@ export class LoginPage implements OnInit {
   btnSubmit: boolean = false;
   protected pswInputType: string = "password";
   protected mostrarPwd: boolean = false;
-
-  protected spinner: string = Constants.ALERT_SPINNER;
 
   //Estado de "cargando" para mostrar el alert con spinner
   cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);

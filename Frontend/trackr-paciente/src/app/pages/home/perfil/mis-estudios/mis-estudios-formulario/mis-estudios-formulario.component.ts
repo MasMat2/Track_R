@@ -129,7 +129,6 @@ export class MisEstudiosFormularioPage implements OnInit {
     const alertSuccess = await this.alertController.create({
       header: 'Estudio registrado',
       subHeader: 'El estudio ha sido registrado correctamente',
-      message: Constants.ALERT_SUCCESS,
       buttons: [{
         text: 'De acuerdo',
         role: 'confirm',

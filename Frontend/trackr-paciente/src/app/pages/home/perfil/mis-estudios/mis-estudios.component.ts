@@ -151,7 +151,6 @@ export class MisEstudiosPage {
     const alert = await this.alertController.create({
       header: '¿Seguro que deseas eliminar este elemento?',
       subHeader: 'No podrás recuperarlo',
-      message: Constants.ALERT_DELETE,
       cssClass: 'custom-alert-delete',
       buttons: [
         {
@@ -175,7 +174,6 @@ export class MisEstudiosPage {
 
     const alertSuccess = await this.alertController.create({
       header: 'Elemento eliminado exitosamente',
-      message: Constants.ALERT_SUCCESS,
       buttons: [{
         text: 'De acuerdo',
         role: 'confirm'
