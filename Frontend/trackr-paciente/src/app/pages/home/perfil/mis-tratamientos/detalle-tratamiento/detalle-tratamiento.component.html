@@ -1,16 +1,16 @@
-<ion-content>
+<ion-content class="primary">
     <div class="contenedor-header" [ngStyle]="{'background-image': backgroundUrl}">
       <div class="contenedor-header-secundario">
         <ion-toolbar>
-          <ion-buttons slot="start">
+          <ion-buttons class="start" slot="start">
             <ion-button (click)="cerrarModal('cancel')">
               <ion-icon slot="start" name="chevron-left"></ion-icon>
-              Atrás
+              <ion-label>Atrás</ion-label>
             </ion-button>
           </ion-buttons>
-          <ion-buttons slot="end">
-            <ion-button (click)="abrirModalImagen()">
-              <ion-icon slot="end" name="external-link"></ion-icon>
+          <ion-buttons class="end" slot="end">
+            <ion-button class="icon-only" (click)="abrirModalImagen()">
+              <ion-icon name="external-link"></ion-icon>
             </ion-button>
           </ion-buttons>
         </ion-toolbar>
@@ -87,7 +87,7 @@
           </ion-toolbar>
         </div>
       </ion-header>
-      <ion-content>
+      <ion-content class="primary">
         <div class="contenedor-principal-modal">
           <div class="titulo">
             <ion-text>

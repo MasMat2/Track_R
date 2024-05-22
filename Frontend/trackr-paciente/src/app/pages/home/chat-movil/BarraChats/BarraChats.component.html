@@ -1,16 +1,16 @@
 <ion-header class="ion-no-border">
-  <div class="contenedor-header">
+  <div class="contenedor-header-dark">
     <ion-toolbar>
       <ion-title>Chats</ion-title>
-      <ion-buttons slot="end">
-        <ion-button class="icon" (click)="mostrarListaDoctores()">
-          <ion-icon slot="icon-only" name="chat-plus"></ion-icon>
+      <ion-buttons class="end" slot="end">
+        <ion-button class="icon-only" (click)="mostrarListaDoctores()">
+          <ion-icon name="chat-plus"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </div>
 </ion-header> 
-<ion-content>
+<ion-content class="primary">
 
   <div class="barra-busqueda">
     <ion-searchbar (ionChange)="buscarChat($event)" show-cancel-button="focus" placeholder="Buscar" animated ></ion-searchbar>

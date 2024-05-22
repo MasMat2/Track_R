@@ -1,22 +1,22 @@
 
 <ion-header class="ion-no-border">
-  <div class="contenedor-header">
+  <div class="contenedor-header-light">
     <ion-toolbar>
-      <ion-buttons slot="start">
+      <ion-buttons class="start" slot="start">
         <ion-button routerLink="inicio-perfil">
           <ion-icon slot="start" name="chevron-left"></ion-icon>
-          Atrás
+          <ion-label>Atrás</ion-label>
         </ion-button>
       </ion-buttons>
-      <ion-buttons slot="end">
-        <ion-button (click)="agregarTratamiento()">
-          <ion-icon slot="icon-only" name="plus"></ion-icon>
+      <ion-buttons class="end" slot="end">
+        <ion-button class="icon-only" (click)="agregarTratamiento()">
+          <ion-icon name="plus"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </div>
 </ion-header>
-<ion-content>
+<ion-content class="primary">
   <div class="contenedor-principal">
     <div class="titulo">
       <ion-text>

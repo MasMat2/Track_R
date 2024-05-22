@@ -31,22 +31,6 @@
     }
 }
 
-ion-header{
-    ion-title{
-    font-weight: bold;
-    }
-    .primary-toolbar{
-    --border-width: 1px 0;
-    --border-color: var(--neutral-200);
-    --background: url('../../../../../assets/header_dark.svg');
-    height: 20vh;
-    color: aliceblue;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    }
-}
-
 .mensajeVacio{
     height: 60vh;
     background-color: #F3F4FA;
