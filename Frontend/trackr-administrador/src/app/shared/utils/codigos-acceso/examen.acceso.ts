@@ -2,7 +2,8 @@ export enum ACCESO_ASIGNATURA {
   Consultar = 'APASIG0000',
   Agregar = 'APASIG1000',
   Editar = 'APASIG2000',
-  Eliminar = 'APASIG3000'
+  Eliminar = 'APASIG3000',
+  NoAcceso = ''
 };
 
 export enum ACCESO_TIPO_EXAMEN {
