@@ -1,34 +1,8 @@
-
-ion-header{
-  border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
-  --background: var(--primary-50);
-}
-
-ion-content{
+.contenedor-header-light{
   background: var(--primary-50);
-}
-
-.contenedor-header{
-  background: var(--primary-50);
-  height: 20vh;
-  width: 100%;
 
   ion-toolbar{
-    height: 100%;
-    width: 100%;
-    --background: var(--primary-50);
-
-    max-height: 153px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding-bottom: 20px;
-
     ion-button{
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 18px;
       color: var(--neutral-500);
     }
   }
@@ -68,89 +42,13 @@ ion-content{
 
     .contenido-formulario{
       height: 55vh;
-
-      .inputs{
-        background: transparent;
-        padding: 0 32px 0 32px;
-
-        .input{
-          padding-top: 20px;
-          ion-text{
-            p{
-              margin-bottom: 12px;
-              font-family: var(--font-body);
-              font-weight: 400;
-              font-size: 16px;
-              line-height: 22px;
-              color: var(--neutral-700);
-            }
-          }
-
-          ion-item{
-            width: 100%;
-            --border-width: 1px ;
-            --border-color: var(--neutral-300);
-            --border-radius: 8px;
-            --background: var(--primary-50);
-
-            ion-input{
-              border-width: 0px;
-              --highlight-color-focused: var(--neutral-950);
-              font-family: var(--font-body);
-              font-size: 16px;
-              font-weight: 400;
-              line-height: 22px;
-            }
-
-            ion-button{
-              margin: 0;
-              ion-icon{
-                color: var(--neutral-600);
-                --ionicon-stroke-width: 44px;
-                font-size: 24px;
-              }
-            }
-
-            ion-button.button-disabled{
-              opacity: 1; //eliminar la opacidad .5 que se pone cuando el botón está desactivado
-              margin: 0 8px 0 0;
-            }
-          }
-        }
-      }
     }
-    
+
     .botones{
       height: 10vh;
-      width: 100%;
-      flex-direction: column;
-      display: flex;
-      align-items: center;
-      padding: 0 32px 0 32px;
-
-      ion-button{
-        font-family: var(--font-body);
-        font-size: 16px;
-        width: 100%;
-        max-width: 600px;
-        height: 44px;
-        --border-radius: 8px;
-        color: var(--neutral-50);
-      }
-
-      .btn-login{
-        --background: var(--primary-700);
-      }
-
-      .btn-login.button-disabled{
-        opacity: 1;
-        --background: var(--primary-300);
-      }
-      
     }
   }
 }
-
 
 @media (max-width: 375px) {
   .mensaje{
@@ -169,22 +67,22 @@ ion-content{
   }
 
 
-  .inputs{
-    .input{
-      ion-text{
-        p{
-          margin-bottom: 8px !important;
-          font-size: 12px !important;
-          line-height: 18px !important;
-        }
-      }
+  // .inputs{
+  //   .input{
+  //     ion-text{
+  //       p{
+  //         margin-bottom: 8px !important;
+  //         font-size: 12px !important;
+  //         line-height: 18px !important;
+  //       }
+  //     }
 
-      ion-item{
-        ion-input{
-          font-size: 12px !important;
-          line-height: 18px !important;
-        }
-      }
-    }
-  }
+  //     ion-item{
+  //       ion-input{
+  //         font-size: 12px !important;
+  //         line-height: 18px !important;
+  //       }
+  //     }
+  //   }
+  // }
 }

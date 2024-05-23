@@ -10,9 +10,6 @@ import { IonicModule, AlertController } from '@ionic/angular';
 import { Router, RouterLink } from '@angular/router';
 import { RestablecerContrasenaDto } from '@dtos/seguridad/restablecer-contrasena-dto';
 import { addIcons } from 'ionicons';
-import { chevronBack, personOutline} from 'ionicons/icons';
-
-import { Constants } from '@utils/constants/constants';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -36,16 +33,42 @@ export class PeticionRestablecerContrasenaComponent implements OnInit {
   //public recuperacionCorrecta = false;
 
   //Estado de "cargando" para mostrar el alert con spinner
-  cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  cargando$ = this.cargandoSubject.asObservable();
+  private cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private cargando$ = this.cargandoSubject.asObservable();
+  private loading: any;
 
   constructor(
     private restablecerContrasenaService: RestablecerContrasenaService,
     private alertController: AlertController,
     private router: Router,
-  ) { addIcons({chevronBack, personOutline}) }
+  ) { addIcons({
+    'user': 'assets/img/svg/user.svg',
+  }) }
 
-  ngOnInit() {}
+  async presentLoading() {
+    this.loading = await this.alertController.create({
+      cssClass: "custom-alert-loading"
+    })
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    if (this.loading) {
+      await this.loading.dismiss();
+      this.loading = null;
+    }
+  }
+
+
+  ngOnInit() {
+    this.cargando$.subscribe(cargando => {
+      if (cargando) {
+        this.presentLoading();
+      } else {
+        this.dismissLoading();
+      }
+    });
+  }
 
   recuperarContrasena(formulario: NgForm) {
     this.cargandoSubject.next(true);
@@ -63,7 +86,6 @@ export class PeticionRestablecerContrasenaComponent implements OnInit {
         this.cargandoSubject.next(false);
       },
       complete: ()=> {
-        //this.recuperacionCorrecta = true;
         this.cargandoSubject.next(false);
         this.presentAlert();
       },

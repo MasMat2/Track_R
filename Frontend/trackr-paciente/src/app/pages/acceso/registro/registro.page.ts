@@ -6,15 +6,12 @@ import { HospitalService } from '@http/catalogo/hospital.service';
 import { UsuarioService } from '@http/seguridad/usuario.service';
 import { AlertController, CheckboxCustomEvent, IonicModule, ModalController } from '@ionic/angular';
 import { Hospital } from '@models/catalogo/hospital';
-import { Usuario } from '@models/usuario';
 import { NgSelectModule } from '@ng-select/ng-select';
 import * as Utileria from '@utils/utileria';
 import { UsuarioNuevoTrackrDto } from 'src/app/shared/Dtos/seguridad/usuario-nuevo-trackr-dto';
 import { addIcons } from 'ionicons';
-import { chevronBack, eyeOutline, eyeOffOutline} from 'ionicons/icons';
-import { Constants } from '@utils/constants/constants';
 import { BehaviorSubject } from 'rxjs';
-import { TerminosYCondicionesComponent } from './components/terminos-y-condiciones/terminos-y-condiciones.component';
+import { TerminosYCondicionesComponent } from '@sharedComponents/terminos-y-condiciones/terminos-y-condiciones.component';
 
 
 @Component({
@@ -26,6 +23,7 @@ import { TerminosYCondicionesComponent } from './components/terminos-y-condicion
 })
 export class RegistroPage implements OnInit {
   protected usuario = new UsuarioNuevoTrackrDto();
+  protected fecha = new Date().toISOString();
   protected confirmarContrasena: string = '';
   protected submitting: boolean = false;
   protected termsAccepted: boolean = false;
@@ -34,13 +32,16 @@ export class RegistroPage implements OnInit {
   protected placeHolderSelectHospital : string = "Seleccione un hospital";
   protected placeHolderNoOptions : string = "No hay hospitales disponibles";
   protected pswInputType: string = "password";
+  protected pswInputType2: string = "password";
   protected mostrarPwd: boolean = false;
+  protected mostrarPwd2: boolean = false;
   protected procesoContinuado: boolean = false;
-  protected parteProceso: string = '1';
+  protected parteProceso: '1' | '2' = '1';
 
   //Estado de "cargando" para mostrar el alert con spinner
-  cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  cargando$ = this.cargandoSubject.asObservable();
+  private cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private cargando$ = this.cargandoSubject.asObservable();
+  private loading : any;
 
   constructor(
     private usuarioService: UsuarioService,
@@ -48,14 +49,40 @@ export class RegistroPage implements OnInit {
     private alertController: AlertController,
     private modalController: ModalController,
     private hospitalService : HospitalService
-  ) { addIcons({chevronBack, eyeOffOutline, eyeOutline}) }
+  ) { addIcons({
+    'eye': 'assets/img/svg/eye.svg',
+    'eye-off': 'assets/img/svg/eye-off.svg',
+    'calendar': 'assets/img/svg/calendar.svg',
+  }) }
+
+
+  async presentLoading() {
+    this.loading = await this.alertController.create({
+      cssClass: "custom-alert-loading"
+    })
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    if (this.loading) {
+      await this.loading.dismiss();
+      this.loading = null;
+    }
+  }
 
   public ngOnInit() {
-    this.hospitalService.consultarTodosParaSelector().subscribe(
-      (data) => {
-          this.hospitalList = data;
+    // this.hospitalService.consultarTodosParaSelector().subscribe(
+    //   (data) => {
+    //       this.hospitalList = data;
+    //   }
+    // );
+    this.cargando$.subscribe(cargando => {
+      if (cargando) {
+        this.presentLoading();
+      } else {
+        this.dismissLoading();
       }
-    );
+    });
   }
 
   protected enviarFormulario(formulario: NgForm): void {
@@ -128,6 +155,17 @@ export class RegistroPage implements OnInit {
     else{
       this.mostrarPwd = true;
       this.pswInputType = "text";
+    }
+  }
+
+  protected mostrarConfirmarContrasena(){
+    if(this.mostrarPwd2 == true){
+      this.mostrarPwd2 = false;
+      this.pswInputType2 = "password";
+    }
+    else{
+      this.mostrarPwd2 = true;
+      this.pswInputType2 = "text";
     }
   }
 

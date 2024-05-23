@@ -25,15 +25,15 @@ ion-content.neutral{
           ion-button{
               ion-label{
                   font-family: var(--font-body);
-                  font-size: 16px;
-                  margin: 4px;
+                  font-size: 18px !important;
+                  margin: 4px !important;
               }
               color: var(--neutral-50); 
-              margin: 0;
+              margin: 0 !important;
               --border-radius: 8px !important;
               ion-icon{
-                  font-size: 24px; 
-                  margin: 0;
+                  font-size: 24px !important; 
+                  margin: 0 !important;
               }
           }
           ion-button::part(native){
@@ -81,15 +81,15 @@ ion-content.neutral{
           ion-button{
               ion-label{
                   font-family: var(--font-body);
-                  font-size: 16px;
-                  margin: 4px;
+                  font-size: 18px !important;
+                  margin: 4px !important;
               }
               color: var(--primary-700); 
-              margin: 0;
+              margin: 0 !important;
               --border-radius: 8px !important;
               ion-icon{
-                  font-size: 24px;
-                  margin: 0;
+                  font-size: 24px !important;
+                  margin: 0 !important;
               }
           }
           ion-button::part(native){
@@ -447,7 +447,7 @@ ion-grid.inputs {
 
   //Diferentes Tipos de input
   ion-item.general-input {
-    --inner-padding-end: 0;
+    //--inner-padding-end: 0;
     ion-input {
       border-width: 0px;
       --highlight-color-focused: var(--neutral-700);
@@ -457,7 +457,20 @@ ion-grid.inputs {
       font-weight: 400;
     }
   }
+  .general-input.icon-right{
+    ion-icon{
+      margin-left: 12px !important;
+      font-size: 24px;
+    }
+  }
+  .general-input.icon-left{
+    ion-icon{
+      margin-right: 12px !important;
+      font-size: 24px;
+    }
+  }
 
+  //input de fecha
   ion-item.date-input {
     ion-datetime-button {
       width: 100%;
@@ -477,6 +490,7 @@ ion-grid.inputs {
     padding-left: 8px;
   }
 
+  //input con select
   ion-item.select-input {
     ion-select::part(icon) {
       position: absolute;
@@ -490,6 +504,7 @@ ion-grid.inputs {
     
   }
 
+  //input de textarea
   ion-item.textarea-input {
     ion-textarea{
       --highlight-color-focused: var(--neutral-700);
@@ -497,6 +512,7 @@ ion-grid.inputs {
     }
   }
   
+  //selector de una cantidad 
   ion-item.quantity-selector{
     min-width: 105px;
     --inner-padding-end: 0;
@@ -531,9 +547,86 @@ ion-grid.inputs {
   }
   ion-item.quantity-selector::part(native){
     padding: 0;
+  }  
+}
+
+.botones{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0 32px 0 32px;
+
+  ion-button{
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    width: 100%;
+    max-width: 600px;
+    height: 44px;
+    --border-radius: 8px;
+    --box-shadow: 0;
   }
 
+  ion-button.dark{
+    --background: var(--primary-700) !important;
+    --border-width: 1px !important;
+    --border-style: solid !important;
+    --border-color: var(--neutral-50) !important;
+    color: var(--neutral-50) !important;
+  }
   
+  ion-button.light{
+    --border-color: var(--primary-700) !important;
+    --border-width: 1px !important;
+    --border-style: solid !important;
+    --background: var(--neutral-50) !important;
+    color: var(--primary-700) !important;
+  }
+
+  // ion-button.dark.button-disabled{
+  //   opacity: 1 !important;
+  //   --background: var(--primary-300) !important;
+  // }
+
+  // ion-button.light.button-disabled{
+  //   opacity: 1 !important;
+  //   --background: var(--neutral-200) !important;
+  // }
+}
+
+.botones.botones-column{
+  flex-direction: column;
+  justify-content: center;
+}
+
+.botones.botones-row{
+  flex-direction: row;
+  align-items: center;
+
+  .padding-izquierdo {
+    padding-left: 8px !important;
+  }
+
+  .padding-derecho {
+    padding-right: 8px !important;
+  }
+
+  ion-button{
+    width: 50% !important;
+  }
+
+  @media (max-width: 350px) {
+    ion-button{
+      font-size: 14px !important;
+    }
+  }
+
+  @media (max-width: 310px) {
+    ion-button{
+      font-size: 12px !important;
+    }
+  }
 }
 
 
