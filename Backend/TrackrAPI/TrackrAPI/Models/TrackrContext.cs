@@ -29,6 +29,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<ChatMensaje> ChatMensaje { get; set; } = null!;
         public virtual DbSet<ChatMensajeVisto> ChatMensajeVisto { get; set; } = null!;
         public virtual DbSet<ChatPersona> ChatPersona { get; set; } = null!;
+        public virtual DbSet<ClasificacionPregunta> ClasificacionPregunta { get; set; } = null!;
         public virtual DbSet<CodigoPostal> CodigoPostal { get; set; } = null!;
         public virtual DbSet<Colonia> Colonia { get; set; } = null!;
         public virtual DbSet<Compania> Compania { get; set; } = null!;
@@ -243,6 +244,8 @@ namespace TrackrAPI.Models
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
+                entity.Property(e => e.ArchivoUrl).HasMaxLength(255);
+
                 entity.Property(e => e.FechaRealizacion).HasColumnType("datetime");
 
                 entity.Property(e => e.Nombre)
@@ -432,6 +435,21 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdTipo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ChatPerso__IdTip__080C0D4A");
+            });
+
+            modelBuilder.Entity<ClasificacionPregunta>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("ClasificacionPregunta", "Proyectos");
+
+                entity.Property(e => e.Clave)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<CodigoPostal>(entity =>
