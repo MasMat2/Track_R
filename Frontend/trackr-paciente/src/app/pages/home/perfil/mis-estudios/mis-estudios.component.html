@@ -33,10 +33,10 @@
       </ion-button>
     </div>
 
-    <div class="barra-busqueda" *ngIf="!listaEstudiosVacia()">
-      <ion-searchbar show-cancel-button="focus" placeholder="Buscar" animated (ionChange)="buscarEstudio($event)"></ion-searchbar>
-    </div>
     <div class="lista-estudios" *ngIf="!listaEstudiosVacia()">
+      <div class="barra-busqueda">
+        <ion-searchbar show-cancel-button="focus" placeholder="Buscar" animated (ionChange)="buscarEstudio($event)"></ion-searchbar>
+      </div>
       <div *ngIf="!filtrando">
         <ion-list *ngIf="expedientes$ | async as estudios">
           <ion-item-sliding *ngFor="let estudio of estudios">

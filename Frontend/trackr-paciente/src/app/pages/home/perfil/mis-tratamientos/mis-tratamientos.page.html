@@ -24,7 +24,7 @@
       </ion-text>
     </div>
 
-    <div class="lista-vacia" *ngIf="false">
+    <div class="lista-vacia" *ngIf="listaTratamientosVacia()">
       <ion-text>
         <p>Nada Por aquí. <br> Aún no tienes tratamientos registrados.</p>
       </ion-text>
@@ -33,7 +33,7 @@
         Añadir tratamiento
       </ion-button>
     </div>
-    <div class="lista-tratamientos" *ngIf="true">
+    <div class="lista-tratamientos" *ngIf="!listaTratamientosVacia()">
       <div class="barra-busqueda">
         <ion-searchbar (ionChange)="buscarTratamiento($event)" show-cancel-button="focus" placeholder="Buscar" animated ></ion-searchbar>
       </div>

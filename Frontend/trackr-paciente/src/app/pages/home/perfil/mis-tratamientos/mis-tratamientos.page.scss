@@ -19,50 +19,8 @@
       }
   }
 
-  .lista-vacia{
-    height: 72vh;
-    padding-top: 20vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    ion-text{
-        text-align: center;
-        p{
-            font-size: 16px;
-            line-height: 22px;
-            font-family: var(--font-body);
-            color: var(--neutral-500);
-        }
-    }
-
-    ion-button{
-        min-width: 187px;
-        height: 44px;
-        font-family: var(--font-body);
-        font-weight: bold;
-        font-size: 16px;
-        --border-radius: 8px;
-        color: var(--primary-700);
-        --border-color: var(--primary-700);
-        --border-width: 1px;
-    }
-  }
-
   .lista-tratamientos{
     height: 62vh;
-
-
-    .barra-busqueda{
-      height: 10vh;
-      padding: 0 32px 0 32px;
-      ion-searchbar{
-        padding-left: 0;
-        padding-right: 0;
-        --box-shadow: 0;
-        --border-radius: 4.16px;
-      }
-    }
 
     ion-list{
       padding: 0;
@@ -72,7 +30,7 @@
         --detail-icon-opacity: 1;
         --detail-icon-color: var(--neutral-900);
         --inner-padding-end: 32px;
-        
+
         ion-thumbnail{
           border: 1px solid var(--neutral-100);
           --size: 72px;

@@ -22,36 +22,6 @@ ion-content{
         }
     }
 
-    .lista-vacia{
-        height: 72vh;
-        padding-top: 20vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        ion-text{
-            text-align: center;
-            p{
-                font-size: 16px;
-                line-height: 22px;
-                font-family: var(--font-body);
-                color: var(--neutral-500);
-            }
-        }
-
-        ion-button{
-            width: 187px;
-            height: 44px;
-            font-family: var(--font-body);
-            font-weight: bold;
-            font-size: 16px;
-            --border-radius: 8px;
-            color: var(--primary-700);
-            --border-color: var(--primary-700);
-            --border-width: 1px;
-        }
-    }
-
     .lista-doctores{
         height: 72vh;
 

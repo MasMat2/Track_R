@@ -55,6 +55,10 @@ export class MisTratamientosPage implements OnInit {
     })
   }
 
+  protected listaTratamientosVacia(){
+    return this.tratamientos?.length == 0;
+  }
+
   protected async presentarAlertaEliminar(tratamiento: ExpedienteTratamientoPerfilDto) {
     const alert = await this.alertController.create({
       header: '¿Seguro que deseas eliminar este elemento?',
