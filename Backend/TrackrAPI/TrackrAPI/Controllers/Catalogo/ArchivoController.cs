@@ -88,46 +88,22 @@ namespace TrackrAPI.Controllers.Catalogo
         [HttpGet("usuario/{idUsuario}")]
         public IActionResult ObtenerUsuarioImagen(int idUsuario)
         {
-            var usuario = usuarioService.Consultar(idUsuario);
-            string path;
+            byte[] imageFileStream;
             string tipoMime;
 
-            // if (string.IsNullOrWhiteSpace(usuario.ImagenTipoMime))
-            // {
-            //     path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
-            //     tipoMime = "image/svg+xml";
-            // }
-            // else
-            // {
             var archivo = archivoService.ObtenerImagenUsuario(idUsuario);
             if (archivo == null)
             {
-                path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
+                imageFileStream = Convert.FromBase64String(usuarioService.ObtenerImagenUsuario(idUsuario));
                 tipoMime = "image/svg+xml";
             }
             else
             {
-                MemoryStream ms = new MemoryStream();
-
-                BinaryFormatter binForm = new BinaryFormatter();
-                ms.Write(archivo.Archivo1, 0, archivo.Archivo1.Length);
-                ms.Seek(0, SeekOrigin.Begin);
-                return File(ms, archivo.ArchivoTipoMime);
+                tipoMime = archivo.ArchivoTipoMime;
+                imageFileStream = Convert.FromBase64String(usuarioService.ObtenerImagenUsuario(idUsuario, tipoMime));
 
             }
 
-
-            // path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"{usuario.IdUsuario}{ MimeTypeMap.GetExtension(usuario.ImagenTipoMime)}");
-            // tipoMime = usuario.ImagenTipoMime;
-
-            // if (!System.IO.File.Exists(path))
-            // {
-            //     path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
-            //     tipoMime = "image/svg+xml";
-            // }
-            // }
-
-            var imageFileStream = System.IO.File.OpenRead(path);
 
             return File(imageFileStream, tipoMime);
         }
