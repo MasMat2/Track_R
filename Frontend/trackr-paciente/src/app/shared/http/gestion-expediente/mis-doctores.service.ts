@@ -35,9 +35,8 @@ export class MisDoctoresService {
       body: doctor // Pasar el objeto doctor en el cuerpo de la solicitud DELETE
     };
 
-    return this.http.delete(this.url, options);
+    return this.http.delete(this.url + 'eliminarDoctorTrackr', options);
   }
-
 
   public agregar(doctor: UsuarioDoctorDto) {
     return this.http.post(this.url, doctor);

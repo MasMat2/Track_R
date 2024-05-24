@@ -51,12 +51,19 @@ public class ExpedienteDoctorController : ControllerBase
     }
 
     [HttpDelete]
-    public void Eliminar(ExpedienteDoctorDTO expedienteDoctorDTO)
+    public void Eliminar(ExpedienteDoctorDTO expedienteDoctorDTO) //Para eliminar un doctor desde track administrador (el doctor se elimina a si mismo)
     {
         int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
         expedienteDoctorDTO.IdUsuarioDoctor = idUsuario;
         _expedienteDoctorService.Eliminar(expedienteDoctorDTO);
     }
+
+    [HttpDelete("eliminarDoctorTrackr")]
+    public void EliminarDoctorTrackr(ExpedienteDoctorDTO expedienteDoctorDTO) //Para eliminar un doctor desde track movil (el usuario elimina al doctor)
+    {
+        _expedienteDoctorService.Eliminar(expedienteDoctorDTO);
+    }
+
     [HttpPost]
     public void Agregar(ExpedienteDoctorDTO expedienteDoctorDTO)
     {
