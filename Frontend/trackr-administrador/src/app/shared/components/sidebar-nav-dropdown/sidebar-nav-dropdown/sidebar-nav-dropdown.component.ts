@@ -47,7 +47,7 @@ export class SidebarNavDropdownComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.usuarioImagenService.consultarImagen();
+    // this.usuarioImagenService.consultarImagen();
 
     this.usuarioImagenService.imagenBase64$
       .subscribe({
