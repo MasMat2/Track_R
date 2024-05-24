@@ -372,7 +372,7 @@ export class AgregarTratamientoPage implements OnInit {
           this.cerrarModal('confirm');
         }
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();

@@ -151,7 +151,7 @@ export class MisEstudiosPage {
     const alert = await this.alertController.create({
       header: '¿Seguro que deseas eliminar este elemento?',
       subHeader: 'No podrás recuperarlo',
-      cssClass: 'custom-alert-delete',
+      cssClass: 'custom-alert color-error icon-trash two-buttons',
       buttons: [
         {
           text: 'No, regresar',
@@ -178,7 +178,7 @@ export class MisEstudiosPage {
         text: 'De acuerdo',
         role: 'confirm'
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();

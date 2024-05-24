@@ -132,7 +132,7 @@ export class RegistroPage implements OnInit {
           this.router.navigateByUrl('/acceso/login');
         }
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();

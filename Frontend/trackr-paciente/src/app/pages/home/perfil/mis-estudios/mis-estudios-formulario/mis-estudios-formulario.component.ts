@@ -136,7 +136,7 @@ export class MisEstudiosFormularioPage implements OnInit {
           this.modalController.dismiss();
         }
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();

@@ -100,7 +100,7 @@ export class MuestrasPage implements OnInit {
         text: 'De acuerdo',
         role: 'confirm'
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();

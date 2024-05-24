@@ -93,8 +93,8 @@ export class InicioPerfilComponent  implements OnInit {
 
   protected async presentarAlertaCerrarSesion() {
     const alert = await this.alertCtrl.create({
-      header: '¿Seguro que deseas cerrar sesión?',
-      cssClass: 'custom-alert-delete',
+      header: '¿Seguro(a) que deseas cerrar sesión?',
+      cssClass: 'custom-alert color-error icon-info two-buttons',
       buttons: [
         {
           text: 'No, regresar',

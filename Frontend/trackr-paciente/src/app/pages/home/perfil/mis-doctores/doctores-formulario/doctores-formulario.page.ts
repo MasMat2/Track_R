@@ -22,7 +22,14 @@ import { BehaviorSubject } from 'rxjs';
     CommonModule,
   ]
 })
-export class DoctoresFormularioPage {
+export class DoctoresFormularioPage implements OnInit  {
+
+  protected currentDoctor: UsuarioDoctorDto;
+  protected doctoresSelector: UsuarioDoctoresSelectorDto[];
+
+  private cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private cargando$ = this.cargandoSubject.asObservable();
+  private loading: any;
 
   constructor(
     private doctoresService: MisDoctoresService,
@@ -30,24 +37,41 @@ export class DoctoresFormularioPage {
     private modarCtrl: ModalController,
   ) {addIcons({close, checkmark})}
 
+  ngOnInit(): void {
+    this.cargando$.subscribe(cargando => {
+      if (cargando) {
+        this.presentLoading();
+      } else {
+        this.dismissLoading();
+      }
+    });
+  }
+
   ionViewWillEnter() {
     this.consultarSelector();
   }
 
-  protected currentDoctor: UsuarioDoctorDto;
-  protected doctoresSelector: UsuarioDoctoresSelectorDto[];
+  async presentLoading() {
+    this.loading = await this.alertController.create({
+      cssClass: "custom-alert-loading"
+    })
+    return await this.loading.present();
+  }
 
-  cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  cargando$ = this.cargandoSubject.asObservable();
+  async dismissLoading() {
+    if (this.loading) {
+      await this.loading.dismiss();
+      this.loading = null;
+    }
+  }
 
-  seleccionDoctor(doctor: any) {
+  protected seleccionDoctor(doctor: any) {
     this.currentDoctor = doctor;
   }
 
   protected agregar() {
     this.cargandoSubject.next(true);
 
-    const MENSAJE_EXITO: string = `El doctor ha sido agregado correctamente`;
     const MENSAJE_REQUERIMIENTO: string = `Seleccione un doctor`;
     
     if(this.currentDoctor == undefined)
@@ -58,7 +82,6 @@ export class DoctoresFormularioPage {
     const subscription = this.doctoresService.agregar(this.currentDoctor)
       .subscribe({
         next: () => {
-          //this.presentAlert(MENSAJE_EXITO);
           this.consultarSelector();
         },
         error: () => {
@@ -83,8 +106,9 @@ export class DoctoresFormularioPage {
   private async presentAlert(mensaje : string) {
     const alert = await this.alertController.create({
       header: 'Mis Doctores',
-      message: mensaje,
+      subHeader: mensaje,
       buttons: ['OK'],
+      cssClass: 'custom-alert color-error icon-info'
     });
 
     await alert.present();
@@ -106,14 +130,10 @@ export class DoctoresFormularioPage {
           this.cerrarModal();
         }
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();
   }
-  // protected seleccionarDoctor(doctor: UsuarioDoctoresSelectorDto){
-  //   console.log(doctor);
-  //   //this.currentDoctor = idDoctor;
-  // }
 
 }

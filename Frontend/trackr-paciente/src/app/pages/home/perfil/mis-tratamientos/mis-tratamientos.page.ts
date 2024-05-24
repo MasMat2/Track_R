@@ -63,7 +63,7 @@ export class MisTratamientosPage implements OnInit {
     const alert = await this.alertController.create({
       header: '¿Seguro que deseas eliminar este elemento?',
       subHeader: 'No podrás recuperarlo',
-      cssClass: 'custom-alert-delete',
+      cssClass: 'custom-alert color-error icon-trash two-buttons',
       buttons: [
         {
           text: 'No, regresar',
@@ -89,11 +89,8 @@ export class MisTratamientosPage implements OnInit {
       buttons: [{
         text: 'De acuerdo',
         role: 'confirm',
-        handler: ()=> {
-          this.consultarTratamientos();
-        }
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();
@@ -102,6 +99,7 @@ export class MisTratamientosPage implements OnInit {
   private eliminarTratamiento(tratamiento: ExpedienteTratamientoPerfilDto){
     this.perfilTratamientoService.eliminarTratamiento(tratamiento.idExpedienteTratamiento).subscribe({
       next: ()=> {
+        this.consultarTratamientos();
       },
       error: ()=> {
       },

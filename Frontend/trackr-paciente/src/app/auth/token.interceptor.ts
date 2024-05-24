@@ -101,7 +101,7 @@ export class TokenInterceptor implements HttpInterceptor {
       header: header,
       subHeader: subheader,
       buttons: ['Cerrar'],
-      cssClass: 'custom-alert-error'
+      cssClass: 'custom-alert color-error icon-info'
     });
 
     await alert.present();
