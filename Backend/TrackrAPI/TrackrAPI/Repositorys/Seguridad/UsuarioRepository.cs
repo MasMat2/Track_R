@@ -658,13 +658,7 @@ namespace TrackrAPI.Repositorys.Seguridad
         {
             var usuario = context.Usuario.
                 Where(u => u.IdUsuario == idUsuario)
-                    .Include(u => u.IdEstadoNavigation)
                     .Include(u => u.ExpedienteTrackr)
-                    .ThenInclude(u => u.ExpedientePadecimiento)
-                    .ThenInclude(ep => ep.IdPadecimientoNavigation)
-                    .Include(u => u.ExpedienteTrackr)
-                    .ThenInclude(u => u.ExpedientePadecimiento)
-                    .ThenInclude(ep => ep.IdUsuarioDoctorNavigation)
                     .FirstOrDefault();
 
             var expediente = usuario.ExpedienteTrackr.FirstOrDefault();
@@ -682,6 +676,23 @@ namespace TrackrAPI.Repositorys.Seguridad
                 CorreoPersonal = usuario.CorreoPersonal,
                 Correo = usuario.Correo,
                 TelefonoMovil = usuario.TelefonoMovil,
+                CorreoConfirmado = usuario.CorreoConfirmado
+            };
+            
+            return informacionGeneralDto;
+
+        }
+
+        public InformacionDomicilioDTO ConsultarInformacionDomicilioTrackr(int idUsuario)
+        {
+            var usuario = context.Usuario.
+                Where(u => u.IdUsuario == idUsuario)
+                    .Include(u => u.IdEstadoNavigation)
+                    .FirstOrDefault();
+
+            var informacionDomicilioDto = new InformacionDomicilioDTO
+            {
+ 
                 IdPais = usuario.IdEstadoNavigation?.IdPais,
                 IdEstado = usuario.IdEstado,
                 IdMunicipio = usuario.IdMunicipio,
@@ -692,27 +703,9 @@ namespace TrackrAPI.Repositorys.Seguridad
                 NumeroInterior = usuario.NumeroInterior,
                 NumeroExterior = usuario.NumeroExterior,
                 EntreCalles = usuario.EntreCalles,
-                CorreoConfirmado = usuario.CorreoConfirmado
             };
-            
-            if(expediente.ExpedientePadecimiento != null)
-            {
-                var padecimientos = expediente?.ExpedientePadecimiento;
-            
-                informacionGeneralDto.padecimientos = padecimientos.Select(p => new ExpedientePadecimientoDTO
-                {
-                    IdPadecimiento = p.IdPadecimiento,
-                    IdExpedientePadecimiento = p.IdExpedientePadecimiento,
-                    NombrePadecimiento = p.IdPadecimientoNavigation?.Nombre,
-                    IdUsuarioDoctor = p.IdUsuarioDoctor,
-                    NombreDoctor = p.IdUsuarioDoctorNavigation.Nombre,
-                    FechaDiagnostico = p.FechaDiagnostico,
-                    EsAntecedente = p.IdPadecimientoNavigation.EsAntecedente,
-                });
-            }
-         
 
-            return informacionGeneralDto;
+            return informacionDomicilioDto;
 
         }
 

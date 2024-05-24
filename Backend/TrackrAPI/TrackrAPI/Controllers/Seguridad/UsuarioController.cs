@@ -271,6 +271,12 @@ namespace TrackrAPI.Controllers.Seguridad
         {
             return usuarioService.ConsultarInformacionGeneralTrackr(Utileria.ObtenerIdUsuarioSesion(this));
         }
+        [HttpGet("consultarInformacionDomicilio")]
+        public InformacionDomicilioDTO ConsultarInformacionDomicilio()
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            return usuarioService.ConsultarInformacionDomicilioTrackr(idUsuario);
+        }
 
         [HttpGet("consultarInformacionPerfil")]
         public InformacionPerfilTrackrDTO ConsultarInformacionPerfil()
@@ -294,6 +300,13 @@ namespace TrackrAPI.Controllers.Seguridad
         public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion)
         {
             usuarioService.ActualizarInformacionGeneralTrackr(informacion, Utileria.ObtenerIdUsuarioSesion(this)); 
+        }
+
+        [HttpPut("actualizarInformacionDomicilio")]
+        public void ActualizarInformacionDomicilioTrackr(InformacionDomicilioDTO informacion)
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            usuarioService.ActualizarInformacionDomicilioTrackr(informacion, idUsuario);
         }
 
         [HttpGet("consultaDomicilioPorId/{idUsuario}")]

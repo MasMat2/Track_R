@@ -1,7 +1,5 @@
-import {ExpedientePadecimientoDto} from '../seguridad/expediente-padecimiento-dto'
 
-export interface InformacionGeneralDto {
-
+export class InformacionGeneralDto {
     nombre: string;
     apellidoPaterno: string;
     apellidoMaterno: string;
@@ -13,17 +11,5 @@ export interface InformacionGeneralDto {
     correo: string;
     correoPersonal: string;
     telefonoMovil: string;
-    idPais: number;
-    idEstado: number;
-    idMunicipio: number;
-    idLocalidad: number;
-    idColonia: number;
-    codigoPostal: string;
-    calle: string;
-    entreCalles: string;
-    numeroInterior: string;
-    numeroExterior: string;
     correoConfirmado: string;
-
-    padecimientos: ExpedientePadecimientoDto[];
 }

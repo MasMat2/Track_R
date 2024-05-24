@@ -22,6 +22,11 @@ export default [
         data: { breadcrumb: "Informacion General"},
         loadComponent: () => import('./informacion-general/components/info-general/informacion-general.component').then((m) => m.InformacionGeneralComponent)
       },
+            {
+        path: 'informacion-general/domicilio',
+        canDeactivate : [ExitGuard],
+        loadComponent: () => import('./informacion-general/components/info-domicilio/info-domicilio.component').then((m)=> m.InfoDomicilioComponent)
+      },
       {
         path: 'informacion-general/antecedentes',
         loadComponent: () => import('./informacion-general/components/info-antecedentes/info-antecedentes.component').then((m)=> m.InfoAntecedentesComponent)
@@ -30,10 +35,7 @@ export default [
         path: 'informacion-general/diagnosticos',
         loadComponent: () => import('./informacion-general/components/info-diagnosticos/info-diagnosticos.component').then((m)=> m.InfoDiagnosticosComponent)
       },
-      {
-        path: 'informacion-general/domicilio',
-        loadComponent: () => import('./informacion-general/components/info-domicilio/info-domicilio.component').then((m)=> m.InfoDomicilioComponent)
-      },
+
       {
         path: 'mis-tratamientos',
         data: { breadcrumb: "Mis tratamientos"},

@@ -7,6 +7,7 @@ import { UsuarioNuevoTrackrDto } from '../../Dtos/seguridad/usuario-nuevo-trackr
 import { UsuarioDto } from '../../Dtos/perfil/usuario-dto';
 import { InformacionPerfilDto } from '../../Dtos/perfil/informacion-perfil-dto';
 import { ExpedientePadecimientoDto } from '@dtos/seguridad/expediente-padecimiento-dto';
+import { InformacionDomicilioDto } from '../../Dtos/perfil/informacion-domicilio-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,10 @@ export class UsuarioService {
     return this.http.get<InformacionGeneralDto>(this.url + 'consultarInformacionGeneral');
   }
 
+  consultarInformacionDomicilio(): Observable<InformacionDomicilioDto>{
+    return this.http.get<InformacionDomicilioDto>(this.url + 'consultarInformacionDomicilio');
+  }
+
   consultarInformacionPerfil(): Observable<InformacionPerfilDto>{
     return this.http.get<InformacionPerfilDto>(this.url + 'consultarInformacionPerfil');
   }
@@ -42,6 +47,10 @@ export class UsuarioService {
 
   actualizarInformacionGeneral(informacion: InformacionGeneralDto){
     return this.http.put(this.url + 'actualizarInformacionGeneral', informacion);
+  }
+
+  actualizarInformacionDomicilio(informacion: InformacionDomicilioDto){
+    return this.http.put(this.url + 'actualizarInformacionDomicilio', informacion);
   }
 
   public consultarMiUsuario(): Observable<UsuarioDto> {

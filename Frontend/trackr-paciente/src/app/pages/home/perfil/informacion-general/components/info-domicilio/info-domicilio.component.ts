@@ -7,88 +7,49 @@ import { GeneroSelectorDto } from '@dtos/catalogo/genero-selector-dto';
 import { LocalidadSelectorDto } from '@dtos/catalogo/localidad-selector-dto';
 import { municipioSelectorDto } from '@dtos/catalogo/municipio-selector-dto';
 import { PaisSelectorDto } from '@dtos/catalogo/pais-selector-dto';
-import { InformacionGeneralDto } from '@dtos/perfil/informacion-general-dto';
-import { ExpedientePadecimientoDto } from '@dtos/seguridad/expediente-padecimiento-dto';
-import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
 import { CodigoPostalService } from '@http/catalogo/codigo-postal.service';
 import { ColoniaService } from '@http/catalogo/colonia.service';
 import { EstadoService } from '@http/catalogo/estado.service';
-import { GeneroService } from '@http/catalogo/genero.service';
 import { LocalidadService } from '@http/catalogo/localidad.service';
 import { MunicipioService } from '@http/catalogo/municipio.service';
 import { PaisService } from '@http/catalogo/pais.service';
-import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
-import { ConfirmacionCorreoService } from '@http/seguridad/confirmacion-correo.service';
-import { MisDoctoresService } from '@http/gestion-expediente/mis-doctores.service';
 import { AlertController, IonicModule, ModalController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { addCircleOutline, closeCircleOutline, chevronBack, chevronDown, chevronUp } from 'ionicons/icons';
-import { Observable, forkJoin, switchMap, tap, lastValueFrom } from 'rxjs';
-import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
+import { Observable, tap, BehaviorSubject } from 'rxjs';
 import * as Utileria from '@utils/utileria';
 import { UsuarioService } from '@http/seguridad/usuario.service';
 import { RouterModule } from '@angular/router';
-import { CatalogoFormularioComponent } from '../info-general/catalogo-formulario/catalogo-formulario.component';
+import { OnExit } from 'src/app/shared/guards/exit.guard';
+import { InformacionDomicilioDto } from 'src/app/shared/Dtos/perfil/informacion-domicilio-dto';
 
 @Component({
   selector: 'app-info-domicilio',
   templateUrl: './info-domicilio.component.html',
   styleUrls: ['./info-domicilio.component.scss'],
   standalone: true,
-  imports : [
-    CommonModule,
-    IonicModule,
-    FormsModule,
-    RouterModule
-  ]
+  imports: [CommonModule, IonicModule, FormsModule, RouterModule],
 })
-export class InfoDomicilioComponent  implements OnInit {
-
-  protected informacionUsuario$: Observable<InformacionGeneralDto>;
-  protected infoUsuario: InformacionGeneralDto;
-  protected misDoctores: UsuarioDoctoresDto[];
-  protected edadUsuario: string;
+export class InfoDomicilioComponent implements OnInit, OnExit {
+  protected informacionUsuario$: Observable<InformacionDomicilioDto>;
+  protected infoUsuario: InformacionDomicilioDto;
   protected submiting = false;
-  protected emailsubmiting = false;
+
   protected esPaisExtranjero: boolean = false;
   private idPaisMexico: 1;
-  protected nuevoPadecimiento: ExpedientePadecimientoDto = new ExpedientePadecimientoDto();
-  protected nuevoAntecedente: ExpedientePadecimientoDto = new ExpedientePadecimientoDto();
-  protected nuevoDiagnostico: ExpedientePadecimientoDto = new ExpedientePadecimientoDto();
-  protected nuevoAntecedenteInvalido = false;
-  protected nuevoDiagnosticoInvalido = false;
-  protected nombrePais : string;
-  protected nombreEstado : string ;
-  protected nombreMunicipio : string;
-  protected nombreLocalidad : string;
-  protected nombreColonia : string;
-  protected modalPaisAbierto : boolean = false;
-  protected modalEstadoAbierto : boolean = false;
-  protected modalMunicipioAbierto : boolean = false;
-  protected modalLocalidadAbierto : boolean = false;
-  protected modalColoniaAbierto : boolean = false;
-
   protected paisList: PaisSelectorDto[] = [];
   protected estadoList: EstadoSelectorDto[] = [];
   protected municipioList: municipioSelectorDto[] = [];
   protected localidadList: LocalidadSelectorDto[] = [];
   protected coloniaList: ColoniaSelectorDto[] = [];
 
-  protected antecedenteList: ExpedientePadecimientoSelectorDTO[] = [];
-  protected diagnosticoList: ExpedientePadecimientoSelectorDTO[] = [];
-  protected antecedenteFiltradoList: ExpedientePadecimientoSelectorDTO[] = [];
-  protected diagnosticoFiltradoList: ExpedientePadecimientoSelectorDTO[] = [];
-
-  customAlertOptions = {
-    cssClass: 'custom-select-alert',
-    // header: '',
-    // subHeader: '',
-    // message: '',
-    // translucent: true,
-  };
+  //Estado de "cargando" para mostrar el alert con spinner
+  private cargandoSubject: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
+  private cargando$ = this.cargandoSubject.asObservable();
+  private loading: any;
 
   @ViewChild('formulario') formulario: NgForm;
-  generoList: GeneroSelectorDto[];
+
   constructor(
     private usuarioService: UsuarioService,
     private paisService: PaisService,
@@ -97,86 +58,100 @@ export class InfoDomicilioComponent  implements OnInit {
     private localidadService: LocalidadService,
     private coloniaService: ColoniaService,
     private codigoPostalService: CodigoPostalService,
-    private alertController: AlertController,
-    private modalController: ModalController
+    private alertController: AlertController
   ) {
-    addIcons({addCircleOutline, closeCircleOutline, chevronBack, chevronDown, chevronUp, 'informacion': 'assets/img/svg/info.svg'})
+    addIcons({
+      'chevron-down': 'assets/img/svg/chevron-down.svg',
+    });
+  }
+
+  async ngOnInit() {
+    await this.consultarPaises();
+    this.obtenerUsuario();
+
+    this.cargando$.subscribe((cargando) => {
+      if (cargando) {
+        this.presentLoading();
+      } else {
+        this.dismissLoading();
+      }
+    });
+  }
+
+  onExit() {
+    if (this.formulario.dirty) {
+      const rta = this.presentAlertSalir();
+      return rta;
     }
 
-  ngOnInit() {
-    this.consultarPaises();
-    this.obtenerUsuario();
+    return true;
   }
 
-  protected async onChangePais() {
-    this.esPaisExtranjero = this.infoUsuario.idPais !== this.idPaisMexico;
-    this.infoUsuario.idEstado = 0;
-    
+  async presentLoading() {
+    this.loading = await this.alertController.create({
+      cssClass: 'custom-alert-loading',
+    });
+    return await this.loading.present();
   }
 
-  protected async enviarFormulario(formulario: NgForm){
-    this.submiting = true;
+  async dismissLoading() {
+    if (this.loading) {
+      await this.loading.dismiss();
+      this.loading = null;
+    }
+  }
 
-    if(formulario.invalid){
-      Utileria.validarCamposRequeridos(formulario);
-      this.presentAlertError();
+  private async obtenerUsuario() {
+    this.informacionUsuario$ = this.usuarioService
+      .consultarInformacionDomicilio()
+      .pipe(
+        tap(async (infoUsuario) => {
+          this.infoUsuario = infoUsuario;
+
+          await Promise.all([
+            this.consultarEstados(infoUsuario.idPais),
+            this.consultarMunicipios(infoUsuario.idEstado),
+            this.consultarLocalidades(infoUsuario.idEstado),
+            this.consultarColonias(infoUsuario.codigoPostal),
+          ]);
+        })
+      );
+  }
+
+  protected async enviarFormulario(formulario: NgForm) {
+    if (formulario.invalid) {
       this.submiting = false;
+      Utileria.validarCamposRequeridos(formulario);
+      this.presentAlertError(
+        'Campos requeridos',
+        'Debe completar todos los campos obligatorios'
+      );
       return;
     }
-    this.presentAlert();
-    console.log(this.infoUsuario);
+    this.submiting = true;
+    this.cargandoSubject.next(true);
     this.actualizarInformacionUsuario(this.infoUsuario);
-    this.submiting = false;
   }
 
-private async obtenerUsuario(){
-  this.informacionUsuario$ = this.usuarioService.consultarInformacionGeneral().pipe(
-    tap(
-      async (infoUsuario) => {
+  private actualizarInformacionUsuario(informacion: InformacionDomicilioDto) {
+    this.usuarioService.actualizarInformacionDomicilio(informacion).subscribe({
+      next: () => { },
+      error: () => {
+        this.submiting = false;
+        this.cargandoSubject.next(false);
+      },
+      complete: () => {
+        this.presentAlertSuccess(
+          'Información actualizada',
+          'La información se actualizó correctamente'
+        );
+        this.submiting = false;
+        this.cargandoSubject.next(false);
+        this.formulario.form.markAsPristine();
+      },
+    });
+  }
 
-        this.infoUsuario = infoUsuario;
-        await Promise.all([
-          this.consultarEstados(infoUsuario.idPais),
-          this.consultarMunicipios(infoUsuario.idEstado),
-          this.consultarLocalidades(infoUsuario.idEstado),
-          this.consultarColonias(infoUsuario.codigoPostal)
-        ]);
-     
-        this.setNombrePais();
-        this.setNombreEstado();
-        this.setNombreMunicipio();
-        this.setNombreLocalidad();
-        this.setNombreColonia();
-        
-      }));
-
-
-}
-
-private setNombrePais() {
-  const pais = this.paisList.find(pais => pais.idPais === this.infoUsuario.idPais);
-  this.nombrePais = pais ? pais.nombre : '';
-}
-
-private setNombreEstado() {
-  const estado = this.estadoList.find(estado => estado.idEstado === this.infoUsuario.idEstado);
-  this.nombreEstado = estado ? estado.nombre : '';
-}
-
-private setNombreMunicipio() {
-  const municipio = this.municipioList.find(municipio => municipio.idMunicipio === this.infoUsuario.idMunicipio);
-  this.nombreMunicipio = municipio ? municipio.nombre : '';
-}
-
-private setNombreLocalidad() {
-  const localidad = this.localidadList.find(localidad => localidad.idLocalidad === this.infoUsuario.idLocalidad);
-  this.nombreLocalidad = localidad ? localidad.nombre : '';
-}
-
-private setNombreColonia() {
-  const colonia = this.coloniaList.find(colonia => colonia.idColonia === this.infoUsuario.idColonia);
-  this.nombreColonia = colonia ? colonia.nombre : '';
-}
   private async consultarPaises(): Promise<void> {
     const paises = await this.paisService
       .consultarTodosParaSelector()
@@ -185,52 +160,62 @@ private setNombreColonia() {
     this.paisList = paises ?? [];
   }
 
-  protected async onChangeEstado() {
-    this.infoUsuario.idMunicipio = 0;
-    this.infoUsuario.idLocalidad = 0;
+  private async consultarEstados(idPais: number | null): Promise<void> {
+    if (idPais) {
+      const estados =
+        idPais > 0
+          ? await this.estadoService
+            .consultarPorPaisParaSelector(idPais)
+            .toPromise()
+          : [];
 
-    await Promise.all([
-      this.consultarMunicipios(this.infoUsuario.idEstado),
-      this.consultarLocalidades(this.infoUsuario.idEstado),
-
-    ]);
+      this.estadoList = estados ?? [];
+    }
   }
 
-  private async consultarMunicipios(idEstado: number): Promise<void> {
-    const municipios = idEstado > 0
-      ? await this.municipioService.consultarPorEstadoParaSelector(idEstado).toPromise()
-      : [];
+  private async consultarMunicipios(idEstado: number | null): Promise<void> {
+    if (idEstado) {
+      const municipios =
+        idEstado > 0
+          ? await this.municipioService
+            .consultarPorEstadoParaSelector(idEstado)
+            .toPromise()
+          : [];
 
-    this.municipioList = municipios ?? [];
+      this.municipioList = municipios ?? [];
+    }
   }
 
-  private async consultarLocalidades(idEstado: number): Promise<void> {
-    const localidades = idEstado > 0
-      ? await this.localidadService.consultarPorEstado(idEstado).toPromise()
-      : [];
+  private async consultarLocalidades(idEstado: number | null): Promise<void> {
+    if (idEstado) {
+      const localidades =
+        idEstado > 0
+          ? await this.localidadService.consultarPorEstado(idEstado).toPromise()
+          : [];
 
-    this.localidadList = localidades ?? [];
+      this.localidadList = localidades ?? [];
+    }
   }
 
-  private async consultarEstados(idPais: number): Promise<void> {
-    const estados = idPais > 0
-      ? await this.estadoService.consultarPorPaisParaSelector(idPais).toPromise()
-      : [];
+  private async consultarColonias(codigoPostal: string): Promise<void> {
+    const colonias =
+      codigoPostal && codigoPostal.length === 5
+        ? await this.coloniaService
+          .consultarPorCodigoParaSelector(codigoPostal)
+          .toPromise()
+        : [];
 
-    this.estadoList = estados ?? [];
+    this.coloniaList = colonias ?? [];
   }
 
   protected async onChangeCodigoPostal() {
     this.infoUsuario.idColonia = 0;
-
-    const codigoPostalValue: string = this.infoUsuario.codigoPostal;
-
+    const codigoPostalValue: string = this.infoUsuario?.codigoPostal;
     if (codigoPostalValue.length !== 5) {
       return;
     }
 
     await this.asignarValoresDeCodigoPostal(codigoPostalValue);
-
   }
 
   private async asignarValoresDeCodigoPostal(codigoPostalValue: string): Promise<void> {
@@ -247,198 +232,129 @@ private setNombreColonia() {
       return;
     }
 
+    this.infoUsuario.idPais = codigoPostal.idPais;
     this.infoUsuario.idEstado = codigoPostal.idEstado;
-
+    this.infoUsuario.idMunicipio = codigoPostal.idMunicipio;
+    this.infoUsuario.idLocalidad = null;
 
     await Promise.all([
+      this.consultarEstados(codigoPostal.idPais),
       this.consultarMunicipios(codigoPostal.idEstado),
       this.consultarLocalidades(codigoPostal.idEstado),
-      this.consultarEstados(codigoPostal.idPais)
     ]);
-    this.infoUsuario.idMunicipio = codigoPostal.idMunicipio;
-
-      const estado = this.estadoList.find(estado => estado.idEstado === codigoPostal.idEstado);
-    if (estado) {
-      this.nombreEstado = estado.nombre;
-    }
-
-    const municipio = this.municipioList.find(municipio => municipio.idMunicipio === codigoPostal.idMunicipio);
-    if (municipio) {
-      this.nombreMunicipio = municipio.nombre;
-    }
-    this.nombreLocalidad = '';
 
     await this.consultarColonias(codigoPostalValue);
-    const colonia = this.coloniaList
-      .find((colonia) => Utileria.equalsNormalized(colonia.nombre, codigoPostal.colonia)) || this.coloniaList[0];
-
+    const colonia =
+      this.coloniaList.find((colonia) =>
+        Utileria.equalsNormalized(colonia.nombre, codigoPostal.colonia)
+      ) || this.coloniaList[0];
 
     if (colonia) {
       this.infoUsuario.idColonia = colonia.idColonia;
-      this.nombreColonia = colonia.nombre;
     }
   }
 
+  protected async onChangePais() {
+    this.esPaisExtranjero = this.infoUsuario.idPais !== this.idPaisMexico;
 
-  private async consultarColonias(codigoPostal: string): Promise<void> {
-    const colonias = codigoPostal && codigoPostal.length === 5
-      ? await this.coloniaService.consultarPorCodigoParaSelector(codigoPostal).toPromise()
-      : [];
+    this.infoUsuario.idEstado = null;
+    this.infoUsuario.idMunicipio = null;
+    this.infoUsuario.idLocalidad = null;
+    this.infoUsuario.idColonia = null;
+    this.infoUsuario.codigoPostal = '';
 
-    this.coloniaList = colonias ?? [];
+    await Promise.all([
+      this.consultarEstados(this.infoUsuario.idPais),
+      this.consultarMunicipios(this.infoUsuario.idEstado),
+      this.consultarLocalidades(this.infoUsuario.idEstado),
+      //this.consultarColonias(this.infoUsuario.idEstado),
+    ]);
   }
 
-  private async presentAlertError() {
+  protected async onChangeEstado() {
+    this.infoUsuario.idMunicipio = null;
+    this.infoUsuario.idLocalidad = null;
+    this.infoUsuario.idColonia = null;
+
+    await Promise.all([
+      this.consultarMunicipios(this.infoUsuario.idEstado),
+      this.consultarLocalidades(this.infoUsuario.idEstado),
+    ]);
+  }
+
+  private async presentAlertError(header: string, subheader: string) {
     const alert = await this.alertController.create({
-      header: 'Campos requeridos',
-      message: 'Llene todos los campos requeridos',
-      buttons: ['OK'],
-      cssClass: 'custom-alert'
+      header: header,
+      subHeader: subheader,
+      buttons: ['Ok'],
+      cssClass: 'custom-alert color-error icon-info',
     });
 
     await alert.present();
   }
 
-  private async presentAlert() {
+  private async presentAlertSuccess(header: string, subheader: string) {
     const alert = await this.alertController.create({
-      header: 'Información actualizada',
-      message: 'La información se actualizó correctamente',
-      buttons: ['OK'],
-      cssClass: 'custom-alert'
+      header: header,
+      subHeader: subheader,
+      buttons: ['Ok'],
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alert.present();
   }
 
-  private actualizarInformacionUsuario(informacion: InformacionGeneralDto){
-    this.usuarioService.actualizarInformacionGeneral(informacion).subscribe({
-      next: ()=> {}
+  private async presentAlertSalir(): Promise<boolean> {
+    const alert = await this.alertController.create({
+      header: '¿Está seguro que desea salir?',
+      subHeader: 'Perderá los cambios que no haya guardado',
+      cssClass: 'custom-alert color-error icon-info two-buttons',
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            return false;
+          },
+        },
+        {
+          text: 'Salir',
+          handler: () => {
+            return true;
+          },
+        },
+      ],
     });
+    await alert.present();
+
+    const data = await alert.onDidDismiss();
+    return data.role === 'cancel' ? false : true;
   }
 
-  async openEstadoModal() {
-    if(this.modalEstadoAbierto)
-       return;
-    
-    this.modalEstadoAbierto = true;
-    const modal = await this.modalController.create({
-      component: CatalogoFormularioComponent,
-      breakpoints : [0, 0.25, 0.5, 0.75],
-      initialBreakpoint: 0.25,
-      cssClass: 'custom-sheet-modal',
-      componentProps: {
-        catalogoList: this.estadoList.map((estado) => ({ id: estado.idEstado, descripcion: estado.nombre })),
-      }
-    });
-
-    await modal.present();
-    const { data } = await modal.onWillDismiss();
-    if (data) {
-      this.infoUsuario.idEstado = data.id;
-      this.nombreEstado = data.descripcion;
-
-      this.onChangeEstado();
-    
-    }
-    
-    this.modalEstadoAbierto = false;
+  protected codigoPostalDisabled() {
+    return !(this.infoUsuario.idPais != null);
   }
-  async openMunicipioModal() {
-    if(this.modalMunicipioAbierto)
-       return;
-      
-    this.modalMunicipioAbierto = true;
-    const modal = await this.modalController.create({
-      component: CatalogoFormularioComponent,
-      breakpoints : [0, 0.25, 0.5, 0.75, 1],
-      initialBreakpoint: 0.25,
-      cssClass: 'custom-sheet-modal',
-      componentProps: {
-        catalogoList: this.municipioList.map((municipio) => ({ id: municipio.idMunicipio, descripcion: municipio.nombre })),
-      }
-    });
-
-    await modal.present();
-    const { data } = await modal.onWillDismiss();
-    if (data) {
-      this.infoUsuario.idMunicipio = data.id;
-      this.nombreMunicipio = data.descripcion;
-    }
-    
-    this.modalMunicipioAbierto = false;
+  protected estadoDisabled() {
+    return !(this.infoUsuario.idPais != null);
   }
-  async openLocalidadModal() {
-    if(this.modalLocalidadAbierto)
-       return;
-      
-    this.modalLocalidadAbierto = true;
-    const modal = await this.modalController.create({
-      component: CatalogoFormularioComponent,
-      breakpoints : [0, 0.25, 0.5, 0.75, 1],
-      initialBreakpoint: 0.25,
-      cssClass: 'custom-sheet-modal',
-      componentProps: {
-        catalogoList: this.localidadList.map((localidad) => ({ id: localidad.idLocalidad, descripcion: localidad.nombre })),
-      }
-    });
-
-    await modal.present();
-    const { data } = await modal.onWillDismiss();
-    if (data) {
-      this.infoUsuario.idLocalidad = data.id;
-      this.nombreLocalidad = data.descripcion;
-    }
-    
-    this.modalLocalidadAbierto = false;
+  protected municipioDisabled() {
+    return !(
+      this.infoUsuario.idPais != null && this.infoUsuario.idEstado != null
+    );
   }
-  async openColoniaModal() {
-    if(this.modalColoniaAbierto)
-       return;
-      
-    this.modalColoniaAbierto = true;
-    const modal = await this.modalController.create({
-      component: CatalogoFormularioComponent,
-      breakpoints : [0, 0.25, 0.5, 0.75, 1],
-      initialBreakpoint: 0.25,
-      cssClass: 'custom-sheet-modal',
-      componentProps: {
-        catalogoList: this.coloniaList.map((colonia) => ({ id: colonia.idColonia, descripcion: colonia.nombre })),
-      }
-    });
-
-    await modal.present();
-    const { data } = await modal.onWillDismiss();
-    if (data) {
-      this.infoUsuario.idLocalidad = data.id;
-      this.nombreLocalidad = data.descripcion;
-    }
-    
-    this.modalColoniaAbierto = false;
+  protected localidadDisabled() {
+    return !(
+      this.infoUsuario.idPais != null && this.infoUsuario.idEstado != null
+    );
   }
-  async openPaisModal() {
-    if(this.modalPaisAbierto)
-       return;
-      
-    this.modalPaisAbierto = true;
-    const modal = await this.modalController.create({
-      component: CatalogoFormularioComponent,
-      breakpoints : [0, 0.25, 0.5, 0.75, 1],
-      initialBreakpoint: 1,
-      cssClass: 'custom-sheet-modal',
-      componentProps: {
-        catalogoList: this.paisList.map((pais) => ({ id: pais.idPais, descripcion: pais.nombre })),
-      }
-    });
-
-    await modal.present();
-    const { data } = await modal.onWillDismiss();
-    if (data) {
-      this.infoUsuario.idPais  = data.id;
-      this.nombrePais= data.descripcion;
-    }
-    await this.consultarEstados(this.infoUsuario.idPais);
-
-    this.modalPaisAbierto = false;
+  protected coloniaDisabled() {
+    return !(
+      this.infoUsuario.idPais != null &&
+      this.infoUsuario.idEstado != null &&
+      this.infoUsuario.idMunicipio != null &&
+      this.infoUsuario.codigoPostal != null &&
+      this.infoUsuario.codigoPostal != ''
+    );
   }
-
 }

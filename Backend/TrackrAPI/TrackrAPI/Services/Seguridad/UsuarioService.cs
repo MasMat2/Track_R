@@ -931,6 +931,10 @@ namespace TrackrAPI.Services.Seguridad
         {
             return usuarioRepository.ConsultarInformacionGeneralTrackr(idUsuario);
         }
+        public InformacionDomicilioDTO ConsultarInformacionDomicilioTrackr(int idUsuario)
+        {
+            return usuarioRepository.ConsultarInformacionDomicilioTrackr(idUsuario);
+        }
 
         public InformacionPerfilTrackrDTO ConsultarInformacionPerfilTrackr(int idUsuario)
         {
@@ -964,7 +968,6 @@ namespace TrackrAPI.Services.Seguridad
 
         public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion, int idUsuario)
         {
-            using TransactionScope scope = new();
 
             var usuario = usuarioRepository.Consultar(idUsuario);
             var expediente = expedienteTrackrRepository.ConsultarPorUsuario(usuario.IdUsuario);
@@ -985,6 +988,16 @@ namespace TrackrAPI.Services.Seguridad
             expediente.Estatura = informacion.Estatura;
             usuario.CorreoPersonal = informacion.CorreoPersonal;
             usuario.TelefonoMovil = informacion.TelefonoMovil;
+
+            usuarioRepository.Editar(usuario);
+            expedienteTrackrRepository.Editar(expediente);
+        }
+
+        public void ActualizarInformacionDomicilioTrackr(InformacionDomicilioDTO informacion, int idUsuario)
+        {
+
+            var usuario = usuarioRepository.Consultar(idUsuario);
+
             usuario.IdEstado = informacion.IdEstado;
             usuario.IdMunicipio = informacion.IdMunicipio;
             usuario.IdLocalidad = informacion.IdLocalidad;
@@ -995,30 +1008,7 @@ namespace TrackrAPI.Services.Seguridad
             usuario.NumeroExterior = informacion.NumeroExterior;
             usuario.EntreCalles = informacion.EntreCalles;
 
-
-            expedientePadecimientoRepository.EliminarPorExpediente(expediente.IdExpediente);
-            foreach (var padecimientoDTO in informacion.padecimientos)
-            {
-                var padecimiento = new ExpedientePadecimiento();
-
-                padecimiento.IdPadecimiento = padecimientoDTO.IdPadecimiento;
-                padecimiento.IdUsuarioDoctor = padecimientoDTO.IdUsuarioDoctor;
-                padecimiento.FechaDiagnostico = padecimientoDTO.FechaDiagnostico;
-                padecimiento.IdExpediente = expediente.IdExpediente;
-
-                if (padecimiento.IdPadecimiento == 0)
-                {
-                    continue;
-                }
-
-                expedientePadecimientoRepository.Agregar(padecimiento);
-
-            }
-
             usuarioRepository.Editar(usuario);
-            expedienteTrackrRepository.Editar(expediente);
-
-            scope.Complete();
         }
 
 
