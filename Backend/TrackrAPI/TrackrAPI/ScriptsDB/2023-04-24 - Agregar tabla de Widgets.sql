@@ -20,3 +20,5 @@ CREATE TABLE UsuarioWidget (
 
 ALTER TABLE Trackr.ExpedienteEstudio
 ADD ArchivoUrl VARCHAR(250) NULL;
+ALTER TABLE Trackr.ExpedienteEstudio
+ALTER COLUMN Archivo IMAGE NULL;
