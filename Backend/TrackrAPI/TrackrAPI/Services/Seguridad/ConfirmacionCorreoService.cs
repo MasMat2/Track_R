@@ -1,4 +1,7 @@
 ﻿using MimeKit;
+using MimeTypes;
+using System.Net.Mail;
+using System.Net.Mime;
 using System.Security.Cryptography;
 using System.Text;
 using System.Transactions;
@@ -7,6 +10,9 @@ using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Seguridad;
 using TrackrAPI.Services.GestionExpediente;
+using TrackrAPI.Services.Sftp;
+using ContentDisposition = MimeKit.ContentDisposition;
+using ContentType = System.Net.Mime.ContentType;
 
 namespace TrackrAPI.Services.Seguridad
 {
@@ -146,15 +152,14 @@ namespace TrackrAPI.Services.Seguridad
 
             string urlFrontEnd = _config.GetSection("AppSettings:UrlFrontEnd").Value;
 
-            var logotipoTrackr = await DescargarLogo(urlFrontEnd + "assets/img/logo-trackr.png", "logotrackr");
-            var logotipoCdis = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-01-Trackr.png", "logocdis");
-            var logotipoHospital = await DescargarLogo(urlFrontEnd + "assets/img/png-Logo-H_C_CEIC.png", "logohospital");
+            var logotipoTrackr = GetLogo("png-Logo-01-Trackr.png", "logotrackr" , "image/png");
+            var logotipoHospital = GetLogo("png-Logo-H_C_CEIC.png", "logohospital" , "image/png");
 
             var mensaje =
                 $@"
                     <div>
-                        <span><img src=""cid:logotrackr"" style='max-width:100%; height:auto;'></span>
-                        <span><img src=""cid:logohospital"" style='max-width:100%; height:auto;' align='right'></span>
+                        <span><img src=cid:logotrackr style='max-width:50%; height:auto;'></span>
+                        <span><img src=cid:logoHospital style='max-width:50%; height:auto;' align='right'></span>
                     </div>
                     <hr style='border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;'>
                     <p>Da clic en el siguiente link para confirmar tu correo:
@@ -165,16 +170,21 @@ namespace TrackrAPI.Services.Seguridad
                     <hr style='border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;'>
                 ";
 
+            AlternateView htmlView = AlternateView.CreateAlternateViewFromString(mensaje, null, MediaTypeNames.Text.Html);
+            htmlView.LinkedResources.Add(logotipoTrackr);
+            htmlView.LinkedResources.Add(logotipoHospital);
+
+
+
             var correo = new Correo()
             {
                 Receptor = usuarioCompleto.CorreoPersonal,
-                Asunto = "ATISC: Confirmación de correo",
+                Asunto = "OncoTracker: Confirmación de correo",
                 Mensaje = mensaje,
-                EsMensajeHtml = true,
-                Imagenes = new List<MimePart> { logotipoTrackr }
+                EsMensajeHtml = true
             };
 
-            await _correoHelper.Enviar(correo);
+            _correoHelper.Enviar(correo, htmlView);
         }
 
 
@@ -239,6 +249,15 @@ namespace TrackrAPI.Services.Seguridad
             {
                 throw new CdisException("Ocurrió un error al enviar el correo");
             }
+        }
+
+        private LinkedResource GetLogo(string imageUrl, string contentId , string mimeType)
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "Archivos" , "Img" , imageUrl);
+            return new LinkedResource(path){
+                ContentId = contentId,
+                ContentType = new ContentType(mimeType)
+            };
         }
 
 
