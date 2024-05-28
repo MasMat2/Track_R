@@ -12,6 +12,7 @@ namespace TrackrAPI.Models
         public byte[] Archivo { get; set; } = null!;
         public string ArchivoTipoMime { get; set; } = null!;
         public string ArchivoNombre { get; set; } = null!;
+        public string? ArchivoUrl { get; set; }
 
         public virtual ExpedienteTrackr IdExpedienteNavigation { get; set; } = null!;
     }

@@ -17,3 +17,6 @@ CREATE TABLE UsuarioWidget (
 	FOREIGN KEY (IdWidget) REFERENCES Widget(IdWidget),
 	FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario)
 );
+
+ALTER TABLE Trackr.ExpedienteEstudio
+ADD ArchivoUrl VARCHAR(250) NULL;

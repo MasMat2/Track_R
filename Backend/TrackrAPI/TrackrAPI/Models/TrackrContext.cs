@@ -99,6 +99,8 @@ namespace TrackrAPI.Models
         public virtual DbSet<ProyectoEstatus> ProyectoEstatus { get; set; } = null!;
         public virtual DbSet<Reactivo> Reactivo { get; set; } = null!;
         public virtual DbSet<RegimenFiscal> RegimenFiscal { get; set; } = null!;
+        public virtual DbSet<Respuesta> Respuesta { get; set; } = null!;
+        public virtual DbSet<RespuestasClasificacionPregunta> RespuestasClasificacionPregunta { get; set; } = null!;
         public virtual DbSet<RestablecerContrasena> RestablecerContrasena { get; set; } = null!;
         public virtual DbSet<Rol> Rol { get; set; } = null!;
         public virtual DbSet<RolAcceso> RolAcceso { get; set; } = null!;
@@ -439,9 +441,11 @@ namespace TrackrAPI.Models
 
             modelBuilder.Entity<ClasificacionPregunta>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.IdClasificacionPregunta);
 
                 entity.ToTable("ClasificacionPregunta", "Proyectos");
+
+                entity.Property(e => e.IdClasificacionPregunta).HasColumnName("idClasificacionPregunta");
 
                 entity.Property(e => e.Clave)
                     .HasMaxLength(20)
@@ -1170,6 +1174,10 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.ArchivoTipoMime)
                     .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ArchivoUrl)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.FechaRealizacion).HasColumnType("datetime");
@@ -2203,6 +2211,47 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(100)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Respuesta>(entity =>
+            {
+                entity.HasKey(e => e.IdRespuesta)
+                    .HasName("PK__Respuest__D3480198E3617368");
+
+                entity.ToTable("Respuesta", "Proyectos");
+
+                entity.Property(e => e.IdRespuesta).ValueGeneratedNever();
+
+                entity.Property(e => e.Clave).HasMaxLength(30);
+
+                entity.Property(e => e.Respuesta1)
+                    .HasMaxLength(2000)
+                    .HasColumnName("Respuesta");
+
+                entity.HasOne(d => d.IdReactivoNavigation)
+                    .WithMany(p => p.RespuestaNavigation)
+                    .HasForeignKey(d => d.IdReactivo)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Respuesta__IdRea__54575F1A");
+            });
+
+            modelBuilder.Entity<RespuestasClasificacionPregunta>(entity =>
+            {
+                entity.HasKey(e => e.IdRespuestasClasificacionPregunta)
+                    .HasName("PK__Respuest__B00235C9F755D13F");
+
+                entity.Property(e => e.Identificador)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.IdClasificacionPreguntaNavigation)
+                    .WithMany(p => p.RespuestasClasificacionPregunta)
+                    .HasForeignKey(d => d.IdClasificacionPregunta)
+                    .HasConstraintName("FK__Respuesta__IdCla__5086CE36");
             });
 
             modelBuilder.Entity<RestablecerContrasena>(entity =>
