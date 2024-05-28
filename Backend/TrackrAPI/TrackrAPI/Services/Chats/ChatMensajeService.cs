@@ -9,6 +9,9 @@ using TrackrAPI.Repositorys.Chats;
 using TrackrAPI.Services.Archivos;
 using TrackrAPI.Services.Notificaciones;
 using TrackrAPI.Helpers;
+using MimeTypes;
+using TrackrAPI.Dtos.Seguridad;
+using TrackrAPI.Services.Sftp;
 
 namespace TrackrAPI.Services.Chats;
 
@@ -21,6 +24,7 @@ public class ChatMensajeService
     private readonly IArchivoRepository _archivoRepository;
     private readonly ArchivoService _archivoService;
     private readonly SimpleAES _simpleAES;
+    private readonly SftpService _sftpService;
 
     public ChatMensajeService(IChatMensajeRepository chatMensajeRepository,
                               IHubContext<ChatMensajeHub, IChatMensajeHub> hubContext,
@@ -28,7 +32,8 @@ public class ChatMensajeService
                               NotificacionDoctorService notificacionService,
                               IArchivoRepository archivoRepository,
                               ArchivoService archivoService,
-                              SimpleAES simpleAES)
+                              SimpleAES simpleAES,
+                              SftpService sftpService)
     {
         _chatMensajeRepository = chatMensajeRepository;
         _hubContext = hubContext;
@@ -37,6 +42,7 @@ public class ChatMensajeService
         _archivoRepository = archivoRepository;
         _archivoService = archivoService;
         _simpleAES = simpleAES;
+        _sftpService = sftpService;
     }
 
     public IEnumerable<IEnumerable<ChatMensajeDTO>> ObtenerMensajesPorChat(int IdPersona)
@@ -82,8 +88,9 @@ public class ChatMensajeService
         //Subir si existe el archivo
         if (mensaje.ArchivoTipoMime != null)
         {
+            idArchivo = this.GuardarArchivo(mensaje.Archivo, mensaje.ArchivoNombre, mensaje.ArchivoTipoMime, mensaje.IdPersona);
 
-            var archivo = new Archivo
+            /*var archivo = new Archivo
             {
                 Archivo1 = Convert.FromBase64String(mensaje.Archivo.Substring(mensaje.Archivo.LastIndexOf(',') + 1)),
                 ArchivoNombre = mensaje.ArchivoNombre,
@@ -94,7 +101,7 @@ public class ChatMensajeService
             };
 
             _archivoRepository.Agregar(archivo);
-            idArchivo = archivo.IdArchivo;
+            idArchivo = archivo.IdArchivo;*/
         }
 
         var mensajeAux = new ChatMensaje
@@ -117,6 +124,36 @@ public class ChatMensajeService
         _chatMensajeRepository.Agregar(mensajeAux);
 
         return (idArchivo != null) ? (int)idArchivo : 0;
+    }
+
+    public int GuardarArchivo(string archivo,string nombre,string tipoMime, int idUsuario)
+    {
+
+        
+            string nombreArchivo = $"{nombre}";
+            string path = Path.Combine("Archivos", "Chat", nombreArchivo);
+            var archivoBase64 = archivo.Substring(archivo.LastIndexOf(',') + 1);
+
+            this._sftpService.UploadFile(path, archivoBase64);
+
+            //Logica para agregar las fotos de perfil en la tabla archivo
+            var archivoMensaje = new Archivo
+            {
+                Nombre = nombreArchivo,
+                ArchivoNombre = nombreArchivo,
+                ArchivoTipoMime = tipoMime,
+                ArchivoUrl = path,
+                FechaRealizacion = DateTime.Now,
+                IdUsuario = idUsuario
+            };
+
+
+            var fileUploaded = _archivoRepository.Agregar(archivoMensaje);
+
+        return fileUploaded.IdArchivo;
+
+
+        
     }
 }
 
