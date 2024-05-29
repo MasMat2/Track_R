@@ -127,6 +127,7 @@ export class NotificacionesComponent  implements OnInit
     const alert = await this.alertController.create({
       header: notificacion.titulo,
       subHeader: `${notificacion.mensaje} \n ${MENSAJE_TOMA}`,
+      cssClass: 'custom-alert color-primary icon-pill two-buttons',
       buttons: [
         {
           text: 'No tomé la dosis', 
@@ -147,7 +148,6 @@ export class NotificacionesComponent  implements OnInit
           }
         }
       ],
-      cssClass: 'custom-alert-choice'
     });
 
     await alert.present();
