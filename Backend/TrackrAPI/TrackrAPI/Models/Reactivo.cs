@@ -8,6 +8,7 @@ namespace TrackrAPI.Models
         public Reactivo()
         {
             ExamenReactivo = new HashSet<ExamenReactivo>();
+            RespuestaNavigation = new HashSet<Respuesta>();
         }
 
         public int IdReactivo { get; set; }
@@ -23,9 +24,14 @@ namespace TrackrAPI.Models
         public bool? NecesitaRevision { get; set; }
         public DateTime? FechaAlta { get; set; }
         public bool? Estatus { get; set; }
+        public bool? EscalaLikert { get; set; }
+        public bool? PreguntaAbierta { get; set; }
+        public bool? RespuestaSimple { get; set; }
+        public bool? RespuestaMultiple { get; set; }
 
         public virtual Asignatura IdAsignaturaNavigation { get; set; } = null!;
         public virtual NivelExamen IdNivelExamenNavigation { get; set; } = null!;
         public virtual ICollection<ExamenReactivo> ExamenReactivo { get; set; }
+        public virtual ICollection<Respuesta> RespuestaNavigation { get; set; }
     }
 }
