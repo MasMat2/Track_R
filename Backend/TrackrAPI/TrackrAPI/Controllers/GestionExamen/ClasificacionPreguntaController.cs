@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using RoadisAPI.Dtos;
-using RoadisAPI.Dtos.GestionExamen;
-using RoadisAPI.Models;
-using RoadisAPI.Services.GestionExamen;
+using TrackrAPI.Dtos.General;
+using TrackrAPI.Dtos.GestionExamen;
+using TrackrAPI.Services.GestionExamen;
 
-namespace RoadisAPI.Controllers.GestionExamen
-{
+namespace TrackrAPI.Controllers.GestionExamen;
     [Route("api/[controller]")]
     [ApiController]
 
@@ -58,4 +56,3 @@ namespace RoadisAPI.Controllers.GestionExamen
             return _clasificacionPreguntaService.ConsultarTodosParaSelector();
         }
     }
-}

@@ -1,5 +1,4 @@
-namespace RoadisAPI.Dtos.GestionExamen
-{
+namespace TrackrAPI.Dtos.GestionExamen;
     public class ClasificacionPreguntaGridDto
     {
         public int IdClasificacionPregunta { get; set; }
@@ -8,4 +7,3 @@ namespace RoadisAPI.Dtos.GestionExamen
         public string? Clave { get; set; }
 
     }
-}

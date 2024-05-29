@@ -39,14 +39,14 @@ public class ReactivoController : ControllerBase
 
     [HttpPost]
     [Route("agregar")]
-    public int Agregar(Reactivo reactivo)
+    public int Agregar(ReactivoDto reactivo)
     {
         return _reactivoService.Agregar(reactivo);
     }
 
     [HttpPut]
     [Route("editar")]
-    public void Editar(Reactivo reactivo)
+    public void Editar(ReactivoDto reactivo)
     {
         _reactivoService.Editar(reactivo);
     }
