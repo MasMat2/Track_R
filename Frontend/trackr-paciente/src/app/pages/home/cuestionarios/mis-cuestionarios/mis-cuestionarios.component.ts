@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Time } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { format} from 'date-fns';
 import { chevronForward } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
+import { ExamenDto } from 'src/app/shared/Dtos/cuestionarios/examen-dto';
 
 @Component({
   selector: 'app-mis-cuestionarios',
@@ -24,9 +25,9 @@ import { addIcons } from 'ionicons';
 })
 export class MisCuestionariosComponent  implements OnInit {
 
-  protected examenPendienteList: any[] = [];
-  protected examenContestadoList: any[] = [];
-  protected cantidadCuestionariosContestados: number = 0;
+  protected examenPendienteList: ExamenDto[] = [];
+  protected examenContestadoList: ExamenDto[] = [];
+  protected cantidadCuestionariosContestados: number;
   protected mostrarTodosContestados: boolean = false;
 
   protected segmentoSeleccionado = 'pendientes';
@@ -48,9 +49,10 @@ export class MisCuestionariosComponent  implements OnInit {
   private consultarCuestionariosPendientes(){
     this.examenService.consultarMisExamenes().subscribe({
       next: (examenes) => {
+        console.log('exámenes pendientes: ', examenes);
         this.examenPendienteList = examenes.map(examen => {
-          const fechaFormateada = format(new Date(examen.fechaExamen), 'dd-MM-yyyy');
-          return { ...examen, fechaExamen: fechaFormateada};
+          const fechaFormateada = this.formatearFecha(examen.fechaExamen, examen.horaExamen);
+          return {...examen, fechaExamen: fechaFormateada};
         });
       }
     })
@@ -59,40 +61,47 @@ export class MisCuestionariosComponent  implements OnInit {
   private consultarCuestionariosContestados(){
     this.examenService.consultarMisExamenesContestados().subscribe({
       next: (examenes) => {
+        console.log('exámenes contestados: ', examenes);
         this.examenContestadoList = examenes.map(examen => {
-          const fechaFormateada = format(new Date(examen.fechaExamen), 'dd-MM-yyyy');
-          return { ...examen, fechaExamen:fechaFormateada};
+          const fechaFormateada = this.formatearFecha(examen.fechaExamen, examen.horaExamen);
+          return {...examen, fechaExamen: fechaFormateada};
         });
-        examenes.length > 5 ? this.cantidadCuestionariosContestados = examenes.length -5 : this.cantidadCuestionariosContestados = examenes.length
+        (examenes.length > 5) ? (this.cantidadCuestionariosContestados = examenes.length -5) : (this.cantidadCuestionariosContestados = examenes.length);
       }
     })
   }
 
-  protected verMas(opcion: boolean){
-    this.mostrarTodosContestados = opcion;
+  protected formatearFecha(fecha:Date ,hora: Time){
+    const fechaString = new Date(`${new Date(fecha).toDateString()} ${hora}`);
+    return fechaString;
   }
 
   protected responderCuestionario(idExamen: number) {
-    this.examenService
-      .consultarMiExamenIndividual(idExamen)
+    this.examenService.consultarMiExamenIndividual(idExamen)
       .subscribe((examen) => {
           if (!this.esFechaValida(examen)) {
            this.presentAlertError();
            return;
          }
-        this.router.navigate(['/home/cuestionarios/responder', idExamen]);
+         this.navigateResponderCuestionario(idExamen);
       });
   }
 
-  protected verCuestionario(idExamen: number) {
+  protected navigateVerCuestionario(idExamen: number) {
     this.router.navigate(['/home/cuestionarios/ver', idExamen]);
   }
 
-  private esFechaValida(examen: Examen): boolean {
-    const fechaExamen = new Date(`${new Date(examen.fechaExamen).toDateString()} ${examen.horaExamen}`);
+  private navigateResponderCuestionario(idExamen: number){
+    this.router.navigate(['/home/cuestionarios/responder', idExamen]);
+  }
+
+  private esFechaValida(examen: Examen): boolean{
+    const fechaExamen = this.formatearFecha(examen.fechaExamen, examen.horaExamen);
+    console.log(fechaExamen);
     const fechaActual = new Date();
 
     if (fechaExamen.toDateString() !== fechaActual.toDateString()) {
+      console.log('false 1')
       return false;
     }
 
@@ -107,24 +116,31 @@ export class MisCuestionariosComponent  implements OnInit {
     );
 
     if (diferenciaMinutos > 5 || diferenciaMinutos <= -15) {
+      console.log('false 2');
       return false;
-    }
 
+    }
+    console.log('true');
     return true;
   }
 
   private async presentAlertError() {
     const alert = await this.alertController.create({
-      header: 'Error',
-      message: 'Aún no tiene acceso a este cuestionario',
+      header: 'Cuestionario no disponible',
+      subHeader: 'Aún no tienes acceso a este cuestionario',
+      cssClass: 'custom-alert color-error icon-info',
       buttons: ['OK'],
     });
 
     await alert.present();
   }
 
-  changeSection(section:string){
+  protected changeSection(section:string){
     this.segmentoSeleccionado = section;
+  }
+
+  protected verMas(opcion: boolean){
+    this.mostrarTodosContestados = opcion;
   }
 
 }

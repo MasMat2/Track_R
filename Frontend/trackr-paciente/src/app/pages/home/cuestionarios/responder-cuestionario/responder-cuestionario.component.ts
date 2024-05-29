@@ -5,13 +5,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ExamenReactivoService } from '@http/cuestionarios/examen-reactivo.service';
 import { ExamenService } from '@http/cuestionarios/examen.service';
 import { IonicModule, AlertController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular/standalone';
 import { Examen } from '@models/examen/examen';
 import { ExamenReactivo } from '@models/examen/examen-reactivo';
-import { Reactivo } from '@models/examen/reactivo';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
-import { GeneralConstant } from '@utils/general-constant';
+import { ImageOnlyModalComponent } from '@sharedComponents/image-only-modal/image-only-modal.component';
 import { addIcons } from 'ionicons';
-import { chevronBack, calendarClearOutline, timeOutline, documentTextOutline } from 'ionicons/icons';
+import { BehaviorSubject } from 'rxjs';
+import { OnExit } from 'src/app/shared/guards/exit.guard';
+
+
+interface ExamenReactivoRespuestasArray extends ExamenReactivo{
+  respuestasSeparadas: string[]
+  respuestaSeleccionadaIndex: number | undefined;
+}
 
 @Component({
   selector: 'app-responder-cuestionario',
@@ -22,153 +28,212 @@ import { chevronBack, calendarClearOutline, timeOutline, documentTextOutline } f
     IonicModule,
     CommonModule,
     FormsModule,
-    HeaderComponent
   ]
 })
-export class ResponderCuestionarioComponent  implements OnInit {
+export class ResponderCuestionarioComponent  implements OnInit, OnExit {
 
+  //Estado de "cargando" para mostrar el alert con spinner
+  private cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  protected cargando$ = this.cargandoSubject.asObservable();
+  private loading : any;
+  
   private idExamen: any;
+  protected examen = new Examen();
+  protected reactivoList: ExamenReactivoRespuestasArray[] = [];
+
   protected submitting = false;
   protected presentando = false;
-
-  protected progreso = 0;
-  private porcentajePorPregunta = 0;
-  protected reactivo = new Reactivo();
-  protected examen = new Examen();
   protected examenTerminado = false;
-  protected blockQuestions = false;
   protected mostrarMsgFinal = false;
 
-  protected reactivoList: ExamenReactivo[] = [];
-
-  protected respuestas: { nombre: string }[] = [
-    { nombre: 'a' },
-    { nombre: 'b' },
-    { nombre: 'c' },
-    { nombre: 'd' },
-    { nombre: 'e' },
-  ];
-
   protected indice = 0;
-
+  protected progreso = 0;
+  private porcentajePorPregunta = 0;
   protected segundosRestantes = 0;
   protected lastMinute = false;
-
   private interval: NodeJS.Timer;
+
   constructor(
     private examenService: ExamenService,
     private examenReactivoService: ExamenReactivoService,
     private route: ActivatedRoute,
     private router: Router,
     private alertController: AlertController,
+    private modalController: ModalController
 
   ) { 
-    addIcons({chevronBack,calendarClearOutline,timeOutline,documentTextOutline})
+    addIcons({
+      'calendar': '/assets/img/svg/calendar.svg',
+      'clock': '/assets/img/svg/clock-2.svg',
+      'file-check': '/assets/img/svg/file-check-2.svg'
+    })
   }
 
   ngOnInit() {
-    this.submitting = true;
     this.route.paramMap.subscribe(params => {
       this.idExamen = params.get('id');
       if(this.idExamen > 0){
         this.consultarExamen(this.idExamen);
+      }
+    });
+
+    this.cargando$.subscribe(cargando => {
+      if (cargando) {
+        this.presentLoading();
       } else {
-        this.blockQuestions = true;
-        this.consultarReactivosNoExamen();
+        this.dismissLoading();
       }
     });
   }
 
-  ionViewWillLeave(){
-    this.terminarExamenTiempo();
-  }
-
-
-  consultarExamen(idExamen: number) {
-    this.examenService.consultarMiExamen(idExamen).subscribe((data) => {
-      this.examen = data;
-      this.porcentajePorPregunta = 1/data.totalPreguntas;
-      this.segundosRestantes = this.examen.duracion * 60;
-      this.submitting = false;
-    });
-  }
-
-  consultarReactivos() {
-    this.submitting = true;
-    this.examenReactivoService
-      .consultarReactivosExamen(this.examen.idExamen)
-      .subscribe((data) => {
-        if (data.length != this.examen.totalPreguntas) {
-          this.cancelar();
-        } else {
-          this.reactivoList = data;
-          this.submitting = false;
-          this.interval = setInterval(() => this.updateTimer(), 1000);
-          setTimeout(() => this.terminarExamenTiempo(), this.segundosRestantes * 1000);
-          this.presentando = true;
+  onExit(){
+    if(!this.examenTerminado && this.presentando){
+      const rta  = this.presentAlertSalir();
+      rta.then((rol: boolean)=> {
+        if(rol == true){
+          this.terminarExamen();
         }
-      });
+      })
+      return rta;
+    }
+
+    return true;
+  };
+
+  async presentLoading() {
+    this.loading = await this.alertController.create({
+      cssClass: "custom-alert-loading",
+      backdropDismiss: false
+    })
+    return await this.loading.present();
   }
 
-  consultarReactivosNoExamen() {
-    this.examenReactivoService
-      .consultarReactivosExamen(this.examen.idExamen)
-      .subscribe((data) => {
-        this.reactivoList = data;
-        this.submitting = false;
-      });
-  }
-
-  public cancelar(): void {
-    if (!this.blockQuestions) {
-      this.router.navigate(['/home/cuestionarios/misCuestionarios'], {});
+  async dismissLoading() {
+    if (this.loading) {
+      await this.loading.dismiss();
+      this.loading = null;
     }
   }
 
-  private terminarExamen() {
-    clearInterval(this.interval);
-    this.indice++;
-    this.submitting = true;
-    this.examenReactivoService.revisar(this.reactivoList).subscribe(
-      (data) => {
-        this.examen.resultado = data;
-        this.examenTerminado = true;
-        this.submitting = false;
-        this.router.navigate(['/home/cuestionarios/misCuestionarios'], {});
-      });
+  private consultarExamen(idExamen: number) {
+    this.cargandoSubject.next(true);
+    this.examenService.consultarMiExamen(idExamen).subscribe({
+      next: (data)=> {
+        this.examen = data;
+        this.porcentajePorPregunta = 1/data.totalPreguntas;
+        this.progreso = this.porcentajePorPregunta;
+        this.segundosRestantes = this.examen.duracion * 60;
+      },
+      error: ()=>{
+        this.cargandoSubject.next(false);
+      },
+      complete: ()=> {
+        this.cargandoSubject.next(false);
+      }
+    })
   }
 
-  protected terminarExamenTiempo() {
-    this.submitting = true;
-    this.examenReactivoService.revisar(this.reactivoList).subscribe((data) => {
-      this.examen.resultado = data;
-      this.examenTerminado = true;
+  consultarReactivos() {
+    this.examenReactivoService.consultarReactivosExamen(this.examen.idExamen).subscribe({
+      next: (data) => {
+        this.reactivoList = data.map(reactivo => ({
+          ...reactivo,
+          respuestasSeparadas: this.separarRespuestas(reactivo.respuesta),
+          respuestaSeleccionadaIndex: undefined
+        }));
+        if((this.examen.totalPreguntas != this.reactivoList.length) || this.reactivoList.length == 0){
+          this.cargandoSubject.next(false);
+        }
+      },
+      error: ()=> {
+        this.cargandoSubject.next(false);
+        this.presentAlertError();
+      },
+      complete: ()=> {
+        this.cargandoSubject.next(false);
+        this.iniciarTimer();
+        this.presentando = true;
+      }
+    })
+  }
 
-      this.submitting = false;
+  //TODO: Temporal mientras se migra el sistema de roadis y se estandariza lo de las respuestas
+  private separarRespuestas(StringRespuestas: string) {
+
+    // Dividir el string utilizando la expresión regular que busca números seguidos de paréntesis
+    const respuestasArray = StringRespuestas.split(/(?=\d\))/).map(str => str.trim());
+    return respuestasArray;
+  }
+
+  protected seleccionarRespuesta(preguntaIndex: number, respuestaIndex: number){
+    this.reactivoList[preguntaIndex].respuestaAlumno = (respuestaIndex + 1).toString(); //asignar respuesta
+    this.reactivoList[preguntaIndex].respuestaSeleccionadaIndex = respuestaIndex; //marcar item como seleccionado
+  }
+
+  protected hayRespuestaSeleccionada(preguntaIndex: number): boolean{
+    if((this.reactivoList[preguntaIndex].respuestaSeleccionadaIndex != undefined) && this.reactivoList[preguntaIndex].respuestaAlumno != ""){
+      return true
+    }
+     return false;
+  }
+
+  protected iniciarExamen(){
+    this.cargandoSubject.next(true);
+    this.consultarReactivos()
+  }
+
+  private terminarExamen() {
+    if(this.examenTerminado){
+      return;
+    }
+    this.cargandoSubject.next(true);
+    clearInterval(this.interval);
+    this.submitting = true;
+
+    this.examenReactivoService.revisar(this.reactivoList).subscribe({
+      next: (data)=> {
+        this.examen.resultado = data;
+      },
+      error: ()=> {
+        this.cargandoSubject.next(false);
+      },
+      complete: ()=>{
+        this.submitting = false;
+        this.examenTerminado = true;
+        this.cargandoSubject.next(false);
+        this.presentAlertSuccess();
+      }
     });
   }
 
   protected siguiente() {
-    if (this.indice + 1 < this.reactivoList.length) {
-      this.indice++;
-      this.progreso = this.indice*this.porcentajePorPregunta;
-    }
-    else{ //cuando ya se encuentra en la ultima pregunta
-      this.progreso = 1;
+    if((this.indice + 1) == this.reactivoList.length){
       this.mostrarMsgFinal = true;
+      this.progreso = 1;
+      return;
     }
+
+    this.indice ++;
+    this.progreso = ((this.indice + 1) * this.porcentajePorPregunta);
   }
 
   protected anterior() {
-    if (this.indice > 0 && !this.mostrarMsgFinal) {
-      this.indice--;
-      this.progreso = this.indice*this.porcentajePorPregunta;
+    if(this.indice == 0){
+      return;
     }
-    else{//cuando ya se encuentra en el mensaje final
-      this.progreso = this.indice*this.porcentajePorPregunta;
+    if(this.mostrarMsgFinal){
+      this.progreso = ((this.indice + 1) * this.porcentajePorPregunta);
       this.mostrarMsgFinal = false;
-
+      return;
     }
+
+    this.indice--;
+    this.progreso = ((this.indice + 1) * this.porcentajePorPregunta);
+  }
+
+  private iniciarTimer(){
+    this.interval = setInterval(() => this.updateTimer(), 1000);
+    setTimeout(() => this.terminarExamen(), this.segundosRestantes * 1000);
   }
 
   private updateTimer() {
@@ -178,19 +243,119 @@ export class ResponderCuestionarioComponent  implements OnInit {
     }
     else if (this.segundosRestantes < 60 && !this.lastMinute) {
       this.lastMinute = true;
-      this.presentAlert("Advertencia", "Sólo queda 1 minuto para responder el examen");
+      this.presentAlertTiempo();
     }
+  }
+
+  
+  protected preguntaTieneImagen(imagen: string): boolean {
+    if((imagen !== "") && (imagen !== "data:;base64,") && (imagen != null)){
+      return true
+    }
+    return false
+  }
+
+  protected async VerImagen(imagen: string){
+    const modal = await this.modalController.create({
+      component: ImageOnlyModalComponent,
+      cssClass: 'image-only-modal',
+      componentProps: {archivo: imagen}
+    })
+    if((imagen !== "") && (imagen !== "data:;base64,") && (imagen != null)){
+      modal.present();
+    }
+  }
+
+  protected cerrar(): void {
+    this.router.navigateByUrl('/home/cuestionarios/misCuestionarios');
+  }
+
+  private async presentAlertSalir(): Promise<boolean> {
+    const alert = await this.alertController.create({
+      header: '¿Está seguro(a) que desea salir?',
+      subHeader: 'El cuestionario se enviará incompleto',
+      cssClass: 'custom-alert color-error icon-info two-buttons',
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            return false;
+          }
+        },
+        {
+          text: 'Salir',
+          role: 'confirm',
+          handler: () => {
+            return true
+          }
+        }
+      ],
+    });
+    await alert.present();
+    
+    const data = await alert.onWillDismiss();
+    
+    return data.role === 'cancel' ? false : true;
+  }
+
+  private async presentAlertError(){
+    const alert = await this.alertController.create({
+      header: 'Ha ocurrido un error',
+      subHeader: 'No fue posible consultar este cuestionario',
+      cssClass: 'custom-alert color-error icon-info',
+      buttons: [{
+        text: 'Ok',
+        role: 'confirm',
+        handler: () => {
+          this.cerrar();
+        }
+      }]
+    });
+
+    alert.present();
+  }
+
+  private async presentAlertTiempo() {
+    const alert = await this.alertController.create({
+      header: "Advertencia",
+      subHeader: "Sólo queda 1 minuto para responder el examen",
+      cssClass: 'custom-alert color-error icon-info',
+      buttons: ['Ok'],
+    });
+    await alert.present();
+  }
+
+  private async presentAlertSuccess(){
+    const alert = await this.alertController.create({
+      header: '¡Cuestionario enviado exitosamente!',
+      cssClass: 'custom-alert color-primary icon-check',
+      buttons: [{
+        text: 'Cerrar',
+        role: 'confirm',
+        handler: ()=> {
+          this.cerrar();
+        }
+      }]
+    })
+
+    await alert.present()
   }
 
   protected async presentAlertTerminar() {
     const alert = await this.alertController.create({
-      header: 'Enviar cuestionario',
-      message: '¿Seguro que desea terminar y enviar el cuestionario?',
-      cssClass: 'custom-alert',
+      header: '¿Envíar cuestionario?',
+      subHeader: '¿Seguro(a) que desea terminar y enviar el cuestionario?',
+      cssClass: 'custom-alert color-primary icon-info two-buttons',
       buttons: [
-        {text: 'Cancelar'},
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
         {
           text: 'Enviar',
+          role: 'confirm',
           handler: () => {
             this.terminarExamen();
           }
@@ -199,40 +364,4 @@ export class ResponderCuestionarioComponent  implements OnInit {
     });
     await alert.present();
   }
-
-  protected async presentAlert(header: string, msg: string ) {
-    const alert = await this.alertController.create({
-      header: header,
-      message: msg,
-      buttons: ['Ok'],
-      cssClass: 'custom-alert'
-    });
-    await alert.present();
-  }
-
-  imprimirFecha(fecha:Date){
-    let meses: { [key: number]: string } = {
-      1: 'Enero',
-      2: 'Febrero',
-      3: 'Marzo',
-      4: 'Abril',
-      5: 'Mayo',
-      6: 'Junio',
-      7: 'Julio',
-      8: 'Agosto',
-      9: 'Septiembre',
-      10: 'Octubre',
-      11: 'Noviembre',
-      12: 'Diciembre'
-    };
-
-    let fec = new Date(fecha)
-
-    let dia = fec.getDate();
-    let mes = meses[fec.getMonth() + 1];
-    let anio = fec.getFullYear()
-    
-    return `${mes} ${dia}, ${anio}`;
-  }
-
 }

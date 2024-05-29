@@ -557,6 +557,22 @@ ion-grid.inputs {
     color: var(--primary-700) !important;
   }
 
+  ion-button.transparent-dark{
+    --background: transparent;
+    --border-color: var(--neutral-50) !important;
+    --border-width: 1px !important;
+    --border-style: solid !important;
+    color: var(--neutral-50) !important;
+  }
+
+  ion-button.transparent-light{
+    --background: transparent;
+    --border-color: var(--primary-700) !important;
+    --border-width: 1px !important;
+    --border-style: solid !important;
+    color: var(--primary-700) !important;
+  }
+
   // ion-button.dark.button-disabled{
   //   opacity: 1 !important;
   //   --background: var(--primary-300) !important;
