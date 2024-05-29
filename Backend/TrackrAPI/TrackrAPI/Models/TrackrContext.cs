@@ -1176,10 +1176,6 @@ namespace TrackrAPI.Models
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ArchivoUrl)
-                    .HasMaxLength(250)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.FechaRealizacion).HasColumnType("datetime");
 
                 entity.Property(e => e.Nombre)
