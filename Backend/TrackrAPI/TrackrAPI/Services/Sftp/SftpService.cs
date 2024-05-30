@@ -94,7 +94,7 @@ namespace TrackrAPI.Services.Sftp
                 using (var sftp = new SftpClient(host, port, username, password))
                 {
                     sftp.Connect();
-                    using (Stream fileStream = new FileStream(localFilePath, FileMode.CreateNew))
+                    using (Stream fileStream = new FileStream(localFilePath, FileMode.OpenOrCreate))
                     {
                         // Remote filePath
                         string linuxPath = GetRemotePath(filePath);
