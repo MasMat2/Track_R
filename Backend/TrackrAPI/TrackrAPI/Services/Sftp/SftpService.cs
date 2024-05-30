@@ -89,17 +89,23 @@ namespace TrackrAPI.Services.Sftp
             byte[] fileContent;
 
             string localFilePath = GetLocalPath(filePath);
-            
-            using (var sftp = new SftpClient(host, port, username, password))
+            try
             {
-                sftp.Connect();
-                using (Stream fileStream = File.Create(localFilePath))
+                using (var sftp = new SftpClient(host, port, username, password))
                 {
-                    // Remote filePath
-                    string linuxPath = GetRemotePath(filePath);
-                    sftp.DownloadFile(linuxPath, fileStream);
+                    sftp.Connect();
+                    using (Stream fileStream = new FileStream(localFilePath, FileMode.OpenOrCreate))
+                    {
+                        // Remote filePath
+                        string linuxPath = GetRemotePath(filePath);
+                        sftp.DownloadFile(linuxPath, fileStream);
+                    }
+                    sftp.Disconnect();
                 }
-                sftp.Disconnect();
+            }
+            catch (IOException ex) when (ex.HResult == -2147024816)
+            {
+                Console.WriteLine("The file already exists. Another process has created the file.");
             }
 
             fileContent = File.ReadAllBytes(localFilePath);

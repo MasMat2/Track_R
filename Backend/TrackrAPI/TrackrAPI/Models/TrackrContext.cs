@@ -101,6 +101,8 @@ namespace TrackrAPI.Models
         public virtual DbSet<RegimenFiscal> RegimenFiscal { get; set; } = null!;
         public virtual DbSet<Respuesta> Respuesta { get; set; } = null!;
         public virtual DbSet<RespuestasClasificacionPregunta> RespuestasClasificacionPregunta { get; set; } = null!;
+        public virtual DbSet<Respuesta> Respuesta { get; set; } = null!;
+        public virtual DbSet<RespuestasClasificacionPregunta> RespuestasClasificacionPregunta { get; set; } = null!;
         public virtual DbSet<RestablecerContrasena> RestablecerContrasena { get; set; } = null!;
         public virtual DbSet<Rol> Rol { get; set; } = null!;
         public virtual DbSet<RolAcceso> RolAcceso { get; set; } = null!;
@@ -1174,6 +1176,10 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.ArchivoTipoMime)
                     .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ArchivoUrl)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.FechaRealizacion).HasColumnType("datetime");
