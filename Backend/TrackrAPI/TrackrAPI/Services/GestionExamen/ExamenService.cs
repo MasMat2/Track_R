@@ -302,6 +302,7 @@ public class ExamenService
     public string GenerarPdf(int idExamen)
     {
         string preguntas = "";
+        
         var index = 0;
 
         var examen = _examenRepository.ConsultarMiExamen(idExamen);
@@ -309,18 +310,22 @@ public class ExamenService
 
         foreach (var reactivo in reactivos)
         {
+            string respuestas = "";
+            foreach(var respuesta in reactivo.Respuestas)
+              respuestas += $"<p><b>{respuesta.Clave})</b> {respuesta.Respuesta1}</p> <br>";
+                    
             if (reactivo.ImagenBase64 != "" && reactivo.ImagenBase64 != "data:;base64,")
             {
-                preguntas +=
+            preguntas +=
                     @$"
                         <div class='pregunta'>
-                           <h3>{ index+1 }.- { reactivo.Pregunta }</h3>
-                           <div style='text-align: center; margin-top: 10px; margin-bottom: 10px;'>
-                               <img id='logo' class='imagenPregunta' src='{ reactivo.ImagenBase64 }' height='200'/>
-                           </div>
-                           <p>{ reactivo.Respuestas.ToList() }</p>
-                           <p>Respondió: <span style='font-weight: bold;'>{ reactivo.RespuestaAlumno }</span></p>
-                       </div>
+                        <h3>{ index+1 }.- { reactivo.Pregunta }</h3>
+                        <div style='text-align: center; margin-top: 10px; margin-bottom: 10px;'>
+                            <img id='logo' class='imagenPregunta' src='{ reactivo.ImagenBase64 }' height='200'/>
+                        </div>
+                        {respuestas}
+                        <p>Respondió: <span style='font-weight: bold;'>{ reactivo.RespuestaAlumno }</span></p>
+                    </div>
                     ";
             }
             else
@@ -329,10 +334,10 @@ public class ExamenService
                 @$"
                     <div class='pregunta'>
                         <h3>{index+1 }.- { reactivo.Pregunta }</h3>
-                        <p> { reactivo.Respuestas.ToList() }</p>
+                       {respuestas}
                         <p>Respondió: <span style='font-weight: bold;'>{ reactivo.RespuestaAlumno }</span></p>
                     </div>
-                ";
+                ";      
             }
             index++;
         }

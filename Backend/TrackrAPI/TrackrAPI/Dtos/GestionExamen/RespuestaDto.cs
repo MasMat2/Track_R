@@ -6,5 +6,6 @@ public class RespuestaDto
     public string? Clave { get; set; }
     public string? Respuesta1 { get; set; }
     public bool? RespuestaCorrecta { get; set; }
+    public string RespuestaFormateada => $"{Clave}) {Respuesta1}";
     public int? Valor { get; set; }
 }

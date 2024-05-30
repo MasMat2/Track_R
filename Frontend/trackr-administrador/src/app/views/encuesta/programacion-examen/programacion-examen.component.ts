@@ -43,7 +43,7 @@ export class ProgramacionExamenComponent implements OnInit {
           component: 'actionButton',
           params: { disabled: false },
         };
-        return params.data.resultado != null ? component : '';
+        return component;
       },
       minWidth: 44,
       maxWidth: 44,
@@ -119,6 +119,7 @@ export class ProgramacionExamenComponent implements OnInit {
       this.eliminar(gridData.data);
     }
     else if (gridData.accion === GRID_ACTION.DescargarExcel) {
+      console.log('Descargar Excel');
       this.consultarExcelRespuestas(gridData.data.idProgramacionExamen);
     }
   }

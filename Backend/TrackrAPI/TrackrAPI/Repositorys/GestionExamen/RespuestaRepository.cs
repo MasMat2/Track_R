@@ -44,6 +44,21 @@ public class RespuestaRepository : Repository<Respuesta>, IRespuestaRepository
             .ToList();
     }
 
+    public RespuestaDto ConsultarRespuestaContestada(int idReactivo , string clave)
+    {
+        return context.Respuesta
+            .Where(p => p.IdReactivo == idReactivo)
+            .Where( r => r.Clave == clave )
+            .Select(p => new RespuestaDto
+            {
+                Clave = p.Clave ?? string.Empty,
+                Respuesta1 = p.Respuesta1 ?? string.Empty,
+                RespuestaCorrecta = p.RespuestaCorrecta,
+                Valor = p.Valor
+            })
+            .FirstOrDefault();
+    }
+
     public Respuesta Consultar(int idRespuesta)
     {
         return context.Respuesta

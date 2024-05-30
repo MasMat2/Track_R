@@ -11,17 +11,20 @@ public class ExamenReactivoService
     private readonly ExamenReactivoValidatorService _examenReactivoValidatorService;
     private readonly IReactivoRepository _reactivoRepository;
     private readonly IExamenRepository _examenRepository;
+    private readonly IRespuestaRepository _respuestaRepository;
 
     public ExamenReactivoService(
         IExamenReactivoRepository examenReactivoRepository,
         ExamenReactivoValidatorService examenReactivoValidatorService,
         IReactivoRepository reactivoRepository,
-        IExamenRepository examenRepository)
+        IExamenRepository examenRepository,
+        IRespuestaRepository respuestaRepository)
     {
         _examenReactivoRepository = examenReactivoRepository;
         _examenReactivoValidatorService = examenReactivoValidatorService;
         _reactivoRepository = reactivoRepository;
         _examenRepository = examenRepository;
+        _respuestaRepository = respuestaRepository;
     }
 
     public ExamenReactivo? Consultar(int idExamenReactivo)
@@ -60,9 +63,53 @@ public class ExamenReactivoService
 
     public RespuestasExcelDto ConsultarReactivosExamenExcel(int idProgramacionExamen)
     {
-        var respuestas = _examenReactivoRepository.ConsultarReactivosExamenExcel(idProgramacionExamen);
+        int idExamen = _examenRepository.Consultar(idProgramacionExamen).IdExamen;
+        var reactivos = _examenReactivoRepository.ConsultarReactivosExamenExcel(idExamen);
+        
+        foreach (var reactivo in reactivos)
+        {
+            reactivo.RespuestaAlumno = _respuestaRepository.ConsultarRespuestaContestada(reactivo.IdReactivo , reactivo.RespuestaAlumno).RespuestaFormateada;
+        }
 
-        return respuestas;
+        List<string> headers = new List<string> { "Marca temporal", "Usuario", "Correo electronico" }; //Datos de la persona que respondió
+        List<string> preguntas = reactivos.GroupBy(r => r.IdExamen).FirstOrDefault().Select(p => p.Pregunta).ToList(); //Preguntas del cuestionario
+        headers.AddRange(preguntas); //Los headers del excel son los datos + las preguntas
+
+        var respuestas = reactivos.ToList();
+        var respuestasConDatos = new List<ExamenReactivoExcelDto>();
+
+        foreach (var grupo in respuestas.GroupBy(r => r.IdExamen))
+        {
+            var datos = _examenReactivoRepository.obtenerDatosParaRespuestasExcel(grupo.FirstOrDefault().IdExamen);
+
+            var listaDatos = new List<ExamenReactivoExcelDto> {
+                new ExamenReactivoExcelDto {
+                    IdExamen = grupo.Key,
+                    Pregunta = "Fecha de realizacion",
+                    RespuestaAlumno = datos.FechaContestado.ToString()
+                },
+                new ExamenReactivoExcelDto {
+                    IdExamen = grupo.Key,
+                    Pregunta = "Nombre del participante",
+                    RespuestaAlumno = datos.Nombre
+                },
+                new ExamenReactivoExcelDto {
+                    IdExamen = grupo.Key,
+                    Pregunta = "Correo del participante",
+                    RespuestaAlumno = datos.Correo
+                }
+            };
+            respuestasConDatos.AddRange(listaDatos);
+        }
+        respuestasConDatos.AddRange(respuestas);
+
+        RespuestasExcelDto respuestasExcel = new RespuestasExcelDto
+        {
+            Preguntas = headers,
+            Respuestas = respuestasConDatos.GroupBy(r => r.IdExamen)
+        };
+
+        return respuestasExcel;
     }
 
 

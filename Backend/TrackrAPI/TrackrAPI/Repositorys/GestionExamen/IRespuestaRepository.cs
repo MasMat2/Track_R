@@ -7,5 +7,6 @@ public interface IRespuestaRepository : IRepository<Respuesta>
     public Respuesta Consultar(int idRespuesta);
     public IEnumerable<RespuestaDto> ConsultarTodosPorReactivo(int idReactivo);
     public RespuestaDto? ConsultarParaFormulario(int idRespuesta);
+    public RespuestaDto ConsultarRespuestaContestada(int idReactivo , string clave);
     
 }
