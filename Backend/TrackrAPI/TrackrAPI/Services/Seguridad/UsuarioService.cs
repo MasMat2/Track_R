@@ -782,11 +782,14 @@ namespace TrackrAPI.Services.Seguridad
         {
             var infoPerfil = usuarioRepository.ConsultarInformacionPerfilTrackr(idUsuario);
             var fotoPerfil = _archivoRepository.ObtenerImagenUsuario(idUsuario);
+
+            var fotoPerfilUsuario = ObtenerImagenUsuario(idUsuario, fotoPerfil?.ArchivoTipoMime);
+
             if(fotoPerfil != null)
             {
                 var fotoPerfilDto = new ArchivoDTO
                 {
-                    Archivo = Convert.ToBase64String(fotoPerfil.Archivo1),
+                    Archivo = fotoPerfilUsuario,
                     ArchivoMime = fotoPerfil.ArchivoTipoMime,
                     IdArchivo = fotoPerfil.IdArchivo,
                     Nombre = fotoPerfil.ArchivoNombre
