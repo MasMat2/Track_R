@@ -14,6 +14,7 @@ namespace TrackrAPI.Repositorys.Seguridad
         public Usuario Login(string correo, string contrasena, string claveRol);
         public Usuario ConsultarPorCorreo(string correo, string claveTipoUsuario);
         public Usuario ConsultarPorCorreo(string correo);
+        public Usuario ConsultarPorUsername(string username);
         public Usuario ConsultarPorCorreoPersonal(string correoPersonal);
         public Usuario ConsultarPorUsuario(string usuario);
         public Usuario Consultar(int idUsuario);

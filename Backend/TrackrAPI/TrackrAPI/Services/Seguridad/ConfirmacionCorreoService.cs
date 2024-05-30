@@ -79,7 +79,7 @@ namespace TrackrAPI.Services.Seguridad
         public bool ValidarConfirmarCorreo(ConfirmarCorreoDto datosConfirmacionDto)
         {
             _usuarioValidatorService.ValidarConfirmarCorreo(datosConfirmacionDto);
-            Usuario usuario = _usuarioRepository.ConsultarPorCorreo(_simpleAES.DecryptString(datosConfirmacionDto.Correo));
+            Usuario usuario = _usuarioRepository.ConsultarPorUsername(_simpleAES.DecryptString(datosConfirmacionDto.Correo));
 
 
 

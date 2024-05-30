@@ -372,6 +372,14 @@ namespace TrackrAPI.Repositorys.Seguridad
                 select u;
             return usuario.FirstOrDefault();
         }
+        public Usuario ConsultarPorUsername(string username)
+        {
+            var usuario =
+                from u in context.Usuario
+                where u.Correo == username
+                select u;
+            return usuario.FirstOrDefault();
+        }
 
         public Usuario ConsultarPorCorreoPersonal(string correoPersonal)
         {
