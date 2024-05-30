@@ -8,6 +8,7 @@ import { IonicModule, AlertController } from '@ionic/angular';
 import { ModalController } from '@ionic/angular/standalone';
 import { Examen } from '@models/examen/examen';
 import { ExamenReactivo } from '@models/examen/examen-reactivo';
+import { Respuesta } from '@models/examen/respuesta';
 import { ImageOnlyModalComponent } from '@sharedComponents/image-only-modal/image-only-modal.component';
 import { addIcons } from 'ionicons';
 import { BehaviorSubject } from 'rxjs';
@@ -15,7 +16,7 @@ import { OnExit } from 'src/app/shared/guards/exit.guard';
 
 
 interface ExamenReactivoRespuestasArray extends ExamenReactivo{
-  respuestasSeparadas: string[]
+  respuestasSeparadas: Respuesta[]
   respuestaSeleccionadaIndex: number | undefined;
 }
 
@@ -138,7 +139,7 @@ export class ResponderCuestionarioComponent  implements OnInit, OnExit {
       next: (data) => {
         this.reactivoList = data.map(reactivo => ({
           ...reactivo,
-          respuestasSeparadas: this.separarRespuestas(reactivo.respuesta),
+          respuestasSeparadas: reactivo.respuestas,
           respuestaSeleccionadaIndex: undefined
         }));
         if((this.examen.totalPreguntas != this.reactivoList.length) || this.reactivoList.length == 0){
@@ -165,9 +166,10 @@ export class ResponderCuestionarioComponent  implements OnInit, OnExit {
     return respuestasArray;
   }
 
-  protected seleccionarRespuesta(preguntaIndex: number, respuestaIndex: number){
-    this.reactivoList[preguntaIndex].respuestaAlumno = (respuestaIndex + 1).toString(); //asignar respuesta
+  protected seleccionarRespuesta(preguntaIndex: number, respuestaIndex: number , respuesta : Respuesta){
+    this.reactivoList[preguntaIndex].respuestaAlumno = respuesta.clave; //asignar respuesta
     this.reactivoList[preguntaIndex].respuestaSeleccionadaIndex = respuestaIndex; //marcar item como seleccionado
+    this.reactivoList[preguntaIndex].respuestaValor = respuesta.valor;
   }
 
   protected hayRespuestaSeleccionada(preguntaIndex: number): boolean{

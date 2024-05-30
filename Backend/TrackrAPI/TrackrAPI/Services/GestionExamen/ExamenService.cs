@@ -318,7 +318,7 @@ public class ExamenService
                            <div style='text-align: center; margin-top: 10px; margin-bottom: 10px;'>
                                <img id='logo' class='imagenPregunta' src='{ reactivo.ImagenBase64 }' height='200'/>
                            </div>
-                           <p>{ reactivo.Respuesta }</p>
+                           <p>{ reactivo.Respuestas.ToList() }</p>
                            <p>Respondió: <span style='font-weight: bold;'>{ reactivo.RespuestaAlumno }</span></p>
                        </div>
                     ";
@@ -329,7 +329,7 @@ public class ExamenService
                 @$"
                     <div class='pregunta'>
                         <h3>{index+1 }.- { reactivo.Pregunta }</h3>
-                        <p> { reactivo.Respuesta }</p>
+                        <p> { reactivo.Respuestas.ToList() }</p>
                         <p>Respondió: <span style='font-weight: bold;'>{ reactivo.RespuestaAlumno }</span></p>
                     </div>
                 ";

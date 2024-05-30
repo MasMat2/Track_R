@@ -51,7 +51,7 @@ public class ExamenReactivoRepository : Repository<ExamenReactivo>, IExamenReact
                 ImagenBase64 = p.IdReactivoNavigation.ImagenTipoMime == null
                     ? ""
                     : "data:" + p.IdReactivoNavigation.ImagenTipoMime + ";base64," + Convert.ToBase64String(p.IdReactivoNavigation.Imagen ?? Array.Empty<byte>()),
-                Respuesta = p.IdReactivoNavigation.Respuesta ?? string.Empty,
+                Respuestas = p.IdReactivoNavigation.RespuestaNavigation,
                 RespuestaAlumno = p.RespuestaAlumno ?? string.Empty,
                 NecesitaRevision = p.IdReactivoNavigation.NecesitaRevision,
                 FechaAlta = p.FechaAlta,

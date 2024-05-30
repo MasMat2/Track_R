@@ -89,7 +89,7 @@
             </ion-button>
             <ion-img
              *ngIf="preguntaTieneImagen(reactivoList[indice].imagenBase64)" 
-             [src]="'data:image/jpeg;base64,' + reactivoList[indice].imagenBase64"
+             [src]="reactivoList[indice].imagenBase64"
              alt="imagen de pregunta">
             </ion-img>
           </div>
@@ -100,9 +100,12 @@
               lines="none" 
               button 
               *ngFor="let respuesta of reactivoList[indice].respuestasSeparadas index as i"
-              (click)="seleccionarRespuesta(indice, i)"
+              (click)="seleccionarRespuesta(indice, i , respuesta)"
               [ngClass]="{'seleccionado': (reactivoList[indice].respuestaSeleccionadaIndex == i)}">
-              <ion-label>{{respuesta}} {{i}}</ion-label>
+              <ion-label>
+                {{respuesta.clave}})
+                 {{respuesta.respuesta1}}
+              </ion-label>
             </ion-item>
           </ion-list>
         </div>

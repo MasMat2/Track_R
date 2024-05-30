@@ -8,6 +8,7 @@ import { AlertController, IonicModule } from '@ionic/angular';
 import { ModalController } from '@ionic/angular/standalone';
 import { Examen } from '@models/examen/examen';
 import { ExamenReactivo } from '@models/examen/examen-reactivo';
+import { Respuesta } from '@models/examen/respuesta';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { ImageOnlyModalComponent } from '@sharedComponents/image-only-modal/image-only-modal.component';
 import { addIcons } from 'ionicons';
@@ -35,7 +36,7 @@ export class VerCuestionarioComponent implements OnInit {
   private examen = new Examen();
   protected tipoExamen: string;
   protected fechaExamen: string;
-  protected reactivoList: ExamenReactivoRespuestasArray[] = [];
+  protected reactivoList: ExamenReactivo[] = [];
 
   //Estado de "cargando" para mostrar el alert con spinner
   private cargandoSubject: BehaviorSubject<boolean> =
@@ -60,7 +61,6 @@ export class VerCuestionarioComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       this.idExamen = params.get('id');
     });
-
     this.cargando$.subscribe((cargando) => {
       if (cargando) {
         this.presentLoading();
@@ -106,18 +106,7 @@ export class VerCuestionarioComponent implements OnInit {
       .consultarReactivosExamen(this.examen.idExamen)
       .subscribe({
         next: (data) => {
-          this.reactivoList = data.map((reactivo) => ({
-            ...reactivo,
-            respuestasSeparadas: this.separarRespuestas(reactivo.respuesta),
-          }));
-
-          if (
-            this.examen.totalPreguntas != this.reactivoList.length ||
-            this.reactivoList.length == 0
-          ) {
-            this.cargandoSubject.next(false);
-            this.presentAlertError();
-          }
+          this.reactivoList = data;
         },
         error: () => {
           this.cargandoSubject.next(false);
@@ -160,17 +149,11 @@ export class VerCuestionarioComponent implements OnInit {
   }
 
   protected esRespuestaAlumno(
-    respuesta: string,
+    respuesta: Respuesta,
     respuestaAlumno: string
   ): boolean {
-    const match = respuesta.match(/^(\d+)\)/);
-    const resp = match ? match[1] : null; //Agarra sólo el número/letra de la respuesta
-
-    if (resp != null && resp === respuestaAlumno) {
-      return true;
-    }
-
-    return false;
+    const match = respuesta.clave == respuestaAlumno;
+    return match;
   }
 
   protected async presentAlertError() {

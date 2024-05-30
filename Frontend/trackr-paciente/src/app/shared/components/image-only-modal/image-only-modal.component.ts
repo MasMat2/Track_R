@@ -28,7 +28,7 @@ export class ImageOnlyModalComponent  implements OnInit {
 
   ngOnInit() {
     if(this.archivo || this.archivo != ""){
-      this.imageSrc = `data:image/jpeg;base64,${this.archivo}`;
+      this.imageSrc = this.archivo;
     }
   }
 

@@ -36,16 +36,17 @@
             </ion-button>
             <ion-img
              *ngIf="preguntaTieneImagen(reactivo.imagenBase64)" 
-             [src]="'data:image/jpeg;base64,' + reactivo.imagenBase64"
+             [src]="reactivo.imagenBase64"
              alt="imagen de pregunta">
             </ion-img>
           </div>
           <ion-label class="opciones">
             <p 
-              *ngFor="let respuesta of reactivo.respuestasSeparadas"
+              *ngFor="let respuesta of reactivo.respuestas"
               [ngClass]="{'seleccionada': esRespuestaAlumno(respuesta, reactivo.respuestaAlumno)}"
             >
-              {{respuesta}}
+              {{respuesta.clave}}) 
+              {{respuesta.respuesta1}}
             </p>
 
             <p 

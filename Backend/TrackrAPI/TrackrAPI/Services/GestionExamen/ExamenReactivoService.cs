@@ -102,8 +102,24 @@ public class ExamenReactivoService
 
         int preguntasCorrectas = 0;
 
+
+        Examen? examen = _examenRepository.Consultar(examenReactivoList[0].IdExamen);
+   
+        if (examen is null)
+        {
+            throw new CdisException("El examen no existe");
+        }
+
+        examen.Resultado = 0;
+
+
         foreach (ExamenReactivo examenReactivo in examenReactivoList)
         {
+            if(examenReactivo.RespuestaValor != null)
+            {
+                examen.Resultado += examenReactivo.RespuestaValor;
+            }
+
             string respuestaCorrecta = _reactivoRepository.ConsultarRespuestaCorrecta(examenReactivo.IdReactivo);
 
             if (examenReactivo.RespuestaAlumno == respuestaCorrecta)
@@ -121,18 +137,10 @@ public class ExamenReactivoService
             }
         }
 
-        Examen? examen = _examenRepository.Consultar(examenReactivoList[0].IdExamen);
 
-        if (examen is null)
-        {
-            throw new CdisException("El examen no existe");
-        }
 
         int totalPreguntas = examen.IdProgramacionExamenNavigation.IdTipoExamenNavigation.TotalPreguntas == null ? 0 : examen.IdProgramacionExamenNavigation.IdTipoExamenNavigation.TotalPreguntas ?? 0;
-        float calificacion = (preguntasCorrectas * 100) / totalPreguntas;
-
-        examen.PreguntasCorrectas = preguntasCorrectas;
-        examen.Resultado = calificacion;
+        float calificacion = (float?)examen.Resultado ?? 0;
         examen.IdEstatusExamen = 3; //Examen Terminado
 
         _examenRepository.Editar(examen);
