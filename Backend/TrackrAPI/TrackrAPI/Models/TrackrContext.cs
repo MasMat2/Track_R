@@ -101,8 +101,6 @@ namespace TrackrAPI.Models
         public virtual DbSet<RegimenFiscal> RegimenFiscal { get; set; } = null!;
         public virtual DbSet<Respuesta> Respuesta { get; set; } = null!;
         public virtual DbSet<RespuestasClasificacionPregunta> RespuestasClasificacionPregunta { get; set; } = null!;
-        public virtual DbSet<Respuesta> Respuesta { get; set; } = null!;
-        public virtual DbSet<RespuestasClasificacionPregunta> RespuestasClasificacionPregunta { get; set; } = null!;
         public virtual DbSet<RestablecerContrasena> RestablecerContrasena { get; set; } = null!;
         public virtual DbSet<Rol> Rol { get; set; } = null!;
         public virtual DbSet<RolAcceso> RolAcceso { get; set; } = null!;
