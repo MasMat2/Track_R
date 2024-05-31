@@ -95,7 +95,7 @@ namespace TrackrAPI.Controllers.Catalogo
             if (archivo == null)
             {
                 var path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
-                imageFileStream = System.IO.File.ReadAllBytes(path);
+                imageFileStream = Convert.FromBase64String(usuarioService.ObtenerImagenUsuario(idUsuario));
                 tipoMime = "image/svg+xml";
             }
             else if(archivo != null && (archivo.ArchivoUrl != null || archivo.ArchivoUrl == ""))
