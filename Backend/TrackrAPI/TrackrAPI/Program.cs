@@ -21,6 +21,8 @@ using TrackrAPI.Services.Seguridad;
 using TrackrAPI.Services.Sftp;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 // TODO: 2023-05-09 -> Esta es una configuración temporal para evitar
 // que se validen los modelos en los controladores migrados de ATI.
