@@ -818,10 +818,6 @@ namespace TrackrAPI.Services.Seguridad
             var expediente = expedienteTrackrRepository.ConsultarPorUsuario(usuario.IdUsuario);
 
 
-            if (informacion.CorreoPersonal != usuario.CorreoPersonal)
-            {
-                usuario.CorreoConfirmado = false;
-            }
 
             usuario.Nombre = informacion.Nombre;
             usuario.ApellidoPaterno = informacion.ApellidoPaterno;
@@ -832,9 +828,10 @@ namespace TrackrAPI.Services.Seguridad
             expediente.Cintura = informacion.Cintura;
             expediente.Estatura = informacion.Estatura;
             usuario.CorreoPersonal = informacion.CorreoPersonal;
+            usuario.Correo = informacion.Correo;
             usuario.TelefonoMovil = informacion.TelefonoMovil;
 
-            usuarioRepository.Editar(usuario);
+            Editar(usuario);
             expedienteTrackrRepository.Editar(expediente);
         }
 

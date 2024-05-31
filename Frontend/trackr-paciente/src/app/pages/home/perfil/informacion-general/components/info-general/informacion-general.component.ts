@@ -129,6 +129,7 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
     }
     this.submiting = true;
     this.cargandoSubject.next(true);
+    this.infoUsuario.correo = this.infoUsuario.correoPersonal;
     this.actualizarInformacionUsuario(this.infoUsuario);
   }
 
