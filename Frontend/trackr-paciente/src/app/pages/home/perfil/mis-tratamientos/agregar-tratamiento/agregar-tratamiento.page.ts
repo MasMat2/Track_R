@@ -14,7 +14,6 @@ import {  ModalController } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { ExpedienteTratamientoDetalleDto } from 'src/app/shared/Dtos/gestion-perfil/expediente-tratamiento-detalle-dto';
-import { SelectorDto } from 'src/app/shared/Dtos/gestion-perfil/selector-dto';
 import { MisDoctoresService } from '@http/gestion-expediente/mis-doctores.service';
 import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores-selector-dto';
 import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';

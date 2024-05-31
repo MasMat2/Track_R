@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 
 import { Observable, map } from 'rxjs';
 import { ExpedienteTratamientoDetalleDto } from '../../Dtos/gestion-perfil/expediente-tratamiento-detalle-dto';
-import { SelectorDto } from '../../Dtos/gestion-perfil/selector-dto';
 import { ExpedienteTratamientoPerfilDto } from '../../Dtos/gestion-perfil/expediente-tratamiento-perfil-dto';
 
 @Injectable({
