@@ -117,9 +117,9 @@ builder.Services.AddHostedService<RecordatorioTomasService>();
 
 var app = builder.Build();
 
-app.UseExceptionHandler(builder =>
+app.UseExceptionHandler(webApplicationBuilder =>
 {
-    builder.Run(async context =>
+    webApplicationBuilder.Run(async context =>
     {
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
@@ -142,6 +142,12 @@ app.UseExceptionHandler(builder =>
             else
             {
                 string errorMessageDefault = "Ocurri� un error inesperado, favor de contactar al administrador del sistema";
+                var notificarPorSlack = builder.Configuration.GetSection("Slack:NotificarEnvioPorSlack")?.Value;
+                
+                if (notificarPorSlack == "1")
+                {
+                    Logger.NotificarPorSlack(exceptionHandlerPathFeature.Error);
+                }
                 Logger.WriteError(exceptionHandlerPathFeature.Error, app.Environment);
 
                 context.Response.AddApplicationError(errorMessageDefault);
