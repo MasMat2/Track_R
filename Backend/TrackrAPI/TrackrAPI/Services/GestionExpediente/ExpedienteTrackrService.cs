@@ -223,22 +223,9 @@ public class ExpedienteTrackrService
 
             var img = _archivoService.ObtenerImagenUsuario(expediente.IdUsuario);
 
-            if (img != null)
-            {
-                var imgPath = img.ArchivoUrl ?? Path.Combine("Archivos", "Usuario", $"default.svg");
-                expediente.ImagenBase64 = "data:" + img.ArchivoTipoMime + ";base64," +  _sftpService.DownloadFile(imgPath);
-                //expediente.ImagenBase64 = "data:" + img.ArchivoTipoMime + ";base64," + Convert.ToBase64String(img.Archivo1);
-            }
-            // string filePath = $"Archivos/Usuario/{expediente.IdUsuario}{MimeTypeMap.GetExtension(expediente.TipoMime)}";
-
-            //     //Console.WriteLine("Expediente : " + JsonConvert.SerializeObject(expediente, Formatting.Indented));
-            //     //Console.WriteLine("--------------------");
-            // if (File.Exists(filePath))
-            // {
-            //     byte[] imageArray = File.ReadAllBytes(filePath);
-
-            //     expediente.ImagenBase64 = Convert.ToBase64String(imageArray);
-            // }
+            var imgPath = img?.ArchivoUrl ?? Path.Combine("Archivos", "Usuario", "default-user.jpg");
+            var mimeType = img?.ArchivoTipoMime ?? "image/jpg";
+            expediente.ImagenBase64 = $"data:{mimeType};base64,{_sftpService.DownloadFile(imgPath)}";
 
             expediente.DosisNoTomadas = _expedienteTrackrRepository.DosisNoTomadas(expediente.IdExpedienteTrackr);
             expediente.VariablesFueraRango = _expedienteTrackrRepository.VariablesFueraRango(expediente.IdUsuario);
