@@ -225,7 +225,8 @@ public class ExpedienteTrackrService
 
             if (img != null)
             {
-                expediente.ImagenBase64 = "data:" + img.ArchivoTipoMime + ";base64," +  _sftpService.DownloadFile(img.ArchivoUrl);
+                var imgPath = img.ArchivoUrl ?? Path.Combine("Archivos", "Usuario", $"default.svg");
+                expediente.ImagenBase64 = "data:" + img.ArchivoTipoMime + ";base64," +  _sftpService.DownloadFile(imgPath);
                 //expediente.ImagenBase64 = "data:" + img.ArchivoTipoMime + ";base64," + Convert.ToBase64String(img.Archivo1);
             }
             // string filePath = $"Archivos/Usuario/{expediente.IdUsuario}{MimeTypeMap.GetExtension(expediente.TipoMime)}";
