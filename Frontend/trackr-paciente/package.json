@@ -1,6 +1,6 @@
 {
   "name": "trackr-paciente",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
   "scripts": {
@@ -44,7 +44,7 @@
     "ag-grid-angular": "^30.0.6",
     "ag-grid-community": "^30.0.6",
     "bootstrap": "^5.2.3",
-    "capacitor-health-connect-local": "file:../../../../../documents/github/capacitor-health-connect-main",
+    "capacitor-health-connect-local": "file:../../../capacitor-health-connect-main",
     "capacitor-voice-recorder": "^5.0.0",
     "chart.js": "^4.4.0",
     "date-fns": "^2.30.0",
