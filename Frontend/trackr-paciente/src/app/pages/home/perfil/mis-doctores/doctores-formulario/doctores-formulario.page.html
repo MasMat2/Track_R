@@ -14,7 +14,7 @@
 </ion-header>
 
 <!-- fullscreen para que pase por detrás del footer -->
-<ion-content fullscreen>
+<ion-content fullscreen class="neutral">
   <div class="contenedor-principal">
     <div class="lista-doctores">
       <ion-list>
@@ -28,14 +28,7 @@
       </ion-list>
     </div>
   </div>
-  <ion-alert
-    [isOpen]="cargando$ | async"
-    [message]="spinner"
-    cssClass="custom-alert-loading"
-  >
-  </ion-alert>
 </ion-content>
-
 <ion-footer class="ion-no-border">
   <div class="contenedor-footer">
     <div class="gradiente">

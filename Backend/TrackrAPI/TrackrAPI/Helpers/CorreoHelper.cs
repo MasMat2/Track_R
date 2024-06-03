@@ -1,73 +1,74 @@
 ﻿
+using System.Net.Mail;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+using TrackrAPI.Services.Sftp;
 
 
 namespace TrackrAPI.Helpers;
 
 public class CorreoHelper
 {
-    private string Host;
-    private int Puerto;
-    private string Emisor;
-    private string Contrasena;
-    private string Alias;
+    private readonly string Host;
+    private readonly int Puerto;
+    private readonly string Emisor;
+    private readonly string Contrasena;
+    private readonly string Alias;
+    private readonly bool UseSSL;
+    private readonly string AuthName;
 
     public CorreoHelper(IConfiguration config)
     {
+        
         var smtp = config.GetSection("SMTP");
         if (smtp != null)
         {
             Host = smtp.GetSection("Host").Value;
             Puerto = StringToIntPort(smtp.GetSection("Puerto").Value);
-            Emisor = smtp.GetSection("Emisor").Value;
-            Contrasena = smtp.GetSection("Contrasena").Value;
-            Alias = smtp.GetSection("Alias").Value;
+            Emisor = smtp.GetSection("Address").Value;
+            Contrasena = smtp.GetSection("AuthPassword").Value;
+            Alias = smtp.GetSection("DisplayName").Value;
+            UseSSL = bool.Parse(smtp.GetSection("UseSSL").Value);
+            AuthName = smtp.GetSection("AuthName").Value;
         }
     }
 
-    public async Task Enviar(Correo correo)
+    public void Enviar(Correo correo, AlternateView? htmlView = null)
     {
         try
         {
-
             if (string.IsNullOrWhiteSpace(correo.Receptor) || correo.Receptor.Trim().StartsWith('.'))
                 return;
 
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(Alias, Emisor));
-            message.To.Add(MailboxAddress.Parse(correo.Receptor));
-            message.Subject = correo.Asunto;
+            MailMessage mail = new();
+            mail.To.Add(new MailAddress(correo.Receptor));
+            mail.From = new MailAddress(Emisor, Alias);
+            mail.Subject = correo.Asunto;
+            mail.Body = correo.Mensaje;
+            mail.IsBodyHtml = correo.EsMensajeHtml;
 
-            if (correo.EsMensajeHtml)
+            if (htmlView != null)
             {
-                var builder = new BodyBuilder { HtmlBody = correo.Mensaje };
-
-                foreach (var imagen in correo.Imagenes)
-                    builder.LinkedResources.Add(imagen);
-
-                message.Body = builder.ToMessageBody();
-            }
-            else
-            {
-                message.Body = new TextPart("plain") { Text = correo.Mensaje };
+                mail.AlternateViews.Add(htmlView);
             }
 
-            using (var client = new SmtpClient())
+            System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient(Host, Puerto)
             {
-                await client.ConnectAsync(Host, Puerto, SecureSocketOptions.StartTls);
-                await client.AuthenticateAsync(Emisor, Contrasena);
-                await client.SendAsync(message);
-                await client.DisconnectAsync(true);
-            }
+                UseDefaultCredentials = false,
+                Credentials = new System.Net.NetworkCredential(Emisor, Contrasena),
+                Port = Puerto,
+                Host = Host,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                EnableSsl = UseSSL
+            };
 
+            client.Send(mail);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            throw new CdisException("Ocurrió un error al enviar el correo");
+            Console.WriteLine("Error al enviar correo: " + ex.Message);
         }
-
     }
 
     public void EnviarAdjuntos(Correo correo, List<MimePart> adjuntos)
@@ -101,7 +102,7 @@ public class CorreoHelper
 
         message.Body = bodyBuilder.ToMessageBody();
 
-        using (var client = new SmtpClient())
+        using (var client = new MailKit.Net.Smtp.SmtpClient())
         {
             client.Connect(Host, Puerto, SecureSocketOptions.StartTls);
             client.Authenticate(Emisor, Contrasena);

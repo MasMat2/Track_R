@@ -41,7 +41,10 @@ export class FooterComponent implements OnInit {
     '/home/perfil/mis-estudios',
     '/home/perfil/informacion-general',
     '/home/dashboard/seguimiento',
-    '/home/perfil/mis-tratamientos'
+    '/home/perfil/mis-tratamientos',
+    '/home/cuestionarios/responder',
+    '/home/cuestionarios/ver'
+
   ];
 
   @ViewChild('tabs') tabs: IonTabs;

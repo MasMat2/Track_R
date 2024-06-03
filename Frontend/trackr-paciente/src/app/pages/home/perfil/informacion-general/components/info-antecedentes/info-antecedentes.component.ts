@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular/standalone';
-import { Constants } from '@utils/constants/constants';
 import { addIcons } from 'ionicons';
 import { chevronBack, add, trashOutline} from 'ionicons/icons';
 import { AntecedenteFormularioComponent } from './antecedente-formulario/antecedente-formulario.component';
@@ -51,7 +50,6 @@ export class InfoAntecedentesComponent  implements OnInit {
     const alert = await this.alertController.create({
       header: '¿Seguro que deseas eliminar este elemento?',
       subHeader: 'No podrás recuperarlo',
-      message: Constants.ALERT_DELETE,
       cssClass: 'custom-alert-delete',
       buttons: [
         {
@@ -75,7 +73,6 @@ export class InfoAntecedentesComponent  implements OnInit {
 
     const alertSuccess = await this.alertController.create({
       header: 'Elemento eliminado exitosamente',
-      message: Constants.ALERT_SUCCESS,
       buttons: [{
         text: 'De acuerdo',
         role: 'confirm',

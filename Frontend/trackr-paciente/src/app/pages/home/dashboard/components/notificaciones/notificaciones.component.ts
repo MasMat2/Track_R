@@ -1,5 +1,5 @@
 import { CommonModule, NgClass, NgFor } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AlertController, IonicModule, PopoverController } from '@ionic/angular';
 import { NotificacionPacienteHubService } from '@services/notificacion-paciente-hub.service';
 import { Observable , map} from 'rxjs';
@@ -42,7 +42,8 @@ export class NotificacionesComponent  implements OnInit
     private alertController : AlertController,
     private router:Router,
     private popOverController:PopoverController,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private cdr : ChangeDetectorRef
   ){ addIcons({
     'close' : 'assets/img/svg/x.svg',
     'circle-user' : 'assets/img/svg/circle-user.svg',
@@ -92,23 +93,33 @@ export class NotificacionesComponent  implements OnInit
   //     }
   // }
 
-  protected async marcarComoVista(notificacion : NotificacionPacientePopOverDto) {
+  protected async marcarComoVista(event: Event, notificacion: NotificacionPacientePopOverDto) {
+    event.preventDefault();
+    event.stopPropagation();
+  
+    const scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
+  
+    this.cdr.detach(); 
+  
     if(!notificacion.visto){
       if(notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA){
         await this.presentAlertTomarTratamiento(notificacion)
       }
-    }
-    
-    if(notificacion.idChat !== null){
-      if(!notificacion.visto){
+      
+      if(notificacion.idChat !== null){
         await this.notificacionHubService.marcarComoVista(notificacion.id);
+        this.modalController.dismiss().then(() => {
+          this.router.navigate(['home','chat-movil','chat',notificacion.idChat]);
+        });
       }
-      this.modalController.dismiss().then(() => {
-        this.router.navigate(['home','chat-movil','chat',notificacion.idChat]);
-      });
     }
-
-    this.consultarNotificaciones();   
+  
+    this.consultarNotificaciones();
+  
+    setTimeout(() => {
+      window.scrollTo(0, scrollPosition); // Restore scroll position
+      this.cdr.reattach(); // Reattach change detection
+    }, 0);
   }
 
   protected async presentAlertTomarTratamiento(notificacion : NotificacionPacientePopOverDto){
@@ -116,6 +127,7 @@ export class NotificacionesComponent  implements OnInit
     const alert = await this.alertController.create({
       header: notificacion.titulo,
       subHeader: `${notificacion.mensaje} \n ${MENSAJE_TOMA}`,
+      cssClass: 'custom-alert color-primary icon-pill two-buttons',
       buttons: [
         {
           text: 'No tomé la dosis', 
@@ -136,7 +148,6 @@ export class NotificacionesComponent  implements OnInit
           }
         }
       ],
-      cssClass: 'custom-alert-choice'
     });
 
     await alert.present();

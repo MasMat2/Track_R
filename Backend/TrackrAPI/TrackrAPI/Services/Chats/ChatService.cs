@@ -8,6 +8,7 @@ using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Chats;
 using TrackrAPI.Repositorys.Seguridad;
 using TrackrAPI.Services.Archivos;
+using TrackrAPI.Services.Sftp;
 
 namespace TrackrAPI.Services.Chats;
 
@@ -19,6 +20,7 @@ public class ChatService
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly ChatPersonaService _chatPersonaService;
     private readonly ArchivoService _archivoService;
+    private readonly SftpService _sftpService;
 
     public ChatService(IChatRepository chatRepository,
                        IHubContext<ChatHub,
@@ -26,7 +28,8 @@ public class ChatService
                        IChatPersonaRepository chatPersonaRepository,
                        IUsuarioRepository usuarioRepository,
                        ChatPersonaService chatPersonaService,
-                       ArchivoService archivoService)
+                       ArchivoService archivoService,
+                       SftpService sftpService)
     {
         _chatRepository = chatRepository;
         this.hubContext = hubContext;
@@ -34,6 +37,7 @@ public class ChatService
         _usuarioRepository = usuarioRepository;
         _chatPersonaService = chatPersonaService;
         _archivoService = archivoService;
+        _sftpService = sftpService;
     }
 
     public Chat AgregarChat(Chat chat)
@@ -82,14 +86,14 @@ public class ChatService
                         var user = _usuarioRepository.Consultar(persona);
                         chat.Titulo = user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno + " " + chat.Titulo;
                         var usuario = _usuarioRepository.ConsultarDto(persona);
-                        if (usuario != null)
-                        {
-                            if (!string.IsNullOrEmpty(usuario.ImagenTipoMime))
-                            {
-                                var imagen = _archivoService.ObtenerImagenUsuario(usuario.IdUsuario);
+                        //if (usuario != null)
+                        //{
+                            //if (!string.IsNullOrEmpty(usuario.ImagenTipoMime))
+                            //{
+                                var imagen = _archivoService.ObtenerImagenUsuario(persona);
                                 if (imagen != null)
                                 {
-                                    chat.ImagenBase64 = Convert.ToBase64String(imagen.Archivo1);
+                                    chat.ImagenBase64 = imagen.ArchivoUrl != null ?  _sftpService.DownloadFile(imagen.ArchivoUrl): "" ;
                                     chat.TipoMime = imagen.ArchivoTipoMime;
                                     chat.IdCreadorChat = usuario.IdUsuario;
                                 }
@@ -102,8 +106,8 @@ public class ChatService
                                 //     chat.TipoMime = usuario.ImagenTipoMime;
                                 // }
                                 // chat.IdCreadorChat = usuario.IdUsuario;
-                            }
-                        }
+                            //}
+                        //}
                     }
                 }
 
@@ -113,14 +117,15 @@ public class ChatService
                 var personas = _chatPersonaRepository.ConsultarPersonasPorChat(chat.IdChat).Select(x => x.IdPersona).ToList();
                 var idCreador = personas.Last();
                 var usuario = _usuarioRepository.ConsultarDto(idCreador);
-                if (usuario != null)
-                {
-                    if (!string.IsNullOrEmpty(usuario.ImagenTipoMime))
-                    {
-                        var imagen = _archivoService.ObtenerImagenUsuario(usuario.IdUsuario);
+                //if (usuario != null)
+                //{
+                    //if (!string.IsNullOrEmpty(usuario.ImagenTipoMime))
+                    //{
+                        var imagen = _archivoService.ObtenerImagenUsuario(idCreador);
                         if (imagen != null)
                         {
-                            chat.ImagenBase64 = Convert.ToBase64String(imagen.Archivo1);
+
+                            chat.ImagenBase64 = imagen.ArchivoUrl != null ? _sftpService.DownloadFile(imagen.ArchivoUrl) : "";
                             chat.TipoMime = imagen.ArchivoTipoMime;
                             chat.IdCreadorChat = usuario.IdUsuario;
                         }
@@ -132,8 +137,8 @@ public class ChatService
                         //     chat.TipoMime = usuario.ImagenTipoMime;
                         // }
                         // chat.IdCreadorChat = idCreador;
-                    }
-                }
+                    //}
+                //}
             }
             /*
             int idChatCreador = _chatPersonaRepository.ConsultarIdCreador(chat.IdChat);

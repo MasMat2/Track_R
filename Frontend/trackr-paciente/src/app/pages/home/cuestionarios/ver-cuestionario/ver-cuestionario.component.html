@@ -1,40 +1,63 @@
-<ion-header>
-  <app-header></app-header>
+<ion-header class="ion-no-border">
+  <div class="contenedor-header-light">
+    <ion-toolbar>
+      <ion-buttons class="start" slot="start">
+        <ion-button (click)="regresar()">
+          <ion-icon slot="start" name="chevron-left"></ion-icon>
+          <ion-label>Atrás</ion-label>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
 </ion-header>
-<ion-content>
-  <ion-toolbar class="header">
-    <ion-buttons slot="start">
-      <ion-button routerLink="home">
-        <ion-icon name="chevron-back" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title slot="" >{{tipoExamen}}</ion-title>
-  </ion-toolbar>
-  <div class="preguntas">
-    <ion-card *ngFor="let reactivo of reactivoList index as i" class="pregunta">
-      <ion-card-header>
-        <ion-card-title>{{i+1}}.-{{reactivo.pregunta}}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <div *ngIf="reactivo.imagenBase64 !== '' " style="text-align: center; margin-top: 10px; margin-bottom: 10px;">
-          <img
-            *ngIf="reactivo.imagenBase64 !== 'data:;base64,' "
-            id="logo"
-            class="imagenPregunta"
-            [src]="reactivo.imagenBase64"
-            height="200"
-          />
+<ion-content class="primary">
+  <div class="contenedor-principal">
+    <div class="titulo">
+      <ion-text>
+        <p>{{fechaExamen | date: 'MMMM d, y': '': 'es-MX'}}</p>
+        <h3>{{tipoExamen}}</h3>
+      </ion-text>
+    </div>
+
+    <div class="preguntas">
+      <div class="card-pregunta" *ngFor="let reactivo of reactivoList index as i">
+        <div class="header-pregunta">
+          <ion-label>
+            <p>{{i+1}}. {{reactivo.pregunta}}</p>
+          </ion-label>
         </div>
-        <ion-label>
-          <div class="opciones" *ngIf="!reactivo.necesitaRevision">
-          <p>{{reactivo.respuesta}}</p>
+        <div class="content-respuestas">
+          <div class="imagen" *ngIf="preguntaTieneImagen(reactivo.imagenBase64)">
+            <ion-button
+             class="verFoto"
+             (click)="VerImagen(reactivo.imagenBase64)"
+            >
+              <ion-icon slot="icon-only" name="external-link"></ion-icon>
+            </ion-button>
+            <ion-img
+             *ngIf="preguntaTieneImagen(reactivo.imagenBase64)" 
+             [src]="reactivo.imagenBase64"
+             alt="imagen de pregunta">
+            </ion-img>
           </div>
-        </ion-label>
-        <ion-label class="respuesta">
-          <h2>Respondió: <span style="color: black ; font-weight: bold;">{{reactivo.respuestaAlumno}}</span></h2>
-        </ion-label>
-      </ion-card-content>
-    </ion-card>
+          <ion-label class="opciones">
+            <p 
+              *ngFor="let respuesta of reactivo.respuestas"
+              [ngClass]="{'seleccionada': esRespuestaAlumno(respuesta, reactivo.respuestaAlumno)}"
+            >
+              {{respuesta.clave}}) 
+              {{respuesta.respuesta1}}
+            </p>
+
+            <p 
+              style="color: var(--error-200); padding-top: 32px;"
+              *ngIf="reactivo.respuestaAlumno === ''">
+              No respondió
+            </p>
+          </ion-label>
+        </div> 
+      </div>
+    </div>
   </div>
 </ion-content>
 

@@ -1,6 +1,6 @@
 <div class="contenedor">
   <div class="titulo-contenedor">
-    Contenido de la Encuesta: {{ tipoExamen.nombre }}
+    Contenido del Cuestionario: {{ tipoExamen.nombre }}
   </div>
   <div class="cuerpo-contenedor">
     <div class="row justify-content-center">
@@ -10,7 +10,7 @@
           (click)="agregar()"
           *ngIf="tieneAccesoAgregar"
         >
-          <button class="btn-agregar">Agregar Encuesta</button>
+          <button class="btn-agregar">Agregar Cuestionario</button>
         </div>
         <app-grid-general
           #gridNecesidad

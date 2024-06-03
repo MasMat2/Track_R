@@ -27,7 +27,7 @@ public class PadecimientoService
             p.IdPadecimiento,
             p.NombrePadecimiento,
             expedientes.Count(e => e.IdPadecimiento == p.IdPadecimiento)
-        ));
+        )).Where(p => p.CantidadPacientes > 0);
     }
 
     public IEnumerable<PadecimientoDTO> ConsultarPadecimientos()

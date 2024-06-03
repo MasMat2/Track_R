@@ -137,7 +137,9 @@ public class ExamenRepository : Repository<Examen>, IExamenRepository
             {
                 IdExamen = p.IdExamen,
                 TipoExamen = p.IdProgramacionExamenNavigation.IdTipoExamenNavigation.Nombre ?? string.Empty,
-                FechaExamen = p.IdProgramacionExamenNavigation.FechaExamen,
+                FechaExamen = p.IdProgramacionExamenNavigation.FechaExamen.HasValue 
+                    ? p.IdProgramacionExamenNavigation.FechaExamen.Value.ToLocalTime() 
+                    : (DateTime?)null,
                 HoraExamen = p.IdProgramacionExamenNavigation.HoraExamen,
                 Duracion = p.IdProgramacionExamenNavigation.Duracion,
                 NombreUsuario = p.IdUsuarioParticipanteNavigation.Nombre + " " + p.IdUsuarioParticipanteNavigation.ApellidoPaterno + " " + p.IdUsuarioParticipanteNavigation.ApellidoMaterno,

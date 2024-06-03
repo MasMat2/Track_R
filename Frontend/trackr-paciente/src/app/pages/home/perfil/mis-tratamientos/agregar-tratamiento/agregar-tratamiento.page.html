@@ -1,17 +1,16 @@
-
 <ion-header class="ion-no-border">
-  <div class="contenedor-header">
+  <div class="contenedor-header-light">
     <ion-toolbar>
-      <ion-buttons slot="start">
+      <ion-buttons class="start" slot="start">
         <ion-button (click)="cerrarModal('cancel')">
           <ion-icon slot="start" name="chevron-left"></ion-icon>
-          Atrás
+          <ion-label>Atrás</ion-label>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </div>
 </ion-header>
-<ion-content>
+<ion-content class="primary">
   <div class="contenedor-principal" *ngIf="true">
     <div class="titulo">
       <ion-text>
@@ -162,8 +161,8 @@
                       toggleIcon="chevron-down"
                       formControlName="idPadecimiento">
                       <ion-select-option 
-                        *ngFor="let padecimiento of padecimientos$| async"
-                        [value]="padecimiento.id">
+                        *ngFor="let padecimiento of padecimientosSelector"
+                        [value]="padecimiento.idPadecimiento">
                         {{padecimiento.nombre}}
                       </ion-select-option>
                     </ion-select>
@@ -193,8 +192,8 @@
                       toggleIcon="chevron-down"                       
                       formControlName="idUsuarioDoctor">
                       <ion-select-option 
-                        *ngFor="let doctor of doctores$ | async"
-                        [value]="doctor.id">
+                        *ngFor="let doctor of doctoresSelector"
+                        [value]="doctor.idUsuarioDoctor">
                         {{doctor.nombre}}
                       </ion-select-option>
                     </ion-select>
@@ -312,7 +311,7 @@
                         <ion-title>Fijar recordatorio</ion-title>
                       </ion-toolbar>
                     </ion-header>
-                    <ion-content>
+                    <ion-content class="neutral">
                       <div class="contenedor-principal-modal">
                         <ion-grid class="inputs ion-no-padding">
                           <ion-row>

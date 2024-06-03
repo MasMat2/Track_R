@@ -17,15 +17,15 @@ public class TipoExamenValidatorService
     private static readonly int LongitudClave = 5;
     private readonly string MensajeClaveLongitud = $"La longitud máxima de la clave son {LongitudClave } caracteres";
 
-    private readonly string MensajeNombreRequerido = "El Tipo de Encuesta es requerido";
+    private readonly string MensajeNombreRequerido = "El Tipo cuestionario es requerido";
     private static readonly int LongitudNombre = 200;
     private readonly string MensajeNombreLongitud = $"La longitud máxima de la descripción son {LongitudNombre } caracteres";
 
-    private readonly string MensajeDependencia = "El Tipo de Encuesta tiene información agregada y no se puede eliminar";
+    private readonly string MensajeDependencia = "El Tipo cuestionario tiene información agregada y no se puede eliminar";
 
-    private readonly string MensajeExistencia = "El Tipo de Encuesta que se requería actualizar no existe";
+    private readonly string MensajeExistencia = "El Tipo cuestionario que se requería actualizar no existe";
 
-    private readonly string MensajeDuplicado = "El Tipo de Encuesta que intenta agregar ya existe";
+    private readonly string MensajeDuplicado = "El Tipo cuestionario que intenta agregar ya existe";
 
     public void ValidarAgregar(TipoExamen tipoExamen)
     {

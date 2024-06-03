@@ -1,20 +1,18 @@
 <ion-header class="ion-no-border">
-  <div class="contenedor-header">
+  <div class="contenedor-header-dark">
+    <ion-toolbar class="boton-cerrar">
+      <ion-buttons class="start" slot="start">
+        <ion-button class="icon-only" (click)="cerrarModal()">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
     <ion-toolbar>
-      <div class="buttons">
-        <ion-buttons slot="start">
-          <ion-button (click)="cerrarModal()">
-            <ion-icon slot="icon-only" name="close"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </div>
-      <div class="title">
-        <ion-title>Notificaciones</ion-title>
-      </div>
+      <ion-title>Notificaciones</ion-title>
     </ion-toolbar>
   </div>
 </ion-header>
-<ion-content>
+<ion-content class="primary">
   <div class="contenedor-principal">
     <div class="lista-notificaciones">
       <ion-item-group>
@@ -27,7 +25,7 @@
           [button]="true" 
           [detail]="true"
           lines="none"  
-          (click)="marcarComoVista(notificacion)">
+          (click)="marcarComoVista($event,notificacion)">
           <div slot="start" class="marcador-visto" *ngIf="!notificacion.visto"></div>
           <ion-icon
             slot="start"
@@ -49,7 +47,7 @@
           [button]="true" 
           [detail]="true"
           lines="none"    
-          (click)="marcarComoVista(notificacion)">
+          (click)="marcarComoVista($event , notificacion)">
           <div slot="start" class="marcador-visto" *ngIf="!notificacion.visto"></div>
           <ion-icon
             slot="start"
@@ -71,7 +69,7 @@
           [button]="true" 
           [detail]="true"
           lines="none"    
-          (click)="marcarComoVista(notificacion)">
+          (click)="marcarComoVista($event, notificacion)">
           <div slot="start" class="marcador-visto" *ngIf="!notificacion.visto"></div>
           <ion-icon
             slot="start"

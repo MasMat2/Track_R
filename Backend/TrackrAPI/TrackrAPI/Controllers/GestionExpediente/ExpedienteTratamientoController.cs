@@ -7,7 +7,6 @@ using TrackrAPI.Services.GestionExpediente;
 
 namespace TrackrAPI.Controllers.GestionExpediente
 {
-    
     [Route("api/[controller]")]
     [ApiController]
     public class ExpedienteTratamientoController : ControllerBase
@@ -26,17 +25,43 @@ namespace TrackrAPI.Controllers.GestionExpediente
         }
 
         [HttpGet("consultarTratamientos")]
-        public IEnumerable<ExpedienteTratamientoDto> ConsultarTratamientos()
+        public IEnumerable<ExpedienteTratamientoDetalleDto> ConsultarTratamientos()
         {
             int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
             return expedienteTratamientoService.ConsultarTratamientos(idUsuario);
         }
 
+        [HttpGet("consultarTratamientosTrackr")]
+        public IEnumerable<ExpedienteTratamientoPerfilDto> ConsultarTratamientosTrackr()
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            return expedienteTratamientoService.ConsultarTratamientosTrackr(idUsuario);
+        }
+
+        [HttpGet("consultarTratamientoDetalle/{idExpedienteTratamiento}")]
+        public ExpedienteTratamientoDetalleDto ConsultarTratamientoParaDetalle(int idExpedienteTratamiento)
+        {
+            return expedienteTratamientoService.ConsultarTratamientoParaDetalle(idExpedienteTratamiento);
+        }
+
         [HttpPost("agregar")]
-        public int Agregar(ExpedienteTratamientoDto expedienteTratamientoDto)
+        public int Agregar(ExpedienteTratamientoDetalleDto expedienteTratamientoDto)
         {
             int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
             return expedienteTratamientoService.Agregar(expedienteTratamientoDto, idUsuario);
+        }
+
+        [HttpPut("editar")]
+        public int EditarTratamiento(ExpedienteTratamientoDetalleDto expedienteTratamientoDto)
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            return expedienteTratamientoService.EditarTratamiento(expedienteTratamientoDto, idUsuario);
+        }
+
+        [HttpDelete("eliminar/{idExpedienteTratamiento}")]
+        public void Eliminar(int idExpedienteTratamiento)
+        {
+            expedienteTratamientoService.EliminarTratamiento(idExpedienteTratamiento);
         }
 
         [HttpGet("selectorDeDoctor")]

@@ -47,6 +47,7 @@ export class Usuario {
   public idSatFormaPago?: number;
   public idMetodoPago?: number;
   public entreCalles?: string;
+  public hospital : string;
 
   // UsuarioDto
   public clave: string;

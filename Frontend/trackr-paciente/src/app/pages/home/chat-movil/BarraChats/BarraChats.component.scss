@@ -1,33 +1,22 @@
-@import "../../../../../theme/variables.scss";
 
-
-ion-header{
-  ion-title{
-    font-weight: bold;
-  }
-  .primary-toolbar{
-    --border-width: 1px 0;
-    --border-color: var(--neutral-200);
-    --background: url('../../../../../assets/header_dark.svg');
-    height: 20vh;
-    color: aliceblue;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-}
+ion-content{
 
 .barra-busqueda{
-  --background: var(--neutral-100);
-  ion-searchbar{
-    --background: var(--primary-100);
-    --border-radius: 5px;
+    margin-top: 32px;
+    padding: 0 32px 0 32px;
+    ion-searchbar{
+      padding-left: 0;
+      padding-right: 0;
+      --box-shadow: 0;
+      --border-radius: 4.16px;
+    }
   }
 }
 
 .contactos{
   
   .lista-doctores{
+    background-color: transparent;
     border: 1px solid var(--neutral-200);
     background: var(--neutral-50);
     display: flex;
@@ -99,11 +88,11 @@ ion-header{
 .chats{
   height: 78vh;
   padding-top: 3vh;
-
+  margin: 0 32px;
   ion-list{
-    background: var(--neutral-100);
+    background: var(--primary-50);
     .chat{
-      --background: var(--neutral-100);
+      --background: var(--primary-50);
 
       ion-avatar{
         --border-radius: 15px;
@@ -122,8 +111,4 @@ ion-header{
     }
   }
   
-}
-
---ion-header{
-  --height: 20vh;
 }

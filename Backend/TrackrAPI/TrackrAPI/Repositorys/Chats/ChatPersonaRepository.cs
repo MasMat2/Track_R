@@ -3,19 +3,24 @@ using Microsoft.EntityFrameworkCore;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Seguridad;
+using TrackrAPI.Services.Seguridad;
 
 namespace TrackrAPI.Repositorys.Chats;
 
 public class ChatPersonaRepository : Repository<ChatPersona>, IChatPersonaRepository
 {
     private readonly IUsuarioRepository _usuarioRepository;
+    private readonly UsuarioService _usuarioService;
     private readonly IAsistenteDoctorRepository _asistenteDoctorRepository;
     public ChatPersonaRepository(TrackrContext context,
                                  IUsuarioRepository usuarioRepository,
-                                 IAsistenteDoctorRepository asistenteDoctorRepository) : base(context)
+                                 IAsistenteDoctorRepository asistenteDoctorRepository,
+                                 UsuarioService usuarioService) : base(context)
+                        
     {
         _usuarioRepository = usuarioRepository;
         _asistenteDoctorRepository = asistenteDoctorRepository;
+        _usuarioService = usuarioService;
     }
 
     public IEnumerable<ChatPersona> ConsultarChatPersonas()
@@ -35,8 +40,7 @@ public class ChatPersonaRepository : Repository<ChatPersona>, IChatPersonaReposi
     {
         //Agregar la logica del asistente
         var user = _usuarioRepository.ConsultarDto(IdPersona);
-        var esAsistente = _usuarioRepository.ConsultarPorPerfil(user.IdCompania, GeneralConstant.ClavePerfilAsistente)
-                                            .Any((usuario) => usuario.IdUsuario == user.IdUsuario);
+        var esAsistente = _usuarioService.EsAsistente(user.IdCompania , user.IdUsuario);
 
         if (esAsistente)
         {

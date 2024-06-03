@@ -10,7 +10,7 @@ import { calendarOutline, chevronUp, chevronDown } from 'ionicons/icons';
 import { validarCamposRequeridos } from '@utils/utileria';
 import { AgregarExpedientePadecimientoDto } from 'src/app/shared/Dtos/seguridad/agregar-expediente-padecimiento-dto';
 import { ExpedientePadecimientoService } from '../../../../../../../shared/http/gestion-expediente/expediente-padecimiento.service';
-import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
+import { MisDoctoresService } from '@http/gestion-expediente/mis-doctores.service';
 import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
 import { ExpedientePadecimientoDto } from '@dtos/seguridad/expediente-padecimiento-dto';
 import { ModalController } from '@ionic/angular/standalone';

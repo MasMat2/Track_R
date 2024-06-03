@@ -15,6 +15,7 @@ using TrackrAPI.Repositorys.Seguridad;
 using TrackrAPI.Services.Archivos;
 using TrackrAPI.Services.Dashboard;
 using TrackrAPI.Services.Seguridad;
+using TrackrAPI.Services.Sftp;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace TrackrAPI.Services.GestionExpediente;
@@ -30,6 +31,7 @@ public class ExpedienteTrackrService
     private readonly IAsistenteDoctorRepository _asistenteDoctorRepository;
     private readonly ArchivoService _archivoService;
     private readonly IExpedienteDoctorRepository _expedienteDoctorRepository;
+    private readonly SftpService _sftpService;
 
     public ExpedienteTrackrService(
         IExpedienteTrackrRepository expedienteTrackrRepository,
@@ -40,7 +42,10 @@ public class ExpedienteTrackrService
         ExpedienteTrackrValidatorService expedienteTrackrValidatorService,
         IAsistenteDoctorRepository asistenteDoctorRepository,
         ArchivoService archivoService,
-        IExpedienteDoctorRepository expedienteDoctorRepository
+        IExpedienteDoctorRepository expedienteDoctorRepository,
+        SftpService sftpService
+
+
         )
     {
         this._expedienteTrackrRepository = expedienteTrackrRepository;
@@ -52,6 +57,7 @@ public class ExpedienteTrackrService
         _asistenteDoctorRepository = asistenteDoctorRepository;
         _archivoService = archivoService;
         _expedienteDoctorRepository = expedienteDoctorRepository;
+        _sftpService = sftpService;
     }
     /// <summary>
     /// Consulta el expediente de un usuario
@@ -128,7 +134,7 @@ public class ExpedienteTrackrService
 
             var expediente = _expedienteDoctorRepository.ConsultarExpedientePorDoctor(expedienteTrackr.IdExpediente, idDoctor);
 
-            if(expediente == null)
+            if (expediente == null)
             {
                 var expedienteDoctor = new ExpedienteDoctor
                 {
@@ -195,42 +201,31 @@ public class ExpedienteTrackrService
         }
     }
 
-    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(int idUsuario, int idCompania)
+    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(int idDoctor, int idCompania)
     {
         List<int> idDoctorList = new();
-        var esAsistente = _usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente)
-                                                    .Any((usuario) => usuario.IdUsuario == idUsuario);
+        var esAsistente = _usuarioRepository.ConsultarPorRol(GeneralConstant.ClaveRolAsistente, idCompania)
+                                                .Any((usuario) => usuario.IdUsuario == idDoctor);
 
         if (esAsistente)
         {
-            idDoctorList = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idUsuario)
+            idDoctorList = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idDoctor)
                                                          .Select(ad => ad.IdUsuario).ToList();
         }
         else
         {
-            idDoctorList.Add(idUsuario);
+            idDoctorList.Add(idDoctor);
         }
 
-        IEnumerable<UsuarioExpedienteGridDTO> expedientes = _expedienteTrackrRepository.ConsultarParaGrid(idDoctorList);
+        IEnumerable<UsuarioExpedienteGridDTO> expedientes = _expedienteTrackrRepository.ConsultarParaGrid(idDoctorList, idCompania);
         foreach (UsuarioExpedienteGridDTO expediente in expedientes)
         {
 
             var img = _archivoService.ObtenerImagenUsuario(expediente.IdUsuario);
 
-            if (img != null)
-            {
-                expediente.ImagenBase64 = "data:" + img.ArchivoTipoMime + ";base64," + Convert.ToBase64String(img.Archivo1);
-            }
-            // string filePath = $"Archivos/Usuario/{expediente.IdUsuario}{MimeTypeMap.GetExtension(expediente.TipoMime)}";
-
-            //     //Console.WriteLine("Expediente : " + JsonConvert.SerializeObject(expediente, Formatting.Indented));
-            //     //Console.WriteLine("--------------------");
-            // if (File.Exists(filePath))
-            // {
-            //     byte[] imageArray = File.ReadAllBytes(filePath);
-
-            //     expediente.ImagenBase64 = Convert.ToBase64String(imageArray);
-            // }
+            var imgPath = img?.ArchivoUrl ?? Path.Combine("Archivos", "Usuario", "default-user.jpg");
+            var mimeType = img?.ArchivoTipoMime ?? "image/jpg";
+            expediente.ImagenBase64 = $"data:{mimeType};base64,{_sftpService.DownloadFile(imgPath)}";
 
             expediente.DosisNoTomadas = _expedienteTrackrRepository.DosisNoTomadas(expediente.IdExpedienteTrackr);
             expediente.VariablesFueraRango = _expedienteTrackrRepository.VariablesFueraRango(expediente.IdUsuario);
@@ -328,8 +323,8 @@ public class ExpedienteTrackrService
     public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios(int idDoctor, int idCompania)
     {
         List<int> idDoctorList = new();
-        var esAsistente = _usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente)
-                                                    .Any((usuario) => usuario.IdUsuario == idDoctor);
+        var esAsistente = _usuarioRepository.ConsultarPorRol(GeneralConstant.ClaveRolAsistente, idCompania)
+                                                .Any((usuario) => usuario.IdUsuario == idDoctor);
 
         if (esAsistente)
         {

@@ -1,0 +1,17 @@
+
+<div class="titulo-contenedor">Clasificación Pregunta</div>
+
+<!--<div class="form-row panel-busqueda mb-4">
+    <div (click)="isCollapsed = !isCollapsed" class="panel-carga-elementos center-element-vertically">
+        <span class="titulo-panel">Panel de Búsqueda</span>
+        <span class="arow-down-up">
+            <i *ngIf="isCollapsed" class="fa fa-chevron-down"></i>
+            <i *ngIf="!isCollapsed" class="fa fa-chevron-up"></i>
+        </span>
+    </div>
+</div>-->
+
+<app-catalogo-base tituloBoton="Clasificación Pregunta" [columns]="columns" [crudConfig]="crudConfig"
+    [elementos$]="registros$" [tieneAccesoAgregar$]="tieneAccesoAgregar$" (agregarClick)="agregar()"
+    (gridClick)="onGridClick($event)">
+</app-catalogo-base>

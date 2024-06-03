@@ -20,7 +20,7 @@ import { TipoExamenFormularioComponent } from './tipo-examen-formulario/tipo-exa
 })
 export class TipoExamenComponent implements OnInit {
 
-  public readonly HEADER_GRID: string = 'Tipos de Encuestas';
+  public readonly HEADER_GRID: string = 'Tipo Cuestionario';
 
   // Accesos
   protected tieneAccesoAgregar: boolean = false;
@@ -56,7 +56,7 @@ export class TipoExamenComponent implements OnInit {
 
   protected columns: ColDef[] = [
     { headerName: 'Clave', field: 'idTipoExamen', minWidth: 150, },
-    { headerName: 'Tipo de Encuesta', field: 'nombre', minWidth: 150, },
+    { headerName: 'Tipo Cuestionario', field: 'nombre', minWidth: 150, },
     { headerName: 'Cantidad de Reactivos', field: 'totalPreguntas', minWidth: 150, },
     { headerName: 'Duración Total (Minutos)', field: 'duracion', minWidth: 150, },
     this.columnaDetalle,
@@ -161,9 +161,9 @@ export class TipoExamenComponent implements OnInit {
   }
 
   private eliminar(tipoExamen: TipoExamen) {
-    const MENSAJE_EXITO: string = 'El Tipo de Encuesta ha sido eliminada';
-    const TITULO_MODAL: string = 'Eliminar Tipo de Encuesta';
-    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar el tipo de Encuesta: <strong>${tipoExamen.nombre}</strong>?`;
+    const MENSAJE_EXITO: string = 'El Tipo Cuestionarioi ha sido eliminada';
+    const TITULO_MODAL: string = 'Eliminar Tipo Cuestionario';
+    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar el tipo Cuestionario: <strong>${tipoExamen.nombre}</strong>?`;
 
     this.mensajeService
       .modalConfirmacion(

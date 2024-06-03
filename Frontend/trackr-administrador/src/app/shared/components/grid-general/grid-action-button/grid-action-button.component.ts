@@ -91,6 +91,9 @@ export class GridActionButtonComponent {
         case GeneralConstant.GRID_ACCION_DESCARGAR_PDF:
           this.title = 'Descargar en PDF';
           break;
+        case GeneralConstant.GRID_ACCION_DESCARGAR_EXCEL:
+          this.title = 'Descargar en Excel';
+        break;
       }
     }
   }

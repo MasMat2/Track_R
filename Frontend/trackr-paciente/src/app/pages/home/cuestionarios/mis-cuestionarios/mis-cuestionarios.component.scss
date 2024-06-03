@@ -1,59 +1,32 @@
-@import "../../../../../theme/variables.scss";
+.contenedor-principal {
+  height: 100%;
 
+  .lista-cuestionarios {
+    ion-list {
+      background: var(--primary-50);
+      padding-top: 16px !important;
+      ion-item {
+        --border-width: 0 0 2px 0;
+        --border-color: var(--primary-50);
+        --detail-icon-opacity: 1;
+        --detail-icon-color: var(--neutral-900);
+        --inner-padding-end: 32px !important;
 
-.contenido{
-    margin: .7em;
-}
+        ion-label {
+          padding-left: 16px;
+          h3 {
+            font-family: var(--font-body);
+            font-size: 16px;
+            color: var(--neutral-900);
+          }
 
-.texto-seccion{
-    font-weight: bold;
-    color: var(--primary-600);
-}
-
-.pendientes{
-    margin-bottom: 2vh;
-
-    ion-item{
-        margin: 10px;
-        --border-width: 2px;
-        --border-radius: 20px;
+          p {
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: var(--neutral-600);
+          }
+        }
+      }
     }
-
-    .btn-responder{
-        --color: var(--neutral-50);
-        --background: var(--primary-400);
-    }
-}
-.contestados{
-    .texto-ver-mas{
-        color: grey;
-        text-align: center;
-    }
-}
-
-ion-header{
-    ion-title{
-    font-weight: bold;
-    }
-    .primary-toolbar{
-    --border-width: 1px 0;
-    --border-color: var(--neutral-200);
-    --background: url('../../../../../assets/header_dark.svg');
-    height: 20vh;
-    color: aliceblue;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    }
-}
-
-.mensajeVacio{
-    height: 60vh;
-    background-color: #F3F4FA;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-
+  }
 }

@@ -18,6 +18,7 @@ using TrackrAPI.Repositorys.Archivos;
 using TrackrAPI.Dtos.GestionExpediente.ExpedienteDoctor;
 using TrackrAPI.Dtos.Archivos;
 using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Services.Sftp;
 
 namespace TrackrAPI.Services.Seguridad
 {
@@ -45,6 +46,7 @@ namespace TrackrAPI.Services.Seguridad
         private IArchivoRepository _archivoRepository;
         private ExpedienteDoctorService _expedienteDoctorService;
 
+        private SftpService _sftpService;
 
         public UsuarioService(IUsuarioRepository usuarioRepository,
             IExpedienteTrackrRepository expedienteTrackrRepository,
@@ -66,7 +68,8 @@ namespace TrackrAPI.Services.Seguridad
             ExpedienteTrackrService expedienteTrackrService,
             IAsistenteDoctorRepository asistenteDoctorRepository,
             IArchivoRepository archivoRepository,
-            ExpedienteDoctorService expedienteDoctorService)
+            ExpedienteDoctorService expedienteDoctorService,
+            SftpService sftpService)
         {
             this.usuarioRepository = usuarioRepository;
             this.expedienteTrackrRepository = expedienteTrackrRepository;
@@ -88,6 +91,7 @@ namespace TrackrAPI.Services.Seguridad
             _asistenteDoctorRepository = asistenteDoctorRepository;
             this._archivoRepository = archivoRepository;
             this._expedienteDoctorService = expedienteDoctorService;
+            this._sftpService = sftpService;
         }
 
         public Usuario Consultar(int idUsuario)
@@ -214,7 +218,7 @@ namespace TrackrAPI.Services.Seguridad
             usuarioRepository.Editar(usuario);
         }
 
-        public int Agregar(UsuarioDto usuarioDto, int idLocacion)
+        public int Agregar(UsuarioDto usuarioDto, int idLocacion, int? idMedico = null)
         {
             using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
             {
@@ -273,26 +277,8 @@ namespace TrackrAPI.Services.Seguridad
                     domicilioRepository.Agregar(domicilioNuevo);
                 }
 
-                // Guardar la imagen
-                if (usuarioDto.ImagenBase64 != null)
-                {
-                    string nombreArchivo = $"{usuario.IdUsuario}{MimeTypeMap.GetExtension(usuarioDto.ImagenTipoMime)}";
-                    string path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", nombreArchivo);
-                    usuarioDto.ImagenBase64 = usuarioDto.ImagenBase64.Substring(usuarioDto.ImagenBase64.LastIndexOf(',') + 1);
-                    //Logica para agregar las fotos de perfil en la tabla archivo
-                    var fotoPerfil = new Archivo
-                    {
-                        Nombre = nombreArchivo,
-                        ArchivoNombre = nombreArchivo,
-                        Archivo1 = Convert.FromBase64String(usuarioDto.ImagenBase64),
-                        ArchivoTipoMime = usuarioDto.ImagenTipoMime,
-                        EsFotoPerfil = true,
-                        FechaRealizacion = DateTime.Now,
-                        IdUsuario = usuario.IdUsuario
-                    };
-                    _archivoRepository.Agregar(fotoPerfil);
-                    //File.WriteAllBytes(path, Convert.FromBase64String(usuarioDto.ImagenBase64));
-                }
+                // Guardar imagen
+                GuardarImagen(usuarioDto, usuario.IdUsuario);
 
                 // Guardar el perfil
                 if (usuarioDto.IdPerfil > 0)
@@ -306,118 +292,20 @@ namespace TrackrAPI.Services.Seguridad
                     usuarioLocacionService.Agregar(permiso);
                 }
 
-                scope.Complete();
-
-                return idUsuario;
-            }
-        }
-
-        public int Agregar(UsuarioDto usuarioDto, int idLocacion, int idMedico)
-        {
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
-            {
-                Usuario usuario = MapearUsuario(usuarioDto);
-
-                string contrasenaEncriptada;
-                if (usuarioDto.Contrasena == null || usuarioDto.Contrasena == "")
+                if(idMedico != null && idMedico > 0)
                 {
-                    string contraseniaAutogenerada = GenerarContraseniaAleatoria();
-
-                    contrasenaEncriptada = simpleAES.EncryptToString(contraseniaAutogenerada);
-                    EnviarCorreoConContrasena(usuario, contraseniaAutogenerada);
-                }
-                else
-                {
-                    contrasenaEncriptada = simpleAES.EncryptToString(usuarioDto.Contrasena);
-                }
-
-                usuario.Habilitado = true;
-                usuario.Contrasena = contrasenaEncriptada;
-
-                if (usuarioDto.AdministradorCompania != true && (usuarioDto.IdsRol == null || usuarioDto.IdsRol.Count == 0))
-                {
-                    throw new CdisException("Se debe seleccionar al menos un rol");
-                }
-
-                List<Rol> roles = usuarioDto.IdsRol?.Select(idRol => rolService.Consultar(idRol)).ToList();
-
-                usuarioValidatorService.ValidarAgregar(usuario, roles);
-                int idUsuario = usuarioRepository.Agregar(usuario).IdUsuario;
-
-                // Actualizar los roles del usuario
-                List<UsuarioRol> usuarioRols = usuarioDto.IdsRol?
-                    .Select(idRol =>
-                    {
-                        return new UsuarioRol()
-                        {
-                            IdRol = idRol,
-                            IdUsuario = idUsuario
-                        };
-                    })
-                    .ToList();
-
-                if (usuarioRols != null)
-                {
-                    usuarioRolService.Guardar(usuarioRols);
-                }
-
-                // El domicilio sólo se agrega cuando se llenan todos los datos de domicilio
-                bool esCliente = roles != null && roles.Any(rol => rol.Clave == GeneralConstant.ClaveRolCliente);
-                if (esCliente && usuario.TieneDomicilioCompleto())
-                {
-                    Domicilio domicilioNuevo = ObtenerDomicilioUsuario(usuario);
-
-                    domicilioValidatorService.ValidarAgregar(domicilioNuevo, false);
-                    domicilioRepository.Agregar(domicilioNuevo);
-                }
-
-                // Guardar la imagen
-                if (usuarioDto.ImagenBase64 != null)
-                {
-                    string nombreArchivo = $"{usuario.IdUsuario}{MimeTypeMap.GetExtension(usuarioDto.ImagenTipoMime)}";
-                    string path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", nombreArchivo);
-                    usuarioDto.ImagenBase64 = usuarioDto.ImagenBase64.Substring(usuarioDto.ImagenBase64.LastIndexOf(',') + 1);
-                    //Logica para agregar las fotos de perfil en la tabla archivo
-                    var fotoPerfil = new Archivo
-                    {
-                        Nombre = nombreArchivo,
-                        ArchivoNombre = nombreArchivo,
-                        Archivo1 = Convert.FromBase64String(usuarioDto.ImagenBase64),
-                        ArchivoTipoMime = usuarioDto.ImagenTipoMime,
-                        EsFotoPerfil = true,
-                        FechaRealizacion = DateTime.Now,
-                        IdUsuario = usuario.IdUsuario
-                    };
-                    _archivoRepository.Agregar(fotoPerfil);
-                    //File.WriteAllBytes(path, Convert.FromBase64String(usuarioDto.ImagenBase64));
-                }
-
-                // Guardar el perfil
-                if (usuarioDto.IdPerfil > 0)
-                {
-                    UsuarioLocacion permiso = new()
-                    {
-                        IdPerfil = (int)usuarioDto.IdPerfil,
-                        IdUsuario = idUsuario,
-                        IdLocacion = idLocacion
-                    };
-                    usuarioLocacionService.Agregar(permiso);
-                }
-
-                if(idMedico > 0)
-                {
-
-                    if (usuarioValidatorService.ValidarUsuarioEsMedico(idMedico) && usuarioValidatorService.ValidarUsuarioEsPaciente(idUsuario))
+                    
+                    if (usuarioValidatorService.ValidarUsuarioEsMedico((int)idMedico) && usuarioValidatorService.ValidarUsuarioEsPaciente(idUsuario))
                     {
                         int idExpediente = _expedienteTrackrService.AgregarExpedienteNuevoUsuario(idUsuario);
 
                         ExpedienteDoctorDTO expedienteDoctor = new()
                         {
-                            IdUsuarioDoctor = idMedico,
+                            IdUsuarioDoctor = (int)idMedico,
                             IdExpediente = idExpediente,
                         };
 
-                        usuarioValidatorService.ValidarUsuarioEsMedico(idMedico);
+                        usuarioValidatorService.ValidarUsuarioEsMedico((int)idMedico);
                         this._expedienteDoctorService.Agregar(expedienteDoctor, idUsuario);
                     }
                     
@@ -517,27 +405,8 @@ namespace TrackrAPI.Services.Seguridad
 
                 List<Rol> roles = usuarioDto.IdsRol.Select(idRol => rolService.Consultar(idRol)).ToList();
 
-                // Guardar la imagen
-                if (usuarioDto.ImagenBase64 != null)
-                {
-                    string nombreArchivo = $"{usuario.IdUsuario}{MimeTypeMap.GetExtension(usuarioDto.ImagenTipoMime)}";
-                    string path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", nombreArchivo);
-                    usuarioDto.ImagenBase64 = usuarioDto.ImagenBase64.Substring(usuarioDto.ImagenBase64.LastIndexOf(',') + 1);
-                    usuario.ImagenTipoMime = usuarioDto.ImagenTipoMime;
-                    //Logica para agregar las fotos de perfil en la tabla archivo
-                    var fotoPerfil = new Archivo
-                    {
-                        Nombre = nombreArchivo,
-                        ArchivoNombre = nombreArchivo,
-                        Archivo1 = Convert.FromBase64String(usuarioDto.ImagenBase64),
-                        ArchivoTipoMime = usuarioDto.ImagenTipoMime,
-                        EsFotoPerfil = true,
-                        FechaRealizacion = DateTime.Now,
-                        IdUsuario = usuario.IdUsuario
-                    };
-                    _archivoRepository.Agregar(fotoPerfil);
-                    //File.WriteAllBytes(path, Convert.FromBase64String(usuarioDto.ImagenBase64));
-                }
+                // Guardar la imagen                
+                GuardarImagen(usuarioDto, usuario.IdUsuario);
 
                 // El domicilio sólo se actualiza cuando se llenan todos los datos de domicilio
                 bool esCliente = roles.Any(rol => rol.Clave == GeneralConstant.ClaveRolCliente);
@@ -599,16 +468,7 @@ namespace TrackrAPI.Services.Seguridad
 
             foreach (var asistente in asistentes)
             {
-                if (!string.IsNullOrEmpty(asistente.ImagenTipoMime))
-                {
-                    string filePath = $"Archivos/Usuario/{asistente.IdUsuario}{MimeTypeMap.GetExtension(asistente.ImagenTipoMime)}";
-                    if (File.Exists(filePath))
-                    {
-                        byte[] imageArray = File.ReadAllBytes(filePath);
-                        asistente.ImagenBase64 = Convert.ToBase64String(imageArray);
-                        asistente.ImagenTipoMime = asistente.ImagenTipoMime;
-                    }
-                }
+                asistente.ImagenBase64 = ObtenerImagenUsuario(asistente.IdUsuario, asistente.ImagenTipoMime);
             }
 
             return asistentes;
@@ -620,18 +480,9 @@ namespace TrackrAPI.Services.Seguridad
 
             foreach (var asistente in asistentes)
             {
-                if (!string.IsNullOrEmpty(asistente.ImagenTipoMime))
-                {
-                    string filePath = $"Archivos/Usuario/{asistente.IdUsuario}{MimeTypeMap.GetExtension(asistente.ImagenTipoMime)}";
-                    if (File.Exists(filePath))
-                    {
-                        byte[] imageArray = File.ReadAllBytes(filePath);
-                        asistente.ImagenBase64 = Convert.ToBase64String(imageArray);
-                        asistente.ImagenTipoMime = asistente.ImagenTipoMime;
-                    }
-                }
-            }
 
+                asistente.ImagenBase64 = ObtenerImagenUsuario(asistente.IdUsuario, asistente.ImagenTipoMime);
+            }
 
             return asistentes;
         }
@@ -642,16 +493,7 @@ namespace TrackrAPI.Services.Seguridad
 
             foreach (var doctor in doctores)
             {
-                if (!string.IsNullOrEmpty(doctor.ImagenTipoMime))
-                {
-                    string filePath = $"Archivos/Usuario/{doctor.IdUsuario}{MimeTypeMap.GetExtension(doctor.ImagenTipoMime)}";
-                    if (File.Exists(filePath))
-                    {
-                        byte[] imageArray = File.ReadAllBytes(filePath);
-                        doctor.ImagenBase64 = Convert.ToBase64String(imageArray);
-                        doctor.ImagenTipoMime = doctor.ImagenTipoMime;
-                    }
-                }
+                doctor.ImagenBase64 = ObtenerImagenUsuario(doctor.IdUsuario, doctor.ImagenTipoMime);
             }
 
             return doctores;
@@ -931,16 +773,23 @@ namespace TrackrAPI.Services.Seguridad
         {
             return usuarioRepository.ConsultarInformacionGeneralTrackr(idUsuario);
         }
+        public InformacionDomicilioDTO ConsultarInformacionDomicilioTrackr(int idUsuario)
+        {
+            return usuarioRepository.ConsultarInformacionDomicilioTrackr(idUsuario);
+        }
 
         public InformacionPerfilTrackrDTO ConsultarInformacionPerfilTrackr(int idUsuario)
         {
             var infoPerfil = usuarioRepository.ConsultarInformacionPerfilTrackr(idUsuario);
             var fotoPerfil = _archivoRepository.ObtenerImagenUsuario(idUsuario);
+
+            var fotoPerfilUsuario = ObtenerImagenUsuario(idUsuario, fotoPerfil?.ArchivoTipoMime);
+
             if(fotoPerfil != null)
             {
                 var fotoPerfilDto = new ArchivoDTO
                 {
-                    Archivo = Convert.ToBase64String(fotoPerfil.Archivo1),
+                    Archivo = fotoPerfilUsuario,
                     ArchivoMime = fotoPerfil.ArchivoTipoMime,
                     IdArchivo = fotoPerfil.IdArchivo,
                     Nombre = fotoPerfil.ArchivoNombre
@@ -964,16 +813,11 @@ namespace TrackrAPI.Services.Seguridad
 
         public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion, int idUsuario)
         {
-            using TransactionScope scope = new();
 
             var usuario = usuarioRepository.Consultar(idUsuario);
             var expediente = expedienteTrackrRepository.ConsultarPorUsuario(usuario.IdUsuario);
 
 
-            if (informacion.CorreoPersonal != usuario.CorreoPersonal)
-            {
-                usuario.CorreoConfirmado = false;
-            }
 
             usuario.Nombre = informacion.Nombre;
             usuario.ApellidoPaterno = informacion.ApellidoPaterno;
@@ -984,7 +828,18 @@ namespace TrackrAPI.Services.Seguridad
             expediente.Cintura = informacion.Cintura;
             expediente.Estatura = informacion.Estatura;
             usuario.CorreoPersonal = informacion.CorreoPersonal;
+            usuario.Correo = informacion.Correo;
             usuario.TelefonoMovil = informacion.TelefonoMovil;
+
+            Editar(usuario);
+            expedienteTrackrRepository.Editar(expediente);
+        }
+
+        public void ActualizarInformacionDomicilioTrackr(InformacionDomicilioDTO informacion, int idUsuario)
+        {
+
+            var usuario = usuarioRepository.Consultar(idUsuario);
+
             usuario.IdEstado = informacion.IdEstado;
             usuario.IdMunicipio = informacion.IdMunicipio;
             usuario.IdLocalidad = informacion.IdLocalidad;
@@ -995,30 +850,7 @@ namespace TrackrAPI.Services.Seguridad
             usuario.NumeroExterior = informacion.NumeroExterior;
             usuario.EntreCalles = informacion.EntreCalles;
 
-
-            expedientePadecimientoRepository.EliminarPorExpediente(expediente.IdExpediente);
-            foreach (var padecimientoDTO in informacion.padecimientos)
-            {
-                var padecimiento = new ExpedientePadecimiento();
-
-                padecimiento.IdPadecimiento = padecimientoDTO.IdPadecimiento;
-                padecimiento.IdUsuarioDoctor = padecimientoDTO.IdUsuarioDoctor;
-                padecimiento.FechaDiagnostico = padecimientoDTO.FechaDiagnostico;
-                padecimiento.IdExpediente = expediente.IdExpediente;
-
-                if (padecimiento.IdPadecimiento == 0)
-                {
-                    continue;
-                }
-
-                expedientePadecimientoRepository.Agregar(padecimiento);
-
-            }
-
             usuarioRepository.Editar(usuario);
-            expedienteTrackrRepository.Editar(expediente);
-
-            scope.Complete();
         }
 
 
@@ -1035,6 +867,53 @@ namespace TrackrAPI.Services.Seguridad
         public bool EsMedico(int idCompania, int idUsuario)
         {
             return usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilMedico).Any((usuario) => usuario.IdUsuario == idUsuario);
+        }
+
+        public void GuardarImagen(UsuarioDto usuarioDto, int idUsuario){
+
+            if (usuarioDto.ImagenBase64 != null)
+            {
+                string nombreArchivo = $"{idUsuario}{MimeTypeMap.GetExtension(usuarioDto.ImagenTipoMime)}";
+                string path = Path.Combine("Archivos", "Usuario", nombreArchivo);
+                usuarioDto.ImagenBase64 = usuarioDto.ImagenBase64.Substring(usuarioDto.ImagenBase64.LastIndexOf(',') + 1);
+
+                this._sftpService.UploadFile(path, usuarioDto.ImagenBase64);
+
+                //Logica para agregar las fotos de perfil en la tabla archivo
+                var fotoPerfil = new Archivo
+                {
+                    Nombre = nombreArchivo,
+                    ArchivoNombre = nombreArchivo,
+                    ArchivoTipoMime = usuarioDto.ImagenTipoMime,
+                    ArchivoUrl = path,
+                    EsFotoPerfil = true,
+                    FechaRealizacion = DateTime.Now,
+                    IdUsuario = idUsuario
+                };
+
+
+                _archivoRepository.Agregar(fotoPerfil);
+
+
+            }
+        }
+        public string ObtenerImagenUsuario(int idUsuario, string? imagenTipoMime=null){
+            
+            string filePath;
+
+            if (!string.IsNullOrEmpty(imagenTipoMime))
+            {
+                filePath = $"Archivos/Usuario/{idUsuario}{MimeTypeMap.GetExtension(imagenTipoMime)}";
+            }
+            else
+            {
+                filePath = Path.Combine("Archivos", "Usuario", $"default.svg");
+
+            }
+
+            return this._sftpService.DownloadFile(filePath);
+
+
         }
 
     }

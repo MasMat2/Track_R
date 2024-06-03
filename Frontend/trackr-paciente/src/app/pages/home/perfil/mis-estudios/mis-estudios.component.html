@@ -1,21 +1,21 @@
 <ion-header class="ion-no-border">
-  <div class="contenedor-header">
+  <div class="contenedor-header-light">
     <ion-toolbar>
-      <ion-buttons slot="start">
+      <ion-buttons class="start" slot="start">
         <ion-button routerLink="inicio-perfil">
           <ion-icon slot="start" name="chevron-back"></ion-icon>
-          Atrás
+          <ion-label>Atrás</ion-label>
         </ion-button>
       </ion-buttons>
-      <ion-buttons slot="end">
-        <ion-button (click)="agregarEstudio()">
-          <ion-icon slot="icon-only" name="add"></ion-icon>
+      <ion-buttons class="end" slot="end">
+        <ion-button class="icon-only" (click)="agregarEstudio()">
+          <ion-icon name="add"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </div>
 </ion-header>
-<ion-content>
+<ion-content class="primary">
   <div class="contenedor-principal">
     <div class="titulo">
       <ion-text>
@@ -33,10 +33,10 @@
       </ion-button>
     </div>
 
-    <div class="barra-busqueda" *ngIf="!listaEstudiosVacia()">
-      <ion-searchbar show-cancel-button="focus" placeholder="Buscar" animated (ionChange)="buscarEstudio($event)"></ion-searchbar>
-    </div>
     <div class="lista-estudios" *ngIf="!listaEstudiosVacia()">
+      <div class="barra-busqueda">
+        <ion-searchbar show-cancel-button="focus" placeholder="Buscar" animated (ionChange)="buscarEstudio($event)"></ion-searchbar>
+      </div>
       <div *ngIf="!filtrando">
         <ion-list *ngIf="expedientes$ | async as estudios">
           <ion-item-sliding *ngFor="let estudio of estudios">

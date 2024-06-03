@@ -64,7 +64,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
   direccion: string;
   genero: number;
   edad: string;
-  idHospital: number;
+  hospital: string;
   colonia: string;
   municipio: string;
   estado: string;
@@ -101,8 +101,9 @@ ciudad: string
         this.usuarioService.consultar(idUsuario).subscribe
           ({
             next: (data) => {
+              var da  = data;
               this.nombreCompleto = data.nombre + " " + data.apellidoPaterno + " " + data.apellidoMaterno;
-              this.idHospital = data.idHospital;
+              this.hospital = data.hospital;
               this.ciudad = data.ciudad,
               this.colonia = data.colonia
             }, error: (error) => { }
