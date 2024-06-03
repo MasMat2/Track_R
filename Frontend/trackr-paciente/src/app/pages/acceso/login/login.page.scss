@@ -1,51 +1,22 @@
-@import "../../../../theme/variables.scss";
-
-ion-header{
-  border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
-  background: var(--primary-700);
-}
-
 ion-content{
   --background: var(--primary-700);
-  //--keyboard-offset: 0px !important;
-  
+  --keyboard-offset: 0px !important;
 }
 
 ion-footer{
   background: var(--primary-700);
 }
 
-.contenedor-header{
-  background: var(--primary-700);
-  height: 20vh;
-  width: 100%;
-
-  ion-toolbar{
-    height: 100%;
-    width: 100%;
-    --background: url('../../../../assets/img/svg/header_shapes.svg');
-
-    //medidas máximas para que no se estire el svg
-    max-height: 153px;
-    max-width: 390px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding-bottom: 20px;
-
-    ion-button{
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 18px;
-      color: var(--neutral-50);
-    }
-  }
+.contenedor-header-dark{
+  background: url(../../../../assets/img/svg/header_shapes.svg);
+  background-color: var(--primary-700);
+  background-repeat: no-repeat;
 }
 
 .contenedor-principal{
-  height: 75vh;
+  min-height: 75vh !important;
   width: 100%;
+  background: transparent;
 
   .saludo{
     display: flex;
@@ -73,133 +44,28 @@ ion-footer{
   }
 
   .formulario{
-    height: 55vh;
+    min-height: 55vh;
     background: var(--primary-50);
     border-radius: 0 64px 0 0;
 
-    .contenido-formulario{
-      height: 40vh;
-
-      .inputs{
-        background: transparent;
-        padding: 24px 32px 0 32px;
-
-        .input{
-          padding-top: 16px;
-          ion-text{
-            p{
-              margin-bottom: 8px;
-              font-family: var(--font-body);
-              font-weight: 400;
-              font-size: 16px;
-              line-height: 22px;
-              color: var(--neutral-700);
-            }
-          }
-
-          ion-item{
-            width: 100%;
-            --border-width: 1px ;
-            --border-color: var(--neutral-300);
-            --border-radius: 8px;
-            --background: transparent;
-
-            ion-input{
-              border-width: 0px;
-              --highlight-color-focused: var(--neutral-950);
-              font-family: var(--font-body);
-              font-size: 16px;
-              font-weight: 400;
-              line-height: 22px;
-            }
-
-            //iconos en los inputs
-            .input-icon{
-              width: 32px;
-              height: 100%;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              ion-icon{
-                font-size: 24px;
-                color: var(--neutral-600);
-              }
-
-              ion-button{
-                width: 32px !important;
-                height: 100% !important;
-                margin: 0 !important;
-                display: flex;
-                --ripple-color: transparent;
-                ion-icon{
-                  position: absolute;
-                }
-              }
-            }
-          }
-
-          //Para acomodar los íconos de cada input (normal a la izquierda, contraseña a la derecha)
-          ion-item.password-input{
-            ion-input{
-              max-width: calc(100% - 40px );
-            }
-
-            .input-icon{
-              position: absolute;
-              right: 0;
-              margin-right: 16px !important;
-            }
-          }
-
-          ion-item.normal-input{
-            ion-input{
-              position: absolute;
-              left: 0;
-              padding-left: 40px !important;
-            }
-          }
+    form{
+      .contenido-formulario{
+        min-height: 40vh;
+        padding-top: 16px;
+      }
+      .botones{
+        height: 15vh;
+        .recuperar-contrasena{
+          font-family: var(--font-body);
+          font-size: 14px;
+          font-weight: 600;
+          padding-top: 12px;
+          text-decoration: none;
+          text-align: center;
+          color: var(--primary-700);
         }
-      }
-    }
-    
-    .botones{
-      height: 15vh;
-      width: 100%;
-      background: var(--primary-50);
-      flex-direction: column;
-      display: flex;
-      align-items: center;
-      padding: 0 32px 0 32px;
-
-      ion-button{
-        font-family: var(--font-body);
-        font-size: 16px;
-        width: 100%;
-        max-width: 600px;
-        height: 44px;
-        --border-radius: 8px;
-        color: var(--neutral-50);
-      }
-
-      .btn-login{
-        --background: var(--primary-700);
-      }
-
-      .btn-login.button-disabled{
-        opacity: 1;
-        --background: var(--primary-300);
-      }
-
-      .recuperar-contrasena{
-        font-family: var(--font-body);
-        font-size: 14px;
-        font-weight: 600;
-        padding-top: 12px;
-        text-decoration: none;
-        text-align: center;
-        color: var(--primary-700);
-      }
-    }
+      } 
+    }  
   }
 }
 

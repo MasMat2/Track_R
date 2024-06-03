@@ -22,11 +22,11 @@ public class NivelExamenValidatorService
     private readonly string MensajeDescripcionLongitud = $"La longitud máxima de la descripción son {LongitudDescripcion } caracteres";
     private readonly string MensajeClaveLongitud = $"La longitud máxima de la clave son {LongitudClave } caracteres";
 
-    private readonly string MensajeDependencia = "La Complejidad de Encuesta tiene reactivos asociados y no se puede eliminar";
+    private readonly string MensajeDependencia = "La Complejidad del cuestionario tiene reactivos asociados y no se puede eliminar";
 
-    private readonly string MensajeExistencia = "La Complejidad de Encuesta que se requería actualizar no existe";
+    private readonly string MensajeExistencia = "La Complejidad del cuestionario que se requería actualizar no existe";
 
-    private readonly string MensajeDuplicado = "La Complejidad de Encuesta que intenta agregar ya existe";
+    private readonly string MensajeDuplicado = "La Complejidad del cuestionario que intenta agregar ya existe";
 
     public void ValidarAgregar(NivelExamen nivelExamen)
     {

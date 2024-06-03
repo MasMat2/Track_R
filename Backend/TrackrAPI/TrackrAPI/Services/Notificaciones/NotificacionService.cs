@@ -66,4 +66,9 @@ public class NotificacionService
 
         return new NotificacionResultadoDTO(notificacion, notificacionUsuario);
     }
+
+    public string ConsultarClave(int idNotificacion)
+    {
+        return notificacionRepository.ConsultarClave(idNotificacion);
+    }
 }

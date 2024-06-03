@@ -4,4 +4,5 @@ export interface ExpedienteEstudio {
     archivo: Blob;
     archivoTipoMime: string;
     archivoNombre: string;
+    archivoUrl: string;
 }

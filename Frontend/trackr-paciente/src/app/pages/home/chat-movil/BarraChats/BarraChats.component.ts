@@ -11,7 +11,7 @@ import { ChatMensajeHubService } from '../../../../services/dashboard/chat-mensa
 import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
 import { ArchivoService } from '@services/archivo.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
+import { MisDoctoresService } from '@http/gestion-expediente/mis-doctores.service';
 import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
 import { ChatPersonaService } from '../../../../shared/http/chat/chat-persona.service';
 import { FormsModule } from '@angular/forms';
@@ -59,7 +59,7 @@ export class BarraChatsComponent {
     private ChatPersonaService:ChatPersonaService,
     private modalCtrl:ModalController
   ) {
-    addIcons({addCircle, chatboxOutline, send});
+    addIcons({addCircle, chatboxOutline, send, 'chat-plus': ' ../assets/img/svg/chat-plus.svg'});
   }
 
   ionViewWillEnter(){

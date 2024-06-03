@@ -6,4 +6,6 @@ export class ExpedienteTratamientoGridDto{
     indicaciones : string;
     padecimiento : string;
     fechaRegistro : Date;
+    dias?: string;
+    horas ?: string;
 }

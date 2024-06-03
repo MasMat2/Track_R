@@ -19,12 +19,12 @@ public class ContenidoExamenValidatorService
 
     private readonly string MensajeClaveRequerido = "La clave es requerida";
 
-    private readonly string MensajeExistencia = "La Encuesta que se requería actualizar no existe";
+    private readonly string MensajeExistencia = "El Cuestionario que se requería actualizar no existe";
 
     private static readonly int LongitudClave = 5;
     private readonly string MensajeClaveLongitud = $"La longitud máxima de la clave son {LongitudClave} caracteres";
 
-    private readonly string MensajeCantidadReactivos = "No hay suficientes reactivos para agregar a la Encuesta";
+    private readonly string MensajeCantidadReactivos = "No hay suficientes reactivos para agregar el cuestionario";
 
     public void ValidarAgregar(ContenidoExamen contenidoExamen)
     {

@@ -3,7 +3,6 @@ import { RegistroPage } from './registro/registro.page';
 import { LoginPage } from './login/login.page';
 import { AccesoPage } from './acceso.page';
 import { PeticionRestablecerContrasenaComponent } from './peticion-restablecer-contrasena/peticion-restablecer-contrasena.component';
-import { RestablecerContrasenaComponent } from './restablecer-contrasena/restablecer-contrasena.component';
 
 export default [
   { path: '', component: AccesoPage },
@@ -13,5 +12,4 @@ export default [
     path: 'peticion-restablecer-contrasena',
     component: PeticionRestablecerContrasenaComponent,
   },
-  { path: 'restablecer-contrasena', component: RestablecerContrasenaComponent },
 ] as Route[];

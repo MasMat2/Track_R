@@ -1,3 +1,5 @@
+import { Respuesta } from "./respuesta";
+
 export class Reactivo{
 
     public idReactivo: number;
@@ -19,5 +21,17 @@ export class Reactivo{
     public asignatura: string;
     public nivelExamen: string;
 
-    constructor() {}
+    public escalaLikert: boolean;
+    public abierta: boolean;
+    public simple: boolean;
+    public multiple: boolean;
+
+    public respuestaList: Respuesta[];
+    public idClasificacionPregunta: number;
+        constructor() {
+        this.escalaLikert = false;
+        this.abierta = false;
+        this.simple = false;
+        this.multiple = false;
+    }
 }

@@ -1,39 +1,6 @@
-ion-header{
-    border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
-    background: var(--primary-50);
-}
-
 ion-content{
     --background: var(--primary-50);
 }
-
-.contenedor-header{
-    height: 20vh;
-    width: 100%;
-  
-    ion-toolbar{
-      height: 100%;
-      width: 100%;
-      --background: url('../../../../../assets/header_light.svg');
-  
-      //medidas máximas para que no se estire el svg
-      max-height: 153px;
-      max-width: 390px;
-  
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding-bottom: 20px;
-  
-      ion-button{
-        font-family: var(--font-body);
-        font-weight: 400;
-        font-size: 18px;
-        color: var(--primary-700);
-      }
-    }
-}
-
 .contenedor-principal{
     background: var(--primary-50);
     height: 80vh;
@@ -52,36 +19,6 @@ ion-content{
                 font-weight: 700;
                 line-height: 32px;
             }
-        }
-    }
-
-    .lista-vacia{
-        height: 72vh;
-        padding-top: 20vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        ion-text{
-            text-align: center;
-            p{
-                font-size: 16px;
-                line-height: 22px;
-                font-family: var(--font-body);
-                color: var(--neutral-500);
-            }
-        }
-
-        ion-button{
-            width: 187px;
-            height: 44px;
-            font-family: var(--font-body);
-            font-weight: bold;
-            font-size: 16px;
-            --border-radius: 8px;
-            color: var(--primary-700);
-            --border-color: var(--primary-700);
-            --border-width: 1px;
         }
     }
 

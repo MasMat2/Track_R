@@ -55,6 +55,7 @@ namespace TrackrAPI.Dtos.Seguridad
         public int? IdMetodoPago { get; set; }
         public bool? AdministradorCompania { get; set; }
         public string? EntreCalles { get; set; }
+        public string Hospital { get; set; }
 
         public List<int> IdsRol { get; set; }
         public List<int> IdsCompania { get; set; }

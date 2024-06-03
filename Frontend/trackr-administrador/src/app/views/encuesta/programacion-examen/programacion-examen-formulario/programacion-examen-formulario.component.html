@@ -2,7 +2,7 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>Programación de Encuestas - {{ accion }}</div>
+      <div>Programación del Cuestionario - {{ accion }}</div>
       <button
         type="button"
         class="close pull-right"
@@ -68,7 +68,7 @@
 
           <div class="col-md-5">
             <div class="form-group">
-              <label class="label-input required-label">Tipo de Encuesta</label>
+              <label class="label-input required-label">Tipo Cuestionario</label>
               <div>
                 <ng-select
                   #tipoExamenLst="ngModel"
@@ -87,7 +87,7 @@
                 *ngIf="tipoExamenLst.errors?.['required'] && tipoExamenLst.touched"
                 class="error"
               >
-                El tipo de Encuesta es requerido
+                El tipo Cuestionario es requerido
               </div>
             </div>
           </div>
@@ -139,7 +139,7 @@
 
           <div class="col-md-3">
             <div class="form-group">
-              <label class="label-input required-label">Fecha de la Encuesta</label>
+              <label class="label-input required-label">Fecha del Cuestionario</label>
               <div class="calendario">
                 <input
                   #fechaExamenName="ngModel"
@@ -159,14 +159,14 @@
                 "
                 class="error"
               >
-                La fecha de la Encuesta es requerida
+                La fecha del Cuestionario es requerida
               </div>
             </div>
           </div>
 
           <div class="col-md-3">
             <div class="form-group">
-              <label class="label-input required-label">Hora de la Encuesta</label>
+              <label class="label-input required-label">Hora del Cuestionario</label>
               <div>
                 <input
                   #horaExamen="ngModel"
@@ -181,7 +181,7 @@
                 *ngIf="horaExamen.errors?.['required'] && horaExamen.touched"
                 class="error"
               >
-                La hora den la Encuesta es requerida
+                La hora del Cuestionario es requerida
               </div>
             </div>
           </div>

@@ -11,8 +11,6 @@ import * as Utileria from '@utils/utileria';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { AuthService } from '../../../auth/auth.service';
 import { addIcons } from 'ionicons';
-import { chevronBack, eyeOffOutline, eyeOutline, personOutline } from 'ionicons/icons';
-import { Constants } from '@utils/constants/constants';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -30,37 +28,40 @@ import { BehaviorSubject } from 'rxjs';
 export class LoginPage implements OnInit {
   
   loginRequest: LoginRequest = new LoginRequest();
-  loading : any;
   loginResponse: LoginResponse = new LoginResponse();
   btnSubmit: boolean = false;
   protected pswInputType: string = "password";
   protected mostrarPwd: boolean = false;
 
-  protected spinner: string = Constants.ALERT_SPINNER;
-
   //Estado de "cargando" para mostrar el alert con spinner
-  cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  cargando$ = this.cargandoSubject.asObservable();
+  private cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private cargando$ = this.cargandoSubject.asObservable();
+  private loading : any;
+
 
   constructor(
     private loginService: LoginService,
     private router: Router,
     private authService: AuthService,
     private alertController: AlertController,
-    private loadingController: LoadingController
   ) { 
-    addIcons({chevronBack, eyeOffOutline, eyeOutline, personOutline})
+    addIcons({
+      'user': 'assets/img/svg/user.svg',
+      'eye': 'assets/img/svg/eye.svg',
+      'eye-off': 'assets/img/svg/eye-off.svg',
+      'chevron-left': 'assets/img/svg/chevron-left.svg',
+      'info': 'assets/img/svg/info.svg',
+    })
   }
 
   async presentLoading() {
-    this.loading = await this.loadingController.create({
-      spinner: null,
-      cssClass: 'custom-loading',
-    });
+    this.loading = await this.alertController.create({
+      cssClass: "custom-alert-loading"
+    })
     return await this.loading.present();
   }
 
-    async dismissLoading() {
+  async dismissLoading() {
     if (this.loading) {
       await this.loading.dismiss();
       this.loading = null;
@@ -73,7 +74,7 @@ export class LoginPage implements OnInit {
         this.presentLoading();
       } else {
         this.dismissLoading();
-  }
+      }
     });
   }
   /**
@@ -97,7 +98,6 @@ export class LoginPage implements OnInit {
       return;
     }
 
-    //await alertSpinner.present();
     this.autenticarPaciente();
     this.btnSubmit = false;
   }
@@ -124,6 +124,7 @@ export class LoginPage implements OnInit {
   }
 
   protected mostrarContrasena(){
+    console.log("AAAA")
     if(this.mostrarPwd == true){
       this.mostrarPwd = false;
       this.pswInputType = "password";

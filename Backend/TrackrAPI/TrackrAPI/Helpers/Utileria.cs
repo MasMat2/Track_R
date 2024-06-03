@@ -42,7 +42,7 @@ namespace TrackrAPI.Helpers
 
         public static DateTime ObtenerFechaActual()
         {
-            return DateTime.Now.AddHours(-1);
+            return DateTime.UtcNow;
         }
 
         public static int DiferenciaEntreFechas(DateTime fechaInicio, DateTime fechaFin)

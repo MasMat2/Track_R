@@ -17,18 +17,6 @@ namespace TrackrAPI.Dtos.Perfil
         public string Correo { get; set; }
         public string CorreoPersonal { get; set; }
         public string TelefonoMovil { get; set; }
-        public int? IdPais { get; set; }
-        public int? IdEstado { get; set; }
-        public int? IdMunicipio { get; set; }
-        public int? IdLocalidad { get; set; }
-        public int? IdColonia { get; set; }
-        public string CodigoPostal { get; set; }
-        public string Calle { get; set; }
-        public string EntreCalles { get; set; }
-        public string NumeroInterior { get; set; }
-        public string NumeroExterior { get; set; }
         public bool? CorreoConfirmado { get; set; }
-
-        public IEnumerable<ExpedientePadecimientoDTO> padecimientos {get; set;}
     }
 }

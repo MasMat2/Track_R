@@ -13,11 +13,12 @@ namespace TrackrAPI.Models
         public int IdArchivo { get; set; }
         public string? Nombre { get; set; }
         public DateTime? FechaRealizacion { get; set; }
-        public byte[] Archivo1 { get; set; } = null!;
+        public byte[]? Archivo1 { get; set; }
         public string ArchivoTipoMime { get; set; } = null!;
         public string? ArchivoNombre { get; set; }
         public int? IdUsuario { get; set; }
         public bool? EsFotoPerfil { get; set; }
+        public string? ArchivoUrl { get; set; }
 
         public virtual Usuario? IdUsuarioNavigation { get; set; }
         public virtual ICollection<ChatMensaje> ChatMensaje { get; set; }

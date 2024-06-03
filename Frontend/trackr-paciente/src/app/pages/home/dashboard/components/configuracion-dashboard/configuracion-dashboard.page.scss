@@ -1,49 +1,31 @@
-@import "../../../../../../theme/variables.scss";
+// .contenedor-header{
+//   height: 20vh;
+//   width: 100%;
+//   background: var(--primary-50);
 
-
-// .header{
 //   ion-toolbar{
-//     --background: var(--neutral-50);
+//     height: 100%;
+//     width: 100%;
+//     --background: url('../../../../../../assets/header_light.svg');
 
-//    ion-card-title{
-//     --color: var(--neutral-600);
-//     font-weight: bold;
-//    }
-   
-//    ion-icon{
-//     color: var(--neutral-600);
-//    }
+//     //medidas máximas para que no se estire el svg
+//     max-height: 153px;
+//     max-width: 390px;
+
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: flex-end;
+//     padding-bottom: 20px;
+
+//     ion-button{
+//       font-family: var(--font-body);
+//       font-weight: 400;
+//       font-size: 18px;
+//       color: var(--primary-700);
+//     }
 //   }
 // }
 
-
-.contenedor-header{
-  height: 20vh;
-  width: 100%;
-  background: var(--primary-50);
-
-  ion-toolbar{
-    height: 100%;
-    width: 100%;
-    --background: url('../../../../../../assets/header_light.svg');
-
-    //medidas máximas para que no se estire el svg
-    max-height: 153px;
-    max-width: 390px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding-bottom: 20px;
-
-    ion-button{
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 18px;
-      color: var(--primary-700);
-    }
-  }
-}
 .contenedor-principal{
   background: var(--primary-50);
   height: 65vh;

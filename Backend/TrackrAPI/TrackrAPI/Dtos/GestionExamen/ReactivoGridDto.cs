@@ -9,4 +9,5 @@ public class ReactivoGridDto
     public string Pregunta { get; set; } = null!;
     public string Respuesta { get; set; } = null!;
     public string RespuestaCorrecta { get; set; } = null!;
+    public List<RespuestaDto>? RespuestasList { get; set; }
 }

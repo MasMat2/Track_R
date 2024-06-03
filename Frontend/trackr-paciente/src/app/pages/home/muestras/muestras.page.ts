@@ -57,9 +57,9 @@ export class MuestrasPage implements OnInit {
   public consultarValoresFueraRango(): void {
     lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresFueraRangoUsuarioSesion())
       .then((valoresFueraRango: ValoresFueraRangoGridDTO[]) => {
-        console.log(valoresFueraRango);
-        this.valoresFueraRango = valoresFueraRango;
-        console.log(this.valoresFueraRango);
+        this.valoresFueraRango = valoresFueraRango.sort((a, b) => {
+          return new Date(b.fechaHora).getTime() - new Date(a.fechaHora).getTime();
+        });
       }
     );
   }
@@ -100,7 +100,7 @@ export class MuestrasPage implements OnInit {
         text: 'De acuerdo',
         role: 'confirm'
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();

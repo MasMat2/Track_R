@@ -24,7 +24,7 @@ const routes: Routes = [
       },
       {
         path: 'reactivo',
-        loadChildren: () => import('./reactivo/reactivo.module').then((m) => m.ReactivoModule)
+        loadChildren: () => import('./reactivo copy/reactivo.module').then((m) => m.ReactivoModule1)
       },
       {
         path: 'nivel-examen',
@@ -37,6 +37,10 @@ const routes: Routes = [
       {
         path: 'programacion-examen',
         loadChildren: () => import('./programacion-examen/programacion-examen.module').then((m) => m.ProgramacionExamenModule)
+      },
+      {
+        path: 'clasificacion-pregunta',
+        loadChildren: () => import('./clasificacion-pregunta/clasificacion-pregunta.module').then((m) => m.ClasificacionPreguntaModule)
       }
     ]
   }

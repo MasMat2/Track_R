@@ -1,0 +1,27 @@
+.switch {
+    top: 1px;
+    height: calc(1.5em + 0.80rem + 10px);
+    width: 110px;
+}
+
+input:checked+.slider:before {
+    background-color: white;
+
+    -webkit-transform: translateX(70px);
+    -ms-transform: translateX(70px);
+    transform: translateX(70px);
+}
+
+.switch input.accent:checked+.slider.round {
+    background-color: #ed7d31;
+    /* Cambia el color de fondo del botón cuando esté habilitado */
+}
+
+.switch input.accent:checked+.slider.round .on {
+    color: white;
+    /* Cambia el color del texto "Si" cuando esté habilitado */
+}
+
+.respuestaTextArea {
+    height: 9em !important;
+}

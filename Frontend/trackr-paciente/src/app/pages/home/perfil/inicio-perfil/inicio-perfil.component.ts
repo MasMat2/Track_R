@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { chevronForward, chevronDown} from 'ionicons/icons';
 import { AuthService } from '../../../../auth/auth.service';
 import { AlertController } from '@ionic/angular/standalone';
 import { Constants } from '@utils/constants/constants';
@@ -44,14 +43,15 @@ export class InicioPerfilComponent  implements OnInit {
     private usuarioService: UsuarioService,
   ) { 
     addIcons({
-      chevronForward,
-      chevronDown,
       'persona':'assets/img/svg/user.svg',
       'cruz': 'assets/img/svg/cross.svg', 
       'portapapeles-mas': 'assets/img/svg/clipboard-plus.svg',
       'pildora': 'assets/img/svg/pill.svg',
       'cerrar-sesion': 'assets/img/svg/log-out.svg',
-      'informacion': 'assets/img/svg/info.svg'
+      'informacion': 'assets/img/svg/info.svg',
+      'chevron-down': 'assets/img/svg/chevron-down.svg',
+      'chevron-right': 'assets/img/svg/chevron-right.svg',
+
     })
   }
 
@@ -93,9 +93,8 @@ export class InicioPerfilComponent  implements OnInit {
 
   protected async presentarAlertaCerrarSesion() {
     const alert = await this.alertCtrl.create({
-      header: '¿Seguro que deseas cerrar sesión?',
-      message: Constants.ALERT_DELETE,
-      cssClass: 'custom-alert-delete',
+      header: '¿Seguro(a) que deseas cerrar sesión?',
+      cssClass: 'custom-alert color-error icon-info two-buttons',
       buttons: [
         {
           text: 'No, regresar',

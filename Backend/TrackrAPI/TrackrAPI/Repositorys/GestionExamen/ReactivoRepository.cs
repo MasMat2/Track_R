@@ -9,7 +9,6 @@ public class ReactivoRepository : Repository<Reactivo>, IReactivoRepository
     {
         base.context = context;
     }
-
     public ReactivoDto? Consultar(int idReactivo)
     {
         return context.Reactivo
@@ -29,11 +28,25 @@ public class ReactivoRepository : Repository<Reactivo>, IReactivoRepository
                 RespuestaCorrecta = p.RespuestaCorrecta ?? string.Empty,
                 NecesitaRevision = p.NecesitaRevision,
                 FechaAlta = p.FechaAlta,
-                Estatus = p.Estatus ?? false
+                Estatus = p.Estatus ?? false,
+                EscalaLikert = p.EscalaLikert,
+                Simple = p.RespuestaSimple,
+                Abierta = p.PreguntaAbierta,
+                Multiple = p.RespuestaMultiple,
+                RespuestaList = p.RespuestaNavigation
+                .Where(r => r.IdReactivo ==  p.IdReactivo)
+                .Select(r => new Respuesta
+                {
+                    IdReactivo = r.IdReactivo,
+                    IdRespuesta = r.IdRespuesta,
+                    Clave = r.Clave,
+                    Respuesta1 = r.Respuesta1,
+                    RespuestaCorrecta = r.RespuestaCorrecta,
+                    Valor = r.Valor
+                }).ToList(),
             })
             .FirstOrDefault();
     }
-
     public ReactivoDto? ConsultarImagen(int idReactivo)
     {
         return context.Reactivo
@@ -62,7 +75,15 @@ public class ReactivoRepository : Repository<Reactivo>, IReactivoRepository
                 Clave = p.Clave ?? string.Empty,
                 Pregunta = p.Pregunta ?? string.Empty,
                 Respuesta = p.Respuesta ?? string.Empty,
-                RespuestaCorrecta = p.RespuestaCorrecta ?? string.Empty
+                RespuestaCorrecta = p.RespuestaCorrecta ?? string.Empty,
+                RespuestasList = p.RespuestaNavigation.Select(r => new RespuestaDto
+                {
+                    IdReactivo = r.IdReactivo,
+                    IdRespuesta = r.IdRespuesta,
+                    Clave = r.Clave ?? string.Empty,
+                    Respuesta1 = r.Respuesta1 ?? string.Empty,
+                    RespuestaCorrecta = r.RespuestaCorrecta == true ? true : false,
+                }).ToList(),
             })
             .ToList();
     }

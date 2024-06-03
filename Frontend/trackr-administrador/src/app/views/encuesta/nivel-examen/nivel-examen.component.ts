@@ -17,7 +17,7 @@ import { NivelExamenFormularioComponent } from './nivel-examen-formulario/nivel-
   templateUrl: './nivel-examen.component.html',
 })
 export class NivelExamenComponent implements OnInit {
-  protected readonly HEADER_GRID: string = 'Complejidad de Encuesta';
+  protected readonly HEADER_GRID: string = 'Complejidad del Cuestionario';
 
   // Accesos
   protected tieneAccesoAgregar: boolean = false;
@@ -33,7 +33,7 @@ export class NivelExamenComponent implements OnInit {
       valueGetter: (params: any) => params.data.estatus ? 'Activo' : 'Inactivo' },
     { headerName: 'Fecha Alta', field: 'fechaAlta', minWidth: 100,
       cellRenderer: (data: any) => { return data.value ? (new Date(data.value)).toLocaleDateString() : '';} },
-    { headerName: 'Complejidad de Encuesta', field: 'descripcion', minWidth: 300, },
+    { headerName: 'Complejidad Cuestionario', field: 'descripcion', minWidth: 300, },
   ];
 
   constructor(
@@ -132,9 +132,9 @@ export class NivelExamenComponent implements OnInit {
   }
 
   private eliminar(nivelExamen: NivelExamen): void {
-    const MENSAJE_EXITO: string = 'La Complejidad de Encuesta ha sido eliminada';
-    const TITULO_MODAL: string = 'Eliminar Complejidad de Encuesta';
-    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar la Complejidad de Encuesta: <strong>${nivelExamen.descripcion}</strong>?`;
+    const MENSAJE_EXITO: string = 'La Complejidad del Cuestionario ha sido eliminada';
+    const TITULO_MODAL: string = 'Eliminar Complejidad del Cuestionario';
+    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar la Complejidad del Cuestionario: <strong>${nivelExamen.descripcion}</strong>?`;
 
     this.mensajeService
       .modalConfirmacion(MENSAJE_CONFIRMACION, TITULO_MODAL, ICONO.Cruz)

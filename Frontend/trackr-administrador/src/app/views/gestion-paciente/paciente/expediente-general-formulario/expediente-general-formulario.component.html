@@ -61,6 +61,7 @@
                   required
                   [disabled]="true"
                   bsDatepicker
+                  [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
                 />
                 <div
                   *ngIf="fechaAlta.errors?.['required'] && fechaAlta.touched"
@@ -245,6 +246,7 @@
                 (ngModelChange)="calcularEdad()"
                 required
                 bsDatepicker
+                [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
               />
               <div
                 *ngIf="fechaNacimiento.errors?.['required'] && fechaNacimiento.touched"

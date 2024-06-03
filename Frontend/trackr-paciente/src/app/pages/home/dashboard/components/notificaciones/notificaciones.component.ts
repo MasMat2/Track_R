@@ -1,5 +1,5 @@
 import { CommonModule, NgClass, NgFor } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AlertController, IonicModule, PopoverController } from '@ionic/angular';
 import { NotificacionPacienteHubService } from '@services/notificacion-paciente-hub.service';
 import { Observable , map} from 'rxjs';
@@ -26,14 +26,24 @@ import { Constants } from '@utils/constants/constants';
 export class NotificacionesComponent  implements OnInit 
 {
   protected notificaciones$: Observable<NotificacionPacientePopOverDto[]>;
-  
+
+  //iconos correspondientes de lucidIcons
+  protected iconMappings: any = {
+    1: { name: 'earth'},
+    2: { name: 'message-square-dot'},
+    4: { name: 'user' },
+    5: { name: 'circle-user'},
+    6: { name: 'pill'}
+  };
+
   constructor(
     private notificacionHubService : NotificacionPacienteHubService,
     private  notificacionPacienteService : NotificacionPacienteService,
     private alertController : AlertController,
     private router:Router,
     private popOverController:PopoverController,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private cdr : ChangeDetectorRef
   ){ addIcons({
     'close' : 'assets/img/svg/x.svg',
     'circle-user' : 'assets/img/svg/circle-user.svg',
@@ -65,53 +75,79 @@ export class NotificacionesComponent  implements OnInit
     );
   }
 
-  protected async marcarComoVista(notificacion : NotificacionPacientePopOverDto) {
-    //http://localhost:8100/#/home/chat-movil/chat/340
-    if(!notificacion.visto)
-    {
-      await this.notificacionHubService.marcarComoVista(notificacion.id);
-      if(notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA)
-      {
-        //await this.modalTomarToma(notificacion.mensaje);
-        await this.presentAlertTomarTratamiento(notificacion)
-      } 
-    }
-    this.consultarNotificaciones();
-      if(notificacion.idChat !== null){
-        this.router.navigate(['home','chat-movil','chat',notificacion.idChat])
-        this.modalController.dismiss();
-      }
-  }
+  // protected async marcarComoVista(notificacion : NotificacionPacientePopOverDto) {
+  //   //http://localhost:8100/#/home/chat-movil/chat/340
+  //   if(!notificacion.visto)
+  //   {
+  //     await this.notificacionHubService.marcarComoVista(notificacion.id);
+  //     if(notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA)
+  //     {
+  //       //await this.modalTomarToma(notificacion.mensaje);
+  //       await this.presentAlertTomarTratamiento(notificacion)
+  //     } 
+  //   }
+  //   this.consultarNotificaciones();
+  //     if(notificacion.idChat !== null){
+  //       this.router.navigate(['home','chat-movil','chat',notificacion.idChat])
+  //       this.modalController.dismiss();
+  //     }
+  // }
 
-  //iconos correspondientes de lucidIcons
-  iconMappings: any = {
-    1: { name: 'earth'},
-    2: { name: 'message-square-dot'},
-    4: { name: 'user' },
-    5: { name: 'circle-user'},
-    6: { name: 'pill'}
-  };
+  protected async marcarComoVista(event: Event, notificacion: NotificacionPacientePopOverDto) {
+    event.preventDefault();
+    event.stopPropagation();
+  
+    const scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
+  
+    this.cdr.detach(); 
+  
+    if(!notificacion.visto){
+      if(notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA){
+        await this.presentAlertTomarTratamiento(notificacion)
+      }
+      
+      if(notificacion.idChat !== null){
+        await this.notificacionHubService.marcarComoVista(notificacion.id);
+        this.modalController.dismiss().then(() => {
+          this.router.navigate(['home','chat-movil','chat',notificacion.idChat]);
+        });
+      }
+    }
+  
+    this.consultarNotificaciones();
+  
+    setTimeout(() => {
+      window.scrollTo(0, scrollPosition); // Restore scroll position
+      this.cdr.reattach(); // Reattach change detection
+    }, 0);
+  }
 
   protected async presentAlertTomarTratamiento(notificacion : NotificacionPacientePopOverDto){
     const MENSAJE_TOMA = '¿Tomó la dosis a tiempo?'
     const alert = await this.alertController.create({
       header: notificacion.titulo,
       subHeader: `${notificacion.mensaje} \n ${MENSAJE_TOMA}`,
+      cssClass: 'custom-alert color-primary icon-pill two-buttons',
       buttons: [
         {
           text: 'No tomé la dosis', 
           role: 'cancel',
+          handler: () => {
+            //TODO: Agregar logica para la NO realizacion de la toma
+            this.notificacionHubService.marcarComoVista(notificacion.id);
+            this.notificacionPacienteService.actualizarWidgets();
+          }
         },
         {
           text: 'Sí tomé la dosis',
           role: 'confirm',
           handler: () => {
-            //Falta la realizacion de la toma
+            //TODO: Agregar logica para la realizacion de la toma
+            this.notificacionHubService.marcarComoVista(notificacion.id);
             this.notificacionPacienteService.actualizarWidgets();
           }
         }
       ],
-      cssClass: 'custom-alert-choice'
     });
 
     await alert.present();
@@ -136,40 +172,40 @@ export class NotificacionesComponent  implements OnInit
     this.modalController.dismiss();
   }
 
-  filtrarNotificacionesHoy(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
+  protected filtrarNotificacionesHoy(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
     if(notificaciones)
       return notificaciones.filter(n => this.esHoy(n.fecha));
     else
       return [];
   }
 
-  filtrarNotificacionesSemana(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
+  protected filtrarNotificacionesSemana(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
     if(notificaciones)
       return notificaciones.filter(n => this.esEstaSemana(n.fecha));
     else
       return [];
   }
 
-  filtrarNotificacionesAnterioresSemana(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
+  protected filtrarNotificacionesAnterioresSemana(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
     if(notificaciones)
       return notificaciones.filter(n => this.esAnteriorEstaSemana(n.fecha));
     else
       return [];
   }
 
-  esHoy(fecha: Date): boolean {
+  private esHoy(fecha: Date): boolean {
     const hoy = new Date();
     return fecha.toDateString() === hoy.toDateString();
   }
 
-  esEstaSemana(fecha: Date): boolean {
+  private esEstaSemana(fecha: Date): boolean {
     const hoy = new Date();
     const haceUnaSemana = new Date();
     haceUnaSemana.setDate(hoy.getDate() - 7);
     return fecha >= haceUnaSemana && fecha < hoy;
   }
 
-  esAnteriorEstaSemana(fecha: Date): boolean {
+  private esAnteriorEstaSemana(fecha: Date): boolean {
     const hoy = new Date();
     const haceUnaSemana = new Date();
     haceUnaSemana.setDate(hoy.getDate() - 7);

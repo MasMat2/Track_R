@@ -57,6 +57,8 @@ public class NotificacionDoctorService
             imgData = "data:" + img.ArchivoTipoMime + ";base64," + Convert.ToBase64String(img.Archivo1);
         }
 
+        var claveNotificacion = _notificacionService.ConsultarClave(notificacionDto.IdTipoNotificacion);
+
         return new NotificacionDoctorDTO(
             notificacionUsuarioDto.IdNotificacionUsuario,
             notificacionUsuarioDto.IdNotificacion,
@@ -68,7 +70,8 @@ public class NotificacionDoctorService
             notificacionDto.IdTipoNotificacion,
             idPaciente,
             imgData,
-            notificacionDto.IdChat
+            notificacionDto.IdChat,
+            claveNotificacion
         );
     }
 

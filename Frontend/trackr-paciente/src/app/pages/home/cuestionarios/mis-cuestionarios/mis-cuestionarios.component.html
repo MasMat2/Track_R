@@ -1,98 +1,173 @@
-<ion-header>
-  <ion-toolbar class="primary-toolbar">
-    <ion-title>Cuestionarios</ion-title>
-    <ion-buttons slot="end">
-      
-    </ion-buttons>
-  </ion-toolbar>
+<ion-header class="ion-no-border">
+  <div class="contenedor-header-dark">
+    <ion-toolbar>
+      <ion-title>
+        Cuestionarios
+      </ion-title>
+    </ion-toolbar>
+  </div>
 </ion-header>
-<ion-content>
-  <div class="contenido">
+<ion-content class="primary">
+  <div class="contenedor-principal">
 
-    <ion-segment  value="pendientes" color="tertiary">
-      <ion-segment-button value="pendientes" (click)="changeSection('pendientes')">
-        <ion-label>Pendientes</ion-label>
-      </ion-segment-button>
-        
-      <ion-segment-button value="contestados" (click)="changeSection('contestados')">
-        <ion-label>Contestados</ion-label>
-      </ion-segment-button>
-    </ion-segment>
+    <ion-toolbar class="segment-toolbar">
+      <ion-segment  value="pendientes" color="morado-custom">
+        <ion-segment-button value="pendientes" (click)="changeSection('pendientes')">
+          <ion-label>Pendientes</ion-label>
+        </ion-segment-button>
+          
+        <ion-segment-button value="contestados" (click)="changeSection('contestados')">
+          <ion-label>Contestados</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
 
-    <div class="pendientes" *ngIf="segmentoSeleccionado === 'pendientes'">
-      <div class="mensajeVacio" *ngIf="examenPendienteList.length === 0">
-        <ion-label>
-          Nada por aquí.<br>
-          Aún no se te ha asignado un cuestionario
-        </ion-label>
+    <div id="pendientes" *ngIf="segmentoSeleccionado === 'pendientes'">
+      <div class="lista-vacia" *ngIf="examenPendienteList.length === 0">
+        <ion-text>
+          <p>
+            Nada por aquí. <br> Aún no se te ha asignado un cuestionario.
+          </p>
+        </ion-text>
       </div>
-
-      <div *ngIf="examenPendienteList.length !== 0">
-        <ion-label class="texto-seccion" >
-        </ion-label>
-        <ion-item lines="none" *ngFor="let examen of examenPendienteList">
+      
+      <div class="lista-cuestionarios" *ngIf="examenPendienteList.length !== 0">
+        <ion-list>
+          <ion-item lines="none" detail="true" *ngFor="let examen of examenPendienteList"
+            (click)="responderCuestionario(examen.idExamen)">
             <ion-label>
               <h3>{{examen.tipoExamen}}</h3>
+              <p>{{examen.fechaExamen | date: "MMMM d, y 'a las' h:mm a" : '' : 'es-MX'}}</p>
             </ion-label>
-            <ion-label>
-              <p>{{examen.fechaExamen}}</p>
-              <p>{{examen.horaExamen}}</p>
-            </ion-label>
-            <ion-button class="btn-responder" (click)="responderCuestionario(examen.idExamen)">Contestar</ion-button>
-    
-        </ion-item>
+          </ion-item>
+        </ion-list>
       </div>
-      
-      
     </div>
-    <div class="contestados" *ngIf="segmentoSeleccionado === 'contestados'">
-      <div class="mensajeVacio" *ngIf="examenContestadoList.length === 0">
-        <ion-label>
-          Nada por aquí.<br>
-          Aún no has contestado un cuestionario.
-        </ion-label>
+
+    <div  id="pendientes" *ngIf="segmentoSeleccionado === 'contestados'">
+      <div class="lista-vacia" *ngIf="examenContestadoList.length === 0">
+        <ion-text>
+          <p>
+            Nada por aquí. <br> Aún no tienes cuestionarios contestados.
+          </p>
+        </ion-text>
       </div>
 
-      <div *ngIf="examenContestadoList.length !== 0">
-        <ion-label class="texto-seccion">
-        </ion-label>
+      <div class="lista-cuestionarios" *ngIf="examenContestadoList.length !== 0">
         <!--Mostrar 5-->
-        <div *ngIf="!mostrarTodosContestados">
-          <ion-item (click)="verCuestionario(examen.idExamen)" button="true" *ngFor="let examen of examenContestadoList.slice(0, 5) ">
+        <ion-list>
+          <ion-item 
+            lines="none" 
+            detail="true" 
+            *ngFor="let examen of (mostrarTodosContestados ? examenContestadoList : examenContestadoList?.slice(0,5))" 
+            (click)="navigateVerCuestionario(examen.idExamen)"
+          >
             <ion-label>
-              <h3>
-                {{examen.tipoExamen}}
-              </h3>
-              <p>{{examen.fechaExamen}}</p>
+              <h3>{{examen.tipoExamen}}</h3>
+              <p>{{examen.fechaExamen | date: "MMMM d, y" : '' : 'es-MX'}}</p>
             </ion-label>
-            <ion-icon name="chevron-forward"></ion-icon>
           </ion-item>
-          <ion-item *ngIf="cantidadCuestionariosContestados > 5" class="texto-ver-mas" button="true" (click)="verMas(true)" lines="none">
-            <ion-label>
+
+          <ion-item lines="none" button class="texto-ver-mas" (click)="verMas(!mostrarTodosContestados)">
+            <ion-label *ngIf="!mostrarTodosContestados">
               Ver Todos (+{{cantidadCuestionariosContestados}})
             </ion-label>
+            <ion-label *ngIf="mostrarTodosContestados">
+              Ver menos
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div class="contenido-viejo" *ngIf="false">
+    <div class="contenido">
+      <ion-segment  value="pendientes" color="tertiary">
+        <ion-segment-button value="pendientes" (click)="changeSection('pendientes')">
+          <ion-label>Pendientes</ion-label>
+        </ion-segment-button>
+          
+        <ion-segment-button value="contestados" (click)="changeSection('contestados')">
+          <ion-label>Contestados</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+  
+      <div class="pendientes" *ngIf="segmentoSeleccionado === 'pendientes'">
+        <div class="mensajeVacio" *ngIf="examenPendienteList.length === 0">
+          <ion-label>
+            Nada por aquí.<br>
+            Aún no se te ha asignado un cuestionario
+          </ion-label>
+        </div>
+  
+        <div *ngIf="examenPendienteList.length !== 0">
+          <ion-label class="texto-seccion" >
+          </ion-label>
+          <ion-item lines="none" *ngFor="let examen of examenPendienteList">
+              <ion-label>
+                <h3>{{examen.tipoExamen}}</h3>
+              </ion-label>
+              <ion-label>
+                <p>{{examen.fechaExamen}}</p>
+                <p>{{examen.horaExamen}}</p>
+              </ion-label>
+              <ion-button class="btn-responder" (click)="responderCuestionario(examen.idExamen)">Contestar</ion-button>
+      
           </ion-item>
         </div>
-        <!--Mostrar todos-->
-        <div *ngIf="mostrarTodosContestados">
-          <ion-item *ngFor="let examen of examenContestadoList" (click)="verCuestionario(examen.idExamen)" button="true">
-            <ion-label>
-              <h3>
-                {{examen.tipoExamen}}
-              </h3>
-              <p>{{examen.fechaExamen}}</p>
-            </ion-label>
-            <ion-icon name="chevron-forward"></ion-icon>
-          </ion-item>
-          <ion-item class="texto-ver-mas" button="true" (click)="verMas(false)">
-            <ion-label>
-              Ver Menos
-            </ion-label>
-          </ion-item>
+        
+        
+      </div>
+      <div class="contestados" *ngIf="segmentoSeleccionado === 'contestados'">
+        <div class="mensajeVacio" *ngIf="examenContestadoList.length === 0">
+          <ion-label>
+            Nada por aquí.<br>
+            Aún no has contestado un cuestionario.
+          </ion-label>
+        </div>
+  
+        <div *ngIf="examenContestadoList.length !== 0">
+          <ion-label class="texto-seccion">
+          </ion-label>
+          <!--Mostrar 5-->
+          <div *ngIf="!mostrarTodosContestados">
+            <ion-item (click)="navigateVerCuestionario(examen.idExamen)" button="true" *ngFor="let examen of examenContestadoList.slice(0, 5) ">
+              <ion-label>
+                <h3>
+                  {{examen.tipoExamen}}
+                </h3>
+                <p>{{examen.fechaExamen}}</p>
+              </ion-label>
+              <ion-icon name="chevron-forward"></ion-icon>
+            </ion-item>
+            <ion-item *ngIf="cantidadCuestionariosContestados > 5" class="texto-ver-mas" button="true" (click)="verMas(true)" lines="none">
+              <ion-label>
+                Ver Todos (+{{cantidadCuestionariosContestados}})
+              </ion-label>
+            </ion-item>
+          </div>
+          <!--Mostrar todos-->
+          <div *ngIf="mostrarTodosContestados">
+            <ion-item *ngFor="let examen of examenContestadoList" (click)="navigateVerCuestionario(examen.idExamen)" button="true">
+              <ion-label>
+                <h3>
+                  {{examen.tipoExamen}}
+                </h3>
+                <p>{{examen.fechaExamen}}</p>
+              </ion-label>
+              <ion-icon name="chevron-forward"></ion-icon>
+            </ion-item>
+            <ion-item class="texto-ver-mas" button="true" (click)="verMas(false)">
+              <ion-label>
+                Ver Menos
+              </ion-label>
+            </ion-item>
+          </div>
         </div>
       </div>
-      
-      
     </div>
   </div>
 </ion-content>

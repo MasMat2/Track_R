@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { alertCircle, checkmarkCircle, trash } from 'ionicons/icons';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +13,9 @@ import { alertCircle, checkmarkCircle, trash } from 'ionicons/icons';
 })
 export class AppComponent {
   constructor() {
-    addIcons({alertCircle, checkmarkCircle, trash})
+    addIcons({
+      'chevron-left': 'assets/img/svg/chevron-left.svg',
+      'info': 'assets/img/svg/info.svg',
+    })
   }
 }

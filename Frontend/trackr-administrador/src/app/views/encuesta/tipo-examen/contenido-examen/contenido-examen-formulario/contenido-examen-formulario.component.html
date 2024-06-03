@@ -2,7 +2,7 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>Contenido de la Encuesta - {{ accion }} </div>
+      <div>Contenido del Cuestionario - {{ accion }} </div>
       <button
         type="button"
         class="close pull-right"
@@ -40,7 +40,7 @@
 
           <div class="col-md-6">
             <div class="form-group">
-              <label class="label-input required-label">Tipo de Encuesta</label>
+              <label class="label-input required-label">Tipo Cuestionario</label>
               <div>
                 <input
                   #nombre="ngModel"
@@ -55,7 +55,7 @@
                 *ngIf="nombre.errors?.['required'] && nombre.touched"
                 class="error"
               >
-                El tipo de Encuesta es requerido
+                El tipo Cuestionario es requerido
               </div>
             </div>
           </div>
@@ -64,7 +64,7 @@
         <div class="row justify-content-md-center">
           <div class="col-md-6">
             <div class="form-group">
-              <label class="label-input required-label">Encuesta</label>
+              <label class="label-input required-label">Cuestionario</label>
               <div>
                 <ng-select
                   #asignaturaLst="ngModel"
@@ -82,14 +82,14 @@
                 *ngIf="asignaturaLst.errors?.['required'] && asignaturaLst.touched"
                 class="error"
               >
-                La Encuesta es requerida
+                La Cuestionario es requerido
               </div>
             </div>
           </div>
 
           <div class="col-md-6">
             <div class="form-group">
-              <label class="label-input required-label">Complejidad de Encuesta</label>
+              <label class="label-input required-label">Complejidad de Cuestionario</label>
               <div>
                 <ng-select
                   #nivelLst="ngModel"
@@ -107,7 +107,7 @@
                 *ngIf="nivelLst.errors?.['required'] && nivelLst.touched"
                 class="error"
               >
-                La Complejidad de Encuesta es requerida
+                La Complejidad del Cuestionario es requerida
               </div>
             </div>
           </div>

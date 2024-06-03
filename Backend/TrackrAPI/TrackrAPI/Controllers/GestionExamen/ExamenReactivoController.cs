@@ -2,6 +2,7 @@
 using TrackrAPI.Services.GestionExamen;
 using TrackrAPI.Models;
 using TrackrAPI.Dtos.GestionExamen;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TrackrAPI.Controllers.GestionExamen;
 
@@ -35,6 +36,12 @@ public class ExamenReactivoController : ControllerBase
     public IEnumerable<ExamenReactivoDto> ConsultarReactivosExamen(int idExamen)
     {
         return _examenReactivo.ConsultarReactivosExamen(idExamen);
+    }
+
+    [HttpGet("consultarReactivosExamenParaExcel/{idProgramacionExamen}")]
+    public RespuestasExcelDto ConsultarReactivosExamenExcel(int idProgramacionExamen)
+    {
+        return _examenReactivo.ConsultarReactivosExamenExcel(idProgramacionExamen);
     }
 
     [HttpGet]

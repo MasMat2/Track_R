@@ -1,23 +1,20 @@
-<ion-header class="ion-no-border" >
-  <ion-toolbar class="primary-toolbar">
-    <ion-title>Chats</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="mostrarListaDoctores()">
-        <div style="position: relative;">
-          <ion-icon style="font-size: 1.5em;" name="chatbox-outline"></ion-icon>
-          <div style="position: absolute; top: -6px; right: -6px;">
-            <ion-icon name="add-circle"></ion-icon>
-          </div>
-        </div>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-  
-</ion-header>
-<ion-content>
-  <ion-toolbar class="barra-busqueda" *ngIf="!verListaDoctores">
-    <ion-searchbar show-cancel-button="focus" placeholder="Buscar" animated (ionChange)="buscarChat($event)"></ion-searchbar>
-  </ion-toolbar>
+<ion-header class="ion-no-border">
+  <div class="contenedor-header-dark">
+    <ion-toolbar>
+      <ion-title>Chats</ion-title>
+      <ion-buttons class="end" slot="end">
+        <ion-button class="icon-only" (click)="mostrarListaDoctores()">
+          <ion-icon name="chat-plus"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+</ion-header> 
+<ion-content class="primary">
+
+  <div class="barra-busqueda">
+    <ion-searchbar (ionChange)="buscarChat($event)" show-cancel-button="focus" placeholder="Buscar" animated ></ion-searchbar>
+  </div>
 
   <div class="contactos" *ngIf="verListaDoctores">
     <div class="generar-chat" *ngIf="doctorSeleccionado">
@@ -60,8 +57,8 @@
   </div>
 
   <div class="chats">
-    <ion-list *ngFor="let chat of chatsFiltradosPorBusqueda">
-      <ion-item class="chat" lines="none" button="true" (click)="enviarIdChat(chat.idChat || 0)">
+    <ion-list  *ngFor="let chat of chatsFiltradosPorBusqueda">
+      <ion-item  class="chat" lines="none" button="true" (click)="enviarIdChat(chat.idChat || 0)">
         <ion-avatar slot="start">
           <ion-img *ngIf="chat.urlImagen" [src]="chat.urlImagen" > </ion-img>
           <ion-img *ngIf="!chat.urlImagen" alt="profile pic" src="https://ionicframework.com/docs/img/demos/avatar.svg"></ion-img> 

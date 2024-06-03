@@ -23,7 +23,8 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         public IEnumerable<ExpedientePadecimientoDTO> Consultar(List<int> idDoctor)
         {
             return context.ExpedientePadecimiento
-            .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioPaciente && idDoctor.Contains(ep.IdUsuarioDoctor))
+            .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.IdTipoUsuarioNavigation.Clave == GeneralConstant.ClaveTipoUsuarioPaciente)
+            .Where(ep => ep.IdExpedienteNavigation.ExpedienteDoctor.Any(ed => idDoctor.Contains(ed.IdUsuarioDoctor)))
                 .Select(ep => new ExpedientePadecimientoDTO
                 {
                     IdExpedientePadecimiento = ep.IdExpedientePadecimiento,
@@ -37,6 +38,33 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         {
             return context.ExpedientePadecimiento
                 .Where(ep => ep.IdExpedienteNavigation.IdUsuario == idUsuario)
+                .Select(ep => new ExpedientePadecimientoDTO
+                {
+                    IdExpedientePadecimiento = ep.IdExpedientePadecimiento,
+                    IdPadecimiento = ep.IdPadecimiento,
+                    FechaDiagnostico = ep.FechaDiagnostico,
+                    IdExpediente = ep.IdExpediente,
+                    NombrePadecimiento = ep.IdPadecimientoNavigation.Nombre,
+                    clavePadecimiento = ep.IdPadecimientoNavigation.Clave,
+                }).ToList();
+        }
+
+        public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarPorUsuarioParaSelector(int idUsuario)
+        {
+            return context.ExpedientePadecimiento
+                .Where(ep => ep.IdExpedienteNavigation.IdUsuario == idUsuario)
+                .Select(ep => new ExpedientePadecimientoSelectorDTO
+                {
+                    IdPadecimiento = ep.IdPadecimiento,
+                    Nombre = ep.IdPadecimientoNavigation.Nombre
+                }).ToList();
+        }
+
+        public IEnumerable<ExpedientePadecimientoDTO> ConsultarPorUsuarioDoctor(int idUsuario , int idDoctor)
+        {
+            return context.ExpedientePadecimiento
+                .Where(ep => ep.IdExpedienteNavigation.IdUsuario == idUsuario)
+                .Where(ep => ep.IdUsuarioDoctor == idDoctor)
                 .Select(ep => new ExpedientePadecimientoDTO
                 {
                     IdExpedientePadecimiento = ep.IdExpedientePadecimiento,

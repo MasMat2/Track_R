@@ -12,8 +12,8 @@ import { FormularioService } from 'src/app/shared/services/formulario.service';
   templateUrl: './asignatura-formulario.component.html',
 })
 export class AsignaturaFormularioComponent implements OnInit {
-  public MENSAJE_AGREGAR = 'La Encuesta ha sido agregada';
-  public MENSAJE_EDITAR = 'La Encuesta ha sido modificada';
+  public MENSAJE_AGREGAR = 'El cuestionario ha sido agregado';
+  public MENSAJE_EDITAR = 'El cuestionario ha sido modificado';
 
   // Inputs
   public accion: string;
@@ -39,7 +39,7 @@ export class AsignaturaFormularioComponent implements OnInit {
     }
     else {
       if (this.idAsignatura === undefined) {
-        throw new Error('No se especificó el id de la Encuesta');
+        throw new Error('No se especificó el id del Cuestionario');
       }
 
       this.asignaturaService
