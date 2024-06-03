@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Specialized;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using TrackrAPI.Helpers;
 
@@ -19,7 +20,7 @@ public class SlackClient
     }
 
     //Post a message using simple strings
-    public void PostMessage(string text, string username = null, string errorMessage = null)
+    public async void PostMessage(string text, string username = null, string errorMessage = null)
     {
         Payload payload = new Payload()
         {
@@ -28,43 +29,46 @@ public class SlackClient
             ErrorMessage = errorMessage
         };
 
-        PostMessage(payload);
+        await PostMessage(payload);
     }
 
-    //Post a message using a Payload object
-    public void PostMessage(Payload payload)
+    
+    public async Task PostMessage(Payload payload)
     {
-        GetVariables();
-        
+       GetVariables();
+    
         var formattedStackTrace = ProcessStackTrace(payload.ErrorMessage);
-        
-
+    
         string dateTimeNow = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
+
         string formattedErrorMessage = string.Join("", formattedStackTrace.Select(line => line.Replace("\\", "\\\\").Replace("\"", "\\\"").TrimEnd('\r')));
-        string formattedShortErroMessage = payload.Text[..50];
 
+        string formattedShortErrorMessage = payload.Text[..50];
+
+        // Could not find file 'C:\Users\Usuario\Documents\CD ---> Could not find file \'C:\Users\Usuario\Documents\CD 
+        // Se escapan las comillas simples y las barras invertidas
+        formattedShortErrorMessage = formattedShortErrorMessage.Replace("\\", "\\\\").Replace("'", "\\'");
+
+        
         var truncatedJson = TruncateJson(formattedErrorMessage);
-
+    
         var formattedJson = truncatedJson.Replace("{0}", environment)
                                             .Replace("{1}", dateTimeNow)
-                                            .Replace("{2}", formattedShortErroMessage)
+                                            .Replace("{2}", formattedShortErrorMessage)
                                             .Replace("{3}", urlFrontend);
+    
+        HttpClient client = new();
 
-
-        using (WebClient client = new())
+        HttpRequestMessage request = new(HttpMethod.Post, _uri.AbsoluteUri)
         {
-            NameValueCollection data = new()
-            {
-                ["payload"] = formattedJson
-            };
+            Content = new StringContent(formattedJson)
+        };
+        request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            var response = client.UploadValues(_uri, "POST", data);
-
-            string responseText = _encoding.GetString(response);
-        }
-
+        HttpResponseMessage response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        string responseBody = await response.Content.ReadAsStringAsync();
     }
-
     private static string[] ProcessStackTrace(string stackTraceText)
     {
         string[] stackTraceLines = stackTraceText.Split('\n');
@@ -83,7 +87,7 @@ public class SlackClient
 
         var maxCharacters = 3000 + fixedJsonStart.Length + fixedJsonEnd.Length; // 3000 es el numero maximo de caracteres para un texto en la api de slack
 
-        var stackTraceText = errorMessage.Replace("\\", "\\\\").Replace("\"", "\\\"");
+        var stackTraceText = errorMessage;
 
         var availableLength = maxCharacters - fixedJsonStart.Length - fixedJsonEnd.Length;
 

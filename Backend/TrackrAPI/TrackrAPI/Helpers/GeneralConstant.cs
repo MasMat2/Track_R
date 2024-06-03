@@ -425,65 +425,64 @@
         public static readonly int idEstatusExamenPresentandose = 2;
         public static readonly int idEstatusExamenProgramado = 1;
 
-        public const string SlackJsonMessageStart = @"
-            {
-                ""blocks"": [
+        public const string SlackJsonMessageStart = @"{
+                'blocks': [
                     {
-                        ""type"": ""header"",
-                        ""text"": {
-                            ""type"": ""plain_text"",
-                            ""text"": ""Nueva Excepcion en {0}"",
-                            ""emoji"": true
+                        'type': 'header',
+                        'text': {
+                            'type': 'plain_text',
+                            'text': 'Nueva Excepcion en {0}',
+                            'emoji': true
                         }
                     },
                     {
-                        ""type"": ""section"",
-                        ""fields"": [
+                        'type': 'section',
+                        'fields': [
                             {
-                                ""type"": ""mrkdwn"",
-                                ""text"": ""*Cuando*: \n{1}""
+                                'type': 'mrkdwn',
+                                'text': '*Cuando*: \n{1}'
                             },
                             {
-                                ""type"": ""mrkdwn"",
-                                ""text"": ""*Error:*\n {2}""
+                                'type': 'mrkdwn',
+                                'text': '*Error:*\n {2}'
                             }
                         ]
                     },
                     {
-                        ""type"": ""context"",
-                        ""elements"": [
+                        'type': 'context',
+                        'elements': [
                             {
-                                ""type"": ""image"",
-                                ""image_url"": ""https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg"",
-                                ""alt_text"": ""cute cat""
+                                'type': 'image',
+                                'image_url': 'https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg',
+                                'alt_text': 'cute cat'
                             },
                             {
-                                ""type"": ""image"",
-                                ""image_url"": ""https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg"",
-                                ""alt_text"": ""cute cat""
+                                'type': 'image',
+                                'image_url': 'https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg',
+                                'alt_text': 'cute cat'
                             },
                             {
-                                ""type"": ""image"",
-                                ""image_url"": ""https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg"",
-                                ""alt_text"": ""cute cat""
+                                'type': 'image',
+                                'image_url': 'https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg',
+                                'alt_text': 'cute cat'
                             },
                             {
-                                ""type"": ""plain_text"",
-                                ""text"": ""{3}"",
-                                ""emoji"": true
+                                'type': 'plain_text',
+                                'text': '{3}',
+                                'emoji': true
                             }
                         ]
                     },
                     {
-                        ""type"": ""divider""
+                        'type': 'divider'
                     },
                     {
-                        ""type"": ""section"",
-                        ""text"": {
-                            ""type"": ""mrkdwn"",
-                            ""text"": """;
+                        'type': 'section',
+                        'text': {
+                            'type': 'mrkdwn',
+                            'text': '";
 
-        public const string SlackJsonMessageEnd = @"""
+        public const string SlackJsonMessageEnd = @"'
                     }
                 }
             ]
