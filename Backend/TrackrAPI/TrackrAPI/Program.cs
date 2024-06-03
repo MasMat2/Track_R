@@ -139,7 +139,7 @@ app.UseExceptionHandler(webApplicationBuilder =>
                 context.Response.AddApplicationError(((CdisException)error.Error).ErrorMessage);
                 await context.Response.WriteAsync(((CdisException)error.Error).ErrorMessage);
             }
-            else
+                else
             {
                 string errorMessageDefault = "Ocurri� un error inesperado, favor de contactar al administrador del sistema";
                 var notificarPorSlack = builder.Configuration.GetSection("Slack:NotificarEnvioPorSlack")?.Value;
