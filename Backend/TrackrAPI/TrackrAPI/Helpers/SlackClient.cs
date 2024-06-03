@@ -41,11 +41,13 @@ public class SlackClient
 
         string dateTimeNow = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
         string formattedErrorMessage = string.Join("", formattedStackTrace.Select(line => line.Replace("\\", "\\\\").Replace("\"", "\\\"").TrimEnd('\r')));
+        string formattedShortErroMessage = payload.Text[..50];
+
         var truncatedJson = TruncateJson(formattedErrorMessage);
 
         var formattedJson = truncatedJson.Replace("{0}", environment)
                                             .Replace("{1}", dateTimeNow)
-                                            .Replace("{2}", payload.Text)
+                                            .Replace("{2}", formattedShortErroMessage)
                                             .Replace("{3}", urlFrontend);
 
 
