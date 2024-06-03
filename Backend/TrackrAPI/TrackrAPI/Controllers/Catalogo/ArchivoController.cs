@@ -8,6 +8,7 @@ using System.IO;
 using TrackrAPI.Services.Inventario;
 using TrackrAPI.Services.Archivos;
 using System.Runtime.Serialization.Formatters.Binary;
+using TrackrAPI.Services.Sftp;
 
 namespace TrackrAPI.Controllers.Catalogo
 {
@@ -20,13 +21,15 @@ namespace TrackrAPI.Controllers.Catalogo
         private readonly CompaniaLogotipoService companiaLogotipoService;
         private readonly UsuarioService usuarioService;
         private readonly ArchivoService archivoService;
+        private readonly SftpService _sftpService;
 
         public ArchivoController(
             IWebHostEnvironment hostingEnvironment,
             HospitalLogotipoService hospitalLogotipoService,
             CompaniaLogotipoService companiaLogotipoService,
             UsuarioService usuarioService,
-            ArchivoService archivoService
+            ArchivoService archivoService,
+            SftpService sftpService
             )
         {
             this.hostingEnvironment = hostingEnvironment;
@@ -34,6 +37,7 @@ namespace TrackrAPI.Controllers.Catalogo
             this.companiaLogotipoService = companiaLogotipoService;
             this.usuarioService = usuarioService;
             this.archivoService = archivoService;
+            _sftpService = sftpService;
         }
 
         [HttpGet("HospitalLogotipo/{idHospitalLogotipo}")]
@@ -90,8 +94,16 @@ namespace TrackrAPI.Controllers.Catalogo
         {
             byte[] imageFileStream;
             string tipoMime;
-
             var archivo = archivoService.ObtenerImagenUsuario(idUsuario);
+
+
+            var imgPath = archivo?.ArchivoUrl ?? Path.Combine("Archivos", "Usuario", "default-user.jpg");
+            var mimeType = archivo?.ArchivoTipoMime ?? "image/jpg";
+            var imagenPerfilBase64 = _sftpService.DownloadFile(imgPath);
+            var imagenPerfil = $"data:{mimeType};base64,{imagenPerfilBase64}";
+            var imagenPerfilBytes = Convert.FromBase64String(imagenPerfilBase64);
+
+/* 
             if (archivo == null)
             {
                 var path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
@@ -109,10 +121,10 @@ namespace TrackrAPI.Controllers.Catalogo
                 var path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
                 imageFileStream = System.IO.File.ReadAllBytes(path);
                 tipoMime = "image/svg+xml";
-            }
+            } */
 
 
-            return File(imageFileStream, tipoMime);
+            return File(imagenPerfilBytes, mimeType);
         }
         [HttpGet("usuarioEnSesionImagen/")]
         public IActionResult ObtenerUsuarioEnSesionImagen()
