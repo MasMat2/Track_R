@@ -7,16 +7,25 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { PdfVisorModule } from '@sharedComponents/pdf-visor/pdf-visor.module';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+
 
 //componentes
 import { SpinnerComponent } from './spinner/spinner.component';
+import { CustomAlertComponent } from './components/custom-alert/custom-alert.component';
 
 @NgModule({
   imports: [
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatButtonModule,
+    CommonModule
+
   ],
   declarations: [
-    SpinnerComponent
+    SpinnerComponent,
+    CustomAlertComponent
    ],
   exports: [
     FormsModule,
@@ -27,7 +36,8 @@ import { SpinnerComponent } from './spinner/spinner.component';
     DomicilioFormularioModule,
     PdfVisorModule,
     SpinnerComponent,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    CustomAlertComponent
   ],
   providers: []
 })
