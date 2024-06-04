@@ -70,3 +70,22 @@
   height: 1px;
   background: $color-primario;
 }
+
+.custom-alert{
+  .mat-mdc-dialog-surface {
+    border-radius: 16px !important;
+  }
+  
+  .mat-mdc-dialog-container{
+    min-height: 277px;
+    width: 327px;
+  }
+
+  .mat-mdc-dialog-content{
+    padding: 32px 24px 0 24px !important;
+  }
+
+  .mat-mdc-dialog-actions{
+    padding: 24px !important;
+  }
+}
