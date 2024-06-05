@@ -14,12 +14,14 @@ import { MatButtonModule } from '@angular/material/button';
 //componentes
 import { SpinnerComponent } from './spinner/spinner.component';
 import { CustomAlertComponent } from './components/custom-alert/custom-alert.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   imports: [
     MatProgressSpinnerModule,
     MatDialogModule,
     MatButtonModule,
+    MatIconModule,
     CommonModule
 
   ],
@@ -37,7 +39,8 @@ import { CustomAlertComponent } from './components/custom-alert/custom-alert.com
     PdfVisorModule,
     SpinnerComponent,
     MatProgressSpinnerModule,
-    CustomAlertComponent
+    CustomAlertComponent,
+    MatIconModule
   ],
   providers: []
 })

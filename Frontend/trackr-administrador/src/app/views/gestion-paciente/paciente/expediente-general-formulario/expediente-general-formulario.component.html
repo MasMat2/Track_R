@@ -10,37 +10,35 @@
       <div class="row">
         <div class="col-md-4">
           <div class="form-group">
-            <div class="row">
-              <label class="label-input required-label">Núm. Expediente</label>
-              <div>
-                <input
-                  #numeroExpediente="ngModel"
-                  [(ngModel)]="expediente.numero"
-                  name="numeroExpediente"
-                  class="form-control"
-                  type="text"
-                  maxlength="20"
-                  autocomplete="off"
-                  required
-                  appFormatoSoloAlfanumerico
-                  autofocus
-                  [disabled]="true"
-                />
-                <div
-                  *ngIf="numeroExpediente.errors?.['required'] && numeroExpediente.touched"
-                  class="error"
-                >
-                  El número de expediente es requerido
-                </div>
-                <div
-                  *ngIf="numeroExpediente.errors?.['formatoSoloAlfanumerico']"
-                  class="error"
-                >
-                  El formato de la clave es inválido
-                </div>
+            <label class="label-input required-label">Núm. Expediente</label>
+            <div>
+              <input
+                #numeroExpediente="ngModel"
+                [(ngModel)]="expediente.numero"
+                name="numeroExpediente"
+                class="form-control"
+                type="text"
+                maxlength="20"
+                autocomplete="off"
+                required
+                appFormatoSoloAlfanumerico
+                autofocus
+                [disabled]="true"
+              />
+              <div
+                *ngIf="numeroExpediente.errors?.['required'] && numeroExpediente.touched"
+                class="error"
+              >
+                El número de expediente es requerido
+              </div>
+              <div
+                *ngIf="numeroExpediente.errors?.['formatoSoloAlfanumerico']"
+                class="error"
+              >
+                El formato de la clave es inválido
               </div>
             </div>
-          </div>
+        </div>
         
         </div>
           <!-- Fecha Alta Expediente -->
@@ -234,12 +232,12 @@
             <label class="label-input required-label"
               >Fecha de Nacimiento</label
             >
-            <div>
+            <div class="date-form-control-container">
               <input
                 #fechaNacimiento="ngModel"
                 [(ngModel)]="expediente.fechaNacimiento"
                 name="fechaNacimiento"
-                class="form-control"
+                class="date-form-control"
                 type="text"
                 maxlength="50"
                 autocomplete="off"
@@ -248,6 +246,10 @@
                 bsDatepicker
                 [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
               />
+              <div class="icono">
+                <!-- usar iconos svg de lucid -->
+                <mat-icon>calendar_today</mat-icon>
+              </div>
               <div
                 *ngIf="fechaNacimiento.errors?.['required'] && fechaNacimiento.touched"
                 class="error"

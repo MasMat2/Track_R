@@ -1,9 +1,13 @@
 @import 'variables';
 
 .ng-select .ng-select-container {
-  border-radius: $border-radius-inputs;
+  border-radius: 8px !important;
   padding: 0.25rem 0 0.25rem 0.25rem;
-  font-size: 0.80rem;
+  font-family: var(--font-body);
+  font-size: 14px;
+  height: 42px !important;
+  padding-right: 12px !important;
+
 }
 
 .ng-dropdown-panel {
@@ -14,10 +18,31 @@
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
   &.ng-option-marked,
   &.ng-option-selected {
-    background-color: $color-terceario;
+    background-color: var(--primary-200);
   }
 }
 
 .ng-select.ng-select-disabled .ng-select-container {
-  background-color: #e9ecef;
+  background-color: var(--neutral-100);
+}
+
+.ng-select .ng-arrow-wrapper .ng-arrow {
+  display: none !important;
+}
+
+.ng-select .ng-arrow-wrapper {
+  width: 24px;
+  height: 24px;
+  background-image: url(./assets/chevron-down.svg);
+  color: red !important;
+  //background-color: var(--neutral-600) !important;
+}
+
+.ng-select-opened .ng-arrow-wrapper {
+  background-image: url(./assets/chevron-up.svg) !important;
+}
+
+.ng-select.ng-select-focused:not(.ng-select-opened)>.ng-select-container {
+  border-color: var(--primary-700) !important;
+  box-shadow: none !important;
 }
