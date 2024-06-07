@@ -14,7 +14,7 @@ export class GraficaNotificacionesComponent implements OnInit {
 
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
-  protected colors: string[] = ['#92d050', '#ff8b8b'];
+  protected colors: string[] = ['#98C450', '#B3261E'];
   protected etiquetas: string[] = ['Solicitudes Atendidas', 'Solicitudes Sin Atender'];
   protected data: number[] = [0, 0];
   private total: number = 0;
@@ -34,11 +34,11 @@ export class GraficaNotificacionesComponent implements OnInit {
   };
 
   protected chartOptions: ChartConfiguration<'doughnut'>['options'] = {
-    cutout: '80%',
+    cutout: '60%',
     plugins: {
       legend: { display: false },
       datalabels: {
-        color: 'black',
+        color: '#FFFFFF',
         formatter: (value: number) => {
           if (this.total === 0) return (0).toFixed(0) + '%';
           return (value / this.total * 100).toFixed(0) + '%';

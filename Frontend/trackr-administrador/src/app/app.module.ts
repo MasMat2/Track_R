@@ -20,6 +20,7 @@ import { LoginService } from './shared/services/seguridad/login.service';
 import { ChatModule } from './views/chat/chat.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructu
     PaginationModule.forRoot(),
     FormsModule,
     ChatModule,
-    NgSelectModule
+    NgSelectModule,
+    MatDialogModule
   ],
   providers: [ LoginService,
     AdministradorAuthService,

@@ -1,22 +1,29 @@
-<div class="tarjeta-contenedor d-flex gap-3">
-  <app-tarjeta
-    [claseIcono]="'fas fa-volume-up'"
-    [valor]="pacientesFueraDeRango.toString()"
-    [etiqueta]="'Alertas en Pacientes (Valores fuera de Rango)'"
-  >
-  </app-tarjeta>
-
-  <app-tarjeta
-    [claseIcono]="'fas fa-message'"
-    [valor]="solicitudesDeChat.toString()"
-    [etiqueta]="'Solicitudes a través de Chat'"
-  >
-  </app-tarjeta>
-
-  <app-tarjeta
-    [claseIcono]="'fas fa-video'"
-    [valor]="solicitudesDeVideo.toString()"
-    [etiqueta]="'Solicitudes de Videoconsultas'"
-  >
-  </app-tarjeta>
+<div class="card-container row">
+  <div class="col-4">
+    <app-tarjeta
+      [claseIcono]="'fas fa-volume-up'"
+      [claseIconoFondo]="'icon-badge-info'"
+      [valor]="pacientesFueraDeRango.toString()"
+      [etiqueta]="'Alertas en pacientes \n (Valores fuera de Rango)'"
+      claseColor="primary">
+    </app-tarjeta>
+  </div>
+  <div class="col-4">
+    <app-tarjeta
+      [claseIcono]="'fas fa-message'"
+      [claseIconoFondo]="'icon-message-square-more'"
+      [valor]="solicitudesDeChat.toString()"
+      [etiqueta]="'Solicitudes a través de Chat'"
+      claseColor="neutral">
+    </app-tarjeta>
+  </div>
+  <div class="col-4">
+    <app-tarjeta
+      [claseIcono]="'fas fa-video'"
+      [claseIconoFondo]="'icon-video'"
+      [valor]="solicitudesDeVideo.toString()"
+      [etiqueta]="'Solicitudes de Videoconsultas'"
+      claseColor="neutral">
+    </app-tarjeta>
+  </div>
 </div>

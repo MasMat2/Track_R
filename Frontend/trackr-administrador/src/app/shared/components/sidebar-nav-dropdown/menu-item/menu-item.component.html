@@ -5,15 +5,15 @@
 </div>
 
 <ng-template #accesoPadre>
-  <button
+    <button
     class="button-item"
     mat-button
-    style="height: 60px;"
     [ngClass]="{ 'active': menuTrigger.menuOpen }"
     (click)="menuTrigger.openMenu()"
     routerLinkActive="active"
   >
-    <div class="d-flex justify-content-center align-items-center w-100">
+    <div class="borde"></div>
+    <div class="d-flex align-items-center w-100">
       <i class="item mr-3 {{ item.icon }}"></i>
       <i class="fas fa-caret-right" style="color: #ffffff;"></i>
     </div>
@@ -24,6 +24,7 @@
       [matMenuTriggerFor]="menu.menuHijo"
     ></div>
   </button>
+  
 
   <!-- Componente para desplegar los elementos emergentes -->
   <app-menu-anidado #menu [items]="item.children!"></app-menu-anidado>
@@ -39,26 +40,30 @@
 
 
 <ng-template #accesoDirecto>
-  <button
-    class="button-item d-flex justify-content-center"
+    <button
+    class="button-item d-flex "
     mat-button
     [routerLink]="item.url"
-    style="height: 60px;"
     routerLinkActive="active"
     [routerLinkActiveOptions]="{ exact: true }"
   >
+  <div class="borde"></div>
     <i class="item mr-3 {{ item.icon }}"></i>
+    {{item.name}}
   </button>
+  
 </ng-template>
 
 <ng-template #accesoExterno>
-  <button
-    type="button"
-    class="button-item d-flex justify-content-center"
-    mat-button
-    style="height: 60px;"
-    [routerLink]="item.url"
-  >
-    <i class="item mr-3 {{ item.icon }}"></i>
-  </button>
+    <button
+      type="button"
+      class="button-item d-flex "
+      mat-button
+      [routerLink]="item.url"
+    >
+    <div class="borde"></div>
+      <i class="item mr-3 {{ item.icon }}"></i>
+      {{item.name}}
+    </button>
+  
 </ng-template>
