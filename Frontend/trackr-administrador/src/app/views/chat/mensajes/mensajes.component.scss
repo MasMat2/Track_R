@@ -1,4 +1,208 @@
+@import "../../../../../src/theme/variables.scss";
+
+
 .message {
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  
+  
+  .user .message-bubble {
+    background-color: var(--primary-700);
+    color: var(--neutral-50);
+    font-family: var(--font-body);
+    border-radius: 10px 10px 0px 10px;
+    margin-right: 3vw;
+    float: right;
+  
+    .archivo {
+      color: var(--neutral-50);
+    }
+  }
+  
+  .other .message-bubble {
+    background-color: var(--neutral-50);
+    color: var(--neutral-900);
+    margin-left: 3vw;
+    border-radius: 10px 10px 10px 0px;
+    font-family: var(--font-body);
+    float: left;
+  
+    .archivo {
+      color: var(--neutral-900);
+    }
+  }
+  
+  .message-bubble {
+    padding: 10px;
+    max-width: 70%;
+  
+    .nombre {
+      font-weight: bold;
+      padding: 0%;
+    }
+  }
+  
+  .listado {
+    align-self: flex-end;
+    background-color: var(--primary-50);
+
+    height: 70vh;
+    overflow-y: auto;
+    align-self: flex-end;
+    
+  }
+  
+  .final {
+    position: relative;
+    bottom: 0;
+    padding-bottom: 2vh;
+    padding-top: 2vh;
+  }
+  
+  .boton {
+    // position: relative;
+    // right: 2vh;
+    // top: 3vh;
+  }
+  
+  .chat-header{
+    --background: var(--neutral-50);
+    height: 8vh;
+  }
+  
+  .chat-container {
+    overflow: scroll;
+  }
+  
+  .chat-footer{
+    //display: flex;
+      .optional-toolbar{
+  
+        audio::-webkit-media-controls-panel {
+          background-color: var(--neutral-50);
+        }
+      }
+      .main-toolbar{
+        max-height: 15vh;
+  
+        .grabando-audio-container{
+          display: flex;
+          align-items: center;
+  
+          .contador-tiempo{
+            display: flex;
+            align-items: center;
+            z-index: 99;
+            background-color: var(--neutral-50);
+            padding-right: 2vw;
+  
+            ion-button{
+              color: red;
+              opacity: 0.5;
+            }
+          }
+        }
+  
+        .contenedor-principal1{
+          display: flex;
+          justify-content: space-between;
+          ion-icon{
+            color: var(--neutral-500);
+          }
+        }
+  
+        //Si la altura del textarea no ha sido alterada por tener varias lineas, 
+        //los botones estarán centrados con el textarea
+        .contenedor-principal2{
+          align-items: center;
+        }
+  
+        .contenedor-izquierda{
+          display: flex;
+          align-items: flex-end !important;
+        }
+  
+        .contenedor-central{
+          display: flex;
+          align-items: flex-end;
+          margin-bottom: 12px;
+          margin-top: 12px;
+          width: 100%;
+  
+          .texto-mensaje{
+            border: 1px solid;
+            border-color: var(--primary-100);
+            border-radius: 5px;
+            background-color: var(--primary-50);
+            max-height: 100px !important;
+            padding: 8px;
+            width: 100%;
+          }
+    
+          .texto-mensaje:focus{
+            outline: none !important;
+            //border: 0px solid;
+          }
+  
+          
+        }
+  
+        .contenedor-derecha{
+          display: flex;
+          align-items: flex-end;
+        }
+  
+      }
+  
+  }
+  
+  .enviar-foto-modal{
+  
+    ion-content{
+      --background: var(--neutral-950);
+    }
+  
+    .contenedor-imagen{
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .texto-mensaje{
+      margin-left: 10vw;
+      width: 70vw;
+      border: 0px;
+      border-radius: 5px;
+      background-color: var(--primary-50);
+  
+    }
+  
+    .texto-mensaje:focus{
+      outline: none !important;
+      border: 1px solid;
+      border-color: var(--primary-700);
+  
+    }
+  }
+  
+  
+  // Video options
+  ion-popover {
+    --width: auto;
+  }
+  
+  .video-option {
+    cursor: pointer;
+  
+  }
+  
+  .video-option:hover {
+    color: var(--primary-700);
+  }
+
+/* .message {
     margin-bottom: 10px;
     overflow: hidden;
 }
@@ -44,4 +248,4 @@
 
 .btn-1{
     color: #ecf0f1;
-}
+} */
