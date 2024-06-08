@@ -26,17 +26,11 @@
 @import '../src/theme/fonts.scss';
 
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.popover-custom {
-    max-width: 500px !important; // ajusta el ancho máximo según tus necesidades
-    width: auto !important; // ancho automático para ajustar el contenido
-  }
-
-.modal-izquierda{
-  position: absolute;
-  top: -30px;
-  left: 110px;
-}
+// .popover-custom {
+//     max-width: 500px !important; // ajusta el ancho máximo según tus necesidades
+//     width: auto !important; // ancho automático para ajustar el contenido
+//   }
 

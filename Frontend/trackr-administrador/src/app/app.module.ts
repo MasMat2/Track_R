@@ -21,6 +21,12 @@ import { ChatModule } from './views/chat/chat.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ToolbarModule } from '@sharedComponents/toolbar/toolbar.module';
+import { PanelNotificacionesModule } from './views/administrador/inicio/components/panel-notificaciones/panel-notificaciones.module';
+
+import { registerLocaleData } from '@angular/common';
+import localeEsMx from '@angular/common/locales/es-MX'
+registerLocaleData(localeEsMx, 'es-MX');
 
 @NgModule({
   declarations: [
@@ -42,7 +48,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     FormsModule,
     ChatModule,
     NgSelectModule,
-    MatDialogModule
+    MatDialogModule,
+    ToolbarModule,
+    PanelNotificacionesModule
   ],
   providers: [ LoginService,
     AdministradorAuthService,
