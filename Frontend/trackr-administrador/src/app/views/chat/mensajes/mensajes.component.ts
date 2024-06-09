@@ -31,6 +31,8 @@ export class MensajesComponent {
   protected archivo ?: File =undefined;
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('scrollContainer') private scrollContainer: ElementRef;
+  @Input() imagenChat: string;
+  @Input() tipoMime: string;
 
   //Variables para el audio
   protected isAudio:boolean = false;

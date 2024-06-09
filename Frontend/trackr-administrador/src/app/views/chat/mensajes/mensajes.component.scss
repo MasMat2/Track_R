@@ -21,7 +21,7 @@
   }
   
   .other .message-bubble {
-    background-color: var(--neutral-50);
+    background-color: var(--primary-50);
     color: var(--neutral-900);
     margin-left: 3vw;
     border-radius: 10px 10px 10px 0px;
@@ -45,7 +45,7 @@
   
   .listado {
     align-self: flex-end;
-    background-color: var(--primary-50);
+    background-color: var(--neutral-50);
 
     height: 70vh;
     overflow-y: auto;
@@ -56,8 +56,6 @@
   .final {
     position: relative;
     bottom: 0;
-    padding-bottom: 2vh;
-    padding-top: 2vh;
   }
   
   .boton {
@@ -201,6 +199,12 @@
   .video-option:hover {
     color: var(--primary-700);
   }
+  .avatar{
+    height: 40px;
+    width: 40px;
+    border-radius: 30%;
+    overflow: hidden;
+}
 
 /* .message {
     margin-bottom: 10px;
