@@ -8,3 +8,24 @@
     display: grid;
     place-items: center;
 }
+
+.cuadro{
+    height: 50vh;
+}
+
+.avatar{
+    height: 40px;
+    width: 40px;
+    border-radius: 30%;
+    overflow: hidden;
+}
+
+.texto-titulo{
+    margin: 0; 
+    word-wrap: break-word;
+    white-space: break-spaces;
+}
+
+.purple{
+    color: var(--primary-700);
+}
