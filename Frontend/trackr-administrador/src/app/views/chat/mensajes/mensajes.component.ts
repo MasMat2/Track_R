@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, OnInit } from '@angular/core';
 import { ChatMensajeDTO } from '@dtos/chats/chat-mensaje-dto';
 import { ChatMensajeHubService } from '../../../shared/services/chat-mensaje-hub.service';
 import { ChatPersonaService } from '../../../shared/http/chats/chat-persona.service';
@@ -12,6 +12,7 @@ import { Subject, lastValueFrom } from 'rxjs';
 /* import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder'; */
 import { ChatHubServiceService } from '../../../shared/services/chat-hub-service.service';
 import { MensajeService } from '../../../shared/components/mensaje/mensaje.service';
+import { NgAudioRecorderService, OutputFormat } from 'ng-audio-recorder';
 
 declare var Recorder: any;
 
@@ -49,12 +50,13 @@ export class MensajesComponent {
               private ArchivoService:ArchivoService,
               private router: Router,
               private ChatHubServiceService:ChatHubServiceService,
-              private mensaje:MensajeService) {}
+              private mensaje:MensajeService,
+              private audioRecorderService:NgAudioRecorderService) {}
   
   ngOnInit(){
     this.obtenerIdUsuario();
     this.obtenerPersonasEnChat();
-    this.permisosGrabacion();
+    //this.permisosGrabacion();
 /*     this.solicitarPermisos(); */
   }
 
@@ -98,10 +100,10 @@ export class MensajesComponent {
 
     if(this.audio != ''){
       msg.archivo = this.audio;
-      msg.archivoNombre = `audio-${Date.now()}.wav`
-      msg.archivoTipoMime = "audio/wav"
+      msg.archivoNombre = `audio-${Date.now()}.webm`
+      msg.archivoTipoMime = "audio/webm"
       msg.fechaRealizacion = new Date();
-      msg.nombre = `audio-${Date.now()}.wav`
+      msg.nombre = `audio-${Date.now()}.webm`
     }
 
     this.ChatMensajeHubService.enviarMensaje(msg);
@@ -328,24 +330,30 @@ export class MensajesComponent {
       return;
     }
     this.grabacionIniciada = true;
-    this.media.start();
-    console.log('grabacion iniciada')
+    this.audioRecorderService.startRecording()
     
   }
 
   async detenerGrabacion(){
     if(!this.grabacionIniciada){
-      console.log('dds')
       return;
     }
-      console.log('grabacion detenida')
       this.grabacionIniciada = false;
-      this.media.stop();
-      this.audioSubject.subscribe(record => {
+      //this.media.stop();
+      this.audioRecorderService.stopRecording(OutputFormat.WEBM_BLOB).then( async (output) => {
+        if (output instanceof Blob) {
+          let record =  'data:audio/webm;base64,' + await this.convertBlobToBase64(output);
+          this.audio = record;
+          this.audio2 = record
+        } else {
+          console.error('El output no es un Blob.');
+        }
+      })
+      /* this.audioSubject.subscribe(record => {
         
         this.audio = record;
         this.audio2 = 'data:audio/wav;base64,' + record;
-      })
+      }) */
       
     
     
@@ -391,6 +399,25 @@ export class MensajesComponent {
       }
     })
     
+  }
+
+  convertBlobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const arrayBuffer = reader.result as ArrayBuffer;
+        let binary = '';
+        const bytes = new Uint8Array(arrayBuffer);
+        const len = bytes.byteLength;
+        for (let i = 0; i < len; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        const base64String = window.btoa(binary);
+        resolve(base64String);
+      };
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(blob);
+    });
   }
 
 }

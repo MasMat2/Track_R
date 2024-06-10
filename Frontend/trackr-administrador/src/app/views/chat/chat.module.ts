@@ -12,6 +12,7 @@ import { ModalBaseComponent } from '@sharedComponents/modal-base/modal-base.comp
 import { ModalBaseModule } from '@sharedComponents/modal-base/modal-base.module';
 import { MatListModule } from '@angular/material/list'
 import { MatIconModule } from '@angular/material/icon';
+import { NgAudioRecorderModule } from 'ng-audio-recorder';
 
 
 
@@ -30,7 +31,8 @@ import { MatIconModule } from '@angular/material/icon';
     PipesModule,
     ModalBaseModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
+    NgAudioRecorderModule
   ]
 })
 export class ChatModule { }
