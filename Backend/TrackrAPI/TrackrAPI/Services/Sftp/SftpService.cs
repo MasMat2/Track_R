@@ -11,6 +11,7 @@ namespace TrackrAPI.Services.Sftp
         private string host;
         private string username;
         private string password;
+        private string root_path;
         private int port; 
         private readonly string _server;
         private readonly string _database;
@@ -24,6 +25,8 @@ namespace TrackrAPI.Services.Sftp
             username = configuration["SFTP:Usuario"]; // roadisftp
             password = configuration["SFTP:Contrasena"]; // sftproadis
             port = int.Parse(configuration["SFTP:Puerto"]); // 22
+            root_path = configuration["SFTP:RootPath"] ?? "/srv/roadis"; // /srv/roadis
+            root_path = root_path + "/servers"; // separate files by db server and db
 
             // Get server and database name
             var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -41,7 +44,7 @@ namespace TrackrAPI.Services.Sftp
         public string GetRemotePath(string filePath)
         {
             // Separate by server and database
-            string remote_path = Path.Combine("/srv/roadis/servers", this._server, this._database, filePath);
+            string remote_path = Path.Combine(this.root_path, this._server, this._database, filePath);
             // Replace '\' by '/' for Linux
             return remote_path.Replace('\\', '/'); 
         }
