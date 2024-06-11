@@ -17,12 +17,19 @@ import { Router } from '@angular/router';
 })
 export class PanelNotificacionesComponent implements OnInit {
 
+  protected iconMappings: any = {
+    2: { name: 'message-square-more'},
+    3: {name : 'phone'},
+    4: { name: 'chevron-right' },
+
+  };
+
   protected pacientes$: Observable<Usuario[]>;
-  protected tiposNotificacion: { idTipoNotificacion: number, nombre: string }[] = [
-    { idTipoNotificacion: 2, nombre: 'Chat' },
-    { idTipoNotificacion: 3, nombre: 'Video' },
-    { idTipoNotificacion: 4, nombre: 'Alerta' },
-  ];
+  // protected tiposNotificacion: { idTipoNotificacion: number, nombre: string }[] = [
+  //   { idTipoNotificacion: 2, nombre: 'Chat' },
+  //   { idTipoNotificacion: 3, nombre: 'Video' },
+  //   { idTipoNotificacion: 4, nombre: 'Alerta' },
+  // ];
 
   protected idPaciente?: number;
   protected idTipoNotificacion?: number;
@@ -30,12 +37,13 @@ export class PanelNotificacionesComponent implements OnInit {
 
   protected notificaciones$: Observable<{
     id: number,
+    idTipoNotificacion: number,
     paciente: string,
     mensaje: string,
     fecha: Date,
     imagen?: string | SafeUrl,
     visto: boolean,
-    idChat?: number
+    idChat?: number,
   }[]>;
 
   constructor(
@@ -58,6 +66,7 @@ export class PanelNotificacionesComponent implements OnInit {
         map(notificaciones => notificaciones.map((notificacion) => {
           return {
             id: notificacion.idNotificacionUsuario,
+            idTipoNotificacion: notificacion.idTipoNotificacion,
             paciente: notificacion.nombrePaciente,
             mensaje: notificacion.mensaje,
             fecha: notificacion.fechaAlta,
@@ -95,6 +104,10 @@ export class PanelNotificacionesComponent implements OnInit {
       }
       this.modalService.show(ModalPanelNotificacionesComponent,{initialState});
     }
+  }
+
+  protected cerrarModal(){
+    this.modalService.hide();
   }
 
 }

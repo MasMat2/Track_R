@@ -88,3 +88,24 @@
     padding: 24px !important;
   }
 }
+
+.mat-mdc-tab-header {
+  border-radius: 0 0 8px 8px;
+  background: var(--neutral-50);
+  //border: none ;
+}
+
+.modal-notificaciones{
+  position: absolute;
+  top: calc(10vh - 12px);
+  right: 56px;
+  //left: 110px;
+  margin: 0 !important;
+
+  .modal-content{
+    border-radius: 8px !important;
+    max-height: 60vh !important;
+    overflow-y: scroll;
+  }
+  
+}
