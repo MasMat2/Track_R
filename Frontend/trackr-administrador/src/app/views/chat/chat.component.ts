@@ -20,6 +20,8 @@ export class ChatComponent {
   protected idChatSeleccionado: number;
   protected mensajesChatSeleccionado: ChatMensajeDTO[]; 
   protected tituloChatSeleccionado: string;
+  protected imagenChatSeleccionado: string;
+  protected tipoMimeSeleccionado: string;
 
   protected clickEnChat = false;
 
@@ -88,6 +90,8 @@ export class ChatComponent {
     this.mensajesChatSeleccionado = this.mensajes.find(array => array.some(x => x.idChat === this.idChatSeleccionado)) || [];
     let aux = this.chats.find(x => x.idChat == id)
     this.tituloChatSeleccionado = aux?.titulo || "";
+    this.imagenChatSeleccionado = aux?.imagenBase64 || "";
+    this.tipoMimeSeleccionado = aux?.tipoMime || "";
     this.clickEnChat = true;
   }
 

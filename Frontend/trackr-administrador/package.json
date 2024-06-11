@@ -45,6 +45,7 @@
     "lodash": "^4.17.21",
     "lucide-angular": "^0.390.0",
     "moment": "^2.29.4",
+    "ng-audio-recorder": "0.0.5",
     "ng2-charts": "^4.1.1",
     "ngx-bootstrap": "^10.3.0",
     "ngx-extended-pdf-viewer": "^17.0.0-alpha.9",
