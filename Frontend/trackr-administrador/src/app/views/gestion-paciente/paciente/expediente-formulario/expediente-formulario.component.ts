@@ -68,7 +68,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
   colonia: string;
   municipio: string;
   estado: string;
-ciudad: string
+  ciudad: string
 
 
   constructor(
@@ -252,6 +252,10 @@ ciudad: string
       .then((padecimientos) => {
         this.padecimientosList = padecimientos;
       });
+  }
+
+  protected esAgregar(){
+    return this.accion == "Agregar";
   }
 
 
