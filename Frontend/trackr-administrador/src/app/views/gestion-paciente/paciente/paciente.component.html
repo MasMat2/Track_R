@@ -1,4 +1,4 @@
-<mat-sidenav-container style="background-color: white;">
+<mat-sidenav-container>
   <mat-sidenav #sidenav mode="side" [opened]="mostrarSidebar" position="end" [fixedInViewport]="true">
     <div class="container-fluid">
       <div class="d-flex justify-content-end">
@@ -22,7 +22,6 @@
                   ? (paciente.imagenBase64 | urlImagen : paciente.tipoMime)
                   : 'assets/img/default-user.jpg'
               "
-              class="rounded"
             />
           </div>
           <div class="bg-white">
@@ -115,70 +114,34 @@
   
   <mat-sidenav-content>
     <div class="contenedor" style="width: 100%">
+    
       <div class="titulo-contenedor-paciente">
-         Pacientes
-         <h3 class="filter-text">Filtros de Búsqueda de pacientes</h3>
-         <div class="d-flex justify-content-end">
-            <div class="d-flex">
-              <input
-                type="text"
-                class="form-control"
-                style="width: 450px"
-                placeholder="Buscar..."
-                aria-label="Buscar"
-                (change)="filtrarPacientes($event)"
-                [disabled]="!isVistaCuadricula"
-              />
-              <button class="btn-buscar" type="button" (change)="filtrarPacientes($event)" [disabled]="!isVistaCuadricula">
-                <img class="filter-primario" src="assets/img/svg/ico-18x18-buscar.svg"/>
-              </button>
-              <div class="d-flex align-items-center" style="color: gray">
-                <button class="btn" type="button" style="color: gray">
-                  <img
-                    class="filter-gray"
-                    src="assets/img/svg/ico-18x18-Filtros.svg"
-                  />
-                  Filtros
-                </button>
+        <h1 class="saludo">
+          Pacientes¿
+        </h1>
+        <div class="row">
+          <div class="col-9">
+            <div>
+              <div>
+                <input type="text" class="form-control" style="width: 100%" placeholder="Buscar..." aria-label="Buscar"
+                  (change)="filtrarPacientes($event)" [disabled]="!isVistaCuadricula" />
+    
               </div>
             </div>
           </div>
-      </div>
 
-      <div class="row">
-        <hr class="col-md-12"/>
-      </div>
-
-      <div
-        class="d-flex align-items-center justify-content-between"
-        style="margin-left: 10px"
-      >
-        <div class="contenedor-agregar justify-content-start" >
-          <button class="btn-agregar" (click)="agregar()">Agregar Paciente</button>
-          <button class="btn-terceario" (click)="agregarAsistente()" *ngIf="esAsistente !== null">{{ esAsistente  ? 'Mis doctores' : 'Agregar asistentes'}}</button>
-        </div>
-        <div class="justify-content-end">
-          <div style="text-align: right">
-            <button type="button" class="btn" (click)="isVistaCuadricula = true">
-              <img
-                src="assets/img/svg/ico-18x18-Grid-Bloques.svg"
-                [ngClass]="isVistaCuadricula ? 'filter-primario' : null"
-              />
-            </button>
-            <button
-              type="button"
-              class="btn"
-              (click)="isVistaCuadricula = false"
-              title="Vista de Lista"
-            >
-              <img
-                src="assets/img/svg/ico-18x18-Grid-Lista.svg"
-                [ngClass]="!isVistaCuadricula ? 'filter-primario' : null"
-              />
-            </button>
+          <div class="col-3">
+    
+            <div class="contenedor-agregar justify-content-start">
+              <button class="btn-agregar" (click)="agregar()">Agregar Paciente</button>
+              <!-- <button class="btn-terceario" (click)="agregarAsistente()" *ngIf="esAsistente !== null">{{ esAsistente  ? 'Mis doctores' : 'Agregar asistentes'}}</button> -->
+            </div>
           </div>
         </div>
+       
+    
       </div>
+
 
       <div class="row">
         <div class="col-12">
