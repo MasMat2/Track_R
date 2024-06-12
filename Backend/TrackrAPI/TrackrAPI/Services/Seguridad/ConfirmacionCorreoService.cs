@@ -1,4 +1,4 @@
-﻿using MimeKit;
+using MimeKit;
 using MimeTypes;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -253,8 +253,11 @@ namespace TrackrAPI.Services.Seguridad
 
         private LinkedResource GetLogo(string imageUrl, string contentId , string mimeType)
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "Archivos" , "Img" , imageUrl);
-            return new LinkedResource(path){
+            var pathRemoteImage = Path.Combine("Archivos" , "Img" , imageUrl);
+            var image = _sftpService.DownloadFileAsBase64(pathRemoteImage);
+            var bytes = Convert.FromBase64String(image);
+            var stream = new MemoryStream(bytes);
+            return new LinkedResource(stream){
                 ContentId = contentId,
                 ContentType = new ContentType(mimeType)
             };
