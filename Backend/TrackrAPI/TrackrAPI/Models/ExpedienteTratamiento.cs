@@ -23,6 +23,7 @@ namespace TrackrAPI.Models
         public string? ImagenTipoMime { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime? FechaFin { get; set; }
+        public string? ArchivoUrl { get; set; }
 
         public virtual ExpedienteTrackr IdExpedienteNavigation { get; set; } = null!;
         public virtual EntidadEstructura IdPadecimientoNavigation { get; set; } = null!;

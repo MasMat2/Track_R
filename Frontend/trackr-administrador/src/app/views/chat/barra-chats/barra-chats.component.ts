@@ -13,7 +13,9 @@ export class BarraChatsComponent {
   @Output() idChatPadre = new EventEmitter<number>();
   @Input() ultmoMensajes: string[];
 
-  constructor(private modal:BsModalService){}
+  constructor(private modal:BsModalService){
+    console.log(this.chats)
+  }
 
   enviarIdChat(idChat:number){
     this.idChatPadre.emit(idChat)

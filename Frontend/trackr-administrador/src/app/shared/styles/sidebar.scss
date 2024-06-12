@@ -20,30 +20,52 @@
   justify-content: space-between;
 }
 
+.contenedor-button-item{
+  .borde{
+    width: 8px;
+    height: 64px;
+    background: var(--primary-700);
+    z-index: 999;
+    border-radius: 0 8px 8px 0;
+    display: none; //No aparece si no está activa la pestaña
+  }
+  
+  &.active{
+    .borde{
+      display: block !important;
+    }
+  }
+}
+
 .button-item {
   width: 100%;
   transition: 0.4s ease;
-  padding: 0.5rem 0.7rem 0.5rem 0.7rem !important;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
-}
+  min-height: 58px !important;
+  border-radius:  0px !important;
+  justify-content: start !important;
+  font-size: 16px;
 
-.button-item.active {
-  font-weight: 600;
-  color: #505050!important;
-  background: #f5f5f5;
-  border-top: 1px solid #c7c7c7;
-  border-bottom: 1px solid #c7c7c7;
-  border-left: 4px solid #2e75b6 !important;
+  .mdc-button__label{ //icono y label centrados
+    display: flex !important;
+    align-items: center !important;
+  }
 }
 
 .button-item {
+  color: var(--neutral-400) !important;
+  font-family: var(--font-body) !important;
+
+  &.active{
+    font-weight: bold;
+  }
+
   &.active,
   &:hover {
-    background-color: #f5f5f5 !important;
+    background-color: var(--primary-100);
+    color: var(--primary-700) !important;
     cursor: pointer;
-
     .item {
-      color: var(--color-primario);
+      color: var(--primary-700) !important;
     }
   }
 }

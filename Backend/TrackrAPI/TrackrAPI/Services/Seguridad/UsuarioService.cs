@@ -785,18 +785,15 @@ namespace TrackrAPI.Services.Seguridad
 
             var fotoPerfilUsuario = ObtenerImagenUsuario(idUsuario, fotoPerfil?.ArchivoTipoMime);
 
-            if(fotoPerfil != null)
+            var fotoPerfilDto = new ArchivoDTO
             {
-                var fotoPerfilDto = new ArchivoDTO
-                {
-                    Archivo = fotoPerfilUsuario,
-                    ArchivoMime = fotoPerfil.ArchivoTipoMime,
-                    IdArchivo = fotoPerfil.IdArchivo,
-                    Nombre = fotoPerfil.ArchivoNombre
-                };
+                Archivo = fotoPerfilUsuario,
+                ArchivoMime = fotoPerfil?.ArchivoTipoMime ?? "image/svg+xml",
+                IdArchivo = fotoPerfil?.IdArchivo ?? 0,
+                Nombre = fotoPerfil?.ArchivoNombre ?? "default.svg"
+            };
 
-                infoPerfil.ImagenBase64 = fotoPerfilDto;
-            }
+            infoPerfil.ImagenBase64 = fotoPerfilDto;
 
             return infoPerfil;
         }

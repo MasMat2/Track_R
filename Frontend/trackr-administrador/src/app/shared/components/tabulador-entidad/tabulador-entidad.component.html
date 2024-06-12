@@ -1,7 +1,6 @@
 <!-- Grupo de Tabulaciones -->
 <mat-tab-group
   *ngIf="!loading"
-  class="mat-elevation-z1"
   animationDuration="0ms"
   (selectedIndexChange)="onSelectTabChange($event)"
 >
@@ -17,7 +16,6 @@
     </ng-template>
 
     <!-- Contenido -->
-
     <app-tab
       *ngIf="i === selectedTab"
       [component]="element.component"

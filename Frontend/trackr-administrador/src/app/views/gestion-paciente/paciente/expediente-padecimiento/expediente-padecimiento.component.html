@@ -1,6 +1,20 @@
-<div class="modal-header">
-  <div></div>
+<div class="contenedor-principal">
+  <div class="contenedor-grid">
+    <div class="card">
+      <ng-container #pacientesLista>
+        <app-grid-general
+          [headerName]="HEADER_GRID"
+          [data]="padecimientos$ | async"
+          [children]="columns"
+          [disableDelete]="true"
+          [disableEdit]="true"
+        >
+        </app-grid-general>
+      </ng-container>
+    </div>
+  </div>
 </div>
+<!-- 
 <mat-accordion multi="true">
   <mat-expansion-panel expanded="true"> 
       <mat-expansion-panel-header>
@@ -9,18 +23,9 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-    <ng-container #pacientesLista>
-      <app-grid-general
-        [headerName]="HEADER_GRID"
-        [data]="padecimientos$ | async"
-        [children]="columns"
-        [disableDelete]="true"
-        [disableEdit]="true"
-      >
-      </app-grid-general>
-    </ng-container>
+    
   </mat-expansion-panel>
-</mat-accordion>
+</mat-accordion> -->
 
 
 

@@ -1,22 +1,14 @@
 @import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
-// @import "../node_modules/@coreui/coreui/scss/coreui";
-
 @import '../node_modules/ag-grid-community/styles/ag-grid.css';
 @import '../node_modules/ag-grid-community/styles/ag-theme-balham.css';
-
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
-
 @import '../node_modules/@ng-select/ng-select/themes/default.theme.css';
-
 @import '../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css';
-
 @import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
-
 @import '~@circlon/angular-tree-component/css/angular-tree-component.css';
-
 @import '../node_modules/alertifyjs/build/css/alertify.min.css';
 
 @import '../src/app/shared/styles/general-button.scss';
@@ -28,19 +20,17 @@
 @import '../src/app/shared/styles/select-input.scss';
 @import '../src/app/shared/styles/sidebar.scss';
 @import '../src/app/shared/styles/switch.scss';
-@import '../src/app/shared/styles/variables.scss';
-@import '../src/app/custom.scss';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@import '../src/theme/variables.scss';
+@import '../src/theme/custom.scss';
+@import '../src/theme/fonts.scss';
 
-.popover-custom {
-    max-width: 500px !important; // ajusta el ancho máximo según tus necesidades
-    width: auto !important; // ancho automático para ajustar el contenido
-  }
 
-.modal-izquierda{
-  position: absolute;
-  top: -30px;
-  left: 110px;
-}
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// .popover-custom {
+//     max-width: 500px !important; // ajusta el ancho máximo según tus necesidades
+//     width: auto !important; // ancho automático para ajustar el contenido
+//   }
+

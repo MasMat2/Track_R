@@ -11,6 +11,7 @@ namespace TrackrAPI.Services.Sftp
         private string host;
         private string username;
         private string password;
+        private string root_path;
         private int port; 
         private readonly string _server;
         private readonly string _database;
@@ -24,6 +25,8 @@ namespace TrackrAPI.Services.Sftp
             username = configuration["SFTP:Usuario"]; // roadisftp
             password = configuration["SFTP:Contrasena"]; // sftproadis
             port = int.Parse(configuration["SFTP:Puerto"]); // 22
+            root_path = configuration["SFTP:RootPath"] ?? "/srv/roadis"; // /srv/roadis
+            root_path = root_path + "/servers"; // separate files by db server and db
 
             // Get server and database name
             var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -41,7 +44,7 @@ namespace TrackrAPI.Services.Sftp
         public string GetRemotePath(string filePath)
         {
             // Separate by server and database
-            string remote_path = Path.Combine("/srv/roadis/servers", this._server, this._database, filePath);
+            string remote_path = Path.Combine(this.root_path, this._server, this._database, filePath);
             // Replace '\' by '/' for Linux
             return remote_path.Replace('\\', '/'); 
         }
@@ -84,6 +87,40 @@ namespace TrackrAPI.Services.Sftp
             }
         }
 
+        public void UploadBytesFile(string filePath, string base64file)
+        {
+            byte[] fileBytes = Convert.FromBase64String(base64file);
+        
+            using (var sftp = new SftpClient(host, port, username, password))
+            {
+                sftp.Connect();
+        
+                // Write in remote filePath
+                string linuxPath = GetRemotePath(filePath);
+                
+                // Create directory structure if it does not exist
+                string[] folders = linuxPath.Split('/');
+                string currentFolder = "";
+                for (int i = 0; i < folders.Length - 1; i++)
+                {
+                    if (!string.IsNullOrWhiteSpace(folders[i]))
+                    {
+                        currentFolder += "/" + folders[i];
+                        if (!sftp.Exists(currentFolder))
+                            sftp.CreateDirectory(currentFolder);
+                    }
+                }
+        
+                // Upload File
+                using (var memStream = new MemoryStream(fileBytes))
+                {
+                    sftp.UploadFile(memStream, linuxPath);
+                }
+        
+                sftp.Disconnect();
+            }
+        }
+
         public string DownloadFile(string filePath)
         {
             byte[] fileContent;
@@ -112,5 +149,35 @@ namespace TrackrAPI.Services.Sftp
 
             return Convert.ToBase64String(fileContent);
         }
+
+        public string DownloadFileAsBase64(string filePath)
+        {
+            byte[] fileContent;
+
+            try
+            {
+                using (var sftp = new SftpClient(host, port, username, password))
+                {
+                    sftp.Connect();
+                    using (var memStream = new MemoryStream())
+                    {
+                        // Remote filePath
+                        string linuxPath = GetRemotePath(filePath);
+                        sftp.DownloadFile(linuxPath, memStream);
+                        fileContent = memStream.ToArray();
+                    }
+                    sftp.Disconnect();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
+
+            return Convert.ToBase64String(fileContent);
+        }
+
+
     }
 }

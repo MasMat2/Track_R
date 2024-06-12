@@ -1,31 +1,63 @@
-.circle-container {
+.titulo-seccion{
+  margin-bottom: 8px !important;
+}
+.card-container{
+  padding-top: 8px;
+  padding-bottom: 8px;
+  overflow-x: auto;
+  gap: 24px;
+}
+
+.card{
+  min-height: 112px;
+  min-width: 196px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #ffffff;
-  border: 2px;
-  border-style: solid;
-  border-radius: 50%;
-  border-color: #a6d0a6;
-  width: 40px;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
+  justify-content: flex-end;
+  background: var(--neutral-50);
 }
 
-.cantidad-pacientes {
-  font-weight: bold;
-  font-size: 22px;
+.datos{
+  font-family: var(--font-body);
+  color: var(--primary-900);
+  .cantidad-pacientes{
+    font-size: 28px;
+    font-weight: bold;
+  }
+  .nombre-padecimiento{
+    font-size: 16px;
+  }
 }
 
-.nombre-padecimiento {
-  color: gray;
-  font-size: 12px;
-  line-height: 12px;
-  text-align: center;
-}
+// .circle-container {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+//   background-color: #ffffff;
+//   border: 2px;
+//   border-style: solid;
+//   border-radius: 50%;
+//   border-color: #a6d0a6;
+//   width: 40px;
+//   aspect-ratio: 1 / 1;
+//   overflow: hidden;
+// }
 
-.filtro-btn{
-  border: 1px solid black;
-  //background-color: red;
-}
+// .cantidad-pacientes {
+//   font-weight: bold;
+//   font-size: 22px;
+// }
+
+// .nombre-padecimiento {
+//   color: gray;
+//   font-size: 12px;
+//   line-height: 12px;
+//   text-align: center;
+// }
+
+// .filtro-btn{
+//   border: 1px solid black;
+//   //background-color: red;
+// }

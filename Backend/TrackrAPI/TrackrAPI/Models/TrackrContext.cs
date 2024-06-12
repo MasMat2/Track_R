@@ -1309,6 +1309,7 @@ namespace TrackrAPI.Models
                     .HasName("PK__Expedien__58DDD7D813710334");
 
                 entity.ToTable("ExpedienteTratamiento", "Trackr");
+                 entity.Property(e => e.ArchivoUrl).HasMaxLength(250);
 
                 entity.Property(e => e.Cantidad).HasColumnType("decimal(18, 0)");
 
