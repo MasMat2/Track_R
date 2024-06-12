@@ -5,4 +5,5 @@ export class ExpedienteTratamientoPerfilDto{
     unidad: string;
     padecimiento: string;
     imagenBase64: string;
+    tipoMime: string;
 }

@@ -20,6 +20,7 @@ namespace TrackrAPI.Dtos.GestionExpediente
         public string ApellidosDoctor { get; set; }
         public string? TituloDoctor { get; set; }
         public string? ImagenBase64 { get; set; }
+        public string? TipoMime { get; set; }
         public bool RecordatorioActivo { get; set; }
         public bool[] DiaSemana { get; set; }
         public TimeSpan[] Horas { get; set; }
