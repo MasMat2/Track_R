@@ -1,69 +1,76 @@
 <!-- Acceso con Hijos -->
-<div *ngIf="item.children && item.children.length > 0;
+<div
+  *ngIf="
+    item.children && item.children.length > 0;
     then accesoPadre;
-    else accesoHoja">
-</div>
+    else accesoHoja
+  "
+></div>
 
 <ng-template #accesoPadre>
-    <button
-    class="button-item"
-    mat-button
-    [ngClass]="{ 'active': menuTrigger.menuOpen }"
-    (click)="menuTrigger.openMenu()"
-    routerLinkActive="active"
-  >
+  <div class="contenedor-button-item" [ngClass]="{ active: menuTrigger.menuOpen }">
     <div class="borde"></div>
-    <div class="d-flex align-items-center w-100">
-      <i class="item mr-3 {{ item.icon }}"></i>
-      <i class="fas fa-caret-right" style="color: #ffffff;"></i>
-    </div>
+    <button
+      class="button-item"
+      mat-button
+      [ngClass]="{ active: menuTrigger.menuOpen }"
+      (click)="menuTrigger.openMenu()"
+      routerLinkActive="active"
+    >
+      <div class="d-flex align-items-center w-100">
+        <i-lucide class="item-icon" [name]="item.icon"></i-lucide>
+        {{ item.name }}
+        <i-lucide [name]="'chevron-right'"></i-lucide>
+      </div>
 
-
-    <div
-      #menuTrigger="matMenuTrigger"
-      [matMenuTriggerFor]="menu.menuHijo"
-    ></div>
-  </button>
-  
+      <div
+        #menuTrigger="matMenuTrigger"
+        [matMenuTriggerFor]="menu.menuHijo"
+      ></div>
+    </button>
+  </div>
 
   <!-- Componente para desplegar los elementos emergentes -->
   <app-menu-anidado #menu [items]="item.children!"></app-menu-anidado>
 </ng-template>
 
 <ng-template #accesoHoja>
-  <div *ngIf="item.claveTipoAcceso != claveTipoAccesoSistema;
-    then accesoDirecto;
-    else accesoExterno"
-  >
+  <div
+    *ngIf="
+      item.claveTipoAcceso != claveTipoAccesoSistema;
+      then accesoDirecto;
+      else accesoExterno
+    "
+  ></div>
+</ng-template>
+
+<ng-template #accesoDirecto>
+  <div class="contenedor-button-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <div class="borde"></div>
+    <button
+      class="button-item"
+      mat-button
+      [routerLink]="item.url"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <i-lucide class="item-icon" [name]="item.icon"></i-lucide>
+      {{ item.name }}
+    </button>
   </div>
 </ng-template>
 
-
-<ng-template #accesoDirecto>
-    <button
-    class="button-item d-flex "
-    mat-button
-    [routerLink]="item.url"
-    routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: true }"
-  >
-  <div class="borde"></div>
-    <i class="item mr-3 {{ item.icon }}"></i>
-    {{item.name}}
-  </button>
-  
-</ng-template>
-
 <ng-template #accesoExterno>
+  <div class="contenedor-button-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <div class="borde"></div>
     <button
       type="button"
-      class="button-item d-flex "
+      class="button-item"
       mat-button
       [routerLink]="item.url"
     >
-    <div class="borde"></div>
-      <i class="item mr-3 {{ item.icon }}"></i>
-      {{item.name}}
+      <i-lucide class="item-icon" [name]="item.icon"></i-lucide>
+      {{ item.name }}
     </button>
-  
+  </div>
 </ng-template>

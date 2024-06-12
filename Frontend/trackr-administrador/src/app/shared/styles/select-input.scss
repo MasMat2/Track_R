@@ -18,7 +18,7 @@
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
   &.ng-option-marked,
   &.ng-option-selected {
-    background-color: var(--primary-200);
+    background-color: var(--primary-100) !important;
   }
 }
 

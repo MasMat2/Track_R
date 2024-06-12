@@ -1,7 +1,7 @@
 <div class="card-container row">
   <div class="col-4">
     <app-tarjeta
-      [claseIcono]="'fas fa-volume-up'"
+      [claseIcono]="'badge-alert'"
       [claseIconoFondo]="'icon-badge-info'"
       [valor]="pacientesFueraDeRango.toString()"
       [etiqueta]="'Alertas en pacientes \n (Valores fuera de Rango)'"
@@ -10,7 +10,7 @@
   </div>
   <div class="col-4">
     <app-tarjeta
-      [claseIcono]="'fas fa-message'"
+      [claseIcono]="'message-square-more'"
       [claseIconoFondo]="'icon-message-square-more'"
       [valor]="solicitudesDeChat.toString()"
       [etiqueta]="'Solicitudes a través de Chat'"
@@ -19,7 +19,7 @@
   </div>
   <div class="col-4">
     <app-tarjeta
-      [claseIcono]="'fas fa-video'"
+      [claseIcono]="'video'"
       [claseIconoFondo]="'icon-video'"
       [valor]="solicitudesDeVideo.toString()"
       [etiqueta]="'Solicitudes de Videoconsultas'"
