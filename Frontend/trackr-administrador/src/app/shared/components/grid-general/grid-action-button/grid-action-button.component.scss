@@ -1,29 +1,37 @@
 div {
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
 }
 
 .see{
-  background-image: url('../../../../../assets/img/svg/ico-pen-clip-solid.svg');
+  background-image: url('./assets/eye.svg');
+  background-position: center;
+  background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
 }
 
 .play
 {
-  background-image: url('../../../../../assets/img/svg/ico-pen-clip-solid.svg');
+  background-image: url('./assets/pen-line.svg');
+  background-position: center;
+  background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
 }
 
 .delete {
-  background-image: url('../../../../../assets/img/svg/ico-15x15-Eliminar.svg');
+  background-image: url('./assets/trash-2.svg');
+  background-position: center;
+  background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
 }
 
 .edit {
-  background-image: url('../../../../../assets/img/svg/ico-15x15-Editar-1.svg');
+  background-image: url('./assets/pen-line.svg');
+  background-position: center;
+  background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
 }
@@ -202,13 +210,17 @@ div {
 }
 
 .descargarPdf{
-  background-image: url('../../../../../assets/img/svg/ico-15x15-Descargar.svg');
+  background-image: url('./assets/download.svg');
+  background-position: center;
+  background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
 }
 
 .descargarExcel{
-  background-image: url('../../../../../assets/img/svg/ico-15x15-Descargar.svg');
+  background-image: url('./assets/download.svg');
+  background-position: center;
+  background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
 }
