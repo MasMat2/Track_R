@@ -115,5 +115,35 @@ namespace TrackrAPI.Services.Sftp
 
             return Convert.ToBase64String(fileContent);
         }
+
+        public string DownloadFileAsBase64(string filePath)
+        {
+            byte[] fileContent;
+
+            try
+            {
+                using (var sftp = new SftpClient(host, port, username, password))
+                {
+                    sftp.Connect();
+                    using (var memStream = new MemoryStream())
+                    {
+                        // Remote filePath
+                        string linuxPath = GetRemotePath(filePath);
+                        sftp.DownloadFile(linuxPath, memStream);
+                        fileContent = memStream.ToArray();
+                    }
+                    sftp.Disconnect();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
+
+            return Convert.ToBase64String(fileContent);
+        }
+
+
     }
 }
