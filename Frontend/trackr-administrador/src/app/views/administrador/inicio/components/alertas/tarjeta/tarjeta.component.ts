@@ -10,6 +10,8 @@ export class TarjetaComponent implements OnInit {
   @Input() valor: string;
   @Input() etiqueta: string;
   @Input() claseIcono: string;
+  @Input() claseIconoFondo: string;
+  @Input() claseColor: string;
 
   constructor() { }
 

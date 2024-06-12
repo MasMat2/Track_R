@@ -41,7 +41,7 @@ namespace TrackrAPI.Services.GestionExpediente
 
             if(expediente.ArchivoUrl != null   || expediente.ArchivoNombre != "")
             {
-                expediente.Archivo = Convert.FromBase64String(_sftpService.DownloadFile(expediente.ArchivoUrl));
+                expediente.Archivo = Convert.FromBase64String(_sftpService.DownloadFileAsBase64(expediente.ArchivoUrl));
             }
 
             return expediente;
@@ -95,7 +95,7 @@ namespace TrackrAPI.Services.GestionExpediente
             string path = Path.Combine("Archivos", "Expediente", nombreArchivo);
             var archivoBase64 = Convert.ToBase64String(archivo);
 
-            this._sftpService.UploadFile(path, archivoBase64);
+            _sftpService.UploadBytesFile(path, archivoBase64);
 
 
             return path;

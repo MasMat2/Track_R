@@ -65,7 +65,7 @@ export class DetalleTratamientoComponent  implements OnInit {
     this.tratamiento$.subscribe({
       next: (data)=>{
         this.tratamiento = data;
-        this.backgroundUrl = `url(data:image/jpeg;base64,${this.tratamiento.imagenBase64})`;
+        this.backgroundUrl = `url(data:${this.tratamiento.tipoMime};base64,${this.tratamiento.imagenBase64})`;
         this.textoRecordatorios = this.formatearTextoRecordatorios(this.tratamiento.diaSemana, this.tratamiento.horas);
       }
     })
@@ -107,7 +107,9 @@ export class DetalleTratamientoComponent  implements OnInit {
     const modal = await this.modalController.create({
       component: ImageOnlyModalComponent,
       cssClass: 'image-only-modal',
-       componentProps: { archivo : this.tratamiento.imagenBase64}
+       componentProps: {
+         archivo : this.tratamiento.imagenBase64,
+         archivoTipoMime: this.tratamiento.tipoMime}
     })
     if(this.tratamiento.imagenBase64 != ""){
       await modal.present();

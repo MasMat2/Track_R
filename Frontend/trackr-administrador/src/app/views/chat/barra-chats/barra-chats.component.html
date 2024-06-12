@@ -1,52 +1,54 @@
 <div class="overflow">
-  <div class="form-group centrar" style="margin: 0;">
-    <button (click)="abrirModal()" class="btn btn-agregar" >Agregar Chat</button>
+  <div>
+    <div class="grid">
+      <div class="row">
+        <div class="col-8">
+          <h2 class="ms-3" style="font-weight: normal;">Chats con pacientes</h2>
+        </div>
+        <div class="col-4" style="display: flex; flex-direction: row; justify-content: center; ">
+          <mat-icon class="purple" (click)="abrirModal()" >add</mat-icon>
+        </div>
+      </div>
+    </div>
   </div>
-  <p-table
-  class="primeng-table grid-cuadricula"
-  [value]="chats"
-  dataKey="idProyectoElementoTecnica"
-  *ngIf="chats"
-  [autoLayout]="true"
->
-  <ng-template pTemplate="header">
-    <tr class="table-header">
-      <th class="px-0 text-center">Fotografía</th>
-      <th class="text-center">Paciente</th>
+  
+  <mat-list>
+    <div class="">
       
-  </ng-template>
-
-  <ng-template pTemplate="body" let-chat>
-    <tr (click)="enviarIdChat(chat.idChat)">
-      <td class="img-container p-0" >
-        <img
-          [src]="
-            chat.idCreadorChat != undefined || null
-            ? (chat.imagenBase64 | urlImagen : chat?.tipoMime)
-            : 'assets/img/default-user.jpg'
-          "
-        />
-<!--
-        <img *ngIf="paciente.imagenBase64 !== undefined"
-          class="imagen-usuario"
-          [src]="paciente.imagenBase64 != undefined
-          ? (paciente.imagenBase64 | urlImagen : paciente?.tipoMime)
-          : 'assets/img/default-user.jpg'"
-          width="85px"
-          height="85px"
-          alt="Imagen de Usuario"
-        /> -->
-
-      </td>
-      <!-- TODO: Arreglar las bolitas de colores que muestran los signos -->
-      <td style="">
-        <div class="green-dot"></div>
-        {{ chat.titulo }}
-        <p class="edad">{{ chat.ultimoMensaje }}</p>
-      </td>
-
-    </tr>
-    <br/>
-  </ng-template>
-</p-table>
+      <mat-list-item *ngFor="let chat of chats" class="cuadro" style="height: 10vh;" (click)="enviarIdChat(chat.idChat || 0)">
+        <div class="grid">
+          <div class="row" style="display: flex; flex-direction: row;">
+            <div class="col-2" style="display: flex; flex-direction: row; justify-content: flex-end; align-items: center;">
+              <img 
+                class="avatar"
+                [src]="
+                chat.idCreadorChat != undefined || null
+                  ? (chat.imagenBase64 | urlImagen : chat?.tipoMime)
+                  : 'assets/img/default-user.jpg'
+                  " alt=""> 
+            </div>
+  
+            <div class="col-10">
+              <div class="grid">
+                <div class="row">
+                  <div class="col-12">
+                    <p class="texto-titulo"><b>{{chat.titulo}}</b></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <p class="texto-titulo">{{chat.ultimoMensaje}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+         
+          
+      </mat-list-item>
+    </div>
+    
+  </mat-list>
 </div>

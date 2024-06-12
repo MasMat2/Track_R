@@ -28,8 +28,14 @@
 
 :host ::ng-deep {
   .ag-theme-balham {
-    color: $color-font !important;
-    font-size: 13px !important;
+
+    //--ag-header-cell-hover-background-color: red;
+    --ag-row-hover-color: var(--primary-100);
+    --ag-input-focus-border-color: var(--primary-400);
+    --ag-balham-active-color: var(--primary-700);
+    color: var(--neutral-700) !important;
+    font-size: 16px !important;
+    font-family: var(--font-body) !important;
 
     .ag-row-selected {
       background-color: $color-terceario !important;
@@ -41,6 +47,7 @@
 
     .ag-row {
       border: transparent;
+      border-bottom: 1px solid var(--primary-50) !important;
     }
 
     .ag-paging-panel {
@@ -48,7 +55,12 @@
     }
 
     .ag-header {
-      border-top: 1px $color-secundario solid;
+      border-top: 1px solid var(--primary-50);
+      height: 56px !important;
+      font-size: 14px !important;
+    }
+    .ag-header-row{
+      height: 100% !important;
     }
   }
 
@@ -60,22 +72,21 @@
   .ag-root-wrapper {
     border: none;
   }
-
   .ag-root,
   .ag-row {
     border: none !important;
   }
 
   .ag-header {
-    border-bottom: 1px $color-secundario solid;
+    border-bottom: 1px solid var(--primary-50);
   }
 
   .ag-header-cell-text {
-    color: purple;
+    color: var(--primary-700);
   }
 
   .ag-body-viewport {
-    border-bottom: 1px $color-secundario solid;
+    border-bottom: 1px solid var(--primary-50);
     // overflow-y: auto !important;
   }
 
@@ -95,11 +106,7 @@
   }
 
   .ag-row-even {
-    background: #ededed !important;
-  }
-
-  .ag-row-hover {
-    background: $color-terceario !important;
+    //background: ;
   }
 
   .ag-cell-edit-input {

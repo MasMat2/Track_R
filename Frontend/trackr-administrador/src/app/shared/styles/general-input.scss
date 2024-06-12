@@ -1,33 +1,45 @@
 @import "variables";
 
 .form-control {
-  border: 1px #d9d9d9 solid;
-  color: #000000;
-  font-size: 0.80rem;
-  border-radius: $border-radius-inputs !important;
-  height: calc(1.5em + 0.75rem + 7px) !important;
+  border: 1px solid var(--neutral-300);
+  color: var(--neutral-800);
+  font-size: 14px;
+  border-radius: 8px!important;
+  //height: calc(1.5em + 0.75rem + 7px) !important;
+  height: 42px !important;
 }
 
 .form-group {
   position: relative;
-  margin-top: 25px;
+  margin-top: 20px;
 
   .label-input {
-    position: absolute;
-    top: -11px;
-    left: 16px;
-    z-index: 1002;
-    background-color: white;
-    padding: 0 5px;
-    font-size: 11px;
-    color: gray;
+    // position: absolute;
+    // top: -11px;
+    // left: 16px;
+    // z-index: 1002;
+    margin-bottom: 12px;
+    background-color: transparent;
+     padding: 0 !important;
+    // font-size: 11px;
+    font-size: 14px;
+    font-family: var(--font-body);
+    color: var(--neutral-700);
   }
 }
 
 input,
 textarea {
-  border-radius: 20px !important;
+  color: var(--neutral-800) !important;
+  font-family: var(--font-body) !important;
+  font-size: 14px !important;
 }
+
+input:focus{
+  outline: none !important;
+}
+
+
 
 // .ag-theme-balham .ag-icon-checkbox-checked {
 //   color: $color-primario;
@@ -37,13 +49,13 @@ textarea {
 input.ng-touched.ng-invalid:not(:focus),
 textarea.ng-touched.ng-invalid:not(:focus),
 .ng-select.ng-invalid.ng-touched:not(.ng-select-focused) .ng-select-container {
-  border: 1px solid #c00000;
+  border: 1px solid var(--error-200);
 }
 
 // Focus
 .form-control:focus,
 .ng-select.ng-select-focused .ng-select-container {
-  border: 2px $color-terceario-hover solid;
+  border: 1px solid var(--primary-700);
   box-shadow: none;
 }
 
@@ -51,10 +63,59 @@ textarea.ng-touched.ng-invalid:not(:focus),
 .disabled,
 textarea:disabled  {
   opacity: 1 !important;
-  background-color: #e4e7ea !important;
+  background: var(--neutral-100) !important;
+}
+
+.form-control:disabled{
+  opacity: 1 !important;
+  background: var(--neutral-100) !important;
 }
 
 // Calendario - Date
+
+.date-form-control-container{
+  border: 1px solid var(--neutral-300);
+  font-size: 0.80rem;
+  border-radius: 8px!important;
+  //height: calc(1.5em + 0.75rem + 7px) !important;
+  height: 42px !important;
+  position: relative  !important;
+  // display: flex;
+  // align-items: center;
+
+  // .error{
+  //   display: block !;
+  // }
+
+  .date-form-control{
+    padding-left: 12px;
+    width: calc(100% - 36px);
+    height: 100%;
+    border: none;
+    background: transparent;
+  }
+
+  .date-form-control.focused{
+    border: none !important;
+  }
+
+  input.ng-touched.ng-invalid:not(:focus){
+    border: none !important;
+  }
+
+  .icono{
+    position: absolute !important;
+    right: 12px;
+    top: 8px;
+
+    mat-icon{
+      color: var(--neutral-600) !important;
+      font-size: 24px;
+    }
+  }
+ 
+}
+
 
 .bs-datepicker-container {
   padding: 0;

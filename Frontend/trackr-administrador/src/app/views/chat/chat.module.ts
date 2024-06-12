@@ -10,6 +10,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { ModalBaseComponent } from '@sharedComponents/modal-base/modal-base.component';
 import { ModalBaseModule } from '@sharedComponents/modal-base/modal-base.module';
+import { MatListModule } from '@angular/material/list'
+import { MatIconModule } from '@angular/material/icon';
+import { NgAudioRecorderModule } from 'ng-audio-recorder';
 
 
 
@@ -26,7 +29,10 @@ import { ModalBaseModule } from '@sharedComponents/modal-base/modal-base.module'
     TableModule,
     NgSelectModule,
     PipesModule,
-    ModalBaseModule
+    ModalBaseModule,
+    MatListModule,
+    MatIconModule,
+    NgAudioRecorderModule
   ]
 })
 export class ChatModule { }

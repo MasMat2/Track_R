@@ -1,9 +1,23 @@
+@import "../../../../src/theme/variables.scss";
+
+
 .rellenar-div{
-    height: 80vh;
-    background-color: #EFEDE4;
+    height: 90vh;
+    background-color: var(--neutral-50);
 }
 
 .mensajes{
-    min-height: 80vh;
-    background-color: #EFEDE4;
+    min-height: 90vh;
+    background-color: var(--neutral-50);
+}
+
+.contenedor{
+    
+}
+
+.centrar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }

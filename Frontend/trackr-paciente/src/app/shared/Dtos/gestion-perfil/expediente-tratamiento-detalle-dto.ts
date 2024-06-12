@@ -15,6 +15,7 @@ export class ExpedienteTratamientoDetalleDto{
     apellidosDoctor?: string;
     tituloDoctor?: string;
     imagenBase64: string;
+    tipoMime? : string;
     recordatorioActivo: boolean; // Recordatorio de tomas
     diaSemana: boolean[]; // Checkboxes dias de la semana
     horas: string[]; // Horario(h)

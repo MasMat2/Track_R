@@ -1,0 +1,25 @@
+.searchbar{
+    width: 100%;
+    max-width: 664px;
+    background: var(--neutral-50);
+    border-radius: 8px;
+    border: 2px solid var(--primary-100);
+    padding-left: 12px;
+    padding-right: 12px;
+}
+.searchbar:focus-within{
+    border: 2px solid var(--primary-400);
+}
+
+
+.icono{
+    color: var(--neutral-400);
+    margin-right: 10px;
+}
+input{
+    width: calc(100% - 34px); //24px del icono + 10px del margen del icono
+    border: none !important;
+    color: var(--neutral-800) !important;
+    font-family: var(--font-body) !important;
+    font-size: 14px !important;
+}

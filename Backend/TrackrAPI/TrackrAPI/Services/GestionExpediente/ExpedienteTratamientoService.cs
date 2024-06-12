@@ -2,6 +2,7 @@ using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionExpediente;
 using System.Transactions;
+using TrackrAPI.Services.Sftp;
 
 namespace TrackrAPI.Services.GestionExpediente;
 
@@ -9,13 +10,17 @@ public class ExpedienteTratamientoService
 {
     private readonly IExpedienteTratamientoRepository expedienteTratamientoRepository;
     private readonly IExpedienteTrackrRepository expedienteTrackrRepository;
+    private readonly SftpService _sftpService;
+    private readonly string defaultPath = Path.Combine("Archivos", "Tratamiento", "placeholder.png");
 
     public ExpedienteTratamientoService(
         IExpedienteTratamientoRepository expedienteTratamientoRepository,
-        IExpedienteTrackrRepository expedienteTrackrRepository)
+        IExpedienteTrackrRepository expedienteTrackrRepository,
+        SftpService sftpService)
     {
         this.expedienteTratamientoRepository = expedienteTratamientoRepository;
         this.expedienteTrackrRepository = expedienteTrackrRepository;
+        _sftpService = sftpService;
     }
 
     public IEnumerable<ExpedienteTratamientoGridDTO> ConsultarParaGrid(int idUsuario)
@@ -148,7 +153,8 @@ public class ExpedienteTratamientoService
             Cantidad = et.Cantidad,
             Unidad = et.Unidad,
             Padecimiento = et.IdPadecimientoNavigation.Nombre,
-            ImagenBase64 = (et.Imagen != null && et.Imagen.Length > 0) ? System.Convert.ToBase64String(et.Imagen) : "",
+            ImagenBase64 = _sftpService.DownloadFileAsBase64(et.ArchivoUrl ?? defaultPath),
+            TipoMime = et.ImagenTipoMime ?? "image/png"
         });
 
         return expedienteTratamientosDto;
@@ -204,14 +210,15 @@ public class ExpedienteTratamientoService
             Padecimiento = expedienteTratamiento.IdPadecimientoNavigation.Nombre,
             IdPadecimiento = expedienteTratamiento.IdPadecimiento,
             IdUsuarioDoctor = expedienteTratamiento.IdUsuarioDoctor,
-            ImagenBase64 = (expedienteTratamiento.Imagen != null && expedienteTratamiento.Imagen.Length > 0) ? System.Convert.ToBase64String(expedienteTratamiento.Imagen) : "",
+            ImagenBase64 = _sftpService.DownloadFileAsBase64(expedienteTratamiento.ArchivoUrl ?? defaultPath),
             NombreDoctor = expedienteTratamiento.IdUsuarioDoctorNavigation.Nombre,
             ApellidosDoctor = expedienteTratamiento.IdUsuarioDoctorNavigation.ApellidoPaterno + " " + expedienteTratamiento.IdUsuarioDoctorNavigation.ApellidoMaterno,
             TituloDoctor = expedienteTratamiento.IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre,
             RecordatorioActivo = recordatorioActivo,
             DiaSemana = diaSemana,
             Horas = horas.Select(group => group.Key).ToArray(),
-            Bitacora = bitacora
+            Bitacora = bitacora,
+            TipoMime = expedienteTratamiento.ImagenTipoMime ?? "image/png"
 
         };
     }
@@ -260,6 +267,12 @@ public class ExpedienteTratamientoService
 
             int idExpediente = expedienteTrackrRepository.ConsultarPorUsuario(idUsuario).IdExpediente;
             expedienteTratamiento.IdExpediente = idExpediente; // Asignar IdExpediente del usuario
+
+            var remoteImagePath = Path.Combine("Archivos", "Tratamiento", $"{Guid.NewGuid()}.png");
+            expedienteTratamiento.ArchivoUrl = remoteImagePath;
+
+            var imagenToBase64 = Convert.ToBase64String(expedienteTratamiento.Imagen);
+            _sftpService.UploadFile(remoteImagePath, imagenToBase64);
 
             int idExpedienteTratamiento = expedienteTratamientoRepository.Agregar(expedienteTratamiento);
 

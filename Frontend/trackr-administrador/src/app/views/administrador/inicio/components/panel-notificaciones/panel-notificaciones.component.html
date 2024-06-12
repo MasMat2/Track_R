@@ -1,76 +1,28 @@
-<div class="container p-4">
-  <div class="titulo mb-3">Notificaciones</div>
-
-  <div class="d-flex flex-column gap-2">
-    <div *ngFor="let notificacion of notificaciones$ | async" (click)="mostrarModal(notificacion)">
-      <div class="notificacion d-flex align-items-center gap-3" [ngClass]="{ 'vista': notificacion.visto }">
-        <div class="img-container">
-          
-          <img [src]="notificacion.imagen ?? 'https://via.placeholder.com/150'">
+<div class="contenedor">
+  <div class="titulo">
+    <h3>Notificaciones</h3>
+    <button mat-flat-button (click)="cerrarModal()">
+      <i-lucide name="x"></i-lucide>
+    </button>
+  </div>
+  <div class="notificaciones">
+    <div class="notificacion" *ngFor="let notificacion of notificaciones$ | async" [ngClass]="{'vista': !notificacion.visto}">
+      <div class="contenedor-marcador" *ngIf="!notificacion.visto">
+        <div class="marcador-visto"></div>
+      </div>
+      <div class="contenido" (click)="marcarComoVista(notificacion.id)">
+        <div class="thumbnail">
+          <img [src]="notificacion.imagen" alt="picture">
         </div>
-        <div class="d-flex flex-column">
-          <span class="nombre">{{ notificacion.paciente }}</span>
-          <span class="mensaje">{{ notificacion.mensaje }}</span>
-          <span class="fecha">{{ notificacion.fecha | date }}</span>
+        <div class="info">
+          <h2>{{notificacion.paciente}}</h2>
+          <h3>{{notificacion.mensaje}}</h3>
+          <p>{{notificacion.fecha | date: "dd/MM/YYYY 'a las' h:mm a" : '' : 'es-MX'}}</p>
         </div>
-        <div class="ms-auto">
-          <button type="button" class="btn chat" (click)="marcarComoVista(notificacion.id)">
-            <i class="chat fas fa-comment"></i>
-          </button>
+        <div class="detail-icon">
+          <i-lucide class="icon" [name]="iconMappings[notificacion.idTipoNotificacion].name"></i-lucide>
         </div>
       </div>
     </div>
-
-
-    <!-- <form (ngSubmit)="notificar()">
-      <div class="d-flex flex-column align-items-center p-3 mt-2" style="background-color: #ffffff; border-radius: 15px;">
-        <div class="row">
-          <div class="col-12">
-            <div class="form-group">
-              <label class="label-input" for="tipoNotificacion">Tipo de Notificación</label>
-              <ng-select
-                #tipoNotificacion="ngModel"
-                name="tipoNotificacion"
-                class="select-custom"
-                [items]="tiposNotificacion"
-                bindLabel="nombre"
-                bindValue="idTipoNotificacion"
-                [(ngModel)]="idTipoNotificacion"
-              ></ng-select>
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="form-group">
-              <label class="label-input" for="paciente">Paciente</label>
-              <ng-select
-                #paciente="ngModel"
-                name="paciente"
-                class="select-custom"
-                [items]="pacientes$ | async"
-                bindLabel="nombreCompleto"
-                bindValue="idUsuario"
-                [(ngModel)]="idPaciente"
-              ></ng-select>
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="form-group">
-              <label class="label-input" for="mensaje">Mensaje</label>
-              <textarea
-                #mensajeInput="ngModel"
-                name="mensaje"
-                id="mensaje"
-                class="form-control"
-                rows="3"
-                [(ngModel)]="mensaje"
-              ></textarea>
-            </div>
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn-primario mt-4">Enviar Notificacion</button>
-      </div>
-    </form> -->
   </div>
-
 </div>

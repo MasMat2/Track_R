@@ -1,0 +1,6 @@
+<button mat-flat-button (click)="mostrarNotificaciones()">
+    <div class="contenedor-iconos">
+        <i-lucide class="outer-icon" name="bell"></i-lucide>
+        <i class="fa-solid fa-circle inner-icon" *ngIf="((notificaciones$ | async)?.length !== 0)"></i>
+    </div>
+</button>

@@ -8,5 +8,6 @@
         public string Unidad { get; set; }
         public string Padecimiento { get; set; }
         public string? ImagenBase64 { get; set; }
+        public string? TipoMime { get; set; }
     }
 }

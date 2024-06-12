@@ -269,7 +269,7 @@ export class AgregarTratamientoPage implements OnInit {
     });
 
     const tratamientoDto: ExpedienteTratamientoDetalleDto = {
-      idExpedienteTratamiento: this.perfilTratamientoDto.idExpedienteTratamiento,//tendra valor solo cuando la accion sea editar
+      idExpedienteTratamiento: this.perfilTratamientoDto?.idExpedienteTratamiento,//tendra valor solo cuando la accion sea editar
       farmaco: formValues.farmaco,
       fechaRegistro: new Date(formValues.fechaRegistro),
       fechaInicio: new Date(formValues.fechaInicio),

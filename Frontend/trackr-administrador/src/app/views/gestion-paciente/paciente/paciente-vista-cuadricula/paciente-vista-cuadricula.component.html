@@ -1,12 +1,4 @@
 <!-- Botón Descargar Excel -->
-<div
-    class="d-flex justify-content-end">
-    <button type="button" class="btn" (click)="descargarExcel()" >
-      <i title="Descargar Excel" class="grid-download">
-        <img src="assets/img/svg/ico-15x15-Descargar.svg"/>
-      </i>
-    </button>
-</div>
 <p-table
   class="primeng-table grid-cuadricula"
   [value]="pacientes"
@@ -15,13 +7,23 @@
   [autoLayout]="true"
 >
   <ng-template pTemplate="header">
-    <tr class="table-header">
-      <th class="px-0 text-center">Fotografía</th>
-      <th class="text-center">Paciente</th>
-      <th class="text-center">Patologías</th>
-      <th class="text-center">Dosis sin tomar</th>
-      <th class="text-center">Variables fuera de rango</th>
-      <th class="text-center"></th>
+    <tr class="ptable-header" >
+      <th></th>
+      <th >Nombre</th>
+      <th >Edad</th>
+      <th >Patalogías</th>
+      <th >Dosis sin tomar</th>
+      <th>Variables fuera de rango</th>
+      
+      <th>
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn" (click)="descargarExcel()">
+            <i title="Descargar Excel" class="grid-download">
+              <img src="assets/img/svg/ico-15x15-Descargar.svg" />
+            </i>
+          </button>
+        </div>
+      </th>
     </tr>
   </ng-template>
 
@@ -35,23 +37,13 @@
               : 'assets/img/default-user.jpg'
           "
         />
-<!--
-        <img *ngIf="paciente.imagenBase64 !== undefined"
-          class="imagen-usuario"
-          [src]="paciente.imagenBase64 != undefined
-          ? (paciente.imagenBase64 | urlImagen : paciente?.tipoMime)
-          : 'assets/img/default-user.jpg'"
-          width="85px"
-          height="85px"
-          alt="Imagen de Usuario"
-        /> -->
-
       </td>
-      <!-- TODO: Arreglar las bolitas de colores que muestran los signos -->
       <td style="">
-        <div class="green-dot"></div>
+        <div ></div>
         {{ paciente.nombreCompleto }}
-        <p class="edad">{{ paciente.edad }}</p>
+      </td>
+      <td style="">
+       {{ paciente.edad }}
       </td>
 
       <td>
@@ -67,11 +59,11 @@
       </td>
       <!-- TODO: Arreglar las bolitas de colores que muestran los signos -->
       <td style="">
-        <div class="green-dot"></div>
+        <div ></div>
         <div class="d-flex justify-content-center align-items-center">{{ paciente.dosisNoTomadas }}</div>
       </td>
       <td style="">
-        <div class="green-dot"></div>
+        <div ></div>
         <div class="d-flex justify-content-center align-items-center">{{ paciente.variablesFueraRango}}</div>
       </td>
       <td class="botones-acciones text-center px-0">
@@ -81,7 +73,7 @@
           (click)="onVer(paciente)"
           title="Ver"
         >
-          <i class="fa fa-lg fa-eye icono-primario"></i>
+        <img src="assets/img/svg/eye.svg" class="icon">
         </button>
         <button
           type="button"
@@ -89,7 +81,7 @@
           (click)="onEditar(paciente)"
           title="Editar"
         >
-          <i class="fa fa-lg fa-pen-to-square icono-primario"></i>
+          <img src="assets/img/svg/pen-line.svg" class="icon">
         </button>
 
         <button
@@ -98,10 +90,10 @@
           (click)="onEliminar(paciente)"
           title="Eliminar"
         >
-          <i class="fa fa-2xl fa-trash icono-primario"></i>
+        <img src="assets/img/svg/trash-2.svg" class="icon">
         </button>
       </td>
+
     </tr>
-    <br/>
   </ng-template>
 </p-table>

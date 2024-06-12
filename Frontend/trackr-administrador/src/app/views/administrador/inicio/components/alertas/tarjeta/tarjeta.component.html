@@ -1,8 +1,14 @@
-<div class="card shadow">
-  <i class="card-icon" [ngClass]="claseIcono"></i>
+<div class="card" [ngClass]="claseColor">
+  <div class="header">
+    <i-lucide class="card-icon" [name]="claseIcono"></i-lucide>
+  </div>
 
-  <div class="d-flex flex-column align-items-center m-4 gap-3">
-    <span class="card-value">{{ valor }}</span>
-    <span class="card-text">{{ etiqueta }}</span>
+  <div class="content">
+    <div class="datos">
+      <span class="card-value">{{ valor }}</span>
+      <br>
+      <span class="card-text">{{ etiqueta }}</span>
+    </div>
+    <div class="icono-fondo video" [ngClass]="claseIconoFondo"></div>
   </div>
 </div>
