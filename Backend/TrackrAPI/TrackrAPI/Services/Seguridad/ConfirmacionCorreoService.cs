@@ -1,4 +1,4 @@
-using MimeKit;
+﻿using MimeKit;
 using MimeTypes;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -29,6 +29,7 @@ namespace TrackrAPI.Services.Seguridad
         private readonly ExpedienteTrackrService _expedienteTrackrService;
         private readonly IPerfilRepository _perfilRepository;
         private readonly ITipoUsuarioRepository _tipoUsuarioRepository;
+        private readonly SftpService _sftpService;
 
         public ConfirmacionCorreoService(
             IUsuarioRepository usuarioRepository,
@@ -41,7 +42,8 @@ namespace TrackrAPI.Services.Seguridad
             UsuarioLocacionService usuarioLocacionService,
             ExpedienteTrackrService expedienteTrackrService,
             IPerfilRepository perfilRepository,
-            ITipoUsuarioRepository tipoUsuarioRepository
+            ITipoUsuarioRepository tipoUsuarioRepository,
+            SftpService sftpService
         ) {
             this._confirmacionCorreoRepository = confirmacionCorreoRepository;
             this._usuarioRepository = usuarioRepository;
@@ -54,6 +56,7 @@ namespace TrackrAPI.Services.Seguridad
             this._expedienteTrackrService = expedienteTrackrService;
             this._perfilRepository = perfilRepository;
             this._tipoUsuarioRepository = tipoUsuarioRepository;
+            _sftpService = sftpService;
         
         }
 
@@ -146,9 +149,8 @@ namespace TrackrAPI.Services.Seguridad
 
         public async void EnviarCorreo(string correoUsuario, string clave){
 
-            var usuarioCompleto = _usuarioRepository.ConsultarPorCorreo(correoUsuario);
 
-            string correoEncriptado = _simpleAES.EncryptToString(usuarioCompleto.CorreoPersonal);
+            string correoEncriptado = _simpleAES.EncryptToString(correoUsuario);
 
             string urlFrontEnd = _config.GetSection("AppSettings:UrlFrontEnd").Value;
 
@@ -178,7 +180,7 @@ namespace TrackrAPI.Services.Seguridad
 
             var correo = new Correo()
             {
-                Receptor = usuarioCompleto.CorreoPersonal,
+                Receptor = correoUsuario,
                 Asunto = "OncoTracker: Confirmación de correo",
                 Mensaje = mensaje,
                 EsMensajeHtml = true
