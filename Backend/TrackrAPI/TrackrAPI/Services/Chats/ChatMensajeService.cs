@@ -134,7 +134,7 @@ public class ChatMensajeService
             string path = Path.Combine("Archivos", "Chat", nombreArchivo);
             var archivoBase64 = archivo.Substring(archivo.LastIndexOf(',') + 1);
 
-            this._sftpService.UploadFile(path, archivoBase64);
+            _sftpService.UploadBytesFile(path, archivoBase64);
 
             //Logica para agregar las fotos de perfil en la tabla archivo
             var archivoMensaje = new Archivo
