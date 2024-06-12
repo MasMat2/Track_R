@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MenuItemComponent } from './menu-item/menu-item.component';
 import { PanelNotificacionesModule } from '../../../views/administrador/inicio/components/panel-notificaciones/panel-notificaciones.module';
 import { PopoverModule } from 'ngx-bootstrap/popover';
+import { ChevronRight, FileCheck2, Home, LogOut, LucideAngularModule, MessageSquareMore, Users } from 'lucide-angular';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
     MatButtonModule,
     PanelNotificacionesModule,
     PopoverModule,
+    LucideAngularModule.pick({Home, Users, MessageSquareMore, FileCheck2, LogOut, ChevronRight})
   ],
   exports: [SidebarNavDropdownComponent]
 })

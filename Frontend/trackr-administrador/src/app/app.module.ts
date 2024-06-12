@@ -26,6 +26,7 @@ import { PanelNotificacionesModule } from './views/administrador/inicio/componen
 
 import { registerLocaleData } from '@angular/common';
 import localeEsMx from '@angular/common/locales/es-MX'
+import { SidebarNavDropdownModule } from '@sharedComponents/sidebar-nav-dropdown/sidebar-nav-dropdown.module';
 registerLocaleData(localeEsMx, 'es-MX');
 
 @NgModule({
@@ -50,7 +51,8 @@ registerLocaleData(localeEsMx, 'es-MX');
     NgSelectModule,
     MatDialogModule,
     ToolbarModule,
-    PanelNotificacionesModule
+    PanelNotificacionesModule,
+    SidebarNavDropdownModule
   ],
   providers: [ LoginService,
     AdministradorAuthService,
