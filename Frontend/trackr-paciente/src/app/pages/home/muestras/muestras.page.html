@@ -72,12 +72,12 @@
       <div class="label">
         <ion-text><p>Valores fuera de rango</p></ion-text>
       </div>
-      <div class="lista-vacia" *ngIf="!listaValoresVacia()">
+      <div class="lista-vacia" *ngIf="listaValoresVacia()">
         <ion-text>
           <p>Nada Por aquí. <br> Aún no hay valores fuera de rango.</p>
         </ion-text>
       </div>
-      <ion-list lines="full" *ngIf="listaValoresVacia()">
+      <ion-list lines="full" *ngIf="!listaValoresVacia()">
         <ion-item *ngFor="let valor of valoresFueraRango">
           <ion-label>
             <h3>

@@ -29,6 +29,7 @@ namespace TrackrAPI.Services.Seguridad
         private readonly ExpedienteTrackrService _expedienteTrackrService;
         private readonly IPerfilRepository _perfilRepository;
         private readonly ITipoUsuarioRepository _tipoUsuarioRepository;
+        private readonly SftpService _sftpService;
 
         public ConfirmacionCorreoService(
             IUsuarioRepository usuarioRepository,
@@ -41,7 +42,8 @@ namespace TrackrAPI.Services.Seguridad
             UsuarioLocacionService usuarioLocacionService,
             ExpedienteTrackrService expedienteTrackrService,
             IPerfilRepository perfilRepository,
-            ITipoUsuarioRepository tipoUsuarioRepository
+            ITipoUsuarioRepository tipoUsuarioRepository,
+            SftpService sftpService
         ) {
             this._confirmacionCorreoRepository = confirmacionCorreoRepository;
             this._usuarioRepository = usuarioRepository;
@@ -54,6 +56,7 @@ namespace TrackrAPI.Services.Seguridad
             this._expedienteTrackrService = expedienteTrackrService;
             this._perfilRepository = perfilRepository;
             this._tipoUsuarioRepository = tipoUsuarioRepository;
+            _sftpService = sftpService;
         
         }
 
@@ -146,9 +149,8 @@ namespace TrackrAPI.Services.Seguridad
 
         public async void EnviarCorreo(string correoUsuario, string clave){
 
-            var usuarioCompleto = _usuarioRepository.ConsultarPorCorreo(correoUsuario);
 
-            string correoEncriptado = _simpleAES.EncryptToString(usuarioCompleto.CorreoPersonal);
+            string correoEncriptado = _simpleAES.EncryptToString(correoUsuario);
 
             string urlFrontEnd = _config.GetSection("AppSettings:UrlFrontEnd").Value;
 
@@ -178,7 +180,7 @@ namespace TrackrAPI.Services.Seguridad
 
             var correo = new Correo()
             {
-                Receptor = usuarioCompleto.CorreoPersonal,
+                Receptor = correoUsuario,
                 Asunto = "OncoTracker: Confirmación de correo",
                 Mensaje = mensaje,
                 EsMensajeHtml = true
@@ -253,8 +255,11 @@ namespace TrackrAPI.Services.Seguridad
 
         private LinkedResource GetLogo(string imageUrl, string contentId , string mimeType)
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "Archivos" , "Img" , imageUrl);
-            return new LinkedResource(path){
+            var pathRemoteImage = Path.Combine("Archivos" , "Img" , imageUrl);
+            var image = _sftpService.DownloadFileAsBase64(pathRemoteImage);
+            var bytes = Convert.FromBase64String(image);
+            var stream = new MemoryStream(bytes);
+            return new LinkedResource(stream){
                 ContentId = contentId,
                 ContentType = new ContentType(mimeType)
             };
