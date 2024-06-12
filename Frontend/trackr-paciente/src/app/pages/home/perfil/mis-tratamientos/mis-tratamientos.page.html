@@ -42,7 +42,7 @@
           <ion-item-sliding *ngFor="let tratamiento of tratamientos">
             <ion-item lines="none" detail="true" button (click)="verDetalleTratamiento(tratamiento.idExpedienteTratamiento)">
               <ion-thumbnail slot="start">
-                <ion-img alt="img" *ngIf="tratamiento.imagenBase64" [src]="'data:image/jpeg;base64,' + tratamiento.imagenBase64"></ion-img>
+                <ion-img alt="img" *ngIf="tratamiento.imagenBase64" [src]="'data:' + tratamiento.tipoMime + ';base64,' + tratamiento.imagenBase64"></ion-img>
               </ion-thumbnail>
               <ion-label>
                 <h3>{{tratamiento.farmaco}}</h3>
@@ -63,7 +63,7 @@
           <ion-item-sliding *ngFor="let tratamiento of tratamientosFiltradosPorBusqueda">
             <ion-item lines="none" detail="true">
               <ion-thumbnail slot="start">
-                <img alt="img" *ngIf="tratamiento.imagenBase64" [src]="'data:image/jpeg;base64,' + tratamiento.imagenBase64" />
+                <img alt="img" *ngIf="tratamiento.imagenBase64" [src]="'data:' + tratamiento.tipoMime + ';base64,' + tratamiento.imagenBase64">
               </ion-thumbnail>
               <ion-label>
                 <h3>{{tratamiento.farmaco}}</h3>
