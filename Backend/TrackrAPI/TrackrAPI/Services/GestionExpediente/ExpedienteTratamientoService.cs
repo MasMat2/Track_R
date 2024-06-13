@@ -272,7 +272,7 @@ public class ExpedienteTratamientoService
             expedienteTratamiento.ArchivoUrl = remoteImagePath;
 
             var imagenToBase64 = Convert.ToBase64String(expedienteTratamiento.Imagen);
-            _sftpService.UploadFile(remoteImagePath, imagenToBase64);
+            _sftpService.UploadBytesFile(remoteImagePath, imagenToBase64);
 
             int idExpedienteTratamiento = expedienteTratamientoRepository.Agregar(expedienteTratamiento);
 
