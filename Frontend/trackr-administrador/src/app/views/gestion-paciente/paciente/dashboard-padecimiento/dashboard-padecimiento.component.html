@@ -1,99 +1,71 @@
-<div class="modal-header">
-  <div>{{ nombrePadecimiento }}</div>
-</div>
-<mat-accordion multi="true">
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <p style="color: purple">Valores fuera de rango</p>
-      </mat-panel-title>
-      <!-- <mat-panel-description>
-        This is a summary of the content
-      </mat-panel-description> -->
-    </mat-expansion-panel-header>
-    <div class="row">
-      <!-- Grid Valores Fuera Rango -->
-      <app-grid-general
-        [headerName]="tituloFueraRango"
-        [data]="valoresFueraRango"
-        [children]="columns"
-        (event)="onGridClick($event)"
-      >
-      </app-grid-general>
-    </div>
-  </mat-expansion-panel>
-
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <p style="color: purple">Bitácora de Muestras (Todas las Variables)</p>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div class="row">
-      <!-- Grid Bitácora Muestras -->
-      <app-grid-general
-        [headerName]="tituloBitacoraMuestras"
-        [data]="bitacoraMuestras"
-        [children]="columns"
-        (event)="onGridClick($event)"
-      >
-      </app-grid-general>
-    </div>
-  </mat-expansion-panel>
-
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <p style="color: purple">Histograma</p>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div class="row">
-      <div class="col-md-6">
-        <!-- Select Variable -->
+<div class="contenedor-principal">
+  <div class="cards-container">
+    <div class="card">
+      <div class="subseccion">Histograma</div>
+      <div class="contenido-card">
         <div class="row">
-          <ng-select
-            #variable="ngModel"
-            name="variableName"
-            class="select-custom"
-            [items]="variableList"
-            bindLabel="variable"
-            bindValue="idSeccionCampo"
-            (ngModelChange)="onChangeVariable($event)"
-            [(ngModel)]="idSeccionCampo"
-            [placeholder]="placeHolderSelect"
-            [notFoundText]="placeHolderNoOptions"
-          ></ng-select>
-        </div>
+          <div class="col-md-4 no-padding">
+            <div class="contenedor-selector-variable">
+              <!-- Select Variable -->
+              <div class="row">
+                <div class="col-md-12 no-padding select">
+                  <ng-select
+                    #variable="ngModel"
+                    name="variableName"
+                    class="select-custom"
+                    [items]="variableList"
+                    bindLabel="variable"
+                    bindValue="idSeccionCampo"
+                    (ngModelChange)="onChangeVariable($event)"
+                    [(ngModel)]="idSeccionCampo"
+                    [placeholder]="placeHolderSelect"
+                    [notFoundText]="placeHolderNoOptions"
+                  ></ng-select>
+                </div>
+              </div>
 
-        <!-- Chip Opciones Filtrado -->
-        <div class="row">
-          <div class="col-md-8">
-            <mat-chip-listbox
-              aria-label="Filtro Tiempo"
-              (ngModelChange)="onFiltroChange($event)"
-              [(ngModel)]="filtroTiempo"
-            >
-              <mat-chip-option value="Hoy">Hoy</mat-chip-option>
-              <mat-chip-option selected value="1 Semana">1 Semana</mat-chip-option>
-              <!-- <mat-chip-option>2 Semanas</mat-chip-option>
-              <mat-chip-option>3 Semanas</mat-chip-option>
-              <mat-chip-option>1 Mes</mat-chip-option>
-              <mat-chip-option>2 Meses</mat-chip-option> -->
-            </mat-chip-listbox>
+              <!-- Chip Opciones Filtrado -->
+              <div class="row">
+                <div class="col-md-12 no-padding">
+                  <div class="lista-filtros">
+                    <mat-chip-listbox
+                    aria-label="Filtro Tiempo"
+                    (ngModelChange)="onFiltroChange($event)"
+                    [(ngModel)]="filtroTiempo">
+                    <mat-chip-option *ngFor="let opcion of valoresfiltroTiempo" [value]="opcion.value">{{opcion.label}}</mat-chip-option>
+                  </mat-chip-listbox>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8 no-padding">
+            <div class="contenedor-histograma">
+              <!-- Gráfica / Histograma -->
+              <canvas
+                baseChart
+                [data]="barChartData"
+                [labels]="barChartLabels"
+                [type]="barChartType"
+                [options]="barChartOptions"
+              >
+              </canvas>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-md-6">
-        <!-- Gráfica / Histograma -->
-        <canvas
-          baseChart
-          [data]="barChartData"
-          [labels]="barChartLabels"
-          [type]="barChartType"
-          [options]="barChartOptions"
+    </div>
+    <div class="card">
+      <div class="subseccion">Bitácora de datos clínicos</div>
+      <div class="contenido-card">
+        <app-grid-general
+          [headerName]="tituloBitacoraMuestras"
+          [data]="bitacoraMuestras"
+          [children]="columns"
+          (event)="onGridClick($event)"
         >
-        </canvas>
+        </app-grid-general>
       </div>
     </div>
-  </mat-expansion-panel>
-</mat-accordion>
+  </div>
+</div>
