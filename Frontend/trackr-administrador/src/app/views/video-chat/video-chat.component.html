@@ -2,78 +2,82 @@
 
 <div class="video-container">
   <div class="container">
-    <!-- Row -->
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <h2>1. Inicia tu Webcam</h2> 
+    <div class="row row-video">
+      <!-- LLAMADAS -->
+      <div class="col-10">
+        <div class="row">
+          <video id="remoteVideo" autoplay playsinline controls [srcObject]="remoteStream"></video>
+        </div>
+        <div class="row">
+          <video id="webcamVideo" autoplay playsinline [muted]="true" controls [srcObject]="localStream"></video>
+        </div>
+      </div>
+
+
+
+
+
+
+      <div class="col-2 instructions-container">
+        <div class="instructions">
+          <div class="row ">
+
+         
+            <div class="col-auto">
+                  <h2>1. Inicia tu Webcam</h2>
+              <button  id="webcamButton" (click)="webcamButtonClick()"
+                [disabled]="!buttonState">Iniciar
+                webcam</button>
+            </div>
+          </div>
+
+   
+
+          <div class="row">
+            <div class="col-auto">
+              <h2>2. Crea una nueva llamada</h2>
+              <button style="margin-bottom: 16px;"  id="callButton" disabled (click)="callButtonClick()"
+                [disabled]="buttonState">Crear llamada (ID)</button>
+            </div>
+          </div>
+
+          <div style="margin-right: 10%;">
+              <h2>3. Únete a una llamada</h2>
+              <p>Responde la llamada desde una ventana de navegador
+                 diferente o dispositivo</p>
+            
+              
+          </div>
+
+          <div class="row" >
+            <div class="col-auto">
+              <input style="margin-bottom: 16px;" type="text" class="form-control" id="callerId" placeholder="ID de llamada" [(ngModel)]="callerId">
+            </div>
+
+            <div class="col-auto">
+              <button  id="answerButton" (click)="answerButtonClick()"
+                [disabled]="buttonState">Responder</button>
+            </div>
+          </div>
+
+          <br>
+
+
+
+          <div class="row">
+            <div class="col-auto">
+              <h2>4. Colgar</h2>
+              <button  id="hangupButton" (click)="closeStreams()">Colgar</button>
+            </div>
+          </div>
+
+
+        </div>
+
       </div>
     </div>
 
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <button class="btn btn-sm" id="webcamButton" (click)="webcamButtonClick()" [disabled]="!buttonState">Iniciar webcam</button>
-      </div>
-    </div>
 
-    <!-- Row -->
-    <div class="row">
-      <div class="col-6">
-        <h3>Transmisión Local</h3>
-        <video id="webcamVideo" autoplay playsinline [muted]="true" controls [srcObject]="localStream"></video>
-      </div>
-
-      <div class="col-6">
-        <h3>Transmisión Remota</h3>
-        <video id="remoteVideo" autoplay playsinline controls [srcObject]="remoteStream"></video>
-      </div>
-    </div>
-
-    <!-- Row -->
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <h2>2. Crea una nueva llamada</h2>
-      </div>
-    </div>
-
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <button class="btn btn-sm" id="callButton" disabled (click)="callButtonClick()" [disabled]="buttonState">Crear llamada (ID)</button>
-      </div>
-    </div>
-
-    <br>
-
-    <!-- Row -->
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <h2>3. Únete a una llamada</h2>
-        <p>Responde la llamada desde una ventana de navegador diferente o dispositivo</p>
-      </div>
-    </div>
-
-    <div class="row justify-content-center align-items-center">
-      <div class="col-auto">
-        <input type="text" class="form-control" id="callerId" placeholder="ID de llamada" [(ngModel)]="callerId">
-      </div>
-
-      <div class="col-auto">
-        <button class="btn" id="answerButton" (click)="answerButtonClick()" [disabled]="buttonState">Responder</button>
-      </div>
-    </div>
-
-    <br>
-
-    <!-- Row -->
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <h2>4. Colgar</h2>
-      </div>
-    </div>
-
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <button class="btn" id="hangupButton" (click)="closeStreams()">Colgar</button>
-      </div>
-    </div>
   </div>
+
 </div>
