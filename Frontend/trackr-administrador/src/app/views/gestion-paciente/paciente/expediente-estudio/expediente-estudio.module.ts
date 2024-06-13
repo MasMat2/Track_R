@@ -4,13 +4,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ExpedienteEstudioComponent } from './expediente-estudio.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     TableModule,
     PipesModule,
-    PdfVisorModule
+    PdfVisorModule,
+    SharedModule,
   ],
   declarations: [ExpedienteEstudioComponent],
   exports: [ExpedienteEstudioComponent]
