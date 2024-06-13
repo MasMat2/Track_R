@@ -38,7 +38,32 @@ export class DashboardPadecimientoComponent implements OnInit {
   public idSeccionCampo: number;
   public variableList: ExpedienteColumnaSelectorDTO[] = [];
   protected filtroTiempo: string;
-
+  protected valoresfiltroTiempo = [
+    {
+      label: 'Hoy',
+      value : 'hoy' 
+    },
+    {
+      label: '1 Semana',
+      value : '1 semana' 
+    },
+    {
+      label: '2 Semanas',
+      value : '2 semanas' 
+    },
+    {
+      label: '3 Semanas',
+      value : '3 semanas' 
+    },
+    {
+      label: '1 Mes',
+      value : '1 mes' 
+    },
+    {
+      label: '2 Meses',
+      value : '2 meses' 
+    },
+  ]
   // Configuracion Columnas DataGrid
   public columns = [
     { headerName: 'Variable', field: 'variable', minWidth: 150 },
@@ -65,22 +90,11 @@ export class DashboardPadecimientoComponent implements OnInit {
     // Colores Histograma
 
     private readonly backgroundColor = [
-      'rgba(255, 99, 132, 0.2)',
-      'rgba(255, 159, 64, 0.2)',
-      'rgba(255, 205, 86, 0.2)',
-      'rgba(75, 192, 192, 0.2)',
-      'rgba(54, 162, 235, 0.2)',
-      'rgba(153, 102, 255, 0.2)',
-      'rgba(201, 203, 207, 0.2)'
+      'rgba(105, 94, 147, 1)',
     ];
+    
     private readonly borderColor = [
-      'rgb(255, 99, 132)',
-      'rgb(255, 159, 64)',
-      'rgb(255, 205, 86)',
-      'rgb(75, 192, 192)',
-      'rgb(54, 162, 235)',
-      'rgb(153, 102, 255)',
-      'rgb(201, 203, 207)'
+      'rgba(105, 94, 147, 1)',
     ];
   
 
@@ -95,10 +109,7 @@ export class DashboardPadecimientoComponent implements OnInit {
         label: "Niveles de Glucosa",
         data: [],
         backgroundColor: this.backgroundColor,
-        // backgroundColor: ["red", "green", "blue"],
         borderColor: this.borderColor,
-        borderWidth: 1
-        // hoverBackgroundColor: ["darkred", "darkgreen", "darkblue"],
       }
     ],
   };
@@ -111,7 +122,7 @@ export class DashboardPadecimientoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.consultarValoresFueraRango();
+    //this.consultarValoresFueraRango();
     this.consultarTodasVariables();
     this.consultarSeccionesPadecimiento();
   }
@@ -120,13 +131,13 @@ export class DashboardPadecimientoComponent implements OnInit {
     console.log(event);
   }
 
-  private consultarValoresFueraRango(): void {
-    lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresFueraRango(this.idPadecimiento, this.idUsuario))
-      .then((valoresFueraRango: ValoresFueraRangoGridDTO[]) => {
-        this.valoresFueraRango = valoresFueraRango;
-      }
-    );
-  }
+  // private consultarValoresFueraRango(): void {
+  //   lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresFueraRango(this.idPadecimiento, this.idUsuario))
+  //     .then((valoresFueraRango: ValoresFueraRangoGridDTO[]) => {
+  //       this.valoresFueraRango = valoresFueraRango;
+  //     }
+  //   );
+  // }
 
   private consultarTodasVariables(): void {
     lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresTodasVariables(this.idPadecimiento, this.idUsuario))
@@ -169,9 +180,9 @@ export class DashboardPadecimientoComponent implements OnInit {
         return {
           // labels: labels.map(label => valoresPorClaveCampo[label][index]?.fechaMuestra ?? 'Sin fecha'),
           data: labels.map(label => valoresPorClaveCampo[label][index]?.valor ?? 0),
-          backgroundColor: this.backgroundColor[index],
-          borderColor: this.borderColor[index],
-          borderWidth: 1,
+          backgroundColor: this.backgroundColor,
+          borderColor: this.borderColor,
+          //borderWidth: 1,
           // label: this.variableList.find(variable => variable.clave == this.claveVariable)?.variable ?? 'Sin nombre',
         };
       });

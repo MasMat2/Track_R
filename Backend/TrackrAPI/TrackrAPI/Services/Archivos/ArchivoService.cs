@@ -36,7 +36,7 @@ public class ArchivoService
     {
         ArchivoDTO archivo = new ArchivoDTO();
         var file = _archivoRepository.GetArchivo(idArchivo);
-        archivo.Archivo = file.ArchivoUrl != null ? _sftpService.DownloadFile(file.ArchivoUrl): "";
+        archivo.Archivo = file.ArchivoUrl != null ? _sftpService.DownloadFileAsBase64(file.ArchivoUrl): "";
         archivo.ArchivoMime = file.ArchivoTipoMime;
         archivo.IdArchivo = file.IdArchivo;
         archivo.Nombre = file.ArchivoNombre;
