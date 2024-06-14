@@ -5,4 +5,5 @@ export class ValoresFueraRangoGridDTO{
     fechaMuestra: string;
     valorEntidadEstructuraValor: string;
     valorReferencia: string;
+    fueraDeRango: boolean;
 }

@@ -79,8 +79,28 @@ export class DashboardPadecimientoComponent implements OnInit {
         return moment(params.data.fechaHora).format('DD/MM/YYYY') + '   ' + moment(params.data.fechaHora, 'HH:mm:ss').format('LT');
       },
     },
-    { headerName: 'Valor Registrado', field: 'valorRegistrado', minWidth: 150 },
-    { headerName: 'Valor de Referencia (min-máx)', field: 'valorReferencia', minWidth: 150 },
+    { 
+      headerName: 'Valor Registrado', field: 'valorRegistrado', minWidth: 150,
+      cellRenderer: (params: any) => {
+        const unidadMedida = params.data.unidadMedida;
+        //Definir color del icono de fuera de rango
+        let colorIcono: string = "";
+        params.data.fueraDeRango ? (colorIcono = 'var(--error-200)') : (colorIcono = 'var(--success-200)');
+
+        return '<span style="display:flex">' +     
+        `<div style="color: ${colorIcono}; font-size: 12px; margin-right: 8px"><i class="fa fa-circle"></i></div>`
+        + `${params.value} ${unidadMedida}` +
+        '</span>'
+      }
+    },
+    { headerName: 'Valor de Referencia (min-máx)', field: 'valorReferencia', minWidth: 150,
+      cellRenderer: (params: any) => {
+        const unidadMedida = params.data.unidadMedida;
+        return `<span>${params.value} ${unidadMedida}</span>`;
+      }
+
+    },
+
   ];
 
     // Configuraciones Select
