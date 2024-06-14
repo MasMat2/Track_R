@@ -417,9 +417,9 @@
                 </ion-item>
                 <div class="adjuntar-elemento" *ngIf="photo">
                   <div class="previsualizacion">
-                    <ion-img [src]="'data:image/png;base64,' + photo?.base64String"></ion-img>
+                    <ion-img [src]="photo"></ion-img>
                     <div class="datos-archivo">
-                      <ion-text><p>{{photo?.dataUrl}}</p></ion-text>
+                      <ion-text><p>{{photoPreview?.dataUrl}}</p></ion-text>
                       <ion-button (click)="eliminarAdjunto()">
                         <ion-icon slot="icon-only" name="trash-2"></ion-icon>
                       </ion-button>

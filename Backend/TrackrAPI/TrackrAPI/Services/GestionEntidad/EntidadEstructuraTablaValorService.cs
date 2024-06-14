@@ -245,7 +245,8 @@ namespace TrackrAPI.Services.GestionEntidad
                         FechaHora = valor.FechaMuestra,
                         ValorRegistrado = valor.Valor,
                         ValorReferencia = valorReferencia,
-                        unidadMedida = columnaCorrespondiente.UnidadMedida
+                        unidadMedida = columnaCorrespondiente.UnidadMedida,
+                        fueraDeRango = valor.FueraDeRango,
                     });
                 }
             }

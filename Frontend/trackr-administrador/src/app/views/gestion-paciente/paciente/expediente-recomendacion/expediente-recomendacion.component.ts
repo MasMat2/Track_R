@@ -16,6 +16,7 @@ import { ExpedienteRecomendacionFormDTO } from '@dtos/gestion-expediente/expedie
 @Component({
   selector: 'app-expediente-recomendacion',
   templateUrl: './expediente-recomendacion.component.html',
+  styleUrls : ['./expediente-recomendacion.component.scss']
 })
 export class ExpedienteRecomendacionComponent implements OnInit{
   //Variables relacionadas con el componente y la vista
@@ -31,7 +32,7 @@ export class ExpedienteRecomendacionComponent implements OnInit{
   public HEADER_GRID = 'Recomendaciones';
   public columns = [
     { headerName: 'Num', valueGetter: (params: any) => params.node.rowIndex + 1, maxWidth: 70 },
-    { headerName: 'Fecha', field: 'fecha', maxWidth: 90},
+    { headerName: 'Fecha', field: 'fecha', maxWidth: 120},
     { headerName: 'Recomendacion', field: 'descripcion', minWidth: 150 },
     { headerName: 'Doctor', field: 'doctor', minWidth: 80 },
   ];

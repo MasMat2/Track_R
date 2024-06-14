@@ -19,22 +19,30 @@ export class GraficaTratamientosComponent implements OnInit {
   private etiquetas: string[] = [];
   private colors: string[] = ['#70ad47', '#5b9bd5', '#ffc000', '#a5a5a5', '#ed7d31'];
 
+  // private readonly backgroundColor = [
+  //   'rgba(105, 94, 147, 1)',
+  //   'rgba(105, 94, 147, 1)',
+  //   'rgba(105, 94, 147, 1)',
+  //   'rgba(105, 94, 147, 1)',
+  //   'rgba(105, 94, 147, 1)',
+  //   'rgba(105, 94, 147, 1)',
+  //   'rgba(105, 94, 147, 1)',
+  // ];
+  // private readonly borderColor = [
+  //   'rgba(105, 94, 147, 1)',
+  //   'rgba(105, 94, 147, 1)',
+  //   'rgba(105, 94, 147, 1)',
+  //   'rgba(105, 94, 147, 1)',
+  //   'rgba(105, 94, 147, 1)',
+  //   'rgba(105, 94, 147, 1)',
+  //   'rgba(105, 94, 147, 1)',
+  // ];
+
   private readonly backgroundColor = [
     'rgba(105, 94, 147, 1)',
-    'rgba(105, 94, 147, 1)',
-    'rgba(105, 94, 147, 1)',
-    'rgba(105, 94, 147, 1)',
-    'rgba(105, 94, 147, 1)',
-    'rgba(105, 94, 147, 1)',
-    'rgba(105, 94, 147, 1)',
   ];
+  
   private readonly borderColor = [
-    'rgba(105, 94, 147, 1)',
-    'rgba(105, 94, 147, 1)',
-    'rgba(105, 94, 147, 1)',
-    'rgba(105, 94, 147, 1)',
-    'rgba(105, 94, 147, 1)',
-    'rgba(105, 94, 147, 1)',
     'rgba(105, 94, 147, 1)',
   ];
 
@@ -50,18 +58,21 @@ export class GraficaTratamientosComponent implements OnInit {
         borderColor: this.borderColor,
         barThickness: 20,
         datalabels: {
-          align: 'end',
-          anchor: 'start',
+          align: 'top',
+          anchor: 'end',
         }
       },
     ],
   };
   protected chartOptions: ChartConfiguration<'bar'>['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
       datalabels: {
-        color: '#525252',
+        color: '#000000',
         font: {
+          size: 14,
           weight: 'bold'
         },
         formatter: (value: number) => {
