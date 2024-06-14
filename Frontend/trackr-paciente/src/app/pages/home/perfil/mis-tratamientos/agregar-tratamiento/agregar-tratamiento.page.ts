@@ -20,6 +20,8 @@ import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructu
 import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
 import { ExpedientePadecimientoService } from '@http/gestion-expediente/expediente-padecimiento.service';
 
+import { CapacitorUtils } from '@utils/capacitor-utils';
+
 //TODO:Definir cantidad máxima de fármaco
 const CANTIDAD_MAXIMA = 99;
 
@@ -35,7 +37,8 @@ const CANTIDAD_MAXIMA = 99;
     FormsModule, 
     ReactiveFormsModule, 
     HeaderComponent, 
-  ]
+  ],
+  providers: [CapacitorUtils]
 })
 export class AgregarTratamientoPage implements OnInit {
 
@@ -51,7 +54,8 @@ export class AgregarTratamientoPage implements OnInit {
   protected isModalRecordatorioOpen: boolean = false;
   protected btnSubmit: boolean = false;
   protected fechaSeleccionada: string = this.dateToday;
-  protected photo: Photo | undefined;
+  protected photo: string | undefined;
+  protected photoPreview: Photo | undefined;
   protected doctoresSelector: UsuarioDoctoresSelectorDto[];
   protected padecimientosSelector: ExpedientePadecimientoSelectorDTO[];
 
@@ -85,7 +89,8 @@ export class AgregarTratamientoPage implements OnInit {
     private fb: FormBuilder,
     private photoService: PhotoService,
     private _modalCtrl: ModalController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private capacitorUtils: CapacitorUtils,
   ) { 
     addIcons({
     'chevron-left': 'assets/img/svg/chevron-left.svg',
@@ -166,7 +171,8 @@ export class AgregarTratamientoPage implements OnInit {
 
     //asignar la imagen del medicamento
     if(this.perfilTratamientoDto.imagenBase64 != ""){
-      this.photo = {format: 'jpeg', saved: false, base64String: this.perfilTratamientoDto.imagenBase64};
+      this.photo = this.perfilTratamientoDto.imagenBase64;
+      this.photoPreview = {format: 'jpeg', saved: false, base64String: this.perfilTratamientoDto.imagenBase64};
     }
 
     //ajustar el selector de cantidad
@@ -209,7 +215,9 @@ export class AgregarTratamientoPage implements OnInit {
 
   // Camara
   protected async addPhotoToGallery() {
-    this.photo = await this.photoService.takePicture();
+    this.photo = (await this.capacitorUtils.takePicture());
+    console.log(this.photo);
+
   }
 
   // Recordatorios Horas
@@ -268,6 +276,8 @@ export class AgregarTratamientoPage implements OnInit {
       return hora.split('T')[1].split('.')[0]; 
     });
 
+
+    var imageBase64 = this.photo ? this.photo.split(',')[1] : "";
     const tratamientoDto: ExpedienteTratamientoDetalleDto = {
       idExpedienteTratamiento: this.perfilTratamientoDto?.idExpedienteTratamiento,//tendra valor solo cuando la accion sea editar
       farmaco: formValues.farmaco,
@@ -280,7 +290,7 @@ export class AgregarTratamientoPage implements OnInit {
       padecimiento: formValues.padecimiento,
       idPadecimiento: formValues.idPadecimiento,
       idUsuarioDoctor: formValues.idUsuarioDoctor,
-      imagenBase64: this.photo?.base64String || "",
+      imagenBase64: imageBase64,
       recordatorioActivo: formValues.recordatorioActivo,
       diaSemana: formValues.recordatorioActivo ? formValues.diaSemana : null,
       horas: formValues.recordatorioActivo ? horasTiempos : null,
