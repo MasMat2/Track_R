@@ -133,7 +133,11 @@ export class DashboardPadecimientoComponent implements OnInit {
       }
     ],
   };
-  public barChartOptions:ChartOptions = {plugins: {legend: {display: false}}};
+  public barChartOptions:ChartOptions = {
+    plugins: {legend: {display: false}},
+    responsive: true,
+    maintainAspectRatio: false,
+  };
 
   constructor(
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
