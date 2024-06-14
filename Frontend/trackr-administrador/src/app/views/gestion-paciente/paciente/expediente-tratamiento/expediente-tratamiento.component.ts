@@ -27,8 +27,15 @@ export class ExpedienteTratamientoComponent implements OnInit {
   protected tratamientos: ApegoTomaMedicamentoDto[] = [];
   private data: number[] = [];
   private etiquetas: string[] = [];
-  private colors: string[] = ['#70ad47', '#5b9bd5', '#ffc000', '#a5a5a5', '#ed7d31'];
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
+  private readonly backgroundColor = [
+    'rgba(105, 94, 147, 1)',
+  ];
+  
+  private readonly borderColor = [
+    'rgba(105, 94, 147, 1)',
+  ];
 
   protected chartPlugins = [ChartDataLabels]
   protected chartType: ChartConfiguration<'bar'>['type'] = 'bar';
@@ -38,21 +45,25 @@ export class ExpedienteTratamientoComponent implements OnInit {
       {
         label: "Apego",
         data: this.data,
-        backgroundColor: this.colors,
+        backgroundColor: this.backgroundColor,
+        borderColor: this.borderColor,
         barThickness: 20,
         datalabels: {
-          align: 'end',
-          anchor: 'start',
+          align: 'top',
+          anchor: 'end',
         }
       },
     ],
   };
   protected chartOptions: ChartConfiguration<'bar'>['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
       datalabels: {
-        color: 'black',
+        color: '#00000',
         font: {
+          size: 14,
           weight: 'bold'
         },
         formatter: (value: number) => {
@@ -107,6 +118,16 @@ export class ExpedienteTratamientoComponent implements OnInit {
     this.obtenerParametrosURL();
   }
 
+  
+  private async obtenerParametrosURL(): Promise<void> {
+    const queryParams = await lastValueFrom(this.route.queryParams.pipe(first()));
+    const params = this.encryptionService.readUrlParams(queryParams);
+    this.idUsuario = Number(params.i);
+    this.consultarParaGrid();
+    this.expedienteTrackrService.apegoTratamientoPorPaciente(this.idUsuario)
+    .subscribe((data) => this.actualizarGrafica(data));
+  }
+
   private actualizarGrafica( apegoTratamientoData : ApegoTomaMedicamentoDto[])
   {
     console.log(apegoTratamientoData);
@@ -120,19 +141,7 @@ export class ExpedienteTratamientoComponent implements OnInit {
     this.chart?.update();
   }
 
-
-
-  protected consultarParaGrid(): void{
-    this.tratamientos$ = this.expedienteTratamientoService.consultarParaGrid(this.idUsuario)
+  private consultarParaGrid(): void{
+    this.tratamientos$ = this.expedienteTratamientoService.consultarParaGrid(this.idUsuario);
   }
-
-  private async obtenerParametrosURL(): Promise<void> {
-    const queryParams = await lastValueFrom(this.route.queryParams.pipe(first()));
-    const params = this.encryptionService.readUrlParams(queryParams);
-    this.idUsuario = Number(params.i);
-    this.consultarParaGrid();
-    this.expedienteTrackrService.apegoTratamientoPorPaciente(this.idUsuario)
-    .subscribe((data) => this.actualizarGrafica(data));
-  }
-
 }
