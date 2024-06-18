@@ -21,12 +21,13 @@ declare var JitsiMeetExternalAPI: any;
 export class AnswerMeetComponent implements OnInit {
   protected localStream: MediaStream;
 
-  protected domain: string = "meet.jit.si"; // For self hosted use your domain
+  protected domain: string = "8x8.vc"; // For self hosted use your domain
   protected room: any;
   protected options: any;
   protected api: any;
   protected user: any;
   private meetName: string;
+  private AppIDJitsi = 'vpaas-magic-cookie-c25fa0da2cd344ba8d41a873768065ec';
 
   // For Custom Controls
   isAudioMuted = false;
@@ -42,7 +43,7 @@ export class AnswerMeetComponent implements OnInit {
   ngOnInit() {
 
     this.route.paramMap.subscribe(params => {
-      this.meetName = params.get('meet-name')!;
+      this.meetName = this.AppIDJitsi+'/'+params.get('meet-name')!;
     });
 
     this.orientationService.lockLandscape();
@@ -69,9 +70,9 @@ export class AnswerMeetComponent implements OnInit {
       interfaceConfigOverwrite: {
         //overwrite interface properties
       },
-      parentNode: document.querySelector('#jitsi-answer-call-iframe'),
+      parentNode: document.querySelector('#jaas-container'),
       userInfo: {
-        displayName: "Medico-Trackr"
+        displayName: "Oncotracker User"
       }
 
     };
