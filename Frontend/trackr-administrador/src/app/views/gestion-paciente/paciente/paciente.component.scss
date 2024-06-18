@@ -3,13 +3,6 @@
   filter: invert(17%) sepia(50%) saturate(2928%) hue-rotate(271deg) brightness(91%) contrast(98%);
 }
 
-.btn-buscar{
-  color:purple;
-  border-radius: 5px;
-  border: 1px #d9d9d9 solid !important;
-  width: 50px;
-  margin-left: 10px;
-}
 
 .filter-gray{
   filter: invert(79%) sepia(13%) saturate(28%) hue-rotate(322deg) brightness(82%) contrast(88%);
@@ -66,10 +59,6 @@
   border-radius: 50%;
 }
 
-button
-{
-  border-style: hidden;
-}
 
 .btn-terceario{
 
@@ -78,4 +67,17 @@ button
 
 mat-sidenav-container{
   background-color: #F3F4FA;
+}
+
+.saludo{
+  font-family: var(--font-display);
+  font-family: 32px;
+}
+
+.row{
+  padding-right: 0px;
+  padding-left: 0px !important;
+  margin-left: 0px !important;
+  margin-right: 0px;
+  width: 100%;
 }

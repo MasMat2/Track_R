@@ -25,9 +25,9 @@
             />
           </div>
           <div class="bg-white">
-            <div style="font-weight: 400; font-size: medium;">
-              Paciente
-            </div>
+            <h1 class="titulo">
+              Pacientes
+            </h1>
             <div
               style="
                 font-weight: 300;
@@ -117,25 +117,38 @@
     
       <div class="titulo-contenedor-paciente">
         <h1 class="saludo">
-          Pacientes¿
+          Pacientes
         </h1>
-        <div class="row">
-          <div class="col-9">
-            <div>
-              <div>
-                <input type="text" class="form-control" style="width: 100%" placeholder="Buscar..." aria-label="Buscar"
+
+        <div class="botones">
+          <div id="buscar">
+                <input type="text" class="form-control" style="width: 100%" placeholder="Buscar" aria-label="Buscar"
                   (change)="filtrarPacientes($event)" [disabled]="!isVistaCuadricula" />
-    
-              </div>
-            </div>
           </div>
 
-          <div class="col-3">
-    
-            <div class="contenedor-agregar justify-content-start">
-              <button class="btn-agregar" (click)="agregar()">Agregar Paciente</button>
+
+          <div id="filtros">
+            <button>
+              <lucide-icon name="filter"></lucide-icon>
+              Filtros
+            </button>
+          </div>
+
+          <div id="agregar" class="dropdown">
+              <button  class="add-button">
+                <lucide-icon name="plus"></lucide-icon>
+                <span>
+                  Agregar...
+                </span>
+                <img src="../../../../assets/img/svg/bar-vertical.svg">
+                <lucide-icon name="chevron-down"></lucide-icon>
+              </button>
+              <div class="dropdown-content">
+                <a (click)="agregar()">Paciente</a>
+                <img src="../../../../assets/img/svg/bar-horizontal.svg">
+                <a (click)="agregarAsistente()">Asistente</a>
+              </div>
               <!-- <button class="btn-terceario" (click)="agregarAsistente()" *ngIf="esAsistente !== null">{{ esAsistente  ? 'Mis doctores' : 'Agregar asistentes'}}</button> -->
-            </div>
           </div>
         </div>
        
@@ -143,24 +156,16 @@
       </div>
 
 
-      <div class="row">
+      <div>
         <div class="col-12">
-          <ng-container *ngIf="isVistaCuadricula; else vistaLista">
+          <ng-container *ngIf="isVistaCuadricula">
             <app-paciente-vista-cuadricula
               [pacientes]="pacientesFiltrados"
               (event)="onGridClick($event)"
             >
             </app-paciente-vista-cuadricula>
           </ng-container>
-          <ng-template #vistaLista>
-            <app-grid-general
-              [headerName]="HEADER_GRID"
-              [data]="pacientes"
-              [children]="columns"
-              (event)="onGridClick($event)"
-            >
-            </app-grid-general>
-          </ng-template>
+        
         </div>
       </div>
     </div>
