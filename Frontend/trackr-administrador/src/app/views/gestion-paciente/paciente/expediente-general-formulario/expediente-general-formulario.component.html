@@ -47,15 +47,13 @@
             <!-- Fecha Alta Expediente -->
             <div class="col-md-4">
               <div class="form-group">
-                <label class="label-input required-label"
-                  >Fecha Alta Expediente</label
-                >
-                <div>
+                <label class="label-input required-label">Fecha Alta Expediente</label>
+                <div class="date-form-control-container">
                   <input
                     #fechaAlta="ngModel"
                     [(ngModel)]="expediente.fechaAlta"
                     name="fechaAlta"
-                    class="form-control"
+                    class="date-form-control"
                     type="text"
                     maxlength="50"
                     autocomplete="off"
@@ -64,11 +62,14 @@
                     bsDatepicker
                     [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
                   />
+                  <div class="contenedor-icono">
+                    <i-lucide class="icono" name="calendar"></i-lucide>
+                 </div>
                   <div
                     *ngIf="fechaAlta.errors?.['required'] && fechaAlta.touched"
                     class="error"
                   >
-                    La Fecha Alta Exepediente es requerida
+                    La Fecha Alta Expediente es requerida
                   </div>
                 </div>
               </div>
@@ -138,10 +139,6 @@
                 Agregar paciente
               </button>
             </div>
-
-            <!-- <div class="contenedor-agregar col-md-2 d-flex align-items-center" (click)="agregarUsuario()">
-                  <i class="fas fa-plus-circle"></i><span>Agregar</span>
-                </div> -->
           </div>
 
           <div class="row">
@@ -247,9 +244,8 @@
                     bsDatepicker
                     [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
                   />
-                  <div class="icono">
-                    <!-- usar iconos svg de lucid -->
-                    <mat-icon>calendar_today</mat-icon>
+                  <div class="contenedor-icono">
+                    <i-lucide class="icono" name="calendar"></i-lucide>
                   </div>
                   <div
                     *ngIf="fechaNacimiento.errors?.['required'] && fechaNacimiento.touched"
@@ -419,7 +415,10 @@
       <div class="card">
         <div class="subseccion">Padecimientos</div>
         <div class="contenido-card">
-          <div class="row" *ngFor="let pad of padecimientos; let i = index; last as isLast">
+          <div
+            class="row"
+            *ngFor="let pad of padecimientos; let i = index; last as isLast"
+          >
             <div class="col-md-4">
               <div class="form-group">
                 <label class="label-input required-label"
@@ -460,7 +459,8 @@
                 <button
                   mat-flat-button
                   type="button"
-                  (click)="agregarPadecimiento()">
+                  (click)="agregarPadecimiento()"
+                >
                   <i-lucide name="plus"></i-lucide>
                   Añadir otro
                 </button>
@@ -472,23 +472,14 @@
 
       <div class="botones-footer">
         <div class="botones">
-          <button
-            type="button"
-            class="secondary"
-            (click)="cancelar()"
-          >
+          <button type="button" class="secondary" (click)="cancelar()">
             Cancelar
           </button>
-          <button
-            [disabled]="btnSubmit"
-            type="submit"
-            class="primary"
-          >
+          <button [disabled]="btnSubmit" type="submit" class="primary">
             Guardar
           </button>
         </div>
       </div>
     </div>
-    
   </form>
 </div>

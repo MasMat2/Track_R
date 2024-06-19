@@ -1,40 +1,40 @@
-<div class="modal-header">
-  <div></div>
-</div>
-<mat-accordion multi="true">
-  <mat-expansion-panel expanded="true"> 
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <p style="color: purple">{{ HEADER_GRID }}</p>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-
-    <div class="cuerpo-contenedor" style="padding-bottom: 0; padding-top: 0;">
-      <app-grid-general
-        #gridTratamientos
-        [headerName]="HEADER_GRID"
-        [data]="tratamientos$ | async"
-        [children]="columns"
-        [disableDelete]="true"
-        [disableEdit]="true"
-      >
-      </app-grid-general>
-
-      <div class="col-md-6">
-        <div class="titulo-seccion">
-          Apego a Tratamientos de Pacientes por Padecimiento
+<div class="contenedor-principal">
+  <div class="cards-container">
+    <div class="card">
+      <div class="contenido-card">
+        <div class="contenedor-grid">
+          <app-grid-general
+            #gridTratamientos
+            [headerName]="HEADER_GRID"
+            [data]="tratamientos$ | async"
+            [children]="columns"
+            [disableDelete]="true"
+            [disableEdit]="true"
+          >
+          </app-grid-general>
         </div>
-        
-        <canvas
-          baseChart
-          [data]="chartData"
-          [type]="chartType"
-          [options]="chartOptions"
-          [plugins]="chartPlugins"
-        >
-        </canvas>
       </div>
-
     </div>
-  </mat-expansion-panel>
-</mat-accordion>
+    <div class="row">
+      <div class="col-md-7 no-padding">
+        <div class="card">
+          <div class="subseccion">
+            Apego a Tratamientos de Pacientes por Padecimiento
+          </div>
+          <div class="contenido-card">
+            <div class="contenedor-histograma">
+              <canvas
+                baseChart
+                [data]="chartData"
+                [type]="chartType"
+                [options]="chartOptions"
+                [plugins]="chartPlugins"
+              >
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

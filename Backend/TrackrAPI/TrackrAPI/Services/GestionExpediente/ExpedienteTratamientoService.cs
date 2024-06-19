@@ -36,8 +36,8 @@ public class ExpedienteTratamientoService
             Indicaciones = et.Indicaciones,
             Padecimiento = et.IdPadecimientoNavigation?.Nombre ?? string.Empty,
             FechaRegistro = et.FechaRegistro,
-            Dias = et.TratamientoRecordatorio != null ? String.Join('-', this.ObtenerGruposDiasPadecimiento(et).Select(r => r.Dia)) : "",
-            Horas = et.TratamientoRecordatorio != null ? String.Join('-', this.ObtenerGruposDiasPadecimiento(et).Select(r => r.Hora)) : ""
+            Dias = et.TratamientoRecordatorio != null ? String.Join(" - ", this.ObtenerGruposDiasPadecimiento(et).Select(r => r.Dia)) : "",
+            Horas = et.TratamientoRecordatorio != null ? String.Join(" - ", this.ObtenerGruposDiasPadecimiento(et).Select(r => r.Hora)) : ""
         });
 
         return expedienteTratamientosDto;
@@ -48,8 +48,8 @@ public class ExpedienteTratamientoService
         return et.TratamientoRecordatorio.GroupBy(h => h.Hora)
                                   .Select(tr => new PadecimientoDiasDTO
                                   {
-                                      Hora = tr.Key.ToString(),
-                                      Dia = String.Join(",", tr.Select(r =>
+                                      Hora = FormatearHora(tr.Key),
+                                      Dia = String.Join(", ", tr.Select(r =>
                                       {
                                           if (r.Dia == 1)
                                           {
@@ -82,6 +82,13 @@ public class ExpedienteTratamientoService
                                           return "";
                                       }).ToList())
                                   }).ToList() ;
+    }
+
+    private string FormatearHora(TimeSpan hora)
+    {
+        DateTime dateTime = DateTime.Today.Add(hora);
+        string formattedTime = dateTime.ToString("h:mm tt");
+        return formattedTime;
     }
 
     // Consultar Tratamientos
@@ -272,7 +279,7 @@ public class ExpedienteTratamientoService
             expedienteTratamiento.ArchivoUrl = remoteImagePath;
 
             var imagenToBase64 = Convert.ToBase64String(expedienteTratamiento.Imagen);
-            _sftpService.UploadFile(remoteImagePath, imagenToBase64);
+            _sftpService.UploadBytesFile(remoteImagePath, imagenToBase64);
 
             int idExpedienteTratamiento = expedienteTratamientoRepository.Agregar(expedienteTratamiento);
 

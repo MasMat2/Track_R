@@ -4,13 +4,6 @@
     .chart{
         height: 100%;
         width: 100%;
-        padding: 28px 34px 28px 34px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        canvas{
-            min-width: 100% !important;
-            max-height: 100% !important;
-        }
+        padding: 32px;
     }
 }

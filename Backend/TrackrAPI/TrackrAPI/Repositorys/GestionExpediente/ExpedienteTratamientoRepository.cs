@@ -43,6 +43,7 @@ public class ExpedienteTratamientoRepository : Repository<ExpedienteTratamiento>
             .Include(et => et.TratamientoRecordatorio)
             .ThenInclude(tr => tr.TratamientoToma)
             .AsSplitQuery()
+            .OrderByDescending(et => et.IdExpedienteTratamiento)
             .ToList();
     }
 

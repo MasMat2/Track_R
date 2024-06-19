@@ -10,6 +10,7 @@
         public DateTime? FechaHora { get; set; }
         public string ValorRegistrado { get; set; }
         public string ValorReferencia { get; set; }
+        public bool? fueraDeRango { get; set; }
 
     }
 }
