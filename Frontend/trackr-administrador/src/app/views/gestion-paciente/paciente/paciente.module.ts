@@ -16,7 +16,7 @@ import { PacienteVistaCuadriculaComponent } from './paciente-vista-cuadricula/pa
 import { PacienteComponent } from './paciente.component';
 import { ExpedienteConsumoMedicamentoModule } from './expediente-consumo-medicamento/expediente-consumo-medicamento.module';
 import { GestionAsistenteModule } from './gestion-asistente/gestion-asistente.module';
-import { ChevronDown, Filter, LucideAngularModule, Plus, Search, Tally1 } from 'lucide-angular';
+import { ChevronDown, Download, Eye, Filter, LucideAngularModule, Pen, Plus, Search, Tally1, Trash2 } from 'lucide-angular';
 
 @NgModule({
   declarations: [
@@ -38,7 +38,7 @@ import { ChevronDown, Filter, LucideAngularModule, Plus, Search, Tally1 } from '
     ExpedienteTratamientoModule,
     ExpedienteConsumoMedicamentoModule,
     GestionAsistenteModule,
-    LucideAngularModule.pick({Filter, Tally1, Plus, ChevronDown, Search}),
+    LucideAngularModule.pick({Filter, Tally1, Plus, ChevronDown, Search, Eye, Pen, Trash2, Download}),
   ],
   entryComponents: [
     PacienteVistaCuadriculaComponent,
