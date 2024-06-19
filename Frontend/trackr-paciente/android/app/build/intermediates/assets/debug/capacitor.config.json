@@ -1,0 +1,11 @@
+{
+	"appId": "trackr.app",
+	"appName": "Oncotracker",
+	"webDir": "www",
+	"bundledWebRuntime": false,
+	"plugins": {
+		"CapacitorHttp": {
+			"enabled": true
+		}
+	}
+}
