@@ -49,9 +49,7 @@ export class AnswerMeetComponent implements OnInit {
     this.orientationService.lockLandscape();
 
     this.iniciarWebCam(); //iniciamos camara y microfono para que pueda ser iniciada una llamada en el iframe de jitsi
-    const cspValue = "default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;";
-    this.meta.addTag({ name: 'Content-Security-Policy', content: cspValue }); //Se le indica al template que confie en iframe
-
+    
     this.answerMeet(); //Metodo para crear una llamada con jitsi
   }
 
@@ -64,7 +62,7 @@ export class AnswerMeetComponent implements OnInit {
     //Configuración para la nueva sala
     const newRoomOptions = {
       roomName: this.meetName,
-      width: 900,
+      width: 800,
       height: 500,
       configOverwrite: { prejoinPageEnabled: false },
       interfaceConfigOverwrite: {
@@ -72,7 +70,7 @@ export class AnswerMeetComponent implements OnInit {
       },
       parentNode: document.querySelector('#jaas-container'),
       userInfo: {
-        displayName: "Oncotracker User"
+        displayName: "Trackr-user"
       }
 
     };
