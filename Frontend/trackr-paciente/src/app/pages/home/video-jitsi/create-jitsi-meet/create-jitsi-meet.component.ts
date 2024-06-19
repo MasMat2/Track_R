@@ -34,11 +34,12 @@ export class CreateJitsiMeetComponent implements OnInit {
   protected chats$: Observable<ChatDTO[]>;
   protected chats: ChatDTO[] = [];
 
-  private domain: string = "meet.jit.si"; // For self hosted use your domain
+  private domain: string = "8x8.vc"; // For self hosted use your domain
   private room: any;
   private options: any;
   private roomApi: any;
   private user: any;
+  private appIDJitsi = 'vpaas-magic-cookie-c25fa0da2cd344ba8d41a873768065ec';
 
   private idChat : string;
 
@@ -64,12 +65,8 @@ export class CreateJitsiMeetComponent implements OnInit {
 
     this.orientationService.lockLandscape();
     this.iniciarWebCam(); //iniciamos camara y microfono para que pueda ser iniciada una llamada en el iframe de jitsi
-    const cspValue = "default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;";
-    this.meta.addTag({ name: 'Content-Security-Policy', content: cspValue }); //Se le indica al template que confie en iframe
 
     this.createNewRoom(); //Metodo para crear una llamada con jitsi
-    // this.obtenerChats();
-    // this.obtenerMensajes();
   }
 
   //Metodo para inicializar el hub
@@ -95,15 +92,13 @@ export class CreateJitsiMeetComponent implements OnInit {
 
   createNewRoom(): void {
 
-    const newRoomName = 'trackr-'+this.idChat+'-'+Math.floor(Math.random() * 10000);
+    const numberCall = Math.floor(Math.random() * 10000);
+        
+    const newRoomName = this.appIDJitsi+'/'+'trackr-'+this.idChat+'-'+numberCall;
 
     const telefonoEmoji = "📞";
-    this.mandarMensajeLlamada(telefonoEmoji+' Te espero la sala '+newRoomName);
+    this.mandarMensajeLlamada(telefonoEmoji+' Te espero la sala '+'trackr-'+this.idChat+'-'+numberCall);
 
-    //Crea la nueva URL utilizando la plantilla de cadenas
-    const newUrl = `intent://${this.domain}/${newRoomName}#Intent;scheme=org.jitsi.meet;package=org.jitsi.meet;end`;
-    window.location.assign(newUrl);
-    
     //Configuración para la nueva sala
     const newRoomOptions = {
       roomName: newRoomName,
@@ -113,7 +108,7 @@ export class CreateJitsiMeetComponent implements OnInit {
       interfaceConfigOverwrite: {
         //overwrite interface properties
       },
-      parentNode: document.querySelector('#jitsi-new-meet-iframe'),
+      parentNode: document.querySelector('#jaas-container'),
       userInfo: {
         displayName: "Trackr-user"
       }
@@ -133,9 +128,6 @@ export class CreateJitsiMeetComponent implements OnInit {
       audioMuteStatusChanged: this.handleMuteStatus,
       videoMuteStatusChanged: this.handleVideoStatus
     });
-
-    console.log('Nueva sala creada:', newRoomName);
-
   }
 
   mandarMensajeLlamada(mensajeLlamada : string): void{
