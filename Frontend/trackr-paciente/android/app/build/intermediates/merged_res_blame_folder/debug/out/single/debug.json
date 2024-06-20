@@ -20,10 +20,6 @@
         "source": "trackr.app-main-40:/drawable-land-hdpi/splash.png"
     },
     {
-        "merged": "trackr.app-merged_res-38:/drawable-anydpi-v24_ic_launcher_foreground.xml.flat",
-        "source": "trackr.app-pngs-34:/drawable-anydpi-v24/ic_launcher_foreground.xml"
-    },
-    {
         "merged": "trackr.app-merged_res-38:/drawable-port-mdpi_splash.png.flat",
         "source": "trackr.app-main-40:/drawable-port-mdpi/splash.png"
     },
@@ -110,6 +106,10 @@
     {
         "merged": "trackr.app-merged_res-38:/mipmap-xhdpi_ic_launcher.png.flat",
         "source": "trackr.app-main-40:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "trackr.app-merged_res-38:/drawable-v24_ic_launcher_foreground.xml.flat",
+        "source": "trackr.app-main-40:/drawable-v24/ic_launcher_foreground.xml"
     },
     {
         "merged": "trackr.app-merged_res-38:/mipmap-mdpi_ic_launcher_round.png.flat",
