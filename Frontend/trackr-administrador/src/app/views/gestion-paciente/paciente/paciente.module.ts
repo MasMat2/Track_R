@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { TableModule } from 'primeng/table';
@@ -16,12 +16,16 @@ import { PacienteVistaCuadriculaComponent } from './paciente-vista-cuadricula/pa
 import { PacienteComponent } from './paciente.component';
 import { ExpedienteConsumoMedicamentoModule } from './expediente-consumo-medicamento/expediente-consumo-medicamento.module';
 import { GestionAsistenteModule } from './gestion-asistente/gestion-asistente.module';
-import { ChevronDown, Download, Eye, Filter, LucideAngularModule, Pen, Plus, Search, Tally1, Trash2 } from 'lucide-angular';
+import { ChevronDown, Download, Eye, Filter, LucideAngularModule, Pen, Plus, Search, Tally1, Trash2, X } from 'lucide-angular';
+import { CapitalizePipe } from 'src/app/shared/pipes/capitalize.pipe';
+import { MAT_RIPPLE_GLOBAL_OPTIONS, MatRippleModule, RippleGlobalOptions } from '@angular/material/core';
+
 
 @NgModule({
   declarations: [
     PacienteComponent,
     PacienteVistaCuadriculaComponent,
+    CapitalizePipe
   ],
   imports: [
     SharedModule,
@@ -38,13 +42,16 @@ import { ChevronDown, Download, Eye, Filter, LucideAngularModule, Pen, Plus, Sea
     ExpedienteTratamientoModule,
     ExpedienteConsumoMedicamentoModule,
     GestionAsistenteModule,
-    LucideAngularModule.pick({Filter, Tally1, Plus, ChevronDown, Search, Eye, Pen, Trash2, Download}),
+    LucideAngularModule.pick({Filter, Tally1, Plus, ChevronDown, Search, Eye, Pen, Trash2, Download, X}),
+    MatRippleModule
   ],
   entryComponents: [
     PacienteVistaCuadriculaComponent,
     ExpedienteFormularioComponent,
   ],
   exports: [],
-  providers: [],
+  providers: [ 
+    { provide: LOCALE_ID, useValue: 'es-MX'}
+  ],
 })
 export class PacienteModule {}
