@@ -1,4 +1,5 @@
-﻿using TrackrAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using TrackrAPI.Models;
 
 namespace TrackrAPI.Repositorys.Archivos;
 
@@ -27,6 +28,13 @@ public class ArchivoRepository : Repository<Archivo>, IArchivoRepository
                       .Where(x => x.IdUsuario == idUsuario && x.EsFotoPerfil == true)
                       .OrderBy(x => x.FechaRealizacion)
                       .LastOrDefault();
+    }
+   public Task<Archivo?> ObtenerImagenUsuarioAsync(int idUsuario)
+    {
+        return context.Archivo
+                      .Where(x => x.IdUsuario == idUsuario && x.EsFotoPerfil == true)
+                      .OrderBy(x => x.FechaRealizacion)
+                      .LastOrDefaultAsync();
     }
 
 }

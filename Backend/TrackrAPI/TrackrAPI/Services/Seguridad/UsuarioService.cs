@@ -912,6 +912,21 @@ namespace TrackrAPI.Services.Seguridad
 
 
         }
+        public async Task<string> ObtenerBytesImagenUsuario(int idUsuario){
+            
+            string filePath;
+
+            var archivo = await _archivoRepository.ObtenerImagenUsuarioAsync(idUsuario);
+
+            var imgPath = archivo?.ArchivoUrl ?? Path.Combine("Archivos", "Usuario", "default-user.jpg");
+            var mimeType = archivo?.ArchivoTipoMime ?? "image/jpg";
+            var imagenPerfilBase64 = _sftpService.DownloadFileAsBase64(imgPath);
+            var imagenPerfil = $"data:{mimeType};base64,{imagenPerfilBase64}";
+        
+            return imagenPerfil;
+
+
+        }
 
     }
 }

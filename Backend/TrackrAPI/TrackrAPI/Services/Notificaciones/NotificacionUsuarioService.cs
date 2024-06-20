@@ -41,9 +41,9 @@ public class NotificacionUsuarioService
         return _notificacionUsuarioRepository.ConsultarPorPaciente(idUsuario);
     }
 
-    public IEnumerable<NotificacionDoctorDTO> ConsultarPorDoctor(int idUsuario)
+    public async Task<IEnumerable<NotificacionDoctorDTO>> ConsultarPorDoctor(int idUsuario)
     {
-        return _notificacionUsuarioRepository.ConsultarPorDoctor(idUsuario);
+        return await _notificacionUsuarioRepository.ConsultarPorDoctor(idUsuario);
     }
 
     public NotificacionUsuarioDto Agregar(int idNotificacion, int idUsuario)
