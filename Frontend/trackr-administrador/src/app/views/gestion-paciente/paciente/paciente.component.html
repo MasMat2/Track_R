@@ -14,15 +14,11 @@
         </div>
       </div>
       <div *ngIf="paciente">
-        <div class="bg-white d-flex align-items-center gap-2">
-          <div class="img-container">
-            <img
-              [src]="
-                paciente.imagenBase64 != undefined || null
-                  ? (paciente.imagenBase64 | urlImagen : paciente.tipoMime)
-                  : 'assets/img/default-user.jpg'
-              "
-            />
+          <div class="img-contenedor">
+            <img [src]="paciente.imagenBase64 != undefined || null
+                              ? (paciente.imagenBase64)
+                              : 'assets/img/default-user.jpg'
+                          " />
           </div>
           <div class="bg-white">
             <h1 class="titulo">
