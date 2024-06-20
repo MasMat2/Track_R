@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ChatDTO } from '@dtos/chats/chat-dto';
 import { ChatHubServiceService } from '@services/chat-hub-service.service';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { ChatMensajeHubService } from '../../shared/services/chat-mensaje-hub.service';
 import { ChatMensajeDTO } from '@dtos/chats/chat-mensaje-dto';
 import { ActivatedRoute } from '@angular/router';
@@ -28,10 +28,11 @@ export class ChatComponent {
   constructor(
     private ChatHubServiceService:ChatHubServiceService,
     private chatMensajeHubService:ChatMensajeHubService,
-    private route:ActivatedRoute
+    private route:ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
+    this.obtenerId();
     this.obtenerChats();
     //this.obtenerMensajes();
   }
@@ -48,8 +49,8 @@ export class ChatComponent {
   }
 
   obtenerChats(){
-    this.chats$ = this.ChatHubServiceService.chat$
-    this.chats$.subscribe(res => {
+    //this.chats$ = this.ChatHubServiceService.chat$
+    this.ChatHubServiceService.chat$.subscribe(res => {
       this.chats = res;
       this.obtenerUltimoMensaje();
       this.obtenerMensajes();
@@ -57,19 +58,12 @@ export class ChatComponent {
   }
 
   obtenerMensajes(){
-    this.chatMensajes$ = this.chatMensajeHubService.chatMensaje$
-
-    this.chatMensajes$.subscribe(res =>{
+    //TODO:no descargar los mensajes hasta entrar al chat
+    //this.chatMensajes$ = this.chatMensajeHubService.chatMensaje$;
+    
+    this.chatMensajeHubService.chatMensaje$.subscribe(res =>{
       this.mensajes = res;
       this.obtenerUltimoMensaje();
-      this.obtenerId();
-      // this.route.params.subscribe(params => {
-      //   const idChat = Number(params['id']);
-      //   if(idChat !== undefined){
-      //     this.idChatSeleccionado = idChat;
-      //     this.obtenerChatSeleccionado(idChat);
-      //   }
-      // })
     })
   }
 

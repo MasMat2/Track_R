@@ -1,135 +1,181 @@
-<div class="row">
-    <div class="col-1" style="display: flex; flex-direction: row; justify-content: flex-end; align-items: center;">
-        <img 
-          class="avatar"
-          [src]="
-          imagenChat != ''
-            ? (imagenChat | urlImagen : tipoMime)
-            : 'assets/img/default-user.jpg'
-            " alt=""> 
-      </div>
-    <div class="col-8" style="display: flex; flex-direction: row; justify-content: flex-start; align-items: center;">
-        <div class="mt-3"><h2 style="font-weight: normal;">{{tituloChat}}</h2></div>
-    </div>
-    <!-- <div class="col" *ngIf="personas.length > 2">
-        <ng-select
-            name="padecimientoSelect"
-            [multiple]="true"
-            [items]="personas"
-            bindLabel="nombre"
-            bindValue="idUsuario"
-           [(ngModel)]="idPersonas"
-            >
-          </ng-select>
-    </div> -->
-
-    <div class="col-3" style="display: flex; flex-direction: row; justify-content: flex-end; align-items: center;">
-        
-            <button class="btn" (click)="eliminarChat()"  style="display: flex; flex-direction: row; justify-content: center; align-items: center; color: red;"> <mat-icon>delete</mat-icon> Eliminar chat</button>
-          
-    </div>
-</div>
-
-<hr>
-
-<div class="absolute">
-    <div #scrollContainer class="listado">
-        <div *ngFor="let mensaje of mensajes">
-            <div class="message user" *ngIf="mostrarMensaje(mensaje.idPersona)">
-                <div class="message-bubble">
-                    {{mensaje.mensaje}} <br>
-                    <button class="btn btn-1" (click)="clickArchivo(mensaje.idArchivo)" *ngIf="mensaje.idArchivo != 0">
-                        <i class="fa fa-file" style="font-size: 24px;"></i> {{mensaje.archivoNombre}}
-                    </button>
-                    <br>
-                    {{imprimirFecha(mensaje.fecha)}}
-                </div>
-            </div>
-            <div class="message other" *ngIf="!mostrarMensaje(mensaje.idPersona)">
-                <div class="message-bubble" (click)="validarMeet(mensaje.mensaje)">
-                    <div class="nombre">{{mensaje.nombrePersona}}</div>
-                    {{mensaje.mensaje}} <br>
-                    <button class="btn" (click)="clickArchivo(mensaje.idArchivo)" *ngIf="mensaje.idArchivo != 0">
-                        <i class="fa fa-file" style="font-size: 24px;"></i> {{mensaje.archivoNombre}}
-                    </button>
-                    <br>
-                    {{imprimirFecha(mensaje.fecha)}}
-                </div>
-            </div>
+<div class="contenedor-principal">
+  <div class="card">
+    <div class="header">
+      <div class="contenido-header">
+        <div class="slot-start">
+          <div id="foto-perfil">
+            <img 
+              class="avatar" 
+              [src]="imagenChat != ''
+              ? (imagenChat | urlImagen : tipoMime)
+              : 'assets/img/svg/avatar-placeholder.svg'" 
+              alt=""
+            />
+          </div>
+          <div class="titulo">
+            <span>{{ tituloChat }}</span>
+          </div>
         </div>
+        <div class="slot-end">
+          <div class="botones">
+            <button 
+              id="eliminar-chat" 
+              type="button" 
+              mat-flat-button 
+              (click)="eliminarChat()">
+              <i-lucide name="trash-2" size="24"></i-lucide>
+              Eliminar chat
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-    
-    
-<hr>
-    <div class="final">
-        <div class="form-group">
-            <div class="row" *ngIf="isAudio && !archivo">
-                <div class="col-2">
-                  <button class="btn"><i class="fa fa-microphone" style="font-size: 24px;" (click)="grabar()"></i></button>
+    <div class="card-content">
+      <div #scrollContainer class="lista-mensajes">
+        <div
+          class="row-mensaje"
+          *ngFor="let mensaje of mensajes"
+          [ngClass]="esMensajeMio(mensaje.idPersona) ? 'mio' : 'otra-persona'"
+        >
+          <div
+            class="bubble"
+            [ngClass]="esMensajeMio(mensaje.idPersona) ? 'mio' : 'otra-persona'"
+          >
+            <div class="bubble-content">
+              <div class="mensaje">
+                <span>{{ mensaje.mensaje }}</span>
+              </div>
+              <div class="adjunto" *ngIf="hayAdjuntoEnMensaje(mensaje)">
+                <div class="audio" *ngIf="esAudio(mensaje)">
+                  <app-audio-wave
+                    [color]="setColorAudio(mensaje.idPersona)"
+                    [idArchivo]="mensaje.idArchivo"
+                    [height]="36"
+                    [width]="132"
+                    (isAudioPlaying)="onAudioPlay($event)"
+                  ></app-audio-wave>
                 </div>
-                <div class="col-2">
-                  <button class="btn"><i class="fa fa-stop" style="font-size: 24px;" (click)="detenerGrabacion()"></i></button>
-                </div>
-                <div class="col-8">
-                  <audio controls [src]="audio"></audio>
+                <div class="archivo" *ngIf="!esAudio(mensaje)" (click)="onVerArchivo(mensaje)">
+                  <div id="contenido-archivo">
+                    <i-lucide class="icono" name="file" size="16"></i-lucide>
+                    <span class="nombre-archivo">{{ mensaje.archivoNombre }}</span>
+                  </div>
                 </div>
               </div>
-
-            <div class="row">
-
-                <div class="col-1">
-                    <button class="btn" (click)="openFileInput()"><i class="fa fa-file" style="font-size: 24px;"></i></button>
-                    <input type="file" id="fileInput" #fileInput style="display: none" (change)="onFileSelected($event)" />
-                    <!-- <input type="file" class="fa fa-file" name="" id="" (change)="onFileSelected($event)"> -->
-                </div>
-
-                
-
-                <div class="col-10" *ngIf="archivo">
-                    {{archivo?.name}}
-                </div>
-                <div class="col-1" (click)="eliminarArchivo()" *ngIf="archivo">
-                    <button class="btn"><i class="fa fa-trash" style="font-size: 24px;"></i></button>
-                </div>
-                
-
-                <div class="col-1">
-                    <button class="btn"><i class="fa fa-microphone" style="font-size: 24px;" (click)="changeAudio()"></i></button>
-                </div>
-
-                <div class="col-9">
-                    <!-- <label class="label-input required-label" style="color: gray;" >Mensaje</label> -->
-                    <div>
-                    <textarea
-                        #descripcion="ngModel"
-                        [(ngModel)]="msg"
-                        name="mensaje"
-                        class="form-control"
-                        type="text"
-                        maxlength="800"
-                        autocomplete="off"
-                        style="width: 100%;"
-                        rows="1"
-                        required
-                        (keyup.enter)="enviarMensaje()"
-                    ></textarea>
-                    <!-- <div *ngIf="(descripcion.errors?.['required'] && descripcion.touched )" class="error">
-                        La descripción es requerida
-                    </div> -->
-                    </div>
-                </div>
-    
-                <div class="col-1">
-                    <button
-                    type="submit"
-                    class="btn"
-                    (click)="enviarMensaje()"
-                    [disabled]="msg == '' || msg == undefined"
-                    >
-                        <i class="fa fa-paper-plane" style="font-size: 24px;"></i> 
-                    </button>
-                </div>
+            </div>
+            <div class="bubble-footer">
+              <div>
+                <span>{{ mensaje.fecha | date: "MMMM d, y 'a las' h:mm a" : '' : 'es-MX' }}</span>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
     </div>
+    <div class="footer">
+      <div class="adjunto-input" *ngIf="hayAdjuntoAgregado()">
+        <div class="archivo" *ngIf="archivo">
+          <div class="contenedor-archivo">
+            <i-lucide class="icono" name="file" size="20"></i-lucide>
+            <span class="nombre-archivo">{{archivo?.name}}</span>
+          </div>
+          <div class="boton-eliminar">
+            <button mat-icon-button (click)="eliminarArchivo()">
+              <i-lucide name="trash-2" size="24"></i-lucide>
+            </button>
+          </div>
+        </div>
+        <div class="audio" *ngIf="audio2">
+          <div class="contenedor-audio">
+            <audio controls [src]="audio2"></audio>
+            <div class="boton-eliminar">
+              <button mat-icon-button (click)="eliminarAudio()">
+                <i-lucide name="trash-2" size="24"></i-lucide>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="contenido-footer">
+        <div class="slot-start">
+          <div class="botones" *ngIf="!grabacionIniciada">
+            <button type="button" mat-icon-button (click)="openFileInput()">
+              <i-lucide name="file" size="24"></i-lucide>
+            </button>
+            <input
+              type="file"
+              id="fileInput"
+              #fileInput
+              style="display: none"
+              (change)="onFileSelected($event)"
+            />
+          </div>
+        </div>
+        <div class="user-input">
+          <div class="custom-textarea-container" *ngIf="!grabacionIniciada">
+            <textarea
+              cdkTextareaAutosize
+              cdkAutosizeMaxRows="5"
+              #descripcion="ngModel"
+              [(ngModel)]="msg"
+              name="mensaje"
+              id="message-textarea"
+              type="text"
+              maxlength="800"
+              autocomplete="off"
+              required
+              (keyup.enter)="enviarMensaje()"
+              onchange="console.log(msg)">
+            </textarea>
+          </div>       
+        </div>
+        <div class="slot-end">
+          <div class="contenedor-grabando-audio" *ngIf="grabacionIniciada">
+            <div class="botones">
+              <button
+               id="cancelar-grabacion" 
+               type="button" 
+               mat-icon-button
+               *ngIf="grabacionIniciada" 
+               (click)="cancelarGrabacion()">
+                <i-lucide name="trash-2" size="24"></i-lucide>
+              </button>
+            </div>
+            <div class="indicador">
+              <i-lucide class="icono" name="mic" size="16"></i-lucide>
+              <span id="duracion" *ngIf="timer$ | async">
+                {{duracionAudio}}
+              </span>
+            </div>
+          </div>
+          <div class="botones">
+            <button
+              id="enviar-mensaje" 
+              type="button" 
+              mat-icon-button
+              *ngIf="sePuedeEnviarMensaje()"
+              (click)="enviarMensaje()">
+              <i-lucide name="send" size="24"></i-lucide>
+            </button>
+            <button
+              id="detener-grabacion" 
+              type="button" 
+              mat-icon-button
+              *ngIf="grabacionIniciada"
+              (click)="detenerGrabacion()">
+              <i-lucide name="circle-stop" size="24"></i-lucide>
+            </button>
+            <button 
+              id="iniciar-grabacion" 
+              type="button" 
+              mat-icon-button
+              *ngIf="!sePuedeEnviarMensaje() && !grabacionIniciada"
+              (click)="grabar()">
+              <i-lucide name="mic" size="24"></i-lucide>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

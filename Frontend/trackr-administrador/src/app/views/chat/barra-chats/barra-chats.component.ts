@@ -14,7 +14,6 @@ export class BarraChatsComponent {
   @Input() ultmoMensajes: string[];
 
   constructor(private modal:BsModalService){
-    console.log(this.chats)
   }
 
   enviarIdChat(idChat:number){
