@@ -7,6 +7,7 @@ using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Archivos;
 using TrackrAPI.Repositorys.GestionExpediente;
+using TrackrAPI.Services.Seguridad;
 
 namespace TrackrAPI.Repositorys.Notificaciones;
 
@@ -14,10 +15,15 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
 {
     private readonly IExpedienteConsumoMedicamentoRepository _expedienteConsumoMedicamentoRepository;
     private readonly IArchivoRepository _archivoRepository;
-    public NotificacionUsuarioRepository(TrackrContext context, IExpedienteConsumoMedicamentoRepository expedienteConsumoMedicamentoRepository, IArchivoRepository archivoRepository) : base(context)
+    private readonly UsuarioService _usuarioService;
+    public NotificacionUsuarioRepository(TrackrContext context,
+                                         IExpedienteConsumoMedicamentoRepository expedienteConsumoMedicamentoRepository, 
+                                         IArchivoRepository archivoRepository,
+                                         UsuarioService usuarioService) : base(context)
     {
         _expedienteConsumoMedicamentoRepository = expedienteConsumoMedicamentoRepository;
         _archivoRepository = archivoRepository;
+        _usuarioService = usuarioService;
     }
 
     private IQueryable<NotificacionUsuario> ConsultarPorUsuario(int idUsuario)
@@ -46,7 +52,7 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
             ));
     }
 
-    public IEnumerable<NotificacionDoctorDTO> ConsultarPorDoctor(int idUsuario)
+    public async Task<IEnumerable<NotificacionDoctorDTO>> ConsultarPorDoctor(int idUsuario)
     {
         var notificacionesUsuario = ConsultarPorUsuario(idUsuario)
             .Include(n => n.IdNotificacionNavigation.NotificacionDoctor)
@@ -54,9 +60,15 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
             .Include(n => n.IdNotificacionNavigation)
             .ThenInclude(n => n.IdPersonaNavigation)
             .AsEnumerable();
-
-        return notificacionesUsuario
-            .Select(nu => new NotificacionDoctorDTO(
+    
+        var notificacionesUsuarioList = notificacionesUsuario.ToList();
+    
+        var notificacionesDoctorDto = new List<NotificacionDoctorDTO>();
+    
+        foreach (var nu in notificacionesUsuarioList)
+        {
+            var imagenUsuario = await ObtenerImagenUsuario((int)nu.IdNotificacionNavigation.IdPersona);
+            notificacionesDoctorDto.Add(new NotificacionDoctorDTO(
                 nu.IdNotificacionUsuario,
                 nu.IdNotificacion,
                 nu.IdUsuario,
@@ -66,10 +78,13 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
                 nu.Visto,
                 nu.IdNotificacionNavigation.IdTipoNotificacion,
                 nu.IdNotificacionNavigation.NotificacionDoctor.FirstOrDefault()?.IdPaciente ?? 0,
-                this.ObtenerImagenUsuario(nu?.IdNotificacionNavigation?.IdPersona != null ? (int)nu?.IdNotificacionNavigation?.IdPersona : 0, !string.IsNullOrEmpty(nu?.IdNotificacionNavigation?.IdPersonaNavigation?.ImagenTipoMime) ? nu?.IdNotificacionNavigation?.IdPersonaNavigation?.ImagenTipoMime : null),
+                imagenUsuario,
                 nu.IdNotificacionNavigation.IdChat,
                 nu.IdNotificacionNavigation.IdTipoNotificacionNavigation.Clave
             ));
+        }
+    
+        return notificacionesDoctorDto;
     }
 
     public void MarcarComoVistas(List<int> idNotificacionUsuario)
@@ -92,25 +107,9 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
         context.SaveChanges();
     }
 
-    public string? ObtenerImagenUsuario(int IdUsuario, string ImagenTipoMime)
+    public async Task<string?> ObtenerImagenUsuario(int IdUsuario)
     {
 
-        if (!string.IsNullOrEmpty(ImagenTipoMime))
-        {
-            var img = _archivoRepository.ObtenerImagenUsuario(IdUsuario);
-            if (img != null)
-            {
-                return "data:" + img.ArchivoTipoMime + ";base64," + Convert.ToBase64String(img.Archivo1);
-            }
-
-            // string filePath = $"Archivos/Usuario/{IdUsuario}{MimeTypeMap.GetExtension(ImagenTipoMime)}";
-            // if (File.Exists(filePath))
-            // {
-            //     byte[] imageArray = File.ReadAllBytes(filePath);
-            //     var ImagenBase64 = Convert.ToBase64String(imageArray);
-            //     return "data:"+ImagenTipoMime+";base64,"+ImagenBase64;
-            // }
-        }
-        return null;
+        return await _usuarioService.ObtenerBytesImagenUsuario(IdUsuario);
     }
 }

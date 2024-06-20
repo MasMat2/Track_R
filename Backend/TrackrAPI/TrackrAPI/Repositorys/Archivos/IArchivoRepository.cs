@@ -8,5 +8,6 @@ public interface IArchivoRepository : IRepository<Archivo>
     public string GetFileName(int idArchivo);
     public string GetFileMime(int idArchivo);
     public Archivo? ObtenerImagenUsuario(int idUsuario);
+    public Task<Archivo?> ObtenerImagenUsuarioAsync(int idUsuario);
 }
 
