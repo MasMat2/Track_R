@@ -2,8 +2,8 @@ import { HealthConnect, Mass, Pressure, Record } from 'capacitor-health-connect-
 import { StoredRecord, RecordType, HealthConnectAvailabilityStatus, GetRecordsOptions, sample} from '../../pages/home/dashboard/interfaces/healthconnect-interfaces';
 
 const recordTypeSteps: RecordType = "Steps";
-const readPermissions: RecordType[] = ["Weight", "Steps", "BloodPressure", "HeartRate", "SleepSession"];
-const writePermissions: RecordType[] = ["Weight", "Steps", "BloodPressure", "HeartRate", "SleepSession"];
+const readPermissions: RecordType[] = ["Weight", "Steps", "BloodPressure"];
+const writePermissions: RecordType[] = ["Weight", "Steps", "BloodPressure"];
 
 
 export const requestPermissions = async (): Promise<{ grantedPermissions: string[]; hasAllPermissions: boolean; }> => {
@@ -224,7 +224,7 @@ export const checkHealthPermissions = async (): Promise<{ grantedPermissions: st
             read: readPermissions,
             write: writePermissions
         }
-
+        
         return await HealthConnect.checkHealthPermissions(options);
 
     } catch (error) {
