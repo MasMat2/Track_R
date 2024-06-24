@@ -1,23 +1,14 @@
-
-<div class="contenedor">
+<div class="contenedor-principal">
     <div class="row">
-        <div class="col-4">
-            <div class="rellenar-div">
+        <div class="col-md-4 no-padding padding-derecha" style="height: 100%;">
+            <div class="barra-chats">
                 <app-barra-chats class="overflow" [chats]="chats" (idChatPadre)="obtenerChatSeleccionado($event)"></app-barra-chats>
             </div>
         </div>
-    
-        <div class="col-8">
-            <!-- <div class="row">
-                <app-crear-chat></app-crear-chat>
-            </div> -->
-    
-             <div class="row">
-                <div class="mensajes">
-                    <app-mensajes *ngIf="clickEnChat" [mensajes]="mensajesChatSeleccionado" [idChat]="idChatSeleccionado" [tituloChat]="tituloChatSeleccionado" [imagenChat]="imagenChatSeleccionado" [tipoMime]="tipoMimeSeleccionado"></app-mensajes>
-                </div>
-                
-            </div> 
+        <div class="col-md-8 no-padding padding-izquierda" style="height: 100%;">
+            <div class="mensajes">
+                <app-mensajes *ngIf="clickEnChat" [mensajes]="mensajesChatSeleccionado" [idChat]="idChatSeleccionado" [tituloChat]="tituloChatSeleccionado" [imagenChat]="imagenChatSeleccionado" [tipoMime]="tipoMimeSeleccionado"></app-mensajes>
+            </div>
         </div>
     </div>
 </div>

@@ -1,115 +1,87 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav mode="side" [opened]="mostrarSidebar" position="end" [fixedInViewport]="true">
     <div class="container-fluid">
-      <div class="d-flex justify-content-end">
-        <div class="button">
 
-          <button
-            type="button"
-            aria-label="Close"
-            (click)="toggleSidebar()"
-          >
-            <i class="far fa-times-circle"></i>
+      <div class="header-paciente">
+          <button type="button" class="btn" (click)="toggleSidebar()">
+            <lucide-icon size="24" name="x"></lucide-icon>
           </button>
-        </div>
       </div>
+
       <div *ngIf="paciente">
-        <div class="bg-white d-flex align-items-center gap-2">
-          <div class="img-container">
-            <img
-              [src]="
-                paciente.imagenBase64 != undefined || null
-                  ? (paciente.imagenBase64 | urlImagen : paciente.tipoMime)
-                  : 'assets/img/default-user.jpg'
-              "
-            />
+        <div class="info-paciente">
+          <div class="img-contenedor">
+            <img [src]="paciente.imagenBase64 != undefined || null
+                              ? (paciente.imagenBase64)
+                              : 'assets/img/default-user.jpg'
+                          " />
           </div>
-          <div class="bg-white">
-            <div style="font-weight: 400; font-size: medium;">
-              Paciente
-            </div>
+          <div class="nombre-container">
+            <h1 class="nombre">
+              Andrea Paola Bazaldúa Hernández
+            </h1>
+            <p class="edad"> {{paciente.genero}} | {{paciente.edad + ' años'}} </p>
+          </div>
+          
             <div
               style="
                 font-weight: 300;
                 font-size: larger;">
-              {{ paciente.nombreCompleto }}
             </div>
-          </div>
         </div>
 
-        <div class="text-container">
-          <div class="datos">
-            <div class="font-weight-small mt-3"  style="font-size: 0.9em" *ngIf="paciente.genero">
-             {{paciente.genero}} 
-            </div>
-            <div class="font-weight-bold mt-2" style="font-size: .9rem">
-              {{ paciente.edad + " años" }}
-            </div>
-            <div class="font-weight-light mt-2" style="font-size: 0.6rem">
-              <span *ngIf="paciente.colonia">{{ paciente.colonia }}, </span>
-            </div>
-            <div class="font-weight-light mt-2" style="font-size: 0.6rem">
-              <span *ngIf="paciente.ciudad">{{ paciente.ciudad }}, </span>
-              <span *ngIf="paciente.estado">{{ paciente.estado }}</span>
-            </div>
-          </div>
-        </div>
-        <div
-          class="padecimientos mt-3 bg-white"
-          *ngIf="paciente.padecimientos && paciente.padecimientos.length > 0"
-        >
-          <div class="p-3">
-            <label
-              class="font-weight-normal"
-              style="
-                font-weight: 400;
-                font-size: .9rem;
-                color: gray;
-              "
-            >
+        <section class="padecimientos" *ngIf="paciente.padecimientos && paciente.padecimientos.length > 0">
+            <h2>
               Padecimientos
-            </label>
-            <ul>
-              <li *ngFor="let padecimiento of paciente.padecimientos">
-                <div>
-                  <label
-                  class="font-weight-normal"
-                  style="
-                    font-weight: 300;
-                    font-size: .7rem;
-                    color: gray;
-                  "
-                    >{{ padecimiento.nombre }} -- Desde
-                    {{ padecimiento.fechaDiagnostico | date : "yyyy" }}</label
-                  >
-                </div>
-              </li>
-            </ul>
+            </h2>
+              <div *ngFor="let padecimiento of paciente.padecimientos">
+                <article class="padecimiento">
+                  <div class="purple-dot-container">
+                    <div class="purple-dot"></div>
+                  </div>
+                  <div class="info-padecimiento">
+                    <h3>{{ padecimiento.nombre }}</h3>
+                    <p>Desde {{ padecimiento.fechaDiagnostico | date : "MMMM yyyy" | capitalize }}</p>
+                  </div>
+                </article>
+              </div>
+        </section>
+        <section class="valoresFueraRango">
+          <h2>
+            Valores fuera de rango
+          </h2>
+
+          <div class="buttons">
+            <button class="secondary">
+              Buscar por fecha
+            </button>
+
+            <button class="secondary">
+                Orden
+            </button>
           </div>
-        </div>
+
+          <div class="valores">
+            <div matRipple class="valor" *ngFor="let muestra of valoresFueraRango">
+              <div class="valor-info">
+                <h3>
+                  <span id="valor">{{muestra.valorRegistrado}}</span>
+                  <span id="unidadMedida"> {{muestra.unidadMedida}}</span>
+                </h3>
+                <p>
+                  <span id="variable">{{muestra.variable}}</span>
+                  <span> &bull; </span>
+                  <span id="parametro">{{muestra.parametro}}</span>
+                </p>
+                <p>{{muestra.fechaHora | date: "MMMM d, y 'a las' h:mm a" : '' : 'es-MX' | capitalize}}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </div>
     </div>
-
-          <div class="p-3">
-            <label 
-              class="font-weight-normal"
-              style="
-              font-weight: 400;
-              font-size: .9rem;
-              color: gray;
-            ">Valores Fuera de Rango</label>
-            
-            <app-grid-general
-              [headerName]="HEADER_GRID"
-              [data]="valoresFueraRango"
-              [children]="columnsVariableFueraRango"
-              [disableDelete]="true"
-              [disableEdit]="true"
-              [disableXLS]="true"
-              
-            >
-            </app-grid-general>
-          </div>
+        
   </mat-sidenav>
   
   <mat-sidenav-content>
@@ -117,25 +89,38 @@
     
       <div class="titulo-contenedor-paciente">
         <h1 class="saludo">
-          Pacientes¿
+          Pacientes
         </h1>
-        <div class="row">
-          <div class="col-9">
-            <div>
-              <div>
-                <input type="text" class="form-control" style="width: 100%" placeholder="Buscar..." aria-label="Buscar"
+
+        <div class="botones">
+          <div id="buscar">
+                <input type="text" class="form-control" style="width: 100%" placeholder="Buscar" aria-label="Buscar"
                   (change)="filtrarPacientes($event)" [disabled]="!isVistaCuadricula" />
-    
-              </div>
-            </div>
           </div>
 
-          <div class="col-3">
-    
-            <div class="contenedor-agregar justify-content-start">
-              <button class="btn-agregar" (click)="agregar()">Agregar Paciente</button>
+
+          <div id="filtros">
+            <button>
+              <lucide-icon name="filter"></lucide-icon>
+              Filtros
+            </button>
+          </div>
+
+          <div id="agregar" class="dropdown">
+              <button  class="add-button">
+                <lucide-icon name="plus"></lucide-icon>
+                <span>
+                  Agregar...
+                </span>
+                <img src="../../../../assets/img/svg/bar-vertical.svg">
+                <lucide-icon name="chevron-down"></lucide-icon>
+              </button>
+              <div class="dropdown-content">
+                <a (click)="agregar()">Paciente</a>
+                <img src="../../../../assets/img/svg/bar-horizontal.svg">
+                <a (click)="agregarAsistente()">Asistente</a>
+              </div>
               <!-- <button class="btn-terceario" (click)="agregarAsistente()" *ngIf="esAsistente !== null">{{ esAsistente  ? 'Mis doctores' : 'Agregar asistentes'}}</button> -->
-            </div>
           </div>
         </div>
        
@@ -143,24 +128,16 @@
       </div>
 
 
-      <div class="row">
+      <div>
         <div class="col-12">
-          <ng-container *ngIf="isVistaCuadricula; else vistaLista">
+          <ng-container *ngIf="isVistaCuadricula">
             <app-paciente-vista-cuadricula
               [pacientes]="pacientesFiltrados"
               (event)="onGridClick($event)"
             >
             </app-paciente-vista-cuadricula>
           </ng-container>
-          <ng-template #vistaLista>
-            <app-grid-general
-              [headerName]="HEADER_GRID"
-              [data]="pacientes"
-              [children]="columns"
-              (event)="onGridClick($event)"
-            >
-            </app-grid-general>
-          </ng-template>
+        
         </div>
       </div>
     </div>

@@ -1,0 +1,22 @@
+<div class="contenedor-principal" [ngClass]="color">
+    <div class="controls" (click)="switchPlay()">
+        <div class="contenedor-icono">
+            <i 
+                class="fa fa-play icono-play" 
+                aria-hidden="true" 
+                *ngIf="!isPlaying">
+            </i>
+            <i 
+                class="fa fa-pause icono-play" 
+                aria-hidden="true" 
+                *ngIf="isPlaying">
+            </i>
+        </div>
+        <div class="duracion">
+            <span>{{duracionAudio}}</span>
+        </div>
+    </div>
+    <div class="contenedor-audio">
+        <div #waveform></div>
+    </div>
+</div>
