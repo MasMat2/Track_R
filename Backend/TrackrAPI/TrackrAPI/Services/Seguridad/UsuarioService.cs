@@ -459,7 +459,7 @@ namespace TrackrAPI.Services.Seguridad
 
         public IEnumerable<UsuarioDto> ConsultarAsistentes(int idCompania , int idUsuario)
         {
-            var asistentes = usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente);
+            var asistentes = usuarioRepository.ConsultarPorRol(GeneralConstant.ClaveRolAsistente, idCompania);
 
             var asistentesDoctorEnSesion = _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(idUsuario);
 
