@@ -11,22 +11,11 @@
       <change beforePath="$PROJECT_DIR$/.gradle/8.0.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0.2/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/assets/debug/public/8404.b6e8f9f63dedea99.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/assets/debug/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/assets/debug/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/compressed_assets/debug/out/assets/public/8404.b6e8f9f63dedea99.js.jar" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/compressed_assets/debug/out/assets/public/index.html.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/compressed_assets/debug/out/assets/public/index.html.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/mergeDebugAssets/merger.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/mergeDebugAssets/merger.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/public/8404.b6e8f9f63dedea99.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/assets/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/app/pages/home/dashboard/components/widgets/widget-frecuencia/widget-frecuencia.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../src/app/pages/home/dashboard/components/widgets/widget-frecuencia/widget-frecuencia.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/app/pages/home/dashboard/components/widgets/widget-pasos/widget-pasos.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../src/app/pages/home/dashboard/components/widgets/widget-pasos/widget-pasos.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/app/pages/home/dashboard/components/widgets/widget-peso/widget-peso.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../src/app/pages/home/dashboard/components/widgets/widget-peso/widget-peso.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/app/pages/home/dashboard/components/widgets/widget-sueno/widget-sueno.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../src/app/pages/home/dashboard/components/widgets/widget-sueno/widget-sueno.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/app/pages/home/dashboard/dashboard.page.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../src/app/pages/home/dashboard/dashboard.page.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/app/shared/utils/healthConect-util.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../src/app/shared/utils/healthConect-util.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
