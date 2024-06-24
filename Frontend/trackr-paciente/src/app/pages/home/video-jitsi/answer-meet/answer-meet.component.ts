@@ -93,10 +93,10 @@ export class AnswerMeetComponent implements OnInit {
   executeCommand(command: string) {
     this.api.executeCommand(command);
     if (command == 'hangup') {
-      this.localStream.getTracks().forEach(track => track.stop());
       this.router.navigate(['/home']);
       this.orientationService.lockPortrait();
       this.api.dispose();
+      this.localStream.getTracks().forEach(track => track.stop());
       this.api.remove();
 
       return;

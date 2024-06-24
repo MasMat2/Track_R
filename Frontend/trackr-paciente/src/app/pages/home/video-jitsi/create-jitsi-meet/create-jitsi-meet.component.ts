@@ -196,10 +196,10 @@ export class CreateJitsiMeetComponent implements OnInit {
   executeCommand(command: string) {
     this.roomApi.executeCommand(command);;
     if (command == 'hangup') {
-      this.localStream.getTracks().forEach(track => track.stop());
       this.router.navigate(['/home']);
       this.orientationService.lockPortrait();
       this.roomApi.dispose();
+      this.localStream.getTracks().forEach(track => track.stop());
       this.roomApi.remove();
       return;
     }
