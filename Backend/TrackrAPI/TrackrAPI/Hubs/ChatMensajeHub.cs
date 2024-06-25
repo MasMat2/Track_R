@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System.Transactions;
+using Microsoft.AspNetCore.SignalR;
 using TrackrAPI.Dtos.Chats;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Chats;
@@ -34,8 +35,10 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
 
     public async Task NuevoMensaje(ChatMensajeDTO mensaje)
     {
+        using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted })){
+
         mensaje.IdPersona = this.ObtenerIdUsuario();
-        int idArchivo = _chatMensajeService.NuevoMensaje(mensaje);
+        int idArchivo = await _chatMensajeService.NuevoMensaje(mensaje);
 
         var user = _usuarioService.ConsultarDto(mensaje.IdPersona);
         mensaje.NombrePersona = user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno;
@@ -45,7 +48,7 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
 
         foreach (var persona in idPersonas)
         {
-            Clients.User(persona.ToString()).NuevoMensaje(mensaje);
+            await Clients.User(persona.ToString()).NuevoMensaje(mensaje);
 
             var idAsistentes = _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(persona).Select(x => x.IdUsuario).ToList();
 
@@ -53,12 +56,14 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
             {
                 foreach (var asistente in idAsistentes)
                 {
-                    Clients.User(asistente.ToString()).NuevoMensaje(mensaje);
+                    await Clients.User(asistente.ToString()).NuevoMensaje(mensaje);
                 }
             }
         }
+        scope.Complete();
+        }
 
-        //await Clients.All.NuevoMensaje(mensaje);
+
     }
 
     public async Task AbandonarChat(int idChat)
