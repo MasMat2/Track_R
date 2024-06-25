@@ -25,6 +25,7 @@ import { addIcons } from 'ionicons';
 import { OnExit } from 'src/app/shared/guards/exit.guard';
 import { RouterModule } from '@angular/router';
 import { GeneroSelectorDto } from '@dtos/catalogo/genero-selector-dto';
+import { ChatPersonaService } from '@http/chat/chat-persona.service';
 
 @Component({
   selector: 'app-informacion-general',
@@ -61,6 +62,7 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
     private alertController: AlertController,
     private confirmacionCorreoService: ConfirmacionCorreoService,
     private generoService: GeneroService,
+    private chatPersonaService : ChatPersonaService
   ) {
     addIcons({
       'chevron-down': 'assets/img/svg/chevron-down.svg',
@@ -155,9 +157,10 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
     this.edadUsuario = edadObject.years + ' años ';
   }
 
-  protected reenviarConfirmacionCorreo(correoUsuario: string){
+  protected async reenviarConfirmacionCorreo(correoUsuario: string){
     this.emailsubmiting = true;
-    const confirmarCorreo: ConfirmarCorreoDto = { correo: correoUsuario, token: ""};
+    const idUsuario =  await lastValueFrom(this.chatPersonaService.obtenerIdUsuario());
+    const confirmarCorreo: ConfirmarCorreoDto = { correo: correoUsuario, token: "", idUsuario: idUsuario};
     this.confirmacionCorreoService.enviarCorreoConfirmacion(confirmarCorreo).subscribe({
       next: () => {
       },

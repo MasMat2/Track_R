@@ -26,7 +26,7 @@ namespace TrackrAPI.Controllers.Seguridad
         [HttpPost("enviarCorreoConfirmacion")]
         public void EnviarCorreoConfirmacion(ConfirmarCorreoDto correoUsuario)
         {
-            this._confirmacionCorreoService.ConfirmarCorreo(correoUsuario.Correo);
+            this._confirmacionCorreoService.ConfirmarCorreo(correoUsuario.Correo , correoUsuario.IdUsuario);
         }
 
     }

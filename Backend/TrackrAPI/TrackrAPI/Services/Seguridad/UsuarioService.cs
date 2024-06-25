@@ -377,7 +377,7 @@ namespace TrackrAPI.Services.Seguridad
                 usuarioLocacionService.Agregar(usuarioLocacion);
 
                 this._expedienteTrackrService.AgregarExpedienteNuevoUsuario(idUsuario);
-                this._confirmacionCorreoService.ConfirmarCorreo(usuario.Correo);
+                this._confirmacionCorreoService.ConfirmarCorreo(usuario.Correo,  idUsuario);
 
                 scope.Complete();
 
