@@ -1,7 +1,7 @@
 <app-modal-base [titulo]="titulo">
   <ng-template #modalBody>
     <div class="row">
-      <div class="col-md-6" style="min-height: 30vh;" *ngIf="!esAsistente; else fullWidthColumn" >
+      <div class="col-md-6" style="min-height: 30vh; height: 55vh;" *ngIf="!esAsistente; else fullWidthColumn" >
         <h2 class="text-center"> Mis asistentes </h2>
         <p-table
           class="primeng-table grid-cuadricula"
@@ -23,7 +23,7 @@
                 <img
                 [src]="
                   doctor.imagenBase64 != undefined
-                    ? (doctor.imagenBase64 | urlImagen : doctor?.tipoMime)
+                    ? (doctor.imagenBase64)
                     : 'assets/img/default-user.jpg'
                 "
               />
@@ -100,7 +100,7 @@
                 <img
                 [src]="
                   doctor.imagenBase64 != undefined
-                    ? (doctor.imagenBase64 | urlImagen : doctor?.tipoMime)
+                    ? (doctor.imagenBase64)
                     : 'assets/img/default-user.jpg'
                 "
               />
