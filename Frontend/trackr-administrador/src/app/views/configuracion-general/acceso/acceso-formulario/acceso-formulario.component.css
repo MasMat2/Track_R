@@ -28,11 +28,14 @@
   width: 100%;
 }
 
-.icono-acceso {
-  padding: 9px;
-  padding-left: 0;
-  font-size: 22px;
-  color: #741798;
+.muestra-icono-acceso{
+  height: 42px;
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+  .icono{
+    color: var(--primary-700);
+  }
 }
 
 .form-control-textarea {

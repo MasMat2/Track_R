@@ -1,23 +1,28 @@
-@import "../../../../src/theme/variables.scss";
-
-
-.rellenar-div{
-    height: 90vh;
-    background-color: var(--neutral-50);
+.row {
+  margin: 0 !important;
 }
 
-.mensajes{
-    min-height: 90vh;
-    background-color: var(--neutral-50);
+.no-padding {
+  padding: 0 !important;
+}
+.padding-izquierda {
+  padding-left: 16px !important;
+}
+.padding-derecha {
+  padding-right: 16px !important;
 }
 
-.contenedor{
-    
+.contenedor-principal {
+  height: 100%;
+  width: 100%;
+  padding: 24px 56px 36px 32px;
+  .row {
+    height: 100%;
+  }
 }
-
-.centrar{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+.barra-chats {
+  height: 100%;
+}
+.mensajes {
+  height: 100%;
 }

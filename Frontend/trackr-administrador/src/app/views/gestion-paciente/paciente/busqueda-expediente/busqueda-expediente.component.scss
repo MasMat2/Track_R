@@ -4,7 +4,7 @@
   }
   
   .textcolor {
-    color: #ff6c00;
+    color: var(--primary-700);
   }
   
   .seleccionable{
@@ -13,15 +13,15 @@
   }
   
   .seleccionable:hover {
-    background-color: #fff2cc;
+    background-color: var(--primary-100);
   }
   
   .par {
-    background-color: #ffffff;
+    background-color: var(--neutral-50);
   }
   
   .impar {
-    background-color: #e4e4e4;
+    background-color: var(--neutral-100);
   }
   
   .producto{
@@ -35,8 +35,9 @@
   
   .my-pagination::ng-deep .page-item.active .page-link {
     z-index: 1;
-    color: #FFFFFF;
-    background-color: #531c78 !important;
+    color: var(--neutral-50);
+    background-color: var(--primary-600) !important;
+    border: none !important;
   }
   
   .text-truncate-container{

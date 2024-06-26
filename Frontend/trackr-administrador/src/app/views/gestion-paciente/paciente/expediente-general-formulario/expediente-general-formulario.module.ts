@@ -9,7 +9,7 @@ import { BusquedaExpedienteComponent } from '../busqueda-expediente/busqueda-exp
 import { UsuarioFormularioModule } from 'src/app/views/configuracion-general/catalogo/usuario/usuario-formulario/usuario-formulario.module';
 import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
 import { MatButtonModule } from '@angular/material/button';
-import { Calendar, LucideAngularModule, Plus } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 
 @NgModule({
     declarations: [ExpedienteGeneralFormularioComponent],
@@ -30,7 +30,7 @@ import { Calendar, LucideAngularModule, Plus } from 'lucide-angular';
         BusquedaExpedienteModule,
         UsuarioFormularioModule,
         MatButtonModule,
-        LucideAngularModule.pick({Plus, Calendar})
+        LucideAngularModule
     ]
 })
 export class ExpedienteGeneralFormularioModule {}

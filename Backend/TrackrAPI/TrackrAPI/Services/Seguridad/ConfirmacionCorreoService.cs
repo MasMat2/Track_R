@@ -60,12 +60,12 @@ namespace TrackrAPI.Services.Seguridad
         
         }
 
-        public void ConfirmarCorreo(string correoUsuario)
+        public void ConfirmarCorreo(string correoUsuario, int idUsuario)
         {
             _usuarioValidatorService.ValidarCorreoNoExistente(correoUsuario);
 
             string clave = GenerarClaveConfirmacion();
-            var usuarioCompleto = _usuarioRepository.ConsultarPorCorreo(correoUsuario);
+            var usuarioCompleto = _usuarioRepository.Consultar(idUsuario);
 
             var confirmacionCorreo = new ConfirmacionCorreo
             {
@@ -76,13 +76,13 @@ namespace TrackrAPI.Services.Seguridad
 
             Agregar(confirmacionCorreo);
 
-            EnviarCorreo(usuarioCompleto.Correo, clave);
+            EnviarCorreo(usuarioCompleto.Correo, clave , idUsuario);
 
         }
         public bool ValidarConfirmarCorreo(ConfirmarCorreoDto datosConfirmacionDto)
         {
-            _usuarioValidatorService.ValidarConfirmarCorreo(datosConfirmacionDto);
-            Usuario usuario = _usuarioRepository.ConsultarPorUsername(_simpleAES.DecryptString(datosConfirmacionDto.Correo));
+            _usuarioValidatorService.ValidarExistencia(datosConfirmacionDto.IdUsuario);
+            Usuario usuario = _usuarioRepository.Consultar(datosConfirmacionDto.IdUsuario);
 
 
 
@@ -147,7 +147,7 @@ namespace TrackrAPI.Services.Seguridad
 
         }
 
-        public async void EnviarCorreo(string correoUsuario, string clave){
+        public async void EnviarCorreo(string correoUsuario, string clave, int idUsuario){
 
 
             string correoEncriptado = _simpleAES.EncryptToString(correoUsuario);
@@ -165,7 +165,7 @@ namespace TrackrAPI.Services.Seguridad
                     </div>
                     <hr style='border: none; border-bottom: 1px #FF6A00 solid; margin: 20px 0;'>
                     <p>Da clic en el siguiente link para confirmar tu correo:
-                        <a href='{urlFrontEnd}#/confirmar-correo?id={correoEncriptado}&tkn={clave}' target='_blank'>
+                        <a href='{urlFrontEnd}#/confirmar-correo?id={idUsuario}&tkn={clave}' target='_blank'>
                             Confirmar mi correo
                         </a>
                     </p>

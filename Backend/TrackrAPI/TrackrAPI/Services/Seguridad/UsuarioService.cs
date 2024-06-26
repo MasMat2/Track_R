@@ -377,7 +377,7 @@ namespace TrackrAPI.Services.Seguridad
                 usuarioLocacionService.Agregar(usuarioLocacion);
 
                 this._expedienteTrackrService.AgregarExpedienteNuevoUsuario(idUsuario);
-                this._confirmacionCorreoService.ConfirmarCorreo(usuario.Correo);
+                this._confirmacionCorreoService.ConfirmarCorreo(usuario.Correo,  idUsuario);
 
                 scope.Complete();
 
@@ -457,9 +457,9 @@ namespace TrackrAPI.Services.Seguridad
             usuarioRepository.Editar(usuario);
         }
 
-        public IEnumerable<UsuarioDto> ConsultarAsistentes(int idCompania , int idUsuario)
+        public async Task<IEnumerable<UsuarioDto>> ConsultarAsistentes(int idCompania , int idUsuario)
         {
-            var asistentes = usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente);
+            var asistentes = usuarioRepository.ConsultarPorRol(GeneralConstant.ClaveRolAsistente, idCompania);
 
             var asistentesDoctorEnSesion = _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(idUsuario);
 
@@ -468,20 +468,20 @@ namespace TrackrAPI.Services.Seguridad
 
             foreach (var asistente in asistentes)
             {
-                asistente.ImagenBase64 = ObtenerImagenUsuario(asistente.IdUsuario, asistente.ImagenTipoMime);
+                asistente.ImagenBase64 = await ObtenerBytesImagenUsuario(asistente.IdUsuario);
             }
 
             return asistentes;
         }
 
-        public IEnumerable<AsistenteDoctorDto> ConsultarAsistentePorDoctor(int idDoctor)
+        public async Task<IEnumerable<AsistenteDoctorDto>> ConsultarAsistentePorDoctor(int idDoctor)
         {
             var asistentes = _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(idDoctor);
 
             foreach (var asistente in asistentes)
             {
 
-                asistente.ImagenBase64 = ObtenerImagenUsuario(asistente.IdUsuario, asistente.ImagenTipoMime);
+                asistente.ImagenBase64 = await ObtenerBytesImagenUsuario(asistente.IdUsuario);
             }
 
             return asistentes;
@@ -909,6 +909,21 @@ namespace TrackrAPI.Services.Seguridad
             }
 
             return this._sftpService.DownloadFile(filePath);
+
+
+        }
+        public async Task<string> ObtenerBytesImagenUsuario(int idUsuario){
+            
+            string filePath;
+
+            var archivo = await _archivoRepository.ObtenerImagenUsuarioAsync(idUsuario);
+
+            var imgPath = archivo?.ArchivoUrl ?? Path.Combine("Archivos", "Usuario", "default-user.jpg");
+            var mimeType = archivo?.ArchivoTipoMime ?? "image/jpg";
+            var imagenPerfilBase64 = _sftpService.DownloadFileAsBase64(imgPath);
+            var imagenPerfil = $"data:{mimeType};base64,{imagenPerfilBase64}";
+        
+            return imagenPerfil;
 
 
         }

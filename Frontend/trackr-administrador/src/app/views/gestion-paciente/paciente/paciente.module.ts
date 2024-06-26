@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { TableModule } from 'primeng/table';
@@ -16,11 +16,16 @@ import { PacienteVistaCuadriculaComponent } from './paciente-vista-cuadricula/pa
 import { PacienteComponent } from './paciente.component';
 import { ExpedienteConsumoMedicamentoModule } from './expediente-consumo-medicamento/expediente-consumo-medicamento.module';
 import { GestionAsistenteModule } from './gestion-asistente/gestion-asistente.module';
+import { LucideAngularModule } from 'lucide-angular';
+import { CapitalizePipe } from 'src/app/shared/pipes/capitalize.pipe';
+import { MAT_RIPPLE_GLOBAL_OPTIONS, MatRippleModule, RippleGlobalOptions } from '@angular/material/core';
+
 
 @NgModule({
   declarations: [
     PacienteComponent,
     PacienteVistaCuadriculaComponent,
+    CapitalizePipe
   ],
   imports: [
     SharedModule,
@@ -36,13 +41,17 @@ import { GestionAsistenteModule } from './gestion-asistente/gestion-asistente.mo
     MatIconModule,
     ExpedienteTratamientoModule,
     ExpedienteConsumoMedicamentoModule,
-    GestionAsistenteModule
+    GestionAsistenteModule,
+    LucideAngularModule,
+    MatRippleModule
   ],
   entryComponents: [
     PacienteVistaCuadriculaComponent,
     ExpedienteFormularioComponent,
   ],
   exports: [],
-  providers: [],
+  providers: [ 
+    { provide: LOCALE_ID, useValue: 'es-MX'}
+  ],
 })
 export class PacienteModule {}

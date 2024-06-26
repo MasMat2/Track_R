@@ -16,6 +16,7 @@ import { AccesoAyudaService } from "@http/seguridad/acceso-ayuda.service";
 import { AccesoAyudaComponent } from "./acceso-ayuda/acceso-ayuda.component";
 import { ReporteArbolAccesoComponent } from "./reporte-arbol-acceso/reporte-arbol-acceso.component";
 import { AngularTreeGridModule } from "angular-tree-grid";
+import { LucideAngularModule } from "lucide-angular";
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { AngularTreeGridModule } from "angular-tree-grid";
     DirectiveModule,
     CollapseModule,
     AngularTreeGridModule,
-    ModalModule.forChild()
+    ModalModule.forChild(),
+    LucideAngularModule
   ],
   declarations: [
     AccesoComponent,

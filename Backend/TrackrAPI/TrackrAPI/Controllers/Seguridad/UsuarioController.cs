@@ -316,17 +316,17 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultaDomicilioPorId(idUsuario);
         }
         [HttpGet("consultarAsistentes")]
-        public IEnumerable<UsuarioDto> ConsultarAsistentes()
+        public async Task<IEnumerable<UsuarioDto>> ConsultarAsistentes()
         {
             var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
-            return usuarioService.ConsultarAsistentes((int)usuario.IdCompania , usuario.IdUsuario);
+            return await usuarioService.ConsultarAsistentes((int)usuario.IdCompania , usuario.IdUsuario);
         }
 
         [HttpGet("asistentesPorDoctor")]
-        public IEnumerable<AsistenteDoctorDto> ConsultarAsistentesPorDoctor()
+        public async Task<IEnumerable<AsistenteDoctorDto>> ConsultarAsistentesPorDoctor()
         {
             int idDoctor  = Utileria.ObtenerIdUsuarioSesion(this);
-            return usuarioService.ConsultarAsistentePorDoctor(idDoctor);
+            return await usuarioService.ConsultarAsistentePorDoctor(idDoctor);
         }
 
         [HttpGet("misDoctores")]

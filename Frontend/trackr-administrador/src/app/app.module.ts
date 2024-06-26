@@ -27,6 +27,7 @@ import { PanelNotificacionesModule } from './views/administrador/inicio/componen
 import { registerLocaleData } from '@angular/common';
 import localeEsMx from '@angular/common/locales/es-MX'
 import { SidebarNavDropdownModule } from '@sharedComponents/sidebar-nav-dropdown/sidebar-nav-dropdown.module';
+import { LucideIconsModule } from '@sharedComponents/iconos/lucide-icons/lucide-icons.module';
 registerLocaleData(localeEsMx, 'es-MX');
 
 @NgModule({
@@ -39,6 +40,7 @@ registerLocaleData(localeEsMx, 'es-MX');
     BrowserAnimationsModule,
     HttpClientModule,
     ModalModule.forRoot(),
+    LucideIconsModule,
     MensajeModule,
     SidebarModule,
     OverlayModule,

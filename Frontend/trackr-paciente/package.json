@@ -46,7 +46,6 @@
     "ag-grid-angular": "^30.0.6",
     "ag-grid-community": "^30.0.6",
     "bootstrap": "^5.2.3",
-    "capacitor-health-data-plugin": "^0.0.1",
     "capacitor-voice-recorder": "^5.0.0",
     "chart.js": "^4.4.0",
     "date-fns": "^2.30.0",

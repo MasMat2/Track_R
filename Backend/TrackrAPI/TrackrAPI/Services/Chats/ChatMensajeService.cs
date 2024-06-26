@@ -12,6 +12,7 @@ using TrackrAPI.Helpers;
 using MimeTypes;
 using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.Services.Sftp;
+using System.Transactions;
 
 namespace TrackrAPI.Services.Chats;
 
@@ -73,8 +74,11 @@ public class ChatMensajeService
         return chats;
     }
 
-    public int NuevoMensaje(ChatMensajeDTO mensaje)
+    public async Task<int> NuevoMensaje(ChatMensajeDTO mensaje)
     {
+        using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+        {
+
         int? idArchivo = null;
         var idsPersonasChat = _chatPersonaRepository.ConsultarPersonasPorChat(mensaje.IdChat)
                                                     .Where(cP => cP.IdPersona != mensaje.IdPersona)
@@ -83,7 +87,7 @@ public class ChatMensajeService
                                                     .ToList();
         var notificacion = new NotificacionDoctorCapturaDTO(mensaje.Mensaje, 2, mensaje.IdPersona, mensaje.IdPersona, mensaje.IdChat);
 
-        _notificacionService.Notificar(notificacion, idsPersonasChat);
+        await _notificacionService.Notificar(notificacion, idsPersonasChat);
 
         //Subir si existe el archivo
         if (mensaje.ArchivoTipoMime != null)
@@ -122,8 +126,10 @@ public class ChatMensajeService
         }
 
         _chatMensajeRepository.Agregar(mensajeAux);
+        scope.Complete();
 
         return (idArchivo != null) ? (int)idArchivo : 0;
+        }
     }
 
     public int GuardarArchivo(string archivo,string nombre,string tipoMime, int idUsuario)
