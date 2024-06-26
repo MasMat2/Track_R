@@ -132,10 +132,14 @@
           <div class="form-group">
             <label class="label-input required-label">Icono Menú</label>
             <div class="d-flex">
-              <i
-                *ngIf="acceso.idIcono"
-                class="{{ acceso.claseIcono + ' icono-acceso' }}"
-              ></i>
+              <div class="muestra-icono-acceso">
+                <i-lucide 
+                  *ngIf="acceso.idIcono && (acceso.claseIcono != '')" 
+                  [name]="acceso.claseIcono"
+                  class="icono"
+                  size="24">
+                </i-lucide>
+              </div>
               <ng-select
                 #iconoLst="ngModel"
                 name="IconoName"

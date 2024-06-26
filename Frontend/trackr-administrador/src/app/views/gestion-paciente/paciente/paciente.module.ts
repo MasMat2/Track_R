@@ -16,7 +16,7 @@ import { PacienteVistaCuadriculaComponent } from './paciente-vista-cuadricula/pa
 import { PacienteComponent } from './paciente.component';
 import { ExpedienteConsumoMedicamentoModule } from './expediente-consumo-medicamento/expediente-consumo-medicamento.module';
 import { GestionAsistenteModule } from './gestion-asistente/gestion-asistente.module';
-import { ChevronDown, Download, Eye, Filter, LucideAngularModule, Pen, Plus, Search, Tally1, Trash2, X } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 import { CapitalizePipe } from 'src/app/shared/pipes/capitalize.pipe';
 import { MAT_RIPPLE_GLOBAL_OPTIONS, MatRippleModule, RippleGlobalOptions } from '@angular/material/core';
 
@@ -42,7 +42,7 @@ import { MAT_RIPPLE_GLOBAL_OPTIONS, MatRippleModule, RippleGlobalOptions } from 
     ExpedienteTratamientoModule,
     ExpedienteConsumoMedicamentoModule,
     GestionAsistenteModule,
-    LucideAngularModule.pick({Filter, Tally1, Plus, ChevronDown, Search, Eye, Pen, Trash2, Download, X}),
+    LucideAngularModule,
     MatRippleModule
   ],
   entryComponents: [

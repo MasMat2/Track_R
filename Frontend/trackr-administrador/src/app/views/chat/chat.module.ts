@@ -13,7 +13,7 @@ import { ModalBaseModule } from '@sharedComponents/modal-base/modal-base.module'
 import { MatListModule } from '@angular/material/list'
 import { MatIconModule } from '@angular/material/icon';
 import { NgAudioRecorderModule } from 'ng-audio-recorder';
-import { LucideAngularModule, Plus, Trash2 } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
@@ -43,7 +43,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     NgAudioRecorderModule,
     MatButtonModule,
     MatRippleModule,
-    LucideAngularModule.pick({Plus, Trash2}),
+    LucideAngularModule,
     AudioWaveComponent,
     MatFormFieldModule,
     TextFieldModule

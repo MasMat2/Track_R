@@ -6,8 +6,6 @@ import { LayoutAdministradorComponent } from './layout-administrador.component';
 import { LayoutAdminitradorRoutingModule } from './layout-administrador.routing.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ToolbarModule } from '@sharedComponents/toolbar/toolbar.module';
-import { ChevronRight, LucideAngularModule, SquareX } from 'lucide-angular';
-
 
 @NgModule({
   imports: [
