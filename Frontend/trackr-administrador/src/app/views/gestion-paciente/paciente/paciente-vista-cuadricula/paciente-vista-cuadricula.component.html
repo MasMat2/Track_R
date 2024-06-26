@@ -22,7 +22,7 @@
             <div class="green-dot"></div>
           </div>
           <button type="button" class="btn" (click)="descargarExcel()">
-            <lucide-icon name="download"></lucide-icon>
+            <lucide-icon size="14" name="download"></lucide-icon>
           </button>
         </div>
       </th>
@@ -36,7 +36,7 @@
           [src]="
             paciente.imagenBase64 != undefined
               ? (paciente.imagenBase64)
-              : 'assets/img/default-user.jpg'
+              : 'assets/img/svg/avatar-placeholder.svg'
           "
         />
       </td>

@@ -18,7 +18,7 @@
           </div>
           <div class="nombre-container">
             <h1 class="nombre">
-              Andrea Paola Bazaldúa Hernández
+              {{paciente.nombreCompleto}}
             </h1>
             <p class="edad"> {{paciente.genero}} | {{paciente.edad + ' años'}} </p>
           </div>
@@ -91,39 +91,43 @@
         <h1 class="saludo">
           Pacientes
         </h1>
-
-        <div class="botones">
-          <div id="buscar">
-                <input type="text" class="form-control" style="width: 100%" placeholder="Buscar" aria-label="Buscar"
-                  (change)="filtrarPacientes($event)" [disabled]="!isVistaCuadricula" />
-          </div>
-
-
-          <div id="filtros">
-            <button>
-              <lucide-icon name="filter"></lucide-icon>
-              Filtros
-            </button>
-          </div>
-
-          <div id="agregar" class="dropdown">
-              <button  class="add-button">
-                <lucide-icon name="plus"></lucide-icon>
-                <span>
-                  Agregar...
-                </span>
-                <img src="../../../../assets/img/svg/bar-vertical.svg">
-                <lucide-icon name="chevron-down"></lucide-icon>
-              </button>
-              <div class="dropdown-content">
-                <a (click)="agregar()">Paciente</a>
-                <img src="../../../../assets/img/svg/bar-horizontal.svg">
-                <a (click)="agregarAsistente()">Asistente</a>
+        <div class="contenedor-filtros row">
+          <div class="col-md-8 no-padding">
+            <div class="contenedor-searchbar">
+              <div class="searchbar">
+                <i-lucide class="icono" name="search"></i-lucide>
+                <input type="text" placeholder="Buscar" (input)="filtrarPacientes($event)">
               </div>
-              <!-- <button class="btn-terceario" (click)="agregarAsistente()" *ngIf="esAsistente !== null">{{ esAsistente  ? 'Mis doctores' : 'Agregar asistentes'}}</button> -->
+            </div>
+          </div>
+          <div class="col-md-4 no-padding">
+            <div class="botones"> 
+              <div id="filtros">
+                <button style="min-width: 88px;">
+                  <lucide-icon name="filter"></lucide-icon>
+                  Filtros
+                </button>
+              </div>
+    
+              <div id="agregar" class="dropdown">
+                  <button  class="add-button">
+                    <lucide-icon name="plus"></lucide-icon>
+                    <span>
+                      Agregar...
+                    </span>
+                    <img src="../../../../assets/img/svg/bar-vertical.svg">
+                    <lucide-icon name="chevron-down"></lucide-icon>
+                  </button>
+                  <div class="dropdown-content">
+                    <a (click)="agregar()">Paciente</a>
+                    <img src="../../../../assets/img/svg/bar-horizontal.svg">
+                    <a (click)="agregarAsistente()">Asistente</a>
+                  </div>
+                  <!-- <button class="btn-terceario" (click)="agregarAsistente()" *ngIf="esAsistente !== null">{{ esAsistente  ? 'Mis doctores' : 'Agregar asistentes'}}</button> -->
+              </div>
+            </div>
           </div>
         </div>
-       
     
       </div>
 
