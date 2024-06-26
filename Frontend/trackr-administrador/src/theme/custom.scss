@@ -16,10 +16,11 @@
 }
 
 .titulo-contenedor {
+  font-family: var(--font-body);
   font-size: 1.5rem;
   padding: 2rem;
-  color: $color-primario;
-  background-color: #ffffff;
+  color: var(--primary-700);
+  background-color: var(--neutral-50);
 }
 
 .titulo-contenedor-paciente {
