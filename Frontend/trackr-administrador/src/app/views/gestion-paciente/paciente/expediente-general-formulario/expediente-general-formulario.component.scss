@@ -61,20 +61,26 @@
       font-weight: bold;
       font-family: var(--font-body);
       font-size: 14px;
-      border-radius: 8px !important;
+      border-radius: 4px !important;
       border: none;
       width: 120px;
+      transition: 200ms;
+      
     }
   }
   .primary{
-    border-radius: 8px;
     background: var(--primary-700);
     color: var(--neutral-50);
+    &:hover {
+      background-color: var(--primary-600);
+    }
   }
   .secondary{
-    border-radius: 8px;
     background: var(--primary-50);
     color: var(--primary-700);
     border: 1px solid var(--primary-700) !important;
+    &:hover {
+      background-color: var(--primary-200);
+    }
   }
 }
