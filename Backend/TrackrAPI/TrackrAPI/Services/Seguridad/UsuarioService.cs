@@ -457,7 +457,7 @@ namespace TrackrAPI.Services.Seguridad
             usuarioRepository.Editar(usuario);
         }
 
-        public IEnumerable<UsuarioDto> ConsultarAsistentes(int idCompania , int idUsuario)
+        public async Task<IEnumerable<UsuarioDto>> ConsultarAsistentes(int idCompania , int idUsuario)
         {
             var asistentes = usuarioRepository.ConsultarPorRol(GeneralConstant.ClaveRolAsistente, idCompania);
 
@@ -468,20 +468,20 @@ namespace TrackrAPI.Services.Seguridad
 
             foreach (var asistente in asistentes)
             {
-                asistente.ImagenBase64 = ObtenerImagenUsuario(asistente.IdUsuario, asistente.ImagenTipoMime);
+                asistente.ImagenBase64 = await ObtenerBytesImagenUsuario(asistente.IdUsuario);
             }
 
             return asistentes;
         }
 
-        public IEnumerable<AsistenteDoctorDto> ConsultarAsistentePorDoctor(int idDoctor)
+        public async Task<IEnumerable<AsistenteDoctorDto>> ConsultarAsistentePorDoctor(int idDoctor)
         {
             var asistentes = _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(idDoctor);
 
             foreach (var asistente in asistentes)
             {
 
-                asistente.ImagenBase64 = ObtenerImagenUsuario(asistente.IdUsuario, asistente.ImagenTipoMime);
+                asistente.ImagenBase64 = await ObtenerBytesImagenUsuario(asistente.IdUsuario);
             }
 
             return asistentes;
