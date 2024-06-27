@@ -16,7 +16,7 @@
   <div class="contenedor-principal">
     <div class="lista-notificaciones">
       <ion-item-group>
-        <ion-item-divider >
+        <ion-item-divider *ngIf="(filtrarNotificacionesHoy(notificaciones$ | async).length > 0)">
           <ion-label>Hoy</ion-label>
         </ion-item-divider>
         <ion-item 
@@ -38,7 +38,7 @@
           </ion-label>
         </ion-item>
 
-        <ion-item-divider>
+        <ion-item-divider *ngIf="(filtrarNotificacionesSemana(notificaciones$ | async).length > 0)">
           <ion-label>Esta semana</ion-label>
         </ion-item-divider>
         <ion-item 
@@ -60,7 +60,7 @@
           </ion-label>
         </ion-item>
 
-        <ion-item-divider>
+        <ion-item-divider *ngIf="(filtrarNotificacionesAnterioresSemana(notificaciones$ | async).length > 0)">
           <ion-label>Anteriores</ion-label>
         </ion-item-divider>
         <ion-item 
