@@ -123,7 +123,11 @@
                         }
 
                         .accordion-option{
+                            --inner-padding-end: 32px !important;
                             --background: rgba(244, 244, 244, 0.5);
+                        }
+                        .accordion-option::part(native){
+                            padding-left: 60px !important;
                         }
                     }
                 }
@@ -151,9 +155,15 @@
     }
 }
 
-// @media (max-height: 700px){
+ion-accordion.accordion-expanded > [slot="header"] .ion-accordion-toggle-icon,
+ion-accordion.accordion-expanding > [slot="header"] .ion-accordion-toggle-icon {
+  transform: rotate(90deg);
+}
 
-//     .card{
-//         //height: calc(100% + 48px) !important; 
-//     }
-// }
+#cerrar-sesion{
+    --color-activated: var(--error-200);
+    border-radius: 0 0 16px 16px;
+    ion-icon, ion-label{
+        color: var(--error-200);
+    } 
+}
