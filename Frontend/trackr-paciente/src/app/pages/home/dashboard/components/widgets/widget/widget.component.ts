@@ -27,7 +27,6 @@ export class WidgetComponent  implements OnInit {
    }
 
   ngOnInit() {
-    console.log(this.widgetClass)
   }
 
 }
