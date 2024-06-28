@@ -54,7 +54,7 @@ export class InicioPage implements OnInit {
 
   protected informacionHeader$: Observable<InformacionPerfilDto>;
   protected infoHeader: InformacionPerfilDto;
-  protected fotoPerfilUrl: string;
+  protected fotoPerfilUrl: string = "assets/img/svg/Image_placeholder.svg";
 
   constructor(
     private widgetService : WidgetService,
@@ -90,10 +90,7 @@ export class InicioPage implements OnInit {
       next: (info) => {
         this.infoHeader = info;
         this.infoHeader.nombre = info.nombre.split(" ")[0]; //solo el primer nombre
-        if(this.infoHeader.imagenBase64 == null){
-          this.fotoPerfilUrl = "assets/img/svg/Image_placeholder.svg";
-        }
-        else{
+        if(this.infoHeader.imagenBase64 != null){
           this.fotoPerfilUrl = `data:${info.imagenBase64?.archivoMime};base64,` + info.imagenBase64?.archivo;
         }
       },
