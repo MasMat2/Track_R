@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AgregarExpedientePadecimientoDto } from '../../Dtos/seguridad/agregar-expediente-padecimiento-dto';
-import { ExpedientePadecimientoSelectorDTO } from '../../Dtos/seguridad/expediente-padecimiento-selector-dto copy';
+import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
 
 @Injectable({
   providedIn: 'root',

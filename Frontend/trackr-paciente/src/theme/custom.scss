@@ -522,6 +522,9 @@ ion-grid.inputs {
     padding: 0;
   }
 }
+.first-input{
+  padding-top: 0 !important;
+}
 
 .botones {
   width: 100%;
@@ -684,4 +687,10 @@ ion-modal.image-only-modal {
   --max-width: calc(100vw - 64px);
   --backdrop-opacity: var(--ion-backdrop-opacity, 0.32) !important;
   --border-radius: 8px;
+}
+
+ion-modal.custom-datetime-modal {
+  --height: auto;
+  --max-width: calc(100vw - 64px);
+  --backdrop-opacity: var(--ion-backdrop-opacity, 0.32) !important;
 }
