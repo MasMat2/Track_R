@@ -1,25 +1,41 @@
-@import "../../widgets/styles/circle-container.scss";
-@import "../../../../../../../theme/variables.scss";
 
-ion-label {
-  font-family: var(--font-body);
-  color: var(--neutral-100);
-  width: 100%;
-  font-size: 2.3vw;
-
-  .valor {
-    font-size: 2.8vw;
+.contenido{
+  height: 100% !important;
+  width: 100% !important;
+  background-image: url(../assets/Suenio-background.svg);
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  padding: 24px 16px;
+  .header{
+    height: 30%;
+    .icono{
+      ion-icon{
+        font-size: 24px;
+        color: var(--neutral-50);
+      }
+    }
   }
-}
-
-ion-grid {
-  display: inherit;
-}
-
-.sueno-total {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: flex-end;
+  .datos{
+    height: 70%;
+    display: flex;
+    align-items: end;
+    ion-text{
+      font-family: var(--font-body);
+      color: var(--neutral-50);
+      font-weight: bold;
+    }
+    .label{
+      font-size: 16px;
+      margin: 0;
+    }
+    .medicion{
+      margin: 0;
+      #horas, #minutos{
+        font-size: 28px;
+      }
+      .unidad{
+        font-size: 20px;
+      }
+    }
+  }
 }

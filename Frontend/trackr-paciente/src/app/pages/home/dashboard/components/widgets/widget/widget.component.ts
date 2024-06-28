@@ -26,6 +26,8 @@ export class WidgetComponent  implements OnInit {
     addIcons({water, walk, scale, moon})
    }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.widgetClass)
+  }
 
 }

@@ -1,33 +1,19 @@
 <app-widget 
-  title="Pasos" 
-  iconClass="walk" 
-  colorBackground="#E0B58E" 
-  colorTitle="#F4F4F4"
+  colorBackground="var(--neutral-50)" 
   widgetClass="salud" 
 >
-  <div style=" width: 100%; padding-left: 40%;">
-    <div class="container d-flex align-items-center gap-2">
-
-      <div class="values d-flex flex-column align-items-start gap-2">
-        <!-- Distancia -->
-        <div class="">
-          <div class="value">
-            <span class="valor">{{ distancia | number }}</span><span class="medida"></span>
-          </div>
-          <div class="label">pasos</div>
-        </div>
-
-        <!-- Tiempo -->
-        <div class="">
-          <div class="value">
-            <span class="valor">{{ horas }}</span><span class="medida">h</span>
-            <span class="valor">{{ minutos }}</span><span class="medida">min</span>
-          </div>
-          <div class="label">caminando</div>
-        </div>
-      </div>
+<div class="contenido" salud>
+  <div class="header">
+    <div class="icono">
+      <ion-icon slot="icon-only" name="pasos"></ion-icon>
     </div>
-
   </div>
-
+  <div class="datos">
+    <ion-text>
+      <p class="label">Pasos</p>
+      <p id="valor">{{pasos}}</p>
+      <p id="unidad">{{unidadMedida}}</p>
+    </ion-text>
+  </div>
+</div>
 </app-widget>

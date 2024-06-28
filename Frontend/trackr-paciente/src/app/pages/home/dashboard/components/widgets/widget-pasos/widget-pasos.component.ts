@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { WidgetComponent } from '../widget/widget.component';
-import { HealthData } from '../../../../../../shared/Dtos/health-data/health-data-interface';
+import { IonicModule } from '@ionic/angular';
+import { addIcons } from 'ionicons';
 
 
 
@@ -13,21 +14,19 @@ import { HealthData } from '../../../../../../shared/Dtos/health-data/health-dat
   imports: [
     CommonModule,
     WidgetComponent,
+    IonicModule,
   ]
 })
 export class WidgetPasosComponent  implements OnInit {
 
-  //protected pasos: number = 15_000;
-  protected meta: number = 0;
+  protected pasos: number = 0;
+  protected unidadMedida: string = "pasos";
 
-  protected metros: number = 0;
-  protected horas: number = 0;
-  protected minutos: number = 0;
-
-  protected pasos : HealthData;
-  protected distancia: number = 0;
-
-  constructor() { }
+  constructor() {
+    addIcons({
+      'pasos': '/assets/img/svg/Pasos.svg'
+    })
+   }
 
   ngOnInit() {
 

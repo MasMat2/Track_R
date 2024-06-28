@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WidgetComponent } from '../widget/widget.component';
+import { IonicModule } from '@ionic/angular';
+import { addIcons } from 'ionicons';
 
 @Component({
   selector: 'app-widget-frecuencia',
@@ -8,13 +10,20 @@ import { WidgetComponent } from '../widget/widget.component';
   standalone: true,
   imports: [
     WidgetComponent,
+    IonicModule
   ]
 })
 export class WidgetFrecuenciaComponent  implements OnInit {
 
 
   protected ritmoCardiaco: number = 0;
-  constructor() { }
+  protected unidadMedida: string = "lpm";
+
+  constructor() {
+    addIcons({
+      'ritmo-cardiaco': '/assets/img/svg/Ritmo-cardiaco.svg'
+    })
+   }
 
   ngOnInit() {}
 
