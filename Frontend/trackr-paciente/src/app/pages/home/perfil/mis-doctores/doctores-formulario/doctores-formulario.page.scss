@@ -1,21 +1,11 @@
 @import "../../../../../../theme/variables.scss";
 
-
-
-ion-header{
-  
-}
-
-ion-content{
-  --background: var(--neutral-50);
-}
-
 ion-footer{
   --background: var(--neutral-50);
 }
 
 .contenedor-header{
-  height: 10vh;
+  height: 15vh;
   background: var(--neutral-50);
   display: flex;
   align-items: flex-end;
@@ -30,6 +20,9 @@ ion-footer{
       font-family: var(--font-body);
       font-size: 18px;
       color: var(--neutral-900);
+    }
+    ion-buttons{
+      margin-left: 16px;
     }
   }
 }

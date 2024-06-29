@@ -5,10 +5,8 @@ import { AlertController, IonicModule } from '@ionic/angular';
 import { UsuarioDoctorDto } from 'src/app/shared/Dtos/usuario-doctor-dto';
 import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores-selector-dto';
 import { addIcons } from 'ionicons';
-import { close, checkmark } from 'ionicons/icons';
 import { FormsModule } from '@angular/forms';
 import { ModalController } from '@ionic/angular/standalone';
-import { Constants } from '@utils/constants/constants';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -35,7 +33,12 @@ export class DoctoresFormularioPage implements OnInit  {
     private doctoresService: MisDoctoresService,
     private alertController: AlertController,
     private modarCtrl: ModalController,
-  ) {addIcons({close, checkmark})}
+  ) {
+    addIcons({
+      'x': 'assets/img/svg/x.svg',
+      'check': 'assets/img/svg/check.svg'
+    })
+  }
 
   ngOnInit(): void {
     this.cargando$.subscribe(cargando => {
