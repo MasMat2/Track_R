@@ -671,13 +671,28 @@ ion-grid.inputs {
 }
 
 .barra-busqueda {
-  height: 10vh;
-  padding: 0 32px 0 32px;
+  width: 100%;
+  padding: 32px;
   ion-searchbar {
-    padding-left: 0;
-    padding-right: 0;
     --box-shadow: 0;
-    --border-radius: 4.16px;
+    --color: var(--neutral-400);
+    --icon-color: var(--neutral-400);
+    --clear-button-color: var(--neutral-400);
+    --cancel-button-color: var(--neutral-400);
+    --background: var(--neutral-50);
+    --border-radius: 4px;
+    font-family: var(--font-body);
+    padding: 0;
+  }
+
+  .searchbar-input{
+    transition: 200ms;
+  }
+  .searchbar-input{
+    border: 2px solid var(--primary-100) !important;
+  }
+  .searchbar-input:focus{
+    border: 2px solid var(--primary-400) !important;
   }
 }
 
