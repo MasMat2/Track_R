@@ -157,14 +157,14 @@ export class UsuarioService {
     return this.http.get<AsistenteDoctorDto[]>(this.url + `misDoctores`);
   }
 
-  agregarAsistente(idAsistente : number)
+  agregarAsistente(idAsistentes : number[])
   {
-    return this.http.post<void>(this.url + `asistente/${idAsistente}` , {});
+    return this.http.post<void>(this.url + `asistente/agregar` , idAsistentes);
   }
   
-  eliminarAsistente(idAsistente : number)
+  eliminarAsistente(idAsistentes : number[])
   {
-    return this.http.delete<void>(this.url + `asistente/${idAsistente}`);
+    return this.http.post<void>(this.url + `asistente/eliminar`, idAsistentes);
   }
 
   esAsistente()

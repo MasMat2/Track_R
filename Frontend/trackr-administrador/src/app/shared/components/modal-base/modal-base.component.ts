@@ -11,6 +11,7 @@ export class ModalBaseComponent implements OnInit {
   @ContentChild('modalFooter', { static: false }) modalFooter: TemplateRef<any>;
 
   @Input() public titulo: string;
+  @Input() public mostrarHeader: boolean = true;
 
   @Output() public onClose: EventEmitter<void> = new EventEmitter<void>();
 

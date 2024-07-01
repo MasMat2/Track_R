@@ -1,0 +1,7 @@
+::ng-deep .cdk-overlay-container {
+    z-index: 99999 !important;
+  }
+  mat-dialog-content{
+      padding: 0px;
+  }
+

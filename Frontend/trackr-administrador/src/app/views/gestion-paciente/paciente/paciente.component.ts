@@ -160,7 +160,7 @@ export class PacienteComponent implements OnInit {
       GestionAsistenteComponent,
       {
         initialState,
-        ...GeneralConstant.CONFIG_MODAL_MEDIUM
+        ...GeneralConstant.CONFIG_MODAL_SMALL_CUSTOM 
       }
     );
   }
