@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { CustomAlertComponent } from './components/custom-alert/custom-alert.component';
 import { MatIconModule } from '@angular/material/icon';
+import { LoadingSpinnerComponent } from '@sharedComponents/loading-spinner/loading-spinner.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { MatIconModule } from '@angular/material/icon';
   ],
   declarations: [
     SpinnerComponent,
-    CustomAlertComponent
+    CustomAlertComponent,
+    LoadingSpinnerComponent
    ],
   exports: [
     FormsModule,

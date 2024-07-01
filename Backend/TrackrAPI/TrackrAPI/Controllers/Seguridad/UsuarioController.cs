@@ -336,17 +336,17 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultarDoctoresPorAsistente(idAsistente);
         }
 
-        [HttpPost("asistente/{idAsistente}")]
-        public void AgregarAsistente(int idAsistente)
+        [HttpPost("asistente/agregar")]
+        public void AgregarAsistente(List<int> idAsistentes)
         {
             int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
-            usuarioService.AgregarAsistente(idUsuario , idAsistente);
+            usuarioService.AgregarAsistente(idUsuario , idAsistentes);
         }
 
-        [HttpDelete("asistente/{idAsistenteDoctor}")]
-        public void EliminarAsistente(int idAsistenteDoctor)
+        [HttpPost("asistente/eliminar")]
+        public void EliminarAsistente(List<int> idAsistentes)
         {
-            usuarioService.EliminarAsistente(idAsistenteDoctor);
+            usuarioService.EliminarAsistente(idAsistentes);
         }
 
         [HttpGet("esMedico")]

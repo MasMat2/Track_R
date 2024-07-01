@@ -499,20 +499,34 @@ namespace TrackrAPI.Services.Seguridad
             return doctores;
         }
 
-        public void AgregarAsistente(int idUsuario, int idAsistente)
+        public void AgregarAsistente(int idUsuario, List<int> idAsistentes)
         {
-            var asistente = new AsistenteDoctor()
+            using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+            foreach (var idAsistente in idAsistentes)
             {
-                IdAsistente = idAsistente,
-                IdDoctor = idUsuario
-            };
-            _asistenteDoctorRepository.Agregar(asistente);
+                var asistente = new AsistenteDoctor()
+                {
+                    IdAsistente = idAsistente,
+                    IdDoctor = idUsuario
+                };
+                _asistenteDoctorRepository.Agregar(asistente);
+            }
+
+            scope.Complete();
+
         }
 
-        public void EliminarAsistente(int idAsistenteDoctor)
+        public void EliminarAsistente(List<int> idsAsistenteDoctor)
         {
-            var asistente = _asistenteDoctorRepository.Consultar(idAsistenteDoctor);
-            _asistenteDoctorRepository.Eliminar(asistente);
+            using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+            foreach(var idAsistenteDoctor in idsAsistenteDoctor)
+            {
+                var asistente = _asistenteDoctorRepository.Consultar(idAsistenteDoctor);
+                _asistenteDoctorRepository.Eliminar(asistente);
+            }
+            
+            scope.Complete();
+            
         }
 
         public IEnumerable<UsuarioGridDto> ConsultarGeneral(int idCompania)
