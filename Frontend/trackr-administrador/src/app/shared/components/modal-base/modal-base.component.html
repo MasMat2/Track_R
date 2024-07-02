@@ -3,19 +3,15 @@
 
     <div *ngIf="mostrarHeader" class="modal-header">
       <div>{{ titulo }}</div>
-      <button
-        type="button"
-        class="close pull-right"
-        aria-label="Close"
-        (click)="cerrar()"
-      >
-        <i class="far fa-times-circle"></i>
+
+      <button class="btn-salir" (click)="cerrar()">
+        <lucide-icon name="x" size="10"></lucide-icon>
       </button>
     </div>
 
     <div class="modal-body mx-3">
       <div class="btn-salir-container">
-         <button (click)="cerrar()">
+         <button *ngIf="btnSalirInherit" class="btn-salir" (click)="cerrar()">
           <lucide-icon name="x" size="10"></lucide-icon>
         </button>
       </div>

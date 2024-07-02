@@ -12,6 +12,7 @@ export class ModalBaseComponent implements OnInit {
 
   @Input() public titulo: string;
   @Input() public mostrarHeader: boolean = true;
+  @Input() public btnSalirInherit: boolean = false;
 
   @Output() public onClose: EventEmitter<void> = new EventEmitter<void>();
 

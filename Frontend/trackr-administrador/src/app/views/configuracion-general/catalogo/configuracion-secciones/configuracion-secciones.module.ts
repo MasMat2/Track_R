@@ -11,6 +11,7 @@ import { ConfiguracionSeccionesComponent } from './configuracion-secciones.compo
 import { ConfiguracionSeccionesRoutingModule } from './configuracion-secciones.routing.module';
 import { IconoService } from '@http/catalogo/icono.service';
 import { FormsModule } from '@angular/forms';
+import { LucideAngularModule, X } from 'lucide-angular';
 
 @NgModule({
   imports: [
@@ -19,7 +20,9 @@ import { FormsModule } from '@angular/forms';
     DirectiveModule,
     ModalModule.forChild(),
     ConfiguracionSeccionesRoutingModule,
-    FormsModule
+    FormsModule,
+    LucideAngularModule.pick({X}),
+
   ],
   declarations: [
     ConfiguracionSeccionesComponent,

@@ -4,8 +4,8 @@
     <div class="modal-header">
       <div *ngIf="soloRespuestas">{{ accion }} Reactivo</div>
       <div *ngIf="!soloRespuestas">Ver Respuestas</div>
-      <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
-        <i class="far fa-times-circle"></i>
+      <button class="btn-salir" (click)="cancelar()">
+        <lucide-icon name="x" size="10"></lucide-icon>
       </button>
     </div>
     <div class="modal-body" id="modal">

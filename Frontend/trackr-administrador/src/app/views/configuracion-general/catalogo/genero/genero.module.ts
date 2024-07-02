@@ -6,12 +6,15 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { GeneroFormularioComponent } from './genero-formulario/genero-formulario.component';
 import { GeneroComponent } from './genero.component';
 import { GeneroRoutingModule } from './genero.routing.module';
+import { LucideAngularModule, X } from 'lucide-angular';
 @NgModule({
     imports: [
         GeneroRoutingModule,
         SharedModule,
         DirectiveModule,
-        ModalModule.forRoot()
+        ModalModule.forRoot(),
+        LucideAngularModule.pick({X}),
+
     ],
     declarations: [
     GeneroComponent,
