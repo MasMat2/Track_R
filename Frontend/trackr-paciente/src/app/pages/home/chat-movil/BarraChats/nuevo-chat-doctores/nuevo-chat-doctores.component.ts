@@ -8,6 +8,9 @@ import { ChatPersonaService } from '../../../../../shared/http/chat/chat-persona
 import { ChatHubServiceService } from '../../../../../services/dashboard/chat-hub-service.service';
 import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
 import { FormsModule } from '@angular/forms';
+import { SearchbarComponent } from '@sharedComponents/searchbar/searchbar.component';
+import { AlertController } from '@ionic/angular/standalone';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nuevo-chat-doctores',
@@ -17,7 +20,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     IonicModule,
-    FormsModule
+    FormsModule,
+    SearchbarComponent
   ],
   providers : []
 })
@@ -32,17 +36,22 @@ export class NuevoChatDoctoresComponent  implements OnInit {
   protected doctorSeleccionado: boolean = false;
   protected idDoctorSelecionado:number = 0;
   private idUsuario:number;
+  protected filtrando: boolean = false;
 
   
-  constructor(private modalCtrl:ModalController,
-              private ChatPersonaService:ChatPersonaService,
-              private ChatHubServiceService:ChatHubServiceService) 
-  { 
-    addIcons({chevronBack})
+  constructor(
+    private modalCtrl:ModalController,
+    private ChatPersonaService:ChatPersonaService,
+    private ChatHubServiceService:ChatHubServiceService,
+    private alertController: AlertController,
+  ) { 
+    addIcons({
+      'chevron-left': 'assets/img/svg/chevron-left.svg',
+      'chevron-right': 'assets/img/svg/chevron-right.svg'
+    })
   }
 
   ngOnInit() {
-    //this.doctores.push({nombre:'Arturo Mesa',hospital:'',ambito: '',idExpediente:0,idExpedienteDoctor:0,idUsuarioDoctor:0,imagenBase64:'',tipoMime:''})
     this.doctores.sort( (a,b) => {
       if(a.nombre > b.nombre){
         return 1;
@@ -61,7 +70,7 @@ export class NuevoChatDoctoresComponent  implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  organizarDoctores(docs:UsuarioDoctoresDto[]) {
+  private organizarDoctores(docs:UsuarioDoctoresDto[]) {
     const grupos: { [letra: string]: any[] } = {};
 
     docs.forEach(doctor => {
@@ -78,29 +87,15 @@ export class NuevoChatDoctoresComponent  implements OnInit {
     }));
   }
 
-  protected buscar(event: any){
-    const text = event.target.value;
-    this.doctoresFiltrados = this.doctores;
-    if(text && text.trim() != ''){
-      let filter = this.doctoresFiltrados.filter((doc) =>{
-          return (doc.nombre.toLowerCase().indexOf(text.toLowerCase()) > -1 );
-      })
+  // protected doctorClick(idDoctor:number){
+  //   this.doctorSeleccionado = ! this.doctorSeleccionado
+  //   this.idDoctorSelecionado = idDoctor;
+  //   this.usuarios = []
+  //   this.usuarios.push(this.idUsuario);
+  //   this.usuarios.push(idDoctor);
+  // }
 
-      this.organizarDoctores(filter);
-    }else{
-      this.organizarDoctores(this.doctores)
-    }
-  }
-
-  doctorClick(idDoctor:number){
-    this.doctorSeleccionado = ! this.doctorSeleccionado
-    this.idDoctorSelecionado = idDoctor;
-    this.usuarios = []
-    this.usuarios.push(this.idUsuario);
-    this.usuarios.push(idDoctor);
-  }
-
-  crearChat(){
+  protected crearChat(){
     let chat: ChatDTO = {
       fecha: new Date(),
       habilitado: true,
@@ -109,18 +104,67 @@ export class NuevoChatDoctoresComponent  implements OnInit {
       idChat: 0
     };
 
-    //this.ChatHubServiceService.iniciarConexion();
-
     this.ChatHubServiceService.agregarChat(chat,this.usuarios);
     this.tituloChat = "";
     this.usuarios = []
     this.doctorSeleccionado = false;
   }
 
-  obtenerIdUsuario(){
+  private obtenerIdUsuario(){
     this.ChatPersonaService.obtenerIdUsuario().subscribe(res => {
       this.idUsuario = res;
     })
+  }
+
+  protected handleSearch(searchTerm: string): void {
+    if( searchTerm == ""){
+      this.filtrando = false;
+      return
+    }
+    else{
+      this.filtrando = true;
+      this.doctoresFiltrados = this.doctores.filter(doctor => 
+        doctor.nombre?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      console.log(this.doctoresFiltrados);
+    }
+  }
+
+  protected async mostrarAlertCrearChat(idDoctor: number){
+
+    const alert = await this.alertController.create({
+      header: 'Crear chat',
+      subHeader: '¿Desea crear un chat con este doctor?',
+      cssClass: 'custom-alert color-primary icon-info two-buttons',
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'Crear',
+          role: 'confirm',
+          handler: () => {
+
+            this.doctorSeleccionado = !this.doctorSeleccionado
+            this.idDoctorSelecionado = idDoctor;
+            this.usuarios = []
+            this.usuarios.push(this.idUsuario);
+            this.usuarios.push(idDoctor);
+
+            this.crearChat();
+          }
+        }
+      ],
+    });
+    await alert.present();
+    
+    const data = await alert.onDidDismiss();
+
+    if(data.role == "confirm"){
+      this.regresarBtn();
+    }
   }
 
 }
