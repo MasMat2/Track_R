@@ -349,6 +349,10 @@ ion-popover.custom-select-popover::part(content) {
   border-radius: 8px;
 }
 
+ion-popover.custom-popover::part(content){
+  --width: 50vw !important;
+}
+
 ion-modal.custom-sheet-modal {
   --height: auto;
   --border-radius: 16px 16px 0 0;
@@ -672,7 +676,6 @@ ion-grid.inputs {
 
 .barra-busqueda {
   width: 100%;
-  padding: 32px;
   ion-searchbar {
     --box-shadow: 0;
     --color: var(--neutral-400);

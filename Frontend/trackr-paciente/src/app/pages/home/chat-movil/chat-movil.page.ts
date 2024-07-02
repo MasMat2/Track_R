@@ -92,9 +92,16 @@ export class ChatMovilComponent implements OnInit {
     let ultimoMensaje = this.mensajes.map(
       (arr) =>{ return {mensajes: arr[arr.length - 1]?.mensaje || '', chat: arr[0]?.idChat || 0}}
     );
+
+    let fechaUltimoMensaje = this.mensajes.map(
+      (arr) => {
+        return {fecha: arr[arr.length - 1]?.fecha || new Date(), chat: arr[0]?.idChat || 0}
+      }
+    )
     
-    this.chats.forEach((x, index) => {
+    this.chats.forEach((x) => {
       x.ultimoMensaje = ultimoMensaje.filter(y => y.chat == x.idChat)[0]?.mensajes || '';
+      x.fechaUltimoMensaje = fechaUltimoMensaje.filter(y => y.chat == x.idChat)[0]?.fecha || new Date();
     });
   }
 }

@@ -1,16 +1,33 @@
 
 .header{
-
+    padding-top: 5vh;
 }
 
-ion-content{
-    --background: var(--neutral-950);
+ion-buttons{
+    margin-left: 16px;
 }
 
-.contenedor{
+ion-header{
+    border-bottom: 1px solid var(--neutral-200);
+}
+ion-footer{
+    border-top: 1px solid var(--neutral-200);
+}
+
+.contenedor-principal{
+    height: 100%;
+    background: var(--primary-50);
+
+}
+.contenedor-imagen{
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.icono{
+    font-size: 24px;
+    color: var(--primary-700);
 }
 

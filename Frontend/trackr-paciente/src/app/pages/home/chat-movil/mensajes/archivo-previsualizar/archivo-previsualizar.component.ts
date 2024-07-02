@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
@@ -7,6 +7,9 @@ import { PlataformaService } from 'src/app/services/dashboard/plataforma.service
 import { ArchivoGetDTO } from 'src/app/shared/Dtos/archivos/archivo-get-dto';
 import { chevronBack, downloadOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
+import { ArchivoService } from '@http/archivo/archivo.service';
+import { BehaviorSubject } from 'rxjs';
+import { AlertController } from '@ionic/angular/standalone';
 
 
 
@@ -17,18 +20,71 @@ import { addIcons } from 'ionicons';
   standalone: true,
   imports: [CommonModule, IonicModule, NgxExtendedPdfViewerModule],
 })
-export class ArchivoPrevisualizarComponent implements OnInit {
+export class ArchivoPrevisualizarComponent implements OnInit, AfterViewInit {
   protected tipo: string;
+  protected idArchivo: number;
   protected archivo: ArchivoGetDTO;
-  protected type: string;
+  protected tipoMime: string;
   protected archivoBase64: string;
 
-  constructor(private modalController: ModalController, private plataformaService: PlataformaService) { addIcons({ chevronBack, downloadOutline }); }
+  //Estado de "cargando" para mostrar el alert con spinner
+  private cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private cargando$ = this.cargandoSubject.asObservable();
+  private loading : any;
 
-  ngOnInit() {
-    this.type = this.archivo.archivoMime.split('/')[0]
-    this.archivoBase64 = 'data:' + this.archivo.archivoMime + ';base64,' + this.archivo.archivo
+  constructor(
+    private modalController: ModalController, 
+    private plataformaService: PlataformaService,
+    private archivoService: ArchivoService,
+    private alertController: AlertController
+  ) { 
+    addIcons({ 
+      'chevron-left': 'assets/img/svg/chevron-left.svg', 
+      'download': 'assets/img/svg/download.svg',
+    }); 
   }
+  
+  ngOnInit() {
+    this.cargando$.subscribe(cargando => {
+      if (cargando) {
+        this.presentLoading();
+      } else {
+        this.dismissLoading();
+      }
+    });
+
+    this.cargandoSubject.next(true);
+    this.archivoService.getArchivo(this.idArchivo).subscribe({
+      next: (res)=> {
+        this.archivo = res;
+        this.tipoMime = this.archivo.archivoMime.split('/')[0];
+        this.archivoBase64 = 'data:' + this.archivo.archivoMime + ';base64,' + this.archivo.archivo;
+      },
+      error: ()=> {},
+      complete: () => {
+        this.cargandoSubject.next(false);
+      }
+    })
+  }
+
+  ngAfterViewInit(): void {
+  }
+
+  async presentLoading() {
+    this.loading = await this.alertController.create({
+      cssClass: "custom-alert-loading",
+      backdropDismiss: false,
+    })
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    if (this.loading) {
+      await this.loading.dismiss();
+      this.loading = null;
+    }
+  }
+
 
   regresarBtn() {
     this.modalController.dismiss();

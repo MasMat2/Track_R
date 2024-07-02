@@ -19,6 +19,7 @@ public class ExpedienteDoctorRepository : Repository<ExpedienteDoctor>, IExpedie
         return context.ExpedienteDoctor
         .Include(ed => ed.IdUsuarioDoctorNavigation)
         .Include(ed => ed.IdUsuarioDoctorNavigation.IdCompaniaNavigation)
+        .Include(ed => ed.IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation)
         .Where(ed => ed.IdExpediente == idExpediente);
     }
     public ExpedienteDoctor ConsultarExpedientePorDoctor(int idExpediente , int idUsuarioDoctor){
