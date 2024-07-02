@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { CustomAlertComponent } from '@sharedComponents/custom-alert/custom-alert.component';
+import { CustomAlertData } from '@sharedComponents/interface/custom-alert-data';
 import * as alertify from 'alertifyjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AlertifyService {
-  constructor() {
+  constructor(private dialog: MatDialog) {
     alertify.set('notifier', 'position', 'top-right');
   }
 
@@ -45,4 +48,16 @@ export class AlertifyService {
   public message(message: string): void {
     alertify.message(message);
   }
+
+  
+  presentAlert(config: CustomAlertData, onClose: (result: string) => void) {
+    const alert = this.dialog.open(CustomAlertComponent, {
+      panelClass: 'custom-alert',
+      data: config
+    });
+
+    alert.beforeClosed().subscribe(onClose);
+  }
+
+
 }

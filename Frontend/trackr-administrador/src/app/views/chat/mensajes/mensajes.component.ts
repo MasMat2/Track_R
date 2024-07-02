@@ -13,6 +13,7 @@ import { ChatHubServiceService } from '../../../shared/services/chat-hub-service
 import { MensajeService } from '../../../shared/components/mensaje/mensaje.service';
 import { NgAudioRecorderService, OutputFormat } from 'ng-audio-recorder';
 import { GeneralConstant } from '@utils/general-constant';
+import { AlertifyService } from '@services/alertify.service';
 
 @Component({
   selector: 'app-mensajes',
@@ -66,7 +67,8 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
     private mensaje: MensajeService,
     private audioRecorderService: NgAudioRecorderService,
     private modalService: BsModalService,
-    private bsModalRef: BsModalRef
+    private bsModalRef: BsModalRef,
+    private alertifyService: AlertifyService,
   ) {}
  
   ngOnInit() {
@@ -110,19 +112,21 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
     });
   }
 
-  protected eliminarChat() {
-    this.ChatPersonaService.obtenerPersonasEnChatSelector(
+  protected async eliminarChat() {
+     this.ChatPersonaService.obtenerPersonasEnChatSelector(
       this.idChat
-    ).subscribe((res) => {
+    ).subscribe(async (res) => {
+      var respuesta = await this.presentAlertEliminarChat();
+      if(!respuesta)
+        return
+  
       if (res.length == 1) {
         this.ChatHubServiceService.eliminarChat(this.idChat);
-        this.mensaje.modalExito('Chat eliminado exitosamente');
+        await this.presentAlertExito();
       } else {
-        this.mensaje.modalError(
-          'El chat solo puede ser eliminado una vez que todos los participantes hayan abandonado el chat'
-        );
+        await this.presentAlertError();
       }
-    });
+    }); 
   }
 
   protected esMensajeMio(idPersona: number) {
@@ -462,6 +466,67 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
     this.eliminarAudio();
     this.isAudio = false;
   }
+
+
+private presentAlertEliminarChat(): Promise<Boolean> {
+  return new Promise((resolve) => {
+    this.alertifyService.presentAlert({
+      header: '¿Seguro(a) que desea eliminar este chat?',
+      subHeader: 'No podrás recuperarlo',
+      Icono: 'trash',
+      Color: 'error',
+      twoButtons: true,
+      cancelButtonText: 'No, regresar',
+      confirmButtonText: "Si, eliminar"
+    }, (result) => {
+      if(result == "confirm"){
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+  });
+}
+
+private presentAlertExito(): Promise<Boolean> {
+  return new Promise((resolve) => {
+    this.alertifyService.presentAlert({
+      header: 'Chat eliminado exitosamente',
+      subHeader: '',
+      Icono: 'check',
+      Color: 'primary',
+      twoButtons: false,
+      confirmButtonText: "De acuerdo",
+      cancelButtonText: ''
+    }, (result) => {
+      if(result == "confirm"){
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+  });
+}
+
+private presentAlertError(): Promise<Boolean> {
+  return new Promise((resolve) => {
+    this.alertifyService.presentAlert({
+      header: 'Error al eliminar el chat',
+      subHeader: 'Todos los participantes deben salir primero.',
+      Icono: 'info',
+      Color: 'error',
+      twoButtons: false,
+      confirmButtonText: "Cerrar",
+      cancelButtonText: ''
+    }, (result) => {
+      if(result == "confirm"){
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+  });
+}
 
   // clickArchivo(idArchivo: number) {
   //   this.ArchivoService.getArchivo(idArchivo).subscribe((res) => {
