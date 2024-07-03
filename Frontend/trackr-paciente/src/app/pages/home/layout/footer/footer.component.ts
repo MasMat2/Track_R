@@ -5,18 +5,6 @@ import { filter } from 'rxjs';
 import { IonicModule } from '@ionic/angular';
 import { IonTabs } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import {
-  home,
-  videocam,
-  statsChart,
-  statsChartOutline,
-  documentText,
-  documentTextOutline,
-  person,
-  personOutline,
-  chatboxEllipses,
-  chatboxEllipsesOutline
-} from 'ionicons/icons'
 
 @Component({
   selector: 'app-footer',
@@ -30,7 +18,7 @@ import {
 })
 export class FooterComponent implements OnInit {
 
-  selectedTab: string | undefined;
+  protected selectedTab: string | undefined;
   protected previousUrl: string;
   protected mostrarFooter: boolean;
 
@@ -44,23 +32,22 @@ export class FooterComponent implements OnInit {
     '/home/perfil/mis-tratamientos',
     '/home/cuestionarios/responder',
     '/home/cuestionarios/ver'
-
   ];
 
   @ViewChild('tabs') tabs: IonTabs;
   constructor( private router: Router)
   {
     addIcons({
-      home,
-      videocam,
-      statsChart,
-      statsChartOutline,
-      documentText,
-      documentTextOutline,
-      person,
-      personOutline,
-      chatboxEllipses,
-      chatboxEllipsesOutline,
+      'home': 'assets/img/svg/home.svg',
+      'home-filled': 'assets/img/svg/home_filled.svg',
+      'clipboard-plus': 'assets/img/svg/clipboard-plus.svg',
+      'clipboard-plus-filled': 'assets/img/svg/clipboard-plus_filled.svg',
+      'message-square-more': 'assets/img/svg/message-square-more.svg',
+      'message-square-more-filled': 'assets/img/svg/message-square-more_filled.svg',
+      'file-check-2': 'assets/img/svg/file-check-2.svg',
+      'file-check-2-filled': 'assets/img/svg/file-check-2_filled.svg',
+      'user': 'assets/img/svg/user.svg',
+      'user-filled': 'assets/img/svg/user_filled.svg',
     })
 
     this.verificarCambioEnUrl();
