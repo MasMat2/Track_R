@@ -1,32 +1,41 @@
-input {
-  padding: 10px;
-  border: 1px #eccdf3 solid !important; // Cambiar el color del borde
-  border-radius: 25px !important;
-  color: black;
-  background: white;
-  border: 10px gray solid;
+.input-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-input::placeholder {
-  color: black;
-  padding: 10px;
+.input-icon-container .form-control {
+  padding-right: 30px; 
+}
+
+.icono-input {
+  position: absolute;
+  right: 10px; 
+  color: var(--neutral-600); 
 }
 
 .btn-ingresar{
-  margin-top: 40px;
-  border-radius: 25px !important;
+  margin-top: 60px;
+  border-radius: 8px !important;
   inline-size: max-content;
   transition: 200ms;
   width: 100%;
   min-height: 40px;
-  border: 4px #deebf7 solid; //Cambiar color borde
+  border: none;
   font-size: 14px;
   max-width: 100%;
+  color: var(--neutral-50);
+  background: var(--primary-800);
+
+  &:hover{
+    background: var(--primary-700);
+  }
+
+  &:active{
+    background: var(--primary-900);
+  }
 }
 
-.btn-ingresar:hover{
-  background: #deebf7;
-}
 
 .acceso {
   display: flex;
@@ -43,20 +52,11 @@ input::placeholder {
   justify-content: center;
 }
 
-.contenedor-form {
-  background-color: rgb(16,42,62, .1);
-  flex-direction: column;
-  width: 600px;
-  height: 350px;
-  padding: 30px ;
-  border-radius: 15px;
-  box-shadow: 0 0 20px rgb(0,0,0, .5);
-}
 
 .contenedor-principal {
-  display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden ;
 }
 
 .imgFondo{
@@ -70,6 +70,8 @@ input::placeholder {
   display: flex;
   align-content: space-between;
   justify-content: space-between;
+  margin-top: 6rem !important;
+  justify-content: space-around;
 }
 
 
@@ -87,4 +89,62 @@ input::placeholder {
   align-items: center;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.row {
+  .login-container {
+    width: 53%;
+  }
+  .svg-container {
+    width: 47%;
+    position: relative;
+    .svg{
+      position: absolute;
+      width: 75vw;
+      top: auto;
+      right: auto;
+      bottom: 0;
+      left: 5%;
+      img{
+        width: 95%;
+        object-fit: cover;
+        height: auto;
+      }
+    }
+  }
+}
+
+.container{
+  background-color: var(--primary-100);
+}
+
+.login{
+  display: flex;
+  flex-direction: column;
+
+  h1{
+    color: var(--primary-800);
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 100%;
+    margin: 0;
+  }
+
+  h2{
+    font-family: var(--font-body);
+    color: var(--primary-800);
+    text-align: center;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+}
+
+.formulario{
+  gap: 2rem;
+    display: flex;
+    flex-direction: column;
 }

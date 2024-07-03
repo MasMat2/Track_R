@@ -1,172 +1,111 @@
-<div class="contenedor-principal">
-  <main>
-    <div class="logos mt-5 justify-content-center">
-      <!-- Logo Christus -->
-      <img
-        style="margin: 5px; width: 32%"
-        src="assets/img/svg/Logo_christus_CEI.svg"
-      />
-      <!-- Logo TrackR -->
-      <img
-        style="margin: 10px; width: 20%"
-        src="assets/img/svg/svg-Logo-02-Trackr.svg"
-      />
-    </div>
+<div class="container vh-100 mw-100 m-0 p-0">
 
-    <div class="row text-center">
-      <!-- Imagen BackGround Olas rosas -->
-      <img
-        height="60%"
-        class="imgFondo"
-        src="assets/img/svg/svg-Admvo_Login-Olas_Rosas.svg"
-      />
-    </div>
 
-    <!-- Contenedor Transparente -->
-    <div class="sub-contenedor-login">
-      <div class="contenedor-form">
-        <!-- Imagen de Login -->
-        <div class="row justify-content-center">
-          <div class="acceso">
+      <div class="row vh-100 mw-100" >
+        <div class="svg-container p-0">
+          <div class="svg">
+            <img src="assets/img/svg/oncotracker_login.svg">
+          </div>
+        </div>
+        <div class="login-container p-0 position-relative">
+          <div class="logos ">
+            <!-- Logo Christus -->
             <img
-              class="imgLogin"
-              src="assets/img/svg/svg-Admvo_Login-Titulo.svg"
+              style="margin: 5px; width: 19vw"
+              src="assets/img/svg/Logo_christus_CEI.svg"
+            />
+            <!-- Logo TrackR -->
+            <img
+              style="margin: 10px; width: 14vw"
+              src="assets/img/svg/oncotrackerlogo_morado.svg"
             />
           </div>
-        </div>
+      
+          <!-- Contenedor Transparente -->
+          <div class="sub-contenedor-login ">
+            <div>
+              <form
+                #formulario="ngForm"
+                (ngSubmit)="enviarFormulario(formulario)"
+                novalidate="novalidate"
+              >
+                <div *ngTemplateOutlet="login"></div>
+              </form>
+            </div>
+          </div>
 
-        <form
-          #formulario="ngForm"
-          (ngSubmit)="enviarFormulario(formulario)"
-          novalidate="novalidate"
-        >
-          <div *ngIf="!mostrarLocaciones; then login; else selectorLocacion"></div>
-        </form>
+          <div class="header-shapes position-absolute bottom-0 end-0">
+            <img src="assets/img/svg/header_shapes.svg">
+          </div>
+        </div>
       </div>
-    </div>
+
+
 
     <ng-template #login>
-      <!-- Usuario -->
-      <div class="row justify-content-center">
-        <div class="col-md-10">
-          <div class="form-group">
-            <div>
-              <input
-                #usuario="ngModel"
-                [(ngModel)]="loginRequest.correo"
-                id="usuario"
-                name="usuario"
-                class="form-control"
-                type="text"
-                maxlength="50"
-                required="true"
-                autocomplete="off"
-                placeholder="Usuario"
-              />
-              <div
-                *ngIf="usuario.errors?.['required'] && usuario.dirty"
-                class="error"
-              >
-                El usuario es requerido
+    
+      <div class="login">
+        <div class="saludo">
+          <h1>Bienvenido(a) a Oncotracker</h1>
+          <h2>
+            Inicia sesión para acceder a los datos
+            <br>
+            de tus pacientes
+          </h2>
+        </div>
+    
+        <div class="formulario">
+          <!-- Usuario -->
+          <div class="row justify-content-center">
+            <div class="col-md-8">
+              <div class="form-group">
+                <label class="label-input required-label">Usuario</label>
+                <div class="input-icon-container d-flex ">
+                  <input #usuario="ngModel" [(ngModel)]="loginRequest.correo" id="usuario" name="usuario"
+                    class="form-control" type="text" maxlength="50" required="true" autocomplete="off"
+                    placeholder="Usuario" />
+
+                    <img class="icono-input" src="assets/img/svg/user.svg" >
+                  </div>
+                  <div *ngIf="usuario.errors?.['required'] && usuario.dirty" class="error">
+                    El usuario es requerido
+                  </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <br />
-
-      <!-- Contraseña -->
-      <div class="row justify-content-center">
-        <div class="col-md-10">
-          <div class="form-group">
-            <div>
-              <input
-                #contrasena="ngModel"
-                [(ngModel)]="loginRequest.contrasena"
-                id="contrasena"
-                name="contrasena"
-                class="form-control fondoInput"
-                type="password"
-                maxlength="50"
-                required="true"
-                autocomplete="off"
-                placeholder="Contraseña"
-              />
-              <div
-                *ngIf="contrasena.errors?.['required'] && contrasena.dirty"
-                class="error"
-              >
-                La contraseña es requerida
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row justify-content-center">
-        <div class="col-md-10 text-center">
-          <button [disabled]="btnSubmit" type="submit" class="btn-ingresar">
-            Entrar
-          </button>
-        </div>
-      </div>
-    </ng-template>
-
-    <ng-template #selectorLocacion>
-      <div class="row justify-content-center">
-        <div class="col-md-10">
-          <div class="form-group">
-            <label class="label-input required-label">Locación</label>
-            <div>
-              <ng-select
-                #locacion="ngModel"
-                name="locacion"
-                bindLabel="locacion"
-                bindValue="idLocacion"
-                [items]="locaciones"
-                [(ngModel)]="loginRequest.idLocacion"
-                [placeholder]="placeHolderSelect"
-                [notFoundText]="placeHolderNoOptions"
-              ></ng-select>
-            </div>
-            <div *ngIf="locacion.errors?.['required'] && locacion.touched" class="error">
-              La locacion es requerida
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row justify-content-center">
-        <div class="col-md-10">
-          <button
-            [disabled]="!loginRequest.idLocacion || btnSubmit"
-            type="submit"
-            class="btn-ingresar"
-          >
-            Continuar
-          </button>
-        </div>
-      </div>
-    </ng-template>
-
-
-    <div class="contenedor-footer d-flex mb-5">
-      <div class="row">
-        <div class="col-md-10">
-          <div class="footer">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="footer-texto">
-                  <p>
-                    V1.0
-                  </p>
+    
+    
+          <!-- Contraseña -->
+          <div class="row justify-content-center">
+            <div class="col-md-8">
+              <div class="form-group">
+                <label class="label-input required-label">Contraseña</label>
+                <div class="input-icon-container d-flex">
+                  <input #contrasena="ngModel" [(ngModel)]="loginRequest.contrasena" id="contrasena" name="contrasena"
+                    class="form-control fondoInput" type="password" maxlength="50" required="true" autocomplete="off"
+                    placeholder="Contraseña" />
+                    <img class="icono-input" src="assets/img/svg/key-round.svg" >
+                  </div>
+                  <div *ngIf="contrasena.errors?.['required'] && contrasena.dirty" class="error">
+                    La contraseña es requerida
+                  </div>
                 </div>
-              </div>
             </div>
+          </div>
+    
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-6 text-center">
+            <button [disabled]="btnSubmit" type="submit" class="btn-ingresar">
+              Iniciar sesión
+              <img src="assets/img/svg/arrow-right.svg">
+            </button>
           </div>
         </div>
       </div>
-    </div>
-  </main>
+    
+    </ng-template>
+
+ 
+
 </div>
