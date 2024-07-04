@@ -26,11 +26,16 @@
                 placeholder="Seleccionar" 
                 required
                 [(ngModel)]="expedientePadecimientoDto.idPadecimiento">
+                <ng-container *ngIf="diagnosticoFiltradoList?.length; else noDiagnosticos">
                 <ion-select-option 
                   *ngFor="let diagnostico of diagnosticoFiltradoList" 
                   [value]="diagnostico?.idPadecimiento">
                   {{ diagnostico?.nombre }}
                 </ion-select-option>
+               </ng-container>
+               <ng-template #noDiagnosticos>
+                <ion-select-option disabled>No hay más diagnósticos</ion-select-option>
+              </ng-template>
               </ion-select>
             </ion-item>
           </div>
