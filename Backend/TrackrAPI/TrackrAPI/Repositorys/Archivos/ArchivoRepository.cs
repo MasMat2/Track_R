@@ -12,9 +12,19 @@ public class ArchivoRepository : Repository<Archivo>, IArchivoRepository
         return context.Archivo.Where(x => x.IdArchivo == idArchivo).FirstOrDefault();
     }
 
+    public Archivo GetArchivoByUrl(string urlArchivo)
+    {
+        return context.Archivo.Where(x => x.ArchivoUrl == urlArchivo).FirstOrDefault();
+    }
+
     public string GetFileName(int idArchivo)
     {
         return context.Archivo.Where(x => x.IdArchivo == idArchivo).Select(x => x.Nombre).FirstOrDefault();
+    }
+
+    public int? GetFileId(string urlArchivo)
+    {
+        return context.Archivo.Where(x => x.ArchivoUrl == urlArchivo).Select(x => x.IdArchivo).FirstOrDefault();
     }
 
     public string GetFileMime(int idArchivo)

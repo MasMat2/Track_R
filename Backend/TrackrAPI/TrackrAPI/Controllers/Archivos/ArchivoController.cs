@@ -26,6 +26,12 @@ namespace TrackrAPI.Controllers.Archivos
             return _archivoService.GetArchivo(IdArchivo);
         }
 
+        [HttpGet("getByUrl")]
+        public ArchivoDTO GetArchivoByUrl([FromQuery] string urlArchivo)
+        {
+            return _archivoService.GetArchivoByUrl(urlArchivo);
+        }
+
         [HttpGet("fileName/{IdArchivo}")]
         public string GetFileName(int IdArchivo)
         {
