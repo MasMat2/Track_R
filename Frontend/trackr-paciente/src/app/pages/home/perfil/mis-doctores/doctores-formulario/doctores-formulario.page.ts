@@ -8,6 +8,7 @@ import { addIcons } from 'ionicons';
 import { FormsModule } from '@angular/forms';
 import { ModalController } from '@ionic/angular/standalone';
 import { BehaviorSubject } from 'rxjs';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 
 @Component({
   selector: 'app-doctores-formulario',
@@ -33,6 +34,7 @@ export class DoctoresFormularioPage implements OnInit  {
     private doctoresService: MisDoctoresService,
     private alertController: AlertController,
     private modarCtrl: ModalController,
+    private loadingSpinnerService : LoadingSpinnerService
   ) {
     addIcons({
       'x': 'assets/img/svg/x.svg',
@@ -55,17 +57,11 @@ export class DoctoresFormularioPage implements OnInit  {
   }
 
   async presentLoading() {
-    this.loading = await this.alertController.create({
-      cssClass: "custom-alert-loading"
-    })
-    return await this.loading.present();
+    this.loadingSpinnerService.presentLoading();
   }
 
   async dismissLoading() {
-    if (this.loading) {
-      await this.loading.dismiss();
-      this.loading = null;
-    }
+    this.loadingSpinnerService.dismissLoading();
   }
 
   protected seleccionDoctor(doctor: any) {
@@ -73,7 +69,6 @@ export class DoctoresFormularioPage implements OnInit  {
   }
 
   protected agregar() {
-    this.cargandoSubject.next(true);
 
     const MENSAJE_REQUERIMIENTO: string = `Seleccione un doctor`;
     
@@ -82,6 +77,7 @@ export class DoctoresFormularioPage implements OnInit  {
       this.presentAlert(MENSAJE_REQUERIMIENTO);
       return;
     }
+    this.cargandoSubject.next(true);
     const subscription = this.doctoresService.agregar(this.currentDoctor)
       .subscribe({
         next: () => {
