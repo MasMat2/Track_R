@@ -69,6 +69,9 @@ export class DiagnosticoFormularioComponent  implements OnInit {
 
   protected enviarFormulario(formulario: NgForm) {
     this.btnSubmit = true;
+    if(this.expedientePadecimientoDto.fechaDiagnostico == null){
+      this.expedientePadecimientoDto.fechaDiagnostico = new Date();
+    }
     if (!formulario.valid) {
       validarCamposRequeridos(formulario);
       return;
