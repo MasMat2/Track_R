@@ -712,3 +712,7 @@ ion-modal.custom-datetime-modal {
   --max-width: calc(100vw - 64px);
   --backdrop-opacity: var(--ion-backdrop-opacity, 0.32) !important;
 }
+
+ion-item-option::part(native){
+  min-width: 84px;
+}

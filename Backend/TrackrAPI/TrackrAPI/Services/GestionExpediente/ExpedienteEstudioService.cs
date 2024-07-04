@@ -1,5 +1,7 @@
-﻿using TrackrAPI.Dtos.GestionExpediente;
+﻿using System.Transactions;
+using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Models;
+using TrackrAPI.Repositorys.Archivos;
 using TrackrAPI.Repositorys.GestionExpediente;
 using TrackrAPI.Services.Sftp;
 
@@ -10,12 +12,16 @@ namespace TrackrAPI.Services.GestionExpediente
     {
         private readonly IExpedienteEstudioRepository _expedienteEstudioRepository;
         private readonly SftpService _sftpService;
+        private readonly IArchivoRepository _archivoRepository;
 
-        public ExpedienteEstudioService(IExpedienteEstudioRepository expedienteEstudioRepository,
-                                        SftpService sftpService)
-        {
+        public ExpedienteEstudioService(
+            IExpedienteEstudioRepository expedienteEstudioRepository,
+            SftpService sftpService,
+            IArchivoRepository archivoRepository
+        ){
             _expedienteEstudioRepository = expedienteEstudioRepository;
             _sftpService = sftpService;
+            _archivoRepository = archivoRepository;
         }
 
         /// <summary>
@@ -50,20 +56,28 @@ namespace TrackrAPI.Services.GestionExpediente
 
         public void Agregar(ExpedienteEstudioFormularioCapturaDTO expedienteEstudioDTO, int idUsuario)
         {
+            using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+            
             int idExpediente = _expedienteEstudioRepository.ConsultarIdExpediente(idUsuario);
-
-            var path = this.GuardarArchivo(expedienteEstudioDTO.Archivo, expedienteEstudioDTO.ArchivoNombre, expedienteEstudioDTO.ArchivoTipoMime);
 
             var expedienteEstudio = new ExpedienteEstudio()
             {
                 IdExpediente = idExpediente,
                 Nombre = expedienteEstudioDTO.Nombre,
-                FechaRealizacion = DateTime.Now,
+                FechaRealizacion = expedienteEstudioDTO.FechaRealizacion,
                 ArchivoTipoMime = expedienteEstudioDTO.ArchivoTipoMime,
                 ArchivoNombre = expedienteEstudioDTO.ArchivoNombre,
-                ArchivoUrl = path
+                ArchivoUrl = ""
             };
-            _expedienteEstudioRepository.Agregar(expedienteEstudio);
+            var expedienteEstudioAgregado = _expedienteEstudioRepository.Agregar(expedienteEstudio);
+
+            var path = this.GuardarArchivo(expedienteEstudioDTO.Archivo, expedienteEstudioDTO.ArchivoNombre, expedienteEstudioDTO.ArchivoTipoMime, idUsuario, expedienteEstudioAgregado.IdExpedienteEstudio);
+
+            expedienteEstudioAgregado.ArchivoUrl = path;
+            _expedienteEstudioRepository.Editar(expedienteEstudioAgregado);
+
+            scope.Complete();
+
         }
 
         public void Eliminar(int idExpedienteEstudio)
@@ -87,19 +101,31 @@ namespace TrackrAPI.Services.GestionExpediente
             return expedienteEstudio.IdExpedienteEstudio;
         }*/
 
-        public string GuardarArchivo(byte[] archivo, string nombre, string tipoMime)
+        public string GuardarArchivo(byte[] archivo, string nombre, string tipoMime, int idUsuario, int idExpedienteEstudio)
         {
-
-
-            string nombreArchivo = $"{nombre}";
+            string nombreArchivo = $" {idExpedienteEstudio}_{nombre}"; //idExpedienteEstudio al inicio para diferenciar aunque sea la misma imagen
             string path = Path.Combine("Archivos", "Expediente", nombreArchivo);
             var archivoBase64 = Convert.ToBase64String(archivo);
 
             _sftpService.UploadBytesFile(path, archivoBase64);
 
+            //return path;
+            var archivoMensaje = new Archivo
+            {
+                Nombre = nombreArchivo,
+                ArchivoNombre = nombreArchivo,
+                ArchivoTipoMime = tipoMime,
+                ArchivoUrl = path,
+                FechaRealizacion = DateTime.Now,
+                IdUsuario = idUsuario
+            };
 
-            return path;
+
+            var fileUploaded = _archivoRepository.Agregar(archivoMensaje);
+
+            return fileUploaded.ArchivoUrl;
 
         }
+
     }
 }

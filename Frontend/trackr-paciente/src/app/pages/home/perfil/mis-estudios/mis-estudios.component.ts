@@ -1,21 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AlertController, IonicModule, ModalController } from '@ionic/angular';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { ExpedienteEstudioService } from '@services/expediente-estudio.service';
-import { ImagenVisorComponent } from '@sharedComponents/imagen-visor/imagen-visor.component';
-import { PdfVisorComponent } from '@sharedComponents/pdf-visor/pdf-visor.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { TableModule } from 'primeng/table';
-import { Observable, lastValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { ExpedienteEstudio } from 'src/app/shared/dtos/expediente-estudio-dto';
 import { ExpedienteEstudioGridDTO } from 'src/app/shared/dtos/expediente-estudio-grid-dto';
 import { MisEstudiosFormularioPage } from './mis-estudios-formulario/mis-estudios-formulario.component';
-import { Constants } from '@utils/constants/constants';
-import { add, chevronBack, trashOutline, chevronForward } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
+import { SearchbarComponent } from '@sharedComponents/searchbar/searchbar.component';
+import { ArchivoPrevisualizarComponent } from '@sharedComponents/archivo-previsualizar/archivo-previsualizar.component';
 
 @Component({
   selector: 'app-mis-estudios',
@@ -30,97 +28,93 @@ import { addIcons } from 'ionicons';
     HeaderComponent,
     NgxExtendedPdfViewerModule,
     RouterModule,
+    SearchbarComponent
   ],
 })
 
-export class MisEstudiosPage {
+export class MisEstudiosPage implements OnInit {
   protected expedientes$: Observable<ExpedienteEstudioGridDTO[]>;
-  private estudioSeleccionado: ExpedienteEstudio;
   protected misEstudios: ExpedienteEstudioGridDTO[];
   protected filtrando: boolean = false;
   protected estudiosFiltradosPorBusqueda: ExpedienteEstudioGridDTO[];
+
+  //Estado de "cargando" para mostrar el alert con spinner
+  private cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private cargando$ = this.cargandoSubject.asObservable();
+  private loading : any;
 
   constructor(
     private expedienteEstudioService: ExpedienteEstudioService,
     private modalController: ModalController,
     private alertController: AlertController,
-  ) { addIcons({add, chevronBack, trashOutline, chevronForward})}
-
-  ionViewWillEnter() {
-    this.consultarEstudios();
-  }
-
-  private consultarEstudios(): void {
-    this.expedientes$ = this.expedienteEstudioService.consultarParaGrid();
-    this.expedientes$.subscribe({
-      next: (data)=> {
-        this.misEstudios = data;
-        this.estudiosFiltradosPorBusqueda = data;
-      }
+  ) { 
+    addIcons({
+      'plus': 'assets/img/svg/plus.svg',
+      'chevron-left': 'assets/img/svg/chevron-left.svg',
+      'trash': 'assets/img/svg/trash-2.svg',
+      'chevron-right': 'assets/img/svg/chevron-right.svg',
     })
   }
 
+  ngOnInit(): void {
+    this.cargando$.subscribe(cargando => {
+      if (cargando) {
+        this.presentLoading();
+      } else {
+        this.dismissLoading();
+      }
+    });
+
+    this.consultarEstudios();
+  }
+
+  private async presentLoading() {
+    this.loading = await this.alertController.create({
+      cssClass: "custom-alert-loading",
+      backdropDismiss: false,
+    })
+    return await this.loading.present();
+  }
+
+  private async dismissLoading() {
+    if (this.loading) {
+      await this.loading.dismiss();
+      this.loading = null;
+    }
+  }
+
+  private consultarEstudios(): void {
+    this.expedientes$ = this.expedienteEstudioService.consultarParaGrid().pipe(
+      tap((estudios => {
+        this.misEstudios = estudios;
+      }))
+    );
+  }
+
   protected async abrirEstudio(estudio: ExpedienteEstudioGridDTO){
-    if(estudio.archivoTipoMime == 'application/pdf'){
-      this.onVer(estudio);
-    }
-    if(estudio.archivoTipoMime == 'image/png' || estudio.archivoTipoMime == 'image/jpeg' || estudio.archivoTipoMime == 'image/gif'){
-      this.onVerImagen(estudio);
-    }
-    else{
-      return
-    }
-  }
-
-  private async onVer(estudio: ExpedienteEstudioGridDTO) {
-    await lastValueFrom(
-      this.expedienteEstudioService.consultar(estudio.idExpedienteEstudio)
-    ).then((expedienteEstudio: ExpedienteEstudio) => {
-      this.estudioSeleccionado = expedienteEstudio;
-    });
-    this.abrirModal(PdfVisorComponent, {
-      archivo: this.estudioSeleccionado.archivo,
-      archivoNombre: this.estudioSeleccionado.archivoNombre,
-      nombre: this.estudioSeleccionado.nombre,
-    });
-  }
-
-  private async onVerImagen(estudio: ExpedienteEstudioGridDTO) {
-    await lastValueFrom(
-      this.expedienteEstudioService.consultar(estudio.idExpedienteEstudio)
-    ).then((expedienteEstudio: ExpedienteEstudio) => {
-      this.estudioSeleccionado = expedienteEstudio;
-    });
-    this.abrirModal(ImagenVisorComponent, {
-      nombreEstudio: this.estudioSeleccionado.nombre,
-      archivo: this.estudioSeleccionado.archivo,
-      archivoTipoMime: this.estudioSeleccionado.archivoTipoMime,
-    });
+    this.abrirModal(ArchivoPrevisualizarComponent, {
+      fileSource: 'url',
+      urlArchivo: estudio.urlArchivo,
+      mostrarTitulo: true,
+      titulo: estudio.nombre
+    })
   }
 
   protected eliminar(expedienteEstudio: ExpedienteEstudioGridDTO) {
+    this.cargandoSubject.next(true);
     this.expedienteEstudioService.eliminar(expedienteEstudio.idExpedienteEstudio).subscribe({
         next: ()=> {
           this.consultarEstudios();
         },
         error: () => {
-
+          this.cargandoSubject.next(false);
         },
         complete : ()=> {
+          this.cargandoSubject.next(false);
           this.presentarAlertaEliminadoExitosamente();
         }
       });
   }
-
-  // private async presentAlert(mensaje: string) {
-  //   const alert = await this.alertController.create({
-  //     header: 'Mis Estudios',
-  //     message: mensaje,
-  //     buttons: ['OK'],
-  //   });
-
-  //   await alert.present();
-  // }
 
   protected async abrirModal(component: any, componentProps: any) {
     const modal = await this.modalController.create({
@@ -171,7 +165,6 @@ export class MisEstudiosPage {
   }
 
   protected async presentarAlertaEliminadoExitosamente() {
-
     const alertSuccess = await this.alertController.create({
       header: 'Elemento eliminado exitosamente',
       buttons: [{
@@ -184,18 +177,32 @@ export class MisEstudiosPage {
     await alertSuccess.present();
   }
 
-  protected buscarEstudio(event: any){
-    const text = event.target.value;
-
-    text == '' ? this.filtrando = false : this.filtrando = true; //el filtrado se activa cuando hay texto ingresado
-
-    this.estudiosFiltradosPorBusqueda = this.misEstudios;
-    if(text && text.trim() != ''){
-      this.estudiosFiltradosPorBusqueda = this.estudiosFiltradosPorBusqueda.filter((estudio: ExpedienteEstudioGridDTO) =>{
-        return (estudio.nombre.toLowerCase().indexOf(text.toLowerCase()) > -1 );
-      })
-    }
+  private formatDate(date: Date, monthFormat: '2-digit' | 'long'): string {
+    return date?.toLocaleDateString('es-MX', {
+      day: '2-digit',
+      month: monthFormat,
+      year: 'numeric',
+    });
   }
 
+  protected handleSearch(searchTerm: string): void {
+    if( searchTerm == ""){
+      this.filtrando = false;
+      return
+    }
+    else{
+      this.filtrando = true;
+
+      //filtrar por nombre de estudio o por fecha(Filtra por ambos formatos '01/01/2024' y '01 de enero 2024')
+      this.estudiosFiltradosPorBusqueda = this.misEstudios.filter(estudio => {
+        const nombreMatch = estudio.nombre?.toLowerCase().includes(searchTerm.toLowerCase());
+        const fechaString2Digit = estudio.fechaRealizacion ? this.formatDate(new Date(estudio?.fechaRealizacion), '2-digit') : '';
+        const fechaStringLong = estudio.fechaRealizacion ? this.formatDate(new Date(estudio?.fechaRealizacion), 'long') : '';
+        const fechaMatch = (fechaString2Digit.includes(searchTerm.toLowerCase()) || fechaStringLong.includes(searchTerm.toLowerCase()));
+        return nombreMatch || fechaMatch;
+      }
+      );
+    }
+  }
 
 }

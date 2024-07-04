@@ -11,8 +11,6 @@ import { ExpedienteEstudioFormularioCaptura } from 'src/app/shared/dtos/expedien
 import { validarCamposRequeridos } from 'src/app/shared/utils/utileria';
 import { ModalController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { eyeOutline, personOutline, calendarOutline, cameraOutline, documentOutline, trashOutline} from 'ionicons/icons';
-import { Constants } from '@utils/constants/constants';
 
 @Component({
   selector: 'app-mis-estudios-formulario',
@@ -33,11 +31,11 @@ export class MisEstudiosFormularioPage implements OnInit {
   private files: PickedFile[] = [];
   protected isPictureTaken: boolean = false;
   protected esArchivoSeleccionado: boolean = false;
-  protected fecha = new Date();
-  protected fechastring: string = this.fecha.toISOString();
+  protected fechastring: string = new Date().toISOString();
   private image_src: string = '';
   private mimeType: string = '';
   protected btnSubmit = false;
+  protected showCalendar: boolean = false;
 
   public expedienteEstudio = new ExpedienteEstudioFormularioCaptura();
   constructor(
@@ -46,7 +44,15 @@ export class MisEstudiosFormularioPage implements OnInit {
     private expedienteEstudioService: ExpedienteEstudioService,
     private router: Router,
     private modalController: ModalController,
-  ) {addIcons({eyeOutline, personOutline, calendarOutline, cameraOutline, documentOutline, trashOutline})}
+  ) {
+    addIcons({
+    'eye': 'assets/img/svg/eye.svg',
+    'user': 'assets/img/svg/user.svg',
+    'calendar': 'assets/img/svg/calendar.svg',
+    'camera': 'assets/img/svg/camera.svg',
+    'file': 'assets/img/svg/file.svg',
+    })
+  }
 
   ngOnInit() {}
 
@@ -111,10 +117,6 @@ export class MisEstudiosFormularioPage implements OnInit {
     this.modalController.dismiss();
   }
 
-  protected imprimirFecha(){
-    console.log(this.fechastring);
-  }
-
   protected eliminarAdjunto(){
     this.expedienteEstudio.archivo = '';
     this.expedienteEstudio.archivoNombre = '';
@@ -141,4 +143,14 @@ export class MisEstudiosFormularioPage implements OnInit {
 
     await alertSuccess.present();
   }
+
+  protected openCalendar() {
+    this.showCalendar = true;
+  }
+  
+  protected cancelCalendar() {
+    this.showCalendar = false;
+  }
+
+  
 }

@@ -21,7 +21,7 @@ import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, Cur
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
 import { PlataformaService } from 'src/app/services/dashboard/plataforma.service';
 import { ModalController } from '@ionic/angular';
-import { ArchivoPrevisualizarComponent } from './archivo-previsualizar/archivo-previsualizar.component';
+import { ArchivoPrevisualizarComponent } from '@sharedComponents/archivo-previsualizar/archivo-previsualizar.component';
 
 import { timer, Subject } from 'rxjs';
 import { finalize, map, takeUntil, takeWhile } from 'rxjs/operators';
@@ -300,7 +300,10 @@ export class MensajesComponent{
   protected async clickArchivo(_idArchivo: number) {
     const modal = await this.ModalController.create({
       component: ArchivoPrevisualizarComponent,
-      componentProps: { idArchivo: _idArchivo}
+      componentProps: {
+        fileSource: 'id', 
+        idArchivo: _idArchivo
+      }
     })
 
     modal.present();
