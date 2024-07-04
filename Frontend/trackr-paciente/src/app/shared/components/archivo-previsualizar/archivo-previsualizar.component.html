@@ -1,0 +1,43 @@
+<ion-header class="ion-no-border">
+    <div class="contenedor-header">
+        <ion-toolbar class="header">
+            <ion-buttons slot="start">
+                <ion-button fill="clear" (click)="regresarBtn()">
+                    <ion-icon class="icono" slot="icon-only" name="chevron-left"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+            <ion-title *ngIf="mostrarTitulo">{{titulo}}</ion-title>
+        </ion-toolbar>
+    </div>
+</ion-header>
+<ion-content>
+    <div class="contenedor-principal">
+        <div class="contenedor-imagen" *ngIf="tipoMime !== 'application'">
+            <ion-img class="imagen" [src]="archivoBase64" *ngIf="tipoMime === 'image' || tipoMime === 'gif'"></ion-img>
+        </div>
+        <div class="contenedor-pdf">
+            <ngx-extended-pdf-viewer
+            *ngIf="tipoMime === 'application'"
+            [base64Src]="archivo.archivo"
+            [filenameForDownload]="archivo.nombre"
+            [useBrowserLocale]="true"
+            [zoom]="'page-actual'"
+            [textLayer]="true"
+            [zoom]="'auto'"
+            height="80vh"
+        ></ngx-extended-pdf-viewer>
+        </div>
+    </div>
+</ion-content>
+<ion-footer class="ion-no-border">
+    <div class="contenedor-footer">
+        <ion-toolbar class="footer">
+            <ion-buttons slot="start">
+                <ion-button fill="clear" (click)="descargarArchivo()" >
+                    <ion-icon class="icono" slot="icon-only" name="download"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+        </ion-toolbar>
+    </div>
+</ion-footer>
+
