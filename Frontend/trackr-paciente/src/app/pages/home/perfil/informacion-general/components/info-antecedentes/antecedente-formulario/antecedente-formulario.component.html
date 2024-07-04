@@ -26,11 +26,16 @@
                 placeholder="Seleccionar" 
                 required
                 [(ngModel)]="expedientePadecimientoDto.idPadecimiento">
-                <ion-select-option 
-                  *ngFor="let antecedente of antecedenteFiltradoList" 
-                  [value]="antecedente?.idPadecimiento">
-                  {{ antecedente?.nombre }}
-                </ion-select-option>
+                <ng-container *ngIf="antecedenteFiltradoList?.length; else noAntecedentes">
+                  <ion-select-option 
+                    *ngFor="let antecedente of antecedenteFiltradoList" 
+                    [value]="antecedente?.idPadecimiento">
+                    {{ antecedente?.nombre }}
+                  </ion-select-option>
+                </ng-container>
+                <ng-template #noAntecedentes>
+                  <ion-select-option disabled>No hay más antecedentes</ion-select-option>
+                </ng-template>
               </ion-select>
             </ion-item>
           </div>
