@@ -10,6 +10,7 @@ import { AgregarTratamientoPage } from './agregar-tratamiento/agregar-tratamient
 import { DetalleTratamientoComponent } from './detalle-tratamiento/detalle-tratamiento.component';
 import { ExpedienteTratamientoPerfilDto } from 'src/app/shared/Dtos/gestion-perfil/expediente-tratamiento-perfil-dto';
 import { SearchbarComponent } from '@sharedComponents/searchbar/searchbar.component';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 
 @Component({
   selector: 'app-mis-tratamientos',
@@ -33,7 +34,8 @@ export class MisTratamientosPage implements OnInit {
   constructor(
     private perfilTratamientoService: PerfilTratamientoService,
     private alertController: AlertController,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private loadingSpinner : LoadingSpinnerService
   ) { 
     addIcons({
       'plus': 'assets/img/svg/plus.svg',
@@ -48,11 +50,24 @@ export class MisTratamientosPage implements OnInit {
   }
 
   protected consultarTratamientos(): void {
-    this.tratamientos$ = this.perfilTratamientoService.consultarTratamientos().pipe(
-      tap((tratamientos => {
-        this.misTratamientos = tratamientos;
-      }))
-    );
+    this.loadingSpinner.presentLoading();
+    
+    // this.tratamientos$ = this.perfilTratamientoService.consultarTratamientos().pipe(
+    //   tap((tratamientos => {
+    //     this.misTratamientos = tratamientos;
+    //   }))
+    // );
+
+    this.tratamientos$ = this.perfilTratamientoService.consultarTratamientos();
+    this.tratamientos$.subscribe({
+      next: (data)=>{
+        this.misTratamientos = data;
+      },
+      error: () =>{},
+      complete: () => {
+        this.loadingSpinner.dismissLoading();
+      }
+    })
   }
 
   protected listaTratamientosVacia(){

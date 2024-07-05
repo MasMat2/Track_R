@@ -108,7 +108,9 @@ public class NotificacionDoctorService
 
     public async Task Notificar(NotificacionDoctorCapturaDTO notificacionDoctorCaptura, List<int> idsDoctor)
     {
-        using var ts = new TransactionScope();
+        using var ts = new TransactionScope(TransactionScopeOption.Required,
+                                                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                TransactionScopeAsyncFlowOption.Enabled);
 
         var notificacionCaptura = Mapear(notificacionDoctorCaptura);
 
