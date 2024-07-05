@@ -165,7 +165,8 @@ public class ExpedienteTratamientoService
             Unidad = et.Unidad,
             Padecimiento = et.IdPadecimientoNavigation.Nombre,
             ImagenBase64 = _sftpService.DownloadFileAsBase64(et.ArchivoUrl ?? defaultPath),
-        });
+            TipoMime = _archivoRepository.GetFileMime(et.IdArchivo ?? 0)
+        }); ;
 
         return expedienteTratamientosDto;
     }

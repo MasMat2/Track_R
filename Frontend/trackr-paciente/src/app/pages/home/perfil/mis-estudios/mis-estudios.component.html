@@ -40,7 +40,12 @@
 
         <ion-list *ngIf="!listaEstudiosVacia()">
           <ion-item-sliding *ngFor="let estudio of (!filtrando ? (expedientes$ | async) : estudiosFiltradosPorBusqueda ) index as i">
-            <ion-item lines="none" detail (click)="abrirEstudio(estudio)" detailIcon="chevron-right">
+            <ion-item
+             lines="none" 
+             detail 
+             detailIcon="chevron-right"
+             button
+             (click)="abrirEstudio(estudio)">
               <ion-label>
                 <h3><span id="numeracion">#{{i+1}} </span>{{estudio.nombre}}</h3>
                 <p>{{estudio.fechaRealizacion | date : "MMMM d, y" : '' : 'es-MX'}}</p>
