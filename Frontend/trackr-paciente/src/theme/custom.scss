@@ -514,13 +514,16 @@ ion-grid.inputs {
     #incrementar {
       --border-radius: 0 8px 8px 0;
     }
-    ion-label {
-      width: 100%;
-      text-align: center;
-      font-family: var(--font-body);
-      font-size: 16px;
-      color: var(--neutral-400);
+    ion-input{
+      text-align: center !important;
     }
+    // ion-label {
+    //   width: 100%;
+    //   text-align: center;
+    //   font-family: var(--font-body);
+    //   font-size: 16px;
+    //   color: var(--neutral-400);
+    // }
   }
   ion-item.quantity-selector::part(native) {
     padding: 0;

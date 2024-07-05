@@ -47,7 +47,7 @@ export class AgregarTratamientoPage implements OnInit {
   protected formTratamiento: FormGroup;
   protected perfilTratamientoDto: ExpedienteTratamientoDetalleDto;
   protected isFormModified: boolean = false;
-  private cantidadFarmaco: number = 1;
+  protected cantidadFarmaco: number = 1;
   protected isModalRecordatorioOpen: boolean = false;
   protected btnSubmit: boolean = false;
   protected fechaSeleccionada: string = this.dateToday;
