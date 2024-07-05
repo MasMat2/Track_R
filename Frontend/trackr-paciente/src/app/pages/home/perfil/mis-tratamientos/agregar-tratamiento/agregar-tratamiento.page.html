@@ -55,7 +55,7 @@
                     <ion-button id="decrementar" (click)="decrementarCantidad()">
                       <ion-icon slot="icon-only" name="minus"></ion-icon>
                     </ion-button>
-                    <ion-label>{{ formTratamiento.get('cantidad')?.value }}</ion-label>
+                    <ion-input type="number" formControlName="cantidad"></ion-input>
                     <ion-button id="incrementar" (click)="incrementarCantidad()">
                       <ion-icon slot="icon-only" name="plus"></ion-icon>
                     </ion-button>
