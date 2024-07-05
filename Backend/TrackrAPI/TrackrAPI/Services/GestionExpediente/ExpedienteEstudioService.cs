@@ -18,7 +18,7 @@ namespace TrackrAPI.Services.GestionExpediente
             IExpedienteEstudioRepository expedienteEstudioRepository,
             SftpService sftpService,
             IArchivoRepository archivoRepository
-        ){
+        ) {
             _expedienteEstudioRepository = expedienteEstudioRepository;
             _sftpService = sftpService;
             _archivoRepository = archivoRepository;
@@ -43,38 +43,35 @@ namespace TrackrAPI.Services.GestionExpediente
         {
             var expediente = _expedienteEstudioRepository.Consultar(idExpedienteEstudio);
 
-            expediente.Archivo = new Byte[0];
+            //expediente.Archivo = new Byte[0];
 
-            if(expediente.ArchivoUrl != null   || expediente.ArchivoNombre != "")
-            {
-                expediente.Archivo = Convert.FromBase64String(_sftpService.DownloadFileAsBase64(expediente.ArchivoUrl));
-            }
+            //if (expediente.ArchivoUrl != null || expediente.ArchivoNombre != "")
+            //{
+            //    expediente.Archivo = Convert.FromBase64String(_sftpService.DownloadFileAsBase64(expediente.ArchivoUrl));
+            //}
 
             return expediente;
-            
+
         }
 
         public void Agregar(ExpedienteEstudioFormularioCapturaDTO expedienteEstudioDTO, int idUsuario)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
-            
+
             int idExpediente = _expedienteEstudioRepository.ConsultarIdExpediente(idUsuario);
+
+            var archivo = this.GuardarArchivo(expedienteEstudioDTO.Archivo, expedienteEstudioDTO.ArchivoNombre, expedienteEstudioDTO.ArchivoTipoMime, idUsuario);
 
             var expedienteEstudio = new ExpedienteEstudio()
             {
                 IdExpediente = idExpediente,
                 Nombre = expedienteEstudioDTO.Nombre,
                 FechaRealizacion = expedienteEstudioDTO.FechaRealizacion,
-                ArchivoTipoMime = expedienteEstudioDTO.ArchivoTipoMime,
-                ArchivoNombre = expedienteEstudioDTO.ArchivoNombre,
-                ArchivoUrl = ""
+                IdArchivo = archivo.id,
+                ArchivoUrl = archivo.url
             };
-            var expedienteEstudioAgregado = _expedienteEstudioRepository.Agregar(expedienteEstudio);
 
-            var path = this.GuardarArchivo(expedienteEstudioDTO.Archivo, expedienteEstudioDTO.ArchivoNombre, expedienteEstudioDTO.ArchivoTipoMime, idUsuario, expedienteEstudioAgregado.IdExpedienteEstudio);
-
-            expedienteEstudioAgregado.ArchivoUrl = path;
-            _expedienteEstudioRepository.Editar(expedienteEstudioAgregado);
+            _expedienteEstudioRepository.Agregar(expedienteEstudio);
 
             scope.Complete();
 
@@ -86,31 +83,15 @@ namespace TrackrAPI.Services.GestionExpediente
             _expedienteEstudioRepository.Eliminar(expedienteEstudio);
         }
 
-        /*public int Agregar()
+        public (int id, string url) GuardarArchivo(byte[] archivo, string nombre, string tipoMime, int idUsuario)
         {
-            ExpedienteEstudio expedienteEstudio = new ExpedienteEstudio();
-            byte[] pdfData = File.ReadAllBytes("D:/Users/osval/Downloads/mock.pdf");
-            expedienteEstudio.Archivo = pdfData;
-            expedienteEstudio.Nombre = "Rayos X Tobillo";
-            expedienteEstudio.ArchivoNombre = "Rayos X Tobillo";
-            expedienteEstudio.FechaRealizacion = DateTime.UtcNow;
-            expedienteEstudio.IdExpediente = 9;
-            expedienteEstudio.ArchivoTipoMime = "application/pdf";
-
-            expedienteEstudio = expedienteEstudioRepository.Agregar(expedienteEstudio);
-            return expedienteEstudio.IdExpedienteEstudio;
-        }*/
-
-        public string GuardarArchivo(byte[] archivo, string nombre, string tipoMime, int idUsuario, int idExpedienteEstudio)
-        {
-            string nombreArchivo = $" {idExpedienteEstudio}_{nombre}"; //idExpedienteEstudio al inicio para diferenciar aunque sea la misma imagen
-            string path = Path.Combine("Archivos", "Expediente", nombreArchivo);
+            string nombreArchivo = $"{nombre}";
+            string path = Path.Combine("Archivos", "Expediente", $"{Guid.NewGuid()}.{tipoMime.Split('/')[1]}");
             var archivoBase64 = Convert.ToBase64String(archivo);
 
             _sftpService.UploadBytesFile(path, archivoBase64);
 
-            //return path;
-            var archivoMensaje = new Archivo
+            var archivoEstudio = new Archivo
             {
                 Nombre = nombreArchivo,
                 ArchivoNombre = nombreArchivo,
@@ -121,9 +102,9 @@ namespace TrackrAPI.Services.GestionExpediente
             };
 
 
-            var fileUploaded = _archivoRepository.Agregar(archivoMensaje);
+            var fileUploaded = _archivoRepository.Agregar(archivoEstudio);
 
-            return fileUploaded.ArchivoUrl;
+            return (fileUploaded.IdArchivo, fileUploaded.ArchivoUrl);
 
         }
 

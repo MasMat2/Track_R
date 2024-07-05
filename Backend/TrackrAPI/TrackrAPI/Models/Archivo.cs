@@ -8,6 +8,8 @@ namespace TrackrAPI.Models
         public Archivo()
         {
             ChatMensaje = new HashSet<ChatMensaje>();
+            ExpedienteEstudio = new HashSet<ExpedienteEstudio>();
+            ExpedienteTratamiento = new HashSet<ExpedienteTratamiento>();
         }
 
         public int IdArchivo { get; set; }
@@ -22,5 +24,7 @@ namespace TrackrAPI.Models
 
         public virtual Usuario? IdUsuarioNavigation { get; set; }
         public virtual ICollection<ChatMensaje> ChatMensaje { get; set; }
+        public virtual ICollection<ExpedienteEstudio> ExpedienteEstudio { get; set; }
+        public virtual ICollection<ExpedienteTratamiento> ExpedienteTratamiento { get; set; }
     }
 }

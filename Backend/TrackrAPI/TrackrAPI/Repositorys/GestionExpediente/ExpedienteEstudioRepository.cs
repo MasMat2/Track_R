@@ -30,8 +30,8 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                     IdExpediente = ee.IdExpediente,
                     FechaRealizacion = ee.FechaRealizacion,
                     Nombre = ee.Nombre,
+                    IdArchivo = ee.IdArchivo,
                     UrlArchivo = ee.ArchivoUrl ?? "",
-                    ArchivoTipoMime=ee.ArchivoTipoMime
                 })
                 .ToList();
         }

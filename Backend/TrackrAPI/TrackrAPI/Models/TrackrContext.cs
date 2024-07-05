@@ -1166,25 +1166,22 @@ namespace TrackrAPI.Models
 
                 entity.ToTable("ExpedienteEstudio", "Trackr");
 
-                entity.Property(e => e.Archivo).HasColumnType("image");
-
-                entity.Property(e => e.ArchivoNombre)
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ArchivoTipoMime)
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.ArchivoUrl)
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.FechaRealizacion).HasColumnType("datetime");
 
+                entity.Property(e => e.IdArchivo).HasColumnName("idArchivo");
+
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.IdArchivoNavigation)
+                    .WithMany(p => p.ExpedienteEstudio)
+                    .HasForeignKey(d => d.IdArchivo)
+                    .HasConstraintName("FK_ExpedienteEstudio_Archivo");
 
                 entity.HasOne(d => d.IdExpedienteNavigation)
                     .WithMany(p => p.ExpedienteEstudio)
@@ -1309,7 +1306,8 @@ namespace TrackrAPI.Models
                     .HasName("PK__Expedien__58DDD7D813710334");
 
                 entity.ToTable("ExpedienteTratamiento", "Trackr");
-                 entity.Property(e => e.ArchivoUrl).HasMaxLength(250);
+
+                entity.Property(e => e.ArchivoUrl).HasMaxLength(250);
 
                 entity.Property(e => e.Cantidad).HasColumnType("decimal(18, 0)");
 
@@ -1321,15 +1319,16 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
 
-                entity.Property(e => e.Imagen).HasColumnType("image");
-
-                entity.Property(e => e.ImagenTipoMime)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                entity.Property(e => e.IdArchivo).HasColumnName("idArchivo");
 
                 entity.Property(e => e.Indicaciones).HasMaxLength(500);
 
                 entity.Property(e => e.Unidad).HasMaxLength(100);
+
+                entity.HasOne(d => d.IdArchivoNavigation)
+                    .WithMany(p => p.ExpedienteTratamiento)
+                    .HasForeignKey(d => d.IdArchivo)
+                    .HasConstraintName("FK_ExpedienteTratamiento_Archivo");
 
                 entity.HasOne(d => d.IdExpedienteNavigation)
                     .WithMany(p => p.ExpedienteTratamiento)
