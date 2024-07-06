@@ -1,114 +1,81 @@
 
 ion-content{
 
-.barra-busqueda{
-    margin-top: 32px;
-    padding: 0 32px 0 32px;
-    ion-searchbar{
-      padding-left: 0;
-      padding-right: 0;
-      --box-shadow: 0;
-      --border-radius: 4.16px;
-    }
-  }
+}
+.contenedor-principal{
+  background: var(--primary-50);
+  height: 100%;
 }
 
-.contactos{
-  
-  .lista-doctores{
-    background-color: transparent;
-    border: 1px solid var(--neutral-200);
-    background: var(--neutral-50);
-    display: flex;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    align-items: center;
-    //white-space: nowrap;
-  
-    .doctor{
-      height: 20vh;
-      min-width: 33.33%;
-      display: inline-block;
-  
-      .imagen{
-        margin-top: 10px;
-        position: relative;
-        height: 50%;
-        ion-avatar{      
-          margin: auto;
-        }
-  
-        .icono-agregar{
-          position: absolute;
-          top: 0;
-          right: 0;
-    
-          font-size: 1.2em;
-        }
-      }
-      
-      .nombre{
-        height: 10vh;
-        ion-label{
-          text-align: center;
-          p{
-            font-size: 0.9em;
-          }
-        }
-
-        
-      }
-      
-      
-    }
-  }
-
-  .generar-chat{
-
-    .nombre-chat{
-      --padding-end: 10px;
-      --padding-start: 10px;
-      --padding-bottom: 10px;
-      border: 0px;
-    }
-    
-
-    ion-icon{
-      color: var(--primary-700);
-    }
-
-    ion-button{
-      font-size: 1em;
-      --ripple-color: var(--primary-200);
-    }
-  }
+.contenedor-barra-busqueda{
+  padding: 32px;
 }
 
-
-.chats{
-  height: 78vh;
-  padding-top: 3vh;
-  margin: 0 32px;
+.lista-chats{
+  //padding-top: 3vh;
+  //margin: 0 32px;
   ion-list{
-    background: var(--primary-50);
-    .chat{
+    padding: 0;
+    //background: var(--primary-50);
+    ion-item.chat{
       --background: var(--primary-50);
 
       ion-avatar{
-        --border-radius: 15px;
+        --border-radius: 16px;
+        width: 48px;
+        height: 48px;
       }
 
       ion-label{
+        font-family: var(--font-body);
         h3{
-          font-size: 0.9em;
+          width: 100%;
+          font-size: 16px;
           font-weight: bold;
+          color: var(--neutral-900);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: inline-block;
         }
 
         p{
-          font-size: 0.8em;
+          width: 100%;
+          font-size: 14px;
+          color: var(--neutral-500);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: inline-block;
         }
       }
+      --inner-padding-end: 32px;
+    }
+    ion-item.chat::part(native){
+      padding-left: 32px;
     }
   }
   
+}
+
+.meta-data-end{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  #fecha{
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 10px;
+    color: var(--neutral-500);
+  }
+  #badge{
+    width: 24px;
+    height: 20px;
+    border-radius: 40px;
+    --background: var(--primary-200);
+    --color: var(--primary-700);
+  }
 }

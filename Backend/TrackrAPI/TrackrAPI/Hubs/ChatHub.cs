@@ -52,7 +52,7 @@ public class ChatHub : Hub<IChatHub>
         foreach (var idPersona in idPersonas)
         {
             var chats = _chatService.ConsultarChats(idPersona);
-            Clients.User(idPersona.ToString()).CargarChats(chats);
+            await Clients.User(idPersona.ToString()).CargarChats(chats);
         }
     }
 

@@ -1,9 +1,19 @@
-
-<app-widget title="Frecuencia Cardiaca" iconClass="water" colorBackground="#695e93" colorTitle="#F4F4F4" widgetClass="salud"  (click)="cargarHR()">
-  <div class="container">
-    <div class="d-flex valores">
-      <span class="valor">{{ ritmoCardiaco }}</span>
-      <span class="unidad">BPM</span>
+<app-widget 
+  colorBackground="var(--primary-100)" 
+  widgetClass="salud" 
+  (click)="cargarHR()"
+>
+<div class="contenido" salud>
+  <div class="header">
+    <div class="icono">
+      <ion-icon slot="icon-only" name="ritmo-cardiaco"></ion-icon>
     </div>
   </div>
+  <div class="datos">
+    <ion-text>
+      <p class="label">Ritmo cardiaco</p>
+      <p class="medicion"><span id="valor">{{ritmoCardiaco}}</span><span id="unidad"> {{unidadMedida}}</span></p>
+    </ion-text>
+  </div>
+</div>
 </app-widget>

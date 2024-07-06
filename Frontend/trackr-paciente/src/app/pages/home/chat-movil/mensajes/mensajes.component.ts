@@ -21,7 +21,7 @@ import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, Cur
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
 import { PlataformaService } from 'src/app/services/dashboard/plataforma.service';
 import { ModalController } from '@ionic/angular';
-import { ArchivoPrevisualizarComponent } from './archivo-previsualizar/archivo-previsualizar.component';
+import { ArchivoPrevisualizarComponent } from '@sharedComponents/archivo-previsualizar/archivo-previsualizar.component';
 
 import { timer, Subject } from 'rxjs';
 import { finalize, map, takeUntil, takeWhile } from 'rxjs/operators';
@@ -30,6 +30,7 @@ import { PressDirective } from 'src/app/shared/directives/press.directive';
 import { SwipeDirective } from 'src/app/shared/directives/swipe.directive';
 import { CapacitorUtils } from '@utils/capacitor-utils';
 import { format } from 'date-fns';
+import { AudioWaveComponent } from '@sharedComponents/audio-wave/audio-wave.component';
 
 
 
@@ -39,7 +40,14 @@ import { format } from 'date-fns';
   templateUrl: './mensajes.component.html',
   styleUrls: ['./mensajes.component.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule, IonicModule, HeaderComponent, PressDirective, SwipeDirective],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    IonicModule, 
+    PressDirective, 
+    SwipeDirective,
+    AudioWaveComponent
+  ],
   providers: [CapacitorUtils]
 })
 export class MensajesComponent{
@@ -77,6 +85,7 @@ export class MensajesComponent{
   protected grabacionCancelada: boolean = false;
   protected audio?: string = '';
   protected audio2?: string;
+  protected isAudioPlaying: boolean = false;
 
   constructor(
     private ChatMensajeHubService: ChatMensajeHubService,
@@ -92,15 +101,15 @@ export class MensajesComponent{
     private rout: ActivatedRoute
   ) { 
       addIcons({videocamOutline, 
-        chevronBack, 
-        cameraOutline, 
-        paperPlane, 
-        trash, 
-        documentOutline,
-        mic,
-        micOutline,
-        send,
-        ellipsisVerticalOutline
+        'file': 'assets/img/svg/file.svg',
+        'chevron-left': 'assets/img/svg/chevron-left.svg',
+        'camera': 'assets/img/svg/camera.svg',
+        'send': 'assets/img/svg/send.svg',
+        'send-filled': 'assets/img/svg/send-filled.svg',
+        'trash': 'assets/img/svg/trash-2.svg',
+        'mic': 'assets/img/svg/mic.svg',
+        'ellipsis-vertical': 'assets/img/svg/ellipsis-vertical.svg',
+        'video': 'assets/img/svg/video.svg',
       }); 
     }
 
@@ -108,6 +117,10 @@ export class MensajesComponent{
     this.obtenerIdUsuario();
     this.obtenerIdChat();
     this.solicitarPermisos();
+  }
+
+  ngAfterViewInit() {
+    this.scrollContentToBottom();
   }
 
   obtenerIdChat() {
@@ -284,12 +297,16 @@ export class MensajesComponent{
     }
   }
 
-  clickArchivo(idArchivo: number) {
-    this.ArchivoService.getArchivo(idArchivo).subscribe( async res => {
-      const modal =  await this.ModalController.create({component: ArchivoPrevisualizarComponent,componentProps:{archivo:res}});
-      modal.present();
+  protected async clickArchivo(_idArchivo: number) {
+    const modal = await this.ModalController.create({
+      component: ArchivoPrevisualizarComponent,
+      componentProps: {
+        fileSource: 'id', 
+        idArchivo: _idArchivo
+      }
+    })
 
-    });
+    modal.present();
   }
 
   async downloadFileMobile(fileBase64: string, nombre?: string, mime?: string) {
@@ -351,6 +368,7 @@ export class MensajesComponent{
       this.audio2 = '';
       this.isAudio = false;
     }
+    this.fileInput.nativeElement.value = "";
     this.fileInput.nativeElement.click();
   }
 
@@ -359,10 +377,10 @@ export class MensajesComponent{
     return `${x.getDate()}/${x.getMonth() + 1}/${x.getFullYear()} - ${x.getHours()}:${x.getMinutes()}`
   }
 
-  // Esta función se llama después de cada actualización de la vista
-  ngAfterViewChecked() {
-    this.scrollContentToBottom();
-  }
+  //Esta función se llama después de cada actualización de la vista
+  // ngAfterViewChecked() {
+  //   this.scrollContentToBottom();
+  // }
 
   // Función para desplazar automáticamente hacia abajo al final de la lista
   scrollContentToBottom(){
@@ -608,6 +626,30 @@ export class MensajesComponent{
 
   esAudio(mime?:string):boolean{
     return mime != null  ? mime.split("/")[0] == 'audio' : false
+  }
+
+  protected hayAdjuntoEnMensaje(mensaje: ChatMensajeDTO) {
+    return (
+      mensaje.idArchivo !== 0 &&
+      mensaje.idArchivo !== null &&
+      mensaje.idArchivo !== undefined
+    );
+  }
+
+  protected adjuntoEsAudio(mensaje: ChatMensajeDTO) {
+    return (mensaje.archivoTipoMime === 'audio/wav' || mensaje.archivoTipoMime === 'audio/webm');
+  }
+
+  protected setColorAudio(idPersona: number): 'light' | 'dark' {
+    if (this.idUsuario == idPersona) {
+      return 'dark';
+    } else {
+      return 'light';
+    }
+  }
+
+  protected onAudioPlay(option: boolean) {
+    this.isAudioPlaying = option;
   }
 
 

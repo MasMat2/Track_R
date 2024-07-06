@@ -349,6 +349,10 @@ ion-popover.custom-select-popover::part(content) {
   border-radius: 8px;
 }
 
+ion-popover.custom-popover::part(content){
+  --width: 50vw !important;
+}
+
 ion-modal.custom-sheet-modal {
   --height: auto;
   --border-radius: 16px 16px 0 0;
@@ -510,17 +514,23 @@ ion-grid.inputs {
     #incrementar {
       --border-radius: 0 8px 8px 0;
     }
-    ion-label {
-      width: 100%;
-      text-align: center;
-      font-family: var(--font-body);
-      font-size: 16px;
-      color: var(--neutral-400);
+    ion-input{
+      text-align: center !important;
     }
+    // ion-label {
+    //   width: 100%;
+    //   text-align: center;
+    //   font-family: var(--font-body);
+    //   font-size: 16px;
+    //   color: var(--neutral-400);
+    // }
   }
   ion-item.quantity-selector::part(native) {
     padding: 0;
   }
+}
+.first-input{
+  padding-top: 0 !important;
 }
 
 .botones {
@@ -668,13 +678,27 @@ ion-grid.inputs {
 }
 
 .barra-busqueda {
-  height: 10vh;
-  padding: 0 32px 0 32px;
+  width: 100%;
   ion-searchbar {
-    padding-left: 0;
-    padding-right: 0;
     --box-shadow: 0;
-    --border-radius: 4.16px;
+    --color: var(--neutral-400);
+    --icon-color: var(--neutral-400);
+    --clear-button-color: var(--neutral-400);
+    --cancel-button-color: var(--neutral-400);
+    --background: var(--neutral-50);
+    --border-radius: 4px;
+    font-family: var(--font-body);
+    padding: 0;
+  }
+
+  .searchbar-input{
+    transition: 200ms;
+  }
+  .searchbar-input{
+    border: 2px solid var(--primary-100) !important;
+  }
+  .searchbar-input:focus{
+    border: 2px solid var(--primary-400) !important;
   }
 }
 
@@ -684,4 +708,14 @@ ion-modal.image-only-modal {
   --max-width: calc(100vw - 64px);
   --backdrop-opacity: var(--ion-backdrop-opacity, 0.32) !important;
   --border-radius: 8px;
+}
+
+ion-modal.custom-datetime-modal {
+  --height: auto;
+  --max-width: calc(100vw - 64px);
+  --backdrop-opacity: var(--ion-backdrop-opacity, 0.32) !important;
+}
+
+ion-item-option::part(native){
+  min-width: 84px;
 }

@@ -418,7 +418,12 @@
         public static readonly string TipoMovimientoUsuarioEntradaPersonal = "Entrada Personal";
         public static readonly string TipoMovimientoUsuarioSalidaPersonal = "Salida Personal";
         public static readonly string[] WidgetsDefault = { "w-sue" , "w-pes" , "w-fre" , "w-pas" , "w-omr" };
-        public static readonly string ClaveNotificacionRecordatorio = "GRL";
+        public static readonly string ClaveNotificacionGeneral = "GRL";
+        public static readonly string ClaveNotificacionChat = "CHT";
+        public static readonly string ClaveNotificacionVideo = "VID";
+        public static readonly string ClaveNotificacionAlerta = "ALT";
+        public static readonly string ClaveNotificacionRecomendacion = "RCM";
+        public static readonly string ClaveNotificacionRecordatorio = "RCD";
         public static readonly int IdTipoUsuarioChatAdmin = 1;
         public static readonly string ClaveTipoUsuarioChatAdmin = "001";
         public static readonly int idEstatusExamenTerminado = 3;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArchivoFormDTO } from '../../Dtos/archivos/archivo-form-dto';
 import { Observable } from 'rxjs';
 import { ArchivoGetDTO } from '../../Dtos/archivos/archivo-get-dto';
@@ -18,5 +18,11 @@ export class ArchivoService {
 
   public getArchivo(idArchivo:number):Observable<ArchivoGetDTO>{
     return this.http.get<ArchivoGetDTO>(this.dataUrl+idArchivo)
+  }
+
+  public getArchivoByUrl(urlArchivo: string):Observable<ArchivoGetDTO>{
+    console.log(urlArchivo);
+    const params = new HttpParams().set('urlArchivo', urlArchivo);
+    return this.http.get<ArchivoGetDTO>(`${this.dataUrl}getByUrl`, {params});
   }
 }

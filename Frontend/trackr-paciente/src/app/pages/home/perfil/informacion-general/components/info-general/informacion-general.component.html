@@ -134,11 +134,11 @@
                       datetime="fechaNacimiento"
                     ></ion-datetime-button>
                     <ion-icon
+                      id="fechaNacimientoIcon"
                       name="calendar"
-                      slot="end"
-                      aria-hidden="true"
-                    ></ion-icon>
-                    <ion-modal [keepContentsMounted]="true">
+                      slot="end">
+                    </ion-icon>
+                    <ion-modal [keepContentsMounted]="true" trigger="fechaNacimientoIcon">
                       <ng-template>
                         <ion-datetime
                           color="morado-custom"

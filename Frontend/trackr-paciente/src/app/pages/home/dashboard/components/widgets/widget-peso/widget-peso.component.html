@@ -1,17 +1,19 @@
 <app-widget
-  title="Peso"
-  iconClass="scale"
-  colorBackground="#9691A8"
-  colorTitle="#F4F4F4"
-  widgetClass="salud"
+  colorBackground="var(--neutral-50)"
+  widgetClass="salud" 
   (click)="cargarDatosWeight()"
 >
-  <div class="container d-flex justify-content-center align-items-center">
-
-    <div class="peso-actual">
-      <span class="valor"> {{ pesoActual }} </span>  
-      <span class="unidad">kg</span>
+<div class="contenido" salud>
+  <div class="header">
+    <div class="icono">
+      <ion-icon slot="icon-only" name="peso"></ion-icon>
     </div>
-    
   </div>
+  <div class="datos">
+    <ion-text>
+      <p class="label">Peso</p>
+      <p class="medicion"><span id="valor">{{pesoActual}}</span><span id="unidad"> {{unidadMedida}}</span></p>
+    </ion-text>
+  </div>
+</div>
 </app-widget>

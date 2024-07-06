@@ -1,25 +1,39 @@
-@import "../../../../../../../theme/variables.scss";
-
-.values {
-  font-size: 4vw;
-  color: var(--neutral-100);
-  font-family: var(--font-body);
-
-  .value {
-    font-size: 1em;
-
-    .valor {
-      font-size: 0.8em;
-      font-weight: bold;
-    }
-
-    .medida {
-      font-size: 0.8em;
-      margin-right: 0.2em;
+.contenido{
+  height: 100% !important;
+  width: 100% !important;
+  background-image: url(../assets/Pasos-background.svg);
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  padding: 24px 16px;
+  .header{
+    height: 30%;
+    .icono{
+      ion-icon{
+        font-size: 24px;
+        color: var(--primary-950);
+      }
     }
   }
-
-  .label {
-    font-size: 0.6em;
+  .datos{
+    height: 70%;
+    display: flex;
+    align-items: end;
+    ion-text{
+      font-family: var(--font-body);
+      color: var(--primary-900);
+      font-weight: bold;
+    }
+    .label{
+      font-size: 16px;
+      margin: 0;
+    }
+    #valor{
+      font-size: 28px;
+      margin: 0;
+    }
+    #unidad{
+      font-size: 20px;
+      margin: 0;
+    }
   }
 }

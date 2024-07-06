@@ -14,7 +14,7 @@
   <div class="contenedor-principal" *ngIf="true">
     <div class="titulo">
       <ion-text>
-        <h3>Añadir tratamiento</h3>
+        <h3>{{tituloAccion}} tratamiento</h3>
       </ion-text>
     </div>
 
@@ -24,31 +24,7 @@
           <ion-grid class="inputs ion-no-padding" >
             <ion-row>
               <ion-col size="12">
-                <div class="input">
-                  <ion-label>Fecha de registro</ion-label>
-                  <ion-item lines="none" class="date-input input-disabled">
-                    <ion-datetime-button disabled="true" datetime="fechaRealizacion"></ion-datetime-button>
-                    <ion-icon name="calendar" slot="end" aria-hidden="true"></ion-icon>
-                  </ion-item>
-                  <ion-modal [keepContentsMounted]="true">
-                    <ng-template>
-                      <ion-datetime
-                        presentation="date"
-                        color="morado-custom"
-                        name="fechaRealizacion"
-                        id="fechaRealizacion"
-                        showDefaultButtons="true"
-                        locale="es-ES"
-                        formControlName="fechaRegistro">
-                      </ion-datetime>
-                    </ng-template>
-                  </ion-modal>
-                </div>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col size="12">
-                <div class="input">
+                <div class="input first-input">
                   <ion-label>Fármaco</ion-label>
                   <ion-item lines="none" class="general-input">
                     <ion-input
@@ -79,7 +55,7 @@
                     <ion-button id="decrementar" (click)="decrementarCantidad()">
                       <ion-icon slot="icon-only" name="minus"></ion-icon>
                     </ion-button>
-                    <ion-label>{{ formTratamiento.get('cantidad')?.value }}</ion-label>
+                    <ion-input type="number" formControlName="cantidad" [(ngModel)]="cantidadFarmaco"></ion-input>
                     <ion-button id="incrementar" (click)="incrementarCantidad()">
                       <ion-icon slot="icon-only" name="plus"></ion-icon>
                     </ion-button>
@@ -235,9 +211,13 @@
                   <ion-label>Fecha de inicio</ion-label>
                   <ion-item lines="none" class="date-input">
                     <ion-datetime-button datetime="fechaInicio"></ion-datetime-button>
-                    <ion-icon name="calendar" slot="end" aria-hidden="true"></ion-icon>
+                    <ion-icon 
+                      name="calendar" 
+                      slot="end"
+                      id="fechaInicioIcon">
+                    </ion-icon>
                   </ion-item>
-                  <ion-modal [keepContentsMounted]="true">
+                  <ion-modal [keepContentsMounted]="true" trigger="fechaInicioIcon">
                     <ng-template>
                       <ion-datetime
                         presentation="date"
@@ -248,7 +228,7 @@
                         cancelText="Cancelar"
                         doneText="Ok"
                         locale="es-ES"
-                        formControlName="fechaInicio"
+                        formControlName="fechaInicio"                      
                       ></ion-datetime>
                     </ng-template>
                   </ion-modal>
@@ -261,9 +241,20 @@
                   <ion-label>Fecha de fin</ion-label>
                   <ion-item lines="none" class="date-input">
                     <ion-datetime-button datetime="fechaFin"></ion-datetime-button>
-                    <ion-icon name="calendar" slot="end" aria-hidden="true"></ion-icon>
+                    <ion-icon 
+                      name="calendar"
+                      id="fechaFinIcon"
+                      slot="end">
+                    </ion-icon>
                   </ion-item>
-                  <ion-modal [keepContentsMounted]="true">
+                  <div 
+                    class="input-text-error"
+                    *ngIf="formTratamiento.hasError('fechaFinLessThanFechaInicio') && 
+                    (formTratamiento.get('fechaFin')?.dirty || formTratamiento.get('fechaFin')?.touched)">
+                      <ion-icon slot="start" name="info"></ion-icon>
+                      La fecha de inicio no puede ser mayor a la fecha de fin
+                  </div>
+                  <ion-modal [keepContentsMounted]="true" trigger="fechaFinIcon">
                     <ng-template>
                       <ion-datetime
                         presentation="date"
@@ -284,7 +275,7 @@
             <ion-row>
               <ion-col size="12">
                 <ion-item 
-                  (click)="setOpen(true)" 
+                  (click)="setOpenModalRecordatorio(true)" 
                   lines="none" 
                   button 
                   class="action-button-item" 
@@ -304,7 +295,7 @@
                     <ion-header class="ion-no-border header-modal">
                       <ion-toolbar>
                         <ion-buttons slot="start">
-                          <ion-button (click)="setOpen(false)">
+                          <ion-button (click)="setOpenModalRecordatorio(false)">
                             <ion-icon name="x"></ion-icon>
                           </ion-button>
                         </ion-buttons>
@@ -333,9 +324,13 @@
                                   <ion-label>Definir hora</ion-label>
                                   <ion-item lines="none" class="date-input">
                                     <ion-datetime-button datetime="selectorHora"></ion-datetime-button>
-                                    <ion-icon name="clock" slot="end" aria-hidden="true"></ion-icon>
+                                    <ion-icon 
+                                      id="selectorHoraIcon"
+                                      name="clock" 
+                                      slot="end">
+                                    </ion-icon>
                                   </ion-item>
-                                  <ion-modal [keepContentsMounted]="true">
+                                  <ion-modal [keepContentsMounted]="true" trigger="selectorHoraIcon">
                                     <ng-template>
                                       <ion-datetime
                                         presentation="time"
@@ -355,7 +350,7 @@
                               </ion-col>
                               <ion-col size="auto">
                                 <div class="boton-agregar-eliminar">
-                                  <ion-button class="agregar" *ngIf="true" (click)="addHour()">
+                                  <ion-button class="agregar" (click)="addHour()" [disabled]="!hayDiaSeleccionado()">
                                     <ion-icon slot="icon-only" name="plus"></ion-icon>
                                   </ion-button>
                                 </div>
@@ -411,15 +406,15 @@
             </ion-row>
             <ion-row>
               <ion-col size="12">
-                <ion-item lines="none" button class="action-button-item" (click)="addPhotoToGallery()" *ngIf="!photo">
+                <ion-item lines="none" button class="action-button-item" (click)="takePicture()" *ngIf="!archivo">
                   <ion-label>Adjuntar imagen</ion-label>
                   <ion-icon slot="end" name="camera"></ion-icon>
                 </ion-item>
-                <div class="adjuntar-elemento" *ngIf="photo">
+                <div class="adjuntar-elemento" *ngIf="archivo">
                   <div class="previsualizacion">
-                    <ion-img [src]="photo"></ion-img>
+                    <ion-img [src]="'data:image/png;base64,' + archivo"></ion-img>
                     <div class="datos-archivo">
-                      <ion-text><p>{{photoPreview?.dataUrl}}</p></ion-text>
+                      <ion-text><p>{{archivoNombre}}</p></ion-text>
                       <ion-button (click)="eliminarAdjunto()">
                         <ion-icon slot="icon-only" name="trash-2"></ion-icon>
                       </ion-button>
@@ -430,8 +425,13 @@
             </ion-row>
           </ion-grid>
         </div>
-        <div class="botones">
-          <ion-button [disabled]="!formTratamiento.valid || btnSubmit" (click)="submitForm()" class="guardar">Guardar</ion-button>
+        <div class="botones botones-column">
+          <ion-button 
+            class="dark"
+            [disabled]="!formTratamiento.valid || btnSubmit || (!formTratamiento.dirty && !isFormModified) " 
+            (click)="submitForm()">
+            Guardar
+          </ion-button>
         </div>
       </form>
     </div>

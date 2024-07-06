@@ -22,7 +22,7 @@
     margin-bottom: 12px;
     background-color: transparent;
      padding: 0 !important;
-    font-size: 14px;
+    font-size: 1rem;
     font-family: var(--font-body);
     color: var(--neutral-700);
   }
@@ -194,8 +194,10 @@ app-number-input.ng-invalid.ng-touched.ng-dirty input {
 }
 
 .error {
-  color: rgba(255, 0, 0, 0.74);
-  font-size: 0.86em;
+  color: var(--error-200);
+  margin-top: 6px;
+  font-size: 0.8rem;
+  font-family: var(--font-body);
 }
 
 // Input - Time / Hora

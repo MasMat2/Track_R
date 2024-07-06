@@ -2,38 +2,46 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { PerfilTratamientoService } from '@http/gestion-perfil/perfil-tratamiento.service';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { addIcons } from 'ionicons';
 import { AlertController } from '@ionic/angular/standalone';
 import { AgregarTratamientoPage } from './agregar-tratamiento/agregar-tratamiento.page';
 import { DetalleTratamientoComponent } from './detalle-tratamiento/detalle-tratamiento.component';
 import { ExpedienteTratamientoPerfilDto } from 'src/app/shared/Dtos/gestion-perfil/expediente-tratamiento-perfil-dto';
+import { SearchbarComponent } from '@sharedComponents/searchbar/searchbar.component';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 
 @Component({
   selector: 'app-mis-tratamientos',
   templateUrl: './mis-tratamientos.page.html',
   styleUrls: ['./mis-tratamientos.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, RouterModule, HeaderComponent],
+  imports: [
+    IonicModule, 
+    CommonModule, 
+    RouterModule, 
+    SearchbarComponent
+  ],
 })
 export class MisTratamientosPage implements OnInit {
 
   protected tratamientos$: Observable<ExpedienteTratamientoPerfilDto[]>;
   protected tratamientosFiltradosPorBusqueda: ExpedienteTratamientoPerfilDto[];
-  protected tratamientos: ExpedienteTratamientoPerfilDto[];
+  protected misTratamientos: ExpedienteTratamientoPerfilDto[];
   protected filtrando: boolean = false;
 
   constructor(
     private perfilTratamientoService: PerfilTratamientoService,
     private alertController: AlertController,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private loadingSpinner : LoadingSpinnerService
   ) { 
     addIcons({
       'plus': 'assets/img/svg/plus.svg',
       'trash-2': 'assets/img/svg/trash-2.svg',
-      'chevron-left': 'assets/img/svg/chevron-left.svg'
+      'chevron-left': 'assets/img/svg/chevron-left.svg',
+      'chevron-right': 'assets/img/svg/chevron-right.svg'
     }) 
   }
 
@@ -41,22 +49,29 @@ export class MisTratamientosPage implements OnInit {
     this.consultarTratamientos();
   }
 
-  // public ionViewWillEnter() : void
-  // {
-  //   this.consultarTratamientos();
-  // }
-
   protected consultarTratamientos(): void {
+    this.loadingSpinner.presentLoading();
+    
+    // this.tratamientos$ = this.perfilTratamientoService.consultarTratamientos().pipe(
+    //   tap((tratamientos => {
+    //     this.misTratamientos = tratamientos;
+    //   }))
+    // );
+
     this.tratamientos$ = this.perfilTratamientoService.consultarTratamientos();
     this.tratamientos$.subscribe({
       next: (data)=>{
-        this.tratamientos = data;
+        this.misTratamientos = data;
+      },
+      error: () =>{},
+      complete: () => {
+        this.loadingSpinner.dismissLoading();
       }
     })
   }
 
   protected listaTratamientosVacia(){
-    return this.tratamientos?.length == 0;
+    return this.misTratamientos?.length == 0;
   }
 
   protected async presentarAlertaEliminar(tratamiento: ExpedienteTratamientoPerfilDto) {
@@ -140,15 +155,22 @@ export class MisTratamientosPage implements OnInit {
 
   }
 
-  protected buscarTratamiento(event: any){
-    const text = event.target.value;
+  protected handleSearch(searchTerm: string): void {
+    if( searchTerm == ""){
+      this.filtrando = false;
+      return
+    }
+    else{
+      this.filtrando = true;
 
-    text == '' ? this.filtrando = false : this.filtrando = true;
-    this.tratamientosFiltradosPorBusqueda = this.tratamientos;
-    if(text && text.trim() != ''){
-      this.tratamientosFiltradosPorBusqueda = this.tratamientosFiltradosPorBusqueda.filter((tratamiento: ExpedienteTratamientoPerfilDto) =>{
-        return (tratamiento.farmaco.toLowerCase().indexOf(text.toLowerCase()) > -1 );
-      })
+      this.tratamientosFiltradosPorBusqueda = this.misTratamientos.filter(tratamiento => {
+        const nombreMatch = tratamiento.farmaco?.toLowerCase().includes(searchTerm.toLowerCase());
+        const unidadMatch = tratamiento.unidad?.toLowerCase().includes(searchTerm.toLowerCase());
+        const padecimientoMatch = tratamiento.padecimiento?.toLowerCase().includes(searchTerm.toLowerCase());
+
+        return nombreMatch || unidadMatch || padecimientoMatch;
+      }
+      );
     }
   }
 

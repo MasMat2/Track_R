@@ -59,7 +59,7 @@
         
                   ion-item.date-input{
                     ion-datetime-button{
-                        max-width: calc(100% - 40px );
+                        max-width: calc(100%);
                         width: 100%;
                     }
 
@@ -71,6 +71,7 @@
                     }
 
                     .input-icon{
+                      pointer-events: none;
                       position: absolute;
                       right: 0;
                       margin-right: 16px !important;

@@ -1,12 +1,19 @@
-<ion-card [style.background] = "colorBackground" button [class]="widgetClass">
-  <ion-card-header class="mb-1">
-    <ion-card-title class="d-flex align-items-center w-100" [style.color] = "colorTitle">
-      {{ title }}
-    </ion-card-title>
-  </ion-card-header>
+<ion-card [style.background]="colorBackground" [class]="widgetClass" button>
 
-  <ion-card-content>
-    <ng-content #cardContent></ng-content>
-  </ion-card-content>
-  <ion-icon *ngIf="iconClass" class="ms-auto" [name]="iconClass"></ion-icon>
+  <div class="contenedor-seguimiento" *ngIf="widgetClass === 'seguimiento'">
+    <ion-card-header class="mb-1">
+      <ion-card-title class="d-flex align-items-center w-100" [style.color] = "colorTitle">
+        {{ title }}
+      </ion-card-title>
+    </ion-card-header>
+    
+    <ion-card-content>
+      <ng-content select="[seguimiento]"></ng-content>
+    </ion-card-content>
+  </div>
+  
+  <div class="contenedor-salud" *ngIf="widgetClass === 'salud'">
+    <ng-content select="[salud]"></ng-content>
+  </div>
+
 </ion-card>

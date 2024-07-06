@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { HealthkitService } from '@services/healthkit.service';
 
+import { addIcons } from 'ionicons';
 
 @Component({
   selector: 'app-widget-sueno',
@@ -18,7 +19,11 @@ import { HealthkitService } from '@services/healthkit.service';
 })
 export class WidgetSuenoComponent  implements OnInit {
 
-  constructor(private healthKitService: HealthkitService) { }
+  constructor(private healthKitService: HealthkitService) { 
+    addIcons({
+      'suenio': '/assets/img/svg/Suenio.svg'
+    })
+  }
   
   //Estado de healthkit: AsLeep
   protected tiempoDormido: number = 0;

@@ -1,27 +1,41 @@
-@import "../../../../../../../theme/variables.scss";
-.container {
-  padding: 0;
-}
 
-.valores {
-  padding-right: 0px;
-  padding-top: 15%;
-  align-items: center;
-  justify-content: end;
-
-  .valor {
-    font-size: 6vw;
-    color: var(--neutral-100);
-    font-family: var(--font-body);
-    margin-right: 5%;
-    font-weight: bold;
-    margin-bottom: 0;
+.contenido{
+  height: 100% !important;
+  width: 100% !important;
+  background-image: url(../assets/Ritmo-cardiaco-background.svg);
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  padding: 24px 16px;
+  .header{
+    height: 30%;
+    .icono{
+      ion-icon{
+        font-size: 24px;
+        color: var(--primary-950);
+      }
+    }
   }
-
-  .unidad {
-    font-size: 6vw;
-    color: var(--neutral-100);
-    font-family: var(--font-body);
-    margin-right: 5%;
+  .datos{
+    height: 70%;
+    display: flex;
+    align-items: end;
+    ion-text{
+      font-family: var(--font-body);
+      color: var(--primary-900);
+      font-weight: bold;
+    }
+    .label{
+      font-size: 16px;
+      margin: 0;
+    }
+    .medicion{
+      margin: 0;
+      #valor{
+        font-size: 28px;
+      }
+      #unidad{
+        font-size: 20px;
+      }
+    }
   }
 }

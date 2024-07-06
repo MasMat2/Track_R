@@ -10,6 +10,7 @@ import { DominioFormularioComponent } from './dominio-formulario/dominio-formula
 import { DominioComponent } from './dominio.component';
 import { DominioRoutingModule } from './dominio.routing.module';
 import { DominioHospitalFormularioComponent } from './dominio-formulario/dominio-hospital-formulario/dominio-hospital-formulario.component';
+import { LucideAngularModule, X } from 'lucide-angular';
 
 @NgModule({
     imports: [
@@ -18,7 +19,9 @@ import { DominioHospitalFormularioComponent } from './dominio-formulario/dominio
       DirectiveModule,
       BsDatepickerModule,
       CollapseModule,
-      ModalModule.forChild()
+      ModalModule.forChild(),
+      LucideAngularModule.pick({X}),
+
     ],
     declarations: [
       DominioComponent,

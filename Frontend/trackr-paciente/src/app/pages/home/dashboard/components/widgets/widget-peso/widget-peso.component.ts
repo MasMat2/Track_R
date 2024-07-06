@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { WidgetComponent } from '../widget/widget.component';
 import { HealthkitService } from '@services/healthkit.service';
+import { addIcons } from 'ionicons';
 
 @Component({
   selector: 'app-widget-peso',
@@ -19,9 +20,14 @@ export class WidgetPesoComponent  implements OnInit {
   protected pesoPerdido: number = 12;
   protected pesoFaltante: number = 5;
   protected pesoActual: string = "0.0";
+  protected unidadMedida: string = "kg";
   protected dias: number = 40;
 
-  constructor(private healthKitService: HealthkitService) { }
+  constructor(private healthKitService: HealthkitService) { 
+    addIcons({
+      'peso': '/assets/img/svg/Peso.svg'
+    })
+  }
 
   ngOnInit() {
     this.cargarDatosWeight();

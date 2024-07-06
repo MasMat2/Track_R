@@ -377,6 +377,15 @@ export class GeneralConstant {
     class: 'modal-medium modal-size-md modal-position-center'
   };
 
+  public static CONFIG_MODAL_SMALL_CUSTOM: any = {
+    animated: true,
+    keyboard: false,
+    backdrop: 'static',
+    ignoreBackdropClick: true,
+    size: 'md',
+    class: 'modal-sm modal-size-md modal-position-center modal-content-color'
+  };
+
   public static CONFIG_MODAL_SMALL: any = {
     animated: true,
     keyboard: false,

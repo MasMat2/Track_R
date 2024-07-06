@@ -32,6 +32,7 @@ import { DirectiveModule } from "src/app/shared/directives/directive.module";
 import { SharedModule } from "src/app/shared/shared.module";
 import { UsuarioFormularioComponent } from "./usuario-formulario.component";
 import { GridGeneralModule } from "@sharedComponents/grid-general/grid-general.module";
+import { LucideAngularModule, X } from "lucide-angular";
 
 @NgModule({
   imports: [
@@ -43,7 +44,8 @@ import { GridGeneralModule } from "@sharedComponents/grid-general/grid-general.m
     ModalModule.forChild(),
     NgSelectModule,
     TypeaheadModule.forRoot(),
-    GridGeneralModule
+    GridGeneralModule,
+    LucideAngularModule.pick({ X })
   ],
   declarations: [UsuarioFormularioComponent],
   exports: [UsuarioFormularioComponent],

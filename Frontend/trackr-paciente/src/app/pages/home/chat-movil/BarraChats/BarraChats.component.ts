@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { addIcons } from 'ionicons';
 import { addCircle, chatboxOutline, send } from 'ionicons/icons'
 import { NuevoChatDoctoresComponent } from './nuevo-chat-doctores/nuevo-chat-doctores.component';
+import { SearchbarComponent } from '@sharedComponents/searchbar/searchbar.component';
 
 @Component({
   selector: 'app-barra-chats',
@@ -30,6 +31,7 @@ import { NuevoChatDoctoresComponent } from './nuevo-chat-doctores/nuevo-chat-doc
     IonicModule,
     HeaderComponent, 
     FormsModule,
+    SearchbarComponent
   ],
   providers : [
 
@@ -47,7 +49,8 @@ export class BarraChatsComponent {
 
   protected doctorSeleccionado: boolean = false;
   protected verListaDoctores: boolean = false;
-  protected chatsFiltradosPorBusqueda: any;
+  protected chatsFiltradosPorBusqueda: ChatDTO[];
+  protected filtrando: boolean = false;
 
   constructor(
     private router: Router,
@@ -78,6 +81,7 @@ export class BarraChatsComponent {
   obtenerChats() {
     this.chats$ = this.ChatHubServiceService.chat$;
     this.chats$.subscribe((chats) => {
+      console.log(chats);
       chats.forEach((chat) => {
         if(chat.imagenBase64 != null){
           let base64String = "data:" +chat.tipoMime + ';base64,' + chat.imagenBase64;
@@ -150,6 +154,7 @@ export class BarraChatsComponent {
   crearChat(){
     let chat: ChatDTO = {
       fecha: new Date(),
+      fechaUltimoMensaje: new Date(),
       habilitado: true,
       idCreadorChat: this.usuarios[this.usuarios.length - 1],
       titulo: this.tituloChat
@@ -180,6 +185,24 @@ export class BarraChatsComponent {
       this.chatsFiltradosPorBusqueda = this.chatsFiltradosPorBusqueda.filter((chat: any) =>{
           return (chat.titulo.toLowerCase().indexOf(text.toLowerCase()) > -1 || chat.ultimoMensaje.toLowerCase().indexOf(text.toLowerCase()) > -1 );
       })
+    }
+  }
+
+  protected listaVacia(): boolean{
+    return (this.chats?.length == 0);
+  }
+
+  handleSearch(searchTerm: string): void {
+    if( searchTerm == ""){
+      this.filtrando = false;
+      return
+    }
+    else{
+      this.filtrando = true;
+      this.chatsFiltradosPorBusqueda = this.chats.filter(chat => 
+        chat.ultimoMensaje?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        chat.titulo?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
   }
 }

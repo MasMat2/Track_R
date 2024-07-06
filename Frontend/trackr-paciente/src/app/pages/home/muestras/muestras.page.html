@@ -19,11 +19,15 @@
       <div class="datetime-buttons">
         <div class="datetime-input" id="date-picker">
           <ion-item lines="none" class="date-input">
-            <ion-icon name="calendar" slot="start"></ion-icon>
+            <ion-icon
+              id="dateIcon" 
+              name="calendar" 
+              slot="start">
+            </ion-icon>
             <ion-datetime-button datetime="date"></ion-datetime-button>
           </ion-item>
 
-          <ion-modal [keepContentsMounted]="true">
+          <ion-modal [keepContentsMounted]="true" trigger="dateIcon">
             <ng-template>
               <ion-datetime
                 presentation="date"
@@ -43,11 +47,15 @@
         </div>
         <div class="datetime-input" id="time-picker">
           <ion-item lines="none" class="date-input">
-            <ion-icon name="clock-2" slot="start"></ion-icon>
+            <ion-icon
+              id="timeIcon"
+              name="clock-2" 
+              slot="start">
+            </ion-icon>
             <ion-datetime-button datetime="time"></ion-datetime-button>
           </ion-item>
 
-          <ion-modal [keepContentsMounted]="true">
+          <ion-modal [keepContentsMounted]="true" trigger="timeIcon">
             <ng-template>
               <ion-datetime
                 presentation="time"

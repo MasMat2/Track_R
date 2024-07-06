@@ -7,13 +7,16 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { CodigoPostalFormularioComponent } from './codigo-postal-formulario/codigo-postal-formulario.component';
 import { CodigoPostalComponent } from './codigo-postal.component';
 import { CodigoPostalRoutingModule } from './codigo-postal.routing.module';
+import { LucideAngularModule, X } from 'lucide-angular';
 
 @NgModule({
   imports: [
     SharedModule,
     DirectiveModule,
     ModalModule.forChild(),
-    CodigoPostalRoutingModule
+    CodigoPostalRoutingModule,
+    LucideAngularModule.pick({X}),
+
   ],
   declarations: [
     CodigoPostalComponent,

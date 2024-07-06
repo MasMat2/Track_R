@@ -6,6 +6,9 @@ using TrackrAPI.Helpers;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using System;
+using TrackrAPI.Services.Notificaciones;
+using TrackrAPI.Dtos.Notificaciones;
+using TrackrAPI.Repositorys.Notificaciones;
 
 
 namespace TrackrAPI.Services.GestionExamen;
@@ -21,6 +24,8 @@ public class ExamenService
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly CorreoHelper _correoHelper;
     private readonly IConverter _converter;
+    private readonly NotificacionPacienteService _notificacionPacienteService;
+    private readonly ITipoNotificacionRepository _tipoNotificacionRepository;
 
     private readonly string AsuntoCorreo = "Programación de examen";
 
@@ -33,7 +38,9 @@ public class ExamenService
         IExamenReactivoRepository examenReactivoRepository,
         IReactivoRepository reactivoRepository,
         IContenidoExamenRepository contenidoExamenRepository,
-        IConverter converter)
+        IConverter converter,
+        NotificacionPacienteService notificacionPacienteService,
+        ITipoNotificacionRepository tipoNotificacionRepository)
     {
         _correoHelper = correoHelper;
         _examenRepository = examenRepository;
@@ -44,6 +51,8 @@ public class ExamenService
         _programacionExamenRepository = programacionExamenRepository;
         _usuarioRepository = usuarioRepository;
         _converter = converter;
+        _notificacionPacienteService = notificacionPacienteService;
+        _tipoNotificacionRepository = tipoNotificacionRepository;
     }
 
     public Examen? Consultar(int idExamen)
@@ -183,7 +192,7 @@ public class ExamenService
         }
     }
 
-    public void Actualizar(List<Examen> examenList)
+    public void Actualizar(List<Examen> examenList , int idUsuarioSesion)
     {
         if (examenList[0].IdProgramacionExamen == 0)
         {
@@ -208,10 +217,11 @@ public class ExamenService
 
                 if (!string.IsNullOrWhiteSpace(usuario.CorreoPersonal))
                 {
-                    EnviarCorreo(usuario.CorreoPersonal, examen);
                 }
             }
         }
+
+        EnviarNotificacion(examenList[0], examenList.Select(p => p.IdUsuarioParticipante).ToList() , idUsuarioSesion);
 
         foreach (Examen examen in examenDto)
         {
@@ -222,6 +232,26 @@ public class ExamenService
         }
     }
 
+    public async Task EnviarNotificacion(Examen examen, List<int> idsUsuarios, int idUsuarioSesion)
+    {
+
+        var idTipoNotificacion =_tipoNotificacionRepository.ConsultarPorClave(GeneralConstant.ClaveNotificacionAlerta).IdTipoNotificacion;
+        var fechaLocal = examen.FechaAlta.Value.ToLocalTime();
+        var fecha = fechaLocal.ToString("dd/MM/yyyy HH:mm");
+
+        var notificacion = new NotificacionCapturaDTO
+        (
+           "Nuevo examen programado",
+            $"Se le ha programado un examen para el día {fecha}",
+           idTipoNotificacion,
+           idUsuarioSesion,
+           null
+
+        );
+
+        await _notificacionPacienteService.Notificar(notificacion, idsUsuarios);
+
+    }
     public void EnviarCorreo(string correo, Examen examen)
     {
         // var programacionExamen = _programacionExamenRepository.Consultar(examen.IdProgramacionExamen);

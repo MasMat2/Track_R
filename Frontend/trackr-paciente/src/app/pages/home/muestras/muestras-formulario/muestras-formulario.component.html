@@ -13,33 +13,37 @@
       novalidate="novalidate"
       >
       <div class="contenido-formulario">
-        <ion-list class="inputs">
-          <div class="input">
-            <ion-text><p>Padecimiento</p></ion-text>
-            <ion-item lines="none" class="select-input">
-              <ion-select 
-                id="padecimiento"
-                name="padecimientoName"
-                interface="popover"
-                [interfaceOptions]="{cssClass: 'custom-select-popover'}"
-                toggleIcon="chevron-up"
-                placeholder="Seleccionar" 
-                [(ngModel)]="padecimientoSeleccionado"
-                (ionChange)="onChangePadecimiento()"
-                required
-                >
-                <ion-select-option 
-                  *ngFor="let padecimiento of arbolPadecimiento" 
-                  [value]="padecimiento">
-                  {{ padecimiento?.nombrePadecimiento }}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
-          </div>
-          <div class="input">
-            <ion-text><p>Sección</p></ion-text>
-            <ion-row>
-              <ion-col >
+        <ion-grid class="inputs ion-no-padding">
+          <ion-row>
+            <ion-col size="12">
+              <div class="input">
+                <ion-label>Padecimiento</ion-label>
+                <ion-item lines="none" class="select-input">
+                  <ion-select 
+                    id="padecimiento"
+                    name="padecimientoName"
+                    interface="popover"
+                    [interfaceOptions]="{cssClass: 'custom-select-popover'}"
+                    toggleIcon="chevron-up"
+                    placeholder="Seleccionar" 
+                    [(ngModel)]="padecimientoSeleccionado"
+                    (ionChange)="onChangePadecimiento()"
+                    required
+                    >
+                    <ion-select-option 
+                      *ngFor="let padecimiento of arbolPadecimiento" 
+                      [value]="padecimiento">
+                      {{ padecimiento?.nombrePadecimiento }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <div class="input">
+                <ion-label>Parámetro</ion-label>
                 <ion-item lines="none" class="select-input">
                   <ion-select 
                     id="seccion"
@@ -60,38 +64,45 @@
                     </ion-select-option>
                   </ion-select>
                 </ion-item>
-              </ion-col>
-              <ion-col [hidden]="!variablesExistenEnHealthKit" size="3">
-                <ion-button *ngIf="variablesExistenEnHealthKit" (click)="syncronizeData()" shape="round" fill="outline" [disabled]="seccionSeleccionada?.seccionesCampo == null">
-                  <ion-icon  name="swap-vertical-outline" ></ion-icon>
+              </div>
+            </ion-col>
+            <ion-col *ngIf="false" size="3" [hidden]="!variablesExistenEnHealthKit">
+              <div class="boton-sicronizar-healthkit" *ngIf="variablesExistenEnHealthKit">
+                <ion-button (click)="syncronizeData()" [disabled]="seccionSeleccionada?.seccionesCampo == null">
+                  <ion-icon slot="icon-only" name="swap-vertical-outline"></ion-icon>
                 </ion-button>
-              </ion-col>
-              
-            </ion-row>
-     
-          </div>
-          
-          <div class="inputs-variables">
-            <div class="input" *ngFor="let variable of seccionSeleccionada?.seccionesCampo; let i = index">
-              <ion-text><p>{{variable.descripcion}}</p></ion-text>
-              <ion-item lines="none" class="text-input">
-                <ion-input
-                  [(ngModel)]="variable.valor"
-                  [name]="'variableName' + i"
-                  type="text"
-                  inputmode="numeric"
-                  required
-                  autocomplete="off"
-                >
-                </ion-input>
-                <ion-label slot="end" >{{variable?.idDominioNavigation?.unidadMedida}}</ion-label>
-              </ion-item>
-            </div>
-          </div>
-        </ion-list>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngFor="let variable of seccionSeleccionada?.seccionesCampo; let i = index">
+            <ion-col size="12">
+              <div class="input">
+                <ion-label>{{variable.descripcion}}</ion-label>
+                <ion-item lines="none" class="general-input">
+                  <ion-input
+                    [(ngModel)]="variable.valor"
+                    [name]="'variableName' + i"
+                    type="text"
+                    inputmode="numeric"
+                    required
+                    [maxlength]="variable.idDominioNavigation.longitudMaxima"
+                    autocomplete="off"
+                  >
+                  </ion-input>
+                  <ion-label class="unidadMedida" slot="end" >{{variable?.idDominioNavigation?.unidadMedida}}</ion-label>
+                </ion-item>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </div>
-      <div class="botones">
-        <ion-button type="submit" class="guardar" [disabled]="submitting || !formulario.valid || !seccionYaSeleccionada || !valoresInputValidos()">Guardar</ion-button>
+      <div class="botones botones-column">
+        <ion-button 
+          type="submit" 
+          class="dark" 
+          [disabled]="submitting || !formulario.valid || !seccionYaSeleccionada || !valoresInputValidos()">
+          Guardar
+        </ion-button>
       </div>
     </form>
   </div>

@@ -2,7 +2,7 @@ export class ExpedienteTratamientoDetalleDto{
     idExpedienteTratamiento?: number;
     idExpediente?: number;
     farmaco : string;
-    fechaRegistro : Date;
+    // fechaRegistro : Date;
     fechaInicio?: Date;
     fechaFin?: Date;
     cantidad: number
@@ -14,6 +14,9 @@ export class ExpedienteTratamientoDetalleDto{
     nombreDoctor?: string;
     apellidosDoctor?: string;
     tituloDoctor?: string;
+    archivo: any;
+    archivoTipoMime:string='';
+    archivoNombre:string='';
     imagenBase64: string;
     tipoMime? : string;
     recordatorioActivo: boolean; // Recordatorio de tomas

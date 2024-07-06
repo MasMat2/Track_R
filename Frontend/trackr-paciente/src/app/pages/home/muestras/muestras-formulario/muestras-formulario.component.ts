@@ -126,6 +126,10 @@ export class MuestrasFormularioComponent implements OnInit {
         complete : () => {
           this.modalController.dismiss(null, 'confirm');
         }
+        ,
+        error: () => {
+          this.submitting = false;
+        }
       }
     );
   }

@@ -7,6 +7,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ColoniaFormularioComponent } from './colonia-formulario/colonia-formulario.component';
 import { ColoniaRoutingModule } from './colonia-routing.module';
 import { ColoniaComponent } from './colonia.component';
+import { LucideAngularModule, X } from 'lucide-angular';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,9 @@ import { ColoniaComponent } from './colonia.component';
     SharedModule,
     DirectiveModule,
     ModalModule.forChild(),
-    ColoniaRoutingModule
+    ColoniaRoutingModule,
+    LucideAngularModule.pick({X}),
+
   ],
   providers: [
     ColoniaService

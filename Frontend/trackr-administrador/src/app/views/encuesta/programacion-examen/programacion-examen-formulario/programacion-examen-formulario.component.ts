@@ -253,7 +253,9 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
     const participantes: number[] = this.examenList.map(e => e.idUsuarioParticipante);
 
     for (const participante of this.programacionExamen.participantes) {
-      if (participantes.includes(participante)) {
+      const examenExistente = this.examenList.findIndex(e => e.idUsuarioParticipante === participante);
+      if (examenExistente >= 0) {
+        this.examenList[examenExistente].fechaAlta = this.programacionExamen.fechaExamen;
         continue;
       }
 

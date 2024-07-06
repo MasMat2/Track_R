@@ -3,6 +3,7 @@ export class GeneralConstant {
     public static CLAVE_USUARIO_ADMINISTRADOR = '001';
     public static CLAVE_USUARIO_PACIENTE = '002';
     public static ID_TIPO_NOTIFICACION_TOMA = 6;
+    public static ID_TIPO_NOTIFICACION_ALERTA = 4;
 
 
     public static PLACEHOLDER_DROPDOWN = 'Selecciona...';

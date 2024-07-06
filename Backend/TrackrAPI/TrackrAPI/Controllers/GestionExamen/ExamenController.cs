@@ -116,7 +116,8 @@ public class ExamenController : ControllerBase
     [Route("actualizar")]
     public void Actualizar(List<Examen> examenList)
     {
-        _examenService.Actualizar(examenList);
+        int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+        _examenService.Actualizar(examenList , idUsuario);
     }
 
     [HttpPost]

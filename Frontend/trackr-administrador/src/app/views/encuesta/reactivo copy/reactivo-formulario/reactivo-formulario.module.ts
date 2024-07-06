@@ -9,6 +9,7 @@ import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.m
 import { ReactivoService } from '@http/examen/reactivo.service';
 import { RespuestaService } from '@http/examen/respuesta.service';
 import { Respuesta1FormularioComponent } from './respuesta-formulario/respuesta-formulario.component';
+import { LucideAngularModule, X } from 'lucide-angular';
 
 @NgModule({
   declarations: [Reactivo1FormularioComponent, Respuesta1FormularioComponent],
@@ -18,7 +19,8 @@ import { Respuesta1FormularioComponent } from './respuesta-formulario/respuesta-
     NgSelectModule,
     BsDatepickerModule,
     InputArchivoModule,
-    GridGeneralModule
+    GridGeneralModule,
+    LucideAngularModule.pick({X}),
   ],
   exports: [],
   providers: [

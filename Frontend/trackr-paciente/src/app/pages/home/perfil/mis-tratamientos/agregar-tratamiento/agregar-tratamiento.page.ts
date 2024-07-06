@@ -3,20 +3,16 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
 
-import { Observable } from 'rxjs';
-
 import { PerfilTratamientoService } from '@http/gestion-perfil/perfil-tratamiento.service';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
 
 import { Photo } from '@capacitor/camera';
-import { PhotoService } from '@services/photo.service';
 import {  ModalController } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { ExpedienteTratamientoDetalleDto } from 'src/app/shared/Dtos/gestion-perfil/expediente-tratamiento-detalle-dto';
 import { MisDoctoresService } from '@http/gestion-expediente/mis-doctores.service';
 import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores-selector-dto';
-import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
 import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
 import { ExpedientePadecimientoService } from '@http/gestion-expediente/expediente-padecimiento.service';
 
@@ -50,14 +46,21 @@ export class AgregarTratamientoPage implements OnInit {
   protected accion: string;
   protected formTratamiento: FormGroup;
   protected perfilTratamientoDto: ExpedienteTratamientoDetalleDto;
-  private cantidadFarmaco: number = 1;
+  protected isFormModified: boolean = false;
+  protected cantidadFarmaco: number = 1;
   protected isModalRecordatorioOpen: boolean = false;
   protected btnSubmit: boolean = false;
   protected fechaSeleccionada: string = this.dateToday;
-  protected photo: string | undefined;
-  protected photoPreview: Photo | undefined;
   protected doctoresSelector: UsuarioDoctoresSelectorDto[];
   protected padecimientosSelector: ExpedientePadecimientoSelectorDTO[];
+
+  protected isPictureTaken: boolean = false;
+  protected archivo: any;
+  protected archivoTipoMime: string;
+  protected archivoNombre: string;
+  private mimeType: string = '';
+
+  protected tituloAccion: string = "Agregar";
 
   protected weekDays = [
      {id: 0 , name: 'L'},
@@ -78,16 +81,11 @@ export class AgregarTratamientoPage implements OnInit {
     {id: 6, nombre: 'cucharadas'}
   ]
 
-  // Selectores
-  //protected padecimientos$: Observable<SelectorDto[]>;
-  //protected doctores$: Observable<SelectorDto[]>;
-
   constructor(
     private perfilTratamientoService: PerfilTratamientoService,
     private doctoresService: MisDoctoresService,
     private expedientePadecimientoService: ExpedientePadecimientoService,
     private fb: FormBuilder,
-    private photoService: PhotoService,
     private _modalCtrl: ModalController,
     private alertController: AlertController,
     private capacitorUtils: CapacitorUtils,
@@ -110,7 +108,7 @@ export class AgregarTratamientoPage implements OnInit {
 
   public ngOnInit() {
     this.formTratamiento = this.fb.group({
-      fechaRegistro: [(new Date()).toISOString(), Validators.required],
+      // fechaRegistro: [(new Date()).toISOString(), Validators.required],
       farmaco: ['', Validators.required],
       cantidad: ['1', Validators.required],
       unidad: ['', Validators.required],
@@ -120,30 +118,30 @@ export class AgregarTratamientoPage implements OnInit {
       tratamientoPermanente: [false],
       fechaInicio: [(new Date()).toISOString(), Validators.required],
       fechaFin: [(new Date()).toISOString()],
-      imagenBase64: [''],
       recordatorioActivo: [false],
       diaSemana: this.fb.array([false, false, false, false, false, false, false]),
       horas: this.fb.array([])
     },
       { validators: [this.validateDiaSemana(), this.compareDates()] });
 
-    this.selectorPadecimeintos();
+    this.selectorPadecimientos();
     this.selectorDoctor();
     this.verificarAccionFormulario();
   }
 
   private verificarAccionFormulario(){
     if(this.accion == "editar"){
+      this.tituloAccion = "Editar";
       this.rellenarValoresEditar();
     }
     else{
+      this.tituloAccion = "Añadir";
       return
     }
   }
 
   private rellenarValoresEditar(){
     this.formTratamiento.patchValue({
-      fechaRegistro: this.perfilTratamientoDto.fechaRegistro,
       farmaco: this.perfilTratamientoDto.farmaco,
       cantidad: this.perfilTratamientoDto.cantidad,
       unidad: this.perfilTratamientoDto.unidad,
@@ -171,12 +169,14 @@ export class AgregarTratamientoPage implements OnInit {
 
     //asignar la imagen del medicamento
     if(this.perfilTratamientoDto.imagenBase64 != ""){
-      this.photo = this.perfilTratamientoDto.imagenBase64;
-      this.photoPreview = {format: 'jpeg', saved: false, base64String: this.perfilTratamientoDto.imagenBase64};
+      this.archivo= `${this.perfilTratamientoDto.imagenBase64}`;
     }
+    this.archivoNombre = this.perfilTratamientoDto.archivoNombre;
+    this.archivoTipoMime = this.perfilTratamientoDto.archivoTipoMime;
 
     //ajustar el selector de cantidad
     this.cantidadFarmaco = this.perfilTratamientoDto.cantidad;
+
   }
 
   // Getter para el form array horas
@@ -194,10 +194,9 @@ export class AgregarTratamientoPage implements OnInit {
   }
 
   // Selectores
-  protected selectorPadecimeintos(): void {
+  protected selectorPadecimientos(): void {
     this.expedientePadecimientoService.consultarPorUsuarioParaSelector().subscribe({
       next: (data) => {
-        console.log(data);
         this.padecimientosSelector = data;
       }
     })
@@ -207,21 +206,29 @@ export class AgregarTratamientoPage implements OnInit {
     //this.doctores$ = this.perfilTratamientoService.selectorDeDoctor();
     this.doctoresService.consultarPorUsuarioParaSelector().subscribe({
       next: (data) => {
-        console.log(data);
         this.doctoresSelector = data;
       }
     })
   }
 
   // Camara
-  protected async addPhotoToGallery() {
-    this.photo = (await this.capacitorUtils.takePicture());
-    console.log(this.photo);
+  protected async takePicture() {
+    const image_src = await this.capacitorUtils.takePicture();
 
+    const [, data] = image_src.split(',');
+    const mimeType = image_src.split(':')[1].split(';')[0];
+
+    this.archivo = data;
+    this.archivoTipoMime = mimeType;
+    this.archivoNombre = this.generateFileName();
+
+    this.isPictureTaken = true;
+    this.isFormModified= true;
   }
 
   // Recordatorios Horas
   protected removeHour(index: number) {
+    this.isFormModified = true;
     this.horas.removeAt(index);
     //Al eliminar la ultima hora, se desactiva el recordatorio
     if(this.horas.length === 0){
@@ -230,16 +237,35 @@ export class AgregarTratamientoPage implements OnInit {
   };
 
   protected addHour() {
+    this.isFormModified = true;
     //Al agregar la primer hora, se activa el recordatorio
     if(this.horas.length === 0){
       this.formTratamiento.patchValue({ recordatorioActivo: true });
     }
     const horaSeleccionada = this.fechaSeleccionada;
-    this.horas.push(this.fb.control(horaSeleccionada));
+    const horaRepetida = this.validarHoraRepetida(horaSeleccionada, this.horas.value);
+
+    if(horaRepetida){
+      this.fechaSeleccionada = this.dateToday; //reiniciar selector de hora
+      return
+    }
+    else{
+      this.horas.push(this.fb.control(horaSeleccionada));
+    }
     this.fechaSeleccionada = this.dateToday; //reiniciar selector de hora
   };
 
   // Validaciones
+
+  protected validarHoraRepetida(horaSeleccionada: string, horasArray: string[]){
+    // Extraer solo la parte de la hora y los minutos de la hora seleccionada
+    const horaSeleccionadaHoraMinutos = horaSeleccionada.substring(11, 16);
+
+    const horaRepetida = horasArray.some(hora => hora.substring(11, 16) === horaSeleccionadaHoraMinutos);
+
+    return horaRepetida; // Retorna true si hay una hora repetida, false en caso contrario
+  }
+
   // Valida que la fechaFin sea mayor o igual a fechaInicio
   protected compareDates(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
@@ -247,7 +273,7 @@ export class AgregarTratamientoPage implements OnInit {
       const fechaInicio = new Date(control.get('fechaInicio')?.value);
       const fechaFin = new Date(control.get('fechaFin')?.value);
     
-      if (!tratamientoPermanente && fechaInicio && fechaFin && fechaInicio > fechaFin) {
+      if (!tratamientoPermanente && fechaInicio && fechaFin && (fechaInicio > fechaFin)) {
         return { 'fechaFinLessThanFechaInicio': true };
       }
     
@@ -276,12 +302,9 @@ export class AgregarTratamientoPage implements OnInit {
       return hora.split('T')[1].split('.')[0]; 
     });
 
-
-    var imageBase64 = this.photo ? this.photo.split(',')[1] : "";
     const tratamientoDto: ExpedienteTratamientoDetalleDto = {
       idExpedienteTratamiento: this.perfilTratamientoDto?.idExpedienteTratamiento,//tendra valor solo cuando la accion sea editar
       farmaco: formValues.farmaco,
-      fechaRegistro: new Date(formValues.fechaRegistro),
       fechaInicio: new Date(formValues.fechaInicio),
       fechaFin: !formValues.tratamientoPermanente ? new Date(formValues.fechaFin) : undefined,
       cantidad: formValues.cantidad,
@@ -290,13 +313,16 @@ export class AgregarTratamientoPage implements OnInit {
       padecimiento: formValues.padecimiento,
       idPadecimiento: formValues.idPadecimiento,
       idUsuarioDoctor: formValues.idUsuarioDoctor,
-      imagenBase64: imageBase64,
+      imagenBase64: "",
+      archivo: this.archivo,
+      archivoNombre: this.archivoNombre,
+      archivoTipoMime: this.archivoTipoMime,
       recordatorioActivo: formValues.recordatorioActivo,
       diaSemana: formValues.recordatorioActivo ? formValues.diaSemana : null,
       horas: formValues.recordatorioActivo ? horasTiempos : null,
     };
     this.perfilTratamientoDto = tratamientoDto;
-
+    
     if(this.accion == "editar"){
       this.editar(this.perfilTratamientoDto);
     }
@@ -340,6 +366,7 @@ export class AgregarTratamientoPage implements OnInit {
   }
 
   protected incrementarCantidad(){
+    this.isFormModified = true;
     if(this.cantidadFarmaco < CANTIDAD_MAXIMA){
       this.cantidadFarmaco += 1;
       this.formTratamiento.patchValue({ cantidad: (this.cantidadFarmaco) });
@@ -347,6 +374,7 @@ export class AgregarTratamientoPage implements OnInit {
   }
 
   protected decrementarCantidad(){
+    this.isFormModified = true;
     if(this.cantidadFarmaco > 0){
       this.cantidadFarmaco -= 1;
       this.formTratamiento.patchValue({ cantidad: (this.cantidadFarmaco) });
@@ -366,8 +394,20 @@ export class AgregarTratamientoPage implements OnInit {
     controlEnIndice.patchValue(!controlEnIndice.value);
   }
 
+  protected hayDiaSeleccionado(){
+    const diaSemanaControl = this.formTratamiento.get('diaSemana') as FormArray;
+    return diaSemanaControl.value.indexOf(true) !== -1; //true si hay al menos un dia seleccionado
+  }
+
+  protected hayHoraRepetida(){
+
+  }
+
   protected eliminarAdjunto(){
-    this.photo = undefined;
+    this.archivo = undefined;
+    this.archivoNombre = "";
+    this.archivoTipoMime = "";
+    this.isFormModified = true;
   }
 
   protected async presentarAlertaSuccess(accion: string) {
@@ -391,8 +431,17 @@ export class AgregarTratamientoPage implements OnInit {
     this._modalCtrl.dismiss(null, rol);
   }
 
-  protected setOpen(isOpen: boolean) {
+  protected setOpenModalRecordatorio(isOpen: boolean) {
     this.isModalRecordatorioOpen = isOpen;
+  }
+
+  private generateFileName(): string {
+    const date = new Date();
+    const formattedDate = date.toISOString().split('T')[0];
+    const timestamp = date.getTime();
+    const extension = this.mimeType === 'image/png' ? 'png' : 'jpg';
+
+    return `TrackrImage_${formattedDate}_${timestamp}.${extension}`;
   }
 
 }

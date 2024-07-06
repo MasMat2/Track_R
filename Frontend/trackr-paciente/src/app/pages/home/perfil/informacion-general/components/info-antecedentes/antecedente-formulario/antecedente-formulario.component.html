@@ -26,11 +26,16 @@
                 placeholder="Seleccionar" 
                 required
                 [(ngModel)]="expedientePadecimientoDto.idPadecimiento">
-                <ion-select-option 
-                  *ngFor="let antecedente of antecedenteFiltradoList" 
-                  [value]="antecedente?.idPadecimiento">
-                  {{ antecedente?.nombre }}
-                </ion-select-option>
+                <ng-container *ngIf="antecedenteFiltradoList?.length; else noAntecedentes">
+                  <ion-select-option 
+                    *ngFor="let antecedente of antecedenteFiltradoList" 
+                    [value]="antecedente?.idPadecimiento">
+                    {{ antecedente?.nombre }}
+                  </ion-select-option>
+                </ng-container>
+                <ng-template #noAntecedentes>
+                  <ion-select-option disabled>No hay más antecedentes</ion-select-option>
+                </ng-template>
               </ion-select>
             </ion-item>
           </div>
@@ -39,10 +44,13 @@
             <ion-item lines="none" class="date-input">
               <ion-datetime-button datetime="fechaRealizacion"></ion-datetime-button>
               <div class="input-icon">
-                <ion-icon name="calendar-outline"></ion-icon>
+                <ion-icon 
+                  id="fechaRealizacionIcon"
+                  name="calendar-outline">
+                </ion-icon>
               </div>
             </ion-item>
-            <ion-modal [keepContentsMounted]="true">
+            <ion-modal [keepContentsMounted]="true" trigger="fechaRealizacionIcon">
               <ng-template>
                 <ion-datetime
                   presentation="date"
@@ -52,7 +60,6 @@
                   id="fechaRealizacion"
                   showDefaultButtons="true"
                   locale="es-ES"
-                  required
                   [(ngModel)]="expedientePadecimientoDto.fechaDiagnostico"
                   [max]="fechaActual"
                 ></ion-datetime>

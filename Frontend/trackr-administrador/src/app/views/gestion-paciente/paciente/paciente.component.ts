@@ -16,6 +16,7 @@ import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
 import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { UsuarioDoctorDto } from '@dtos/seguridad/usuario-doctor-dto';
 import { Usuario } from '@models/seguridad/usuario';
+import { LoadingSpinnerService } from '../../../shared/services/loading-spinner.service';
 
 @Component({
   selector: 'app-paciente',
@@ -98,7 +99,8 @@ export class PacienteComponent implements OnInit {
     private modalService: BsModalService,
     private usuarioService : UsuarioService,
     private misDoctoresService : MisDoctoresService,
-    private modalMensajeService : MensajeService
+    private modalMensajeService : MensajeService,
+    private spinnerService  : LoadingSpinnerService
   ) {}
 
   ngOnInit(): void {
@@ -160,7 +162,7 @@ export class PacienteComponent implements OnInit {
       GestionAsistenteComponent,
       {
         initialState,
-        ...GeneralConstant.CONFIG_MODAL_MEDIUM
+        ...GeneralConstant.CONFIG_MODAL_SMALL_CUSTOM 
       }
     );
   }
@@ -191,11 +193,13 @@ export class PacienteComponent implements OnInit {
    * aquellos con clave de perfil PACIENTE.
    */
   protected consultarPacientes(): void {
+    this.spinnerService.openSpinner();
     lastValueFrom(this.expedienteTrackrService.consultarParaGrid()).then(
       (pacientes: UsuarioExpedienteGridDTO[]) => {
 
         this.pacientes = pacientes;
         this.pacientesFiltrados = pacientes;
+        this.spinnerService.closeSpinner();
       }
     );
   }

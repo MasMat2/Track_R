@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NivelExamenFormularioComponent } from './nivel-examen-formulario.component';
 import { FormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { LucideAngularModule, X } from 'lucide-angular';
 
 @NgModule({
   declarations: [NivelExamenFormularioComponent],
@@ -10,6 +11,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     CommonModule,
     FormsModule,
     BsDatepickerModule,
+    LucideAngularModule.pick({X}),
   ],
   exports: [],
   providers: [],

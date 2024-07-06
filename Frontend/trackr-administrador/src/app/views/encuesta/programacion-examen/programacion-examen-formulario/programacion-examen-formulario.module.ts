@@ -5,6 +5,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ProgramacionExamenFormularioComponent } from './programacion-examen-formulario.component';
 import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.module';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { LucideAngularModule, X } from 'lucide-angular';
 
 @NgModule({
   declarations: [ProgramacionExamenFormularioComponent],
@@ -14,6 +15,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     GridGeneralModule,
     NgSelectModule,
     BsDatepickerModule,
+    LucideAngularModule.pick({X}),
+
   ],
   exports: [],
   providers: [],

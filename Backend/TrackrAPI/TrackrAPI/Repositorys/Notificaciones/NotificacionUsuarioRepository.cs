@@ -74,7 +74,7 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
                 nu.IdUsuario,
                 nu.IdNotificacionNavigation.Titulo,
                 nu.IdNotificacionNavigation.Mensaje,
-                nu.IdNotificacionNavigation.FechaAlta,
+                nu.IdNotificacionNavigation.FechaAlta.ToLocalTime(),
                 nu.Visto,
                 nu.IdNotificacionNavigation.IdTipoNotificacion,
                 nu.IdNotificacionNavigation.NotificacionDoctor.FirstOrDefault()?.IdPaciente ?? 0,

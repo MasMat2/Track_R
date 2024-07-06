@@ -1,25 +1,41 @@
-@import "../../widgets/styles/circle-container.scss";
-@import "../../../../../../../theme/variables.scss";
 
-.container {
-  padding: 0;
-  position: relative;
-}
-
-.peso-actual {
-  font-size: 1em;
-  color: var(--neutral-100);
-  font-size: 6vw;
-  font-family: var(--font-body);
-  height: 100%;
-  position: absolute;
-  right: 5%;
-  bottom: 0;
-
-  .valor {
-    font-weight: bold;
+.contenido{
+  height: 100% !important;
+  width: 100% !important;
+  background-image: url(../assets/Peso-background.svg);
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  padding: 24px 16px;
+  .header{
+    height: 30%;
+    .icono{
+      ion-icon{
+        font-size: 24px;
+        color: var(--primary-950);
+      }
+    }
   }
-
-  .unidad {
+  .datos{
+    height: 70%;
+    display: flex;
+    align-items: end;
+    ion-text{
+      font-family: var(--font-body);
+      color: var(--primary-900);
+      font-weight: bold;
+    }
+    .label{
+      font-size: 16px;
+      margin: 0;
+    }
+    .medicion{
+      margin: 0;
+      #valor{
+        font-size: 28px;
+      }
+      #unidad{
+        font-size: 20px;
+      }
+    }
   }
 }

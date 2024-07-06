@@ -1,21 +1,37 @@
 <ion-tabs #tabs (ionTabsDidChange)="cambiarIconoTabSeleccionada()">
   <div class="footer">
-  <ion-tab-bar slot="bottom" [ngStyle]="{'display': mostrarFooter ? 'flex' : 'none'}">
-    <ion-tab-button tab="chat-movil" class="tab">
-      <ion-icon [name]="selectedTab === 'chat-movil' ? 'chatbox-ellipses' : 'chatbox-ellipses-outline'"></ion-icon>
-    </ion-tab-button>
-    <ion-tab-button tab="clinicos" class="tab">
-      <ion-icon [name]="selectedTab === 'clinicos' ? 'stats-chart' : 'stats-chart-outline'"></ion-icon>
-    </ion-tab-button>
-    <ion-tab-button tab="dashboard" class="tab-central">
-      <ion-icon name="home"></ion-icon>
-    </ion-tab-button>
-    <ion-tab-button tab="cuestionarios" class="tab">
-      <ion-icon [name]="selectedTab === 'cuestionarios' ? 'document-text' : 'document-text-outline'"></ion-icon>
-    </ion-tab-button>
-    <ion-tab-button tab="perfil" class="tab">
-      <ion-icon [name]="selectedTab === 'perfil' ? 'person' : 'person-outline'"></ion-icon>
-    </ion-tab-button>
-  </ion-tab-bar>
-</div>
+    <ion-tab-bar slot="bottom" [ngStyle]="{'display': mostrarFooter ? 'flex' : 'none'}">
+      <ion-tab-button 
+        tab="chat-movil" 
+        class="tab" 
+        [ngClass]="{'selected' : selectedTab === 'chat-movil'}">
+        <ion-icon [name]="selectedTab === 'chat-movil' ? 'message-square-more-filled' : 'message-square-more'"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button 
+        tab="clinicos" 
+        class="tab" 
+        [ngClass]="{'selected' : selectedTab === 'clinicos'}">
+        <ion-icon [name]="selectedTab === 'clinicos' ? 'clipboard-plus-filled' : 'clipboard-plus'"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button 
+        tab="dashboard" 
+        class="tab" 
+        [ngClass]="{'selected' : selectedTab === 'dashboard'}">
+        <ion-icon [name]="selectedTab === 'dashboard' ? 'home-filled' : 'home'"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button 
+        tab="cuestionarios" 
+        (click)="cambiarTab('cuestionarios')"
+        class="tab" 
+        [ngClass]="{'selected' : selectedTab === 'cuestionarios'}">
+        <ion-icon [name]="selectedTab === 'cuestionarios' ? 'file-check-2-filled' : 'file-check-2'"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button 
+        tab="perfil" 
+        class="tab" 
+        [ngClass]="{'selected' : selectedTab === 'perfil'}">
+        <ion-icon [name]="selectedTab === 'perfil' ? 'user-filled' : 'user'"></ion-icon>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </div>
 </ion-tabs>
