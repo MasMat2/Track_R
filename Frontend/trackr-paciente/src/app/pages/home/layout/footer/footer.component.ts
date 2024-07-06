@@ -5,6 +5,7 @@ import { filter } from 'rxjs';
 import { IonicModule } from '@ionic/angular';
 import { IonTabs } from '@ionic/angular';
 import { addIcons } from 'ionicons';
+import { TabService } from 'src/app/services/dashboard/tab.service';
 
 @Component({
   selector: 'app-footer',
@@ -35,7 +36,7 @@ export class FooterComponent implements OnInit {
   ];
 
   @ViewChild('tabs') tabs: IonTabs;
-  constructor( private router: Router)
+  constructor( private router: Router, private tabService : TabService)
   {
     addIcons({
       'home': 'assets/img/svg/home.svg',
@@ -57,6 +58,10 @@ export class FooterComponent implements OnInit {
 
   cambiarIconoTabSeleccionada() {
     this.selectedTab = this.tabs.getSelected();
+  }
+
+  protected cambiarTab(tabId: string) {
+    this.tabService.changeTab(tabId);
   }
 
   private verificarCambioEnUrl(){

@@ -21,6 +21,7 @@
       </ion-tab-button>
       <ion-tab-button 
         tab="cuestionarios" 
+        (click)="cambiarTab('cuestionarios')"
         class="tab" 
         [ngClass]="{'selected' : selectedTab === 'cuestionarios'}">
         <ion-icon [name]="selectedTab === 'cuestionarios' ? 'file-check-2-filled' : 'file-check-2'"></ion-icon>

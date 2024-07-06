@@ -10,6 +10,7 @@ import { format} from 'date-fns';
 import { chevronForward } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { ExamenDto } from 'src/app/shared/Dtos/cuestionarios/examen-dto';
+import { TabService } from 'src/app/services/dashboard/tab.service';
 
 @Component({
   selector: 'app-mis-cuestionarios',
@@ -35,16 +36,23 @@ export class MisCuestionariosComponent  implements OnInit {
   constructor(
     private examenService: ExamenService,
     private router: Router,
-    private alertController: AlertController
-  ) { addIcons({chevronForward})}
+    private alertController: AlertController,
+    private tabService: TabService
+  ) { 
+    addIcons({chevronForward});
+
+    //Simula ionViewWillEnter
+    this.tabService.tabChange$.subscribe((tabId) => {
+      if (tabId === 'cuestionarios') {
+        this.consultarCuestionariosPendientes();
+        this.consultarCuestionariosContestados();
+      }
+    });
+  }
 
   ngOnInit() {
   }
 
-  ionViewWillEnter(){
-    this.consultarCuestionariosPendientes();
-    this.consultarCuestionariosContestados();
-  }
 
   private consultarCuestionariosPendientes(){
     this.examenService.consultarMisExamenes().subscribe({
