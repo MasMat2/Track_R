@@ -101,19 +101,23 @@ export class NotificacionesComponent  implements OnInit
   
     this.cdr.detach(); 
   
-    if(!notificacion.visto){
-      if(notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA){
-        await this.presentAlertTomarTratamiento(notificacion)
-      }
-      
-      if(notificacion.idChat !== null){
-        await this.notificacionHubService.marcarComoVista(notificacion.id);
-        this.modalController.dismiss().then(() => {
-          this.router.navigate(['home','chat-movil','chat',notificacion.idChat]);
-        });
-      }
+    
+    if (!notificacion.visto) {
+      await this.notificacionHubService.marcarComoVista(notificacion.id);
     }
-  
+
+    const navigateAndDismiss = async (path: any[]) => {
+      await this.modalController.dismiss();
+      this.router.navigate(path);
+    };
+
+    if (notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA && !notificacion.visto) {
+      await this.presentAlertTomarTratamiento(notificacion);
+    } else if (notificacion.idChat !== null) {
+      await navigateAndDismiss(['home', 'chat-movil', 'chat', notificacion.idChat]);
+    } else if (notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_ALERTA) {
+      await navigateAndDismiss(['home', 'cuestionarios', 'misCuestionarios']);
+    }
     this.consultarNotificaciones();
   
     setTimeout(() => {
