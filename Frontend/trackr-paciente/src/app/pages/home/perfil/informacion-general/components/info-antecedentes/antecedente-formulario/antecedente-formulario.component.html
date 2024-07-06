@@ -44,10 +44,13 @@
             <ion-item lines="none" class="date-input">
               <ion-datetime-button datetime="fechaRealizacion"></ion-datetime-button>
               <div class="input-icon">
-                <ion-icon name="calendar-outline"></ion-icon>
+                <ion-icon 
+                  id="fechaRealizacionIcon"
+                  name="calendar-outline">
+                </ion-icon>
               </div>
             </ion-item>
-            <ion-modal [keepContentsMounted]="true">
+            <ion-modal [keepContentsMounted]="true" trigger="fechaRealizacionIcon">
               <ng-template>
                 <ion-datetime
                   presentation="date"

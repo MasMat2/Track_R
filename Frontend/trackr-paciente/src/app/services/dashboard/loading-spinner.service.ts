@@ -12,7 +12,8 @@ private loading: any;
 
 async presentLoading() {
   this.loading = await this.alertController.create({
-    cssClass: "custom-alert-loading"
+    cssClass: "custom-alert-loading",
+    backdropDismiss: false,
   })
   return await this.loading.present();
 }

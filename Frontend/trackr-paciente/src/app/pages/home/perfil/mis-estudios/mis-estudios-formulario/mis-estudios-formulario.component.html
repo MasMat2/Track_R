@@ -34,13 +34,11 @@
                   <ion-item lines="none" class="date-input">
                     <ion-datetime-button datetime="fechaRealizacion"></ion-datetime-button>
                     <ion-icon
+                      id="fechaRealizacionIcon"
                       name="calendar"
-                      slot="end"
-                      aria-hidden="true"
-                      (click)="openCalendar()"
-                    ></ion-icon>
+                      slot="end"></ion-icon>
                   </ion-item>
-                  <ion-modal [keepContentsMounted]="true" [isOpen]="showCalendar" (didDismiss)="cancelCalendar()">
+                  <ion-modal [keepContentsMounted]="true" trigger="fechaRealizacionIcon">
                     <ng-template>
                       <ion-datetime
                         presentation="date"

@@ -55,7 +55,7 @@
                     <ion-button id="decrementar" (click)="decrementarCantidad()">
                       <ion-icon slot="icon-only" name="minus"></ion-icon>
                     </ion-button>
-                    <ion-input type="number" formControlName="cantidad"></ion-input>
+                    <ion-input type="number" formControlName="cantidad" [(ngModel)]="cantidadFarmaco"></ion-input>
                     <ion-button id="incrementar" (click)="incrementarCantidad()">
                       <ion-icon slot="icon-only" name="plus"></ion-icon>
                     </ion-button>
@@ -211,9 +211,13 @@
                   <ion-label>Fecha de inicio</ion-label>
                   <ion-item lines="none" class="date-input">
                     <ion-datetime-button datetime="fechaInicio"></ion-datetime-button>
-                    <ion-icon name="calendar" slot="end" aria-hidden="true"></ion-icon>
+                    <ion-icon 
+                      name="calendar" 
+                      slot="end"
+                      id="fechaInicioIcon">
+                    </ion-icon>
                   </ion-item>
-                  <ion-modal [keepContentsMounted]="true">
+                  <ion-modal [keepContentsMounted]="true" trigger="fechaInicioIcon">
                     <ng-template>
                       <ion-datetime
                         presentation="date"
@@ -237,7 +241,11 @@
                   <ion-label>Fecha de fin</ion-label>
                   <ion-item lines="none" class="date-input">
                     <ion-datetime-button datetime="fechaFin"></ion-datetime-button>
-                    <ion-icon name="calendar" slot="end" aria-hidden="true"></ion-icon>
+                    <ion-icon 
+                      name="calendar"
+                      id="fechaFinIcon"
+                      slot="end">
+                    </ion-icon>
                   </ion-item>
                   <div 
                     class="input-text-error"
@@ -246,7 +254,7 @@
                       <ion-icon slot="start" name="info"></ion-icon>
                       La fecha de inicio no puede ser mayor a la fecha de fin
                   </div>
-                  <ion-modal [keepContentsMounted]="true">
+                  <ion-modal [keepContentsMounted]="true" trigger="fechaFinIcon">
                     <ng-template>
                       <ion-datetime
                         presentation="date"
@@ -316,9 +324,13 @@
                                   <ion-label>Definir hora</ion-label>
                                   <ion-item lines="none" class="date-input">
                                     <ion-datetime-button datetime="selectorHora"></ion-datetime-button>
-                                    <ion-icon name="clock" slot="end" aria-hidden="true"></ion-icon>
+                                    <ion-icon 
+                                      id="selectorHoraIcon"
+                                      name="clock" 
+                                      slot="end">
+                                    </ion-icon>
                                   </ion-item>
-                                  <ion-modal [keepContentsMounted]="true">
+                                  <ion-modal [keepContentsMounted]="true" trigger="selectorHoraIcon">
                                     <ng-template>
                                       <ion-datetime
                                         presentation="time"

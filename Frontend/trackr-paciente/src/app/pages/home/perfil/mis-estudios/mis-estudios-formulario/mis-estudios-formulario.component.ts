@@ -35,7 +35,6 @@ export class MisEstudiosFormularioPage implements OnInit {
   private image_src: string = '';
   private mimeType: string = '';
   protected btnSubmit = false;
-  protected showCalendar: boolean = false;
 
   public expedienteEstudio = new ExpedienteEstudioFormularioCaptura();
   constructor(
@@ -143,14 +142,5 @@ export class MisEstudiosFormularioPage implements OnInit {
 
     await alertSuccess.present();
   }
-
-  protected openCalendar() {
-    this.showCalendar = true;
-  }
-  
-  protected cancelCalendar() {
-    this.showCalendar = false;
-  }
-
   
 }
