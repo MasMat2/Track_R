@@ -1,6 +1,8 @@
 export const environment = {
   production: false,
-  urlBackend: 'https://localhost:44353/api/',
-  urlFrontend: 'http://localhost:8100/#',
+  urlBackend: 'https://oncotracker-dev.azurewebsites.net/api',
+  urlFrontend: 'https://oncotracker-dev.azurewebsites.net/#/',
+  //urlBackend: 'https://www.atisc.mx/trackr_dev/api/',
+  //urlFrontend: 'https://www.atisc.mx/trackr_dev/#/',
 
 };
