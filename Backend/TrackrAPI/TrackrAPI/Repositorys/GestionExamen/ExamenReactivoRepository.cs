@@ -61,10 +61,10 @@ public class ExamenReactivoRepository : Repository<ExamenReactivo>, IExamenReact
             .ToList();
     }
 
-    public IEnumerable<ExamenReactivoExcelDto> ConsultarReactivosExamenExcel(int idExamen)
+    public IEnumerable<ExamenReactivoExcelDto> ConsultarReactivosExamenExcel(int idProgramacionExamen)
     {
         var reactivos = context.ExamenReactivo
-            .Where(p => p.IdExamenNavigation.IdExamen == idExamen && p.Estatus == true)
+            .Where(p => p.IdExamenNavigation.IdProgramacionExamen == idProgramacionExamen && p.Estatus == true)
             .OrderBy(p => p.IdReactivo)
             .Select(p => new ExamenReactivoExcelDto
             {
