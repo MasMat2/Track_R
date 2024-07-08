@@ -225,7 +225,7 @@ public class ExpedienteTrackrService
 
             var imgPath = img?.ArchivoUrl ?? Path.Combine("Archivos", "Usuario", "default-user.jpg");
             var mimeType = img?.ArchivoTipoMime ?? "image/jpg";
-            expediente.ImagenBase64 = $"data:{mimeType};base64,{_sftpService.DownloadFile(imgPath)}";
+            expediente.ImagenBase64 = $"data:{mimeType};base64,{_sftpService.DownloadFileAsBase64(imgPath)}";
 
             expediente.DosisNoTomadas = _expedienteTrackrRepository.DosisNoTomadas(expediente.IdExpedienteTrackr);
             expediente.VariablesFueraRango = _expedienteTrackrRepository.VariablesFueraRango(expediente.IdUsuario);
