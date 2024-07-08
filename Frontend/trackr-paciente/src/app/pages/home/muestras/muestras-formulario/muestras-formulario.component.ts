@@ -19,6 +19,7 @@ import { AlertController, ModalController } from '@ionic/angular/standalone';
 import { call, swapHorizontalOutline, swapVerticalOutline } from 'ionicons/icons';
 import { HealthkitService } from '@services/healthkit.service';
 import { GeneralConstant } from '@utils/general-constant';
+import { DirectiveModule } from 'src/app/shared/directives/directive.module';
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -31,7 +32,8 @@ import { GeneralConstant } from '@utils/general-constant';
     IonicModule,
     SharedModule,
     CommonModule,
-    CampoExpedienteModule],
+    CampoExpedienteModule,
+    DirectiveModule,],
     providers: [SeccionCampoService, EntidadEstructuraTablaValorService,]
 })
 export class MuestrasFormularioComponent implements OnInit {

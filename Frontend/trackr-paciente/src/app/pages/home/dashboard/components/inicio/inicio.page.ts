@@ -21,6 +21,7 @@ import { ConfiguracionDashboardPage } from '../configuracion-dashboard/configura
 import { InformacionPerfilDto } from 'src/app/shared/Dtos/perfil/informacion-perfil-dto';
 import { UsuarioService } from '@http/seguridad/usuario.service';
 import { NotificacionesPageComponent } from '../notificaciones/notificacionesPage/notificaciones-page.component';
+import { TabService } from 'src/app/services/dashboard/tab.service';
 
 @Component({
     selector: 'app-inicio',
@@ -62,10 +63,18 @@ export class InicioPage implements OnInit {
     private router: Router,
     private notificacionPacienteService : NotificacionPacienteService,
     private modalController: ModalController,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private tabService : TabService,
   ) { 
     this.notificacionPacienteService.actualizarWidgets$.subscribe(() => {
       this.consultarInfoWidgetsSeguimiento();
+    });
+
+    this.tabService.tabChange$.subscribe((tabId) => {
+      if (tabId === 'dashboard') {
+        this.consultarInfoWidgetsSeguimiento();
+        this.consultarWidgets();
+      }
     });
 
     //this.navegarConfigADashboardChanges();

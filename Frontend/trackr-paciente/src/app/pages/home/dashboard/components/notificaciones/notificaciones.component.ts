@@ -102,9 +102,7 @@ export class NotificacionesComponent  implements OnInit
     this.cdr.detach(); 
   
     
-    if (!notificacion.visto) {
-      await this.notificacionHubService.marcarComoVista(notificacion.id);
-    }
+
 
     const navigateAndDismiss = async (path: any[]) => {
       await this.modalController.dismiss();
@@ -114,9 +112,17 @@ export class NotificacionesComponent  implements OnInit
     if (notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA && !notificacion.visto) {
       await this.presentAlertTomarTratamiento(notificacion);
     } else if (notificacion.idChat !== null) {
+      if (!notificacion.visto) 
+        await this.notificacionHubService.marcarComoVista(notificacion.id);
+      
       await navigateAndDismiss(['home', 'chat-movil', 'chat', notificacion.idChat]);
     } else if (notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_ALERTA) {
+      if (!notificacion.visto) 
+        await this.notificacionHubService.marcarComoVista(notificacion.id);
       await navigateAndDismiss(['home', 'cuestionarios', 'misCuestionarios']);
+    }else{
+      if (!notificacion.visto) 
+        await this.notificacionHubService.marcarComoVista(notificacion.id);
     }
     this.consultarNotificaciones();
   
@@ -138,7 +144,6 @@ export class NotificacionesComponent  implements OnInit
           role: 'cancel',
           handler: () => {
             //TODO: Agregar logica para la NO realizacion de la toma
-            this.notificacionHubService.marcarComoVista(notificacion.id);
             this.notificacionPacienteService.actualizarWidgets();
           }
         },

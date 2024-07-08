@@ -83,7 +83,7 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
                 nu.IdNotificacionNavigation.IdTipoNotificacionNavigation.Clave
             ));
         }
-    
+        
         return notificacionesDoctorDto;
     }
 

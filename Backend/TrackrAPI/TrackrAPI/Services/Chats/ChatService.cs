@@ -93,7 +93,7 @@ public class ChatService
                                 var imagen = _archivoService.ObtenerImagenUsuario(persona);
                                 if (imagen != null)
                                 {
-                                    chat.ImagenBase64 = imagen.ArchivoUrl != null ?  _sftpService.DownloadFile(imagen.ArchivoUrl): "" ;
+                                    chat.ImagenBase64 = imagen.ArchivoUrl != null ?  _sftpService.DownloadFileAsBase64(imagen.ArchivoUrl): "" ;
                                     chat.TipoMime = imagen.ArchivoTipoMime;
                                     chat.IdCreadorChat = usuario.IdUsuario;
                                 }

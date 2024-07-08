@@ -888,7 +888,7 @@ namespace TrackrAPI.Services.Seguridad
                 string path = Path.Combine("Archivos", "Usuario", nombreArchivo);
                 usuarioDto.ImagenBase64 = usuarioDto.ImagenBase64.Substring(usuarioDto.ImagenBase64.LastIndexOf(',') + 1);
 
-                this._sftpService.UploadFile(path, usuarioDto.ImagenBase64);
+                this._sftpService.UploadBytesFile(path, usuarioDto.ImagenBase64);
 
                 //Logica para agregar las fotos de perfil en la tabla archivo
                 var fotoPerfil = new Archivo
@@ -922,7 +922,7 @@ namespace TrackrAPI.Services.Seguridad
 
             }
 
-            return this._sftpService.DownloadFile(filePath);
+            return this._sftpService.DownloadFileAsBase64(filePath);
 
 
         }

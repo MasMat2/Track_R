@@ -16,6 +16,7 @@
       <ion-tab-button 
         tab="dashboard" 
         class="tab" 
+        (click)="cambiarTab('dashboard')"
         [ngClass]="{'selected' : selectedTab === 'dashboard'}">
         <ion-icon [name]="selectedTab === 'dashboard' ? 'home-filled' : 'home'"></ion-icon>
       </ion-tab-button>

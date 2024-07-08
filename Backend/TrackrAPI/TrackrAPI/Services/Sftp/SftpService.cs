@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting.Internal;
 using Renci.SshNet;
 using System.IO;
 using TrackrAPI.Dtos.Seguridad;
+using TrackrAPI.Repositorys.Sftp;
 
 namespace TrackrAPI.Services.Sftp
 {
@@ -16,9 +17,11 @@ namespace TrackrAPI.Services.Sftp
         private readonly string _server;
         private readonly string _database;
         private IWebHostEnvironment hostingEnvironment;
+        private ISftpCacheRepository sftpCacheRepository;
 
         public SftpService(IConfiguration configuration,
-            IWebHostEnvironment hostingEnvironment)
+            IWebHostEnvironment hostingEnvironment,
+            ISftpCacheRepository sftpCacheRepository)
         {
             // Read from appsettings.json
             host = configuration["SFTP:Host"]; // 198.251.66.79
@@ -35,6 +38,8 @@ namespace TrackrAPI.Services.Sftp
             _database = builder.InitialCatalog;
 
             this.hostingEnvironment = hostingEnvironment;
+
+            this.sftpCacheRepository = sftpCacheRepository;
         }
 
         public string GetLocalPath(string filePath)
@@ -82,6 +87,9 @@ namespace TrackrAPI.Services.Sftp
 
                     // Upload File
                     sftp.UploadFile(fileStream, linuxPath);
+                    
+                    var fileInfo = sftp.GetAttributes(linuxPath);
+                    this.UpdateCache(filePath, fileInfo.LastWriteTime);
                 }
                 sftp.Disconnect();
             }
@@ -125,24 +133,37 @@ namespace TrackrAPI.Services.Sftp
         {
             byte[] fileContent;
 
+            var lastWriteTime = this.sftpCacheRepository.GetLastWriteTime(filePath);
+
             string localFilePath = GetLocalPath(filePath);
-            try
-            {
-                using (var sftp = new SftpClient(host, port, username, password))
+
+            if (File.GetLastWriteTime(localFilePath) != lastWriteTime){
+                try
                 {
-                    sftp.Connect();
-                    using (Stream fileStream = new FileStream(localFilePath, FileMode.OpenOrCreate))
+                    using (var sftp = new SftpClient(host, port, username, password))
                     {
-                        // Remote filePath
+                        sftp.Connect();
+                        
+                        // Get Remote filePath
                         string linuxPath = GetRemotePath(filePath);
-                        sftp.DownloadFile(linuxPath, fileStream);
+
+                        // Download File
+                        using (Stream fileStream = new FileStream(localFilePath, FileMode.OpenOrCreate))
+                        {
+                            sftp.DownloadFile(linuxPath, fileStream);
+                        }
+                        
+                        // Update Cache
+                        var fileInfo = sftp.GetAttributes(linuxPath);
+                        this.UpdateCache(filePath, fileInfo.LastWriteTime);
+                        
+                        sftp.Disconnect();
                     }
-                    sftp.Disconnect();
                 }
-            }
-            catch (IOException ex) when (ex.HResult == -2147024816)
-            {
-                Console.WriteLine("The file already exists. Another process has created the file.");
+                catch (IOException ex) when (ex.HResult == -2147024816)
+                {
+                    Console.WriteLine("The file already exists. Another process has created the file.");
+                }
             }
 
             fileContent = File.ReadAllBytes(localFilePath);
@@ -178,6 +199,12 @@ namespace TrackrAPI.Services.Sftp
             return Convert.ToBase64String(fileContent);
         }
 
+        private void UpdateCache(string filePath, DateTime lastWriteTime){
+            
+            var localFilePath = GetLocalPath(filePath);
+            File.SetLastWriteTime(localFilePath, lastWriteTime);
+            this.sftpCacheRepository.UpdateLastWriteTime(filePath, lastWriteTime);
+        }
 
     }
 }

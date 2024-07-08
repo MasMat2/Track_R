@@ -106,6 +106,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<RolAcceso> RolAcceso { get; set; } = null!;
         public virtual DbSet<Seccion> Seccion { get; set; } = null!;
         public virtual DbSet<SeccionCampo> SeccionCampo { get; set; } = null!;
+        public virtual DbSet<SftpCache> SftpCache { get; set; } = null!;
         public virtual DbSet<TipoAcceso> TipoAcceso { get; set; } = null!;
         public virtual DbSet<TipoChatPersona> TipoChatPersona { get; set; } = null!;
         public virtual DbSet<TipoCompania> TipoCompania { get; set; } = null!;
@@ -2342,6 +2343,17 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdSeccion)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__SeccionCa__IdSec__70698DE3");
+            });
+
+            modelBuilder.Entity<SftpCache>(entity =>
+            {
+                entity.ToTable("SftpCache", "Trackr");
+
+                entity.Property(e => e.FilePath)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LastWriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<TipoAcceso>(entity =>

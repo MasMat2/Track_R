@@ -82,11 +82,11 @@
                   <ion-input
                     [(ngModel)]="variable.valor"
                     [name]="'variableName' + i"
-                    type="text"
                     inputmode="numeric"
                     required
-                    [maxlength]="variable.idDominioNavigation.longitudMaxima"
+                    type="number"
                     autocomplete="off"
+                    [appMaxDigits]="9"
                   >
                   </ion-input>
                   <ion-label class="unidadMedida" slot="end" >{{variable?.idDominioNavigation?.unidadMedida}}</ion-label>

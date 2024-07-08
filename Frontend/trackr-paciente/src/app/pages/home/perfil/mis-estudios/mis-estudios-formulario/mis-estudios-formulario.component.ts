@@ -70,6 +70,8 @@ export class MisEstudiosFormularioPage implements OnInit {
 
   protected enviarFormulario(formulario: NgForm) {
     this.btnSubmit = true;
+    if(this.expedienteEstudio.fechaRealizacion == null)
+      this.expedienteEstudio.fechaRealizacion = new Date();
     if (!formulario.valid) {
       validarCamposRequeridos(formulario);
       this.btnSubmit = false;
