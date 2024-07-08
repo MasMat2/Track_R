@@ -5,6 +5,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ExamenFormularioRoutingModule } from './examen-formulario-routing.module';
 import { ExamenFormularioComponent } from './examen-formulario.component';
 import { TimerPipe } from './timer.pipe';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { TimerPipe } from './timer.pipe';
     FormsModule,
     NgSelectModule,
     ExamenFormularioRoutingModule,
+    CheckboxModule
   ],
   exports: [ExamenFormularioComponent],
   providers: [],
