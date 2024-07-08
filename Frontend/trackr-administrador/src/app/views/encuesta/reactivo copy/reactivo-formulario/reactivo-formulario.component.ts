@@ -185,7 +185,7 @@ export class Reactivo1FormularioComponent implements OnInit {
   }
 
   protected cancelar(): void {
-    this.onClose(false);
+    this.onClose(true);
   }
 
   public onGridClick(gridData: { accion: string; data: any }): void {
