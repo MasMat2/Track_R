@@ -120,6 +120,9 @@ export class NotificacionesComponent  implements OnInit
       if (!notificacion.visto) 
         await this.notificacionHubService.marcarComoVista(notificacion.id);
       await navigateAndDismiss(['home', 'cuestionarios', 'misCuestionarios']);
+    }else{
+      if (!notificacion.visto) 
+        await this.notificacionHubService.marcarComoVista(notificacion.id);
     }
     this.consultarNotificaciones();
   
