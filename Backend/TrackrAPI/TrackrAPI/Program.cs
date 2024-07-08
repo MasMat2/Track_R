@@ -65,8 +65,7 @@ builder.Services.Scan(scan => scan
     .AddClasses(c => c.InNamespaces("TrackrAPI.Services")
         // TODO: 2023-05-25 -> Implementar IService para evitar estas excepciones
         .Where(type => !typeof(EntidadService.ActualizacionExpedienteParams).IsAssignableFrom(type) &&
-                type != typeof(RsaService) &&
-                type != typeof(SftpService))
+                type != typeof(RsaService))
     )
     .AsSelf()
     .WithTransientLifetime()
@@ -75,7 +74,7 @@ builder.Services.Scan(scan => scan
 
 // Cambiar de Transient (por builder.Services.Scan) a Singleton
 builder.Services.AddSingleton<RsaService>();
-builder.Services.AddSingleton<SftpService>();
+//builder.Services.AddSingleton<SftpService>();
 
 
 // Crea una nueva instancia de JwtSettings y la configura con los valores del appsettings.json
