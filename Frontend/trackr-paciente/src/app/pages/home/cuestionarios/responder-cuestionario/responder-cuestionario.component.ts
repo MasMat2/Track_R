@@ -270,6 +270,7 @@ export class ResponderCuestionarioComponent  implements OnInit, OnExit {
 
   protected cerrar(): void {
     this.router.navigateByUrl('/home/cuestionarios/misCuestionarios');
+    this.examenService.actualizarListadoExamenes();
   }
 
   private async presentAlertSalir(): Promise<boolean> {
