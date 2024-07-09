@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { ModalController } from '@ionic/angular/standalone';
 import { Constants } from '@utils/constants/constants';
+import { ExamenService } from '@http/cuestionarios/examen.service';
 
 @Component({
   selector: 'app-notificaciones',
@@ -43,7 +44,8 @@ export class NotificacionesComponent  implements OnInit
     private router:Router,
     private popOverController:PopoverController,
     private modalController: ModalController,
-    private cdr : ChangeDetectorRef
+    private cdr : ChangeDetectorRef,
+    private examenService : ExamenService
   ){ addIcons({
     'close' : 'assets/img/svg/x.svg',
     'circle-user' : 'assets/img/svg/circle-user.svg',
@@ -119,6 +121,7 @@ export class NotificacionesComponent  implements OnInit
     } else if (notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_ALERTA) {
       if (!notificacion.visto) 
         await this.notificacionHubService.marcarComoVista(notificacion.id);
+        this.examenService.actualizarListadoExamenes();
       await navigateAndDismiss(['home', 'cuestionarios', 'misCuestionarios']);
     }else{
       if (!notificacion.visto) 
