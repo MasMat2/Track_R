@@ -85,7 +85,7 @@
   </mat-sidenav>
   
   <mat-sidenav-content>
-    <div class="contenedor" style="width: 100%">
+    <div class="contenedor-principal" style="width: 100%">
     
       <div class="titulo-contenedor-paciente">
         <h1 class="saludo">
@@ -130,18 +130,14 @@
         </div>
     
       </div>
-
-
-      <div>
-        <div class="col-12">
+      <div class="tabla-pacientes">
+        <div class="col-12 contenedor-tabla">
           <ng-container *ngIf="isVistaCuadricula">
-            <app-paciente-vista-cuadricula
+              <app-paciente-vista-cuadricula
               [pacientes]="pacientesFiltrados"
-              (event)="onGridClick($event)"
-            >
+              (event)="onGridClick($event)">
             </app-paciente-vista-cuadricula>
           </ng-container>
-        
         </div>
       </div>
     </div>

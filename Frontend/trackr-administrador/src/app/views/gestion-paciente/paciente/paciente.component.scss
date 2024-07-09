@@ -33,6 +33,7 @@
 }
 
 .mat-sidenav-content {
+  height: 90vh; // -10vh del toolbar
   padding: 48px 56px 48px 36px;
   display: flex;
 }
@@ -207,7 +208,10 @@ mat-sidenav-container {
   }
 
   mat-sidenav-content {
-    .contenedor {
+    .contenedor-principal {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
       transition: margin-right 0.6s ease-out;
       margin-right: 0;
     }
@@ -297,4 +301,11 @@ mat-sidenav-container {
 }
 .no-padding{
   padding: 0;
+}
+
+.tabla-pacientes{
+  height: calc(100% - 80px); 
+  .contenedor-tabla{
+    height: 90%;
+  }
 }
