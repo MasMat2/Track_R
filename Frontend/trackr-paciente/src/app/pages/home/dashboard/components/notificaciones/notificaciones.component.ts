@@ -138,6 +138,7 @@ export class NotificacionesComponent  implements OnInit
       header: notificacion.titulo,
       subHeader: `${notificacion.mensaje} \n ${MENSAJE_TOMA}`,
       cssClass: 'custom-alert color-primary icon-pill two-buttons',
+      backdropDismiss: false,
       buttons: [
         {
           text: 'No tomé la dosis', 
