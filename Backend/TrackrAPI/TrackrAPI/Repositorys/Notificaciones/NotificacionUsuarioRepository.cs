@@ -87,7 +87,7 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
         return notificacionesDoctorDto;
     }
 
-    public void MarcarComoVistas(List<int> idNotificacionUsuario)
+    public void MarcarComoVistas(List<int> idNotificacionUsuario, bool tomaTomada)
     {
         var notificacionesUsuario = context.NotificacionUsuario
             .Where(n => idNotificacionUsuario.Contains(n.IdNotificacionUsuario))
@@ -97,7 +97,7 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
         {
             notificacionUsuario.Visto = true;
             var toma = _expedienteConsumoMedicamentoRepository.ConsularPorNotificacion(notificacionUsuario.IdNotificacion);
-            if (toma != null)
+            if (toma != null && tomaTomada)
             {
                 toma.FechaToma = DateTime.Now;
                 _expedienteConsumoMedicamentoRepository.Editar(toma);

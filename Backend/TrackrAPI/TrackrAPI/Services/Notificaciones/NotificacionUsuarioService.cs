@@ -65,8 +65,8 @@ public class NotificacionUsuarioService
         return notificacionesUsuario.Select(nu => Mapear(nu));
     }
 
-    public void MarcarComoVistas(List<int> idNotificacionUsuario)
+    public void MarcarComoVistas(List<int> idNotificacionUsuario, bool tomaTomada)
     {
-        _notificacionUsuarioRepository.MarcarComoVistas(idNotificacionUsuario);
+        _notificacionUsuarioRepository.MarcarComoVistas(idNotificacionUsuario, tomaTomada);
     }
 }

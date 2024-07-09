@@ -81,14 +81,14 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
     return this.notificacionesSubject.value;
   }
 
-  public async marcarComoVista(id: number) {
-    this.marcarComoVistas([id]);
+  public async marcarComoVista(id: number, tomaTomada : boolean = true) {
+    this.marcarComoVistas([id] , tomaTomada);
   }
 
-  public async marcarComoVistas(ids: number[]) {
+  public async marcarComoVistas(ids: number[], tomaTomada : boolean = true) {
     await this.ensureConnection();
 
-    await this.connection.invoke('MarcarComoVistas', ids);
+    await this.connection.invoke('MarcarComoVistas', ids, tomaTomada);
   }
 
   public async marcarTodasComoVistas() {
