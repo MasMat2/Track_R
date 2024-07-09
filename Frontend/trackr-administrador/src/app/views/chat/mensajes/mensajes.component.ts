@@ -325,6 +325,24 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
     this.router.navigate(['administrador', 'jitsi-meet', meetCode]);
   }
 
+  protected esMensajeValido(mensaje: ChatMensajeDTO): boolean {
+    if (this.esMensajeMio(mensaje.idPersona)) {
+      return false;
+    }
+  
+    let regex = /trackr-\d-\d+/;
+    if (mensaje.mensaje.includes('trackr-' + this.idChat) && mensaje.mensaje.match(regex)) {
+      return true;
+    }
+  
+    regex = /webrtc-\d+-(\d+)/;
+    if (mensaje.mensaje.includes('webrtc-' + this.idChat) && mensaje.mensaje.match(regex)) {
+      return true;
+    }
+  
+    return false;
+  }
+
   protected validarMeet(mensaje: ChatMensajeDTO) {
     if(this.esMensajeMio(mensaje.idPersona)){
       return;
@@ -342,8 +360,9 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
     }
 
     if (mensaje.mensaje.includes('webrtc-' + this.idChat)) {
-      const regex = /webrtc-\d-(\d+)/;
+      const regex = /webrtc-\d+-(\d+)/;
       const match = mensaje.mensaje.match(regex);
+      console.log(match);
       if (match && match.length > 0) {
         const codigo = match[1];
         this.router.navigate(['/administrador/webrtc', codigo]);
