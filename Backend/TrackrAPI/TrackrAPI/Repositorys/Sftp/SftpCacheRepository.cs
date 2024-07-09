@@ -33,8 +33,11 @@ public class SftpCacheRepository : Repository<SftpCache>, ISftpCacheRepository
             };
             context.SftpCache.Add(sftpFile);
         }
+        else
+        {
+            context.SftpCache.Attach(sftpFile); // Attach the file to track changes
+        }
 
-        context.SftpCache.Attach(sftpFile); // Attach the file to track changes
         sftpFile.LastWriteTime = lastWriteTime;
         context.SaveChanges();
 
