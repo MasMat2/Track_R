@@ -534,8 +534,13 @@ export class MensajesComponent{
   }
 
   //verificar si se está escribiendo un mensaje (mensaje no vacío)
-  escribiendoMensaje(){
-    return !(/^ *$/.test(this.msg))
+  protected escribiendoMensaje(){
+    if(this.isAudio || this.archivo){
+      return true;
+    }
+    else{
+      return !(/^ *$/.test(this.msg));
+    }
   }
 
   protected presionarGrabarAudio(event: any) {

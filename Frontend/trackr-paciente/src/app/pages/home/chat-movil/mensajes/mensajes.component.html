@@ -227,7 +227,7 @@
               </ion-button>
             </ion-buttons>
             <ion-buttons slot="end" class="right-buttons" *ngIf="escribiendoMensaje()">
-                <ion-button type="submit" (click)="enviarMensaje()" [disabled]="msg === '' || msg === undefined">
+                <ion-button type="submit" (click)="enviarMensaje()" [disabled]="!escribiendoMensaje()">
                   <ion-icon slot="icon-only" style="color: var(--primary-700);" name="send"></ion-icon>
                 </ion-button>
             </ion-buttons>
