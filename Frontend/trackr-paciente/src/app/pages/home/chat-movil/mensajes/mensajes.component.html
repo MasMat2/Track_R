@@ -95,13 +95,13 @@
     <div class="contenedor-chat">
       <div #scrollContainer class="lista-mensajes">
         <div class="row-mensaje"
-        [ngClass]="mostrarMensaje(mensaje.idPersona) ? 'mio' : 'otra-persona'"
+        [ngClass]="esMensajeMio(mensaje.idPersona) ? 'mio' : 'otra-persona'"
         *ngFor="let mensaje of mensajes">
         <div 
           class="bubble"
-          [ngClass]="mostrarMensaje(mensaje.idPersona) ? 'mio' : 'otra-persona'">
+          [ngClass]="esMensajeMio(mensaje.idPersona) ? 'mio' : 'otra-persona'">
           <div class="bubble-content">
-            <div class="mensaje">
+            <div class="mensaje" (click)="validarMeet(mensaje)">
               <span>{{ mensaje.mensaje }}</span>
             </div>
             <div class="adjunto" *ngIf="hayAdjuntoEnMensaje(mensaje)">
