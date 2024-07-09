@@ -95,13 +95,13 @@
     <div class="contenedor-chat">
       <div #scrollContainer class="lista-mensajes">
         <div class="row-mensaje"
-        [ngClass]="mostrarMensaje(mensaje.idPersona) ? 'mio' : 'otra-persona'"
+        [ngClass]="esMensajeMio(mensaje.idPersona) ? 'mio' : 'otra-persona'"
         *ngFor="let mensaje of mensajes">
         <div 
           class="bubble"
-          [ngClass]="mostrarMensaje(mensaje.idPersona) ? 'mio' : 'otra-persona'">
+          [ngClass]="esMensajeMio(mensaje.idPersona) ? 'mio' : 'otra-persona'">
           <div class="bubble-content">
-            <div class="mensaje">
+            <div class="mensaje" (click)="validarMeet(mensaje)">
               <span>{{ mensaje.mensaje }}</span>
             </div>
             <div class="adjunto" *ngIf="hayAdjuntoEnMensaje(mensaje)">
@@ -227,7 +227,7 @@
               </ion-button>
             </ion-buttons>
             <ion-buttons slot="end" class="right-buttons" *ngIf="escribiendoMensaje()">
-                <ion-button type="submit" (click)="enviarMensaje()" [disabled]="msg === '' || msg === undefined">
+                <ion-button type="submit" (click)="enviarMensaje()" [disabled]="!escribiendoMensaje()">
                   <ion-icon slot="icon-only" style="color: var(--primary-700);" name="send"></ion-icon>
                 </ion-button>
             </ion-buttons>

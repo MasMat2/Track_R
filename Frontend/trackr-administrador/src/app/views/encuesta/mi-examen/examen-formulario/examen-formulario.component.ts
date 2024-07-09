@@ -15,6 +15,7 @@ import {
   DROPDOWN_NO_OPTIONS,
   DROPDOWN_PLACEHOLDER,
 } from '../../../../shared/utils/constants/constants';
+import { Respuesta } from '@models/examen/respuesta';
 
 @Component({
   selector: 'app-reactivo-formulario',
@@ -91,6 +92,10 @@ export class ExamenFormularioComponent implements OnInit {
     });
   }
 
+  public validarRespuesta(claveReactivo : string , respuestaAlumno : string){
+
+    return claveReactivo ===  respuestaAlumno;
+  }
   consultarExamen(idExamen: number) {
     this.examenService.consultarMiExamen(idExamen).subscribe((data) => {
       this.examen = data;

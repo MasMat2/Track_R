@@ -11,6 +11,7 @@ import { chevronForward } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { ExamenDto } from 'src/app/shared/Dtos/cuestionarios/examen-dto';
 import { TabService } from 'src/app/services/dashboard/tab.service';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 
 @Component({
   selector: 'app-mis-cuestionarios',
@@ -37,46 +38,67 @@ export class MisCuestionariosComponent  implements OnInit {
     private examenService: ExamenService,
     private router: Router,
     private alertController: AlertController,
-    private tabService: TabService
+    private tabService: TabService,
+    private spinnerService : LoadingSpinnerService
   ) { 
     addIcons({chevronForward});
 
     //Simula ionViewWillEnter
     this.tabService.tabChange$.subscribe((tabId) => {
       if (tabId === 'cuestionarios') {
-        this.consultarCuestionariosPendientes();
-        this.consultarCuestionariosContestados();
+        this.cargarCuestionarios();
       }
     });
+
+    this.examenService.actualizarCuestionarios$.subscribe(() => {
+      this.cargarCuestionarios();
+    });
+
+
   }
 
   ngOnInit() {
   }
 
-
-  private consultarCuestionariosPendientes(){
-    this.examenService.consultarMisExamenes().subscribe({
-      next: (examenes) => {
-        console.log('exámenes pendientes: ', examenes);
-        this.examenPendienteList = examenes.map(examen => {
-          const fechaFormateada = this.formatearFecha(examen.fechaExamen, examen.horaExamen);
-          return {...examen, fechaExamen: fechaFormateada};
-        });
-      }
-    })
+  private async cargarCuestionarios() {
+    this.spinnerService.presentLoading();
+    const cuestionariosPendientesPromise = this.consultarCuestionariosPendientes();
+    const cuestionariosContestadosPromise = this.consultarCuestionariosContestados();
+    await Promise.all([cuestionariosPendientesPromise, cuestionariosContestadosPromise]);
+    this.spinnerService.dismissLoading();
+  }
+  
+  private consultarCuestionariosPendientes() {
+    return new Promise((resolve, reject) => {
+      this.examenService.consultarMisExamenes().subscribe({
+        next: (examenes) => {
+          console.log('exámenes pendientes: ', examenes);
+          this.examenPendienteList = examenes.map(examen => {
+            const fechaFormateada = this.formatearFecha(examen.fechaExamen, examen.horaExamen);
+            return {...examen, fechaExamen: fechaFormateada};
+          });
+          resolve(examenes);
+        },
+        error: (error) => reject(error)
+      });
+    });
   }
 
-  private consultarCuestionariosContestados(){
-    this.examenService.consultarMisExamenesContestados().subscribe({
-      next: (examenes) => {
-        console.log('exámenes contestados: ', examenes);
-        this.examenContestadoList = examenes.map(examen => {
-          const fechaFormateada = this.formatearFecha(examen.fechaExamen, examen.horaExamen);
-          return {...examen, fechaExamen: fechaFormateada};
-        });
-        (examenes.length > 5) ? (this.cantidadCuestionariosContestados = examenes.length -5) : (this.cantidadCuestionariosContestados = examenes.length);
-      }
-    })
+  private consultarCuestionariosContestados() {
+    return new Promise((resolve, reject) => {
+      this.examenService.consultarMisExamenesContestados().subscribe({
+        next: (examenes) => {
+          console.log('exámenes contestados: ', examenes);
+          this.examenContestadoList = examenes.map(examen => {
+            const fechaFormateada = this.formatearFecha(examen.fechaExamen, examen.horaExamen);
+            return {...examen, fechaExamen: fechaFormateada};
+          });
+          (examenes.length > 5) ? (this.cantidadCuestionariosContestados = examenes.length - 5) : (this.cantidadCuestionariosContestados = examenes.length);
+          resolve(examenes);
+        },
+        error: (error) => reject(error)
+      });
+    });
   }
 
   protected formatearFecha(fecha:Date ,hora: Time){

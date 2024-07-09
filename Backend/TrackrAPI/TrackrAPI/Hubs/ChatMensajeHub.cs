@@ -35,8 +35,9 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
 
     public async Task NuevoMensaje(ChatMensajeDTO mensaje)
     {
-        using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted })){
-
+        using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                    TransactionScopeAsyncFlowOption.Enabled);
         mensaje.IdPersona = this.ObtenerIdUsuario();
         int idArchivo = await _chatMensajeService.NuevoMensaje(mensaje);
 
@@ -61,7 +62,6 @@ public class ChatMensajeHub : Hub<IChatMensajeHub>
             }
         }
         scope.Complete();
-        }
 
 
     }

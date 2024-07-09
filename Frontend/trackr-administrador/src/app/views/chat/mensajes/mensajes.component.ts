@@ -325,10 +325,32 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
     this.router.navigate(['administrador', 'jitsi-meet', meetCode]);
   }
 
-  protected validarMeet(msj: string) {
-    if (msj.includes('trackr-' + this.idChat)) {
+  protected esMensajeValido(mensaje: ChatMensajeDTO): boolean {
+    if (this.esMensajeMio(mensaje.idPersona)) {
+      return false;
+    }
+  
+    let regex = /trackr-\d-\d+/;
+    if (mensaje.mensaje.includes('trackr-' + this.idChat) && mensaje.mensaje.match(regex)) {
+      return true;
+    }
+  
+    regex = /webrtc-\d+-(\d+)/;
+    if (mensaje.mensaje.includes('webrtc-' + this.idChat) && mensaje.mensaje.match(regex)) {
+      return true;
+    }
+  
+    return false;
+  }
+
+  protected validarMeet(mensaje: ChatMensajeDTO) {
+    if(this.esMensajeMio(mensaje.idPersona)){
+      return;
+    }
+
+    if (mensaje.mensaje.includes('trackr-' + this.idChat)) {
       const regex = /trackr-\d-\d+/;
-      const match = msj.match(regex);
+      const match = mensaje.mensaje.match(regex);
       if (match && match.length > 0) {
         const codigo = match[0];
         this.contestarLlamada(codigo);
@@ -337,9 +359,10 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
       }
     }
 
-    if (msj.includes('webrtc-' + this.idChat)) {
-      const regex = /webrtc-\d-(\d+)/;
-      const match = msj.match(regex);
+    if (mensaje.mensaje.includes('webrtc-' + this.idChat)) {
+      const regex = /webrtc-\d+-(\d+)/;
+      const match = mensaje.mensaje.match(regex);
+      console.log(match);
       if (match && match.length > 0) {
         const codigo = match[1];
         this.router.navigate(['/administrador/webrtc', codigo]);

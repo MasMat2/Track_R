@@ -212,7 +212,7 @@ export class MensajesComponent{
     });
   }
 
-  mostrarMensaje(id: number) {
+  protected esMensajeMio(id: number) {
     return id == this.idUsuario;
   }
 
@@ -502,10 +502,14 @@ export class MensajesComponent{
     this.route.navigate(['/home/video-jitsi/answer-call', meetCode]);
   }
 
-  validarMeet(msj: string) {
-    if (msj.includes('trackr-' + this.idChat)) {
+  protected validarMeet(mensaje: ChatMensajeDTO) {
+    if(this.esMensajeMio(mensaje.idPersona)){
+      return;
+    }
+
+    if (mensaje.mensaje.includes('trackr-' + this.idChat)) {
       const regex = /trackr-\d-\d+/;
-      const match = msj.match(regex);
+      const match = mensaje.mensaje.match(regex);
       if (match && match.length > 0) {
         const codigo = match[0];
         this.contestarLlamada(codigo);
@@ -516,9 +520,9 @@ export class MensajesComponent{
 
     }
 
-    if (msj.includes('webrtc-' + this.idChat)) {
+    if (mensaje.mensaje.includes('webrtc-' + this.idChat)) {
       const regex = /webrtc-\d-(\d+)/;
-      const match = msj.match(regex);
+      const match = mensaje.mensaje.match(regex);
       if (match && match.length > 0) {
         const codigo = match[1];
         this.route.navigate(['/home/chat', codigo]);
@@ -526,14 +530,17 @@ export class MensajesComponent{
       } else {
         console.log("Error al validar codigo meet jitsi.");
       }
-
-
     }
   }
 
   //verificar si se está escribiendo un mensaje (mensaje no vacío)
-  escribiendoMensaje(){
-    return !(/^ *$/.test(this.msg))
+  protected escribiendoMensaje(){
+    if(this.isAudio || this.archivo){
+      return true;
+    }
+    else{
+      return !(/^ *$/.test(this.msg));
+    }
   }
 
   protected presionarGrabarAudio(event: any) {
