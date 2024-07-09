@@ -325,10 +325,14 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
     this.router.navigate(['administrador', 'jitsi-meet', meetCode]);
   }
 
-  protected validarMeet(msj: string) {
-    if (msj.includes('trackr-' + this.idChat)) {
+  protected validarMeet(mensaje: ChatMensajeDTO) {
+    if(this.esMensajeMio(mensaje.idPersona)){
+      return;
+    }
+
+    if (mensaje.mensaje.includes('trackr-' + this.idChat)) {
       const regex = /trackr-\d-\d+/;
-      const match = msj.match(regex);
+      const match = mensaje.mensaje.match(regex);
       if (match && match.length > 0) {
         const codigo = match[0];
         this.contestarLlamada(codigo);
@@ -337,9 +341,9 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
       }
     }
 
-    if (msj.includes('webrtc-' + this.idChat)) {
+    if (mensaje.mensaje.includes('webrtc-' + this.idChat)) {
       const regex = /webrtc-\d-(\d+)/;
-      const match = msj.match(regex);
+      const match = mensaje.mensaje.match(regex);
       if (match && match.length > 0) {
         const codigo = match[1];
         this.router.navigate(['/administrador/webrtc', codigo]);

@@ -41,8 +41,8 @@
             class="bubble"
             [ngClass]="esMensajeMio(mensaje.idPersona) ? 'mio' : 'otra-persona'"
           >
-            <div class="bubble-content" (click)="validarMeet(mensaje.mensaje)">
-              <div class="mensaje">
+            <div class="bubble-content">
+              <div class="mensaje" (click)="validarMeet(mensaje)">
                 <span>{{ mensaje.mensaje }}</span>
               </div>
               <div class="adjunto" *ngIf="hayAdjuntoEnMensaje(mensaje)">
