@@ -491,7 +491,8 @@ export class MensajesComponent{
       mensaje: mensaje,
       idPersona: idUsuario,
       archivo: '',
-      idArchivo: 0
+      idArchivo: 0,
+      esVideoChat: true
     };
 
     this.ChatMensajeHubService.enviarMensaje(msg);

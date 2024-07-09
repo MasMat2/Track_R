@@ -330,7 +330,7 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
       return false;
     }
   
-    let regex = /trackr-\d-\d+/;
+    let regex = /trackr-\d+-\d+/;
     if (mensaje.mensaje.includes('trackr-' + this.idChat) && mensaje.mensaje.match(regex)) {
       return true;
     }
@@ -349,7 +349,7 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
     }
 
     if (mensaje.mensaje.includes('trackr-' + this.idChat)) {
-      const regex = /trackr-\d-\d+/;
+      const regex = /trackr-\d+-\d+/;
       const match = mensaje.mensaje.match(regex);
       if (match && match.length > 0) {
         const codigo = match[0];

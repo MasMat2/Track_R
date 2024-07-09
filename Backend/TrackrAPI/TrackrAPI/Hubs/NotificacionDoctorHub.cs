@@ -28,11 +28,11 @@ public class NotificacionDoctorHub : Hub<INotificacionDoctorHub>
         await base.OnConnectedAsync();
     }
 
-    public async Task MarcarComoVistas(List<int> idNotificacionesUsuario)
+    public async Task MarcarComoVistas(List<int> idNotificacionesUsuario, bool tomaTomada)
     {
         var idUsuario = ObtenerIdUsuario();
 
-        _notificacionUsuarioService.MarcarComoVistas(idNotificacionesUsuario);
+        _notificacionUsuarioService.MarcarComoVistas(idNotificacionesUsuario, tomaTomada);
         await Clients.User(idUsuario.ToString()).NotificarComoVistas(idNotificacionesUsuario);
     }
 

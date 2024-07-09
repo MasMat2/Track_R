@@ -145,7 +145,8 @@ export class CreateJitsiMeetComponent implements OnInit {
       mensaje: mensajeLlamada,
       idPersona:5333,
       archivo: '',
-      idArchivo: 0
+      idArchivo: 0,
+      esVideoChat:true
     }
 
     this.mensajeHubService.enviarMensaje(msg);

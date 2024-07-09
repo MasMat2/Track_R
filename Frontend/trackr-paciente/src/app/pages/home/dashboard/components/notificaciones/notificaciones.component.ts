@@ -143,7 +143,7 @@ export class NotificacionesComponent  implements OnInit
           text: 'No tomé la dosis', 
           role: 'cancel',
           handler: () => {
-            //TODO: Agregar logica para la NO realizacion de la toma
+            this.notificacionHubService.marcarComoVista(notificacion.id, false);
             this.notificacionPacienteService.actualizarWidgets();
           }
         },
@@ -151,8 +151,7 @@ export class NotificacionesComponent  implements OnInit
           text: 'Sí tomé la dosis',
           role: 'confirm',
           handler: () => {
-            //TODO: Agregar logica para la realizacion de la toma
-            this.notificacionHubService.marcarComoVista(notificacion.id);
+            this.notificacionHubService.marcarComoVista(notificacion.id, true);
             this.notificacionPacienteService.actualizarWidgets();
           }
         }
