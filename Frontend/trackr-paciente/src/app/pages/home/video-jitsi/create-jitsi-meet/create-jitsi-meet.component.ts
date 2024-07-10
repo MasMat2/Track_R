@@ -34,7 +34,7 @@ export class CreateJitsiMeetComponent implements OnInit {
   protected chats$: Observable<ChatDTO[]>;
   protected chats: ChatDTO[] = [];
 
-  private domain: string = "meet.jit.si"; // For self hosted use your domain
+  private domain: string = "8x8.vc"; // For self hosted use your domain
   private room: any;
   private options: any;
   private roomApi: any;
@@ -95,14 +95,14 @@ export class CreateJitsiMeetComponent implements OnInit {
 
   createNewRoom(): void {
 
-    const newRoomName = 'trackr-'+this.idChat+'-'+Math.floor(Math.random() * 10000);
+    const numberCall = Math.floor(Math.random() * 10000);
+    const AppIDJitsi = 'vpaas-magic-cookie-c25fa0da2cd344ba8d41a873768065ec';
+
+    const newRoomName = AppIDJitsi+'/'+'trackr-'+this.idChat+'-'+numberCall;
 
     const telefonoEmoji = "📞";
-    this.mandarMensajeLlamada(telefonoEmoji+' Te espero la sala '+newRoomName);
-
-    //Crea la nueva URL utilizando la plantilla de cadenas
-    const newUrl = `intent://${this.domain}/${newRoomName}#Intent;scheme=org.jitsi.meet;package=org.jitsi.meet;end`;
-    window.location.assign(newUrl);
+    this.mandarMensajeLlamada(telefonoEmoji+' Te espero la sala '+'trackr-'+this.idChat+'-'+numberCall);
+  
     
     //Configuración para la nueva sala
     const newRoomOptions = {
@@ -113,7 +113,7 @@ export class CreateJitsiMeetComponent implements OnInit {
       interfaceConfigOverwrite: {
         //overwrite interface properties
       },
-      parentNode: document.querySelector('#jitsi-new-meet-iframe'),
+      parentNode: document.querySelector('#jaas-container'),
       userInfo: {
         displayName: "Trackr-user"
       }

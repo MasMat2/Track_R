@@ -21,12 +21,13 @@ declare var JitsiMeetExternalAPI: any;
 export class AnswerMeetComponent implements OnInit {
   protected localStream: MediaStream;
 
-  protected domain: string = "meet.jit.si"; // For self hosted use your domain
+  protected domain: string = "8x8.vc"; // For self hosted use your domain
   protected room: any;
   protected options: any;
   protected api: any;
   protected user: any;
   private meetName: string;
+  private AppIDJitsi = 'vpaas-magic-cookie-c25fa0da2cd344ba8d41a873768065ec';
 
   // For Custom Controls
   isAudioMuted = false;
@@ -42,14 +43,12 @@ export class AnswerMeetComponent implements OnInit {
   ngOnInit() {
 
     this.route.paramMap.subscribe(params => {
-      this.meetName = params.get('meet-name')!;
+      this.meetName = this.AppIDJitsi+'/'+params.get('meet-name')!;
     });
 
     this.orientationService.lockLandscape();
 
     this.iniciarWebCam(); //iniciamos camara y microfono para que pueda ser iniciada una llamada en el iframe de jitsi
-    const cspValue = "default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;";
-    this.meta.addTag({ name: 'Content-Security-Policy', content: cspValue }); //Se le indica al template que confie en iframe
 
     this.answerMeet(); //Metodo para crear una llamada con jitsi
   }
@@ -63,15 +62,15 @@ export class AnswerMeetComponent implements OnInit {
     //Configuración para la nueva sala
     const newRoomOptions = {
       roomName: this.meetName,
-      width: 900,
+      width: 800,
       height: 500,
       configOverwrite: { prejoinPageEnabled: false },
       interfaceConfigOverwrite: {
         //overwrite interface properties
       },
-      parentNode: document.querySelector('#jitsi-answer-call-iframe'),
+      parentNode: document.querySelector('#jaas-container'),
       userInfo: {
-        displayName: "Medico-Trackr"
+        displayName: "Paciente"
       }
 
     };
