@@ -177,4 +177,11 @@ export class UsuarioService {
     return this.http.get<boolean>(this.url + `esMedico`);
   }
 
+  consultarPersonalParaSelector() {
+    return this.http.get<Usuario[]>(this.url + 'consultarPersonalParaSelector');
+  }
+
+  consultarPacientesParaSelector() {
+    return this.http.get<Usuario[]>(this.url + 'consultarPacientesParaSelector');
+  }
 }
