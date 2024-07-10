@@ -65,6 +65,10 @@ const routes: Routes = [
   {
     path: 'especialidad',
     loadChildren: () => import('./especialidad/especialidad.module').then((m) => m.EspecialidadModule)
+  },
+  {
+    path : 'unidad-medida',
+    loadChildren: () => import('./unidad-medida/unidad-medida.module').then((m) => m.UnidadMedidaModule)
   }
 ];
 
