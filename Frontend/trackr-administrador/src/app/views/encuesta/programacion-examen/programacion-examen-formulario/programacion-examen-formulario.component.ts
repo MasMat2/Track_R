@@ -37,7 +37,8 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
   protected readonly DROPDOWN_PLACEHOLDER = DROPDOWN_PLACEHOLDER;
   protected readonly DROPDOWN_NO_OPTIONS = DROPDOWN_NO_OPTIONS;
 
-  public usuarioList: Usuario[] = [];
+  public pacienteList: Usuario[] = [];
+  public personalList: Usuario[] = [];
   public tipoExamenList: TipoExamen[] = [];
   public examenList: Examen[] = [];
 
@@ -118,7 +119,8 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
 
   public ngOnInit(): void {
 
-    this.consultarUsuarios();
+    this.consultarPacientes();
+    this.consultarPersonal();
     this.consultarTipoExamen();
 
     this.programacionExamen.participantes = [];
@@ -154,11 +156,19 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
       );
   }
 
-  private consultarUsuarios(): void {
+  private consultarPacientes(): void {
     this.usuarioService
-      .consultarGeneral()
+      .consultarPacientesParaSelector()
       .subscribe((usuarios: Usuario[]) => {
-        this.usuarioList = usuarios.filter((u) => u.habilitado);
+        this.pacienteList = usuarios;
+      });
+  }
+
+  private consultarPersonal(): void {
+    this.usuarioService
+      .consultarPersonalParaSelector()
+      .subscribe((usuarios: Usuario[]) => {
+        this.personalList = usuarios;
       });
   }
 
