@@ -17,6 +17,8 @@ import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-pa
 import { ExpedientePadecimientoService } from '@http/gestion-expediente/expediente-padecimiento.service';
 
 import { CapacitorUtils } from '@utils/capacitor-utils';
+import { UnidadMedidaService } from 'src/app/services/dashboard/unidad-medida.service';
+import { UnidadMedidaGridDto } from 'src/app/shared/Dtos/catalogo/unidad-medida-grid-dto';
 
 //TODO:Definir cantidad máxima de fármaco
 const CANTIDAD_MAXIMA = 99;
@@ -34,7 +36,7 @@ const CANTIDAD_MAXIMA = 99;
     ReactiveFormsModule, 
     HeaderComponent, 
   ],
-  providers: [CapacitorUtils]
+  providers: [CapacitorUtils, UnidadMedidaService]
 })
 export class AgregarTratamientoPage implements OnInit {
 
@@ -71,15 +73,8 @@ export class AgregarTratamientoPage implements OnInit {
      {id: 5 , name: 'S'},
      {id: 6 , name: 'D'},
   ];
-  //TODO: Definir tabla de unidades en la BD
-  protected unidades = [
-    {id: 1, nombre: 'mcg'},
-    {id: 2, nombre: 'mg'}, 
-    {id: 3, nombre: 'g'},
-    {id: 4, nombre: 'ml'},
-    {id: 5, nombre: 'tabletas'},
-    {id: 6, nombre: 'cucharadas'}
-  ]
+
+  protected unidades : UnidadMedidaGridDto[];
 
   constructor(
     private perfilTratamientoService: PerfilTratamientoService,
@@ -89,6 +84,7 @@ export class AgregarTratamientoPage implements OnInit {
     private _modalCtrl: ModalController,
     private alertController: AlertController,
     private capacitorUtils: CapacitorUtils,
+    private unidadMedidaService: UnidadMedidaService
   ) { 
     addIcons({
     'chevron-left': 'assets/img/svg/chevron-left.svg',
@@ -124,6 +120,7 @@ export class AgregarTratamientoPage implements OnInit {
     },
       { validators: [this.validateDiaSemana(), this.compareDates()] });
 
+    this.consutarUnidadesMedida();
     this.selectorPadecimientos();
     this.selectorDoctor();
     this.verificarAccionFormulario();
@@ -138,6 +135,14 @@ export class AgregarTratamientoPage implements OnInit {
       this.tituloAccion = "Añadir";
       return
     }
+  }
+
+  private consutarUnidadesMedida(){
+    this.unidadMedidaService.consultarParaGrid().subscribe({
+      next: (data) => {
+        this.unidades = data;
+      }
+    })
   }
 
   private rellenarValoresEditar(){

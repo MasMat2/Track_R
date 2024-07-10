@@ -830,5 +830,18 @@ namespace TrackrAPI.Repositorys.Seguridad
 
             return usuarioDomicilio;
         }
+
+        public IEnumerable<UsuarioDto> ListarUsuariosExcluidosPorRol(string rolExcluido, int idCompania)
+        {
+            return context.Usuario
+                .Include(u => u.UsuarioRol)
+                .Where(u => !u.UsuarioRol.Any(ur => ur.IdRolNavigation.Clave == rolExcluido)
+                    && (u.UsuarioLocacion.Any(ul => ul.IdLocacionNavigation.IdCompania == idCompania) || u.IdCompania == idCompania))
+                    .Select(u => new UsuarioDto
+                    {
+                        IdUsuario = u.IdUsuario,
+                        NombreCompleto = u.ObtenerNombreCompleto()
+                    }).ToList();
+        }
     }
 }

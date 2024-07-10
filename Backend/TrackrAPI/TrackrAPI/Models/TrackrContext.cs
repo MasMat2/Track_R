@@ -121,6 +121,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<TratamientoToma> TratamientoToma { get; set; } = null!;
         public virtual DbSet<Turno> Turno { get; set; } = null!;
         public virtual DbSet<UnidadMedida> UnidadMedida { get; set; } = null!;
+        public virtual DbSet<UnidadesMedida> UnidadesMedida { get; set; } = null!;
         public virtual DbSet<Usuario> Usuario { get; set; } = null!;
         public virtual DbSet<UsuarioLocacion> UsuarioLocacion { get; set; } = null!;
         public virtual DbSet<UsuarioRol> UsuarioRol { get; set; } = null!;
@@ -2541,6 +2542,15 @@ namespace TrackrAPI.Models
                     .WithMany(p => p.UnidadMedida)
                     .HasForeignKey(d => d.IdCompania)
                     .HasConstraintName("FK__UnidadMed__IdCom__31C24FF4");
+            });
+
+            modelBuilder.Entity<UnidadesMedida>(entity =>
+            {
+                entity.ToTable("UnidadesMedida", "Configuracion");
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Usuario>(entity =>

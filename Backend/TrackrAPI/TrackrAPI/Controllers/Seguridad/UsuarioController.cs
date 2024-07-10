@@ -362,5 +362,23 @@ namespace TrackrAPI.Controllers.Seguridad
             var usuario = usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
             return usuarioService.EsAsistente(usuario.IdCompania , usuario.IdUsuario);
         }
+
+        [HttpGet]
+        [Route("consultarPacientesParaSelector")]
+        public IEnumerable<UsuarioDto> ConsultarPacientesParaSelector()
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            var idCompania = usuarioService.Consultar(idUsuario).IdCompania;
+            return usuarioService.ConsultarPorRol(GeneralConstant.ClaveRolPaciente, idCompania);
+        }
+
+        [HttpGet]
+        [Route("consultarPersonalParaSelector")]
+        public IEnumerable<UsuarioDto> ConsultarPersonal()
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            var idCompania = usuarioService.Consultar(idUsuario).IdCompania;
+            return usuarioService.ConsultarPersonal(idCompania);
+        }
     }
 }

@@ -623,6 +623,16 @@ namespace TrackrAPI.Services.Seguridad
         {
             return usuarioRepository.ConsultarParaSelector();
         }
+     
+       public IEnumerable<UsuarioDto> ConsultarPacientesParaSelector(int idCompania)
+        {
+            return usuarioRepository.ConsultarPorRol(GeneralConstant.ClaveRolPaciente, idCompania);
+        }
+
+        public IEnumerable<UsuarioDto> ConsultarPersonal(int idCompania)
+        {
+            return usuarioRepository.ListarUsuariosExcluidosPorRol(GeneralConstant.ClaveRolPaciente, idCompania);
+        }
 
         private string GenerarContraseniaAleatoria()
         {
