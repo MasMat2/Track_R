@@ -507,6 +507,9 @@ export class MensajesComponent{
 
   contestarLlamada(meetCode: string) {
     this.route.navigate(['/home/video-jitsi/answer-call', meetCode]);
+    setTimeout(() => {
+      this.dataJitsiService.contestarLlamada(meetCode);
+    }, 200);
   }
 
   protected validarMeet(mensaje: ChatMensajeDTO) {
@@ -515,7 +518,7 @@ export class MensajesComponent{
     }
 
     if (mensaje.mensaje.includes('trackr-' + this.idChat)) {
-      const regex = /trackr-\d-\d+/;
+      const regex = /trackr-\d+-\d+/;
       const match = mensaje.mensaje.match(regex);
       if (match && match.length > 0) {
         const codigo = match[0];

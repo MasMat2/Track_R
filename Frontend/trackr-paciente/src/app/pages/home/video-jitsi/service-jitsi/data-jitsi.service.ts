@@ -36,6 +36,8 @@ export class DataJitsiService {
   public room: string;
   public user: string;
 
+  private AppIDJitsi = 'vpaas-magic-cookie-c25fa0da2cd344ba8d41a873768065ec';
+
   constructor(
     private router: Router,
     private meta: Meta,
@@ -76,6 +78,16 @@ export class DataJitsiService {
     } catch (error) {
       console.error('Error al crear JitsiMeetExternalAPI:', error);
     }
+
+    this.roomApi.addEventListeners({
+      readyToClose: this.handleClose,
+      participantLeft: this.handleParticipantLeft,
+      participantJoined: this.handleParticipantJoined,
+      videoConferenceJoined: this.handleVideoConferenceJoined,
+      videoConferenceLeft: this.handleVideoConferenceLeft,
+      audioMuteStatusChanged: this.handleMuteStatus,
+      videoMuteStatusChanged: this.handleVideoStatus
+    });
   }
 
   mandarMensajeLlamada(mensajeLlamada : string): void{
@@ -128,6 +140,44 @@ export class DataJitsiService {
     console.log('termino metodo comenzar llamada');
   }
 
+  contestarLlamada(meetCode: string) {
+    this.orientationService.lockLandscape();
+    this.iniciarWebCam(); //iniciamos camara y microfono para que pueda ser iniciada una llamada en el iframe de jitsi
+
+    const newRoomName = `${this.AppIDJitsi}/${meetCode}`;
+
+    //Configuración para la nueva sala
+    const newRoomOptions = {
+      roomName: newRoomName,
+      width: '100%',
+      height: '100%',
+      configOverwrite: { prejoinPageEnabled: false },
+      interfaceConfigOverwrite: {
+        //overwrite interface properties
+      },
+      parentNode: document.querySelector('#jaas-container'),
+      userInfo: {
+        displayName: "Paciente"
+      }
+
+    };
+
+    //Crear una nueva instancia de JitsiMeetExternalAPI para la nueva sala
+    this.roomApi = new JitsiMeetExternalAPI(this.domain, newRoomOptions);
+
+    // Event handlers para la nueva sala
+    this.roomApi.addEventListeners({
+      readyToClose: this.handleClose,
+      participantLeft: this.handleParticipantLeft,
+      participantJoined: this.handleParticipantJoined,
+      videoConferenceJoined: this.handleVideoConferenceJoined,
+      videoConferenceLeft: this.handleVideoConferenceLeft,
+      audioMuteStatusChanged: this.handleMuteStatus,
+      videoMuteStatusChanged: this.handleVideoStatus
+    });
+  }
+
+
   hangup() {
     this.roomApi.executeCommand('hangup');
     this.localStream.getTracks().forEach(track => track.stop());
@@ -148,6 +198,10 @@ export class DataJitsiService {
   handleClose = () => {
     console.log("handleClose");
     this.orientationService.lockPortrait();
+    const container = document.getElementById('jaas-container');
+      if (container) {
+        container.innerHTML = '';
+    }
   }
 
   handleParticipantLeft = async (participant: ParticipantInterface) => {
