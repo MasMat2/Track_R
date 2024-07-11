@@ -146,7 +146,7 @@ namespace TrackrAPI.Services.Sftp
                 Directory.CreateDirectory(directoryPath);
             }
 
-            if (File.GetLastWriteTime(localFilePath) != lastWriteTime&& lastWriteTime == DateTime.MinValue){
+            if (File.GetLastWriteTime(localFilePath) != lastWriteTime || !File.Exists(localFilePath)){
                 try
                 {
                     using (var sftp = new SftpClient(host, port, username, password))
