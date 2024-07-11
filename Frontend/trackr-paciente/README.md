@@ -1,5 +1,6 @@
 Estado de apliacion en plataforma IOS:
-build ios 51
+build ios 52
+
 
 Esta actualización aborda y resuelve varios problemas reportados por los usuarios para mejorar la funcionalidad y la experiencia general de la aplicación:
 1. Notificaciones:
