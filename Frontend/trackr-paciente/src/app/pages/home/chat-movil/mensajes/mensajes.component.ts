@@ -31,6 +31,7 @@ import { SwipeDirective } from 'src/app/shared/directives/swipe.directive';
 import { CapacitorUtils } from '@utils/capacitor-utils';
 import { format } from 'date-fns';
 import { AudioWaveComponent } from '@sharedComponents/audio-wave/audio-wave.component';
+import { DataJitsiService } from '@pages/home/video-jitsi/service-jitsi/data-jitsi.service';
 
 
 
@@ -98,7 +99,8 @@ export class MensajesComponent{
     private ModalController:ModalController,
     private capacitorUtils: CapacitorUtils,
     private PopoverController:PopoverController,
-    private rout: ActivatedRoute
+    private rout: ActivatedRoute,
+    private dataJitsiService: DataJitsiService,
   ) { 
       addIcons({videocamOutline, 
         'file': 'assets/img/svg/file.svg',
@@ -475,6 +477,10 @@ export class MensajesComponent{
 
   crearLlamadaJitsi() {
     this.route.navigate(['/home/video-jitsi/create-call', this.idChat]);
+    //Le damos tiempo de que carge el componente para poder realizar la llamada
+    setTimeout(() => {
+      this.dataJitsiService.comenzarLlamada(this.idChat);
+    }, 200);
   }
 
   crearLlamadaWebRTC() {
