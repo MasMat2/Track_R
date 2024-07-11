@@ -6,7 +6,6 @@ import { Observable, map } from 'rxjs';
 import { CommonModule, NgIf } from '@angular/common';
 import { NotificacionPacientePopOverDto } from 'src/app/shared/Dtos/notificaciones/notificacion-paciente-popover-dto';
 import { addIcons } from 'ionicons';
-import { notificationsOutline, ellipse } from 'ionicons/icons'
 import { ModalController } from '@ionic/angular/standalone';
 
 @Component({
@@ -28,7 +27,10 @@ export class NotificacionesPageComponent implements OnInit
     private modalController : ModalController,
     private notificacionHubService : NotificacionPacienteHubService
   ){
-    addIcons({notificationsOutline, ellipse})
+    addIcons({
+      'bell': 'assets/img/svg/bell.svg',
+      'circle-filled': 'assets/img/svg/circle_filled.svg'
+    })
   }
 
   ngOnInit()

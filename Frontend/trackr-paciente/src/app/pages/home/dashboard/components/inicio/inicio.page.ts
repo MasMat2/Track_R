@@ -15,7 +15,6 @@ import { SeguimientoPadecimientoComponent } from '../seguimiento-padecimiento/se
 import { NotificacionPacienteService } from '@http/gestion-perfil/notificacion-paciente.service';
 import { Observable, lastValueFrom } from 'rxjs';
 import { addIcons } from 'ionicons';
-import { notificationsOutline, menu, settingsOutline} from 'ionicons/icons';
 import { ModalController } from '@ionic/angular/standalone';
 import { ConfiguracionDashboardPage } from '../configuracion-dashboard/configuracion-dashboard.page';
 import { InformacionPerfilDto } from 'src/app/shared/Dtos/perfil/informacion-perfil-dto';
@@ -79,7 +78,9 @@ export class InicioPage implements OnInit {
 
     //this.navegarConfigADashboardChanges();
     
-    addIcons({notificationsOutline, menu, settingsOutline})
+    addIcons({
+      'settings': 'assets/img/svg/settings.svg'
+    })
   }
 
   ngOnInit() {

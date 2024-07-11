@@ -16,17 +16,17 @@
             position: relative;
             ion-icon{
                 font-size: 24px;
-                color: white;
+                color: var(--neutral-50);
             }
         }
     
         .inner-icon{
             position: absolute;
-            right: 0;
+            right: 2px;
             top: -2px;
             ion-icon{
-                color: red;   
-                font-size: 10px;
+                color: var(--error-200);   
+                font-size: 8px;
             }
         }
     }
