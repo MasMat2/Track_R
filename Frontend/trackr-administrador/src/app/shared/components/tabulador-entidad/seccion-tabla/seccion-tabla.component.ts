@@ -24,7 +24,6 @@ import { Dominio } from '@models/catalogo/dominio';
   styleUrls: ['./seccion-tabla.component.scss']
 })
 export class SeccionTablaComponent implements OnInit {
-  @Input() public entidadEstructuraSeccion: EntidadEstructura;
   @Input() public idTabla: number;
  
  public campos: SeccionCampo[] = [];
@@ -43,7 +42,6 @@ export class SeccionTablaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.entidadEstructuraSeccion.campos.sort((a, b) => a.orden - b.orden);
     this.valoresVariablesPadecimiento();
   }
 
@@ -106,17 +104,6 @@ export class SeccionTablaComponent implements OnInit {
     this.seleccionado = registro;
   }
 
-  private actualizarGrid(): void {
-    const subscription = this.entidadEstructuraTablaValorService
-      .consultarPorPestanaSeccion(this.entidadEstructuraSeccion.idEntidadEstructura, this.idTabla)
-      .subscribe({
-        next: (registros: RegistroTabla[]) => {
-          subscription.unsubscribe();
-          this.entidadEstructuraSeccion.registrosTabla = registros;
-        }
-      });
-  }
-
 
   public obtenerValor(claveColumna: string, valores: ExpedienteMuestrasRegistroDTO , firstRegistro : boolean , lastColumna : boolean, idSeccionValor : number) : string  {
     if(lastColumna && firstRegistro)
@@ -161,8 +148,7 @@ export class SeccionTablaComponent implements OnInit {
     const initialState = {
       accion: 'Agregar',
       idTabla: this.idTabla,
-      idPestanaSeccion: this.entidadEstructuraSeccion.idEntidadEstructura,
-      nombreSeccion: this.entidadEstructuraSeccion.nombre,
+      nombreSeccion: 'Agregar muestra',
       campos: this.campos,
     };
 
@@ -222,8 +208,8 @@ export class SeccionTablaComponent implements OnInit {
       accion: 'Editar',
       numeroRegistro: this.seleccionado.idEntidadEstructuraTablaValor,
       idTabla: this.idTabla,
-      idPestanaSeccion: this.entidadEstructuraSeccion.idEntidadEstructura,
-      nombreSeccion: this.entidadEstructuraSeccion.nombre,
+      idPestanaSeccion: this.seleccionado.idEntidadEstructura,
+      nombreSeccion: 'Editar registro',
       campos: this.campos,
     };
 
@@ -275,7 +261,7 @@ export class SeccionTablaComponent implements OnInit {
     for (const campo of this.seleccionado.registro) {
 
 
-      const v = this.seccionCampoList.find(c => c.clave === campo.claveCampo);
+      const v = this.seccionCampoList.find(c => c.idSeccionCampo === campo.idSeccionVariable);
 
       if(v){
       
