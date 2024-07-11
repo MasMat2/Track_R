@@ -133,6 +133,9 @@ namespace TrackrAPI.Services.Sftp
         {
             byte[] fileContent;
 
+            filePath = NormalizeFilePath(filePath);
+
+
             var lastWriteTime = this.sftpCacheRepository.GetLastWriteTime(filePath);
 
             string localFilePath = GetLocalPath(filePath);
@@ -176,6 +179,13 @@ namespace TrackrAPI.Services.Sftp
 
             return Convert.ToBase64String(fileContent);
         }
+
+        private static string NormalizeFilePath(string filePath)
+        {
+            bool isWindows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows);
+            return isWindows ? filePath.Replace("/", "\\") : filePath.Replace("\\", "/");
+        }
+
 
         public string DownloadFileAsBase64(string filePath)
         {
