@@ -1,5 +1,6 @@
 Estado de apliacion en plataforma IOS:
-build ios 52
+build ios 53
+Servidor ios: atisc.mx
 
 
 Esta actualización aborda y resuelve varios problemas reportados por los usuarios para mejorar la funcionalidad y la experiencia general de la aplicación:
@@ -21,6 +22,6 @@ Esta actualización aborda y resuelve varios problemas reportados por los usuari
 - El envío de archivos en el chat también se ha corregido, permitiendo que los archivos seleccionados se envíen correctamente.
 7. Registro de Tratamiento
 - Mejoras en el apartado de registro de tratamientos.
-8. Videollamadas con mejor experiencia de usuario.
+8. Videollamadas con mejoras en la toma de multiples llamadas durante una sesion.
 
 
