@@ -1,0 +1,54 @@
+.contenedor-principal{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .contenedor-controles{     
+        margin-bottom: 16px;   
+        ion-toolbar{
+            height: 6vh;
+        }
+
+        .controles-zoom{
+            margin-right: 28px;
+        }
+        .controles-pagina{
+            margin-left: 32px;
+            .selector-pagina{
+                display: flex;
+                flex-direction: row;
+                height: 32px;
+            }
+            .label{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                width: 24px;
+            }
+        }
+
+
+        .boton-control{
+            color: var(--primary-700);
+            width: fit-content;
+            height: fit-content;
+            ion-icon{
+                font-size: 24px;
+            }
+        }
+        .boton-control::part(native){
+            padding: 4px !important;
+        }
+    }
+
+    .contenedor-pdf{
+        width: 100%;
+        height: 100%;
+
+        #pdf-viewer{
+            width: 100%;
+            height: 100%;   
+        }
+    }
+}
