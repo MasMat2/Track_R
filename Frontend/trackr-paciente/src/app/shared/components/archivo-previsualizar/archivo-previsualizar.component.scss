@@ -44,8 +44,12 @@ ion-toolbar{
     align-items: center;
 
     ion-img::part(image){
-        max-height: calc(80vh - 2px);
+        //max-height: calc(80vh - 2px);
     }
+}
+.contenedor-pdf{
+    height: 100%;
+    width: 100vw;
 }
 
 .icono{

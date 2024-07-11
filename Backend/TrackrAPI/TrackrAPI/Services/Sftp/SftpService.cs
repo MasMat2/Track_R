@@ -137,7 +137,13 @@ namespace TrackrAPI.Services.Sftp
 
             string localFilePath = GetLocalPath(filePath);
 
-            if (File.GetLastWriteTime(localFilePath) != lastWriteTime){
+            var directoryPath = Path.GetDirectoryName(localFilePath);
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            if (File.GetLastWriteTime(localFilePath) != lastWriteTime&& lastWriteTime == DateTime.MinValue){
                 try
                 {
                     using (var sftp = new SftpClient(host, port, username, password))

@@ -2,15 +2,14 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PlataformaService } from 'src/app/services/dashboard/plataforma.service';
 import { ArchivoGetDTO } from 'src/app/shared/Dtos/archivos/archivo-get-dto';
-import { chevronBack, downloadOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { ArchivoService } from '@http/archivo/archivo.service';
 import { BehaviorSubject } from 'rxjs';
 import { AlertController } from '@ionic/angular/standalone';
-import { url } from 'inspector';
+import { PdfVisorComponent } from '@sharedComponents/pdf-visor/pdf-visor.component';
+
 
 
 
@@ -19,7 +18,12 @@ import { url } from 'inspector';
   templateUrl: './archivo-previsualizar.component.html',
   styleUrls: ['./archivo-previsualizar.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, NgxExtendedPdfViewerModule],
+  imports: [
+    CommonModule, 
+    IonicModule, 
+    PdfVisorComponent
+  ],
+  schemas: []
 })
 export class ArchivoPrevisualizarComponent implements OnInit, AfterViewInit {
   
@@ -221,5 +225,4 @@ export class ArchivoPrevisualizarComponent implements OnInit, AfterViewInit {
 
     alert.present();
   }
-
 }

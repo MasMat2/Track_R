@@ -21,7 +21,6 @@ export class ArchivoService {
   }
 
   public getArchivoByUrl(urlArchivo: string):Observable<ArchivoGetDTO>{
-    console.log(urlArchivo);
     const params = new HttpParams().set('urlArchivo', urlArchivo);
     return this.http.get<ArchivoGetDTO>(`${this.dataUrl}getByUrl`, {params});
   }

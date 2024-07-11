@@ -13,7 +13,6 @@ import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-s
 import { ArchivoService } from '../../../../shared/http/archivo/archivo.service';
 import { ArchivoFormDTO } from '../../../../shared/Dtos/archivos/archivo-form-dto';
 import { addIcons } from 'ionicons';
-import {cameraOutline, paperPlane, videocamOutline, chevronBack, trash, mic, micOutline, documentOutline, send, ellipsisVerticalOutline } from 'ionicons/icons';
 //Libreria de capacitor para grabar audio
 import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder';
 
@@ -100,12 +99,12 @@ export class MensajesComponent{
     private PopoverController:PopoverController,
     private rout: ActivatedRoute
   ) { 
-      addIcons({videocamOutline, 
+      addIcons({
         'file': 'assets/img/svg/file.svg',
         'chevron-left': 'assets/img/svg/chevron-left.svg',
         'camera': 'assets/img/svg/camera.svg',
-        'send': 'assets/img/svg/send.svg',
-        'send-filled': 'assets/img/svg/send-filled.svg',
+        'send': 'assets/img/svg/send-filled.svg',
+        'send-filled': 'assets/img/svg/send_filled.svg',
         'trash': 'assets/img/svg/trash-2.svg',
         'mic': 'assets/img/svg/mic.svg',
         'ellipsis-vertical': 'assets/img/svg/ellipsis-vertical.svg',
