@@ -1,4 +1,4 @@
-#jitsi-answer-call-iframe {
+#jaas-container {
     display: flex;
     flex-direction: column; /* Establece la dirección del contenedor como columna */
     align-items: center; /* Centra los elementos horizontalmente en el contenedor */
@@ -7,16 +7,12 @@
     position: relative;
 }
 
-.hangup-btn
-{
+.hangup-btn {
     position: absolute;
-    bottom: 2%;
+    bottom: 0;
     padding: 0;
     text-align: end;
     direction: revert;
     height: 10%;
-    color: white;
-    left: 2%;
-
 }
 

@@ -4,6 +4,7 @@ using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Archivos;
 using TrackrAPI.Repositorys.GestionExpediente;
 using TrackrAPI.Services.Sftp;
+using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Services.GestionExpediente
 
@@ -57,6 +58,11 @@ namespace TrackrAPI.Services.GestionExpediente
         public void Agregar(ExpedienteEstudioFormularioCapturaDTO expedienteEstudioDTO, int idUsuario)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+
+            if (expedienteEstudioDTO.Archivo is null)
+            {
+                throw new CdisException("Debe agregar un adjunto");
+            }
 
             int idExpediente = _expedienteEstudioRepository.ConsultarIdExpediente(idUsuario);
 

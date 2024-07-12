@@ -3,44 +3,45 @@
     <ion-toolbar>
       <ion-buttons class="start" slot="start">
         <ion-button routerLink="inicio-perfil">
-          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          <ion-icon slot="start" name="chevron-left"></ion-icon>
           <ion-label>Atrás</ion-label>
         </ion-button>
       </ion-buttons>
       <ion-buttons class="end" slot="end">
         <ion-button class="icon-only" (click)="AgregarAntecedente()">
-          <ion-icon name="add"></ion-icon>
+          <ion-icon name="plus"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </div>
 </ion-header>
-<ion-content>
+<ion-content class="primary">
   <div class="contenedor-principal">
     <div class="titulo">
       <ion-text>
         <h3>Antecedentes</h3>
       </ion-text>
     </div>
-    <div class="lista-vacia" *ngIf="listaAntecedentesVacia()">
-      <ion-text>
-        <p>Nada Por aquí. <br> Aún no hay antecedentes registrados.</p>
-      </ion-text>
-      <ion-button fill="outline" (click)="AgregarAntecedente()">
-        <ion-icon slot="start" name="add"></ion-icon>
-        Añadir antecedente
-      </ion-button>
-    </div>
-    <div class="lista-antecedentes" *ngIf="!listaAntecedentesVacia()">
-      <ion-list>
+    <div class="lista-antecedentes">
+      <div class="lista-vacia" *ngIf="listaAntecedentesVacia()">
+        <ion-text>
+          <p>Nada Por aquí. <br> Aún no hay antecedentes registrados.</p>
+        </ion-text>
+        <ion-button fill="outline" (click)="AgregarAntecedente()">
+          <ion-icon slot="start" name="plus"></ion-icon>
+          Añadir antecedente
+        </ion-button>
+      </div>
+
+      <ion-list class="custom-general-item-list" *ngIf="!listaAntecedentesVacia()">
         <ion-item *ngFor="let antecedente of misAntecedentes" lines="none">
           <ion-label>
             <h3>{{antecedente.nombrePadecimiento}}</h3>
             <p>{{antecedente.fechaDiagnostico | date : "dd/MM/yyyy"}}</p>
             <p>{{ antecedente.tituloDoctor}} {{antecedente.nombreDoctor}} {{antecedente.apellidosDoctor}}</p>
           </ion-label>
-          <ion-button slot="end" fill="clear" (click)="presentarAlertaEliminarAntecedente(antecedente)">
-            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          <ion-button class="custom-icon-only clear-error slot-end" slot="end" fill="clear" (click)="presentarAlertaEliminarAntecedente(antecedente)">
+            <ion-icon name="trash"></ion-icon>
           </ion-button>
         </ion-item>
       </ion-list>

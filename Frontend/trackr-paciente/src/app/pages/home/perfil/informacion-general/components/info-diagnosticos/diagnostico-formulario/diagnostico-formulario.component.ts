@@ -6,7 +6,6 @@ import { EntidadEstructuraService } from '../../../../../../../shared/http/gesti
 import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
 import { lastValueFrom } from 'rxjs';
 import { addIcons } from 'ionicons';
-import { calendarOutline, chevronUp, chevronDown } from 'ionicons/icons';
 import { validarCamposRequeridos } from '@utils/utileria';
 import { AgregarExpedientePadecimientoDto } from 'src/app/shared/Dtos/seguridad/agregar-expediente-padecimiento-dto';
 import { ExpedientePadecimientoService } from '../../../../../../../shared/http/gestion-expediente/expediente-padecimiento.service';
@@ -41,7 +40,13 @@ export class DiagnosticoFormularioComponent  implements OnInit {
     private expedientePadecimientoService: ExpedientePadecimientoService,
     private doctoresService: MisDoctoresService,
     private modalController: ModalController
-  ) { addIcons({calendarOutline, chevronUp, chevronDown})}
+  ) { 
+    addIcons({
+      'chevron-up': 'assets/img/svg/chevron-up.svg',
+      'chevron-down': 'assets/img/svg/chevron-down.svg',
+      'calendar': 'assets/img/svg/calendar.svg'
+    })
+  }
 
   ngOnInit() {
     this.consultarDiagnosticosSelector();

@@ -119,7 +119,7 @@ export class MisEstudiosFormularioPage implements OnInit {
   }
 
   protected eliminarAdjunto(){
-    this.expedienteEstudio.archivo = '';
+    this.expedienteEstudio.archivo = null;
     this.expedienteEstudio.archivoNombre = '';
     this.expedienteEstudio.archivoTipoMime = '';
 

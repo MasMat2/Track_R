@@ -109,7 +109,7 @@
         <div class="botones botones-column">
           <ion-button 
             class="dark" 
-            [disabled]="btnSubmit || !formulario.valid" 
+            [disabled]="btnSubmit || !formulario.valid || (expedienteEstudio.archivo == null)  " 
             type="submit">
             Guardar
           </ion-button>
