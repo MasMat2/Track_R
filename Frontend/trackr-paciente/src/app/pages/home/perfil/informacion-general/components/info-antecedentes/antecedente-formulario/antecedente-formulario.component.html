@@ -12,88 +12,102 @@
       novalidate="novalidate"
     >
       <div class="contenido-formulario">
-        <ion-list class="inputs">
-          <div class="input">
-            <ion-text><p>Tipo de antecedente</p></ion-text>
-            <ion-item lines="none" class="select-input">
-              <ion-select 
-                id="padecimiento"
-                name="padecimientoName"
-                interface="popover"
-                [interfaceOptions]="{cssClass: 'custom-select-popover'}"
-                toggleIcon="chevron-up"
-                expandedIcon="chevron-down"
-                placeholder="Seleccionar" 
-                required
-                [(ngModel)]="expedientePadecimientoDto.idPadecimiento">
-                <ng-container *ngIf="antecedenteFiltradoList?.length; else noAntecedentes">
-                  <ion-select-option 
-                    *ngFor="let antecedente of antecedenteFiltradoList" 
-                    [value]="antecedente?.idPadecimiento">
-                    {{ antecedente?.nombre }}
-                  </ion-select-option>
-                </ng-container>
-                <ng-template #noAntecedentes>
-                  <ion-select-option disabled>No hay más antecedentes</ion-select-option>
-                </ng-template>
-              </ion-select>
-            </ion-item>
-          </div>
-          <div class="input">
-            <ion-text><p>Fecha de diagnóstico/procedimiento</p></ion-text>
-            <ion-item lines="none" class="date-input">
-              <ion-datetime-button datetime="fechaRealizacion"></ion-datetime-button>
-              <div class="input-icon">
-                <ion-icon 
-                  id="fechaRealizacionIcon"
-                  name="calendar-outline">
-                </ion-icon>
+        <ion-grid class="inputs ion-no-padding">
+          <ion-row>
+            <ion-col size="12">
+              <div class="input">
+                <ion-label>Tipo de antecedente</ion-label>
+                <ion-item lines="none" class="select-input">
+                  <ion-select 
+                    id="padecimiento"
+                    name="padecimientoName"
+                    interface="popover"
+                    [interfaceOptions]="{cssClass: 'custom-select-popover'}"
+                    toggleIcon="chevron-up"
+                    expandedIcon="chevron-down"
+                    placeholder="Seleccionar" 
+                    required
+                    [(ngModel)]="expedientePadecimientoDto.idPadecimiento">
+                    <ng-container *ngIf="antecedenteFiltradoList?.length; else noAntecedentes">
+                      <ion-select-option 
+                        *ngFor="let antecedente of antecedenteFiltradoList" 
+                        [value]="antecedente?.idPadecimiento">
+                        {{ antecedente?.nombre }}
+                      </ion-select-option>
+                    </ng-container>
+                    <ng-template #noAntecedentes>
+                      <ion-select-option disabled>No hay más antecedentes</ion-select-option>
+                    </ng-template>
+                  </ion-select>
+                </ion-item>
               </div>
-            </ion-item>
-            <ion-modal [keepContentsMounted]="true" trigger="fechaRealizacionIcon">
-              <ng-template>
-                <ion-datetime
-                  presentation="date"
-                  color="morado-custom"
-                  #fechaRealizacion="ngModel"
-                  name="fechaRealizacion"
-                  id="fechaRealizacion"
-                  showDefaultButtons="true"
-                  locale="es-ES"
-                  [(ngModel)]="expedientePadecimientoDto.fechaDiagnostico"
-                  [max]="fechaActual"
-                ></ion-datetime>
-              </ng-template>
-            </ion-modal>
-          </div>
-          <div class="input">
-            <ion-text><p>Doctor</p></ion-text>
-            <ion-item lines="none" class="select-input">
-              <ion-select 
-                id="doctor"
-                name="doctorName"
-                interface="popover"
-                [interfaceOptions]="{cssClass: 'custom-select-popover'}"
-                placeholder="Seleccionar" 
-                toggleIcon="chevron-up"
-                expandedIcon="chevron-down"
-                required
-                [(ngModel)]="expedientePadecimientoDto.idUsuarioDoctor"
-              >
-                <ion-select-option 
-                  *ngFor="let doctor of misDoctoresList" 
-                  [value]="doctor?.idUsuarioDoctor"
-                >
-                  {{ doctor?.nombre }}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
-          </div>
-          
-        </ion-list>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <div class="input">
+                <ion-label>Fecha de diagnóstico/procedimiento</ion-label>
+                <ion-item lines="none" class="date-input">
+                  <ion-datetime-button datetime="fechaRealizacion"></ion-datetime-button>
+                  <ion-icon
+                    id="fechaRealizacionIcon"
+                    name="calendar"
+                    slot="end">
+                  </ion-icon>
+                </ion-item>
+                <ion-modal [keepContentsMounted]="true" trigger="fechaRealizacionIcon">
+                  <ng-template>
+                    <ion-datetime
+                      presentation="date"
+                      color="morado-custom"
+                      #fechaRealizacion="ngModel"
+                      name="fechaRealizacion"
+                      id="fechaRealizacion"
+                      showDefaultButtons="true"
+                      locale="es-ES"
+                      [(ngModel)]="expedientePadecimientoDto.fechaDiagnostico"
+                      [max]="fechaActual"
+                    ></ion-datetime>
+                  </ng-template>
+                </ion-modal>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="12">
+              <div class="input">
+                <ion-label>Doctor</ion-label>
+                <ion-item lines="none" class="select-input">
+                  <ion-select 
+                    id="doctor"
+                    name="doctorName"
+                    interface="popover"
+                    [interfaceOptions]="{cssClass: 'custom-select-popover'}"
+                    placeholder="Seleccionar" 
+                    toggleIcon="chevron-up"
+                    expandedIcon="chevron-down"
+                    required
+                    [(ngModel)]="expedientePadecimientoDto.idUsuarioDoctor"
+                  >
+                    <ion-select-option 
+                      *ngFor="let doctor of misDoctoresList" 
+                      [value]="doctor?.idUsuarioDoctor"
+                    >
+                      {{ doctor?.nombre }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </div>
-      <div class="botones">
-        <ion-button class="guardar" [disabled]="btnSubmit || !formulario.valid" type="submit">Guardar</ion-button>
+      <div class="botones botones-column">
+        <ion-button 
+          class="dark" 
+          [disabled]="btnSubmit || !formulario.valid" type="submit">
+          Guardar
+        </ion-button>
       </div>
     </form>
   </div>

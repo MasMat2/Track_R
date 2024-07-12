@@ -3,44 +3,45 @@
     <ion-toolbar>
       <ion-buttons class="start" slot="start">
         <ion-button routerLink="inicio-perfil">
-          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          <ion-icon slot="start" name="chevron-left"></ion-icon>
           <ion-label>Atrás</ion-label>
         </ion-button>
       </ion-buttons>
       <ion-buttons class="end" slot="end">
         <ion-button class="icon-only" (click)="AgregarDiagnostico()">
-          <ion-icon name="add"></ion-icon>
+          <ion-icon name="plus"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </div>
 </ion-header>
-<ion-content>
+<ion-content class="primary">
   <div class="contenedor-principal">
     <div class="titulo">
       <ion-text>
         <h3>Diagnosticos</h3>
       </ion-text>
     </div>
-    <div class="lista-vacia" *ngIf="listaDiagnosticosVacia()">
-      <ion-text>
-        <p>Nada Por aquí. <br> Aún no hay diagnosticos registrados.</p>
-      </ion-text>
-      <ion-button fill="outline" (click)="AgregarDiagnostico()">
-        <ion-icon slot="start" name="add"></ion-icon>
-        Añadir diagnostico
-      </ion-button>
-    </div>
-    <div class="lista-diagnosticos" *ngIf="!listaDiagnosticosVacia()">
-      <ion-list>
+    <div class="lista-diagnosticos">
+      <div class="lista-vacia" *ngIf="listaDiagnosticosVacia()">
+        <ion-text>
+          <p>Nada Por aquí. <br> Aún no hay diagnosticos registrados.</p>
+        </ion-text>
+        <ion-button fill="outline" (click)="AgregarDiagnostico()">
+          <ion-icon slot="start" name="plus"></ion-icon>
+          Añadir diagnostico
+        </ion-button>
+      </div>
+
+      <ion-list class="custom-general-item-list" *ngIf="!listaDiagnosticosVacia()">
         <ion-item *ngFor="let diagnostico of misDiagnosticos" lines="none">
           <ion-label>
             <h3>{{diagnostico.nombrePadecimiento}}</h3>
             <p>{{diagnostico.fechaDiagnostico | date : "dd/MM/yyyy"}}</p>
             <p>{{diagnostico.tituloDoctor}} {{diagnostico.nombreDoctor}} {{diagnostico.apellidosDoctor}}</p>
           </ion-label>
-          <ion-button slot="end" fill="clear" (click)="presentarAlertaEliminarDiagnostico(diagnostico)">
-            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          <ion-button class="custom-icon-only clear-error slot-end" slot="end" (click)="presentarAlertaEliminarDiagnostico(diagnostico)">
+            <ion-icon name="trash"></ion-icon>
           </ion-button>
         </ion-item>
       </ion-list>
