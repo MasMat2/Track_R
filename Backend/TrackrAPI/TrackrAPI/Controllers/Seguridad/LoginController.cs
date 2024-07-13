@@ -52,6 +52,13 @@ namespace TrackrAPI.Controllers.Seguridad
             }
         }
 
+        [Authorize]
+        [HttpGet("validateToken")]
+        public IActionResult ValidateToken()
+        {
+            return Ok(true);
+        }
+
 
     }
 }
