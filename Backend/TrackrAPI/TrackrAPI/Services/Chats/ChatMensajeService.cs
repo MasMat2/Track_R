@@ -80,7 +80,9 @@ public class ChatMensajeService
 
     public async Task<int> NuevoMensaje(ChatMensajeDTO mensaje)
     {
-        using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+        using (var scope = new TransactionScope(TransactionScopeOption.Required, 
+                                                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                TransactionScopeAsyncFlowOption.Enabled))
         {
 
         int? idArchivo = null;
