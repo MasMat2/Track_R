@@ -4,6 +4,7 @@ using TrackrAPI.Repositorys.GestionExpediente;
 using System.Transactions;
 using TrackrAPI.Services.Sftp;
 using TrackrAPI.Repositorys.Archivos;
+using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Services.GestionExpediente;
 
@@ -270,7 +271,6 @@ public class ExpedienteTratamientoService
     public int Agregar(ExpedienteTratamientoDetalleDto expedienteTratamientoDto, int idUsuario)
     {
         using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
-        
 
         int idExpediente = expedienteTrackrRepository.ConsultarPorUsuario(idUsuario).IdExpediente;
 
@@ -461,8 +461,13 @@ public class ExpedienteTratamientoService
         
     }
 
-    public (int id, string url) GuardarArchivo(byte[] archivo, string nombre, string tipoMime, int idUsuario)
+    public (int? id, string? url) GuardarArchivo(byte[] archivo, string nombre, string tipoMime, int idUsuario)
     {
+        if(archivo is null)
+        {
+            return (null, null);
+        }
+
         string nombreArchivo = $"{nombre}";
         string path = Path.Combine("Archivos", "Tratamiento", $"{Guid.NewGuid()}.{tipoMime.Split('/')[1]}");
         var archivoBase64 = Convert.ToBase64String(archivo);
