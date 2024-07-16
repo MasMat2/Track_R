@@ -1,5 +1,5 @@
 Estado de apliacion en plataforma IOS:
-build ios 53
+build ios 54
 Servidor ios: atisc.mx
 
 
