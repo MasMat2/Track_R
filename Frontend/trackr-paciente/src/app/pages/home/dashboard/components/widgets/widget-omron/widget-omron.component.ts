@@ -35,13 +35,20 @@ export class WidgetOmronComponent  implements OnInit {
 
   async openOmronConnect() {
     try {
-      
-      await AppLauncher.canOpenUrl({ url: 'omronconnect://' });
-      await AppLauncher.openUrl({ url: 'omronconnect://'}); 
-      console.log('Abriendo Omron');
+      const canOpen = await AppLauncher.canOpenUrl({ url: 'omronconnect://' });
 
+      if (canOpen.value) {
+        await AppLauncher.openUrl({ url: 'omronconnect://' });
+        console.log('Abriendo Omron');
+      } else {
+        // Abrir App Store si la app no está instalada
+        await AppLauncher.openUrl({ url: 'https://apps.apple.com/mx/app/omron-connect/id1003177043' });
+        console.log('Omron no está instalada. Abriendo App Store.');
+      }
     } catch (error) {
       console.error('No se puede abrir la aplicación Omron', error);
+      // Abrir App Store si ocurre algún error
+      await AppLauncher.openUrl({ url: 'https://apps.apple.com/mx/app/omron-connect/id1003177043' });
     }
   }
 
