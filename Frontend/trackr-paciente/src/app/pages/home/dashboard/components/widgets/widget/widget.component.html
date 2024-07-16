@@ -1,4 +1,9 @@
-<ion-card [style.background]="colorBackground" [class]="widgetClass" button>
+<ion-card 
+  [style.background]="colorBackground" 
+  [class]="widgetClass" 
+  [ngClass]="{'custom-height': (customHeight)}"
+  [button]="button"
+  >
 
   <div class="contenedor-seguimiento" *ngIf="widgetClass === 'seguimiento'">
     <ion-card-header class="mb-1">

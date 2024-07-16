@@ -26,7 +26,9 @@ App.addListener('appStateChange', ({ isActive }) => {
 export class WidgetOmronComponent  implements OnInit {
 
   constructor() {
-    addIcons({barChartOutline})
+    addIcons({
+      'bar-chart': 'assets/img/svg/bar-chart-4.svg'
+    })
    }
 
   ngOnInit() {}
