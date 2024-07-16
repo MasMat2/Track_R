@@ -1,17 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ChatDTO } from '@dtos/chats/chat-dto';
 import { ChatHubServiceService } from '@services/chat-hub-service.service';
-import { Observable, tap } from 'rxjs';
+import { Observable, Subject, takeUntil, tap } from 'rxjs';
 import { ChatMensajeHubService } from '../../shared/services/chat-mensaje-hub.service';
 import { ChatMensajeDTO } from '@dtos/chats/chat-mensaje-dto';
 import { ActivatedRoute } from '@angular/router';
+import { ChatPersonaService } from '@http/chats/chat-persona.service';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent {
+export class ChatComponent implements OnDestroy {
   protected chats$: Observable<ChatDTO[]>;
   protected chats:ChatDTO[] = [];
   protected chatMensajes$: Observable<ChatMensajeDTO[][]>
@@ -22,6 +23,7 @@ export class ChatComponent {
   protected tituloChatSeleccionado: string;
   protected imagenChatSeleccionado: string;
   protected tipoMimeSeleccionado: string;
+  private unsubscribe$ = new Subject<void>();
 
   protected clickEnChat = false;
 
@@ -29,12 +31,23 @@ export class ChatComponent {
     private ChatHubServiceService:ChatHubServiceService,
     private chatMensajeHubService:ChatMensajeHubService,
     private route:ActivatedRoute,
-  ) { }
+    private chatPersonaService : ChatPersonaService
+  ) {
+    this.chatPersonaService.idChatPadre$
+    .pipe(takeUntil(this.unsubscribe$.asObservable()))
+    .subscribe(idChat => {
+      this.obtenerChatSeleccionado(idChat);
+    });
+   }
 
   ngOnInit(): void {
-    this.obtenerId();
     this.obtenerChats();
-    //this.obtenerMensajes();
+  }
+
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   obtenerId(){
@@ -80,6 +93,10 @@ export class ChatComponent {
   }
 
   obtenerChatSeleccionado(id:number){
+
+    if(this.chats.length == 0){
+      this.obtenerChats();
+    }
     this.idChatSeleccionado = id;
     this.mensajesChatSeleccionado = this.mensajes.find(array => array.some(x => x.idChat === this.idChatSeleccionado)) || [];
     let aux = this.chats.find(x => x.idChat == id)

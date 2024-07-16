@@ -9,6 +9,8 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { ModalPanelNotificacionesComponent } from './modal-panel-notificaciones/modal-panel-notificaciones.component';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { Notificacion } from '@dtos/notificaciones/notificacion-dto';
+import { MeetService } from '@http/chats/meet.service';
 
 @Component({
   selector: 'app-panel-notificaciones',
@@ -35,16 +37,8 @@ export class PanelNotificacionesComponent implements OnInit {
   protected idTipoNotificacion?: number;
   protected mensaje: string;
 
-  protected notificaciones$: Observable<{
-    id: number,
-    idTipoNotificacion: number,
-    paciente: string,
-    mensaje: string,
-    fecha: Date,
-    imagen?: string | SafeUrl,
-    visto: boolean,
-    idChat?: number,
-  }[]>;
+  protected notificaciones$: Observable<Notificacion[]>;
+  protected clicDeshabilitado = false;
 
   constructor(
     private notificacionService: NotificacionService,
@@ -52,7 +46,8 @@ export class PanelNotificacionesComponent implements OnInit {
     private usuarioService: UsuarioService,
     private modalService: BsModalService,
     private sanitizer:DomSanitizer,
-    private router:Router
+    private router:Router,
+    private meetService: MeetService
   ) { }
 
   ngOnInit() {
@@ -73,7 +68,7 @@ export class PanelNotificacionesComponent implements OnInit {
             imagen: (notificacion.imagen !== null || notificacion.imagen !== undefined) ? this.sanitizer.bypassSecurityTrustUrl(notificacion.imagen || '') : undefined,
             visto: notificacion.visto,
             idChat: notificacion.idChat
-          };
+          } as Notificacion;
         }))
       );
   }
@@ -88,9 +83,21 @@ export class PanelNotificacionesComponent implements OnInit {
     this.notificacionService.notificar(dto).subscribe();
   }
 
-  protected async marcarComoVista(idNotificacionUsuario: number) {
-    await this.notificacionHubService.marcarComoVista(idNotificacionUsuario);
-    this.consultarNotificaciones();
+  protected async marcarComoVista(notificacion: Notificacion) {
+     if (this.clicDeshabilitado) {
+      return;
+    } 
+  
+    this.clicDeshabilitado = true;
+    try {
+      await this.notificacionHubService.marcarComoVista(notificacion.id);
+      await this.meetService.redirigirMeet(notificacion);
+      this.consultarNotificaciones();
+    } catch (error) {
+      console.error('Error al marcar como vista:', error);
+    } finally {
+      this.clicDeshabilitado = false;
+    }
   }
 
   protected mostrarModal(notificacion:any){
