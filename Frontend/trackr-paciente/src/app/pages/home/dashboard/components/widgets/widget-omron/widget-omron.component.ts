@@ -19,16 +19,11 @@ import { barChartOutline, scaleOutline } from 'ionicons/icons';
 export class WidgetOmronComponent  implements OnInit {
 
   constructor() {
-    addIcons({barChartOutline})
+    addIcons({
+      'bar-chart': 'assets/img/svg/bar-chart-4.svg'
+    })
    }
 
-  protected suenoActual: number = 0;
-  protected horasMinDiarias: number = 0;
-  protected minutosMinDiarias: number = 0;
-  protected tiempoDormido: number = 0;
-  protected minutostiempoDormido: number = 0;
-  protected suenoProfundo: number = 0;
-  protected minsuenoProfundo: number = 0;
   ngOnInit() {}
 
    openOmronConnect() {

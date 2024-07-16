@@ -1,10 +1,13 @@
 <app-widget 
-  colorBackground="#FFFFFF" 
+  colorBackground="var(--neutral-50)"
+  widgetClass="salud"
+  [customHeight]="true"
+  [button]="true"
 >
-  <ion-grid (click)="openOmronConnect()">
-    <ion-card-title>
-      Omron Connect
-    </ion-card-title>
-    <ion-icon name="bar-chart-outline"></ion-icon>
-  </ion-grid>
+  <div salud class="contenido" (click)="openOmronConnect()">
+    <div class="header">
+      <ion-label>Omron Connect</ion-label>
+      <ion-icon name="bar-chart"></ion-icon>
+    </div>
+  </div>
 </app-widget>
