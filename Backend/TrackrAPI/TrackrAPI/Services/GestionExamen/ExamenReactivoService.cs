@@ -63,8 +63,7 @@ public class ExamenReactivoService
 
     public RespuestasExcelDto ConsultarReactivosExamenExcel(int idProgramacionExamen)
     {
-        int idExamen = _examenRepository.Consultar(idProgramacionExamen).IdExamen;
-        var reactivos = _examenReactivoRepository.ConsultarReactivosExamenExcel(idExamen);
+        var reactivos = _examenReactivoRepository.ConsultarReactivosExamenExcel(idProgramacionExamen);
         
         foreach (var reactivo in reactivos)
         {
