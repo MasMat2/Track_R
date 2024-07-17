@@ -99,7 +99,7 @@ namespace TrackrAPI.Services.Catalogo
             return companiaRepository.ConsultarPorIdentificadorUrl(empresa);
         }
 
-        public int Agregar(CompaniaDto companiaDto)
+        public async Task<int> Agregar(CompaniaDto companiaDto)
         {
             Compania compania = CrearCompaniaDtoModel(companiaDto);
             //AgrupadorCuentaContable agrupadorAtisc = agrupadorCuentaContableRepository.ConsultarPorClave(GeneralConstant.ClaveAgrupadorCuentaAtisc);
@@ -126,7 +126,7 @@ namespace TrackrAPI.Services.Catalogo
 
             AgregarPerfilesDefault(compania);
             int idLocacion = AgregarLocacionDefault(compania);
-            int idUsuario = AgregarUsuarioDefault(compania, idLocacion, companiaDto.contrasenaUsuario);
+            int idUsuario = await AgregarUsuarioDefault(compania, idLocacion, companiaDto.contrasenaUsuario);
             //int idAlmacen = AgregarAlmacenDefault(compania, idUsuario, idLocacion);
             //int idPuntoVenta = AgregarPuntoDeVentaDefault(idAlmacen, idUsuario);
             AgregarRolesDefaultAdministrador(idUsuario);
@@ -203,7 +203,7 @@ namespace TrackrAPI.Services.Catalogo
             return hospitalService.Agregar(locacion);
         }
 
-        private int AgregarUsuarioDefault(Compania compania, int idLocacion, string contrasena)
+        private async Task<int> AgregarUsuarioDefault(Compania compania, int idLocacion, string contrasena)
         {
             Perfil perfilAdministrador = perfilRepository.ConsultarAdministradorPorTipoCompania((int)compania.IdTipoCompania, compania.IdCompania);
 
@@ -229,7 +229,7 @@ namespace TrackrAPI.Services.Catalogo
                 AdministradorCompania = true
             };
 
-            return usuarioService.Agregar(usuario, idLocacion);
+            return await usuarioService.Agregar(usuario, idLocacion);
         }
 
         //private int AgregarAlmacenDefault(Compania compania, int idUsuario, int idLocacion)

@@ -131,6 +131,7 @@ export class UsuarioFormularioComponent implements OnInit {
   // Imagen
   public imagenBase64: any;
   public url: any;
+  public urlName: string;
   public urlImagenDefault = './assets/img/svg/ico-36x36-header-usuario.svg';
 
   // Permisos
@@ -596,8 +597,19 @@ export class UsuarioFormularioComponent implements OnInit {
         this.url = reader.result;
         this.usuario.imagenBase64 = this.url;
         this.usuario.imagenTipoMime = event.target.files[0].type;
+        this.urlName = event.target.files[0].name;
+        
       };
     }
+  }
+
+  public async eliminarImagen(): Promise<void> {
+    this.toDataURL(this.urlImagenDefault, (myBase64: string) => {
+      this.url = this.sanitize(myBase64);
+    });
+    this.usuario.imagenBase64 = '';
+    this.usuario.imagenTipoMime = '';
+    this.urlName = '';
   }
 
   public async agregar(): Promise<boolean> {

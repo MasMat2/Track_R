@@ -70,6 +70,20 @@ button {
   }
 }
 
+.btn-agregar-foto {
+  min-width: 60px !important;
+  height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--primary-400);
+  background: var(--primary-100);
+  color: var(--primary-700);
+  font-family: var(--font-body);
+  padding: 0px 14px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+}	
+
 .btn-cuaternario {
   background-color: $color-cuaternario;
   &:hover {

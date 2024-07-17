@@ -218,7 +218,7 @@ namespace TrackrAPI.Services.Seguridad
             usuarioRepository.Editar(usuario);
         }
 
-        public int Agregar(UsuarioDto usuarioDto, int idLocacion, int? idMedico = null)
+        public async Task<int> Agregar(UsuarioDto usuarioDto, int idLocacion, int? idMedico = null)
         {
             using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
             {
@@ -278,7 +278,7 @@ namespace TrackrAPI.Services.Seguridad
                 }
 
                 // Guardar imagen
-                GuardarImagen(usuarioDto, usuario.IdUsuario);
+                await GuardarImagen(usuarioDto, usuario.IdUsuario);
 
                 // Guardar el perfil
                 if (usuarioDto.IdPerfil > 0)
@@ -387,9 +387,11 @@ namespace TrackrAPI.Services.Seguridad
             }
         }
 
-        public void EditarAdministrador(UsuarioDto usuarioDto)
+        public async Task EditarAdministrador(UsuarioDto usuarioDto)
         {
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, 
+                                            new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                            TransactionScopeAsyncFlowOption.Enabled))
             {
                 Usuario usuarioActual = usuarioRepository.Consultar(usuarioDto.IdUsuario);
                 Usuario usuario = MapearUsuario(usuarioDto);
@@ -406,7 +408,7 @@ namespace TrackrAPI.Services.Seguridad
                 List<Rol> roles = usuarioDto.IdsRol.Select(idRol => rolService.Consultar(idRol)).ToList();
 
                 // Guardar la imagen                
-                GuardarImagen(usuarioDto, usuario.IdUsuario);
+                await GuardarImagen(usuarioDto, usuario.IdUsuario);
 
                 // El domicilio sólo se actualiza cuando se llenan todos los datos de domicilio
                 bool esCliente = roles.Any(rol => rol.Clave == GeneralConstant.ClaveRolCliente);
@@ -890,9 +892,13 @@ namespace TrackrAPI.Services.Seguridad
             return usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilMedico).Any((usuario) => usuario.IdUsuario == idUsuario);
         }
 
-        public void GuardarImagen(UsuarioDto usuarioDto, int idUsuario){
+        public async Task GuardarImagen(UsuarioDto usuarioDto, int idUsuario)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                   TransactionScopeAsyncFlowOption.Enabled);
 
-            if (usuarioDto.ImagenBase64 != null)
+            if (!string.IsNullOrEmpty(usuarioDto.ImagenBase64))
             {
                 string nombreArchivo = $"{idUsuario}{MimeTypeMap.GetExtension(usuarioDto.ImagenTipoMime)}";
                 string path = Path.Combine("Archivos", "Usuario", nombreArchivo);
@@ -900,7 +906,7 @@ namespace TrackrAPI.Services.Seguridad
 
                 this._sftpService.UploadBytesFile(path, usuarioDto.ImagenBase64);
 
-                //Logica para agregar las fotos de perfil en la tabla archivo
+                // Logica para agregar las fotos de perfil en la tabla archivo
                 var fotoPerfil = new Archivo
                 {
                     Nombre = nombreArchivo,
@@ -912,11 +918,24 @@ namespace TrackrAPI.Services.Seguridad
                     IdUsuario = idUsuario
                 };
 
-
                 _archivoRepository.Agregar(fotoPerfil);
-
-
             }
+            else
+            {
+                var imagenPerfil = await _archivoRepository.ObtenerImagenUsuarioAsync(idUsuario);
+
+                if (imagenPerfil != null)
+                {
+                    var path = imagenPerfil.ArchivoUrl;
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        _sftpService.DeleteFile(path);
+                    }
+                    _archivoRepository.Eliminar(imagenPerfil);
+                }
+            }
+
+            scope.Complete();
         }
         public string ObtenerImagenUsuario(int idUsuario, string? imagenTipoMime=null){
             

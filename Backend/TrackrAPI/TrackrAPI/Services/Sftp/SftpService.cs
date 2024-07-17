@@ -215,6 +215,31 @@ namespace TrackrAPI.Services.Sftp
             return Convert.ToBase64String(fileContent);
         }
 
+        public void DeleteFile(string filePath)
+        {
+            try
+            {
+                using (var sftp = new SftpClient(host, port, username, password))
+                {
+                    sftp.Connect();
+
+                    string linuxPath = GetRemotePath(filePath);
+
+                    if (sftp.Exists(linuxPath))
+                    {
+                        sftp.DeleteFile(linuxPath);
+                    }
+
+                    sftp.Disconnect();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejar la excepción de manera que no detenga el programa
+                Console.WriteLine($"Error al eliminar el archivo: {ex.Message}");
+            }
+        }
+
         private void UpdateCache(string filePath, DateTime lastWriteTime){
             
             var localFilePath = GetLocalPath(filePath);

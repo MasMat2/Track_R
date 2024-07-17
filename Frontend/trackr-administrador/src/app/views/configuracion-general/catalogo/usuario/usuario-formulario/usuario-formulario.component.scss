@@ -1,0 +1,82 @@
+::ng-deep{
+    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
+        color:var(--primary-700);
+        border-color: transparent;
+        border-bottom: .2em solid var(--primary-700);
+        font-weight: 700;
+    }
+
+    .nav-link{
+        color:var(--neutral-700);
+    }
+
+    .nav-link:focus, .nav-link:hover{
+        color:var(--primary-700);
+    }
+}
+
+.subseccion-gray{
+    font-family: var(--font-body);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--neutral-700);
+    border-top: 1px solid var(--neutral-200);
+    margin: 2rem 0 0rem 0 ;
+    width: 100%;
+  
+    .titulo{
+      padding: 2rem 0 1rem 0;
+      color: var(--primary-700);
+      font-size: 16px;
+  
+    }
+  
+  }
+
+  .imagen-usuario{
+
+    border-radius: 8px;
+    border: 1px solid var(--primary-200);
+    background: var(--primary-100);
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+
+    img{
+        width: 40px;
+        height: 40px;
+        object-fit: cover   ;
+        border-radius: 8px;
+    }
+
+    p{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 50%; 
+    }
+
+    button{
+        width: 40px;
+        height: 40px;
+
+
+        border-radius: 4px;
+        border: 1px solid var(--error-200);
+        background: var(--error-100);
+
+        &:hover{
+            background: var(--error-100);
+        }
+    }
+  }
+
+button{
+    
+    &.btn-primario,
+    &.btn-secundario{
+      width: 7.5rem;
+    }
+}
