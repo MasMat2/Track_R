@@ -377,7 +377,7 @@ namespace TrackrAPI.Services.Seguridad
                 usuarioLocacionService.Agregar(usuarioLocacion);
 
                 this._expedienteTrackrService.AgregarExpedienteNuevoUsuario(idUsuario);
-                this._confirmacionCorreoService.ConfirmarCorreo(usuario.Correo);
+                this._confirmacionCorreoService.ConfirmarCorreo(usuario.Correo,  idUsuario);
 
                 scope.Complete();
 
@@ -457,9 +457,9 @@ namespace TrackrAPI.Services.Seguridad
             usuarioRepository.Editar(usuario);
         }
 
-        public IEnumerable<UsuarioDto> ConsultarAsistentes(int idCompania , int idUsuario)
+        public async Task<IEnumerable<UsuarioDto>> ConsultarAsistentes(int idCompania , int idUsuario)
         {
-            var asistentes = usuarioRepository.ConsultarPorPerfil(idCompania, GeneralConstant.ClavePerfilAsistente);
+            var asistentes = usuarioRepository.ConsultarPorRol(GeneralConstant.ClaveRolAsistente, idCompania);
 
             var asistentesDoctorEnSesion = _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(idUsuario);
 
@@ -468,20 +468,20 @@ namespace TrackrAPI.Services.Seguridad
 
             foreach (var asistente in asistentes)
             {
-                asistente.ImagenBase64 = ObtenerImagenUsuario(asistente.IdUsuario, asistente.ImagenTipoMime);
+                asistente.ImagenBase64 = await ObtenerBytesImagenUsuario(asistente.IdUsuario);
             }
 
             return asistentes;
         }
 
-        public IEnumerable<AsistenteDoctorDto> ConsultarAsistentePorDoctor(int idDoctor)
+        public async Task<IEnumerable<AsistenteDoctorDto>> ConsultarAsistentePorDoctor(int idDoctor)
         {
             var asistentes = _asistenteDoctorRepository.ConsultarAsistentesPorDoctor(idDoctor);
 
             foreach (var asistente in asistentes)
             {
 
-                asistente.ImagenBase64 = ObtenerImagenUsuario(asistente.IdUsuario, asistente.ImagenTipoMime);
+                asistente.ImagenBase64 = await ObtenerBytesImagenUsuario(asistente.IdUsuario);
             }
 
             return asistentes;
@@ -499,20 +499,34 @@ namespace TrackrAPI.Services.Seguridad
             return doctores;
         }
 
-        public void AgregarAsistente(int idUsuario, int idAsistente)
+        public void AgregarAsistente(int idUsuario, List<int> idAsistentes)
         {
-            var asistente = new AsistenteDoctor()
+            using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+            foreach (var idAsistente in idAsistentes)
             {
-                IdAsistente = idAsistente,
-                IdDoctor = idUsuario
-            };
-            _asistenteDoctorRepository.Agregar(asistente);
+                var asistente = new AsistenteDoctor()
+                {
+                    IdAsistente = idAsistente,
+                    IdDoctor = idUsuario
+                };
+                _asistenteDoctorRepository.Agregar(asistente);
+            }
+
+            scope.Complete();
+
         }
 
-        public void EliminarAsistente(int idAsistenteDoctor)
+        public void EliminarAsistente(List<int> idsAsistenteDoctor)
         {
-            var asistente = _asistenteDoctorRepository.Consultar(idAsistenteDoctor);
-            _asistenteDoctorRepository.Eliminar(asistente);
+            using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+            foreach(var idAsistenteDoctor in idsAsistenteDoctor)
+            {
+                var asistente = _asistenteDoctorRepository.Consultar(idAsistenteDoctor);
+                _asistenteDoctorRepository.Eliminar(asistente);
+            }
+            
+            scope.Complete();
+            
         }
 
         public IEnumerable<UsuarioGridDto> ConsultarGeneral(int idCompania)
@@ -608,6 +622,16 @@ namespace TrackrAPI.Services.Seguridad
         public IEnumerable<UsuarioSelectorDto> ConsultarParaSelector()
         {
             return usuarioRepository.ConsultarParaSelector();
+        }
+     
+       public IEnumerable<UsuarioDto> ConsultarPacientesParaSelector(int idCompania)
+        {
+            return usuarioRepository.ConsultarPorRol(GeneralConstant.ClaveRolPaciente, idCompania);
+        }
+
+        public IEnumerable<UsuarioDto> ConsultarPersonal(int idCompania)
+        {
+            return usuarioRepository.ListarUsuariosExcluidosPorRol(GeneralConstant.ClaveRolPaciente, idCompania);
         }
 
         private string GenerarContraseniaAleatoria()
@@ -874,7 +898,7 @@ namespace TrackrAPI.Services.Seguridad
                 string path = Path.Combine("Archivos", "Usuario", nombreArchivo);
                 usuarioDto.ImagenBase64 = usuarioDto.ImagenBase64.Substring(usuarioDto.ImagenBase64.LastIndexOf(',') + 1);
 
-                this._sftpService.UploadFile(path, usuarioDto.ImagenBase64);
+                this._sftpService.UploadBytesFile(path, usuarioDto.ImagenBase64);
 
                 //Logica para agregar las fotos de perfil en la tabla archivo
                 var fotoPerfil = new Archivo
@@ -908,7 +932,22 @@ namespace TrackrAPI.Services.Seguridad
 
             }
 
-            return this._sftpService.DownloadFile(filePath);
+            return this._sftpService.DownloadFileAsBase64(filePath);
+
+
+        }
+        public async Task<string> ObtenerBytesImagenUsuario(int idUsuario){
+            
+            string filePath;
+
+            var archivo = await _archivoRepository.ObtenerImagenUsuarioAsync(idUsuario);
+
+            var imgPath = archivo?.ArchivoUrl ?? Path.Combine("Archivos", "Usuario", "default-user.jpg");
+            var mimeType = archivo?.ArchivoTipoMime ?? "image/jpg";
+            var imagenPerfilBase64 = _sftpService.DownloadFileAsBase64(imgPath);
+            var imagenPerfil = $"data:{mimeType};base64,{imagenPerfilBase64}";
+        
+            return imagenPerfil;
 
 
         }

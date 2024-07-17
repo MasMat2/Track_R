@@ -115,9 +115,9 @@ namespace TrackrAPI.Services.GestionEntidad
 
         public async Task AgregarMuestra(TablaValorMuestraDTO[] muestraDTO, int idUsuario)
         {
-            using var ts = new TransactionScope();
-         
-            
+            using var ts = new TransactionScope(TransactionScopeOption.Required,
+                                                 new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                 TransactionScopeAsyncFlowOption.Enabled);
             foreach (var muestra in muestraDTO)
             {
                     var idSeccion = seccionCampoRepository.Consultar(muestra.IdSeccionVariable).IdSeccion;

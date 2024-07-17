@@ -99,7 +99,7 @@ namespace TrackrAPI.Controllers.Catalogo
 
             var imgPath = archivo?.ArchivoUrl ?? Path.Combine("Archivos", "Usuario", "default-user.jpg");
             var mimeType = archivo?.ArchivoTipoMime ?? "image/jpg";
-            var imagenPerfilBase64 = _sftpService.DownloadFile(imgPath);
+            var imagenPerfilBase64 = _sftpService.DownloadFileAsBase64(imgPath);
             var imagenPerfil = $"data:{mimeType};base64,{imagenPerfilBase64}";
             var imagenPerfilBytes = Convert.FromBase64String(imagenPerfilBase64);
 

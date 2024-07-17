@@ -1,4 +1,5 @@
 import { Time } from "@angular/common";
+import { Respuesta } from "./respuesta";
 
 export class ExamenReactivo{
 
@@ -14,7 +15,7 @@ export class ExamenReactivo{
     public clave: string;
     public pregunta: string;
     public imagenBase64: string;
-    public respuesta: string;
+    public respuestas: Respuesta[];
     public necesitaRevision: boolean;
 
     constructor() {}

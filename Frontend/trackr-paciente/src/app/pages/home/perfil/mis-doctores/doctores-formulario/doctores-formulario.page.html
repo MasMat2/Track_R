@@ -3,7 +3,7 @@
     <ion-toolbar>
       <ion-buttons slot="start">
         <ion-button (click)="cerrarModal()">
-          <ion-icon slot="icon-only" name="close"></ion-icon>
+          <ion-icon slot="icon-only" name="x"></ion-icon>
         </ion-button>
       </ion-buttons>
       <ion-title>
@@ -23,7 +23,7 @@
             <h3>{{doctor.nombre}}</h3>
             <p>{{doctor.ambito}}</p>
           </ion-label>
-          <ion-icon *ngIf="currentDoctor?.idUsuarioDoctor === doctor.idUsuarioDoctor" name="checkmark"></ion-icon>
+          <ion-icon *ngIf="currentDoctor?.idUsuarioDoctor === doctor.idUsuarioDoctor" name="check"></ion-icon>
         </ion-item>
       </ion-list>
     </div>

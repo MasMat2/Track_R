@@ -11,67 +11,45 @@
   </div>
 </ion-header> 
 <ion-content class="primary">
+  <div class="contenedor-principal">
+    <div class="contenedor-barra-busqueda">
+      <app-searchbar (search)="handleSearch($event)"></app-searchbar>
+    </div>
 
-  <div class="barra-busqueda">
-    <ion-searchbar (ionChange)="buscarChat($event)" show-cancel-button="focus" placeholder="Buscar" animated ></ion-searchbar>
-  </div>
-
-  <div class="contactos" *ngIf="verListaDoctores">
-    <div class="generar-chat" *ngIf="doctorSeleccionado">
-        <ion-item lines="none">
-          <ion-input
-            class="nombre-chat" 
-            label="Generar chat: "
-            placeholder="Nombre del chat"
-            labelPlacement="floating" 
-            name="tituloChat" 
-            [(ngModel)]="tituloChat">
-          </ion-input>
-          <ion-button slot="end" (click)="crearChat()" fill="clear">
-            <ion-icon slot="icon-only" name="send"></ion-icon>
-          </ion-button>
+    <div class="lista-chats">
+      <div class="lista-vacia" *ngIf="listaVacia()">
+        <ion-text>
+          <p>Aún no hay chats</p>
+          <p>Empieza una nueva conversación</p>
+        </ion-text>
+      </div>
+      <ion-list *ngIf="!listaVacia()">
+        <ion-item
+         class="chat" 
+         lines="none" 
+         button  
+         *ngFor="let chat of !filtrando ? (chats$ | async) : (chatsFiltradosPorBusqueda)" (click)="enviarIdChat(chat.idChat || 0)"
+        >
+          <ion-avatar slot="start">
+            <ion-img *ngIf="chat.urlImagen" [src]="chat.urlImagen"></ion-img>
+            <ion-img *ngIf="!chat.urlImagen" src="assets/img/svg/Image_placeholder.svg"></ion-img>
+          </ion-avatar>
+          <ion-label>
+            <h3>
+              {{chat.titulo}}
+            </h3>
+            <p>
+              {{chat.ultimoMensaje}}
+            </p>
+          </ion-label>
+          <div class="meta-data-end" slot="end">
+            <p id="fecha">{{chat.fechaUltimoMensaje | date: "dd/MM"}}</p>
+            <!-- solo falta implementar -->
+            <!-- <ion-badge id="badge">2</ion-badge> -->
+          </div>
         </ion-item>
+      </ion-list>
     </div>
-    <div class="lista-doctores">
-        <div
-          class="doctor"
-          *ngFor="let doctor of misDoctores" 
-          (click)="doctorClick(doctor.idUsuarioDoctor)"
-          >
-          <div class="imagen">
-            <ion-avatar>
-              <ion-img *ngIf="doctor.urlImagen" [src]="doctor.urlImagen" > </ion-img>
-              <ion-img *ngIf="!doctor.urlImagen" alt="profile pic" src="https://ionicframework.com/docs/img/demos/avatar.svg"></ion-img> 
-            </ion-avatar>
-            <div class="icono-agregar">
-              <ion-icon name="add-circle"></ion-icon>
-            </div>
-          </div>
-          <div class="nombre">
-            <ion-label>
-              <p>{{doctor.nombre}}</p>
-            </ion-label>
-          </div>
-        </div>
-    </div>
-  </div>
 
-  <div class="chats">
-    <ion-list  *ngFor="let chat of chatsFiltradosPorBusqueda">
-      <ion-item  class="chat" lines="none" button="true" (click)="enviarIdChat(chat.idChat || 0)">
-        <ion-avatar slot="start">
-          <ion-img *ngIf="chat.urlImagen" [src]="chat.urlImagen" > </ion-img>
-          <ion-img *ngIf="!chat.urlImagen" alt="profile pic" src="https://ionicframework.com/docs/img/demos/avatar.svg"></ion-img> 
-        </ion-avatar>
-        <ion-label>
-          <h3>
-            {{chat.titulo}}
-          </h3>
-          <p>
-            {{chat.ultimoMensaje}}
-          </p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
   </div>
 </ion-content>

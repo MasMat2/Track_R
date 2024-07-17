@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { ModalController } from '@ionic/angular/standalone';
 import { Constants } from '@utils/constants/constants';
+import { ExamenService } from '@http/cuestionarios/examen.service';
 
 @Component({
   selector: 'app-notificaciones',
@@ -43,7 +44,8 @@ export class NotificacionesComponent  implements OnInit
     private router:Router,
     private popOverController:PopoverController,
     private modalController: ModalController,
-    private cdr : ChangeDetectorRef
+    private cdr : ChangeDetectorRef,
+    private examenService : ExamenService
   ){ addIcons({
     'close' : 'assets/img/svg/x.svg',
     'circle-user' : 'assets/img/svg/circle-user.svg',
@@ -101,19 +103,30 @@ export class NotificacionesComponent  implements OnInit
   
     this.cdr.detach(); 
   
-    if(!notificacion.visto){
-      if(notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA){
-        await this.presentAlertTomarTratamiento(notificacion)
-      }
-      
-      if(notificacion.idChat !== null){
+    
+
+
+    const navigateAndDismiss = async (path: any[]) => {
+      await this.modalController.dismiss();
+      this.router.navigate(path);
+    };
+
+    if (notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA && !notificacion.visto) {
+      await this.presentAlertTomarTratamiento(notificacion);
+    } else if (notificacion.idChat !== null) {
+      if (!notificacion.visto) 
         await this.notificacionHubService.marcarComoVista(notificacion.id);
-        this.modalController.dismiss().then(() => {
-          this.router.navigate(['home','chat-movil','chat',notificacion.idChat]);
-        });
-      }
+      
+      await navigateAndDismiss(['home', 'chat-movil', 'chat', notificacion.idChat]);
+    } else if (notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_ALERTA) {
+      if (!notificacion.visto) 
+        await this.notificacionHubService.marcarComoVista(notificacion.id);
+        this.examenService.actualizarListadoExamenes();
+      await navigateAndDismiss(['home', 'cuestionarios', 'misCuestionarios']);
+    }else{
+      if (!notificacion.visto) 
+        await this.notificacionHubService.marcarComoVista(notificacion.id);
     }
-  
     this.consultarNotificaciones();
   
     setTimeout(() => {
@@ -128,13 +141,13 @@ export class NotificacionesComponent  implements OnInit
       header: notificacion.titulo,
       subHeader: `${notificacion.mensaje} \n ${MENSAJE_TOMA}`,
       cssClass: 'custom-alert color-primary icon-pill two-buttons',
+      backdropDismiss: false,
       buttons: [
         {
           text: 'No tomé la dosis', 
           role: 'cancel',
           handler: () => {
-            //TODO: Agregar logica para la NO realizacion de la toma
-            this.notificacionHubService.marcarComoVista(notificacion.id);
+            this.notificacionHubService.marcarComoVista(notificacion.id, false);
             this.notificacionPacienteService.actualizarWidgets();
           }
         },
@@ -142,8 +155,7 @@ export class NotificacionesComponent  implements OnInit
           text: 'Sí tomé la dosis',
           role: 'confirm',
           handler: () => {
-            //TODO: Agregar logica para la realizacion de la toma
-            this.notificacionHubService.marcarComoVista(notificacion.id);
+            this.notificacionHubService.marcarComoVista(notificacion.id, true);
             this.notificacionPacienteService.actualizarWidgets();
           }
         }

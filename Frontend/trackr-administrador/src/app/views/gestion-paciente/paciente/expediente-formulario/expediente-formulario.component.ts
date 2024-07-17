@@ -27,6 +27,7 @@ import { UsuarioImagenService } from '@services/usuario-imagen.service';
 import { Genero } from '@models/catalogo/genero';
 import { ExpedienteTrackrService } from '@http/seguridad/expediente-trackr.service';
 import { ExpedienteConsumoMedicamentoComponent } from '../expediente-consumo-medicamento/expediente-consumo-medicamento.component';
+import { SeccionTablaComponent } from '@sharedComponents/tabulador-entidad/seccion-tabla/seccion-tabla.component';
 
 @Component({
   selector: 'app-expediente-formulario',
@@ -139,6 +140,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
     this.agregarTabTratamientos();
     this.agregarTabConsumoMedicamento();
     this.agregarTabRecomendaciones();
+    this.agregarTabMuestras();
   }
 
   private agregarTabInformacionGeneral(): void {
@@ -252,6 +254,21 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
       .then((padecimientos) => {
         this.padecimientosList = padecimientos;
       });
+  }
+
+  public async agregarTabMuestras() {
+    const muestras: ExternalTemplate = {
+      component: SeccionTablaComponent,
+      label: 'Muestras',
+      args: {
+        idTabla : this.idUsuario
+      },
+      enabled: this.idUsuario != null ? true : false,
+      externalSubmit: true,
+      submitControl: false
+    };
+
+    this.externalTemplates.push(muestras);
   }
 
   protected esAgregar(){

@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
 import { GetRecordsOptions, HealthConnectAvailabilityStatus } from '../../../interfaces/healthconnect-interfaces';
+import { addIcons } from 'ionicons';
+
 
 @Component({
   selector: 'app-widget-sueno',
@@ -25,9 +27,16 @@ export class WidgetSuenoComponent  implements OnInit {
   protected sleepREM: number = 0;
   protected sleepDeep: number = 0;
 
+  protected horas: number = 0;
+  protected minutos: number = 0;
+
   constructor(
     private healthConnectservice : HealthConnectService,
-    private alertController: AlertController) { }
+    private alertController: AlertController) { 
+      addIcons({
+        'suenio': '/assets/img/svg/Suenio.svg'
+      })
+    }
 
   protected totalSuenoHoras: number = 0;
   protected totalSuenoMin: number = 0;
@@ -119,5 +128,8 @@ export class WidgetSuenoComponent  implements OnInit {
     this.totalSuenoDeepMin = this.sleepDeep % 60;
 
   }
+
+
+   
 
 }

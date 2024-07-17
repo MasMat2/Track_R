@@ -37,25 +37,14 @@ public class NotificacionDoctorService
         _hostingEnvironment = hostingEnvironment;
     }
 
-    private NotificacionDoctorDTO Mapear(
+    private async Task<NotificacionDoctorDTO> Mapear(
         NotificacionDTO notificacionDto,
         NotificacionUsuarioDto notificacionUsuarioDto,
         int idPaciente)
     {
-        var img = _archivoService.ObtenerImagenUsuario((int)notificacionDto.IdPersona);
-        string imgData;
+        var img = await _usuarioService.ObtenerBytesImagenUsuario((int)idPaciente);
 
-        if(img is null)
-        {
-            var path = Path.Combine(_hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
-            var tipoMime = "image/svg+xml";
-            var imgDefault = File.ReadAllBytes(path);
-            imgData = "data:" + tipoMime + ";base64," + Convert.ToBase64String(imgDefault);
-        }
-        else
-        {
-            imgData = "data:" + img.ArchivoTipoMime + ";base64," + Convert.ToBase64String(img.Archivo1);
-        }
+ 
 
         var claveNotificacion = _notificacionService.ConsultarClave(notificacionDto.IdTipoNotificacion);
 
@@ -69,7 +58,7 @@ public class NotificacionDoctorService
             notificacionUsuarioDto.Visto,
             notificacionDto.IdTipoNotificacion,
             idPaciente,
-            imgData,
+            img,
             notificacionDto.IdChat,
             claveNotificacion
         );
@@ -94,9 +83,9 @@ public class NotificacionDoctorService
         return notificacionDto;
     }
 
-    public IEnumerable<NotificacionDoctorDTO> ConsultarPorDoctor(int idUsuario)
+    public async Task<IEnumerable<NotificacionDoctorDTO>> ConsultarPorDoctor(int idUsuario)
     {
-        return _notificacionUsuarioService.ConsultarPorDoctor(idUsuario);
+        return await _notificacionUsuarioService.ConsultarPorDoctor(idUsuario);
     }
 
     public async Task Notificar(NotificacionDoctorCapturaDTO notificacionDoctorCaptura, int idDoctor)
@@ -107,7 +96,7 @@ public class NotificacionDoctorService
 
         var resultado = _notificacionService.Agregar(notificacionCaptura, idDoctor);
 
-        var notificacionDoctor = Mapear(
+        var notificacionDoctor = await Mapear(
             resultado.Notificacion,
             resultado.NotificacionUsuario,
             notificacionDoctorCaptura.IdPaciente);
@@ -119,14 +108,19 @@ public class NotificacionDoctorService
 
     public async Task Notificar(NotificacionDoctorCapturaDTO notificacionDoctorCaptura, List<int> idsDoctor)
     {
-        using var ts = new TransactionScope();
+        using var ts = new TransactionScope(TransactionScopeOption.Required,
+                                                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                TransactionScopeAsyncFlowOption.Enabled);
 
         var notificacionCaptura = Mapear(notificacionDoctorCaptura);
 
         var resultado = _notificacionService.Agregar(notificacionCaptura, idsDoctor);
-        var notificacionesDoctor = resultado.NotificacionesUsuario
-            .Select(nu => Mapear(resultado.Notificacion, nu, notificacionDoctorCaptura.IdPaciente));
-
+        var notificacionesDoctor = new List<NotificacionDoctorDTO>();
+        foreach (var nu in resultado.NotificacionesUsuario)
+        {
+            var notificacionDoctor = await Mapear(resultado.Notificacion, nu, notificacionDoctorCaptura.IdPaciente);
+            notificacionesDoctor.Add(notificacionDoctor);
+        }
         var tasks = notificacionesDoctor.Select(EnviarNotificacion);
 
         await Task.WhenAll(tasks);

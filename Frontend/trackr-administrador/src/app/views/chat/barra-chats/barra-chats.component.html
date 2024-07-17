@@ -1,54 +1,47 @@
-<div class="overflow">
-  <div>
-    <div class="grid">
-      <div class="row">
-        <div class="col-8">
-          <h2 class="ms-3" style="font-weight: normal;">Chats con pacientes</h2>
-        </div>
-        <div class="col-4" style="display: flex; flex-direction: row; justify-content: center; ">
-          <mat-icon class="purple" (click)="abrirModal()" >add</mat-icon>
+<div class="contenedor-principal">
+  <div class="card">
+    <div class="header">
+      <div class="contenido-header">
+        <div class="titulo">Chats con pacientes</div>
+        <div class="buttons">
+          <button mat-icon-button (click)="abrirModal()">
+            <mat-icon>add</mat-icon>
+            <!-- Revisar porque no se muestra (problema al importar en app.module) -->
+            <!-- <i-lucide name="plus"></i-lucide> -->
+          </button>
         </div>
       </div>
     </div>
-  </div>
-  
-  <mat-list>
-    <div class="">
-      
-      <mat-list-item *ngFor="let chat of chats" class="cuadro" style="height: 10vh;" (click)="enviarIdChat(chat.idChat || 0)">
-        <div class="grid">
-          <div class="row" style="display: flex; flex-direction: row;">
-            <div class="col-2" style="display: flex; flex-direction: row; justify-content: flex-end; align-items: center;">
-              <img 
-                class="avatar"
-                [src]="
+    <div class="card-content">
+      <div class="lista-chats">
+        <div
+          matRipple
+          class="item"
+          *ngFor="let chat of chats"
+          (click)="enviarIdChat(chat.idChat || 0)"
+        >
+          <div id="foto-perfil">
+            <img
+              class="avatar"
+              [src]="
                 chat.idCreadorChat != undefined || null
                   ? (chat.imagenBase64 | urlImagen : chat?.tipoMime)
-                  : 'assets/img/default-user.jpg'
-                  " alt=""> 
+                  : 'assets/img/svg/avatar-placeholder.svg'"
+              alt=""
+            />
+          </div>
+          <div class="informacion">
+            <div class="titulo">
+              <span id="nombre-chat">{{ chat.titulo }}</span>
+              <span id="fecha">{{ chat.fecha | date: 'dd/MM' }}</span>
             </div>
-  
-            <div class="col-10">
-              <div class="grid">
-                <div class="row">
-                  <div class="col-12">
-                    <p class="texto-titulo"><b>{{chat.titulo}}</b></p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12">
-                    <p class="texto-titulo">{{chat.ultimoMensaje}}</p>
-                  </div>
-                </div>
-              </div>
+            <div class="mensaje">
+              <span id="ultimo-mensaje">{{ chat.ultimoMensaje }}</span>
             </div>
           </div>
-          
         </div>
-         
-          
-      </mat-list-item>
+        
+      </div>
     </div>
-    
-  </mat-list>
+  </div>
 </div>

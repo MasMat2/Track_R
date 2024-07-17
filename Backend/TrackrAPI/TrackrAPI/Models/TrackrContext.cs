@@ -106,6 +106,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<RolAcceso> RolAcceso { get; set; } = null!;
         public virtual DbSet<Seccion> Seccion { get; set; } = null!;
         public virtual DbSet<SeccionCampo> SeccionCampo { get; set; } = null!;
+        public virtual DbSet<SftpCache> SftpCache { get; set; } = null!;
         public virtual DbSet<TipoAcceso> TipoAcceso { get; set; } = null!;
         public virtual DbSet<TipoChatPersona> TipoChatPersona { get; set; } = null!;
         public virtual DbSet<TipoCompania> TipoCompania { get; set; } = null!;
@@ -120,6 +121,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<TratamientoToma> TratamientoToma { get; set; } = null!;
         public virtual DbSet<Turno> Turno { get; set; } = null!;
         public virtual DbSet<UnidadMedida> UnidadMedida { get; set; } = null!;
+        public virtual DbSet<UnidadesMedida> UnidadesMedida { get; set; } = null!;
         public virtual DbSet<Usuario> Usuario { get; set; } = null!;
         public virtual DbSet<UsuarioLocacion> UsuarioLocacion { get; set; } = null!;
         public virtual DbSet<UsuarioRol> UsuarioRol { get; set; } = null!;
@@ -1166,25 +1168,22 @@ namespace TrackrAPI.Models
 
                 entity.ToTable("ExpedienteEstudio", "Trackr");
 
-                entity.Property(e => e.Archivo).HasColumnType("image");
-
-                entity.Property(e => e.ArchivoNombre)
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ArchivoTipoMime)
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.ArchivoUrl)
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.FechaRealizacion).HasColumnType("datetime");
 
+                entity.Property(e => e.IdArchivo).HasColumnName("idArchivo");
+
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.IdArchivoNavigation)
+                    .WithMany(p => p.ExpedienteEstudio)
+                    .HasForeignKey(d => d.IdArchivo)
+                    .HasConstraintName("FK_ExpedienteEstudio_Archivo");
 
                 entity.HasOne(d => d.IdExpedienteNavigation)
                     .WithMany(p => p.ExpedienteEstudio)
@@ -1309,7 +1308,8 @@ namespace TrackrAPI.Models
                     .HasName("PK__Expedien__58DDD7D813710334");
 
                 entity.ToTable("ExpedienteTratamiento", "Trackr");
-                 entity.Property(e => e.ArchivoUrl).HasMaxLength(250);
+
+                entity.Property(e => e.ArchivoUrl).HasMaxLength(250);
 
                 entity.Property(e => e.Cantidad).HasColumnType("decimal(18, 0)");
 
@@ -1321,15 +1321,16 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
 
-                entity.Property(e => e.Imagen).HasColumnType("image");
-
-                entity.Property(e => e.ImagenTipoMime)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                entity.Property(e => e.IdArchivo).HasColumnName("idArchivo");
 
                 entity.Property(e => e.Indicaciones).HasMaxLength(500);
 
                 entity.Property(e => e.Unidad).HasMaxLength(100);
+
+                entity.HasOne(d => d.IdArchivoNavigation)
+                    .WithMany(p => p.ExpedienteTratamiento)
+                    .HasForeignKey(d => d.IdArchivo)
+                    .HasConstraintName("FK_ExpedienteTratamiento_Archivo");
 
                 entity.HasOne(d => d.IdExpedienteNavigation)
                     .WithMany(p => p.ExpedienteTratamiento)
@@ -2345,6 +2346,17 @@ namespace TrackrAPI.Models
                     .HasConstraintName("FK__SeccionCa__IdSec__70698DE3");
             });
 
+            modelBuilder.Entity<SftpCache>(entity =>
+            {
+                entity.ToTable("SftpCache", "Trackr");
+
+                entity.Property(e => e.FilePath)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LastWriteTime).HasColumnType("datetime");
+            });
+
             modelBuilder.Entity<TipoAcceso>(entity =>
             {
                 entity.HasKey(e => e.IdTipoAcceso);
@@ -2530,6 +2542,15 @@ namespace TrackrAPI.Models
                     .WithMany(p => p.UnidadMedida)
                     .HasForeignKey(d => d.IdCompania)
                     .HasConstraintName("FK__UnidadMed__IdCom__31C24FF4");
+            });
+
+            modelBuilder.Entity<UnidadesMedida>(entity =>
+            {
+                entity.ToTable("UnidadesMedida", "Configuracion");
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Usuario>(entity =>

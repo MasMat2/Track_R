@@ -60,6 +60,7 @@ public class ExpedienteDoctorService
             Ambito = "Endicronologia",
             Hospital = dto.IdUsuarioDoctorNavigation.IdCompaniaNavigation.Nombre,
             Nombre = dto.IdUsuarioDoctorNavigation.Nombre + " " + dto.IdUsuarioDoctorNavigation.ApellidoPaterno + " " + dto.IdUsuarioDoctorNavigation.ApellidoMaterno,
+            Titulo = dto.IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre ?? ""
         }).ToList();
 
         foreach (var doctor in doctores)

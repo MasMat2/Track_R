@@ -21,6 +21,8 @@ import { GeneralConstant } from '@utils/general-constant';
 import { GetRecordsOptions, Record } from '@pages/home/dashboard/interfaces/healthconnect-interfaces';
 import { RecordType } from 'capacitor-health-connect-local';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
+import { DirectiveModule } from 'src/app/shared/directives/directive.module';
+
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -33,7 +35,8 @@ import { HealthConnectService } from 'src/app/services/dashboard/health-connect.
     IonicModule,
     SharedModule,
     CommonModule,
-    CampoExpedienteModule],
+    CampoExpedienteModule,
+    DirectiveModule,],
     providers: [SeccionCampoService, EntidadEstructuraTablaValorService,]
 })
 export class MuestrasFormularioComponent implements OnInit {
@@ -127,6 +130,10 @@ export class MuestrasFormularioComponent implements OnInit {
         },
         complete : () => {
           this.modalController.dismiss(null, 'confirm');
+        }
+        ,
+        error: () => {
+          this.submitting = false;
         }
       }
     );

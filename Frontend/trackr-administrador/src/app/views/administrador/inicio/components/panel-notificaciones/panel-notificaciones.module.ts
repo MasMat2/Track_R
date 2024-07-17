@@ -4,7 +4,7 @@ import { PanelNotificacionesComponent } from './panel-notificaciones.component';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToolbarModule } from '@sharedComponents/toolbar/toolbar.module';
-import { LucideAngularModule, ChevronRight, MessageSquareMore, Phone, X } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
     NgSelectModule,
     ToolbarModule,
     MatButtonModule,
-    LucideAngularModule.pick({X, ChevronRight, MessageSquareMore, Phone})
+    LucideAngularModule
   ],
   exports: [PanelNotificacionesComponent],
   providers: [],

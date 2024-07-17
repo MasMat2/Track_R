@@ -1,34 +1,40 @@
-<ion-header class="ion-no-border">
-  <div class="contenedor-header">
+<div class="contenedor-principal">
+  <div class="contenedor-controles">
     <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-button (click)="cancelar()">
-          <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+      <ion-buttons slot="start" class="controles-pagina">
+        <div class="selector-pagina">
+          <ion-button class="boton-control" (click)="retrocederPagina()" [disabled]="!paginasCargadas">
+            <ion-icon slot="icon-only" name="chevron-left"></ion-icon>
+          </ion-button>
+          <div class="label"><ion-label>{{pagina}}</ion-label></div>
+          <ion-button class="boton-control" (click)="avanzarPagina()" [disabled]="!paginasCargadas">
+            <ion-icon slot="icon-only" name="chevron-right"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-buttons>
+      <ion-buttons slot="end" class="controles-zoom">
+        <ion-button class="boton-control" (click)="masZoom()" [disabled]="!documentoCargado">
+          <ion-icon slot="icon-only" name="plus"></ion-icon>
+        </ion-button>
+        <ion-button class="boton-control" (click)="menosZoom()" [disabled]="!documentoCargado">
+          <ion-icon slot="icon-only" name="minus"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title>{{ nombre }}</ion-title>
     </ion-toolbar>
   </div>
-</ion-header>
-<ion-content>
-  <div class="contendor-principal">
-    <div class="contenedor-pdf">
-      <ngx-extended-pdf-viewer
-      [base64Src]="archivo"
-      [filenameForDownload]="archivoNombre"
-      [useBrowserLocale]="true"
-      [zoom]="'page-actual'"
-      [height]="height"
-      [textLayer]="true"
-      [zoom]="'auto'"
-    ></ngx-extended-pdf-viewer>
-    </div>
+  <div class="contenedor-pdf">
+    <pdf-viewer
+      id="pdf-viewer" 
+      [src]="Base64Src"
+      [render-text]="true"
+      [original-size]="false"
+      zoom-scale="page-width"
+      [zoom]="zoom"
+      [(page)]="pagina"
+      (pages-initialized)="pageInitialized($event)"
+      (after-load-complete)="loadcomplete($event)"
+      (error)="onError($event)">
+    </pdf-viewer>
   </div>
-</ion-content>
-<ion-footer>
-  <div class="contenedor-footer">
-    <ion-toolbar></ion-toolbar>
-  </div>
-</ion-footer>
-
+</div>
 

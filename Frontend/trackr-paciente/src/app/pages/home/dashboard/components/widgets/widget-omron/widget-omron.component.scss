@@ -1,43 +1,25 @@
-@import "../../widgets/styles/circle-container.scss";
-@import "../../../../../../../theme/variables.scss";
+.contenido {
+  height: 80px;
+  position: relative;
+}
 
-ion-label {
-  font-family: var(--font-body);
-  color: var(--neutral-100);
+.header {
+  height: 100%;
   width: 100%;
-  font-size: 2.3vw;
-
-  .valor {
-    font-size: 2.8vw;
-  }
-}
-
-ion-grid {
-  display: inherit;
-}
-
-.sueno-total {
+  padding: 0 16px 8px 16px;
   display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: flex-end;
-}
+  justify-content: space-between;
+  align-items: end;
 
-ion-card-title {
-  font-size: 16px;
-  font-family: var(--font-body);
-  font-weight: bold;
-  padding-left: 5%;
-  padding-top: 5%;
+  ion-label {
+    font-size: 16px;
+    font-family: var(--font-body);
+    font-weight: bold;
+    color: var(--neutral-900);
+  }
 
-}
-
-
-ion-icon {
-  font-size: 7vw;
-  position: absolute;
-  color: var(--primary-500);
-  right: 0;
-  bottom: 0;
+  ion-icon {
+    font-size: 32px;
+    color: var(--primary-500);
+  }
 }

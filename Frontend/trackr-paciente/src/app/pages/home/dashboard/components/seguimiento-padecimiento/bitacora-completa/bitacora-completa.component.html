@@ -1,0 +1,80 @@
+<ion-header class="ion-no-border">
+  <div class="contenedor-header-light">
+    <ion-toolbar>
+      <ion-buttons class="start" slot="start">
+        <ion-button (click)="regresarBtn()">
+          <ion-icon slot="start" name="chevron-left"></ion-icon>
+          <ion-label>Atrás</ion-label>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+</ion-header>
+<ion-content class="primary">
+  <div class="contenedor-principal">
+    <div class="titulo">
+      <ion-text>
+        <h3>{{padecimiento}}</h3>
+        <p>
+          <span id="variable">{{variable}}</span>
+          <span id="periodo"> &bull; {{periodo}}</span>
+        </p>
+      </ion-text>
+    </div>
+    <div class="filtros">
+      <div class="botones botones-row">
+        <ion-button id="filtro-fecha" class="transparent-light padding-derecho">
+          <ion-icon name="calendar"  slot="start"></ion-icon>
+          <label>Buscar por fecha</label>
+        </ion-button>        
+        <ion-modal trigger="filtro-fecha" class="custom-datetime-modal"  [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime 
+              id="fecha"
+              presentation="date"
+              color="morado-custom"
+              name="fecha"
+              showDefaultButtons="true"
+              cancelText="Cancelar"
+              doneText="Ok"
+              locale="es-ES"
+              [(ngModel)]="fechaFiltro"
+              (ngModelChange)="filtrarPorFecha()"
+              >
+            </ion-datetime>
+          </ng-template>
+        </ion-modal>
+
+        <ion-button (click)="cambiarFiltroOrden()" id="filtro-orden" class="transparent-light padding-izquierdo">
+          <ion-icon *ngIf="ordenFiltro == 'ascendente'" name="arrow-up" slot="start"></ion-icon>
+          <ion-icon *ngIf="ordenFiltro == 'descendente'" name="arrow-down"  slot="start"></ion-icon>
+          <label>Orden</label>
+        </ion-button>
+        
+      </div>
+    </div>
+    <div class="lista">
+      <div class="lista-vacia" *ngIf="listaVacia()">
+        <ion-text>
+          <p>
+            Nada por aquí.
+            <br>
+            Sin registros.
+          </p>
+        </ion-text>
+      </div>
+      <ion-list>
+        <ion-item lines="full" *ngFor="let valor of (filtradoPorFecha ? valoresCampoFiltrados.valores : valoresCampo.valores)">
+          <ion-label class="datos">
+            <p 
+              id="valor" 
+              [ngStyle]="valor.fueraDeRango ? {'color': 'var(--error-200)'} : {}">
+              {{valor.valor}} {{valoresCampo.unidadMedida}} <span *ngIf="valor.fueraDeRango">(Valor fuera de rango)</span>
+            </p>
+            <p id="fecha">{{valor.fechaMuestra | date: 'MMMM d, y, h:mm a' : '' : 'es-MX'}}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+</ion-content>

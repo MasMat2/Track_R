@@ -22,7 +22,7 @@
     margin-bottom: 12px;
     background-color: transparent;
      padding: 0 !important;
-    font-size: 14px;
+    font-size: 1rem;
     font-family: var(--font-body);
     color: var(--neutral-700);
   }
@@ -40,6 +40,34 @@ input:focus{
 }
 textarea:focus{
   outline: none !important;
+}
+
+.custom-textarea-container{
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  background: var(--primary-50);
+  border: 1px solid var(--primary-100);
+  border-radius: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+
+  textarea{
+    width: 100%;
+    padding: 0px;
+    font-size: 16px !important;
+    background: red !important;
+    background: transparent !important;
+    border: none !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  textarea::-webkit-scrollbar{
+    display: none !important;
+  }
+}
+.custom-textarea-container:focus-within{
+  border: 1px solid var(--primary-500);
 }
 
 
@@ -166,8 +194,10 @@ app-number-input.ng-invalid.ng-touched.ng-dirty input {
 }
 
 .error {
-  color: rgba(255, 0, 0, 0.74);
-  font-size: 0.86em;
+  color: var(--error-200);
+  margin-top: 6px;
+  font-size: 0.8rem;
+  font-family: var(--font-body);
 }
 
 // Input - Time / Hora

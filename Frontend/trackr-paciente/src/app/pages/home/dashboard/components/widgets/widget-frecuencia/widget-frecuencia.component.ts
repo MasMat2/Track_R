@@ -5,6 +5,8 @@ import { GetRecordsOptions, HealthConnectAvailabilityStatus } from '../../../int
 import { RecordType } from 'capacitor-health-connect-local';
 import { AlertController } from '@ionic/angular';
 
+import { IonicModule } from '@ionic/angular';
+import { addIcons } from 'ionicons';
 
 @Component({
   selector: 'app-widget-frecuencia',
@@ -13,6 +15,7 @@ import { AlertController } from '@ionic/angular';
   standalone: true,
   imports: [
     WidgetComponent,
+    IonicModule
   ]
 })
 export class WidgetFrecuenciaComponent  implements OnInit {
@@ -22,7 +25,14 @@ export class WidgetFrecuenciaComponent  implements OnInit {
   protected ritmoCardiaco: number = 0;
   constructor(
     private healthConnectService: HealthConnectService,
-    private alertController: AlertController) { }
+    private alertController: AlertController) {
+      addIcons({
+        'ritmo-cardiaco': '/assets/img/svg/Ritmo-cardiaco.svg'
+      })
+     }
+
+  protected unidadMedida: string = "lpm";
+
 
   async ngOnInit() {
     await this.validarDisponibilidad();

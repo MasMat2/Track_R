@@ -1,9 +1,9 @@
 <div class="header-button">
   <ion-button class="notifications-button" (click)="openModal()">
     <div class="outer-icon">
-      <ion-icon name="notifications-outline"></ion-icon>
+      <ion-icon name="bell"></ion-icon>
       <div class="inner-icon" *ngIf="((notificaciones$ | async)?.length !== 0)">
-        <ion-icon name="ellipse"></ion-icon>
+        <ion-icon name="circle-filled"></ion-icon>
       </div>
     </div>
   </ion-button>

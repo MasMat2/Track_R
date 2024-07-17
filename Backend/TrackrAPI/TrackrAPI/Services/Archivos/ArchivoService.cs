@@ -43,9 +43,33 @@ public class ArchivoService
         return archivo;
     }
 
+    public ArchivoDTO? GetArchivoByUrl(string urlArchivo)
+    {
+        ArchivoDTO archivo = new ArchivoDTO();
+        if(urlArchivo is not null)
+        {
+            var file = _archivoRepository.GetArchivoByUrl(urlArchivo);
+            archivo.Archivo = file.ArchivoUrl != null ? _sftpService.DownloadFileAsBase64(file.ArchivoUrl) : "";
+            archivo.ArchivoMime = file.ArchivoTipoMime;
+            archivo.IdArchivo = file.IdArchivo;
+            archivo.Nombre = file.ArchivoNombre;
+            return archivo;
+        }
+        else
+        {
+            return null;
+        }
+   
+    }
+
     public string GetFileName(int idArchivo)
     {
         return _archivoRepository.GetFileName(idArchivo);
+    }
+
+    public int? GetFileId(string urlArchivo)
+    {
+        return _archivoRepository.GetFileId(urlArchivo);
     }
 
     public string GetFileMime(int idArchivo)

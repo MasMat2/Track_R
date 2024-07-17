@@ -41,9 +41,9 @@ public class NotificacionUsuarioService
         return _notificacionUsuarioRepository.ConsultarPorPaciente(idUsuario);
     }
 
-    public IEnumerable<NotificacionDoctorDTO> ConsultarPorDoctor(int idUsuario)
+    public async Task<IEnumerable<NotificacionDoctorDTO>> ConsultarPorDoctor(int idUsuario)
     {
-        return _notificacionUsuarioRepository.ConsultarPorDoctor(idUsuario);
+        return await _notificacionUsuarioRepository.ConsultarPorDoctor(idUsuario);
     }
 
     public NotificacionUsuarioDto Agregar(int idNotificacion, int idUsuario)
@@ -65,8 +65,8 @@ public class NotificacionUsuarioService
         return notificacionesUsuario.Select(nu => Mapear(nu));
     }
 
-    public void MarcarComoVistas(List<int> idNotificacionUsuario)
+    public void MarcarComoVistas(List<int> idNotificacionUsuario, bool tomaTomada)
     {
-        _notificacionUsuarioRepository.MarcarComoVistas(idNotificacionUsuario);
+        _notificacionUsuarioRepository.MarcarComoVistas(idNotificacionUsuario, tomaTomada);
     }
 }

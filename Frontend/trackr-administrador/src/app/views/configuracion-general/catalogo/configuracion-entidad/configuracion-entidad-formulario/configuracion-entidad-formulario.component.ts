@@ -72,7 +72,7 @@ export class ConfiguracionEntidadFormularioComponent extends CrudFormularioBase<
 
   public columnsSeccion = [
     { headerName: 'Clave', field: 'clave', minWidth: 50 },
-    { headerName: 'Sección', field: 'nombre', minWidth: 150 },
+    { headerName: 'Parametro', field: 'nombre', minWidth: 150 },
     this.columnaCheckbox,
     this.columnaVer
   ];

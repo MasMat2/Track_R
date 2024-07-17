@@ -316,17 +316,17 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultaDomicilioPorId(idUsuario);
         }
         [HttpGet("consultarAsistentes")]
-        public IEnumerable<UsuarioDto> ConsultarAsistentes()
+        public async Task<IEnumerable<UsuarioDto>> ConsultarAsistentes()
         {
             var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
-            return usuarioService.ConsultarAsistentes((int)usuario.IdCompania , usuario.IdUsuario);
+            return await usuarioService.ConsultarAsistentes((int)usuario.IdCompania , usuario.IdUsuario);
         }
 
         [HttpGet("asistentesPorDoctor")]
-        public IEnumerable<AsistenteDoctorDto> ConsultarAsistentesPorDoctor()
+        public async Task<IEnumerable<AsistenteDoctorDto>> ConsultarAsistentesPorDoctor()
         {
             int idDoctor  = Utileria.ObtenerIdUsuarioSesion(this);
-            return usuarioService.ConsultarAsistentePorDoctor(idDoctor);
+            return await usuarioService.ConsultarAsistentePorDoctor(idDoctor);
         }
 
         [HttpGet("misDoctores")]
@@ -336,17 +336,17 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultarDoctoresPorAsistente(idAsistente);
         }
 
-        [HttpPost("asistente/{idAsistente}")]
-        public void AgregarAsistente(int idAsistente)
+        [HttpPost("asistente/agregar")]
+        public void AgregarAsistente(List<int> idAsistentes)
         {
             int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
-            usuarioService.AgregarAsistente(idUsuario , idAsistente);
+            usuarioService.AgregarAsistente(idUsuario , idAsistentes);
         }
 
-        [HttpDelete("asistente/{idAsistenteDoctor}")]
-        public void EliminarAsistente(int idAsistenteDoctor)
+        [HttpPost("asistente/eliminar")]
+        public void EliminarAsistente(List<int> idAsistentes)
         {
-            usuarioService.EliminarAsistente(idAsistenteDoctor);
+            usuarioService.EliminarAsistente(idAsistentes);
         }
 
         [HttpGet("esMedico")]
@@ -361,6 +361,24 @@ namespace TrackrAPI.Controllers.Seguridad
         {
             var usuario = usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
             return usuarioService.EsAsistente(usuario.IdCompania , usuario.IdUsuario);
+        }
+
+        [HttpGet]
+        [Route("consultarPacientesParaSelector")]
+        public IEnumerable<UsuarioDto> ConsultarPacientesParaSelector()
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            var idCompania = usuarioService.Consultar(idUsuario).IdCompania;
+            return usuarioService.ConsultarPorRol(GeneralConstant.ClaveRolPaciente, idCompania);
+        }
+
+        [HttpGet]
+        [Route("consultarPersonalParaSelector")]
+        public IEnumerable<UsuarioDto> ConsultarPersonal()
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            var idCompania = usuarioService.Consultar(idUsuario).IdCompania;
+            return usuarioService.ConsultarPersonal(idCompania);
         }
     }
 }

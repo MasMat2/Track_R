@@ -16,16 +16,98 @@
 }
 
 .titulo-contenedor {
+  font-family: var(--font-body);
   font-size: 1.5rem;
   padding: 2rem;
-  color: $color-primario;
-  background-color: #ffffff;
+  color: var(--primary-700);
+  background-color: var(--neutral-50);
 }
 
 .titulo-contenedor-paciente {
+  display: flex;
   font-size: 1.5rem;
-  padding: 1.1rem;
+  padding: 1.1rem 0;
   color: $color-primario;
+  flex-direction: column;
+
+  .botones{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    width: 100%;
+    height: 4vh;
+    justify-content: space-around;
+  
+    #buscar {
+      width: 78%;
+      input{
+        font-family: var(--font-body);
+        color: var(--neutral-400);
+
+      }
+    }
+  
+    #filtros {
+      width: 7.55vw;
+  
+      button {
+        background-color: transparent;
+        border-radius: 8px;
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        font-family: var(--font-body);
+        font-weight: 600;
+        color: var(--primary-700);
+        border: 1px solid var(--primary-700);
+      }
+    }
+  
+    #agregar {
+      width: max(12%, 166.79px);
+  
+      .add-button {
+        padding: 0 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border-radius: 8px;
+        font-size: 14px;
+        width: 100%;
+        height: 100%;
+        background-color: var(--primary-700);
+        border: none;
+        color: var(--neutral-50);
+  
+        span {
+          font-weight: 600;
+          font-style: normal;
+          font-family: var(--font-body);
+          color: var(--neutral-50);
+        }
+  
+        lucide-icon {
+          &[name="chevron-down"] {
+            svg {
+              width: 20px;
+              height: 20px;
+            }
+          }
+  
+          &[name="plus"] {
+            svg {
+              color: var(--neutral-50);
+            }
+          }
+  
+        }
+  
+        color: var(--primary-600);
+      }
+    }
+  
+  }
 }
 
 .subseccion {
@@ -70,6 +152,26 @@
   background: $color-primario;
 }
 
+.loading-alert{
+
+  .mat-mdc-dialog-surface {
+    border-radius: 16px !important;
+  }
+  .mat-mdc-dialog-container{
+    min-height: 277px;
+    width: 327px;
+  }
+
+  .mat-mdc-dialog-content{
+    
+  }
+  .img-container{
+    img{
+      width: 50%;
+    }
+  }
+}
+
 .custom-alert{
   .mat-mdc-dialog-surface {
     border-radius: 16px !important;
@@ -91,8 +193,13 @@
 
 .mat-mdc-tab-header {
   border-radius: 0 0 8px 8px;
-  background: var(--neutral-50);
+  background: var(--neutral-50) !important;
   //border: none ;
+}
+
+.no-bg .mat-mdc-tab-header {
+  border-radius: 0 0 8px 8px;
+  background: none !important;
 }
 
 .modal-notificaciones{
@@ -108,4 +215,64 @@
     overflow-y: scroll;
   }
   
+}
+
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  border-radius: 0px 0px 8px 8px;
+  width: 100%;
+  background-color: var(--primary-500);
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 10px 10px;
+  color: var(--neutral-50);
+  z-index: 1;
+}
+
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  display: block;
+}
+
+
+.dropdown-content a:hover {
+  background: var(--primary-400);
+  background-clip: border-box;
+}
+
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+
+.dropdown:hover .add-button {
+  border-radius: 8px 8px 0px 0px !important;
+}
+.btn-salir-container{
+  z-index: 10;
+  position: absolute;
+  right: 0;
+  padding: inherit;
+  display: flex;
+  align-items: center;
+  max-height: 3rem; //Esto logra que coincida con la altura del header de angular-mat-tabs
+
+}
+.btn-salir{
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  border: 1px solid var(--neutral-200);
+  background: var(--neutral-50);
+   width: 32px;
+  height: 32px;
 }

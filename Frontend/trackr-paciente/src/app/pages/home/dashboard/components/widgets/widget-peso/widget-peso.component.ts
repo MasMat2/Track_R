@@ -3,6 +3,8 @@ import { AlertController, IonicModule } from '@ionic/angular';
 import { WidgetComponent } from '../widget/widget.component';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
 import { GetRecordsOptions, HealthConnectAvailabilityStatus, StoredRecord } from '../../../interfaces/healthconnect-interfaces';
+import { addIcons } from 'ionicons';
+
 
 @Component({
   selector: 'app-widget-peso',
@@ -17,17 +19,26 @@ import { GetRecordsOptions, HealthConnectAvailabilityStatus, StoredRecord } from
 })
 export class WidgetPesoComponent  implements OnInit {
 
+
   private availability: HealthConnectAvailabilityStatus = "Unavailable"; //Disponibilidad de healthConnect
 
   protected pesoPerdido: number = 12;
   protected pesoFaltante: number = 5;
   protected dias: number = 40;
 
+  protected peso: number = 0;
+  protected unidadMedida: string = "kg";
+
+
   protected pesoActual: string = '0';
 
   constructor(
     private healthConnectservice : HealthConnectService,
-    private alertController: AlertController) { }
+    private alertController: AlertController) { 
+      addIcons({
+        'peso': '/assets/img/svg/Peso.svg'
+      })
+    }
 
   async ngOnInit() {
     await this.validarDisponibilidad();

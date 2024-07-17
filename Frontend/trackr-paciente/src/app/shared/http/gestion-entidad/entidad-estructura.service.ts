@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
 import { Observable } from 'rxjs';
-import { ExpedientePadecimientoSelectorDTO } from '../../dtos/seguridad/expediente-padecimiento-selector-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,10 @@ export class EntidadEstructuraService {
 
   public consultarPadecimientosParaSelector(): Observable<ExpedientePadecimientoSelectorDTO[]> {
     return this.http.get<ExpedientePadecimientoSelectorDTO[]>(this.dataUrl + `consultarPadecimientosParaSelector/`);
+  }
+
+  public consultarPadecimientoPorId(idPadecimiento: number): Observable<ExpedientePadecimientoSelectorDTO> {
+    return this.http.get<ExpedientePadecimientoSelectorDTO>(this.dataUrl + `consultarPadecimientoPorId/${idPadecimiento}`);
   }
 
   public consultarDiagnosticosParaSelector(): Observable<ExpedientePadecimientoSelectorDTO[]> {

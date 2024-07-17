@@ -23,7 +23,7 @@ export class ConfiguracionSeccionesComponent implements OnInit {
 
   public columnsSeccion = [
     { headerName: 'Clave', field: 'clave', minWidth: 50 },
-    { headerName: 'Sección', field: 'nombre', minWidth: 150 }
+    { headerName: 'Parámetro', field: 'nombre', minWidth: 150 }
   ];
 
   constructor(

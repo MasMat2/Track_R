@@ -103,41 +103,24 @@
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-md-12">
-              <h5 class="respuestas">{{ reactivoList[indice].respuesta }}</h5>
-            </div>
-          </div>
 
           <div class="row">
             <div class="col-md-8">
               <div
                 class="form-group"
-                *ngIf="reactivoList[indice].necesitaRevision"
               >
                 <label class="label-input required-label">Respuesta</label>
-                <div>
-                  <textarea
-                    #respuestaCorrecta="ngModel"
-                    [(ngModel)]="reactivoList[indice].respuestaAlumno"
-                    name="respuestaCorrecta"
-                    class=" respuesta"
-                    type="text"
-                    [required]="true"
-                    [disabled]="blockQuestions"
-                    rows="3"
-                    style="width: 100%;"
-                  ></textarea>
-                </div>
-                <div
-                  *ngIf="
-                    respuestaCorrecta.errors?.['required'] &&
-                    respuestaCorrecta.touched
-                  "
-                  class="error"
-                >
-                  La respuesta es requerida
-                </div>
+
+                <div *ngFor="let reactivo of reactivoList[indice].respuestas" class="field-checkbox">
+                  <p-checkbox 
+                      [label]="reactivo.respuesta1" 
+                      name="group" 
+                      [disabled]="true"
+                      [name]="reactivo.clave"
+                      [ngModel]="validarRespuesta(reactivo.clave , reactivoList[indice].respuestaAlumno)"
+                      [binary]="true"
+                     />
+              </div>
               </div>
               <div
                 class="form-group respuesta"
@@ -168,16 +151,6 @@
                   La respuesta correcta es requerida
                 </div>
               </div>
-            </div>
-            <div class="col-md-1 check">
-              <i
-                class="fas fa-check icon upload respuesta"
-                *ngIf="blockQuestions && reactivoList[indice].resultado"
-              ></i>
-              <i
-                class="fas fa-times icon notUpload respuesta"
-                *ngIf="blockQuestions && !reactivoList[indice].resultado"
-              ></i>
             </div>
           </div>
 

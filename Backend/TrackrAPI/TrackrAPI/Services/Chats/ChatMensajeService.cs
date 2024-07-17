@@ -12,6 +12,8 @@ using TrackrAPI.Helpers;
 using MimeTypes;
 using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.Services.Sftp;
+using System.Transactions;
+using TrackrAPI.Repositorys.Notificaciones;
 
 namespace TrackrAPI.Services.Chats;
 
@@ -25,6 +27,7 @@ public class ChatMensajeService
     private readonly ArchivoService _archivoService;
     private readonly SimpleAES _simpleAES;
     private readonly SftpService _sftpService;
+    private readonly ITipoNotificacionRepository _tipoNotificacionRepository;
 
     public ChatMensajeService(IChatMensajeRepository chatMensajeRepository,
                               IHubContext<ChatMensajeHub, IChatMensajeHub> hubContext,
@@ -33,7 +36,8 @@ public class ChatMensajeService
                               IArchivoRepository archivoRepository,
                               ArchivoService archivoService,
                               SimpleAES simpleAES,
-                              SftpService sftpService)
+                              SftpService sftpService,
+                              ITipoNotificacionRepository tipoNotificacionRepository)
     {
         _chatMensajeRepository = chatMensajeRepository;
         _hubContext = hubContext;
@@ -43,6 +47,7 @@ public class ChatMensajeService
         _archivoService = archivoService;
         _simpleAES = simpleAES;
         _sftpService = sftpService;
+        _tipoNotificacionRepository = tipoNotificacionRepository;
     }
 
     public IEnumerable<IEnumerable<ChatMensajeDTO>> ObtenerMensajesPorChat(int IdPersona)
@@ -73,17 +78,33 @@ public class ChatMensajeService
         return chats;
     }
 
-    public int NuevoMensaje(ChatMensajeDTO mensaje)
+    public async Task<int> NuevoMensaje(ChatMensajeDTO mensaje)
     {
+        using (var scope = new TransactionScope(TransactionScopeOption.Required, 
+                                                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                TransactionScopeAsyncFlowOption.Enabled))
+        {
+
         int? idArchivo = null;
         var idsPersonasChat = _chatPersonaRepository.ConsultarPersonasPorChat(mensaje.IdChat)
                                                     .Where(cP => cP.IdPersona != mensaje.IdPersona)
                                                     .Select(x => x.IdPersona)
                                                     .Distinct()
                                                     .ToList();
-        var notificacion = new NotificacionDoctorCapturaDTO(mensaje.Mensaje, 2, mensaje.IdPersona, mensaje.IdPersona, mensaje.IdChat);
 
-        _notificacionService.Notificar(notificacion, idsPersonasChat);
+        int idTipoNotificacion;
+
+        if(mensaje.EsVideoChat == true)
+        {
+            idTipoNotificacion = _tipoNotificacionRepository.ConsultarPorClave(GeneralConstant.ClaveNotificacionVideo).IdTipoNotificacion;
+        }
+        else
+        {
+            idTipoNotificacion = _tipoNotificacionRepository.ConsultarPorClave(GeneralConstant.ClaveNotificacionChat).IdTipoNotificacion;
+        }
+        var notificacion = new NotificacionDoctorCapturaDTO(mensaje.Mensaje, idTipoNotificacion, mensaje.IdPersona, mensaje.IdPersona, mensaje.IdChat);
+
+        await _notificacionService.Notificar(notificacion, idsPersonasChat);
 
         //Subir si existe el archivo
         if (mensaje.ArchivoTipoMime != null)
@@ -122,8 +143,10 @@ public class ChatMensajeService
         }
 
         _chatMensajeRepository.Agregar(mensajeAux);
+        scope.Complete();
 
         return (idArchivo != null) ? (int)idArchivo : 0;
+        }
     }
 
     public int GuardarArchivo(string archivo,string nombre,string tipoMime, int idUsuario)

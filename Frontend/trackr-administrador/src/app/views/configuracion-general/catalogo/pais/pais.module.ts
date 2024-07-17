@@ -6,13 +6,16 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { PaisFormularioComponent } from './pais-formulario/pais-formulario.component';
 import { PaisComponent } from './pais.component';
 import { PaisRoutingModule } from './pais.routing.module';
+import { LucideAngularModule, X } from 'lucide-angular';
 
 @NgModule({
   imports: [
     PaisRoutingModule,
     SharedModule,
     DirectiveModule,
-    ModalModule.forChild()
+    ModalModule.forChild(),
+    LucideAngularModule.pick({X}),
+
   ],
   declarations: [
     PaisComponent,

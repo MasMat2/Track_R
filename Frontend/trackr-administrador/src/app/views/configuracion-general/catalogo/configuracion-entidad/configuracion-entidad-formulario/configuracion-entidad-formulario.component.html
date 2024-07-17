@@ -2,7 +2,7 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>Entidad - {{ accion }}</div>
+      <div>Padecimiento - {{ accion }}</div>
       <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
         <i class="far fa-times-circle"></i>
       </button>
@@ -97,7 +97,7 @@
                   <!-- Selector de Pestaña -->
                   <div class="col-md-9">
                     <div class="form-group">
-                      <label class="label-input required-label">Pestaña Padre</label>
+                      <label class="label-input required-label">Padecimiento</label>
                       <ng-select
                         #jerarquiaPadre="ngModel"
                         disabled
@@ -115,7 +115,7 @@
                   <!-- Switch Nueva Pestaña -->
                   <div class="col-md-3">
                     <div class="form-group">
-                      <label class="label-input required-label">Nueva Pestaña</label>
+                      <label class="label-input required-label">Nuevo padecimiento</label>
                       <div class="form-group switch-flex">
                         <label class="switch" for="nuevoNodo">
                           <input
@@ -139,7 +139,7 @@
                 <!-- Grid de Secciones -->
                 <div class="row mb-4" *ngIf="!esNuevaPestana">
                   <div class="col-md-12">
-                    <div class="subseccion">Secciones</div>
+                    <div class="subseccion">Parametros</div>
                     <app-grid-general
                       [headerName]="HEADER_GRID_SECCIONES"
                       [data]="seccionesList"

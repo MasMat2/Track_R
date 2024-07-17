@@ -56,9 +56,13 @@ public class ExpedienteTrackrController : ControllerBase
         _expedienteTrackrService.Eliminar(idExpediente);
     }
     [HttpGet("sidebar/{idUsuario}")]
-    public UsuarioExpedienteSidebarDTO ConsultarParaSidebar(int idUsuario)
+    public async Task<UsuarioExpedienteSidebarDTO> ConsultarParaSidebar(int idUsuario)
     {
-        return _expedienteTrackrService.ConsultarParaSidebar(idUsuario);
+        var usuario =  _expedienteTrackrService.ConsultarParaSidebar(idUsuario);
+        var imgUsuario = await _usuarioService.ObtenerBytesImagenUsuario(idUsuario);
+
+        usuario.ImagenBase64 = imgUsuario;
+        return usuario;
     }
 
     [HttpGet("apegoMedicamentoUsuarios")]

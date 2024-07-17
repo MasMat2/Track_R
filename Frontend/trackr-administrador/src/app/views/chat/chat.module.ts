@@ -13,6 +13,13 @@ import { ModalBaseModule } from '@sharedComponents/modal-base/modal-base.module'
 import { MatListModule } from '@angular/material/list'
 import { MatIconModule } from '@angular/material/icon';
 import { NgAudioRecorderModule } from 'ng-audio-recorder';
+import { LucideAngularModule } from 'lucide-angular';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatRippleModule } from '@angular/material/core';
+import { AudioWaveComponent } from '@sharedComponents/audio-wave/audio-wave.component';
+import {TextFieldModule} from '@angular/cdk/text-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 
@@ -25,6 +32,7 @@ import { NgAudioRecorderModule } from 'ng-audio-recorder';
   ],
   imports: [
     CommonModule,
+    RouterModule,
     FormsModule,
     TableModule,
     NgSelectModule,
@@ -32,7 +40,14 @@ import { NgAudioRecorderModule } from 'ng-audio-recorder';
     ModalBaseModule,
     MatListModule,
     MatIconModule,
-    NgAudioRecorderModule
-  ]
+    NgAudioRecorderModule,
+    MatButtonModule,
+    MatRippleModule,
+    LucideAngularModule,
+    AudioWaveComponent,
+    MatFormFieldModule,
+    TextFieldModule
+  ],
+  exports: [BarraChatsComponent]
 })
 export class ChatModule { }

@@ -3,13 +3,13 @@
     <ion-toolbar>
       <ion-buttons class="start" slot="start">
         <ion-button routerLink="inicio-perfil">
-          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          <ion-icon slot="start" name="chevron-left"></ion-icon>
           <ion-label>Atrás</ion-label>
         </ion-button>
       </ion-buttons>
       <ion-buttons class="end" slot="end">
         <ion-button class="icon-only" (click)="agregarEstudio()">
-          <ion-icon name="add"></ion-icon>
+          <ion-icon name="plus"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
@@ -23,56 +23,41 @@
       </ion-text>
     </div>
 
-    <div class="lista-vacia" *ngIf="listaEstudiosVacia()">
-      <ion-text>
-        <p>Nada Por aquí. <br> Aún no tienes estudios registrados</p>
-      </ion-text>
-      <ion-button fill="outline" (click)="agregarEstudio()">
-        <ion-icon slot="start" name="add"></ion-icon>
-        Añadir estudio
-      </ion-button>
+    <div class="contenedor-barra-busqueda" *ngIf="!listaEstudiosVacia()">
+      <app-searchbar (search)="handleSearch($event)"></app-searchbar>        
     </div>
 
-    <div class="lista-estudios" *ngIf="!listaEstudiosVacia()">
-      <div class="barra-busqueda">
-        <ion-searchbar show-cancel-button="focus" placeholder="Buscar" animated (ionChange)="buscarEstudio($event)"></ion-searchbar>
+    <div class="lista-estudios">
+      <div class="lista-vacia" *ngIf="listaEstudiosVacia()">
+        <ion-text>
+          <p>Nada Por aquí. <br> Aún no tienes estudios registrados</p>
+        </ion-text>
+        <ion-button fill="outline" (click)="agregarEstudio()">
+          <ion-icon slot="start" name="plus"></ion-icon>
+          Añadir estudio
+        </ion-button>
       </div>
-      <div *ngIf="!filtrando">
-        <ion-list *ngIf="expedientes$ | async as estudios">
-          <ion-item-sliding *ngFor="let estudio of estudios">
-            <ion-item lines="none" (click)="abrirEstudio(estudio)" [detail]="true">
+
+        <ion-list *ngIf="!listaEstudiosVacia()">
+          <ion-item-sliding *ngFor="let estudio of (!filtrando ? (expedientes$ | async) : estudiosFiltradosPorBusqueda ) index as i">
+            <ion-item
+             lines="none" 
+             detail 
+             detailIcon="chevron-right"
+             button
+             (click)="abrirEstudio(estudio)">
               <ion-label>
-                <h3>{{estudio.nombre}}</h3>
-                <p>{{estudio.fechaRealizacion | date : "dd/MM/yyyy"}}</p>
+                <h3><span id="numeracion">#{{i+1}} </span>{{estudio.nombre}}</h3>
+                <p>{{estudio.fechaRealizacion | date : "MMMM d, y" : '' : 'es-MX'}}</p>
               </ion-label>
             </ion-item>
             <ion-item-options>
               <ion-item-option expandable (click)="presentarAlertaEliminar(estudio)">
-                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                <ion-icon slot="icon-only" name="trash"></ion-icon>
               </ion-item-option>
             </ion-item-options>
           </ion-item-sliding>
         </ion-list>
-      </div>
-      <!-- lista de estudios filtrados -->
-      <div *ngIf="filtrando">
-        <ion-list>
-          <ion-item-sliding *ngFor="let estudio of estudiosFiltradosPorBusqueda">
-            <ion-item lines="none" (click)="abrirEstudio(estudio)">
-              <ion-label>
-                <h3>{{estudio.nombre}}</h3>
-                <p>{{estudio.fechaRealizacion | date : "dd/MM/yyyy"}}</p>
-              </ion-label>
-              <ion-icon name="chevron-forward"></ion-icon>
-            </ion-item>
-            <ion-item-options>
-              <ion-item-option expandable (click)="presentarAlertaEliminar(estudio)">
-                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-              </ion-item-option>
-            </ion-item-options>
-          </ion-item-sliding>
-        </ion-list>
-      </div>
     </div>
   </div>
 </ion-content>

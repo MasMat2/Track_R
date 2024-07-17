@@ -19,42 +19,49 @@
       }
   }
 
+  .contenedor-barra-busqueda{
+    padding: 0 32px 24px 32px;
+  }
+
   .lista-estudios{
     height: 62vh;
 
     ion-list{
       background: var(--primary-50);
+      padding: 0;
       ion-item{
         --border-width: 0 0 2px 0;
         --border-color: var(--primary-50);
         --detail-icon-opacity: 1;
         --detail-icon-color: var(--neutral-900);
+        --inner-padding-end: 32px;
 
         ion-label{
           padding-left: 16px;
+          font-family: var(--font-body);
           h3{
-            font-family: var(--font-body);
             font-size: 16px;
             color: var(--neutral-900);
+            #numeracion{
+              font-weight: bold;
+              color: var(--primary-700);
+            }
           }
 
           p{
-            font-family: var(--font-body);
             font-size: 14px;
             color: var(--neutral-600);
-
           }
         }
+      }
+      ion-item::part(native){
+        min-height: 92px;
       }
 
       ion-item-option{
         background: var(--error-200);
         color: var(--neutral-50);
       }
-
-      // ion-item::part(detail-icon){
-
-      // }
     }
   }
 

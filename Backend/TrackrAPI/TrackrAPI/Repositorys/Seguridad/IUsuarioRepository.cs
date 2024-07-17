@@ -51,6 +51,7 @@ namespace TrackrAPI.Repositorys.Seguridad
         public InformacionPerfilTrackrDTO ConsultarInformacionPerfilTrackr(int idUsuario);
         public IEnumerable<ExpedientePadecimientoDTO> ConsultarAntecedentesUsuarioTrackr(int idUsuario);
         public IEnumerable<ExpedientePadecimientoDTO> ConsultarDiagnosticosUsuarioTrackr(int idUsuario);
+        public IEnumerable<UsuarioDto> ListarUsuariosExcluidosPorRol(string rolExcluido, int idCompania);
 
 
        public UsuarioDomicilioDto ConsultaDomicilioPorId(int? idUsuario);

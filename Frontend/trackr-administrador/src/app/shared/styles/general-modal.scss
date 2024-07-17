@@ -1,4 +1,5 @@
 @import "variables";
+@import '../../../theme/variables.scss';
 
 .modal-xxlg {
   width: 90% !important;
@@ -22,6 +23,16 @@
   width: 70% !important;
   max-width: 70% !important;
   margin: 0;
+}
+
+.modal-sm {
+  width: 43% !important;
+  max-width: 43% !important;
+  margin: 0;
+
+  .modal-content{
+    background-color: var(--primary-50) !important;
+  }
 }
 
 .modal-xsm {
@@ -99,23 +110,23 @@
   margin-bottom: 0;
   border: none;
   border-radius: 0 !important;
-  font-size: 1.2rem;
+  font-size: 1rem;
   padding: 1rem;
-  color: $color-primario;
+  color: var(--primary-700);
   font-weight: 500;
-  background-color: white;
+  background-color: var(--neutral-50);
 }
 
 
 .modal-content .close {
-  color: $color-primario;
+  color: var(--primary-700);
   opacity: 1 !important;
   border: none;
-  background-color: white;
+  background-color: var(--neutral-50);
 }
 
 .modal-content .close i:hover {
-  color: $color-primario-hover;
+  color: var(--primary-500);
 }
 
 .modal-content {
@@ -124,7 +135,7 @@
 }
 
 .title-modal-confirmacion {
-  color: #000000;
+  color: var(--neutral-700);
   font-size: medium;
 }
 
@@ -148,7 +159,7 @@
   .modal-exito {
     .icon-success {
       text-align: center;
-      color: rgba(165, 220, 134, 1);
+      color: var(--success-200);
       font-size: 400%;
     }
   }
@@ -156,7 +167,7 @@
   .modal-error {
     .icon-error {
       text-align: center;
-      color: #e4e5e6;
+      color: var(--neutral-50);
       font-size: 400%;
     }
   }
@@ -169,17 +180,16 @@
 }
 
 .barra-lateral-modal {
-  width: 9px;
-  background: $color-primario;
+  width: 16px;
+  border-radius: 0 4px 4px 0;
+  background: var(--primary-700);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #c11fc9a3;
   font-size: 4rem;
 }
 
 .modal-open .modal {
-  background: #00000077;
 }
 
 .modal-body {
@@ -200,4 +210,10 @@
   max-height: 90vh;
   border-radius: 0 !important;
   margin: 1%;
+}
+
+.modal-footer{
+  .text-right{
+    display: flex;
+  }
 }

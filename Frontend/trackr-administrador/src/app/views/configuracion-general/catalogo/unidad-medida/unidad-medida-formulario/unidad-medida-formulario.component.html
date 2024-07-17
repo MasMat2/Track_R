@@ -1,0 +1,79 @@
+<app-modal-base [titulo]="nombreEntidad + ' - ' + accion">
+  <ng-template #modalBody>
+    <form
+      #formulario="ngForm"
+      id="form"
+      novalidate="novalidate"
+      (keydown.enter)="$event.preventDefault()"
+      (ngSubmit)="onSubmit(formulario)"
+    >
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+                <label class="label-input required-label">Clave</label>
+                <div>
+                    <input 
+                    #IdEspecialidad="ngModel"
+                    [(ngModel)]="entidad.idUnidadMedida"
+                    id="idEspecialidad"
+                    name="idEspecialidadName"
+                    class="form-control"
+                    type="text"
+                    maxlength="20"
+                    required="true"
+                    autocomplete="off"
+                    [disabled]="true"
+                    /> 
+                </div>
+            </div>
+        </div>
+          <!-- Especialidad -->
+          <div class="col-8">
+            <div class="form-group">
+              <label class="label-input required-label">Especialidad</label>
+              <div>
+                <input
+                  #nombre="ngModel"
+                  [(ngModel)]="entidad.nombre"
+                  name="especialidad"
+                  class="form-control"
+                  type="text"
+                  maxlength="50"
+                  autocomplete="off"
+                  required
+                />
+                <div
+                  *ngIf="nombre.errors?.['required'] && nombre.touched"
+                  class="error"
+                >
+                  La Especialidad es requerida
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <button
+      type="button"
+      class="btn-secundario mr-3"
+      (click)="cancelar()"
+    >
+      Cancelar
+    </button>
+
+    <button
+      type="submit"
+      class="btn-primario btn-margin-left"
+      [disabled]="submiting"
+      form="form"
+    >
+      Guardar
+    </button>
+  </ng-template>
+
+</app-modal-base>

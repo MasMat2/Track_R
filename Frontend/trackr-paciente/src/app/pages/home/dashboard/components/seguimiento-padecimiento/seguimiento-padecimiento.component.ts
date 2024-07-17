@@ -19,6 +19,10 @@ import { ValoresClaveCampoGridDto } from 'src/app/shared/Dtos/gestion-entidades/
 import { addIcons } from 'ionicons';
 import { ValoresPorClaveCampo } from 'src/app/shared/Dtos/gestion-expediente/valores-clave-campo';
 import { ValoresHistogramaDTO } from '../../../../../shared/Dtos/gestion-entidades/valores-histograma-dto';
+import { ModalController } from '@ionic/angular/standalone';
+import { BitacoraCompletaComponent } from './bitacora-completa/bitacora-completa.component';
+import { EntidadEstructuraService } from '../../../../../shared/http/gestion-entidad/entidad-estructura.service';
+import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
 
 
 @Component({
@@ -47,6 +51,7 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
 
   protected HEADER_GRID = 'Bitacora de muestras';
   private idPadecimiento: string;
+  protected padecimiento: ExpedientePadecimientoSelectorDTO;
   protected variableList: ExpedienteColumnaSelectorDTO[];
   protected idSeccionVariable: number;
   protected filtroTiempo: string;
@@ -60,7 +65,6 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   protected seleccionadoFiltroTiempo: boolean = false;
   protected seleccionVacia: boolean = true;
   protected labelHistograma: string = "";
-  protected mostrarTodoLista: boolean = false;
   protected valoresfiltroTiempo = [
     {
       label: 'Hoy',
@@ -167,9 +171,11 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
 
   constructor(
     private seccionCampoService: SeccionCampoService,
+    private entidadEstructuraService: EntidadEstructuraService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
     private route: ActivatedRoute,
     private router: Router,
+    private modalController: ModalController
   
     ) { addIcons({
       'chevron-left': 'assets/img/svg/chevron-left.svg',
@@ -183,6 +189,7 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.idPadecimiento = params.get('id') ?? '';
+      this.consultarPadecimiento();
     });
 
     this.consultarSeccionesPadecimiento();
@@ -335,6 +342,15 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
     this.chart?.update();
   }
     
+  private consultarPadecimiento(){
+    this.entidadEstructuraService.consultarPadecimientoPorId(parseInt(this.idPadecimiento)).subscribe({
+      next: (data) => {
+        console.log(data);
+        this.padecimiento = data;
+      }
+    })
+  }
+
   private consultarSeccionesPadecimiento(): void {
     lastValueFrom(this.seccionCampoService.consultarSeccionesPadecimientos(this.idPadecimiento))
       .then((seccionesPadecimiento: ExpedienteColumnaSelectorDTO[]) => {
@@ -383,11 +399,17 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
     }
   }
 
-  protected mostrarTodo(){
-    this.mostrarTodoLista = true;
+  protected async mostrarTodo(){
+    const modal = await this.modalController.create({
+      component: BitacoraCompletaComponent,
+      componentProps: {
+        valoresCampo: this.valoresCampo,
+        variable: this.variableList.filter(variable => (variable.idSeccionVariable == this.idSeccionVariable)).map(v => v.variable),
+        periodo: this.filtroTiempo,
+        padecimiento: this.padecimiento.nombre
+      }
+    });
 
-    //abrir modal de lista completa con busqueda
+    modal.present();
   }
-
-
 }

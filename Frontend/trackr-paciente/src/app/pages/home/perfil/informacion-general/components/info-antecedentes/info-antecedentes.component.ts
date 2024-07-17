@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { chevronBack, add, trashOutline} from 'ionicons/icons';
 import { AntecedenteFormularioComponent } from './antecedente-formulario/antecedente-formulario.component';
 import { ExpedientePadecimientoDto } from '@dtos/seguridad/expediente-padecimiento-dto';
 import { UsuarioService } from '@http/seguridad/usuario.service';
@@ -32,7 +31,13 @@ export class InfoAntecedentesComponent  implements OnInit {
     private modalController: ModalController,
     private usuarioService: UsuarioService,
     private expedientePadecimientoService: ExpedientePadecimientoService
-  ) { addIcons({chevronBack, add, trashOutline}) }
+  ) { 
+    addIcons({
+      'chevron-left': 'assets/img/svg/chevron-left.svg',
+      'plus': 'assets/img/svg/plus.svg',
+      'trash': 'assets/img/svg/trash-2.svg'
+    }) 
+  }
 
   ngOnInit() {
     this.consultarAntecedentes();
@@ -50,7 +55,7 @@ export class InfoAntecedentesComponent  implements OnInit {
     const alert = await this.alertController.create({
       header: '¿Seguro que deseas eliminar este elemento?',
       subHeader: 'No podrás recuperarlo',
-      cssClass: 'custom-alert-delete',
+      cssClass: 'custom-alert color-error icon-trash two-buttons',
       buttons: [
         {
           text: 'No, regresar',
@@ -77,7 +82,7 @@ export class InfoAntecedentesComponent  implements OnInit {
         text: 'De acuerdo',
         role: 'confirm',
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();

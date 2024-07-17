@@ -115,7 +115,7 @@ export class ConfiguracionDashboardPage  implements OnInit {
           this.cerrarModalConfirmar();
         }
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();

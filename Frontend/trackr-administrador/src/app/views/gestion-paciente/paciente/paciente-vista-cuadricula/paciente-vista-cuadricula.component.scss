@@ -1,20 +1,52 @@
-.green-dot {
-    width: 10px;
-    height: 10px;
-    background-color: green;
-    border-radius: 50%;
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin-top: 10px;
-    margin-right: 20px;
-}
-.edad{
-    color:gray;
-    position: absolute;
-    margin-left:10vh
+.green-dot-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 24px;
+    .green-dot {
+        width: 10px;
+        height: 10px;
+        background-color: var(--success-200);
+        border-radius: 50%;
+        top: 0;
+        right: 0;
+    }
 }
 
-.search-container {
-    border-bottom: 1px solid #000; /* Ajusta el color según tu diseño */
+
+
+.patologia{
+    display: inline-block;
+    margin-right: 5px;
 }
+
+.d-flex{
+    flex-wrap: wrap;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.botones-acciones{
+    align-items: center;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    button{
+        
+        padding: 0px;
+        margin: 10px;
+        lucide-icon{
+            color: var(--neutral-400);
+        }
+
+
+        &:hover {
+            transform: scale(1.1); // Aumenta el tamaño del botón un 10% al pasar el ratón sobre él
+            lucide-icon {
+              color: var(--neutral-600); // Oscurece el color del icono al pasar el ratón sobre él
+            }
+          }
+    }
+}
+

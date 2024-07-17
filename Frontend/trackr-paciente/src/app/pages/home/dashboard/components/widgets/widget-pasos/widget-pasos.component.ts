@@ -5,6 +5,9 @@ import { GetRecordsOptions, HealthConnectAvailabilityStatus, StoredRecord } from
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
 import { AlertController } from '@ionic/angular';
 
+import { IonicModule } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+
 
 
 
@@ -16,6 +19,7 @@ import { AlertController } from '@ionic/angular';
   imports: [
     CommonModule,
     WidgetComponent,
+    IonicModule,
   ]
 })
 export class WidgetPasosComponent  implements OnInit {
@@ -34,7 +38,11 @@ export class WidgetPasosComponent  implements OnInit {
 
   constructor(
     private healthConnectservice : HealthConnectService,
-    private alertController: AlertController ) { }
+    private alertController: AlertController ) {
+      addIcons({
+        'pasos': '/assets/img/svg/Pasos.svg'
+      })
+     }
 
   async ngOnInit() {
     await this.validarDisponibilidad();
@@ -97,6 +105,7 @@ export class WidgetPasosComponent  implements OnInit {
     } else {
         console.log("No se encontraron registros de pasos.");
     }
+
   }
 
 }

@@ -18,14 +18,18 @@ export class WidgetComponent  implements OnInit {
 
   @Input() public title: string;
   @Input() public iconClass?: string;
-  @Input() public widgetClass?: string; //(seguimiento o salud)
+  @Input() public widgetClass: string; //(seguimiento o salud)
   @Input() public colorBackground?: string;
   @Input() public colorTitle?: string;
+  @Input() public customHeight?: boolean;
+  @Input() public button?: boolean;
+
 
   constructor() {
     addIcons({water, walk, scale, moon})
    }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
 }

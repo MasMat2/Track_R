@@ -166,6 +166,11 @@ namespace TrackrAPI.Services.GestionEntidad
             return entidadEstructuraRepository.ConsultarPadecimientosParaSelector();
         }
 
+        public ExpedientePadecimientoSelectorDTO ConsultarPadecimientoPorId(int idPadecimiento)
+        {
+            return entidadEstructuraRepository.ConsultarPadecimientoPorId(idPadecimiento);
+        }
+
         public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarDiagnosticosParaSelector()
         {
             return entidadEstructuraRepository.ConsultarDiagnosticosParaSelector();

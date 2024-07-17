@@ -8,6 +8,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { AyudaSeccionFormularioComponent } from './ayuda-seccion-formulario/ayuda-seccion-formulario.component';
 import { AyudaSeccionRoutingModule } from './ayuda-seccion-routing.module';
 import { AyudaSeccionComponent } from './ayuda-seccion.component';
+import { LucideAngularModule, X } from 'lucide-angular';
 
 @NgModule({
   declarations: [AyudaSeccionComponent, AyudaSeccionFormularioComponent],
@@ -17,6 +18,8 @@ import { AyudaSeccionComponent } from './ayuda-seccion.component';
     DirectiveModule,
     ModalModule.forChild(),
     AyudaSeccionRoutingModule,
+    LucideAngularModule.pick({X}),
+
   ],
   providers: [ AyudaSeccionService, AccesoService],
   entryComponents: [AyudaSeccionFormularioComponent],

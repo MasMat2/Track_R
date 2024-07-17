@@ -3,6 +3,8 @@ using TrackrAPI.Models;
 using TrackrAPI.Repositorys.GestionExpediente;
 using System.Transactions;
 using TrackrAPI.Services.Sftp;
+using TrackrAPI.Repositorys.Archivos;
+using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Services.GestionExpediente;
 
@@ -10,16 +12,19 @@ public class ExpedienteTratamientoService
 {
     private readonly IExpedienteTratamientoRepository expedienteTratamientoRepository;
     private readonly IExpedienteTrackrRepository expedienteTrackrRepository;
+    private readonly IArchivoRepository _archivoRepository;
     private readonly SftpService _sftpService;
     private readonly string defaultPath = Path.Combine("Archivos", "Tratamiento", "placeholder.png");
 
     public ExpedienteTratamientoService(
         IExpedienteTratamientoRepository expedienteTratamientoRepository,
         IExpedienteTrackrRepository expedienteTrackrRepository,
-        SftpService sftpService)
-    {
+        IArchivoRepository archivoRepository,
+        SftpService sftpService
+    ){
         this.expedienteTratamientoRepository = expedienteTratamientoRepository;
         this.expedienteTrackrRepository = expedienteTrackrRepository;
+        this._archivoRepository = archivoRepository;    
         _sftpService = sftpService;
     }
 
@@ -138,7 +143,7 @@ public class ExpedienteTratamientoService
                     Unidad = et.Unidad,
                     Indicaciones = et.Indicaciones,
                     Padecimiento = et.IdPadecimientoNavigation.Nombre,
-                    ImagenBase64 = (et.Imagen != null && et.Imagen.Length > 0) ? System.Convert.ToBase64String(et.Imagen) : "",
+                    ImagenBase64 = _sftpService.DownloadFileAsBase64(et.ArchivoUrl ?? defaultPath),
 
                     RecordatorioActivo = recordatorioActivo,
                     DiaSemana = diaSemana,
@@ -160,9 +165,9 @@ public class ExpedienteTratamientoService
             Cantidad = et.Cantidad,
             Unidad = et.Unidad,
             Padecimiento = et.IdPadecimientoNavigation.Nombre,
-            ImagenBase64 = _sftpService.DownloadFileAsBase64(et.ArchivoUrl ?? defaultPath),
-            TipoMime = et.ImagenTipoMime ?? "image/png"
-        });
+            ImagenBase64 = _sftpService.DownloadFile(et.ArchivoUrl ?? defaultPath),
+            TipoMime = _archivoRepository.GetFileMime(et.IdArchivo ?? 0)
+        }); ;
 
         return expedienteTratamientosDto;
     }
@@ -218,6 +223,8 @@ public class ExpedienteTratamientoService
             IdPadecimiento = expedienteTratamiento.IdPadecimiento,
             IdUsuarioDoctor = expedienteTratamiento.IdUsuarioDoctor,
             ImagenBase64 = _sftpService.DownloadFileAsBase64(expedienteTratamiento.ArchivoUrl ?? defaultPath),
+            ArchivoTipoMime = _archivoRepository.GetFileMime(expedienteTratamiento.IdArchivo ?? 0),
+            ArchivoNombre = _archivoRepository.GetFileName(expedienteTratamiento.IdArchivo ?? 0),
             NombreDoctor = expedienteTratamiento.IdUsuarioDoctorNavigation.Nombre,
             ApellidosDoctor = expedienteTratamiento.IdUsuarioDoctorNavigation.ApellidoPaterno + " " + expedienteTratamiento.IdUsuarioDoctorNavigation.ApellidoMaterno,
             TituloDoctor = expedienteTratamiento.IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre,
@@ -225,8 +232,6 @@ public class ExpedienteTratamientoService
             DiaSemana = diaSemana,
             Horas = horas.Select(group => group.Key).ToArray(),
             Bitacora = bitacora,
-            TipoMime = expedienteTratamiento.ImagenTipoMime ?? "image/png"
-
         };
     }
 
@@ -257,58 +262,54 @@ public class ExpedienteTratamientoService
             Indicaciones = expedienteTratamientoDto.Indicaciones,
             IdPadecimiento = expedienteTratamientoDto.IdPadecimiento,
             IdUsuarioDoctor = expedienteTratamientoDto.IdUsuarioDoctor,
-            Imagen = Convert.FromBase64String(expedienteTratamientoDto.ImagenBase64),
             FechaInicio = expedienteTratamientoDto.FechaInicio,
             FechaFin = expedienteTratamientoDto.FechaFin,
-            
         };
     }
 
     // Agregar Tratamiento
     public int Agregar(ExpedienteTratamientoDetalleDto expedienteTratamientoDto, int idUsuario)
     {
-        using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+        using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+
+        int idExpediente = expedienteTrackrRepository.ConsultarPorUsuario(idUsuario).IdExpediente;
+
+        var archivo = this.GuardarArchivo(expedienteTratamientoDto.Archivo, expedienteTratamientoDto.ArchivoNombre, expedienteTratamientoDto.ArchivoTipoMime, idUsuario);
+
+        // Crear ExpedienteTratamiento
+        ExpedienteTratamiento expedienteTratamiento = MapearTratamiento(expedienteTratamientoDto);
+        expedienteTratamiento.IdExpediente = idExpediente; // Asignar IdExpediente del usuario
+        expedienteTratamiento.IdArchivo = archivo.id;
+        expedienteTratamiento.ArchivoUrl = archivo.url;
+
+        int idExpedienteTratamiento = expedienteTratamientoRepository.Agregar(expedienteTratamiento);
+
+        // Crear una entrada TratamientoRecordatorio por cada dia y por cada hora
+        List<TratamientoRecordatorio> recordatorios = new List<TratamientoRecordatorio>();
+        for (int i = 0; i < expedienteTratamientoDto.DiaSemana?.Length; i++)
         {
-            // Crear ExpedienteTratamiento
-            ExpedienteTratamiento expedienteTratamiento = MapearTratamiento(expedienteTratamientoDto);
-
-            int idExpediente = expedienteTrackrRepository.ConsultarPorUsuario(idUsuario).IdExpediente;
-            expedienteTratamiento.IdExpediente = idExpediente; // Asignar IdExpediente del usuario
-
-            var remoteImagePath = Path.Combine("Archivos", "Tratamiento", $"{Guid.NewGuid()}.png");
-            expedienteTratamiento.ArchivoUrl = remoteImagePath;
-
-            var imagenToBase64 = Convert.ToBase64String(expedienteTratamiento.Imagen);
-            _sftpService.UploadBytesFile(remoteImagePath, imagenToBase64);
-
-            int idExpedienteTratamiento = expedienteTratamientoRepository.Agregar(expedienteTratamiento);
-
-            // Crear una entrada TratamientoRecordatorio por cada dia y por cada hora
-            List<TratamientoRecordatorio> recordatorios = new List<TratamientoRecordatorio>();
-            for (int i = 0; i < expedienteTratamientoDto.DiaSemana?.Length; i++)
+            if (expedienteTratamientoDto.DiaSemana[i])
             {
-                if (expedienteTratamientoDto.DiaSemana[i])
+                foreach (var hour in expedienteTratamientoDto.Horas)
                 {
-                    foreach (var hour in expedienteTratamientoDto.Horas)
+                    var recordatorio = new TratamientoRecordatorio
                     {
-                        var recordatorio = new TratamientoRecordatorio
-                        {
-                            IdExpedienteTratamiento = idExpedienteTratamiento,
-                            Dia = (byte)(i + 1),
-                            Hora = hour,
-                            Activo = true
-                        };
-                        recordatorios.Add(recordatorio);
-                    }
+                        IdExpedienteTratamiento = idExpedienteTratamiento,
+                        Dia = (byte)(i + 1),
+                        Hora = hour,
+                        Activo = true
+                    };
+                    recordatorios.Add(recordatorio);
                 }
             }
-
-            expedienteTratamientoRepository.AgregarRecordatorios(recordatorios);
-
-            scope.Complete();
-
-            return idExpedienteTratamiento;
         }
+
+        expedienteTratamientoRepository.AgregarRecordatorios(recordatorios);
+
+        scope.Complete();
+
+        return idExpedienteTratamiento;
+        
     }
     public void EliminarTratamiento(int idExpedienteTratamiento)
     {
@@ -330,119 +331,163 @@ public class ExpedienteTratamientoService
 
     public int EditarTratamiento(ExpedienteTratamientoDetalleDto expedienteTratamientoDto, int idUsuario)
     {
-        using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+        using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+        
+        // Crear ExpedienteTratamiento
+        ExpedienteTratamiento expedienteTratamiento = MapearTratamiento(expedienteTratamientoDto);
+
+        expedienteTratamiento.IdExpedienteTratamiento = expedienteTratamientoDto.IdExpedienteTratamiento;
+        int idExpedienteTratamiento = expedienteTratamiento.IdExpedienteTratamiento;
+
+        var expedienteTratamientoExistente = expedienteTratamientoRepository.ConsultarTratamiento(idExpedienteTratamiento);
+        expedienteTratamiento.IdExpediente = expedienteTratamientoExistente.IdExpediente;
+        expedienteTratamiento.FechaRegistro = expedienteTratamientoExistente.FechaRegistro;
+
+        var archivoNombre = _archivoRepository.GetFileName(expedienteTratamientoExistente.IdArchivo ?? 0); //Consultar el nombre del archivo
+
+        //Si el archivo cambió (mediante el nombre), entonces se subirá el nuevo archivo y se asignará al tratamiento. De lo contrario, se queda igual.
+        if(archivoNombre != expedienteTratamientoDto.ArchivoNombre)
         {
-            // Crear ExpedienteTratamiento
-            ExpedienteTratamiento expedienteTratamiento = MapearTratamiento(expedienteTratamientoDto);
-
-            expedienteTratamiento.IdExpedienteTratamiento = expedienteTratamientoDto.IdExpedienteTratamiento;
-            int idExpedienteTratamiento = expedienteTratamiento.IdExpedienteTratamiento;
-
-            var expedienteTratamientoExistente = expedienteTratamientoRepository.ConsultarTratamiento(idExpedienteTratamiento);
-            expedienteTratamiento.IdExpediente = expedienteTratamientoExistente.IdExpediente;
-            expedienteTratamiento.FechaRegistro = expedienteTratamientoExistente.FechaRegistro;
-
-            expedienteTratamientoRepository.Editar(expedienteTratamiento);
-
-
-
-            bool recordatorioActivo = expedienteTratamientoExistente.TratamientoRecordatorio.Any(tr => tr.Activo);
-            // DiaSemana: Byte
-            var activeRecordatorios = expedienteTratamientoExistente.TratamientoRecordatorio.Where(tr => tr.Activo).ToList(); // Filtar recordatorios activos
-
-            var distinctDays = activeRecordatorios.Select(tr => tr.Dia).Distinct().ToArray();  // Obtener dias distintos
-
-            bool[] diaSemana = new bool[7];
-            foreach (var day in distinctDays)
-            {
-                diaSemana[day - 1] = true;
-            }
-
-            var horas = activeRecordatorios.GroupBy(tr => tr.Hora)
-                                                .Where(group => group.Count() == distinctDays.Length)
-                                                .OrderBy(group => group.Key)
-                                                .Select(group => group.Key)
-                                                .ToArray();
-
-
-            //Recordatorios de la peticion
-            List<TratamientoRecordatorio> recordatorios = new List<TratamientoRecordatorio>();
-            for (int i = 0; i < expedienteTratamientoDto.DiaSemana?.Length; i++)
-            {
-                if (expedienteTratamientoDto.DiaSemana[i])
-                {
-                    foreach (var hour in expedienteTratamientoDto.Horas)
-                    {
-                        var recordatorio = new TratamientoRecordatorio
-                        {
-                            IdExpedienteTratamiento = expedienteTratamiento.IdExpedienteTratamiento,
-                            Dia = (byte)(i + 1),
-                            Hora = hour,
-                            Activo = true
-                        };
-                        
-                        recordatorios.Add(recordatorio);
-                    }
-                }
-            }
-
-            //Recordatorios ya existentes
-            List<TratamientoRecordatorio> recordatoriosExistentes = new List<TratamientoRecordatorio>();
-            for (int i = 0; i < diaSemana.Length; i++)
-            {
-                if (diaSemana[i])
-                {
-                    foreach (var hour in horas)
-                    {
-                        var recordatorio = new TratamientoRecordatorio
-                        {
-                            IdExpedienteTratamiento = expedienteTratamiento.IdExpedienteTratamiento,
-                            Dia = (byte)(i + 1),
-                            Hora = hour,
-                            Activo = true
-                        };
-
-                        recordatoriosExistentes.Add(recordatorio);
-                    }
-                }
-            }
-
-            // Obtener recordatorios que est�n en la BD pero no en la petici�n
-            var recordatoriosEliminados = recordatoriosExistentes
-                .Where(existingRecordatorio =>
-                    !recordatorios.Any(peticionRecordatorio =>
-                        peticionRecordatorio.Dia == existingRecordatorio.Dia &&
-                        peticionRecordatorio.Hora == existingRecordatorio.Hora))
-                .ToList();
-
-
-            // Obtener recordatorios que est�n en la petici�n pero no en la BD
-            var recordatoriosAgregados = recordatorios
-                .Where(nuevoRecordatorio =>
-                    !recordatoriosExistentes.Any(existingRecordatorio =>
-                        existingRecordatorio.Dia == nuevoRecordatorio.Dia &&
-                        existingRecordatorio.Hora == nuevoRecordatorio.Hora))
-                .ToList();
-
-
-            recordatoriosEliminados.ForEach(recordatorioEliminar =>
-            {
-                var recordatorio = activeRecordatorios.FirstOrDefault(r => r.Dia == recordatorioEliminar.Dia && r.Hora == recordatorioEliminar.Hora);
-                if (recordatorio != null)
-                {
-                    recordatorioEliminar.IdTratamientoRecordatorio = recordatorio.IdTratamientoRecordatorio;
-                    var tratamientoTomas = expedienteTratamientoRepository.ConsultarTratamientoTomas(recordatorioEliminar.IdTratamientoRecordatorio);
-                    expedienteTratamientoRepository.EliminarTratamientoTomas(tratamientoTomas);
-                }
-            });
-
-            expedienteTratamientoRepository.AgregarRecordatorios(recordatoriosAgregados);
-            expedienteTratamientoRepository.EliminarRecordatorios(recordatoriosEliminados);
-
-            scope.Complete();
-
-            return idExpedienteTratamiento;
+            var archivo = this.GuardarArchivo(expedienteTratamientoDto.Archivo, expedienteTratamientoDto.ArchivoNombre, expedienteTratamientoDto.ArchivoTipoMime, idUsuario);
+            expedienteTratamiento.ArchivoUrl = archivo.url;
+            expedienteTratamiento.IdArchivo = archivo.id;
         }
+        else
+        {
+            expedienteTratamiento.ArchivoUrl = expedienteTratamientoExistente.ArchivoUrl;
+            expedienteTratamiento.IdArchivo = expedienteTratamientoExistente.IdArchivo;
+        }
+        
+
+        expedienteTratamientoRepository.Editar(expedienteTratamiento);
+
+
+
+        bool recordatorioActivo = expedienteTratamientoExistente.TratamientoRecordatorio.Any(tr => tr.Activo);
+        var activeRecordatorios = expedienteTratamientoExistente.TratamientoRecordatorio.Where(tr => tr.Activo).ToList(); // Filtar recordatorios activos
+
+        var distinctDays = activeRecordatorios.Select(tr => tr.Dia).Distinct().ToArray();  // Obtener dias distintos
+
+        bool[] diaSemana = new bool[7];
+        foreach (var day in distinctDays)
+        {
+            diaSemana[day - 1] = true;
+        }
+
+        var horas = activeRecordatorios.GroupBy(tr => tr.Hora)
+                                            .Where(group => group.Count() == distinctDays.Length)
+                                            .OrderBy(group => group.Key)
+                                            .Select(group => group.Key)
+                                            .ToArray();
+
+
+        //Recordatorios de la peticion
+        List<TratamientoRecordatorio> recordatorios = new List<TratamientoRecordatorio>();
+        for (int i = 0; i < expedienteTratamientoDto.DiaSemana?.Length; i++)
+        {
+            if (expedienteTratamientoDto.DiaSemana[i])
+            {
+                foreach (var hour in expedienteTratamientoDto.Horas)
+                {
+                    var recordatorio = new TratamientoRecordatorio
+                    {
+                        IdExpedienteTratamiento = expedienteTratamiento.IdExpedienteTratamiento,
+                        Dia = (byte)(i + 1),
+                        Hora = hour,
+                        Activo = true
+                    };
+                        
+                    recordatorios.Add(recordatorio);
+                }
+            }
+        }
+
+        //Recordatorios ya existentes
+        List<TratamientoRecordatorio> recordatoriosExistentes = new List<TratamientoRecordatorio>();
+        for (int i = 0; i < diaSemana.Length; i++)
+        {
+            if (diaSemana[i])
+            {
+                foreach (var hour in horas)
+                {
+                    var recordatorio = new TratamientoRecordatorio
+                    {
+                        IdExpedienteTratamiento = expedienteTratamiento.IdExpedienteTratamiento,
+                        Dia = (byte)(i + 1),
+                        Hora = hour,
+                        Activo = true
+                    };
+
+                    recordatoriosExistentes.Add(recordatorio);
+                }
+            }
+        }
+
+        // Obtener recordatorios que est�n en la BD pero no en la petici�n
+        var recordatoriosEliminados = recordatoriosExistentes
+            .Where(existingRecordatorio =>
+                !recordatorios.Any(peticionRecordatorio =>
+                    peticionRecordatorio.Dia == existingRecordatorio.Dia &&
+                    peticionRecordatorio.Hora == existingRecordatorio.Hora))
+            .ToList();
+
+
+        // Obtener recordatorios que est�n en la petici�n pero no en la BD
+        var recordatoriosAgregados = recordatorios
+            .Where(nuevoRecordatorio =>
+                !recordatoriosExistentes.Any(existingRecordatorio =>
+                    existingRecordatorio.Dia == nuevoRecordatorio.Dia &&
+                    existingRecordatorio.Hora == nuevoRecordatorio.Hora))
+            .ToList();
+
+
+        recordatoriosEliminados.ForEach(recordatorioEliminar =>
+        {
+            var recordatorio = activeRecordatorios.FirstOrDefault(r => r.Dia == recordatorioEliminar.Dia && r.Hora == recordatorioEliminar.Hora);
+            if (recordatorio != null)
+            {
+                recordatorioEliminar.IdTratamientoRecordatorio = recordatorio.IdTratamientoRecordatorio;
+                var tratamientoTomas = expedienteTratamientoRepository.ConsultarTratamientoTomas(recordatorioEliminar.IdTratamientoRecordatorio);
+                expedienteTratamientoRepository.EliminarTratamientoTomas(tratamientoTomas);
+            }
+        });
+
+        expedienteTratamientoRepository.AgregarRecordatorios(recordatoriosAgregados);
+        expedienteTratamientoRepository.EliminarRecordatorios(recordatoriosEliminados);
+
+        scope.Complete();
+
+        return idExpedienteTratamiento;
+        
+    }
+
+    public (int? id, string? url) GuardarArchivo(byte[] archivo, string nombre, string tipoMime, int idUsuario)
+    {
+        if(archivo is null)
+        {
+            return (null, null);
+        }
+
+        string nombreArchivo = $"{nombre}";
+        string path = Path.Combine("Archivos", "Tratamiento", $"{Guid.NewGuid()}.{tipoMime.Split('/')[1]}");
+        var archivoBase64 = Convert.ToBase64String(archivo);
+
+        _sftpService.UploadBytesFile(path, archivoBase64);
+
+        var archivoTratamiento = new Archivo
+        {
+            Nombre = nombreArchivo,
+            ArchivoNombre = nombreArchivo,
+            ArchivoTipoMime = tipoMime,
+            ArchivoUrl = path,
+            FechaRealizacion = DateTime.Now,
+            IdUsuario = idUsuario
+        };
+
+
+        var fileUploaded = _archivoRepository.Agregar(archivoTratamiento);
+
+        return (fileUploaded.IdArchivo, fileUploaded.ArchivoUrl);
     }
 
 }

@@ -39,13 +39,15 @@ ion-content{
     text-align: center !important;
   }
   ion-button{
+    margin: 0;
     --background: var(--primary-700);
     color: var(--neutral-50);
     --box-shadow: 0;
     font-family: var(--font-body);
     font-size: 14px;
     width: 100%;
-    text-wrap: pretty !important;
+    height: 100%;
+    text-wrap: wrap !important;
     --border-radius: 8px !important;
   }
 }

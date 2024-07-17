@@ -1,5 +1,5 @@
-<div class="row">
-    <div class="col-12">
+<div class="contenedor-principal">
+ <!--    <div class="col-12">
         <button
           type="button"
           class="btn contenedor-agregar mb-2"
@@ -25,37 +25,43 @@
         >
             <i class="fas fa-trash"></i><span>Eliminar</span>
         </button>
-    </div>
-
-    <div class="col-12">
-        <p-table
-          [value]="muestras"
-          selectionMode="single"
-          [(selection)]="seleccionado"
-        >
-            <ng-template pTemplate="header">
-                <tr>
-                    <th *ngFor="let columna of seccionCampoList">
-                        {{ columna.descripcion }}
-                    </th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-muestra>
-                  <tr [pSelectableRow]="muestra" (click)="seleccionar(muestra)">  
-                    <td *ngFor="let columna of seccionCampoList ; let last = last">
-                        <div *ngFor="let muestras of muestra.registro; let first = first" [ngClass]="last ? obtenerValorEstilo(muestra, first) : '' ">
-                            {{ obtenerValor(columna.clave, muestras , first, last , columna.idSeccionCampo) }}
-                        </div>
-                    </td>
-                 </tr>   
-            </ng-template>
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td [attr.colspan]="entidadEstructuraSeccion.campos.length">
-                        No se encontraron registros
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
+    </div>  -->
+<div class="cards-container" style="margin-top: 28px;">
+    <div class="card">
+        <div>
+            <p-table
+              [value]="muestras"
+              selectionMode="single"
+              [(selection)]="seleccionado"
+              class="grid-cuadricula"
+              style="width: 100%;"
+            >
+                <ng-template pTemplate="header">
+                    <tr class="ptable-header">
+                        <th *ngFor="let columna of seccionCampoList">
+                            {{ columna.descripcion }}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-muestra>
+                      <tr [pSelectableRow]="muestra" (click)="seleccionar(muestra)">  
+                        <td *ngFor="let columna of seccionCampoList ; let last = last">
+                            <div *ngFor="let muestras of muestra.registro; let index = index" [ngClass]="obtenerValorEstilo(muestras, columna.clave)" >
+                                    {{ obtenerValor(columna.clave, muestras , index , columna.idSeccionCampo) }}
+                                
+                            </div>
+                        </td>
+                     </tr>   
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td [attr.colspan]="seccionCampoList.length">
+                            No se encontraron registros
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>    
+</div>
 </div>

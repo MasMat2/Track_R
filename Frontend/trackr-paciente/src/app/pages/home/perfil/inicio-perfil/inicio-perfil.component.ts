@@ -31,7 +31,7 @@ export class InicioPerfilComponent  implements OnInit {
 
   protected informacionPerfil$: Observable<InformacionPerfilDto>;
   protected infoPerfil: InformacionPerfilDto;
-  protected fotoPerfilUrl: string;
+  protected fotoPerfilUrl: string = "assets/img/svg/Image_placeholder.svg";
 
   protected pacientes: UsuarioExpedienteGridDTO[];
 
@@ -136,10 +136,7 @@ export class InicioPerfilComponent  implements OnInit {
     this.informacionPerfil$.subscribe({
       next: (info) => {
         this.infoPerfil = info;
-        if(this.infoPerfil.imagenBase64 == null){
-          this.fotoPerfilUrl = "https://ionicframework.com/docs/img/demos/avatar.svg";
-        }
-        else{
+        if(this.infoPerfil.imagenBase64 != null){
           this.fotoPerfilUrl = `data:${info.imagenBase64?.archivoMime};base64,` + info.imagenBase64?.archivo;
         }
       },

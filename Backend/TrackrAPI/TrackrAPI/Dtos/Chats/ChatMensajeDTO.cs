@@ -14,5 +14,6 @@ public class ChatMensajeDTO
     public string ? Archivo { get; set; }
     public string ? ArchivoTipoMime { get; set; }
     public string ? ArchivoNombre { get; set; }
+    public bool ? EsVideoChat { get; set; }   
 }
 
