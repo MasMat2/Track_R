@@ -963,7 +963,7 @@ namespace TrackrAPI.Services.Seguridad
 
             var imgPath = archivo?.ArchivoUrl ?? Path.Combine("Archivos", "Usuario", "default-user.jpg");
             var mimeType = archivo?.ArchivoTipoMime ?? "image/jpg";
-            var imagenPerfilBase64 = _sftpService.DownloadFileAsBase64(imgPath);
+            var imagenPerfilBase64 = _sftpService.DownloadFile(imgPath);
             var imagenPerfil = $"data:{mimeType};base64,{imagenPerfilBase64}";
         
             return imagenPerfil;
