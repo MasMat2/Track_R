@@ -666,12 +666,10 @@
               </div>
 
               <!-- Adjuntar imagen -->
-              <div class="col-md-3 d-flex align-items-end" *ngIf="!imagenBase64; else imagen">
-                <div class="form-group w-100">
+              <div class="col-md-3 d-flex align-items-end" >
+                <div class="form-group w-100" *ngIf="!url; else imagen">
                   <div>
                     <input
-                      #file="ngModel"
-                      [(ngModel)]="imagenBase64"
                       id="imagen"
                       name="imagen"
                       class="form-control"
@@ -695,11 +693,15 @@
               </div>
 
               <ng-template #imagen>
-                <div>
-                  <div style="text-align: center; margin-top: 15px">
-                    <img *ngIf="url !== undefined" id="logo" [src]="url" height="200" />
-                  </div>
+                <div class="w-100 h-75 imagen-usuario">
+                  
+                    <img *ngIf="url !== undefined" id="logo" [src]="url"/>
+                    <p>{{urlName}}</p>
+                    <button (click)="eliminarImagen()">
+                      <lucide-icon name="trash-2" color="#B3261E"></lucide-icon>
+                    </button>
                 </div>
+                
               </ng-template>
 
             </div>
@@ -840,41 +842,6 @@
             <div class="subseccion">
               Imagen
             </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div style="text-align: center; margin-top: 15px">
-                  <img *ngIf="url !== undefined" id="logo" [src]="url" height="200" />
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12 text-center">
-                <div class="form-group">
-                  <div>
-                    <input
-                      #file="ngModel"
-                      [(ngModel)]="imagenBase64"
-                      id="imagen"
-                      name="imagen"
-                      class="form-control"
-                      type="file"
-                      autocomplete="off"
-                      (change)="fileChange($event)"
-                      style="display: none"
-                      accept="image/*"
-                    />
-                    <button
-                      onclick="document.getElementById('imagen').click()"
-                      type="button"
-                      class="btn-terceario"
-                    >
-                      Buscar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
           </form>
 
           <div class="modal-footer">

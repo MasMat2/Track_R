@@ -32,7 +32,7 @@ import { DirectiveModule } from "src/app/shared/directives/directive.module";
 import { SharedModule } from "src/app/shared/shared.module";
 import { UsuarioFormularioComponent } from "./usuario-formulario.component";
 import { GridGeneralModule } from "@sharedComponents/grid-general/grid-general.module";
-import { Camera, LucideAngularModule, X } from "lucide-angular";
+import { Camera, LucideAngularModule, Trash, Trash2, X } from "lucide-angular";
 import { MatTabsModule } from "@angular/material/tabs";
 
 @NgModule({
@@ -46,7 +46,7 @@ import { MatTabsModule } from "@angular/material/tabs";
     NgSelectModule,
     TypeaheadModule.forRoot(),
     GridGeneralModule,
-    LucideAngularModule.pick({ X , Camera }),
+    LucideAngularModule.pick({ X , Camera , Trash2 }),
     MatTabsModule
   ],
   declarations: [UsuarioFormularioComponent],
