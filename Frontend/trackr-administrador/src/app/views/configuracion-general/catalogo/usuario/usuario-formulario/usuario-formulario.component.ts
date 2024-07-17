@@ -594,19 +594,16 @@ export class UsuarioFormularioComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]);
 
       reader.onload = () => {
-        this.url = reader.result;
-        this.usuario.imagenBase64 = this.url;
+        const base64Url = reader.result as string;
+        this.url = this.sanitizer.bypassSecurityTrustUrl(base64Url);
         this.usuario.imagenTipoMime = event.target.files[0].type;
         this.urlName = event.target.files[0].name;
-        
       };
     }
   }
 
   public async eliminarImagen(): Promise<void> {
-    this.toDataURL(this.urlImagenDefault, (myBase64: string) => {
-      this.url = this.sanitize(myBase64);
-    });
+    this.url = '';
     this.usuario.imagenBase64 = '';
     this.usuario.imagenTipoMime = '';
     this.urlName = '';

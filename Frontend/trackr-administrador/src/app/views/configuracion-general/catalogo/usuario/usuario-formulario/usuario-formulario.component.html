@@ -674,7 +674,7 @@
 
               <!-- Adjuntar imagen -->
               <div class="col-md-3 d-flex align-items-end" >
-                <div class="form-group w-100" *ngIf="usuario.imagenBase64 == undefined || usuario.imagenBase64 === ''; else imagen">
+                <div class="form-group w-100" *ngIf="!url || url == ''; else imagen">
                   <div>
                     <input
                       id="imagen"
