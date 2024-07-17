@@ -6,6 +6,7 @@ import { ChatMensajeHubService } from '../../shared/services/chat-mensaje-hub.se
 import { ChatMensajeDTO } from '@dtos/chats/chat-mensaje-dto';
 import { ActivatedRoute } from '@angular/router';
 import { ChatPersonaService } from '@http/chats/chat-persona.service';
+import { SessionService } from '@services/session.service';
 
 @Component({
   selector: 'app-chat',
@@ -23,6 +24,7 @@ export class ChatComponent implements OnDestroy {
   protected tituloChatSeleccionado: string;
   protected imagenChatSeleccionado: string;
   protected tipoMimeSeleccionado: string;
+  private idUsuario : number | null;
   private unsubscribe$ = new Subject<void>();
 
   protected clickEnChat = false;
@@ -31,7 +33,8 @@ export class ChatComponent implements OnDestroy {
     private ChatHubServiceService:ChatHubServiceService,
     private chatMensajeHubService:ChatMensajeHubService,
     private route:ActivatedRoute,
-    private chatPersonaService : ChatPersonaService
+    private chatPersonaService : ChatPersonaService,
+    private sessionService : SessionService
   ) {
     this.chatPersonaService.idChatPadre$
     .pipe(takeUntil(this.unsubscribe$.asObservable()))
@@ -40,8 +43,9 @@ export class ChatComponent implements OnDestroy {
     });
    }
 
-  ngOnInit(): void {
+  async ngOnInit(){
     this.obtenerChats();
+    this.idUsuario = this.sessionService.obtenerIdUsuarioSesion();
   }
 
 
@@ -85,7 +89,7 @@ export class ChatComponent implements OnDestroy {
       fecha: new Date(),
       idChat,
       mensaje: this.contenido,
-      idPersona:5333,
+      idPersona:this.idUsuario as number,
       idArchivo: 0
     }
 

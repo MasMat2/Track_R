@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, lastValueFrom } from 'rxjs';
 import { ChatPersonaFormDTO } from '../../Dtos/Chat/chat-persona-form-dto';
 
 @Injectable({
@@ -19,6 +19,9 @@ export class ChatPersonaService {
     return this.http.get<number>(`${this.dataUrl}IdUsuario`)
   }
 
+  async obtenerIdUsuarioAsync(): Promise<number> {
+    return await lastValueFrom(this.http.get<number>(this.dataUrl + `IdUsuario`));
+  }
   obtenerIdPacientesPadecimiento(idPadecimiento:number):Observable<number[]>{
     return this.http.get<number[]>(`${this.dataUrl}Padecimiento/${idPadecimiento}`)
   }

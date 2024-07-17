@@ -12,6 +12,7 @@ import { MensajesComponent } from './mensajes/mensajes.component';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ArchivoService } from '@services/archivo.service';
+import { ChatPersonaService } from '@http/chat/chat-persona.service';
 
 @Component({
   selector: 'app-chat-movil',
@@ -34,6 +35,7 @@ export class ChatMovilComponent implements OnInit {
   protected contenido: string;
   protected idChatSeleccionado: number;
   protected mensajesChatSeleccionado: ChatMensajeDTO[];
+  private idUsuario : number;
 
   protected clickEnChat = false;
 
@@ -41,12 +43,14 @@ export class ChatMovilComponent implements OnInit {
     private ChatHubServiceService: ChatHubServiceService,
     private chatMensajeHubService: ChatMensajeHubService,
     private archivoService : ArchivoService,
-    private sanitizer : DomSanitizer
+    private sanitizer : DomSanitizer,
+    private chatPersonaService : ChatPersonaService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.obtenerChats();
     this.obtenerMensajes();
+    this.idUsuario = await this.chatPersonaService.obtenerIdUsuarioAsync();
   }
 
   obtenerChats() {
@@ -71,7 +75,7 @@ export class ChatMovilComponent implements OnInit {
       fecha: new Date(),
       idChat,
       mensaje: this.contenido,
-      idPersona: 5333,
+      idPersona: this.idUsuario ,
       idArchivo: 0,
     };
 
