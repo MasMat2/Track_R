@@ -18,14 +18,14 @@
 .subseccion-gray{
     font-family: var(--font-body);
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 500;
     color: var(--neutral-700);
-    border-bottom: 1px solid var(--neutral-200);
-    margin: 0;
-    padding: 30px;
+    border-top: 1px solid var(--neutral-200);
+    margin: 2rem 0 0rem 0 ;
     width: 100%;
   
     .titulo{
+      padding: 2rem 0 1rem 0;
       color: var(--primary-700);
       font-size: 16px;
   
@@ -66,5 +66,17 @@
         border-radius: 4px;
         border: 1px solid var(--error-200);
         background: var(--error-100);
+
+        &:hover{
+            background: var(--error-100);
+        }
     }
   }
+
+button{
+    
+    &.btn-primario,
+    &.btn-secundario{
+      width: 7.5rem;
+    }
+}

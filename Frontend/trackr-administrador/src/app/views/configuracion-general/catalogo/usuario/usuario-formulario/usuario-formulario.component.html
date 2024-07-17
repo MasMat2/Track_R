@@ -667,7 +667,7 @@
 
               <!-- Adjuntar imagen -->
               <div class="col-md-3 d-flex align-items-end" >
-                <div class="form-group w-100" *ngIf="!url; else imagen">
+                <div class="form-group w-100" *ngIf="usuario.imagenBase64 == undefined || usuario.imagenBase64 === ''; else imagen">
                   <div>
                     <input
                       id="imagen"
@@ -838,13 +838,11 @@
 
             </div> -->
 
-            <!-- Imagen -->
-            <div class="subseccion">
-              Imagen
-            </div>
           </form>
-
-          <div class="modal-footer">
+            <div class="subseccion-gray">
+              &nbsp;
+            </div>
+          <div class="modal-footer justify-content-end">
             <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar</button>
             <button type="submit" form="form" class="btn-primario ml-3" [disabled]="btnSubmit">Guardar</button>
           </div>
@@ -935,7 +933,10 @@
               </div>
             </div>
           </div>
-          <div class="modal-footer">
+          <div class="subseccion-gray">
+            &nbsp;
+          </div>
+          <div class="modal-footer justify-content-end">
             <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar</button>
             <button (click)="guardarPermiso()" type="button" class="btn-primario ml-3">Guardar</button>
           </div>
