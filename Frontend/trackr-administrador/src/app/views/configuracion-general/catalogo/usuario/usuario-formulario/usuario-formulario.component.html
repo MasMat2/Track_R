@@ -85,9 +85,7 @@
 
                 
               <div
-              class="col-md-3"
-              [class.col-md-4]="usuario.idUsuario > 0"
-              [class.col-md-2]="!(usuario.idUsuario > 0)">
+              class="col-md-3">
             <div class="form-group">
               <label class="label-input required-label">Título</label>
               <div>
@@ -198,6 +196,29 @@
                 </div>
               </div>
 
+             <div class="col-md-3" *ngIf="esEdicion">
+                <div class="form-group">
+                  <div style="display: flex; flex-direction: column">
+                    <label class="label-input required-label">Activo</label>
+                    <label class="switch" for="estatus">
+                      <input
+                        #estatus="ngModel"
+                        name="estatusName"
+                        type="checkbox"
+                        id="estatus"
+                        [(ngModel)]="usuario.habilitado"
+                      />
+                      <div class="slider round">
+                        <span class="on">Si</span>
+                        <span class="off">No</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div> 
+
+              <div class="row">
+              <!-- Nombre de usuario -->
               <div class="col-md">
                 <div class="form-group">
                   <label class="label-input required-label">Nombre de usuario</label>
@@ -219,6 +240,7 @@
                 </div>
               </div>
 
+              <!-- Contrasena -->
               <div class="col-md" *ngIf="accesoContrasena">
                 <div class="form-group">
                   <label class="label-input required-label">Contraseña</label>
@@ -248,6 +270,7 @@
                 </div>
               </div>
 
+              <!-- Confirmar contrasena -->
               <div class="col-md" *ngIf="accesoContrasena">
                 <div class="form-group">
                   <label class="label-input required-label">Confirmar Contraseña</label>
@@ -296,6 +319,7 @@
                 </div>
               </div> -->
 
+              <!-- Cedula profesional -->
               <div class="col-md">
                 <div class="form-group">
                   <label class="label-input required-label">Cédula Profesional</label>
@@ -313,7 +337,7 @@
               </div>
 
 
-
+              <!-- RFC -->
               <div class="col-md">
                 <div class="form-group">
                   <label class="label-input required-label">RFC</label>
@@ -335,6 +359,8 @@
                 </div>
               </div>
 
+              </div>
+              
               <!-- <div class="col-md-4">
                 <div class="form-group">
                   <label class="label-input required-label">Régimen Fiscal</label>
@@ -394,26 +420,7 @@
                 </div>
               </div> -->
 
-              <div class="col-md-4" *ngIf="esEdicion">
-                <div class="form-group">
-                  <div style="display: flex; flex-direction: column">
-                    <label class="label-input required-label">Activo</label>
-                    <label class="switch" for="estatus">
-                      <input
-                        #estatus="ngModel"
-                        name="estatusName"
-                        type="checkbox"
-                        id="estatus"
-                        [(ngModel)]="usuario.habilitado"
-                      />
-                      <div class="slider round">
-                        <span class="on">Si</span>
-                        <span class="off">No</span>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-              </div>
+
 
             </div>
 
