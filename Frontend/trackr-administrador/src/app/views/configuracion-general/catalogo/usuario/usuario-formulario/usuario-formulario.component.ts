@@ -597,6 +597,7 @@ export class UsuarioFormularioComponent implements OnInit {
 
       reader.onload = () => {
         const base64Url = reader.result as string;
+        this.usuario.imagenBase64 = base64Url;
         this.url = this.sanitizer.bypassSecurityTrustUrl(base64Url);
         this.usuario.imagenTipoMime = event.target.files[0].type;
         this.urlName = event.target.files[0].name;
