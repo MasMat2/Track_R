@@ -58,6 +58,7 @@ import * as Utileria from '@utils/utileria';
 import { Observable, Observer, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { ArchivoService } from './../../../../../shared/http/catalogo/archivo.service';
+import { AlertifyService } from '@services/alertify.service';
 
 /**
  * Formulario de usuario, permite agregar, editar y eliminar.
@@ -210,7 +211,8 @@ export class UsuarioFormularioComponent implements OnInit {
     private satFormaPagoService: SatFormaPagoService,
     private codigoPostalService: CodigoPostalService,
     private archivoService: ArchivoService,
-    private usuarioImagenService: UsuarioImagenService
+    private usuarioImagenService: UsuarioImagenService,
+    private alertifyService : AlertifyService
   ) {}
 
   public ngOnInit(): void {
@@ -614,7 +616,7 @@ export class UsuarioFormularioComponent implements OnInit {
     await this.usuarioService.agregar(this.usuario).toPromise()
       .then((data) => {
         this.usuario.idUsuario = data ?? 0;
-        this.modalMensajeService.modalExito(this.MENSAJE_AGREGAR);
+        this.presentAlertAddExito();
         exito = true;
       })
       .catch(() => {
@@ -634,7 +636,7 @@ export class UsuarioFormularioComponent implements OnInit {
     let exito: boolean = false;
     await this.usuarioService.editarAdministrador(this.usuario).toPromise()
       .then((data) => {
-        this.modalMensajeService.modalExito(this.MENSAJE_EDITAR);
+        this.presentAlertEditExito();
         exito = true;
       })
       .catch(() => {
@@ -693,6 +695,7 @@ export class UsuarioFormularioComponent implements OnInit {
 
     if (this.desdeExpediente) {
       this.onClose(this.usuario.idUsuario);
+      
     }
     else {
       this.onClose(this.usuario.idUsuario);
@@ -847,4 +850,47 @@ export class UsuarioFormularioComponent implements OnInit {
 
     formulario.reset();
   }
+
+  private presentAlertAddExito(): Promise<Boolean> {
+    return new Promise((resolve) => {
+      this.alertifyService.presentAlert({
+        header: 'Usuario registrado',
+        subHeader: 'Se ha dado de alta el usuario correctamente',
+        Icono: 'check',
+        Color: 'primary',
+        twoButtons: false,
+        confirmButtonText: "De acuerdo",
+        cancelButtonText: ''
+      }, (result) => {
+        if(result == "confirm"){
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  
+  private presentAlertEditExito(): Promise<Boolean> {
+    return new Promise((resolve) => {
+      this.alertifyService.presentAlert({
+        header: 'Usuario registrado',
+        subHeader: 'Se ha editado el usuario correctamente',
+        Icono: 'check',
+        Color: 'primary',
+        twoButtons: false,
+        confirmButtonText: "De acuerdo",
+        cancelButtonText: ''
+      }, (result) => {
+        if(result == "confirm"){
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  
 }
