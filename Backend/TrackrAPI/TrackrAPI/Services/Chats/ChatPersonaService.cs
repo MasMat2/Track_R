@@ -1,19 +1,22 @@
-﻿using TrackrAPI.Dtos.Chats;
+﻿using Microsoft.EntityFrameworkCore;
+using TrackrAPI.Dtos.Chats;
 using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Chats;
+using TrackrAPI.Services.Seguridad;
 
 namespace TrackrAPI.Services.Chats;
 
 public class ChatPersonaService
 {
     private readonly IChatPersonaRepository _chatPersonaRepository;
+    private readonly UsuarioService _usuarioService;
 
-    public ChatPersonaService(IChatPersonaRepository chatPersonaRepository)
+    public ChatPersonaService(IChatPersonaRepository chatPersonaRepository, UsuarioService usuarioService)
     {
         _chatPersonaRepository = chatPersonaRepository;
+        _usuarioService = usuarioService;
     }
-
     public void agregarPersonaChat(ChatPersonaFormDTO chatPersonaFormDTO, int idUsuario)
     {
         var idPersonas = chatPersonaFormDTO.IdPersonas;
@@ -44,16 +47,24 @@ public class ChatPersonaService
     {
         return _chatPersonaRepository.ObtenerPacientesPorPadecimiento(idPadecimiento);
     }
-
-    public List<ChatPersonaSelectorDTO> ObtenerPersonasChatSelector(int idChat)
+    public async Task<List<ChatPersonaSelectorDTO>> ObtenerPersonasChatSelector(int idChat)
     {
-        return _chatPersonaRepository.ConsultarPersonasPorChat(idChat)
-                                      .Select(x => new ChatPersonaSelectorDTO
-                                      {
-                                          IdUsuario = x.IdPersona,
-                                          Nombre = x.IdPersonaNavigation.Nombre + " " + x.IdPersonaNavigation.ApellidoPaterno + " " + x.IdPersonaNavigation.ApellidoMaterno
-                                      })
-                                      .ToList();
+        var personas = await _chatPersonaRepository.ConsultarPersonasPorChatAsync(idChat);
+
+        var chatPersonasDto = new List<ChatPersonaSelectorDTO>();
+
+        foreach (var persona in personas)
+        {
+            var dto = new ChatPersonaSelectorDTO
+            {
+                IdUsuario = persona.IdPersona,
+                Nombre = persona.IdPersonaNavigation.Nombre,
+                ImagenBase64 = await _usuarioService.ObtenerBytesImagenUsuario(persona.IdPersona)
+            };
+            chatPersonasDto.Add(dto);
+        }
+
+        return chatPersonasDto;
     }
 
     public void AbandonarChat(int idChat, int idPersona)

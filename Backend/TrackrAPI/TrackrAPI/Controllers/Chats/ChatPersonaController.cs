@@ -36,9 +36,9 @@ namespace TrackrAPI.Controllers.Chats
         }
 
         [HttpGet("PersonasEnChat/{IdChat}")]
-        public List<ChatPersonaSelectorDTO> ObtenerPersonasEnChatSelector(int IdChat)
+        public async Task<List<ChatPersonaSelectorDTO>> ObtenerPersonasEnChatSelector(int IdChat)
         {
-            return _chatPersonaService.ObtenerPersonasChatSelector(IdChat);
+            return await _chatPersonaService.ObtenerPersonasChatSelector(IdChat);
         }
     }
 }

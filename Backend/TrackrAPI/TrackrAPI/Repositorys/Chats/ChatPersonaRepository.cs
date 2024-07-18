@@ -35,6 +35,13 @@ public class ChatPersonaRepository : Repository<ChatPersona>, IChatPersonaReposi
                       .Where(x => x.IdChat == IdChat)
                       .ToList();
     }
+    public async Task<IEnumerable<ChatPersona>> ConsultarPersonasPorChatAsync(int IdChat)
+    {
+        return  await context.ChatPersona
+                      .Include(x => x.IdPersonaNavigation)
+                      .Where(x => x.IdChat == IdChat)
+                      .ToListAsync();
+    }
 
     public IEnumerable<ChatPersona> ConsultarChatsPorPersona(int IdPersona)
     {
