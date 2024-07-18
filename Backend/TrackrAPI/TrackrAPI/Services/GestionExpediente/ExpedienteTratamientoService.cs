@@ -143,7 +143,7 @@ public class ExpedienteTratamientoService
                     Unidad = et.Unidad,
                     Indicaciones = et.Indicaciones,
                     Padecimiento = et.IdPadecimientoNavigation.Nombre,
-                    ImagenBase64 = _sftpService.DownloadFileAsBase64(et.ArchivoUrl ?? defaultPath),
+                    ImagenBase64 = _sftpService.DownloadFile(et.ArchivoUrl ?? defaultPath),
 
                     RecordatorioActivo = recordatorioActivo,
                     DiaSemana = diaSemana,
@@ -222,7 +222,7 @@ public class ExpedienteTratamientoService
             Padecimiento = expedienteTratamiento.IdPadecimientoNavigation.Nombre,
             IdPadecimiento = expedienteTratamiento.IdPadecimiento,
             IdUsuarioDoctor = expedienteTratamiento.IdUsuarioDoctor,
-            ImagenBase64 = _sftpService.DownloadFileAsBase64(expedienteTratamiento.ArchivoUrl ?? defaultPath),
+            ImagenBase64 = _sftpService.DownloadFile(expedienteTratamiento.ArchivoUrl ?? defaultPath),
             ArchivoTipoMime = _archivoRepository.GetFileMime(expedienteTratamiento.IdArchivo ?? 0),
             ArchivoNombre = _archivoRepository.GetFileName(expedienteTratamiento.IdArchivo ?? 0),
             NombreDoctor = expedienteTratamiento.IdUsuarioDoctorNavigation.Nombre,

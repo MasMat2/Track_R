@@ -256,7 +256,7 @@ namespace TrackrAPI.Services.Seguridad
         private LinkedResource GetLogo(string imageUrl, string contentId , string mimeType)
         {
             var pathRemoteImage = Path.Combine("Archivos" , "Img" , imageUrl);
-            var image = _sftpService.DownloadFileAsBase64(pathRemoteImage);
+            var image = _sftpService.DownloadFile(pathRemoteImage);
             var bytes = Convert.FromBase64String(image);
             var stream = new MemoryStream(bytes);
             return new LinkedResource(stream){
