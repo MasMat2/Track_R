@@ -126,7 +126,6 @@ export class NuevoChatDoctoresComponent  implements OnInit {
       this.doctoresFiltrados = this.doctores.filter(doctor => 
         doctor.nombre?.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      console.log(this.doctoresFiltrados);
     }
   }
 

@@ -27,7 +27,7 @@ export class WidgetOmronComponent  implements OnInit {
   ngOnInit() {}
 
    openOmronConnect() {
-    console.log('openOmronConnect');
+
    }
 
 }

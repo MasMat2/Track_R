@@ -152,7 +152,6 @@ export class DashboardPadecimientoComponent implements OnInit {
   }
 
   public onGridClick(event: any): void {
-    console.log(event);
   }
 
   // private consultarValoresFueraRango(): void {

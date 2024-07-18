@@ -523,7 +523,7 @@ export class MensajesComponent{
         const codigo = match[0];
         this.contestarLlamada(codigo);
       } else {
-        console.log("Error al validar codigo meet jitsi.");
+        console.error("Error al validar codigo meet jitsi.");
       }
 
 
@@ -537,7 +537,7 @@ export class MensajesComponent{
         this.route.navigate(['/home/chat', codigo]);
 
       } else {
-        console.log("Error al validar codigo meet jitsi.");
+        console.error("Error al validar codigo meet jitsi.");
       }
     }
   }

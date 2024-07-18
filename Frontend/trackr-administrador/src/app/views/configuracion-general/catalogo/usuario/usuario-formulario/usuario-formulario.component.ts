@@ -631,7 +631,6 @@ export class UsuarioFormularioComponent implements OnInit {
   }
 
   public async editar(): Promise<boolean> {
-    console.log("Se edito")
     this.usuario.contrasenaActualizada = this.usuario.contrasena;
 
     let exito: boolean = false;

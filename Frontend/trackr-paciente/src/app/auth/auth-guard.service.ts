@@ -13,8 +13,6 @@ export class AuthGuard {
   ) {}
 
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
-    console.log('AuthGuard#canActivate called');
-
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/login']);
       return false;

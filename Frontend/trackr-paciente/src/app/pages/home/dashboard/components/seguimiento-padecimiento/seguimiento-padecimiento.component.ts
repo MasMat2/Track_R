@@ -349,7 +349,6 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
 
     this.entidadEstructuraService.consultarPadecimientoPorId(parseInt(this.idPadecimiento)).subscribe({
       next: (data) => {
-        console.log(data);
         this.padecimiento = data;
       },
       error: () => {

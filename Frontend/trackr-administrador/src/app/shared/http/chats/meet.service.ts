@@ -23,7 +23,7 @@ export class MeetService {
         const codigo = match[0];
         this.contestarLlamada(codigo, 'jitsi');
       } else {
-        console.log('Error al validar codigo meet jitsi.');
+        console.error('Error al validar codigo meet jitsi.');
       }
     } else if (regexWebrtc.test(mensaje)) {
       const match = mensaje.match(regexWebrtc);
@@ -31,7 +31,7 @@ export class MeetService {
         const codigo = match[1];
         this.contestarLlamada(codigo, 'webrtc');
       } else {
-        console.log('Error al validar codigo meet webrtc.');
+        console.error('Error al validar codigo meet webrtc.');
       }
     }else if(notificacion.idChat){
       await this.router.navigate(['administrador', 'chat' ]);

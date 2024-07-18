@@ -16,7 +16,6 @@ constructor(private dialog: MatDialog) { }
     });
 
     alert.beforeClosed().subscribe(result => {
-      console.log(result);
     } );
   }
 

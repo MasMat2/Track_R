@@ -80,7 +80,6 @@ export class ExpedienteEstudioComponent implements OnInit {
   }
 
   protected onGridClick(gridData: { accion: string; data: ExpedienteEstudioGridDTO }): void {
-    console.log(gridData);
     if(gridData.accion === GRID_ACTION.Ver){
       this.onVer(gridData.data);
     }

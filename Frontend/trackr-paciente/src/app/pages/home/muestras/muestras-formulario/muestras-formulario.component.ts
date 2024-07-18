@@ -98,7 +98,6 @@ export class MuestrasFormularioComponent implements OnInit {
       return;
     }
 
-    console.log(camposAgregados);
     this.agregar(camposAgregados);
   }
 
@@ -137,7 +136,6 @@ export class MuestrasFormularioComponent implements OnInit {
 
     //Verificacion de la tabla dominio hospital
     let domHos = await lastValueFrom(this.dominioHospitalService.obtenerDominioHospital(dominio.idDominio,0))
-    console.log(domHos)
     if(domHos != null){
       if(domHos.valorMaximo != null){
         dominio.valorMaximo = Number(domHos.valorMaximo)
@@ -190,7 +188,7 @@ export class MuestrasFormularioComponent implements OnInit {
   }
 
   async callPlugin(){
-    console.log('Llamando al plugin con uuid: ')
+
   }
 
   protected async presentarAlertSuccess() {

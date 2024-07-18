@@ -86,36 +86,34 @@ export class AnswerMeetComponent implements OnInit {
 
   handleClose = () => {
     this.newRoomApi.dispose();
-    console.log("handleClose");
   }
 
   handleParticipantLeft = async (participant: ParticipantInterface) => {
-    console.log("handleParticipantLeft", participant); // { id: "2baa184e" }
+    //console.log("handleParticipantLeft", participant);  { id: "2baa184e" }
     const data = await this.getParticipants();
   }
 
   handleParticipantJoined = async (participant: ParticipantInterface) => {
-    console.log("handleParticipantJoined", participant); // { id: "2baa184e", displayName: "Shanu Verma", formattedDisplayName: "Shanu Verma" }
+    //console.log("handleParticipantJoined", participant);  { id: "2baa184e", displayName: "Shanu Verma", formattedDisplayName: "Shanu Verma" }
     const data = await this.getParticipants();
   }
 
   handleVideoConferenceJoined = async (participant: ParticipantInterface) => {
-    console.log("handleVideoConferenceJoined", participant); // { roomName: "bwb-bfqi-vmh", id: "8c35a951", displayName: "Akash Verma", formattedDisplayName: "Akash Verma (me)"}
+    //console.log("handleVideoConferenceJoined", participant);  { roomName: "bwb-bfqi-vmh", id: "8c35a951", displayName: "Akash Verma", formattedDisplayName: "Akash Verma (me)"}
     const data = await this.getParticipants();
   }
 
   handleVideoConferenceLeft = () => {
     this.newRoomApi.dispose();
-    console.log("handleVideoConferenceLeft");
     this.router.navigate(['/thank-you']);
   }
 
   handleMuteStatus = (audio: AudioInterface) => {
-    console.log("handleMuteStatus", audio); // { muted: true }
+    //console.log("handleMuteStatus", audio);  { muted: true }
   }
 
   handleVideoStatus = (video: AudioInterface) => {
-    console.log("handleVideoStatus", video); // { muted: true }
+    //console.log("handleVideoStatus", video);  { muted: true }
   }
 
   getParticipants() {

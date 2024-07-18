@@ -355,19 +355,18 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
         const codigo = match[0];
         this.contestarLlamada(codigo);
       } else {
-        console.log('Error al validar codigo meet jitsi.');
+        console.error('Error al validar codigo meet jitsi.');
       }
     }
 
     if (mensaje.mensaje.includes('webrtc-' + this.idChat)) {
       const regex = /webrtc-\d+-(\d+)/;
       const match = mensaje.mensaje.match(regex);
-      console.log(match);
       if (match && match.length > 0) {
         const codigo = match[1];
         this.router.navigate(['/administrador/webrtc', codigo]);
       } else {
-        console.log('Error al validar codigo meet webrtc.');
+        console.error('Error al validar codigo meet webrtc.');
       }
     }
   }
@@ -550,43 +549,5 @@ private presentAlertError(): Promise<Boolean> {
     });
   });
 }
-
-  // clickArchivo(idArchivo: number) {
-  //   this.ArchivoService.getArchivo(idArchivo).subscribe((res) => {
-  //     this.downloadFile(res.archivo, res.nombre, res.archivoMime);
-  //   });
-  // }
-
-  // downloadFile(fileBase64: string, nombre?: string, mime?: string) {
-  //   console.log(fileBase64, nombre, mime);
-
-  //   // Decodificar la cadena Base64
-  //   const decodedData = atob(fileBase64);
-
-  //   // Convertir a un array de bytes
-  //   const byteNumbers = new Array(decodedData.length);
-  //   for (let i = 0; i < decodedData.length; i++) {
-  //     byteNumbers[i] = decodedData.charCodeAt(i);
-  //   }
-  //   const byteArray = new Uint8Array(byteNumbers);
-
-  //   // Crear un Blob con los datos binarios
-  //   const blob = new Blob([byteArray], { type: 'application/octet-stream' });
-
-  //   // Crear un object URL y asignarlo al enlace de descarga
-  //   const url = URL.createObjectURL(blob);
-  //   const a = document.createElement('a');
-  //   document.body.appendChild(a);
-  //   a.style.display = 'none';
-  //   a.href = url;
-
-  //   a.download = `${nombre}`;
-
-  //   // Nombre del archivo
-  //   a.click();
-
-  //   // Limpiar el object URL después de la descarga
-  //   URL.revokeObjectURL(url);
-  // }
 
 }

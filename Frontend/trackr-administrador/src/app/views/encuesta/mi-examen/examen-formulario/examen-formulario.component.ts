@@ -228,7 +228,6 @@ export class ExamenFormularioComponent implements OnInit {
   protected descargarRespuestas(idExamen: number){
     this.examenService.descargarRespuestasPDF(idExamen).subscribe(
       (data) => {
-        console.log(this.examen);
         const a = document.createElement('a');
         const objectUrl = URL.createObjectURL(data);
         a.href = objectUrl;
