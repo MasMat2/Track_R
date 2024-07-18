@@ -1,5 +1,5 @@
 Estado de apliacion en plataforma IOS:
-build ios 58
+build ios 59
 Servidor ios: azure
 
 
