@@ -11,6 +11,10 @@ public class WidgetRepository : Repository<Widget>, IWidgetRepository
     {
     }
 
+    public Widget ConsultarPorPadecimiento(int idPadecimiento)
+    {
+        return context.Widget.Where(w => w.IdPadecimiento == idPadecimiento).FirstOrDefault();
+    }
 
     public IEnumerable<TipoWidget> ConsultarTipo()
     {
