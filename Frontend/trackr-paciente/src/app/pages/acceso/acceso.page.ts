@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { ScreenOrientationService } from '@services/screen-orientation.service';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -17,6 +17,7 @@ import { AuthService } from 'src/app/auth/auth.service';
     IonicModule,
     CommonModule,
     FormsModule,
+    RouterLink
   ]
 })
 export class AccesoPage implements OnInit {
