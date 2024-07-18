@@ -29,7 +29,6 @@ export class Respuesta1FormularioComponent implements OnInit {
   }
 
   public ngOnInit(){
-    console.log(this.resp);
     this.resp.idReactivo = this.idReactivo;
     if(this.resp.respuestaCorrecta == null){
       this.resp.respuestaCorrecta = false;

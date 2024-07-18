@@ -89,7 +89,6 @@ export class MisCuestionariosComponent  implements OnInit {
     return new Promise((resolve, reject) => {
       this.examenService.consultarMisExamenesContestados().subscribe({
         next: (examenes) => {
-          console.log(examenes);
           this.examenContestadoList = examenes.map(examen => {
             const fechaFormateada = this.formatearFecha(examen.fechaExamen, examen.horaExamen);
             return {...examen, fechaExamen: fechaFormateada};
@@ -131,11 +130,9 @@ export class MisCuestionariosComponent  implements OnInit {
 
   private esFechaValida(examen: Examen): boolean{
     const fechaExamen = this.formatearFecha(examen.fechaExamen, examen.horaExamen);
-    console.log(fechaExamen);
     const fechaActual = new Date();
 
     if (fechaExamen.toDateString() !== fechaActual.toDateString()) {
-      console.log('false 1')
       return false;
     }
 
@@ -150,11 +147,9 @@ export class MisCuestionariosComponent  implements OnInit {
     );
 
     if (diferenciaMinutos > 5 || diferenciaMinutos <= -15) {
-      console.log('false 2');
       return false;
 
     }
-    console.log('true');
     return true;
   }
 

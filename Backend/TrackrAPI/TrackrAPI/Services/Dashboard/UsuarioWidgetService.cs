@@ -46,5 +46,21 @@ namespace TrackrAPI.Services.Dashboard
                 
            
         }
+
+        public void AgregarWidgetPadecimiento(int idUsuario , int idPadecimiento){
+            var widget = _widgetRepository.ConsultarPorPadecimiento(idPadecimiento);
+
+            if(widget == null){
+                throw new CdisException("No se encontró widget para el padecimiento");
+            }
+
+            var nuevoUsuarioWidget = new UsuarioWidget
+            {
+                IdUsuario = idUsuario,
+                IdWidget = widget.IdWidget,
+            };
+
+            _usuarioWidgetRepository.Agregar(nuevoUsuarioWidget);
+        }
     }
 }

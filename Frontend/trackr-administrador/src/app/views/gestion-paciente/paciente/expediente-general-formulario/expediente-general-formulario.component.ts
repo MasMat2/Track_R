@@ -330,11 +330,11 @@ export class ExpedienteGeneralFormularioComponent implements OnInit {
         if (Array.isArray(generos)) {
           this.generoList = generos;
         } else {
-          console.log('Error al obtener la lista de géneros');
+          console.error('Error al obtener la lista de géneros');
         }
       })
       .catch(error => {
-        console.log(`Error en consulta de géneros ${error}`);
+        console.error(`Error en consulta de géneros ${error}`);
       });
   }
 

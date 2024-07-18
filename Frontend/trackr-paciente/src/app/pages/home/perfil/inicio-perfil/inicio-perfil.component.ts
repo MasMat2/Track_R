@@ -136,7 +136,7 @@ export class InicioPerfilComponent  implements OnInit {
     this.informacionPerfil$.subscribe({
       next: (info) => {
         this.infoPerfil = info;
-        if(this.infoPerfil.imagenBase64 != null){
+        if(this.infoPerfil?.imagenBase64.archivo != null){
           this.fotoPerfilUrl = `data:${info.imagenBase64?.archivoMime};base64,` + info.imagenBase64?.archivo;
         }
       },

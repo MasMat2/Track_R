@@ -150,7 +150,6 @@ export class DominioFormularioComponent implements OnInit {
 
   //Funcion para el boton guardar
   public enviarFormulario(formulario: NgForm): void {
-    console.log("click")
     this.btnSubmit = true;
     if (!formulario.valid) {
       this.formularioService.validarCamposRequeridos(formulario);

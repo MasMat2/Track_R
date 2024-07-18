@@ -169,7 +169,6 @@ export class ArchivoPrevisualizarComponent implements OnInit, AfterViewInit {
     if(idArchivo){
       this.archivoService.getArchivo(idArchivo).subscribe({
         next: (data) => {
-          console.log(data);
           this.archivo = data;
           this.tipoMime = this.archivo.archivoMime.split('/')[0];
           this.archivoBase64 = 'data:' + this.archivo.archivoMime + ';base64,' + this.archivo.archivo;
@@ -189,7 +188,6 @@ export class ArchivoPrevisualizarComponent implements OnInit, AfterViewInit {
     if(urlArchivo){
       this.archivoService.getArchivoByUrl(urlArchivo).subscribe({
         next: (data) => {
-          console.log(data);
           this.archivo = data;
           this.tipoMime = this.archivo.archivoMime.split('/')[0];
           this.archivoBase64 = 'data:' + this.archivo.archivoMime + ';base64,' + this.archivo.archivo;

@@ -34,7 +34,7 @@ public class WidgetService
         _expedienteTrackrService = expedienteTrackrService;
     }
 
-    public IEnumerable<UsuarioPadecimientosDTO> Consultar(int idUsuario)
+    public IEnumerable<UsuarioPadecimientosDTO> ConsultarWidgetsSeguimiento(int idUsuario)
     {
         var padecimientoUsuario = _expedientePadecimientoRepository.ConsultarPorUsuario(idUsuario);
 

@@ -85,7 +85,6 @@ export class AccesoFormularioComponent implements OnInit {
   public consultarIconos() {
     this.iconoService.consultarGeneral().subscribe((data) => {
       this.iconoList = data;
-      console.log(data);
       this.consultarAcceso();
     });
   }
@@ -181,7 +180,6 @@ export class AccesoFormularioComponent implements OnInit {
   }
 
   public onIconoChange(idIcono?: number) {
-    console.log(this.acceso);
     this.acceso.claseIcono = '';
     const icono = this.iconoList.find((i) => i.idIcono === idIcono);
     if (icono !== undefined && icono.clase != '') {

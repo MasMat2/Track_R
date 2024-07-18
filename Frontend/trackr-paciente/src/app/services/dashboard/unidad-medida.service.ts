@@ -22,7 +22,6 @@ consultarParaGrid(): Observable<UnidadMedidaGridDto[]> {
 
 agregar(unidadMedida: UnidadMedidaFormularioCapturaDto): Observable<void>
 {
-  console.log(unidadMedida);
   return this.http.post<void>(this.dataUrl, unidadMedida);
 } 
 

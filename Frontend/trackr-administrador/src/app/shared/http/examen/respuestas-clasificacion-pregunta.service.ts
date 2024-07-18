@@ -20,7 +20,6 @@ export class RespuestasClasificacionPreguntaService {
     return this.http.get<RespuestasClasificacionPreguntaInformacionGeneralDto>(this.dataUrl+`${idRespuestasClasificacionPregunta}`);
   }
   agregar(captura: RespuestasClasificacionPreguntaFormularioDto): Observable<void> {
-    console.log(captura);
     return this.http.post<void>(this.dataUrl+`agregar`, captura);
   }
   

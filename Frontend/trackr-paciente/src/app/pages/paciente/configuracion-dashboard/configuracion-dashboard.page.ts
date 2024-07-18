@@ -66,7 +66,6 @@ export class ConfiguracionDashboardPage  implements OnInit {
   }
 
   public onChangeCheckbox(event: any) {
-    console.log(event);
   }
 
   protected onAceptar(): void {

@@ -24,7 +24,6 @@ export class EspecialidadService {
 
   agregar(especialidad: EspecialidadFormularioCapturaDto): Observable<void>
   {
-    console.log(especialidad);
     return this.http.post<void>(this.dataUrl, especialidad);
   } 
 

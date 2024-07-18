@@ -119,7 +119,6 @@ export class ProgramacionExamenComponent implements OnInit {
       this.eliminar(gridData.data);
     }
     else if (gridData.accion === GRID_ACTION.DescargarExcel) {
-      console.log('Descargar Excel');
       this.consultarExcelRespuestas(gridData.data.idProgramacionExamen);
     }
   }

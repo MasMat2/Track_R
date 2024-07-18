@@ -460,7 +460,7 @@ export class HospitalFormularioComponent implements OnInit {
       await funcion();
     }
     catch(error) {
-      console.log(error)
+      console.error(error)
       this.btnSubmit = false;
       return;
     }

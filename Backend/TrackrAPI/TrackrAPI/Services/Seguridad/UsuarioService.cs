@@ -951,7 +951,7 @@ namespace TrackrAPI.Services.Seguridad
 
             }
 
-            return this._sftpService.DownloadFileAsBase64(filePath);
+            return this._sftpService.DownloadFile(filePath);
 
 
         }

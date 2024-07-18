@@ -57,10 +57,7 @@ export class SignalingHubBase extends EventTarget{
   
   public async crearLlamada(caller_id?: string) {
     
-    await this.ensureConnection();
-
-    console.log(`CrearLlamada: ${caller_id}`);
-    
+    await this.ensureConnection();    
     await this.connection.invoke('CrearLlamada', caller_id);
 
   }
@@ -75,12 +72,9 @@ export class SignalingHubBase extends EventTarget{
 
 
   protected async onNewMessage(obj: any){
-    console.log(obj);
     
     this.messaageSource.next(obj.content);
-    console.log(obj.id);
     await this.connection.invoke('AcknowledgeMessage', obj.id);
-    console.log(`acknowledge message: ${obj.id}`);
   };
 
   protected onLocalId(local_id: any){

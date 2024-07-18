@@ -87,15 +87,12 @@ export class VideoChatPage extends EventTarget implements OnInit{
     this.route.paramMap.pipe(takeUntil(this.destroy$))
     .subscribe(params => {
       this.callerId = params.get('id')!;
-      console.log(this.callerId);
 
       if(!this.callerId){
-        console.log("calling");
         this.is_caller = true;
         this.signalingHubService.crearLlamada();
 
       }else{
-        console.log("answering");
         this.is_caller = false;
         this.signalingHubService.crearLlamada(this.callerId);
       }
@@ -108,7 +105,6 @@ export class VideoChatPage extends EventTarget implements OnInit{
       if(json_string.length <= 0) return;
 
       var message = JSON.parse(json_string);
-      console.log(message);
       switch (message.type) {
 
         case "local-id":
@@ -126,7 +122,6 @@ export class VideoChatPage extends EventTarget implements OnInit{
           break;
 
         case "remove-remote":
-          console.log('remove-remote');
           this.remoteStream = new MediaStream();
           break;
       }
@@ -168,7 +163,6 @@ export class VideoChatPage extends EventTarget implements OnInit{
   // Callee listener
   offerReceived = async (offer: any) => {
     
-    console.log("offerReceived");
     this.startRTC();
 
     if (!this.pc.currentRemoteDescription) {
@@ -183,7 +177,6 @@ export class VideoChatPage extends EventTarget implements OnInit{
       });
     };
 
-    console.log("answer");
     const answerDescription = await this.pc.createAnswer();
     await this.pc.setLocalDescription(answerDescription);
 
@@ -192,7 +185,6 @@ export class VideoChatPage extends EventTarget implements OnInit{
       sdp: answerDescription.sdp,
     };
 
-    console.log("send answer");
     await this.signalingHubService.sendMessage(({
       type: "video-answer",
       answer: answer
@@ -225,7 +217,6 @@ export class VideoChatPage extends EventTarget implements OnInit{
       if(json_string.length <= 0) return;
 
       var message = JSON.parse(json_string);
-      // console.log(message);
       switch (message.type) {
         case "new-ice-candidate":
           this.pc.addIceCandidate(message.candidate);
@@ -257,7 +248,6 @@ export class VideoChatPage extends EventTarget implements OnInit{
   }
 
   closeStreams = () => {
-    console.log(this.localStream, this.remoteStream);
 
     if (this.localStream) {
       this.localStream.getTracks().forEach(track => track.stop());
