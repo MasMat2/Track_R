@@ -100,7 +100,7 @@ export class InicioPage implements OnInit {
       next: (info) => {
         this.infoHeader = info;
         this.infoHeader.nombre = info.nombre.split(" ")[0]; //solo el primer nombre
-        if(this.infoHeader.imagenBase64 != null){
+        if(this.infoHeader?.imagenBase64.archivo != null){
           this.fotoPerfilUrl = `data:${info.imagenBase64?.archivoMime};base64,` + info.imagenBase64?.archivo;
         }
       },
