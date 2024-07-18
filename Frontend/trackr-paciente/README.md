@@ -1,6 +1,7 @@
 Estado de apliacion en plataforma IOS:
-build ios 60
-Servidor ios: astic.mx
+build ios 61
+Servidor ios: azure
+Grupo de pruebas: US-IT, Muguerza
 
 
 Esta actualización aborda y resuelve varios problemas reportados por los usuarios para mejorar la funcionalidad y la experiencia general de la aplicación:
