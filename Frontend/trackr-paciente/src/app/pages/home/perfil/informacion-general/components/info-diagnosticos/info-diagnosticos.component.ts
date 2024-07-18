@@ -10,6 +10,7 @@ import { AlertController, ModalController } from '@ionic/angular/standalone';
 import { Constants } from '@utils/constants/constants';
 import { addIcons } from 'ionicons';
 import { DiagnosticoFormularioComponent } from './diagnostico-formulario/diagnostico-formulario.component';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 
 
 
@@ -28,12 +29,14 @@ import { DiagnosticoFormularioComponent } from './diagnostico-formulario/diagnos
 export class InfoDiagnosticosComponent  implements OnInit {
 
   protected misDiagnosticos: ExpedientePadecimientoDto[];
+  protected eliminandoDiagnostico: boolean = false;
   
   constructor(
     private alertController: AlertController,
     private modalController: ModalController,
     private usuarioService: UsuarioService,
-    private expedientePadecimientoService: ExpedientePadecimientoService
+    private expedientePadecimientoService: ExpedientePadecimientoService,
+    private loadingSpinner: LoadingSpinnerService
   ) { 
     addIcons({
       'chevron-left': 'assets/img/svg/chevron-left.svg',
@@ -48,14 +51,22 @@ export class InfoDiagnosticosComponent  implements OnInit {
 
 
   private consultarDiagnosticos(){
+    this.loadingSpinner.presentLoading();
+
     this.usuarioService.consultarDiagnosticosUsuario().subscribe({
       next:(value) => {
         this.misDiagnosticos = value;
       },
+      error: () => {
+        this.loadingSpinner.dismissLoading();
+      },
+      complete: () => {
+        this.loadingSpinner.dismissLoading();
+      }
     })
   }
 
-  protected async presentarAlertaEliminarDiagnostico(diagnostico: ExpedientePadecimientoDto) {
+  protected async presentarAlertaEliminarDiagnostico(diagnostico: ExpedientePadecimientoDto) { 
     const alert = await this.alertController.create({
       header: '¿Seguro que deseas eliminar este elemento?',
       subHeader: 'No podrás recuperarlo',
@@ -108,14 +119,16 @@ export class InfoDiagnosticosComponent  implements OnInit {
   }
 
   private eliminarAntecedente(antecedente: ExpedientePadecimientoDto){
+    this.eliminandoDiagnostico = true;
     this.expedientePadecimientoService.eliminar(antecedente.idExpedientePadecimiento).subscribe({
       next: () => {
         this.consultarDiagnosticos();
       },
       error: () => {
-
+        this.eliminandoDiagnostico = false;
       },
       complete: () => {
+        this.eliminandoDiagnostico = false;
         this.presentarAlertaEliminadoExitosamente();
       }
     });

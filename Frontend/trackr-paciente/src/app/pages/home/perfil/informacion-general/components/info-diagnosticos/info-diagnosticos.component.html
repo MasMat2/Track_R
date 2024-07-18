@@ -40,7 +40,11 @@
             <p>{{diagnostico.fechaDiagnostico | date : "dd/MM/yyyy"}}</p>
             <p>{{diagnostico.tituloDoctor}} {{diagnostico.nombreDoctor}} {{diagnostico.apellidosDoctor}}</p>
           </ion-label>
-          <ion-button class="custom-icon-only clear-error slot-end" slot="end" (click)="presentarAlertaEliminarDiagnostico(diagnostico)">
+          <ion-button
+            [disabled]="eliminandoDiagnostico" 
+            class="custom-icon-only clear-error slot-end" 
+            slot="end" 
+            (click)="presentarAlertaEliminarDiagnostico(diagnostico)">
             <ion-icon name="trash"></ion-icon>
           </ion-button>
         </ion-item>
