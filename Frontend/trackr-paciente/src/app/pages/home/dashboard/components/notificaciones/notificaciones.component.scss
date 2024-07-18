@@ -1,8 +1,9 @@
 .contenedor-header-dark{
   justify-content: space-between;
+  min-height: 160px;
 
   .boton-cerrar{
-    --padding-top: 48px;
+    --padding-top: 32px;
     ion-button{
       ion-icon{
         font-size: 32px;

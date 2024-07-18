@@ -9,6 +9,7 @@ import { ExpedientePadecimientoDto } from '@dtos/seguridad/expediente-padecimien
 import { UsuarioService } from '@http/seguridad/usuario.service';
 import { ExpedientePadecimientoService } from '@http/gestion-expediente/expediente-padecimiento.service';
 import { RouterModule } from '@angular/router';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 
 @Component({
   selector: 'app-info-antecedentes',
@@ -25,12 +26,14 @@ import { RouterModule } from '@angular/router';
 export class InfoAntecedentesComponent  implements OnInit {
 
   protected misAntecedentes: ExpedientePadecimientoDto[];
+  protected eliminandoAntecedente: boolean = false;
 
   constructor(
     private alertController: AlertController,
     private modalController: ModalController,
     private usuarioService: UsuarioService,
-    private expedientePadecimientoService: ExpedientePadecimientoService
+    private expedientePadecimientoService: ExpedientePadecimientoService,
+    private loadingSpinner: LoadingSpinnerService
   ) { 
     addIcons({
       'chevron-left': 'assets/img/svg/chevron-left.svg',
@@ -44,10 +47,17 @@ export class InfoAntecedentesComponent  implements OnInit {
   }
 
   private consultarAntecedentes(){
+    this.loadingSpinner.presentLoading();
     this.usuarioService.consultarAntecedentesUsuario().subscribe({
       next:(value) => {
         this.misAntecedentes = value;
       },
+      error: () => {
+        this.loadingSpinner.dismissLoading();
+      },
+      complete: () => {
+        this.loadingSpinner.dismissLoading();
+      }
     })
   }
 
@@ -75,7 +85,6 @@ export class InfoAntecedentesComponent  implements OnInit {
   }
 
   protected async presentarAlertaEliminadoExitosamente() {
-
     const alertSuccess = await this.alertController.create({
       header: 'Elemento eliminado exitosamente',
       buttons: [{
@@ -105,14 +114,16 @@ export class InfoAntecedentesComponent  implements OnInit {
   }
 
   private eliminarAntecedente(antecedente: ExpedientePadecimientoDto){
+    this.eliminandoAntecedente = true;
     this.expedientePadecimientoService.eliminar(antecedente.idExpedientePadecimiento).subscribe({
       next: () => {
         this.consultarAntecedentes();
       },
       error: () => {
-
+        this.eliminandoAntecedente = false;
       },
       complete: () => {
+        this.eliminandoAntecedente = false;
         this.presentarAlertaEliminadoExitosamente();
       }
     });

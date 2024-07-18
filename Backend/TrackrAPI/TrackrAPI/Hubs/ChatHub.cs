@@ -65,7 +65,7 @@ public class ChatHub : Hub<IChatHub>
 
     public async Task EliminarChat(int idChat)
     {
-        var personas = _chatPersonaService.ObtenerPersonasChatSelector(idChat);
+        var personas = await _chatPersonaService.ObtenerPersonasChatSelector(idChat);
 
         if (personas.Count > 1)
         {

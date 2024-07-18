@@ -8,6 +8,7 @@ import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-h
 import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
 import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
 import { AudioInterface, ParticipantInterface } from '../interfaces/jitsi-interface';
+import { ChatPersonaService } from '@http/chat/chat-persona.service';
 
 declare var JitsiMeetExternalAPI: any;
 
@@ -44,7 +45,8 @@ export class DataJitsiService {
     private orientationService: ScreenOrientationService,
     private mensajeHubService: ChatMensajeHubService,
     private chatMensajeHubServiceService: ChatHubServiceService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private chatPersonaService : ChatPersonaService
   ) { }
 
 
@@ -90,13 +92,13 @@ export class DataJitsiService {
     });
   }
 
-  mandarMensajeLlamada(mensajeLlamada : string): void{
-    console.log("id chat mensaje " + this.idChat);
+  async mandarMensajeLlamada(mensajeLlamada : string){
+    const  idUsuario = await this.chatPersonaService.obtenerIdUsuarioAsync();
     let msg: ChatMensajeDTO = {
       fecha: new Date(),
       idChat: parseInt(this.idChat),
       mensaje: mensajeLlamada,
-      idPersona:5333,
+      idPersona: idUsuario,
       archivo: '',
       idArchivo: 0,
       esVideoChat:true

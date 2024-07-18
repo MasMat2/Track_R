@@ -451,7 +451,7 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
       fecha: new Date(),
       idChat: this.idChat,
       mensaje: this.msg,
-      idPersona: 5333,
+      idPersona: this.idUsuario,
       archivo: '',
       idArchivo: 0,
     };
