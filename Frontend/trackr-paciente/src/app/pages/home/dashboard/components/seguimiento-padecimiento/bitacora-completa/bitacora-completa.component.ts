@@ -27,7 +27,7 @@ export class BitacoraCompletaComponent  implements OnInit {
   protected periodo: string;
 
   protected filtradoPorFecha: boolean = false;
-  protected fechaFiltro: Date;
+  protected fechaFiltro: string;
   protected ordenFiltro: 'ascendente' |'descendente' = 'ascendente';
 
 
@@ -76,7 +76,7 @@ export class BitacoraCompletaComponent  implements OnInit {
 
   protected filtrarPorFecha(){
     this.filtradoPorFecha = true;
-    const targetDate = new Date(this.fechaFiltro).toISOString().split('T')[0]; // Solo toma la parte de la fecha, ignorando la hora
+    const targetDate = this.fechaFiltro.split('T')[0]; // Solo toma la parte de la fecha, ignorando la hora
     const coincidencias = this.valoresCampo?.valores.filter(obj => obj.fechaMuestra.split('T')[0] === targetDate);
     this.valoresCampoFiltrados.valores = coincidencias;
   }
