@@ -124,7 +124,6 @@ export class LoginPage implements OnInit {
   }
 
   protected mostrarContrasena(){
-    console.log("AAAA")
     if(this.mostrarPwd == true){
       this.mostrarPwd = false;
       this.pswInputType = "password";
