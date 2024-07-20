@@ -4,13 +4,13 @@
     <ion-toolbar>
       <ion-buttons class="start" slot="start">
         <ion-button routerLink="inicio-perfil">
-          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          <ion-icon slot="start" name="chevron-left"></ion-icon>
           <ion-label>Atrás</ion-label>
         </ion-button>
       </ion-buttons>
       <ion-buttons class="end" slot="end">
         <ion-button class="icon-only" (click)="AgregarDoctor()">
-          <ion-icon name="add"></ion-icon>
+          <ion-icon name="plus"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
@@ -23,25 +23,31 @@
         <h3>Mis doctores</h3>
       </ion-text>
     </div>
-    <div class="lista-vacia" *ngIf="listaDoctoresVacia()">
-      <ion-text>
-        <p>Nada por aquí. <br> Aún no tienes doctores asignados</p>
-      </ion-text>
-      <ion-button fill="outline" (click)="AgregarDoctor()">
-        <ion-icon slot="start" name="add"></ion-icon>
-        Añadir doctor
-      </ion-button>
-    </div>
-    <div class="lista-doctores" *ngIf="!listaDoctoresVacia()">
-      <ion-list>
+
+    <div class="lista-doctores">
+      <div class="lista-vacia" *ngIf="listaDoctoresVacia()">
+        <ion-text>
+          <p>Nada por aquí. <br> Aún no tienes doctores asignados</p>
+        </ion-text>
+        <ion-button fill="outline" (click)="AgregarDoctor()">
+          <ion-icon slot="start" name="plus"></ion-icon>
+          Añadir doctor
+        </ion-button>
+      </div>
+
+      <ion-list class="custom-general-item-list" *ngIf="!listaDoctoresVacia()">
         <ion-item *ngFor="let doctor of misDoctores" lines="none">
           <ion-label>
             <h3>{{doctor.nombre}}</h3>
             <p>{{doctor.ambito}}</p>
             <p>{{doctor.hospital}}</p>
           </ion-label>
-          <ion-button slot="end" fill="clear" (click)="presentarAlertaEliminar(doctor)">
-            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          <ion-button
+            [disabled]="eliminandoEstudio"
+            class="custom-icon-only clear-error slot-end"
+            slot="end" 
+            (click)="presentarAlertaEliminar(doctor)">
+            <ion-icon name="trash"></ion-icon>
           </ion-button>
         </ion-item>
       </ion-list>
