@@ -20,7 +20,7 @@ public class SlackClient
     }
 
     //Post a message using simple strings
-    public async void PostMessage(string text, string username = null, string errorMessage = null)
+    public async Task PostMessage(string text, string username = null, string errorMessage = null)
     {
         Payload payload = new Payload()
         {
@@ -43,7 +43,7 @@ public class SlackClient
 
         string formattedErrorMessage = string.Join("", formattedStackTrace.Select(line => line.Replace("\\", "\\\\").Replace("\"", "\\\"").TrimEnd('\r')));
 
-        string formattedShortErrorMessage = payload.Text[..50];
+        string formattedShortErrorMessage = payload.Text.Length > 50 ? payload.Text[..50] : payload.Text;
 
         // Could not find file 'C:\Users\Usuario\Documents\CD ---> Could not find file \'C:\Users\Usuario\Documents\CD 
         // Se escapan las comillas simples y las barras invertidas

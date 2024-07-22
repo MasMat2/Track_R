@@ -145,7 +145,7 @@ app.UseExceptionHandler(webApplicationBuilder =>
                 
                 if (notificarPorSlack == "1")
                 {
-                    Logger.NotificarPorSlack(exceptionHandlerPathFeature.Error);
+                    await Logger.NotificarPorSlack(exceptionHandlerPathFeature.Error);
                 }
                 Logger.WriteError(exceptionHandlerPathFeature.Error, app.Environment);
 

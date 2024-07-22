@@ -133,12 +133,14 @@ export class MisEstudiosPage implements OnInit {
     const modal = await this.modalController.create({
       component: MisEstudiosFormularioPage,
     });
-    //cuando se cierre el modal la lista de estudios ya estará actualizada
-    modal.onWillDismiss().then(() => {
-      this.consultarEstudios();
-    })
 
     await modal.present();
+
+    await modal.onWillDismiss().then(({data, role}) => {
+      if(role == 'confirm'){
+        this.consultarEstudios();
+      }
+    })
   }
 
   protected async presentarAlertaEliminar(expediente: ExpedienteEstudioGridDTO) {
