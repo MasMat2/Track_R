@@ -150,11 +150,7 @@ export class ChatMensajeHubService {
         ).toPromise();
     } else {
         // Intentar reconectar si el estado es distinto a Connected
-        await this.connection.start().catch(() => {
-            throw new Error(
-                'No se pudo establecer la conexión con el Hub de Notificaciones'
-            );
-        });
+      this.iniciarConexion();
     }
 }
   public async enviarMensaje(mensaje: ChatMensajeDTO) {
