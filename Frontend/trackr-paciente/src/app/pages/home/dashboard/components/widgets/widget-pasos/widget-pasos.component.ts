@@ -26,13 +26,13 @@ export class WidgetPasosComponent  implements OnInit {
 
   private availability: HealthConnectAvailabilityStatus = "Unavailable"; //Disponibilidad de healthConnect
 
-  //protected pasos: number = 15_000;
   protected meta: number = 0;
 
   protected metros: number = 10_000;
   protected horas: number = 0;
   protected minutos: number = 0;
   protected pasos: string = '0';
+  protected unidadMedida: string = "pasos";
 
   protected distancia: number;
 

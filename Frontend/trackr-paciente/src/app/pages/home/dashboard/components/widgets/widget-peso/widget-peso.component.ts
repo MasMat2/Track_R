@@ -26,7 +26,7 @@ export class WidgetPesoComponent  implements OnInit {
   protected pesoFaltante: number = 5;
   protected dias: number = 40;
 
-  protected peso: number = 0;
+  protected peso: string = '0';
   protected unidadMedida: string = "kg";
 
 
@@ -89,7 +89,7 @@ export class WidgetPesoComponent  implements OnInit {
         const ultimoPeso = ultimoRegistro.weight!.value;
 
         this.pesoActual = (ultimoPeso/1000).toString();
-        console.log("Último peso registrado:", ultimoPeso);
+        this.peso = this.pesoActual;
       } else {
           console.log("No se encontró información de peso en el último registro.");
       }

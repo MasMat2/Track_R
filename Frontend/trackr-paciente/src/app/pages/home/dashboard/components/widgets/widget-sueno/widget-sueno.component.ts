@@ -120,6 +120,8 @@ export class WidgetSuenoComponent  implements OnInit {
 
     this.totalSuenoHoras = Math.floor(this.sleep / 60);
     this.totalSuenoMin = this.sleep % 60;
+    this.horas=this.totalSuenoHoras;
+    this.minutos=this.totalSuenoMin;
 
     this.totalSuenoREMHoras = Math.floor(this.sleepREM / 60);
     this.totalSuenoREMMin = this.sleepREM % 60;
