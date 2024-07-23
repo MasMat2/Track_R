@@ -35,12 +35,20 @@ export class WidgetOmronComponent  implements OnInit {
 
   async openOmronConnect() {
     try {
+      const canOpen = await AppLauncher.canOpenUrl({ url: 'jp.co.omron.healthcare.omron_connect' });
 
-      await AppLauncher.canOpenUrl({ url: 'jp.co.omron.healthcare.omron_connect' }); // El nombre del paquete se obtiene investigandolo desde la app OMRON connect
-      await AppLauncher.openUrl({ url: 'jp.co.omron.healthcare.omron_connect' }); 
-
+      if (canOpen.value) {
+        await AppLauncher.openUrl({ url: 'jp.co.omron.healthcare.omron_connect' });
+        console.log('Abriendo Omron');
+      } else {
+        // Abrir Play Store si la app no está instalada
+        await AppLauncher.openUrl({ url: 'market://details?id=jp.co.omron.healthcare.omron_connect' });
+        console.log('Omron no está instalada. Abriendo Play Store.');
+      }
     } catch (error) {
       console.error('No se puede abrir la aplicación Omron', error);
+      // Abrir Play Store si ocurre algún error
+      await AppLauncher.openUrl({ url: 'market://details?id=jp.co.omron.healthcare.omron_connect' });
     }
   }
 
