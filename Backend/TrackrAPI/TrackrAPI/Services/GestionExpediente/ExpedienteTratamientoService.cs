@@ -256,14 +256,14 @@ public class ExpedienteTratamientoService
         {
             IdExpediente = expedienteTratamientoDto.IdExpediente,
             Farmaco = expedienteTratamientoDto.Farmaco,
-            FechaRegistro = DateTime.Now.ToLocalTime(),
+            FechaRegistro = DateTime.Now.ToUniversalTime(),
             Cantidad = expedienteTratamientoDto.Cantidad,
             Unidad = expedienteTratamientoDto.Unidad,
             Indicaciones = expedienteTratamientoDto.Indicaciones,
             IdPadecimiento = expedienteTratamientoDto.IdPadecimiento,
             IdUsuarioDoctor = expedienteTratamientoDto.IdUsuarioDoctor,
-            FechaInicio = expedienteTratamientoDto.FechaInicio.ToLocalTime(),
-            FechaFin = expedienteTratamientoDto.FechaFin.Value.ToLocalTime(),
+            FechaInicio = expedienteTratamientoDto.FechaInicio,
+            FechaFin = expedienteTratamientoDto.FechaFin,
         };
     }
 

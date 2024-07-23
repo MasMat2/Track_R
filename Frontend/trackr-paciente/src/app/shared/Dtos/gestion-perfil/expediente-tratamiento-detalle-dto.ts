@@ -3,8 +3,8 @@ export class ExpedienteTratamientoDetalleDto{
     idExpediente?: number;
     farmaco : string;
     // fechaRegistro : Date;
-    fechaInicio?: Date;
-    fechaFin?: Date;
+    fechaInicio?: string;
+    fechaFin?: string;
     cantidad: number
     unidad : string;
     indicaciones : string;
