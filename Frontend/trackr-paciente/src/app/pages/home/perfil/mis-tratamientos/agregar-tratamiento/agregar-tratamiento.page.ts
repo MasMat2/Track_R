@@ -19,6 +19,8 @@ import { ExpedientePadecimientoService } from '@http/gestion-expediente/expedien
 import { CapacitorUtils } from '@utils/capacitor-utils';
 import { UnidadMedidaService } from 'src/app/services/dashboard/unidad-medida.service';
 import { UnidadMedidaGridDto } from 'src/app/shared/Dtos/catalogo/unidad-medida-grid-dto';
+import { FechaService } from '@services/fecha.service';
+import { split } from 'lodash';
 
 //TODO:Definir cantidad máxima de fármaco
 const CANTIDAD_MAXIMA = 99;
@@ -84,7 +86,8 @@ export class AgregarTratamientoPage implements OnInit {
     private _modalCtrl: ModalController,
     private alertController: AlertController,
     private capacitorUtils: CapacitorUtils,
-    private unidadMedidaService: UnidadMedidaService
+    private unidadMedidaService: UnidadMedidaService,
+    private fechaService: FechaService
   ) { 
     addIcons({
     'chevron-left': 'assets/img/svg/chevron-left.svg',
@@ -104,7 +107,6 @@ export class AgregarTratamientoPage implements OnInit {
 
   public ngOnInit() {
     this.formTratamiento = this.fb.group({
-      // fechaRegistro: [(new Date()).toISOString(), Validators.required],
       farmaco: ['', Validators.required],
       cantidad: ['1', Validators.required],
       unidad: ['', Validators.required],
@@ -310,8 +312,8 @@ export class AgregarTratamientoPage implements OnInit {
     const tratamientoDto: ExpedienteTratamientoDetalleDto = {
       idExpedienteTratamiento: this.perfilTratamientoDto?.idExpedienteTratamiento,//tendra valor solo cuando la accion sea editar
       farmaco: formValues.farmaco,
-      fechaInicio: new Date(formValues.fechaInicio),
-      fechaFin: !formValues.tratamientoPermanente ? new Date(formValues.fechaFin) : undefined,
+      fechaInicio: this.setHora(formValues.fechaInicio, "00:00:00"), 
+      fechaFin: !formValues.tratamientoPermanente ? (this.setHora(formValues.fechaFin, "00:00:00")) : undefined, 
       cantidad: formValues.cantidad,
       unidad: formValues.unidad,
       indicaciones: formValues.indicaciones,
@@ -404,8 +406,12 @@ export class AgregarTratamientoPage implements OnInit {
     return diaSemanaControl.value.indexOf(true) !== -1; //true si hay al menos un dia seleccionado
   }
 
-  protected hayHoraRepetida(){
+  protected setHora(fecha: string, nuevaHora: string){
+    const date = new Date(fecha);
+    const [horas, minutos, segundos] = nuevaHora.split(':').map(Number);
+    date.setHours(horas, minutos, segundos);
 
+    return date.toISOString().slice(0,-1);
   }
 
   protected eliminarAdjunto(){

@@ -150,7 +150,7 @@ export class ChatMensajeHubService {
         ).toPromise();
     } else {
         // Intentar reconectar si el estado es distinto a Connected
-      this.iniciarConexion();
+      await this.iniciarConexion();
     }
 }
   public async enviarMensaje(mensaje: ChatMensajeDTO) {
