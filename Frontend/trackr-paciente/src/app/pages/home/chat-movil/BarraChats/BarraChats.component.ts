@@ -41,8 +41,6 @@ export class BarraChatsComponent {
   private idUsuario:number;
   protected chats$: Observable<ChatDTO[]>;
   protected chats: ChatDTO[];
-  //protected chatMensajes$: Observable<ChatMensajeDTO[][]>;
-  //protected mensajes: ChatMensajeDTO[][];
   protected misDoctores: UsuarioDoctoresDto[];
   protected usuarios: number[] = [];
   protected tituloChat:string;
@@ -55,7 +53,6 @@ export class BarraChatsComponent {
   constructor(
     private router: Router,
     private ChatHubServiceService:ChatHubServiceService,
-    //private chatMensajeHubService:ChatMensajeHubService,
     private archivoService : ArchivoService,
     private sanitizer : DomSanitizer,
     private doctoresService : MisDoctoresService,
@@ -69,7 +66,6 @@ export class BarraChatsComponent {
     this.obtenerChats()
     this.consultarDoctores();
     this.obtenerIdUsuario();
-    //this.obtenerMensajes();
   }
 
   obtenerIdUsuario(){
@@ -81,52 +77,19 @@ export class BarraChatsComponent {
   obtenerChats() {
     this.chats$ = this.ChatHubServiceService.chat$;
     this.chats$.subscribe((chats) => {
-      console.log(chats);
       chats.forEach((chat) => {
         if(chat.imagenBase64 != null){
           let base64String = "data:" +chat.tipoMime + ';base64,' + chat.imagenBase64;
           let aux = this.sanitizer.bypassSecurityTrustUrl(base64String);
           chat.urlImagen = base64String;
         }
-        
-        // this.archivoService.obtenerUsuarioImagen(chat.idCreadorChat).subscribe((imgaen) => {
-        //   let objectURL = URL.createObjectURL(imgaen);
-        //   let urlImagen = objectURL;
-        //   let url = this.sanitizer.bypassSecurityTrustUrl(urlImagen);
-        //   chat.urlImagen = url;
-        // });
       });
       
       this.chats = chats;
       this.chatsFiltradosPorBusqueda = chats;
-      //this.obtenerUltimoMensaje();
     });
   }
 
-  // obtenerMensajes() {
-  //   this.chatMensajes$ = this.chatMensajeHubService.chatMensaje$;
-
-  //   this.chatMensajes$.subscribe((res) => {
-  //     this.mensajes = res;
-  //     this.obtenerUltimoMensaje();
-  //   });
-  // }
-
-  // obtenerUltimoMensaje():void{
-  //   if(this.mensajes){
-  //     let ultimoMensaje = this.mensajes.map(arr => {console.log(arr); return arr[arr.length - 1]?.mensaje || ""})
-  //     this.chats.forEach((x,index) => {x.ultimoMensaje = ultimoMensaje[index]})
-  //   }
-  // }
-
-  /*obtenerUltimoMensaje(): void {
-    let ultimoMensaje = this.mensajes.map(
-      (arr) => arr[arr.length - 1]?.mensaje || ''
-    );
-    this.chats.forEach((x, index) => {
-      x.ultimoMensaje = ultimoMensaje[index];
-    });
-  }*/
 
   enviarIdChat(idChat: number) {
     this.router.navigate(['home/chat-movil/chat',idChat]);
@@ -174,8 +137,6 @@ export class BarraChatsComponent {
       }
     });
     tab.present();
-    // this.verListaDoctores = ! this.verListaDoctores;
-    // this.doctorSeleccionado = false;
   }
 
   protected buscarChat(event: any){

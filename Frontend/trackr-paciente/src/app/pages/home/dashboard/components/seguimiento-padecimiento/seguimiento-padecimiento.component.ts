@@ -23,6 +23,7 @@ import { ModalController } from '@ionic/angular/standalone';
 import { BitacoraCompletaComponent } from './bitacora-completa/bitacora-completa.component';
 import { EntidadEstructuraService } from '../../../../../shared/http/gestion-entidad/entidad-estructura.service';
 import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 
 
 @Component({
@@ -175,7 +176,8 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
     private route: ActivatedRoute,
     private router: Router,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private loadingSpinner: LoadingSpinnerService
   
     ) { addIcons({
       'chevron-left': 'assets/img/svg/chevron-left.svg',
@@ -343,10 +345,17 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   }
     
   private consultarPadecimiento(){
+    this.loadingSpinner.presentLoading();
+
     this.entidadEstructuraService.consultarPadecimientoPorId(parseInt(this.idPadecimiento)).subscribe({
       next: (data) => {
-        console.log(data);
         this.padecimiento = data;
+      },
+      error: () => {
+        this.loadingSpinner.dismissLoading();
+      },
+      complete: () => {
+        this.loadingSpinner.dismissLoading();
       }
     })
   }

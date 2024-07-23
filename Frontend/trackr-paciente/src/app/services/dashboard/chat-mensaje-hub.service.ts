@@ -119,6 +119,11 @@ export class ChatMensajeHubService {
 
   private async ensureConnection(): Promise<void> {
     const timeoutms = 10_000;
+    const token = await this.authService.obtenerToken();
+
+    if (!token) {
+        throw new Error('No se encontró un token válido');
+    }
 
     if (this.connection.state === HubConnectionState.Connected) {
       return;
@@ -133,7 +138,7 @@ export class ChatMensajeHubService {
       this.connection.state === HubConnectionState.Connecting ||
       this.connection.state === HubConnectionState.Reconnecting
     ) {
-      this.connectionStatus.asObservable().pipe(
+        await this.connectionStatus.asObservable().pipe(
         filter((state) => state === HubConnectionState.Connected),
         take(1),
         timeout(timeoutms),
@@ -142,10 +147,12 @@ export class ChatMensajeHubService {
             'No se pudo establecer la conexión con el Hub de Notificaciones'
           );
         })
-      );
+        ).toPromise();
+    } else {
+        // Intentar reconectar si el estado es distinto a Connected
+      this.iniciarConexion();
     }
-  }
-
+}
   public async enviarMensaje(mensaje: ChatMensajeDTO) {
     await this.ensureConnection();
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting.Internal;
 using Renci.SshNet;
+using Renci.SshNet.Common;
 using System.IO;
 using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.Repositorys.Sftp;
@@ -159,13 +160,27 @@ namespace TrackrAPI.Services.Sftp
                         // Download File
                         using (Stream fileStream = new FileStream(localFilePath, FileMode.OpenOrCreate))
                         {
-                            sftp.DownloadFile(linuxPath, fileStream);
+                            try
+                            {
+                                sftp.DownloadFile(linuxPath, fileStream);
+                            }
+                            catch (SftpPathNotFoundException ex)
+                            {
+                                Console.WriteLine("The file does not exist.");
+                            }
                         }
-                        
+
                         // Update Cache
-                        var fileInfo = sftp.GetAttributes(linuxPath);
-                        this.UpdateCache(filePath, fileInfo.LastWriteTime);
-                        
+                        try
+                        {
+                            var fileInfo = sftp.GetAttributes(linuxPath);
+                            this.UpdateCache(filePath, fileInfo.LastWriteTime);
+                        }
+                        catch(SftpPathNotFoundException ex)
+                        {
+                            Console.WriteLine("The file does not exist.");
+                        }
+
                         sftp.Disconnect();
                     }
                 }
@@ -213,6 +228,31 @@ namespace TrackrAPI.Services.Sftp
             }
 
             return Convert.ToBase64String(fileContent);
+        }
+
+        public void DeleteFile(string filePath)
+        {
+            try
+            {
+                using (var sftp = new SftpClient(host, port, username, password))
+                {
+                    sftp.Connect();
+
+                    string linuxPath = GetRemotePath(filePath);
+
+                    if (sftp.Exists(linuxPath))
+                    {
+                        sftp.DeleteFile(linuxPath);
+                    }
+
+                    sftp.Disconnect();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejar la excepción de manera que no detenga el programa
+                Console.WriteLine($"Error al eliminar el archivo: {ex.Message}");
+            }
         }
 
         private void UpdateCache(string filePath, DateTime lastWriteTime){

@@ -155,7 +155,7 @@ export class MensajesComponent{
       fecha: new Date(),
       idChat: this.idChat,
       mensaje: this.msg,
-      idPersona: 5333,
+      idPersona: this.idUsuario,
       archivo: '',
       idArchivo: 0
     }
@@ -285,7 +285,7 @@ export class MensajesComponent{
       let byte = await this.readFileAsByteArray(this.archivo);
 
       let aux: ArchivoFormDTO = {
-        idUsuario: 5333,
+        idUsuario: this.idUsuario,
         archivo: Array.from(byte),
         archivoNombre: this.archivo.name,
         archivoTipoMime: this.archivo.type,
@@ -523,7 +523,7 @@ export class MensajesComponent{
         const codigo = match[0];
         this.contestarLlamada(codigo);
       } else {
-        console.log("Error al validar codigo meet jitsi.");
+        console.error("Error al validar codigo meet jitsi.");
       }
 
 
@@ -537,7 +537,7 @@ export class MensajesComponent{
         this.route.navigate(['/home/chat', codigo]);
 
       } else {
-        console.log("Error al validar codigo meet jitsi.");
+        console.error("Error al validar codigo meet jitsi.");
       }
     }
   }

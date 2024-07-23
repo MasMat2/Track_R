@@ -8,7 +8,6 @@ import { Component } from '@angular/core';
 export class ToolbarComponent {
 
   handleSearch(searchTerm: string): void {
-    console.log(searchTerm);
     // this.filteredItems = this.items.filter(item =>
     //   item.toLowerCase().includes(searchTerm.toLowerCase())
     // );

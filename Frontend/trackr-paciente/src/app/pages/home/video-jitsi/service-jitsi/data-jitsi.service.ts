@@ -8,6 +8,7 @@ import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-h
 import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
 import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
 import { AudioInterface, ParticipantInterface } from '../interfaces/jitsi-interface';
+import { ChatPersonaService } from '@http/chat/chat-persona.service';
 
 declare var JitsiMeetExternalAPI: any;
 
@@ -44,7 +45,8 @@ export class DataJitsiService {
     private orientationService: ScreenOrientationService,
     private mensajeHubService: ChatMensajeHubService,
     private chatMensajeHubServiceService: ChatHubServiceService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private chatPersonaService : ChatPersonaService
   ) { }
 
 
@@ -90,20 +92,19 @@ export class DataJitsiService {
     });
   }
 
-  mandarMensajeLlamada(mensajeLlamada : string): void{
-    console.log("id chat mensaje " + this.idChat);
+  async mandarMensajeLlamada(mensajeLlamada : string){
+    const  idUsuario = await this.chatPersonaService.obtenerIdUsuarioAsync();
     let msg: ChatMensajeDTO = {
       fecha: new Date(),
       idChat: parseInt(this.idChat),
       mensaje: mensajeLlamada,
-      idPersona:5333,
+      idPersona: idUsuario,
       archivo: '',
       idArchivo: 0,
       esVideoChat:true
     }
 
     this.mensajeHubService.enviarMensaje(msg);
-    console.log("mandarMensajeLlamada method msg: "+mensajeLlamada)
   }
 
   iniciarWebCam = async () => {
@@ -122,13 +123,11 @@ export class DataJitsiService {
     this.mensajes$ = this.mensajeHubService.chatMensaje$;
     this.mensajes$.subscribe(res => {
       this.mensajes = res;
-      console.log(this.mensajes)
     })
   }
 
   comenzarLlamada(idchat: number){
     this.idChat=idchat.toString();
-    console.log('probando idchat: '+this.idChat+' . '+idchat)
     this.route.paramMap.subscribe(params => {
       this.idChat = idchat.toString();
     });
@@ -137,7 +136,6 @@ export class DataJitsiService {
     this.iniciarWebCam(); //iniciamos camara y microfono para que pueda ser iniciada una llamada en el iframe de jitsi
 
     this.createNewRoom(); //Metodo para crear una llamada con jitsi
-    console.log('termino metodo comenzar llamada');
   }
 
   contestarLlamada(meetCode: string) {
@@ -196,7 +194,6 @@ export class DataJitsiService {
   }
 
   handleClose = () => {
-    console.log("handleClose");
     this.orientationService.lockPortrait();
     const container = document.getElementById('jaas-container');
       if (container) {
@@ -205,31 +202,30 @@ export class DataJitsiService {
   }
 
   handleParticipantLeft = async (participant: ParticipantInterface) => {
-    console.log("handleParticipantLeft", participant); // { id: "2baa184e" }
+     //console.log("handleParticipantLeft", participant); { id: "2baa184e" }
     const data = await this.getParticipants();
   }
 
   handleParticipantJoined = async (participant: ParticipantInterface) => {
-    console.log("handleParticipantJoined", participant); // { id: "2baa184e", displayName: "Shanu Verma", formattedDisplayName: "Shanu Verma" }
+    //console.log("handleParticipantJoined", participant);  { id: "2baa184e", displayName: "Shanu Verma", formattedDisplayName: "Shanu Verma" }
     const data = await this.getParticipants();
   }
 
   handleVideoConferenceJoined = async (participant: ParticipantInterface) => {
-    console.log("handleVideoConferenceJoined", participant); // { roomName: "bwb-bfqi-vmh", id: "8c35a951", displayName: "Akash Verma", formattedDisplayName: "Akash Verma (me)"}
+    //console.log("handleVideoConferenceJoined", participant);  { roomName: "bwb-bfqi-vmh", id: "8c35a951", displayName: "Akash Verma", formattedDisplayName: "Akash Verma (me)"}
     const data = await this.getParticipants();
   }
 
   handleVideoConferenceLeft = () => {
-    console.log("handleVideoConferenceLeft");
     this.router.navigate(['/home']);
   }
 
   handleMuteStatus = (audio: AudioInterface) => {
-    console.log("handleMuteStatus", audio); // { muted: true }
+   //console.log("handleMuteStatus", audio);  { muted: true }
   }
 
   handleVideoStatus = (video: AudioInterface) => {
-    console.log("handleVideoStatus", video); // { muted: true }
+    //console.log("handleVideoStatus", video);  { muted: true }
   }
 
   getParticipants() {

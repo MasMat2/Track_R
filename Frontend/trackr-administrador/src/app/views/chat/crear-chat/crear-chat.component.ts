@@ -52,7 +52,6 @@ export class CrearChatComponent {
   }
 
   public tieneMismoDoctor(): boolean {
-      console.log(this.personas.length)
       // Obtén el doctorAsociado del primer idUsuario seleccionado
       const expedienteInicial = this.expedientes.find(expediente => expediente.idUsuario === this.personas[0]);
       if (!expedienteInicial) 

@@ -63,17 +63,23 @@ export class NotificacionesComponent  implements OnInit
 
   private consultarNotificaciones(): void {
     this.notificaciones$ = this.notificacionHubService.notificaciones$.pipe(
-      map((notificaciones) =>{
-          return notificaciones.map((notificacion) => ({
-          idTipoNotificacion: notificacion.idTipoNotificacion,
-          id: notificacion.idNotificacionUsuario,
-          titulo: notificacion.titulo,
-          mensaje: notificacion.mensaje,
-          fecha: notificacion.fechaAlta,
-          visto: notificacion.visto,
-          idChat: notificacion.idChat
-        } as NotificacionPacientePopOverDto)) }
-      )
+      map((notificaciones) => {
+        console.log(notificaciones);
+        return notificaciones.map((notificacion) => {
+          // Convertir la fecha UTC a la hora local
+          const localDate = new Date(notificacion.fechaAlta.getTime() - notificacion.fechaAlta.getTimezoneOffset() * 60000);
+    
+          return {
+            idTipoNotificacion: notificacion.idTipoNotificacion,
+            id: notificacion.idNotificacionUsuario,
+            titulo: notificacion.titulo,
+            mensaje: notificacion.mensaje,
+            fecha: localDate, // Asignar la fecha local
+            visto: notificacion.visto,
+            idChat: notificacion.idChat
+          } as NotificacionPacientePopOverDto;
+        });
+      })
     );
   }
 

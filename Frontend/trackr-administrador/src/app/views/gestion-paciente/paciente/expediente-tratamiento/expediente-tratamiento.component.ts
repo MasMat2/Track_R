@@ -130,7 +130,6 @@ export class ExpedienteTratamientoComponent implements OnInit {
 
   private actualizarGrafica( apegoTratamientoData : ApegoTomaMedicamentoDto[])
   {
-    console.log(apegoTratamientoData);
     this.tratamientos = apegoTratamientoData;
     this.etiquetas = apegoTratamientoData.map(t => t.padecimientoNombre)
     this.data = apegoTratamientoData.map( t => Math.ceil(t.apego));

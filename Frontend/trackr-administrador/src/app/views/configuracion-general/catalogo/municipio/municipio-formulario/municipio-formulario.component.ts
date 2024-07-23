@@ -96,7 +96,7 @@ export class MunicipioFormularioComponent extends CrudFormularioBase<MunicipioFo
     }
     else {
       this.estados$ = this.estadoService.consultarPorPaisParaSelector(idPais)
-        .pipe(tap((estados) => console.log(estados)));
+        .pipe(tap((estados) => {}));
     }
   }
 }

@@ -113,12 +113,12 @@ namespace TrackrAPI.Controllers.Seguridad
 
         [HttpPost]
         [Route("agregar")]
-        public int Agregar(UsuarioDto usuarioDto)
+        public async Task<int> Agregar(UsuarioDto usuarioDto)
         {
             var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
             usuarioDto.IdHospital = (int)usuario.IdHospital;
             usuarioDto.IdCompania = usuario.IdCompania;
-            return usuarioService.Agregar(usuarioDto, (int)usuario.IdHospital, usuario.IdUsuario);
+            return await usuarioService.Agregar(usuarioDto, (int)usuario.IdHospital, usuario.IdUsuario);
         }
 
         [AllowAnonymous]
@@ -150,9 +150,9 @@ namespace TrackrAPI.Controllers.Seguridad
 
         [HttpPut]
         [Route("editarAdministrador")]
-        public void EditarAdministrador(UsuarioDto usuarioDto)
+        public async Task EditarAdministrador(UsuarioDto usuarioDto)
         {
-            usuarioService.EditarAdministrador(usuarioDto);
+            await usuarioService.EditarAdministrador(usuarioDto);
         }
 
         [HttpPut]

@@ -151,7 +151,6 @@ export class SidebarNavDropdownComponent implements OnInit {
       } as CustomAlertData
     });
     alert.beforeClosed().subscribe(result => {
-      console.log(result); //Rol confirm o cancel
       if(result == "confirm"){
         this.logout();
       }

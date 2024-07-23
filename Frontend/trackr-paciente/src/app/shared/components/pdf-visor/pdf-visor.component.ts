@@ -58,13 +58,11 @@ export class PdfVisorComponent  implements OnInit {
 
   protected masZoom(){
     this.zoom += 0.2;
-    console.log(this.zoom);
   }
 
   protected menosZoom(){
     if(this.zoom > 0.6){
       this.zoom -= 0.2;
-      console.log(this.zoom);
     }
   }
   

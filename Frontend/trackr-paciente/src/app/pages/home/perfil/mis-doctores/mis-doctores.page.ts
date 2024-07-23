@@ -1,19 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AlertController, IonicModule, ModalController } from '@ionic/angular';
 import { MisDoctoresService } from '@http/gestion-expediente/mis-doctores.service';
 import { UsuarioDoctoresDto } from '../../../../shared/Dtos/usuario-doctores-dto';
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores-selector-dto';
 import { UsuarioDoctorDto } from 'src/app/shared/Dtos/usuario-doctor-dto';
 import { DoctoresFormularioPage } from './doctores-formulario/doctores-formulario.page';
 import { RouterModule } from '@angular/router';
-import { url } from 'inspector';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ArchivoService } from '@services/archivo.service';
 import { addIcons } from 'ionicons';
-import { chevronBack, add, trashOutline } from 'ionicons/icons';
 import { FormsModule } from '@angular/forms';
-import { Constants } from '@utils/constants/constants';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-mis-doctores',
@@ -32,15 +29,19 @@ export class MisDoctoresPage {
   protected misDoctores: UsuarioDoctoresDto[];
   protected doctoresSelector: UsuarioDoctoresSelectorDto[];
   protected currentDoctor: UsuarioDoctorDto;
+  protected eliminandoEstudio: boolean = false;
 
   constructor(
     private doctoresService: MisDoctoresService,
     private alertController: AlertController,
-    private archivoService: ArchivoService,
-    private sanitizer: DomSanitizer,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private loadingSpinner: LoadingSpinnerService
   ) {
-    addIcons({ chevronBack, add, trashOutline });
+    addIcons({
+     'chevron-left': 'assets/img/svg/chevron-left.svg',
+      'plus': 'assets/img/svg/plus.svg',
+      'trash': 'assets/img/svg/trash-2.svg'
+    });
   }
 
   ionViewWillEnter() {
@@ -48,18 +49,32 @@ export class MisDoctoresPage {
   }
 
   consultarDoctores() {
-    this.doctoresService.consultarExpediente().subscribe((doctores) => {
-      this.misDoctores = doctores;
-    });
+    this.loadingSpinner.presentLoading();
+
+    this.doctoresService.consultarExpediente().subscribe({
+      next: (doctores) => {
+        this.misDoctores = doctores;
+      },
+      error: () => {
+        this.loadingSpinner.dismissLoading();
+      },
+      complete: () => {
+        this.loadingSpinner.dismissLoading();
+      }
+    })
   }
 
   private eliminarDoctor(doctor: UsuarioDoctorDto) {
+    this.eliminandoEstudio = true;
     this.doctoresService.eliminar(doctor).subscribe({
       next: () => {
         this.consultarDoctores();
       },
-      error: () => {},
+      error: () => {
+        this.eliminandoEstudio = false;
+      },
       complete: () => {
+        this.eliminandoEstudio = false;
         this.presentarAlertaEliminadoExitosamente();
       },
     });
@@ -107,12 +122,14 @@ export class MisDoctoresPage {
     const modal = await this.modalCtrl.create({
       component: DoctoresFormularioPage,
     });
-    //cuando se cierre el modal la lista de doctores ya estará actualizada
-    modal.onWillDismiss().then(() => {
-      this.consultarDoctores();
-    });
 
     await modal.present();
+
+    const {data, role} = await modal.onWillDismiss();
+
+    if(role == 'confirm'){
+      this.consultarDoctores();
+    }
   }
 
   protected listaDoctoresVacia() {

@@ -115,7 +115,6 @@ export class InformacionGeneralComponent implements OnInit , OnExit {
       tap(
         (data) => {
           this.infoUsuario = data;
-          console.log(data);
           this.calcularEdad();
         }
       )

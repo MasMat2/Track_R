@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MisDoctoresService } from '@http/gestion-expediente/mis-doctores.service';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { UsuarioDoctorDto } from 'src/app/shared/Dtos/usuario-doctor-dto';
@@ -7,7 +7,6 @@ import { UsuarioDoctoresSelectorDto } from 'src/app/shared/Dtos/usuario-doctores
 import { addIcons } from 'ionicons';
 import { FormsModule } from '@angular/forms';
 import { ModalController } from '@ionic/angular/standalone';
-import { BehaviorSubject } from 'rxjs';
 import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 
 @Component({
@@ -26,10 +25,6 @@ export class DoctoresFormularioPage implements OnInit  {
   protected currentDoctor: UsuarioDoctorDto;
   protected doctoresSelector: UsuarioDoctoresSelectorDto[];
 
-  private cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private cargando$ = this.cargandoSubject.asObservable();
-  private loading: any;
-
   constructor(
     private doctoresService: MisDoctoresService,
     private alertController: AlertController,
@@ -43,52 +38,27 @@ export class DoctoresFormularioPage implements OnInit  {
   }
 
   ngOnInit(): void {
-    this.cargando$.subscribe(cargando => {
-      if (cargando) {
-        this.presentLoading();
-      } else {
-        this.dismissLoading();
-      }
-    });
   }
 
   ionViewWillEnter() {
     this.consultarSelector();
   }
 
-  async presentLoading() {
-    this.loadingSpinnerService.presentLoading();
-  }
-
-  async dismissLoading() {
-    this.loadingSpinnerService.dismissLoading();
-  }
-
   protected seleccionDoctor(doctor: any) {
+    this.doctorSeleccionado();
     this.currentDoctor = doctor;
+    this.doctorSeleccionado();
   }
 
   protected agregar() {
-
-    const MENSAJE_REQUERIMIENTO: string = `Seleccione un doctor`;
-    
-    if(this.currentDoctor == undefined)
-    {
-      this.presentAlert(MENSAJE_REQUERIMIENTO);
-      return;
-    }
-    this.cargandoSubject.next(true);
     const subscription = this.doctoresService.agregar(this.currentDoctor)
       .subscribe({
         next: () => {
           this.consultarSelector();
         },
         error: () => {
-          this.cargandoSubject.next(false);
-          
-         },
+        },
         complete: () => {
-          this.cargandoSubject.next(false);
           this.presentAlertSuccess();
           subscription.unsubscribe();
         }
@@ -97,28 +67,25 @@ export class DoctoresFormularioPage implements OnInit  {
   }
 
   private consultarSelector() {
-    this.doctoresService.consultarSelector().subscribe((data) => {
-      this.doctoresSelector = data;
+    this.loadingSpinnerService.presentLoading();
+    this.doctoresService.consultarSelector().subscribe({
+      next: (doctores) => {
+        this.doctoresSelector = doctores;
+      },
+      error: () => {
+        this.loadingSpinnerService.dismissLoading();
+      },
+      complete: ()=> {
+        this.loadingSpinnerService.dismissLoading();
+      }
     })
   }
 
-  private async presentAlert(mensaje : string) {
-    const alert = await this.alertController.create({
-      header: 'Mis Doctores',
-      subHeader: mensaje,
-      buttons: ['OK'],
-      cssClass: 'custom-alert color-error icon-info'
-    });
-
-    await alert.present();
-  }
-
-  protected cerrarModal(){
-    this.modarCtrl.dismiss();
+  protected cerrarModal(data: any, role: string){
+    this.modarCtrl.dismiss(data, role);
   }
 
   protected async presentAlertSuccess() {
-
     const alertSuccess = await this.alertController.create({
       header: 'Doctor Asignado',
       subHeader: 'El doctor ha sido asignado exitosamente.',
@@ -126,13 +93,21 @@ export class DoctoresFormularioPage implements OnInit  {
         text: 'De acuerdo',
         role: 'confirm',
         handler: () => {
-          this.cerrarModal();
+          this.cerrarModal(null, 'confirm');
         }
       }],
       cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();
+  }
+
+  protected listaDoctoresVacia(){
+    return (this.doctoresSelector?.length <= 0);
+  }
+
+  protected doctorSeleccionado(){
+    return this.currentDoctor !== undefined;
   }
 
 }

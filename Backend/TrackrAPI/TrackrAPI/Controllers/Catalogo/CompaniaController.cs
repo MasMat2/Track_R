@@ -59,9 +59,9 @@ namespace TrackrAPI.Controllers.Catalogo
 
         [HttpPost]
         [Route("agregar")]
-        public int Agregar(CompaniaDto companiaDto)
+        public async Task<int> Agregar(CompaniaDto companiaDto)
         {
-            return companiaService.Agregar(companiaDto);
+            return await companiaService.Agregar(companiaDto);
         }
 
 

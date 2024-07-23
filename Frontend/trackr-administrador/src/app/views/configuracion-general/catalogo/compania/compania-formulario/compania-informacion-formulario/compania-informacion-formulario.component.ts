@@ -182,7 +182,7 @@ export class CompaniaInformacionFormularioComponent implements OnInit {
     const companiaLogotipo = await this.companiaLogotipoService
       .consultarPorCompania(idCompania)
       .toPromise()
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
 
     this.companiaLogotipo = companiaLogotipo ?? null;
   }

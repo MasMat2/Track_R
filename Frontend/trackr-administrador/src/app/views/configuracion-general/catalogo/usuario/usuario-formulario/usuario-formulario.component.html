@@ -1,5 +1,4 @@
 <div class="d-flex">
-  <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
       <div>Usuario - {{ accion }}</div>
@@ -20,7 +19,7 @@
           >
             <div class="row">
 
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="label-input required-label">Nombre</label>
                   <div>
@@ -44,7 +43,7 @@
                 </div>
               </div>
 
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="label-input required-label">Apellido Paterno</label>
                   <div>
@@ -64,7 +63,7 @@
                 </div>
               </div>
 
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="label-input required-label">Apellido Materno</label>
                   <div>
@@ -84,31 +83,32 @@
                 </div>
               </div>
 
+                
+              <div
+              class="col-md-3">
+            <div class="form-group">
+              <label class="label-input required-label">Título</label>
+              <div>
+                <ng-select
+                  #tituloLst="ngModel"
+                  name="tituloName"
+                  bindLabel="nombre"
+                  bindValue="idTituloAcademico"
+                  [items]="tituloList"
+                  [(ngModel)]="usuario.idTituloAcademico"
+                  [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"
+                ></ng-select>
+              </div>
             </div>
+          </div>
+              </div>
+          
 
             <div class="row">
 
-              <div
-                  [class.col-md-4]="usuario.idUsuario > 0"
-                  [class.col-md-2]="!(usuario.idUsuario > 0)">
-                <div class="form-group">
-                  <label class="label-input required-label">Título</label>
-                  <div>
-                    <ng-select
-                      #tituloLst="ngModel"
-                      name="tituloName"
-                      bindLabel="nombre"
-                      bindValue="idTituloAcademico"
-                      [items]="tituloList"
-                      [(ngModel)]="usuario.idTituloAcademico"
-                      [placeholder]="placeHolderSelect"
-                      [notFoundText]="placeHolderNoOptions"
-                    ></ng-select>
-                  </div>
-                </div>
-              </div>
 
-              <div class="col-md-2" *ngIf="!(usuario.idUsuario > 0)">
+              <div class="col-md-3" *ngIf="!(usuario.idUsuario > 0)">
                 <div class="form-group">
                   <label class="label-input required-label">Perfil</label>
                   <div>
@@ -131,7 +131,7 @@
                 </div>
               </div>
 
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="label-input required-label">Tipo de Usuario</label>
                   <div>
@@ -154,7 +154,7 @@
                 </div>
               </div>
 
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="label-input required-label">Rol</label>
                   <div>
@@ -178,9 +178,50 @@
                 </div>
               </div>
 
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
-                  <label class="label-input required-label">Username</label>
+                  <label class="label-input required-label">Área</label>
+                  <div>
+                    <ng-select
+                      #departamentoLst="ngModel"
+                      name="departamentoName"
+                      bindLabel="nombre"
+                      bindValue="idArea"
+                      [items]="areaList"
+                      [(ngModel)]="usuario.idArea"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                    ></ng-select>
+                  </div>
+                </div>
+              </div>
+
+             <div class="col-md-3" *ngIf="esEdicion">
+                <div class="form-group">
+                  <div style="display: flex; flex-direction: column">
+                    <label class="label-input required-label">Activo</label>
+                    <label class="switch" for="estatus">
+                      <input
+                        #estatus="ngModel"
+                        name="estatusName"
+                        type="checkbox"
+                        id="estatus"
+                        [(ngModel)]="usuario.habilitado"
+                      />
+                      <div class="slider round">
+                        <span class="on">Si</span>
+                        <span class="off">No</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div> 
+
+              <div class="row">
+              <!-- Nombre de usuario -->
+              <div class="col-md">
+                <div class="form-group">
+                  <label class="label-input required-label">Nombre de usuario</label>
                   <div>
                     <input
                       #correo="ngModel"
@@ -199,7 +240,8 @@
                 </div>
               </div>
 
-              <div class="col-md-4" *ngIf="accesoContrasena">
+              <!-- Contrasena -->
+              <div class="col-md" *ngIf="accesoContrasena">
                 <div class="form-group">
                   <label class="label-input required-label">Contraseña</label>
                   <div>
@@ -228,7 +270,8 @@
                 </div>
               </div>
 
-              <div class="col-md-4" *ngIf="accesoContrasena">
+              <!-- Confirmar contrasena -->
+              <div class="col-md" *ngIf="accesoContrasena">
                 <div class="form-group">
                   <label class="label-input required-label">Confirmar Contraseña</label>
                   <div>
@@ -276,7 +319,8 @@
                 </div>
               </div> -->
 
-              <div class="col-md-4">
+              <!-- Cedula profesional -->
+              <div class="col-md">
                 <div class="form-group">
                   <label class="label-input required-label">Cédula Profesional</label>
                   <div>
@@ -292,25 +336,9 @@
                 </div>
               </div>
 
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label class="label-input required-label">Área</label>
-                  <div>
-                    <ng-select
-                      #departamentoLst="ngModel"
-                      name="departamentoName"
-                      bindLabel="nombre"
-                      bindValue="idArea"
-                      [items]="areaList"
-                      [(ngModel)]="usuario.idArea"
-                      [placeholder]="placeHolderSelect"
-                      [notFoundText]="placeHolderNoOptions"
-                    ></ng-select>
-                  </div>
-                </div>
-              </div>
 
-              <div class="col-md-4">
+              <!-- RFC -->
+              <div class="col-md">
                 <div class="form-group">
                   <label class="label-input required-label">RFC</label>
                   <div>
@@ -331,6 +359,8 @@
                 </div>
               </div>
 
+              </div>
+              
               <!-- <div class="col-md-4">
                 <div class="form-group">
                   <label class="label-input required-label">Régimen Fiscal</label>
@@ -390,38 +420,21 @@
                 </div>
               </div> -->
 
-              <div class="col-md-4" *ngIf="esEdicion">
-                <div class="form-group">
-                  <div style="display: flex; flex-direction: column">
-                    <label class="label-input required-label">Activo</label>
-                    <label class="switch" for="estatus">
-                      <input
-                        #estatus="ngModel"
-                        name="estatusName"
-                        type="checkbox"
-                        id="estatus"
-                        [(ngModel)]="usuario.habilitado"
-                      />
-                      <div class="slider round">
-                        <span class="on">Si</span>
-                        <span class="off">No</span>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-              </div>
+
 
             </div>
 
             <!-- Datos de Contacto -->
-            <div class="subseccion">
-              Datos de Contacto
+            <div class="subseccion-gray">
+              <div class="titulo">
+                Datos de Contacto
+              </div>
             </div>
 
             <div class="row">
 
               <!-- Pais -->
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="label-input required-label">País</label>
                   <div>
@@ -442,7 +455,7 @@
               </div>
 
               <!-- Código Postal -->
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="label-input required-label">Código Postal</label>
                   <div>
@@ -478,7 +491,7 @@
               </div>
 
               <!-- Estado -->
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="label-input required-label">Estado</label>
                   <div>
@@ -500,7 +513,7 @@
               </div>
 
               <!-- Municipio -->
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="label-input required-label">Municipio</label>
                   <div>
@@ -521,7 +534,7 @@
               </div>
 
               <!-- Localidad -->
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="label-input required-label">Localidad</label>
                   <div>
@@ -542,7 +555,7 @@
               </div>
 
               <!-- Colonia -->
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="label-input required-label">Colonia</label>
                   <div>
@@ -563,7 +576,7 @@
               </div>
 
               <!-- Calle -->
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="label-input required-label">Calle</label>
                   <div>
@@ -580,7 +593,7 @@
               </div>
 
               <!-- Número Exterior -->
-              <div class="col-md-2">
+              <div class="col">
                 <div class="form-group">
                   <label class="label-input required-label">Núm. Exterior</label>
                   <div>
@@ -597,7 +610,7 @@
               </div>
 
               <!-- Número Interior -->
-              <div class="col-md-2">
+              <div class="col">
                 <div class="form-group">
                   <label class="label-input required-label">Núm. Interior</label>
                   <div>
@@ -614,7 +627,7 @@
               </div>
 
               <!-- Teléfono -->
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="label-input required-label">Teléfono (10 dígitos)</label>
                   <div>
@@ -635,7 +648,7 @@
               </div>
 
               <!-- Correo Personal -->
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="label-input required-label">Correo Personal</label>
                   <div>
@@ -658,6 +671,45 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Adjuntar imagen -->
+              <div class="col-md-3 d-flex align-items-end" >
+                <div class="form-group w-100" *ngIf="!url || url == ''; else imagen">
+                  <div>
+                    <input
+                      id="imagen"
+                      name="imagen"
+                      class="form-control"
+                      type="file"
+                      autocomplete="off"
+                      (change)="fileChange($event)"
+                      style="display: none"
+                      accept="image/*"
+                    />
+                    <button
+                      onclick="document.getElementById('imagen').click()"
+                      type="button"
+                      class="btn-agregar-foto w-100 d-flex justify-content-between align-items-center"
+                    >
+                      Adjuntar Imagen
+
+                      <lucide-icon name="camera" ></lucide-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <ng-template #imagen>
+                <div class="w-100 h-75 imagen-usuario">
+                  
+                    <img *ngIf="url !== undefined" id="logo" [src]="url"/>
+                    <p>{{urlName}}</p>
+                    <button (click)="eliminarImagen()">
+                      <lucide-icon name="trash-2" color="#B3261E"></lucide-icon>
+                    </button>
+                </div>
+                
+              </ng-template>
 
             </div>
 
@@ -793,48 +845,11 @@
 
             </div> -->
 
-            <!-- Imagen -->
-            <div class="subseccion">
-              Imagen
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div style="text-align: center; margin-top: 15px">
-                  <img *ngIf="url !== undefined" id="logo" [src]="url" height="200" />
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12 text-center">
-                <div class="form-group">
-                  <div>
-                    <input
-                      #file="ngModel"
-                      [(ngModel)]="imagenBase64"
-                      id="imagen"
-                      name="imagen"
-                      class="form-control"
-                      type="file"
-                      autocomplete="off"
-                      (change)="fileChange($event)"
-                      style="display: none"
-                      accept="image/*"
-                    />
-                    <button
-                      onclick="document.getElementById('imagen').click()"
-                      type="button"
-                      class="btn-terceario"
-                    >
-                      Buscar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
           </form>
-
-          <div class="modal-footer">
+            <div class="subseccion-gray">
+              &nbsp;
+            </div>
+          <div class="modal-footer justify-content-end">
             <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar</button>
             <button type="submit" form="form" class="btn-primario ml-3" [disabled]="btnSubmit">Guardar</button>
           </div>
@@ -925,7 +940,10 @@
               </div>
             </div>
           </div>
-          <div class="modal-footer">
+          <div class="subseccion-gray">
+            &nbsp;
+          </div>
+          <div class="modal-footer justify-content-end">
             <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar</button>
             <button (click)="guardarPermiso()" type="button" class="btn-primario ml-3">Guardar</button>
           </div>

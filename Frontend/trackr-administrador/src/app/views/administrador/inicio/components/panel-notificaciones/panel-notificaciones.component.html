@@ -6,11 +6,11 @@
     </button>
   </div>
   <div class="notificaciones">
-    <div class="notificacion" *ngFor="let notificacion of notificaciones$ | async" [ngClass]="{'vista': !notificacion.visto}">
+    <div class="notificacion" *ngFor="let notificacion of notificaciones$ | async" [ngClass]="{'vista': !notificacion.visto}" (click)="!clicDeshabilitado && marcarComoVista(notificacion)">
       <div class="contenedor-marcador" *ngIf="!notificacion.visto">
         <div class="marcador-visto"></div>
       </div>
-      <div class="contenido" (click)="marcarComoVista(notificacion.id)">
+      <div class="contenido">
         <div class="thumbnail">
           <img [src]="notificacion.imagen" alt="picture">
         </div>
