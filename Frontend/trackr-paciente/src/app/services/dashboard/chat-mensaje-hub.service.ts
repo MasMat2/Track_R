@@ -131,6 +131,7 @@ export class ChatMensajeHubService {
       this.connection.state === HubConnectionState.Disconnected ||
       this.connection.state === HubConnectionState.Disconnecting
     ) {
+      await this.iniciarConexion();
       throw new Error(
         'No se ha iniciado la conexion con el Hub de Notificaciones'
       );
