@@ -2,13 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
-
 import { PerfilTratamientoService } from '@http/gestion-perfil/perfil-tratamiento.service';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
-
-import { Photo } from '@capacitor/camera';
 import {  ModalController } from '@ionic/angular/standalone';
-
 import { addIcons } from 'ionicons';
 import { ExpedienteTratamientoDetalleDto } from 'src/app/shared/Dtos/gestion-perfil/expediente-tratamiento-detalle-dto';
 import { MisDoctoresService } from '@http/gestion-expediente/mis-doctores.service';
@@ -20,7 +16,6 @@ import { CapacitorUtils } from '@utils/capacitor-utils';
 import { UnidadMedidaService } from 'src/app/services/dashboard/unidad-medida.service';
 import { UnidadMedidaGridDto } from 'src/app/shared/Dtos/catalogo/unidad-medida-grid-dto';
 import { FechaService } from '@services/fecha.service';
-import { split } from 'lodash';
 
 //TODO:Definir cantidad máxima de fármaco
 const CANTIDAD_MAXIMA = 99;
@@ -42,10 +37,7 @@ const CANTIDAD_MAXIMA = 99;
 })
 export class AgregarTratamientoPage implements OnInit {
 
-  protected readonly now = new Date();
-  protected readonly localOffset = this.now.getTimezoneOffset() * 60000;
-  protected readonly localISOTime = (new Date(this.now.getTime() - this.localOffset)).toISOString().slice(0,-1);
-  protected readonly dateToday: string = this.localISOTime;
+  protected readonly dateToday = this.fechaService.obtenerFechaActualISOString();
 
   protected accion: string;
   protected formTratamiento: FormGroup;
@@ -170,8 +162,7 @@ export class AgregarTratamientoPage implements OnInit {
     const horasFormArray = this.formTratamiento.get('horas') as FormArray;
     horasFormArray.clear();
     this.perfilTratamientoDto.horas.forEach(hora => {
-      const fechaLocal = this.formatearHoraAFechaLocal(hora);
-      horasFormArray.push(new FormControl(fechaLocal));
+      horasFormArray.push(new FormControl(hora));
     });
 
     //asignar la imagen del medicamento
@@ -195,7 +186,7 @@ export class AgregarTratamientoPage implements OnInit {
   protected formatearHoraAFechaLocal(hora: string){
     const dateTodayString = this.dateToday.split('T')[0];
     const fecha = new Date(`${dateTodayString}T${hora}`);
-    const fechalocalString = new Date(fecha.getTime() - this.localOffset).toISOString().slice(0,-1);
+    const fechalocalString = this.fechaService.fechaUTCAFechaLocal(fecha.toISOString());
 
     return fechalocalString;
   }
@@ -306,14 +297,15 @@ export class AgregarTratamientoPage implements OnInit {
     const formValues = this.formTratamiento.value;
 
     const horasTiempos= formValues.horas.map((hora: string) => {
-      return hora.split('T')[1].split('.')[0]; 
+      const nuevaHora = this.fechaService.fechaLocalAFechaUTC(hora); //pasar a UTC
+      return nuevaHora.split('T')[1].split('.')[0]; 
     });
 
     const tratamientoDto: ExpedienteTratamientoDetalleDto = {
       idExpedienteTratamiento: this.perfilTratamientoDto?.idExpedienteTratamiento,//tendra valor solo cuando la accion sea editar
       farmaco: formValues.farmaco,
-      fechaInicio: this.setHora(formValues.fechaInicio, "00:00:00"), 
-      fechaFin: !formValues.tratamientoPermanente ? (this.setHora(formValues.fechaFin, "00:00:00")) : undefined, 
+      fechaInicio: this.setHora(formValues.fechaInicio, "00:00:00"),
+      fechaFin: !formValues.tratamientoPermanente ? (this.setHora(formValues.fechaFin, "00:00:00")) : undefined,
       cantidad: formValues.cantidad,
       unidad: formValues.unidad,
       indicaciones: formValues.indicaciones,

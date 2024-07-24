@@ -7,8 +7,9 @@ import { addIcons } from 'ionicons';
 import { AgregarTratamientoPage } from '../agregar-tratamiento/agregar-tratamiento.page';
 import { ImageOnlyModalComponent } from '@sharedComponents/image-only-modal/image-only-modal.component';
 import { PerfilTratamientoService } from '@http/gestion-perfil/perfil-tratamiento.service';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { ExpedienteTratamientoDetalleDto } from 'src/app/shared/Dtos/gestion-perfil/expediente-tratamiento-detalle-dto';
+import { FechaService } from '@services/fecha.service';
 
 
 interface ObjetoConsumo {
@@ -43,7 +44,8 @@ export class DetalleTratamientoComponent  implements OnInit {
 
   constructor(
     private modalController: ModalController,
-    private perfilTratamientoService: PerfilTratamientoService
+    private perfilTratamientoService: PerfilTratamientoService,
+    private fechaService: FechaService
   ) { addIcons({
     'chevron-left': 'assets/img/svg/chevron-left.svg',
     'chevron-right': 'assets/img/svg/chevron-right.svg',
@@ -51,8 +53,6 @@ export class DetalleTratamientoComponent  implements OnInit {
     'pen-line': 'assets/img/svg/pen-line.svg',
     'arrow-up': 'assets/img/svg/arrow-up.svg',
     'arrow-down': 'assets/img/svg/arrow-down.svg',
-
-
   })}
 
   ngOnInit() {
@@ -61,9 +61,15 @@ export class DetalleTratamientoComponent  implements OnInit {
   }
 
   protected consultarDetalleTratamiento(): void {
-    this.tratamiento$ = this.perfilTratamientoService.consultarTratamientoDetalle(this.idExpedienteTratamiento);
-    this.tratamiento$.subscribe({
-      next: (data)=>{
+    this.perfilTratamientoService.consultarTratamientoDetalle(this.idExpedienteTratamiento).pipe(
+      map((data) => {
+        if(data.horas){
+          data.horas = data.horas.map(hora => this.fechaService.horaUTCAHoraLocal(hora));
+        }
+        return data;
+      })
+    ).subscribe({
+      next: (data)=> {
         this.tratamiento = data;
         this.backgroundUrl = `url(data:${this.tratamiento.tipoMime};base64,${this.tratamiento.imagenBase64})`;
         this.textoRecordatorios = this.formatearTextoRecordatorios(this.tratamiento.diaSemana, this.tratamiento.horas);

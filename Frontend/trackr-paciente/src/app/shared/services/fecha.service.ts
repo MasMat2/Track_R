@@ -31,4 +31,19 @@ export class FechaService {
     const localISOTime = (new Date(fecha.getTime() - 2*(this.localOffset))).toISOString().slice(0,-1);
     return localISOTime;
   }
+
+  public horaUTCAHoraLocal(hora: string){
+    const dateTodayString = this.localISOTime.split('T')[0];
+    const fecha = new Date(`${dateTodayString}T${hora}`);
+    const localISOTime = (new Date(fecha.getTime() - 2*(this.localOffset))).toISOString().slice(0,-1);
+
+    return localISOTime.split('T')[1].split('.')[0];
+  }
+
+  public horaLocalAHoraUTC(hora: string){
+    const dateTodayString = this.localISOTime.split('T')[0];
+    const fecha = new Date(`${dateTodayString}T${hora}`);
+
+    return fecha.toISOString().split('T')[1].split('.')[0];
+  }
 }
