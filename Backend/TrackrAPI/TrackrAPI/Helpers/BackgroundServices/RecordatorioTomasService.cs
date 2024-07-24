@@ -9,7 +9,7 @@ using TrackrAPI.Services.Notificaciones;
 
 namespace TrackrAPI.Helpers;
 
-public class RecordatorioTomasService : IHostedService, IDisposable
+public class RecordatorioTomasService : IRecordatorioTomasService
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private Timer _timer;
