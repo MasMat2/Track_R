@@ -25,7 +25,7 @@ namespace TrackrAPI.Controllers.GestionExpediente
         }
 
         [HttpGet("consultar/{idExpedienteEstudio}")]
-        public ExpedienteEstudio Consultar(int idExpedienteEstudio)
+        public ExpedienteEstudioDTO Consultar(int idExpedienteEstudio)
         {
             return _expedienteEstudioService.Consultar(idExpedienteEstudio);
         }

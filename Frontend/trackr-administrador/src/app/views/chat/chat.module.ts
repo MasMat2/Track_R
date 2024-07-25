@@ -20,6 +20,8 @@ import { MatRippleModule } from '@angular/material/core';
 import { AudioWaveComponent } from '@sharedComponents/audio-wave/audio-wave.component';
 import {TextFieldModule} from '@angular/cdk/text-field';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgxExtendedPdfViewerCommonModule } from 'ngx-extended-pdf-viewer/lib/ngx-extended-pdf-viewer-common.module';
+import { NgxExtendedPdfViewerService } from 'ngx-extended-pdf-viewer';
 
 
 
@@ -48,6 +50,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatFormFieldModule,
     TextFieldModule
   ],
-  exports: [BarraChatsComponent]
+  exports: [BarraChatsComponent],
+  providers: [NgxExtendedPdfViewerService]
 })
 export class ChatModule { }
