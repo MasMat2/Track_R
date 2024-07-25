@@ -74,6 +74,7 @@ builder.Services.Scan(scan => scan
 
 // Cambiar de Transient (por builder.Services.Scan) a Singleton
 builder.Services.AddSingleton<RsaService>();
+builder.Services.AddSingleton<IRecordatorioTomasService, RecordatorioTomasService>();
 //builder.Services.AddSingleton<SftpService>();
 
 

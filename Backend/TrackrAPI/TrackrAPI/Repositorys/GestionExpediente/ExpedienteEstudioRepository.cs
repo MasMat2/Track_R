@@ -16,6 +16,7 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         {
             return context.ExpedienteEstudio
                 .Include(ee => ee.IdExpedienteNavigation)
+                .Include(ee => ee.IdArchivoNavigation)
                 .Where(ee => ee.IdExpedienteEstudio == idExpedienteEstudio)
                 .FirstOrDefault();
         }

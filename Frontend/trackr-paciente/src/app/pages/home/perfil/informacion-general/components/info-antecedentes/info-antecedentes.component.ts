@@ -106,24 +106,29 @@ export class InfoAntecedentesComponent  implements OnInit {
       cssClass: 'custom-sheet-modal'
       
     });
-    modal.onWillDismiss().then(() => {
-      this.consultarAntecedentes();
-    })
 
     await modal.present();
+
+    const {data, role} = await modal.onWillDismiss();
+    if(role == "confirm"){
+      this.consultarAntecedentes();
+    }
+    else{
+      return
+    }
   }
 
   private eliminarAntecedente(antecedente: ExpedientePadecimientoDto){
-    this.eliminandoAntecedente = true;
     this.expedientePadecimientoService.eliminar(antecedente.idExpedientePadecimiento).subscribe({
       next: () => {
-        this.consultarAntecedentes();
+        this.eliminandoAntecedente = true;
       },
       error: () => {
         this.eliminandoAntecedente = false;
       },
       complete: () => {
         this.eliminandoAntecedente = false;
+        this.consultarAntecedentes();
         this.presentarAlertaEliminadoExitosamente();
       }
     });

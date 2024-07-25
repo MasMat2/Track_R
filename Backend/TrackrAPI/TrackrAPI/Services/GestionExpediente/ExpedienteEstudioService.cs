@@ -40,19 +40,21 @@ namespace TrackrAPI.Services.GestionExpediente
         /// </summary>
         /// <param name="idExpedienteEstudio">IdEstudio a consultar</param>
         /// <returns>Estudio Consultado</returns>
-        public ExpedienteEstudio Consultar(int idExpedienteEstudio)
+        public ExpedienteEstudioDTO Consultar(int idExpedienteEstudio)
         {
             var expediente = _expedienteEstudioRepository.Consultar(idExpedienteEstudio);
 
-            //expediente.Archivo = new Byte[0];
+            var expedientedto = new ExpedienteEstudioDTO
+            {
+                IdExpedienteEstudio = expediente.IdExpedienteEstudio,
+                IdExpediente = expediente.IdExpediente,
+                Nombre = expediente.Nombre,
+                FechaRealizacion = expediente.FechaRealizacion,
+                ArchivoBase64 = _sftpService.DownloadFile(expediente.IdArchivoNavigation.ArchivoUrl),
+                ArchivoTipoMime = expediente.IdArchivoNavigation.ArchivoTipoMime
+            };
 
-            //if (expediente.ArchivoUrl != null || expediente.ArchivoNombre != "")
-            //{
-            //    expediente.Archivo = Convert.FromBase64String(_sftpService.DownloadFileAsBase64(expediente.ArchivoUrl));
-            //}
-
-            return expediente;
-
+            return expedientedto;
         }
 
         public void Agregar(ExpedienteEstudioFormularioCapturaDTO expedienteEstudioDTO, int idUsuario)

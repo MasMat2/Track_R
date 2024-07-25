@@ -14,18 +14,21 @@ public class ExpedienteTratamientoService
     private readonly IExpedienteTrackrRepository expedienteTrackrRepository;
     private readonly IArchivoRepository _archivoRepository;
     private readonly SftpService _sftpService;
+    private readonly IRecordatorioTomasService _recordatorioTomasService;
     private readonly string defaultPath = Path.Combine("Archivos", "Tratamiento", "placeholder.png");
 
     public ExpedienteTratamientoService(
         IExpedienteTratamientoRepository expedienteTratamientoRepository,
         IExpedienteTrackrRepository expedienteTrackrRepository,
         IArchivoRepository archivoRepository,
-        SftpService sftpService
+        SftpService sftpService,
+        IRecordatorioTomasService recordatorioTomasService
     ){
         this.expedienteTratamientoRepository = expedienteTratamientoRepository;
         this.expedienteTrackrRepository = expedienteTrackrRepository;
         this._archivoRepository = archivoRepository;    
         _sftpService = sftpService;
+        _recordatorioTomasService = recordatorioTomasService;
     }
 
     public IEnumerable<ExpedienteTratamientoGridDTO> ConsultarParaGrid(int idUsuario)
@@ -268,7 +271,7 @@ public class ExpedienteTratamientoService
     }
 
     // Agregar Tratamiento
-    public int Agregar(ExpedienteTratamientoDetalleDto expedienteTratamientoDto, int idUsuario)
+    public async Task<int> Agregar(ExpedienteTratamientoDetalleDto expedienteTratamientoDto, int idUsuario)
     {
         using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
 
@@ -306,7 +309,11 @@ public class ExpedienteTratamientoService
 
         expedienteTratamientoRepository.AgregarRecordatorios(recordatorios);
 
+        await _recordatorioTomasService.StartAsync(CancellationToken.None);
+
         scope.Complete();
+
+
 
         return idExpedienteTratamiento;
         

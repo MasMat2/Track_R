@@ -10,7 +10,6 @@ import { RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { FormsModule } from '@angular/forms';
 import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
-import { Console } from 'console';
 
 @Component({
   selector: 'app-mis-doctores',
@@ -29,7 +28,7 @@ export class MisDoctoresPage {
   protected misDoctores: UsuarioDoctoresDto[];
   protected doctoresSelector: UsuarioDoctoresSelectorDto[];
   protected currentDoctor: UsuarioDoctorDto;
-  protected eliminandoEstudio: boolean = false;
+  protected eliminandoDoctor: boolean = false;
 
   constructor(
     private doctoresService: MisDoctoresService,
@@ -65,16 +64,16 @@ export class MisDoctoresPage {
   }
 
   private eliminarDoctor(doctor: UsuarioDoctorDto) {
-    this.eliminandoEstudio = true;
     this.doctoresService.eliminar(doctor).subscribe({
       next: () => {
-        this.consultarDoctores();
+        this.eliminandoDoctor = true;
       },
       error: () => {
-        this.eliminandoEstudio = false;
+        this.eliminandoDoctor = false;
       },
       complete: () => {
-        this.eliminandoEstudio = false;
+        this.eliminandoDoctor = false;
+        this.consultarDoctores();
         this.presentarAlertaEliminadoExitosamente();
       },
     });

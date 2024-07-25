@@ -13,17 +13,20 @@ import { ImgVisorComponent } from '@sharedComponents/img-visor/img-visor.compone
 import { ColDef, ICellRendererParams, ValueGetterParams } from 'ag-grid-community';
 import { format } from 'date-fns';
 import { CONFIG_COLUMN_ACTION, GRID_ACTION } from '@utils/constants/grid';
+import { ExpedienteEstudioDTO } from '@dtos/gestion-expediente/expediente-recomendacion/expediente-estudio-dto';
 
 @Component({
   selector: 'app-expediente-estudio',
   templateUrl: './expediente-estudio.component.html',
-  styleUrls: ['./expediente-estudio.component.scss']
+  styleUrls: ['./expediente-estudio.component.scss'],
+  entryComponents: [PdfVisorComponent, ImgVisorComponent]
 })
 export class ExpedienteEstudioComponent implements OnInit {
 
   protected estudioPacienteList: ExpedienteEstudioGridDTO[] = [];
   protected estudios$: Observable<ExpedienteEstudioGridDTO[]>;
   protected estudio: ExpedienteEstudio;
+  protected estudioDto : ExpedienteEstudioDTO;
   protected urlImagen = "";
   // protected pdfSrc: any;
   protected idUsuario: number;
@@ -87,29 +90,29 @@ export class ExpedienteEstudioComponent implements OnInit {
 
   protected async onVer(estudio: ExpedienteEstudioGridDTO){
     await lastValueFrom(this.expedienteEstudioService.consultar(estudio.idExpedienteEstudio))
-    .then((expedienteEstudio: ExpedienteEstudio) => {
-      this.estudio = expedienteEstudio;
-    });
+    .then((expedienteEstudio: ExpedienteEstudioDTO) => {
+      this.estudioDto = expedienteEstudio;
 
-    if(this.estudio.archivoTipoMime == 'application/pdf'){
+    if(this.estudioDto.archivoTipoMime == 'application/pdf'){
       this.abrirModal();
     }
-    if(this.estudio.archivoTipoMime == 'image/png' || this.estudio.archivoTipoMime == 'image/jpeg' || this.estudio.archivoTipoMime == 'image/gif'){
+    if(this.estudioDto.archivoTipoMime == 'image/png' || this.estudioDto.archivoTipoMime == 'image/jpeg' || this.estudioDto.archivoTipoMime == 'image/gif'){
       this.abrirModalImagen();
     }
     else{
       return
     }
+    });
       
   }
 
   private abrirModalImagen(){
 
     const initialState = {
-      nombreEstudio: this.estudio.nombre,
-      archivo: this.estudio.archivo,
-      archivoTipoMime: this.estudio.archivoTipoMime,
-      nombre: this.estudio.nombre
+      nombreEstudio: this.estudioDto.nombre,
+      archivo: this.estudioDto.archivoBase64,
+      archivoTipoMime: this.estudioDto.archivoTipoMime,
+      nombre: this.estudioDto.nombre
     };
 
     this.bsModalRef = this.modalService.show(
@@ -129,9 +132,9 @@ export class ExpedienteEstudioComponent implements OnInit {
       PdfVisorComponent,
       GeneralConstant.CONFIG_MODAL_DEFAULT
       );
-    this.bsModalRef.content.archivo = this.estudio.archivo;
-    this.bsModalRef.content.nombre = this.estudio.nombre;
-    this.bsModalRef.content.archivoNombre = this.estudio.archivoNombre;
+    this.bsModalRef.content.archivo = this.estudioDto.archivoBase64;
+    this.bsModalRef.content.nombre = this.estudioDto.nombre;
+    this.bsModalRef.content.archivoNombre = this.estudioDto.nombre;
     this.bsModalRef.content.onClose = (cerrar: boolean) => {
       this.bsModalRef.hide();
     };
