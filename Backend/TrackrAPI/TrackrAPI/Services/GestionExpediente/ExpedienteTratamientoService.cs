@@ -21,12 +21,14 @@ public class ExpedienteTratamientoService
         IExpedienteTratamientoRepository expedienteTratamientoRepository,
         IExpedienteTrackrRepository expedienteTrackrRepository,
         IArchivoRepository archivoRepository,
-        SftpService sftpService
+        SftpService sftpService,
+        IRecordatorioTomasService recordatorioTomasService
     ){
         this.expedienteTratamientoRepository = expedienteTratamientoRepository;
         this.expedienteTrackrRepository = expedienteTrackrRepository;
         this._archivoRepository = archivoRepository;    
         _sftpService = sftpService;
+        _recordatorioTomasService = recordatorioTomasService;
     }
 
     public IEnumerable<ExpedienteTratamientoGridDTO> ConsultarParaGrid(int idUsuario)
