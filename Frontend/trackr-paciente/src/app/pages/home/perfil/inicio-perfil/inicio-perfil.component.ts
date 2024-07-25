@@ -31,7 +31,7 @@ export class InicioPerfilComponent  implements OnInit {
 
   protected informacionPerfil$: Observable<InformacionPerfilDto>;
   protected infoPerfil: InformacionPerfilDto;
-  protected fotoPerfilUrl: string = "assets/img/svg/Image_placeholder.svg";
+  protected fotoPerfilUrl: string = "assets/img/svg/avatar-placeholder.svg";
 
   protected pacientes: UsuarioExpedienteGridDTO[];
 

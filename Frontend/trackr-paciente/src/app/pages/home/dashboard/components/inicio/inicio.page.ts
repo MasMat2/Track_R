@@ -54,7 +54,7 @@ export class InicioPage implements OnInit {
 
   protected informacionHeader$: Observable<InformacionPerfilDto>;
   protected infoHeader: InformacionPerfilDto;
-  protected fotoPerfilUrl: string = "assets/img/svg/Image_placeholder.svg";
+  protected fotoPerfilUrl: string = "assets/img/svg/avatar-placeholder.svg";
 
   constructor(
     private widgetService : WidgetService,
