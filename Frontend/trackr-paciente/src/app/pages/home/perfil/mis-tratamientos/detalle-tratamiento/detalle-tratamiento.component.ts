@@ -10,6 +10,7 @@ import { PerfilTratamientoService } from '@http/gestion-perfil/perfil-tratamient
 import { map, Observable } from 'rxjs';
 import { ExpedienteTratamientoDetalleDto } from 'src/app/shared/Dtos/gestion-perfil/expediente-tratamiento-detalle-dto';
 import { FechaService } from '@services/fecha.service';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 
 
 interface ObjetoConsumo {
@@ -45,7 +46,8 @@ export class DetalleTratamientoComponent  implements OnInit {
   constructor(
     private modalController: ModalController,
     private perfilTratamientoService: PerfilTratamientoService,
-    private fechaService: FechaService
+    private fechaService: FechaService,
+    private loadingSpinner: LoadingSpinnerService
   ) { addIcons({
     'chevron-left': 'assets/img/svg/chevron-left.svg',
     'chevron-right': 'assets/img/svg/chevron-right.svg',
@@ -61,6 +63,7 @@ export class DetalleTratamientoComponent  implements OnInit {
   }
 
   protected consultarDetalleTratamiento(): void {
+    this.loadingSpinner.presentLoading();
     this.perfilTratamientoService.consultarTratamientoDetalle(this.idExpedienteTratamiento).pipe(
       map((data) => {
         if(data.horas){
@@ -73,6 +76,12 @@ export class DetalleTratamientoComponent  implements OnInit {
         this.tratamiento = data;
         this.backgroundUrl = `url(data:${this.tratamiento.tipoMime};base64,${this.tratamiento.imagenBase64})`;
         this.textoRecordatorios = this.formatearTextoRecordatorios(this.tratamiento.diaSemana, this.tratamiento.horas);
+      },
+      error: () => {
+        this.loadingSpinner.dismissLoading();
+      },
+      complete: () => {
+        this.loadingSpinner.dismissLoading();
       }
     })
   }
