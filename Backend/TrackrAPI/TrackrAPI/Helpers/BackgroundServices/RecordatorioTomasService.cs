@@ -13,6 +13,7 @@ public class RecordatorioTomasService : IRecordatorioTomasService
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private Timer _timer;
+    private bool Update { get; set; } = false;
 
     private readonly int waitTime = 5;
 
@@ -21,6 +22,10 @@ public class RecordatorioTomasService : IRecordatorioTomasService
     {
         
         _scopeFactory = scopeFactory;
+    }
+
+    public void SetUpdate(bool update){
+        Update = update;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -49,7 +54,7 @@ public class RecordatorioTomasService : IRecordatorioTomasService
                                 .FirstOrDefault();
 
             // Actualizar DistributedLock solo en el siguiente cuarto de hora y ejecutar proceso
-            if(dLock != null && EsSiguienteCuartoHora(dLock.LastUpdated)){
+            if(dLock != null && EsSiguienteCuartoHora(dLock.LastUpdated) || Update){
                 context.DistributedLocks.Attach(dLock);
                 dLock.LastUpdated = DateTime.Now;
                 context.SaveChanges();
