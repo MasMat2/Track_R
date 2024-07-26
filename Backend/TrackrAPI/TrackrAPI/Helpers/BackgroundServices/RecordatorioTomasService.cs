@@ -56,7 +56,7 @@ public class RecordatorioTomasService : IRecordatorioTomasService
             // Actualizar DistributedLock solo en el siguiente cuarto de hora y ejecutar proceso
             if(dLock != null && EsSiguienteCuartoHora(dLock.LastUpdated) || Update){
                 context.DistributedLocks.Attach(dLock);
-                dLock.LastUpdated = DateTime.Now;
+                dLock.LastUpdated = DateTime.Now.ToUniversalTime();
                 context.SaveChanges();
                 
                 ActualizarContador(context);
@@ -82,7 +82,7 @@ public class RecordatorioTomasService : IRecordatorioTomasService
     public bool EsSiguienteCuartoHora(DateTime lastUpdated)
     {
         DateTime nextQuarterDateTime = lastUpdated.AddMinutes(15 - (lastUpdated.Minute % 15));
-        return DateTime.Now > nextQuarterDateTime;
+        return DateTime.Now.ToUniversalTime() > nextQuarterDateTime;
     }
 
     // Procesos
@@ -98,7 +98,7 @@ public class RecordatorioTomasService : IRecordatorioTomasService
     }
 
     public async Task CrearTratamientoTomas(TrackrContext context , NotificacionPacienteService notificacionPacienteService){
-        DateTime now = DateTime.Now;
+        DateTime now = DateTime.Now.ToUniversalTime();
         int currentDay = ((int)now.DayOfWeek + 7) % 7; // Monday = 1, ..., Saturday = 6, Sunday = 0
         TimeSpan currentTime = now.TimeOfDay;
         TimeSpan timeIn15Minutes = currentTime + TimeSpan.FromMinutes(15);
