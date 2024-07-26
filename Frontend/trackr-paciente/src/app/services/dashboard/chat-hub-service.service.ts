@@ -8,7 +8,7 @@ import {
   LogLevel,
 } from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
-import { catchError, filter, take, timeout } from 'rxjs/operators';
+import { catchError, filter, map, take, timeout } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Constants } from '@utils/constants/constants';
 import { ChatPersonaService } from '@http/chat/chat-persona.service';
@@ -26,7 +26,17 @@ export class ChatHubServiceService {
   );
 
   private chatSubject = new BehaviorSubject<ChatDTO[]>([]);
-  public chat$ = this.chatSubject.asObservable();
+  public chat$ = this.chatSubject.asObservable().pipe(
+    map((chats) => {
+      return chats.map(chat => {
+        if(!chat.fechaYaFormateada){
+          chat.fecha = this.fechaService.fechaUTCAFechaLocal(chat.fecha);
+          chat.fechaYaFormateada = true;
+        }
+        return chat;
+      });
+    })
+  );
 
   private readonly endpoint = 'hub/chat';
 
@@ -91,34 +101,13 @@ export class ChatHubServiceService {
   }
 
   private async onNuevoChat(chat:ChatDTO,idPersonas:number[]){
-    chat.fecha = this.fechaService.fechaLocalAFechaUTC(new Date());
 
-    const chats = this.chatSubject.value;
-    chats.push(chat);
-    //this.chatSubject.next(chats);
-    /*chat.fecha = new Date();
-
-    const chats = this.chatSubject.value;
-    chats.push(chat);
-    
-    let chatPersona: ChatPersonaFormDTO = {
-      idPersonas: idPersonas,
-      idChat: chat.idChat || 0,
-      idTipo: 2
-    }
-
-    this.ChatPersonaService.agregarPersonas(chatPersona).subscribe(res => {
-      this.chatSubject.next(chats);
-      console.log(chats)
-      this.connection.invoke('NuevaConexion',chats)
-    })*/
+    //no hacer nada de momento
+    //const chats = this.chatSubject.value;
+    //chats.push(chat);
   }
 
   private onNuevaConexion(chats: ChatDTO[]): void {
-    for (const chat of chats) {
-      chat.fecha = this.fechaService.fechaUTCAFechaLocal(chat.fecha);
-    }
-
     this.chatSubject.next(chats);
   }
 
