@@ -1,90 +1,113 @@
-<app-modal-base titulo="Crear Chat">
+<app-modal-base titulo="Crear chat con...">
   <ng-template #modalBody>
-    <div class="row">
-      <div class="col-md-12">
-        <label class="label-input required-label" style="color: gray;" >A quién se enviará el mensaje</label>
-      </div>
-
-      <div class="col-md-3">
-        <div class="form-check">
-          <input type="radio"
-                 class="form-check-input"
-                 name="destinatario"
-                 id="todos"
-                 value="1"
-                 [(ngModel)]="tipo"
-                 (change)="seleccionarTodos()">
-          <label for="todos" class="form-check-label">Todos</label>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="form-check">
-          <input type="radio"
-                 class="form-check-input"
-                 name="destinatario"
-                 id="padecimiento"
-                 value="2"
-                 [(ngModel)]="tipo">
-          <label for="padecimiento" class="form-check-label">Pacientes por padecimiento</label>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="form-check">
-          <input type="radio"
-                 class="form-check-input"
-                 name="destinatario"
-                 id="pacientes"
-                 value="3"
-                 [(ngModel)]="tipo">
-          <label for="pacientes" class="form-check-label">Pacientes</label>
-        </div>
-      </div>
-
-        <div class="col-md-3">
-          <ng-select
-            name="padecimientoSelect"
-            [items]="padecimientos"
-            bindLabel="nombre"
-            bindValue="idPadecimiento"
-            [(ngModel)]="padecimiento"
-            *ngIf="tipo == 2"
-            (change)="obtenerIdPacientesPadecimiento()">
-          </ng-select>
-          <ng-select
-            name="padecimientoSelect"
-            [items]="expedientes"
-            [multiple]="true"
-            bindLabel="nombreCompleto"
-            bindValue="idUsuario"
-            groupBy="doctorAsociado"
-            [(ngModel)]="personas"
-            *ngIf="tipo == 3"
-            (change)="tieneMismoDoctor()">
-          </ng-select> 
-          <div *ngIf="!mismoDoctor" class="error">
-            No se puede seleccionar de distinto auxiliar.
+    <div class="contenedor-principal">
+      <div class="contenido">
+        <div class="participantes">
+          <div class="row">
+            <div class="col-md-12">
+              <label class="label-input required-label" style="color: var(--neutral-500);" >A quién se enviará el mensaje</label>
+            </div>
           </div>
-       
-        </div>
-
-        <div class="col-md-3" *ngIf="personas.length > 1">
-          <div class="form-group">
-            <label class="label-input required-label" style="color: gray;" >Titulo de chat</label>
-            <input #descripcion="ngModel" type="text" name="titulo" [(ngModel)]="tituloChat" class="form-control" [disabled]="desabilitarTitulo()">
-            <div *ngIf="(descripcion.errors?.['required'] && descripcion.touched )" class="error">
-              El titulo es requerido
-          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-check">
+                <input type="radio"
+                       class="form-check-input"
+                       name="destinatario"
+                       id="todos"
+                       value="1"
+                       [(ngModel)]="tipo"
+                       (change)="seleccionarTodos()">
+                <label for="todos" class="form-check-label">Todos</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check">
+                <input type="radio"
+                       class="form-check-input"
+                       name="destinatario"
+                       id="padecimiento"
+                       value="2"
+                       [(ngModel)]="tipo">
+                <label for="padecimiento" class="form-check-label">Pacientes por padecimiento</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check">
+                <input type="radio"
+                       class="form-check-input"
+                       name="destinatario"
+                       id="pacientes"
+                       value="3"
+                       [(ngModel)]="tipo"
+                       (change)="seleccionarPacientes()">
+                <label for="pacientes" class="form-check-label">Pacientes</label>
+              </div>
+            </div>
           </div>
         </div>
+        <div class="selectores">
+          <div class="row">
+            <div class="col-md-5" *ngIf="tipo == 3">
+              <div class="form-group">
+                <label class="label-input required-label">Paciente(s)</label>
+                <div>
+                  <ng-select
+                    #pacientes="ngModel"
+                    name="pacientesSelect"
+                    [items]="expedientes"
+                    [multiple]="true"
+                    bindLabel="nombreCompleto"
+                    bindValue="idUsuario"
+                    groupBy="doctorAsociado"
+                    [(ngModel)]="personas"
+                    *ngIf="tipo == 3"
+                    (change)="tieneMismoDoctor()">
+                  </ng-select> 
+                  <div *ngIf="!mismoDoctor" class="error">
+                    No se puede seleccionar de distinto auxiliar.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5" *ngIf="tipo == 2">
+              <div class="form-group">
+                <label class="label-input required-label">Padecimiento</label>
+                <div>
+                  <ng-select
+                    name="padecimientoSelect"
+                    [items]="padecimientos"
+                    bindLabel="nombre"
+                    bindValue="idPadecimiento"
+                    [(ngModel)]="padecimiento"
+                    *ngIf="tipo == 2"
+                    placeholder="Seleccionar..."
+                    (change)="obtenerIdPacientesPadecimiento()">
+                  </ng-select>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="contenedor-column">
+                <div class="form-group">
+                  <label class="label-input required-label" style="color: var(--neutral-500);" >Titulo de chat</label>
+                  <input #descripcion="ngModel" type="text" name="titulo" [(ngModel)]="tituloChat" class="form-control" [disabled]="desabilitarTitulo()">
+                  <div *ngIf="(descripcion.errors?.['required'] && descripcion.touched )" class="error">
+                    El titulo es requerido
+                  </div>
+                </div>
+              </div>
 
-      <div class="col-md-3">
-        <div class="form-group">
-          <button (click)="crearChat()" class="btn-agregar" [disabled]="deshabilitarBtn() || !mismoDoctor">Crear Chat</button>
+            </div>
+            <div class="col-md-3">
+              <div class="contenedor-column" style="justify-content: end;">
+                <button (click)="crearChat()" class="btn-agregar" [disabled]="deshabilitarBtn() || !mismoDoctor">Crear Chat</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      
     </div>
   </ng-template>
 </app-modal-base>

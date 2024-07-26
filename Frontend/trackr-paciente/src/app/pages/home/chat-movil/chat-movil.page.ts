@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ArchivoService } from '@services/archivo.service';
 import { ChatPersonaService } from '@http/chat/chat-persona.service';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-chat-movil',
@@ -42,9 +43,8 @@ export class ChatMovilComponent implements OnInit {
   constructor(
     private ChatHubServiceService: ChatHubServiceService,
     private chatMensajeHubService: ChatMensajeHubService,
-    private archivoService : ArchivoService,
-    private sanitizer : DomSanitizer,
-    private chatPersonaService : ChatPersonaService
+    private chatPersonaService : ChatPersonaService,
+    private fechaService: FechaService
   ) {}
 
   async ngOnInit() {
@@ -70,17 +70,17 @@ export class ChatMovilComponent implements OnInit {
     });
   }
 
-  enviarMensaje(idChat: number): void {
-    let msg: ChatMensajeDTO = {
-      fecha: new Date(),
-      idChat,
-      mensaje: this.contenido,
-      idPersona: this.idUsuario ,
-      idArchivo: 0,
-    };
+  // enviarMensaje(idChat: number): void {
+  //   let msg: ChatMensajeDTO = {
+  //     fecha: new Date(),
+  //     idChat,
+  //     mensaje: this.contenido,
+  //     idPersona: this.idUsuario ,
+  //     idArchivo: 0,
+  //   };
 
-    this.chatMensajeHubService.enviarMensaje(msg);
-  }
+  //   this.chatMensajeHubService.enviarMensaje(msg);
+  // }
 
   obtenerChatSeleccionado(id: number) {
     this.idChatSeleccionado = id;
@@ -99,13 +99,13 @@ export class ChatMovilComponent implements OnInit {
 
     let fechaUltimoMensaje = this.mensajes.map(
       (arr) => {
-        return {fecha: arr[arr.length - 1]?.fecha || new Date(), chat: arr[0]?.idChat || 0}
+        return {fecha: arr[arr.length - 1]?.fecha || this.fechaService.obtenerFechaActualISOString(), chat: arr[0]?.idChat || 0}
       }
     )
     
     this.chats.forEach((x) => {
       x.ultimoMensaje = ultimoMensaje.filter(y => y.chat == x.idChat)[0]?.mensajes || '';
-      x.fechaUltimoMensaje = fechaUltimoMensaje.filter(y => y.chat == x.idChat)[0]?.fecha || new Date();
+      x.fechaUltimoMensaje = fechaUltimoMensaje.filter(y => y.chat == x.idChat)[0]?.fecha || this.fechaService.obtenerFechaActualISOString();
     });
   }
 }

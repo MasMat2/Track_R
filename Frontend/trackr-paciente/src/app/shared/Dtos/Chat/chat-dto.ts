@@ -1,10 +1,10 @@
 export interface ChatDTO{
     idChat?: number;
-    fecha: Date;
+    fecha: string;
     habilitado: boolean;
     titulo?: string;
     ultimoMensaje?:string
-    fechaUltimoMensaje?: Date;
+    fechaUltimoMensaje?: string;
     idCreadorChat: number;
     imagenBase64?: string;
     tipoMime?: string;

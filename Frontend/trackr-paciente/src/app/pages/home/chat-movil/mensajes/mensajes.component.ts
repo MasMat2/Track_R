@@ -31,6 +31,7 @@ import { CapacitorUtils } from '@utils/capacitor-utils';
 import { format } from 'date-fns';
 import { AudioWaveComponent } from '@sharedComponents/audio-wave/audio-wave.component';
 import { DataJitsiService } from '@pages/home/video-jitsi/service-jitsi/data-jitsi.service';
+import { FechaService } from '@services/fecha.service';
 
 
 
@@ -58,7 +59,7 @@ export class MensajesComponent{
   protected chatMensajes$: Observable<ChatMensajeDTO[][]>
   protected chatMensajes: ChatMensajeDTO[][]
   protected chat: ChatDTO = {
-    fecha: new Date(),
+    fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
     habilitado: true,
     titulo: 'Chat',
     idCreadorChat: 0,
@@ -87,6 +88,8 @@ export class MensajesComponent{
   protected audio2?: string;
   protected isAudioPlaying: boolean = false;
 
+  protected xd = 0;
+
   constructor(
     private ChatMensajeHubService: ChatMensajeHubService,
     private ChatPersonaService: ChatPersonaService,
@@ -100,6 +103,7 @@ export class MensajesComponent{
     private PopoverController:PopoverController,
     private rout: ActivatedRoute,
     private dataJitsiService: DataJitsiService,
+    private fechaService: FechaService
   ) { 
       addIcons({
         'file': 'assets/img/svg/file.svg',
@@ -134,7 +138,7 @@ export class MensajesComponent{
 
   obtenerChat() {
     this.ChatHubServiceService.chat$.subscribe(res => {
-      this.chat = res.find(x => x.idChat == this.idChat) || { fecha: new Date(), habilitado: false, idCreadorChat: 0 }
+      this.chat = res.find(x => x.idChat == this.idChat) || { fecha: this.fechaService.fechaLocalAFechaUTC(new Date()), habilitado: false, idCreadorChat: 0 }
     })
   }
 
@@ -152,12 +156,12 @@ export class MensajesComponent{
     this.alturaTextAreaAlterada = false;
 
     let msg: ChatMensajeDTO = {
-      fecha: new Date(),
+      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
       idChat: this.idChat,
       mensaje: this.msg,
       idPersona: this.idUsuario,
       archivo: '',
-      idArchivo: 0
+      idArchivo: 0,
     }
 
     //Agregar logica para subir archivo
@@ -167,7 +171,7 @@ export class MensajesComponent{
       msg.archivo = byte;
       msg.archivoNombre = this.archivo.name;
       msg.archivoTipoMime = this.archivo.type;
-      msg.fechaRealizacion = new Date();
+      msg.fechaRealizacion = this.fechaService.fechaLocalAFechaUTC(new Date());
       msg.nombre = this.archivo.name;
     }
 
@@ -179,7 +183,7 @@ export class MensajesComponent{
       msg.archivo = byte;
       msg.archivoNombre = nombreFoto;
       msg.archivoTipoMime = "image/jpeg";
-      msg.fechaRealizacion = new Date();
+      msg.fechaRealizacion = this.fechaService.fechaLocalAFechaUTC(new Date());
       msg.nombre = nombreFoto;
     }
 
@@ -187,8 +191,8 @@ export class MensajesComponent{
       msg.archivo = this.audio;
       msg.archivoNombre = `audio-${Date.now()}.wav`
       msg.archivoTipoMime = "audio/wav"
-      msg.fechaRealizacion = new Date();
-      msg.nombre = `audio-${Date.now()}.wav`
+      msg.fechaRealizacion = this.fechaService.fechaLocalAFechaUTC(new Date());
+      msg.nombre = `audio-${this.fechaService.fechaLocalAFechaUTC(new Date())}.wav`
     }
 
     this.ChatMensajeHubService.enviarMensaje(msg);
@@ -218,8 +222,7 @@ export class MensajesComponent{
   }
 
   obtenerMensajes() {
-    this.chatMensajes$ = this.ChatMensajeHubService.chatMensaje$;
-
+    this.chatMensajes$ = this.ChatMensajeHubService.chatMensaje$
     this.chatMensajes$.subscribe((res) => {
       this.chatMensajes = res;
       this.obtenerChatSeleccionado();
@@ -289,7 +292,7 @@ export class MensajesComponent{
         archivo: Array.from(byte),
         archivoNombre: this.archivo.name,
         archivoTipoMime: this.archivo.type,
-        fechaRealizacion: new Date(),
+        fechaRealizacion: this.fechaService.fechaLocalAFechaUTC(new Date()),
         nombre: this.archivo.name
       }
 
@@ -373,10 +376,10 @@ export class MensajesComponent{
     this.fileInput.nativeElement.click();
   }
 
-  imprimirFecha(fecha: Date): string {
-    let x = new Date(fecha)
-    return `${x.getDate()}/${x.getMonth() + 1}/${x.getFullYear()} - ${x.getHours()}:${x.getMinutes()}`
-  }
+  // imprimirFecha(fecha: Date): string {
+  //   let x = new Date(fecha)
+  //   return `${x.getDate()}/${x.getMonth() + 1}/${x.getFullYear()} - ${x.getHours()}:${x.getMinutes()}`
+  // }
 
   //Esta función se llama después de cada actualización de la vista
   // ngAfterViewChecked() {
@@ -491,7 +494,7 @@ export class MensajesComponent{
     let mensaje = `${telefonoEmoji} Te espero la sala ${newRoomName}`;
 
     let msg: ChatMensajeDTO = {
-      fecha: new Date(),
+      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
       idChat: this.idChat,
       mensaje: mensaje,
       idPersona: idUsuario,
@@ -620,7 +623,7 @@ export class MensajesComponent{
 
     let mensaje: ChatMensajeDTO = {
       idChat:this.idChat,
-      fecha: new Date(),
+      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
       idPersona: 0,
       mensaje: 'He abandonado el chat',
       idArchivo: 0

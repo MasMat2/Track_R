@@ -7,6 +7,7 @@ import { ChatMensajeDTO } from '@dtos/chats/chat-mensaje-dto';
 import { ActivatedRoute } from '@angular/router';
 import { ChatPersonaService } from '@http/chats/chat-persona.service';
 import { SessionService } from '@services/session.service';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-chat',
@@ -34,7 +35,8 @@ export class ChatComponent implements OnDestroy {
     private chatMensajeHubService:ChatMensajeHubService,
     private route:ActivatedRoute,
     private chatPersonaService : ChatPersonaService,
-    private sessionService : SessionService
+    private sessionService : SessionService,
+    private fechaService: FechaService
   ) {
     this.chatPersonaService.idChatPadre$
     .pipe(takeUntil(this.unsubscribe$.asObservable()))
@@ -76,9 +78,12 @@ export class ChatComponent implements OnDestroy {
 
   obtenerMensajes(){
     //TODO:no descargar los mensajes hasta entrar al chat
-    //this.chatMensajes$ = this.chatMensajeHubService.chatMensaje$;
+    this.chatMensajes$ = this.chatMensajeHubService.chatMensaje$;
     
-    this.chatMensajeHubService.chatMensaje$.subscribe(res =>{
+    this.chatMensajes$.subscribe(res =>{
+      if(this.idChatSeleccionado != undefined){
+        this.obtenerChatSeleccionado(this.idChatSeleccionado);
+      }
       this.mensajes = res;
       this.obtenerUltimoMensaje();
     })
@@ -86,7 +91,7 @@ export class ChatComponent implements OnDestroy {
 
   enviarMensaje(idChat:number): void{
     let msg: ChatMensajeDTO = {
-      fecha: new Date(),
+      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
       idChat,
       mensaje: this.contenido,
       idPersona:this.idUsuario as number,
@@ -112,6 +117,11 @@ export class ChatComponent implements OnDestroy {
 
   obtenerUltimoMensaje():void{
     let ultimoMensaje = this.mensajes.map(arr => arr[arr.length - 1]?.mensaje || "")
-    this.chats.forEach((x,index) => {x.ultimoMensaje = ultimoMensaje[index]})
+    let fechaUltimoMensaje = this.mensajes.map(arr => arr[arr.length - 1]?.fecha || "")
+
+    this.chats.forEach((x,index) => {
+      x.ultimoMensaje = ultimoMensaje[index];
+      x.fechaUltimoMensaje = fechaUltimoMensaje[index];
+    })
   }
 }

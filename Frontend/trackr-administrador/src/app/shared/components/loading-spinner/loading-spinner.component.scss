@@ -1,7 +1,14 @@
 ::ng-deep .cdk-overlay-container {
-    z-index: 99999 !important;
-  }
-  mat-dialog-content{
-      padding: 0px;
-  }
+  z-index: 99999 !important;
+}
+mat-dialog-content {
+  padding: 0px;
+}
 
+.img-container {
+  height: 277px;
+  width: 327px;
+  background: url(/assets/img/loading.gif);
+  background-repeat: no-repeat;
+  background-position: center;
+}

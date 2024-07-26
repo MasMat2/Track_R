@@ -148,7 +148,9 @@ export class SidebarNavDropdownComponent implements OnInit {
         twoButtons: true,
         cancelButtonText: 'No, cancelar',
         confirmButtonText: "Si, aceptar"
-      } as CustomAlertData
+      } as CustomAlertData,
+      autoFocus: false,
+      restoreFocus: false,
     });
     alert.beforeClosed().subscribe(result => {
       if(result == "confirm"){
