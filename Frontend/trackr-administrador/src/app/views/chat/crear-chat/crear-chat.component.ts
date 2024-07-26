@@ -186,6 +186,10 @@ export class CrearChatComponent {
   seleccionarTodos(){
     this.personas = this.expedientes.map(x => x.idUsuario);
   }
+
+  protected seleccionarPacientes(){
+    this.personas = [];
+  }
   
   
 }

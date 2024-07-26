@@ -17,6 +17,7 @@
 .form-group {
   position: relative;
   margin-top: 20px;
+  width: 100%;
 
   .label-input {
     margin-bottom: 12px;
@@ -90,6 +91,30 @@ textarea.ng-touched.ng-invalid:not(:focus),
 .ng-select.ng-select-focused .ng-select-container {
   border: 1px solid var(--primary-700);
   box-shadow: none;
+}
+
+.ng-select .ng-select-container {
+  min-height: 42px;
+}
+
+.ng-select.ng-select-multiple .ng-select-container {
+  height: fit-content !important;
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value{
+  color: var(--neutral-50);
+  background-color: var(--primary-700);
+  border-radius: 16px;
+  padding: 4px;
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.left{
+  border: none;
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.left:hover{
+  //border: none;
+  background: none;
 }
 
 // Disabled
@@ -441,6 +466,12 @@ input[type=checkbox][disabled]:before {
 
 // Radio Buttons
 
+
+.form-check-input:checked{
+  background-color: var(--primary-700) !important;
+  border: var(--primary-900) !important;
+  box-shadow: none !important;
+}
 /* The container */
 .container-radio {
   position: relative;
