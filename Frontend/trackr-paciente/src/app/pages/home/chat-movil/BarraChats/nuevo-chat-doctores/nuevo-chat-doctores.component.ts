@@ -68,7 +68,7 @@ export class NuevoChatDoctoresComponent  implements OnInit {
     this.obtenerIdUsuario();
   }
 
-  regresarBtn(){
+  protected regresarBtn(){
     this.modalCtrl.dismiss();
   }
 
@@ -89,14 +89,6 @@ export class NuevoChatDoctoresComponent  implements OnInit {
     }));
   }
 
-  // protected doctorClick(idDoctor:number){
-  //   this.doctorSeleccionado = ! this.doctorSeleccionado
-  //   this.idDoctorSelecionado = idDoctor;
-  //   this.usuarios = []
-  //   this.usuarios.push(this.idUsuario);
-  //   this.usuarios.push(idDoctor);
-  // }
-
   protected crearChat(){
     let chat: ChatDTO = {
       fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
@@ -105,7 +97,6 @@ export class NuevoChatDoctoresComponent  implements OnInit {
       titulo: this.tituloChat,
       idChat: 0
     };
-
     this.ChatHubServiceService.agregarChat(chat,this.usuarios);
     this.tituloChat = "";
     this.usuarios = []
@@ -135,7 +126,7 @@ export class NuevoChatDoctoresComponent  implements OnInit {
 
     const alert = await this.alertController.create({
       header: 'Crear chat',
-      subHeader: '¿Desea crear un chat con este doctor?',
+      subHeader: '¿Desea crear un chat con este doctor(a)?',
       cssClass: 'custom-alert color-primary icon-info two-buttons',
       backdropDismiss: false,
       buttons: [
