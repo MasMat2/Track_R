@@ -224,7 +224,6 @@ export class MensajesComponent{
   obtenerMensajes() {
     this.chatMensajes$ = this.ChatMensajeHubService.chatMensaje$
     this.chatMensajes$.subscribe((res) => {
-      console.log(res);
       this.chatMensajes = res;
       this.obtenerChatSeleccionado();
       this.scrollContentToBottom()
