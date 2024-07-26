@@ -53,7 +53,9 @@ export class AlertifyService {
   presentAlert(config: CustomAlertData, onClose: (result: string) => void) {
     const alert = this.dialog.open(CustomAlertComponent, {
       panelClass: 'custom-alert',
-      data: config
+      data: config,
+      autoFocus: false, 
+      restoreFocus: false
     });
 
     alert.beforeClosed().subscribe(onClose);
