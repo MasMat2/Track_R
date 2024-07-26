@@ -27,6 +27,9 @@ export class FechaService {
       return fechaLocal.toISOString().slice(0,-1);
     }
     else if(typeof fechaLocal == "string"){
+      if(fechaLocal.endsWith('Z')){
+        fechaLocal = fechaLocal.slice(0, -1);
+      }
       return new Date(fechaLocal).toISOString().slice(0,-1);
     }
     else{
@@ -35,12 +38,14 @@ export class FechaService {
   }
 
   public fechaUTCAFechaLocal(fechaUTC: string | Date){
-
     if(fechaUTC instanceof Date){
       const localISOTime = (new Date(fechaUTC.getTime() - 2*(this.localOffset))).toISOString().slice(0,-1);
       return localISOTime;
     }
     else if(typeof fechaUTC == "string"){
+      if(fechaUTC.endsWith('Z')){
+        fechaUTC = fechaUTC.slice(0, -1);
+      }
       const fecha = new Date(fechaUTC);
       const localISOTime = (new Date(fecha.getTime() - 2*(this.localOffset))).toISOString().slice(0,-1);
       return localISOTime;
