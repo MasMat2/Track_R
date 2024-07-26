@@ -1,7 +1,7 @@
 export interface ArchivoFormDTO{
     idArchivo ?: number;
     nombre: string;
-    fechaRealizacion: Date;
+    fechaRealizacion: string;
     archivo: any;
     archivoTipoMime: string;
     archivoNombre: string;

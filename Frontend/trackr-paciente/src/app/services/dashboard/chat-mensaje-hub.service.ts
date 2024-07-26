@@ -8,12 +8,12 @@ import {
   LogLevel,
 } from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
-import { catchError, filter, take, timeout } from 'rxjs/operators';
+import { catchError, filter, map, take, timeout } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Constants } from '@utils/constants/constants';
 import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ChatHubServiceService } from './chat-hub-service.service';
+import { FechaService } from '@services/fecha.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,14 +24,28 @@ export class ChatMensajeHubService {
   );
 
   private chatMensajeSubject = new BehaviorSubject<ChatMensajeDTO[][]>([]);
-  public chatMensaje$ = this.chatMensajeSubject.asObservable();
+  public chatMensaje$ = this.chatMensajeSubject.asObservable().pipe(
+    map((chats) => {
+      return chats.map(chat => {
+        return chat.map(mensaje => {
+          if (!mensaje.fechaYaFormateada) {
+            mensaje.fecha = this.fechaService.fechaUTCAFechaLocal(mensaje.fecha);
+            mensaje.fechaYaFormateada = true; // Marca la fecha del mensaje como formateada (así se manejan mensajes entrantes)
+          }
+          return mensaje;
+        });
+      });
+    })
+  );
 
   private readonly endpoint = 'hub/chatMensaje';
 
   private connection: HubConnection;
 
-  constructor(private authService: AuthService,
-              private chatHub:ChatHubServiceService) {
+  constructor(
+    private authService: AuthService,
+    private chatHub:ChatHubServiceService, private fechaService: FechaService
+  ) {
     this.iniciarConexion();
   }
 
@@ -56,7 +70,7 @@ export class ChatMensajeHubService {
       .withUrl(url, connectionConfig)
       .build();
 
-    this.connection.on('NuevoMensaje', (chatMensaje: ChatMensajeDTO) =>
+    this.connection.on('NuevoMensaje', (chatMensaje: ChatMensajeDTO) => 
       this.onNuevoChatMensaje(chatMensaje)
     );
 

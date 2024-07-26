@@ -5,7 +5,7 @@ import { ChatPersonaService } from '../../../shared/http/chats/chat-persona.serv
 import { ChatPersonaSelectorDTO } from '@dtos/chats/chat-persona-selector-dto';
 import { ArchivoService } from '../../../shared/http/archivo/archivo.service';
 import { Router } from '@angular/router';
-import { Subject, finalize, map, takeUntil, takeWhile, timer } from 'rxjs';
+import { Subject, finalize, map, takeUntil, takeWhile, timer, Observable } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { PdfVisorComponent } from '@sharedComponents/pdf-visor/pdf-visor.component';
 import { ImgVisorComponent } from '@sharedComponents/img-visor/img-visor.component';
@@ -14,6 +14,7 @@ import { MensajeService } from '../../../shared/components/mensaje/mensaje.servi
 import { NgAudioRecorderService, OutputFormat } from 'ng-audio-recorder';
 import { GeneralConstant } from '@utils/general-constant';
 import { AlertifyService } from '@services/alertify.service';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-mensajes',
@@ -22,7 +23,7 @@ import { AlertifyService } from '@services/alertify.service';
 })
 export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, AfterViewChecked, AfterContentInit {
 
-  @Input() mensajes: ChatMensajeDTO[];
+  @Input() mensajes: any;
   @Input() idChat: number;
   @Input() tituloChat: string;
   @Input() imagenChat: string;
@@ -64,11 +65,11 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
     private ArchivoService: ArchivoService,
     private router: Router,
     private ChatHubServiceService: ChatHubServiceService,
-    private mensaje: MensajeService,
     private audioRecorderService: NgAudioRecorderService,
     private modalService: BsModalService,
     private bsModalRef: BsModalRef,
     private alertifyService: AlertifyService,
+    private fechaService: FechaService
   ) {}
  
   ngOnInit() {
@@ -447,7 +448,7 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
     }
 
     let msg: ChatMensajeDTO = {
-      fecha: new Date(),
+      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
       idChat: this.idChat,
       mensaje: this.msg,
       idPersona: this.idUsuario,
@@ -462,7 +463,7 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
       msg.archivo = byte;
       msg.archivoNombre = this.archivo.name;
       msg.archivoTipoMime = this.archivo.type;
-      msg.fechaRealizacion = new Date();
+      msg.fechaRealizacion = this.fechaService.fechaLocalAFechaUTC(new Date());
       msg.nombre = this.archivo.name;
     }
 
@@ -470,8 +471,8 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
       msg.archivo = this.audio;
       msg.archivoNombre = `audio-${Date.now()}.webm`;
       msg.archivoTipoMime = 'audio/webm';
-      msg.fechaRealizacion = new Date();
-      msg.nombre = `audio-${Date.now()}.webm`;
+      msg.fechaRealizacion = this.fechaService.fechaLocalAFechaUTC(new Date());
+      msg.nombre = `audio-${this.fechaService.fechaLocalAFechaUTC(new Date())}.webm`;
     }
 
     this.ChatMensajeHubService.enviarMensaje(msg);

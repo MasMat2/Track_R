@@ -9,6 +9,7 @@ import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
 import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
 import { AudioInterface, ParticipantInterface } from '../interfaces/jitsi-interface';
 import { ChatPersonaService } from '@http/chat/chat-persona.service';
+import { FechaService } from '@services/fecha.service';
 
 declare var JitsiMeetExternalAPI: any;
 
@@ -46,7 +47,8 @@ export class DataJitsiService {
     private mensajeHubService: ChatMensajeHubService,
     private chatMensajeHubServiceService: ChatHubServiceService,
     private route: ActivatedRoute,
-    private chatPersonaService : ChatPersonaService
+    private chatPersonaService : ChatPersonaService,
+    private fechaService: FechaService
   ) { }
 
 
@@ -95,7 +97,7 @@ export class DataJitsiService {
   async mandarMensajeLlamada(mensajeLlamada : string){
     const  idUsuario = await this.chatPersonaService.obtenerIdUsuarioAsync();
     let msg: ChatMensajeDTO = {
-      fecha: new Date(),
+      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
       idChat: parseInt(this.idChat),
       mensaje: mensajeLlamada,
       idPersona: idUsuario,

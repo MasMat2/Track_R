@@ -62,7 +62,7 @@ public class ChatMensajeService
                                             {
                                                 IdChatMensaje = x.IdChatMensaje,
                                                 IdChat = x.IdChat,
-                                                Fecha = x.Fecha.ToLocalTime(),
+                                                Fecha = x.Fecha,
                                                 IdPersona = x.IdPersona,
                                                 Mensaje = _simpleAES.DecryptString(x.Mensaje),
                                                 NombrePersona = x.IdPersonaNavigation.Nombre + "  " + x.IdPersonaNavigation.ApellidoPaterno + " " + x.IdPersonaNavigation.ApellidoMaterno,

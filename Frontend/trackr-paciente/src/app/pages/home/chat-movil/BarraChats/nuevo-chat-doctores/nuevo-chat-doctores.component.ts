@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { SearchbarComponent } from '@sharedComponents/searchbar/searchbar.component';
 import { AlertController } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-nuevo-chat-doctores',
@@ -44,6 +45,7 @@ export class NuevoChatDoctoresComponent  implements OnInit {
     private ChatPersonaService:ChatPersonaService,
     private ChatHubServiceService:ChatHubServiceService,
     private alertController: AlertController,
+    private fechaService: FechaService
   ) { 
     addIcons({
       'chevron-left': 'assets/img/svg/chevron-left.svg',
@@ -97,7 +99,7 @@ export class NuevoChatDoctoresComponent  implements OnInit {
 
   protected crearChat(){
     let chat: ChatDTO = {
-      fecha: new Date(),
+      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
       habilitado: true,
       idCreadorChat: this.usuarios[this.usuarios.length - 1],
       titulo: this.tituloChat,

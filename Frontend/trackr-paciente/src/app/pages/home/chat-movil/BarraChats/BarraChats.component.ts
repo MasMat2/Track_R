@@ -7,8 +7,6 @@ import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
 import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-service.service';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
-import { ChatMensajeHubService } from '../../../../services/dashboard/chat-mensaje-hub.service';
-import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
 import { ArchivoService } from '@services/archivo.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MisDoctoresService } from '@http/gestion-expediente/mis-doctores.service';
@@ -19,6 +17,7 @@ import { addIcons } from 'ionicons';
 import { addCircle, chatboxOutline, send } from 'ionicons/icons'
 import { NuevoChatDoctoresComponent } from './nuevo-chat-doctores/nuevo-chat-doctores.component';
 import { SearchbarComponent } from '@sharedComponents/searchbar/searchbar.component';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-barra-chats',
@@ -53,11 +52,11 @@ export class BarraChatsComponent {
   constructor(
     private router: Router,
     private ChatHubServiceService:ChatHubServiceService,
-    private archivoService : ArchivoService,
     private sanitizer : DomSanitizer,
     private doctoresService : MisDoctoresService,
     private ChatPersonaService:ChatPersonaService,
-    private modalCtrl:ModalController
+    private modalCtrl:ModalController,
+    private fechaService: FechaService
   ) {
     addIcons({addCircle, chatboxOutline, send, 'chat-plus': ' ../assets/img/svg/chat-plus.svg'});
   }
@@ -116,8 +115,8 @@ export class BarraChatsComponent {
 
   crearChat(){
     let chat: ChatDTO = {
-      fecha: new Date(),
-      fechaUltimoMensaje: new Date(),
+      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
+      fechaUltimoMensaje: this.fechaService.fechaLocalAFechaUTC(new Date()),
       habilitado: true,
       idCreadorChat: this.usuarios[this.usuarios.length - 1],
       titulo: this.tituloChat

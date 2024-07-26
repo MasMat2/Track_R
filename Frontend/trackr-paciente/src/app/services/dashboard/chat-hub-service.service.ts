@@ -15,6 +15,7 @@ import { ChatPersonaService } from '@http/chat/chat-persona.service';
 import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
 import { ChatPersonaFormDTO } from 'src/app/shared/Dtos/Chat/chat-persona-form-dto';
 import { AuthService } from 'src/app/auth/auth.service';
+import { FechaService } from '@services/fecha.service';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +34,8 @@ export class ChatHubServiceService {
 
   constructor(
     private ChatPersonaService: ChatPersonaService,
-    private authService: AuthService
+    private authService: AuthService,
+    private fechaService: FechaService
   ) {
     this.iniciarConexion();
   }
@@ -89,7 +91,7 @@ export class ChatHubServiceService {
   }
 
   private async onNuevoChat(chat:ChatDTO,idPersonas:number[]){
-    chat.fecha = new Date();
+    chat.fecha = this.fechaService.fechaLocalAFechaUTC(new Date());
 
     const chats = this.chatSubject.value;
     chats.push(chat);
@@ -114,7 +116,7 @@ export class ChatHubServiceService {
 
   private onNuevaConexion(chats: ChatDTO[]): void {
     for (const chat of chats) {
-      chat.fecha = new Date(chat.fecha);
+      chat.fecha = this.fechaService.fechaUTCAFechaLocal(chat.fecha);
     }
 
     this.chatSubject.next(chats);
