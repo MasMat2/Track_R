@@ -117,6 +117,11 @@ export class ChatComponent implements OnDestroy {
 
   obtenerUltimoMensaje():void{
     let ultimoMensaje = this.mensajes.map(arr => arr[arr.length - 1]?.mensaje || "")
-    this.chats.forEach((x,index) => {x.ultimoMensaje = ultimoMensaje[index]})
+    let fechaUltimoMensaje = this.mensajes.map(arr => arr[arr.length - 1]?.fecha || "")
+
+    this.chats.forEach((x,index) => {
+      x.ultimoMensaje = ultimoMensaje[index];
+      x.fechaUltimoMensaje = fechaUltimoMensaje[index];
+    })
   }
 }
