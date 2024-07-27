@@ -65,6 +65,7 @@ export class BarraChatsComponent {
     this.obtenerChats()
     this.consultarDoctores();
     this.obtenerIdUsuario();
+    this.ensureConnection();
   }
 
   obtenerIdUsuario(){
@@ -73,6 +74,10 @@ export class BarraChatsComponent {
     })
   }
 
+
+  private ensureConnection(){
+    this.ChatHubServiceService.ensureConnection();
+  }
   obtenerChats() {
     this.chats$ = this.ChatHubServiceService.chat$;
     this.chats$.subscribe((chats) => {
