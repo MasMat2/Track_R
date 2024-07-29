@@ -1,5 +1,5 @@
 Estado de apliacion en plataforma IOS:
-build ios 71
+build ios 72
 Servidor ios: atisc.mx 
 Grupo de pruebas: US-IT
 
