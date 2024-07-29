@@ -6,7 +6,9 @@ using TrackrAPI.Services.Notificaciones;
 public interface IRecordatorioTomasService : IHostedService , IDisposable
 {
     Task StartAsync(CancellationToken cancellationToken);
-    Task StopAsync(CancellationToken cancellationToken);    bool EsSiguienteCuartoHora(DateTime lastUpdated);
+    public void SetUpdate(bool update);
+    Task StopAsync(CancellationToken cancellationToken);   
+    bool EsSiguienteCuartoHora(DateTime lastUpdated);
     void ActualizarContador(TrackrContext context);
     Task CrearTratamientoTomas(TrackrContext context, NotificacionPacienteService notificacionPacienteService);
 

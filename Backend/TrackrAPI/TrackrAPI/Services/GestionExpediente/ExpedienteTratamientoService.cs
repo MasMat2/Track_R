@@ -273,7 +273,7 @@ public class ExpedienteTratamientoService
     // Agregar Tratamiento
     public async Task<int> Agregar(ExpedienteTratamientoDetalleDto expedienteTratamientoDto, int idUsuario)
     {
-        using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+        using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted } , TransactionScopeAsyncFlowOption.Enabled);
 
         int idExpediente = expedienteTrackrRepository.ConsultarPorUsuario(idUsuario).IdExpediente;
 
@@ -309,6 +309,7 @@ public class ExpedienteTratamientoService
 
         expedienteTratamientoRepository.AgregarRecordatorios(recordatorios);
 
+        _recordatorioTomasService.SetUpdate(true);
         await _recordatorioTomasService.StartAsync(CancellationToken.None);
 
         scope.Complete();

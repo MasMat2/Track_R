@@ -1,6 +1,7 @@
 export interface ChatDTO{
     idChat?: number;
     fecha: string;
+    fechaYaFormateada?: boolean;
     habilitado: boolean;
     titulo?: string;
     ultimoMensaje?:string

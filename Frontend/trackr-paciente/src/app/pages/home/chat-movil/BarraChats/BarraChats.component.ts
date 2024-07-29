@@ -2,21 +2,20 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { TableModule } from 'primeng/table';
-import { Observable } from 'rxjs';
+import { map, Observable, switchMap, tap } from 'rxjs';
 import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
 import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-service.service';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { HeaderComponent } from '@pages/home/layout/header/header.component';
-import { ArchivoService } from '@services/archivo.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { MisDoctoresService } from '@http/gestion-expediente/mis-doctores.service';
 import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
 import { ChatPersonaService } from '../../../../shared/http/chat/chat-persona.service';
 import { FormsModule } from '@angular/forms';
 import { addIcons } from 'ionicons';
-import { addCircle, chatboxOutline, send } from 'ionicons/icons'
 import { NuevoChatDoctoresComponent } from './nuevo-chat-doctores/nuevo-chat-doctores.component';
 import { SearchbarComponent } from '@sharedComponents/searchbar/searchbar.component';
+import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
+import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
 import { FechaService } from '@services/fecha.service';
 
 @Component({
@@ -37,122 +36,117 @@ import { FechaService } from '@services/fecha.service';
   ]
 })
 export class BarraChatsComponent {
-  private idUsuario:number;
   protected chats$: Observable<ChatDTO[]>;
   protected chats: ChatDTO[];
+  protected chatMensajes$: Observable<ChatMensajeDTO[][]>;
+  protected mensajes: ChatMensajeDTO[][] = [];
   protected misDoctores: UsuarioDoctoresDto[];
-  protected usuarios: number[] = [];
-  protected tituloChat:string;
-
-  protected doctorSeleccionado: boolean = false;
-  protected verListaDoctores: boolean = false;
   protected chatsFiltradosPorBusqueda: ChatDTO[];
   protected filtrando: boolean = false;
 
   constructor(
     private router: Router,
     private ChatHubServiceService:ChatHubServiceService,
-    private sanitizer : DomSanitizer,
+    private chatMensajeHubService: ChatMensajeHubService,
     private doctoresService : MisDoctoresService,
-    private ChatPersonaService:ChatPersonaService,
     private modalCtrl:ModalController,
     private fechaService: FechaService
   ) {
-    addIcons({addCircle, chatboxOutline, send, 'chat-plus': ' ../assets/img/svg/chat-plus.svg'});
+    addIcons({
+      'chat-plus': ' ../assets/img/svg/chat-plus.svg'
+    });
   }
 
   ionViewWillEnter(){
     this.obtenerChats()
     this.consultarDoctores();
-    this.obtenerIdUsuario();
+    this.ensureConnection();
   }
 
-  obtenerIdUsuario(){
-    this.ChatPersonaService.obtenerIdUsuario().subscribe(res => {
-      this.idUsuario = res;
-    })
+  private ensureConnection(){
+    this.ChatHubServiceService.ensureConnection();
   }
-
-  obtenerChats() {
+  
+  //OBTENER SÓLO LOS CHATS
+  /* private obtenerChats() {
     this.chats$ = this.ChatHubServiceService.chat$;
-    this.chats$.subscribe((chats) => {
-      chats.forEach((chat) => {
-        if(chat.imagenBase64 != null){
-          let base64String = "data:" +chat.tipoMime + ';base64,' + chat.imagenBase64;
-          let aux = this.sanitizer.bypassSecurityTrustUrl(base64String);
-          chat.urlImagen = base64String;
-        }
-      });
-      
+    this.chats$.pipe(
+      map((data) => {
+        return data.map(chat => {
+          if (chat.imagenBase64 != null) {
+            let base64String = "data:" + chat.tipoMime + ';base64,' + chat.imagenBase64;
+            chat.urlImagen = base64String;
+          }
+          return chat;
+        });
+      })
+    ).subscribe((chats) => {
       this.chats = chats;
-      this.chatsFiltradosPorBusqueda = chats;
+    });
+
+  } */
+
+  //OBTENER LOS CHATS Y EL ULTIMO MENSAJE
+  private obtenerChats() {
+    this.chats$ = this.ChatHubServiceService.chat$;
+    this.chatMensajes$ = this.chatMensajeHubService.chatMensaje$;
+  
+    this.chats$.pipe(
+      map((chats) => {
+        return chats.map(chat => {
+          if (chat.imagenBase64 != null) {
+            let base64String = "data:" + chat.tipoMime + ';base64,' + chat.imagenBase64;
+            chat.urlImagen = base64String;
+          }
+          return chat;
+        });
+      }),
+      switchMap((chats) => {
+        this.chats = chats;
+        return this.chatMensajes$;
+      })
+    ).subscribe((mensajes) => {
+      this.mensajes = mensajes;
+      this.obtenerUltimoMensaje();
     });
   }
 
-
-  enviarIdChat(idChat: number) {
-    this.router.navigate(['home/chat-movil/chat',idChat]);
-  }
-
-  consultarDoctores() {
-    this.doctoresService.consultarExpedienteConImagenes().subscribe((doctores) => {
-      doctores.forEach((doctor) => {
-        if(doctor.imagenBase64 != null){
-          let base64String = "data:" +doctor.tipoMime + ';base64,' + doctor.imagenBase64;
-          doctor.urlImagen = base64String;
-        }
-      });
+  private consultarDoctores() {
+    this.doctoresService.consultarExpedienteConImagenes().pipe(
+      map((data) => {
+        return data.map(doctor => {
+          if(doctor.imagenBase64 != null){
+            let base64String = "data:" + doctor.tipoMime + ';base64,' + doctor.imagenBase64;
+            doctor.urlImagen = base64String;
+          }
+          return doctor;
+        });
+      })
+    ).subscribe((doctores) => {
       this.misDoctores = doctores;
     });
   }
-
-  doctorClick(idDoctor:number){
-    this.doctorSeleccionado = ! this.doctorSeleccionado
-    this.usuarios = []
-    this.usuarios.push(this.idUsuario);
-    this.usuarios.push(idDoctor);
-  }
-
-  crearChat(){
-    let chat: ChatDTO = {
-      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
-      fechaUltimoMensaje: this.fechaService.fechaLocalAFechaUTC(new Date()),
-      habilitado: true,
-      idCreadorChat: this.usuarios[this.usuarios.length - 1],
-      titulo: this.tituloChat
-    };
-
-    this.ChatHubServiceService.agregarChat(chat,this.usuarios);
-    this.tituloChat = "";
-    this.usuarios = []
-    this.doctorSeleccionado = false;
+  
+  protected enviarIdChat(idChat: number) {
+    this.router.navigate(['home/chat-movil/chat',idChat]);
   }
 
   protected async mostrarListaDoctores(){
-    let tab = await this.modalCtrl.create({
+    const modal = await this.modalCtrl.create({
       component: NuevoChatDoctoresComponent,
       componentProps: {
         doctores: this.misDoctores
       }
     });
-    tab.present();
-  }
 
-  protected buscarChat(event: any){
-    const text = event.target.value;
-    this.chatsFiltradosPorBusqueda = this.chats;
-    if(text && text.trim() != ''){
-      this.chatsFiltradosPorBusqueda = this.chatsFiltradosPorBusqueda.filter((chat: any) =>{
-          return (chat.titulo.toLowerCase().indexOf(text.toLowerCase()) > -1 || chat.ultimoMensaje.toLowerCase().indexOf(text.toLowerCase()) > -1 );
-      })
-    }
+    modal .present();
   }
 
   protected listaVacia(): boolean{
     return (this.chats?.length == 0);
   }
 
-  handleSearch(searchTerm: string): void {
+  protected handleSearch(searchTerm: string): void {
     if( searchTerm == ""){
       this.filtrando = false;
       return
@@ -164,5 +158,25 @@ export class BarraChatsComponent {
         chat.titulo?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
+  }
+
+  private obtenerUltimoMensaje(): void {
+    const ultimoMensaje = this.mensajes.map(
+      (arr) =>{ return {mensajes: arr[arr.length - 1]?.mensaje || '', chat: arr[0]?.idChat || 0}}
+    );
+
+    const fechaUltimoMensaje = this.mensajes.map(
+      (arr) => {
+        return {fecha: arr[arr.length - 1]?.fecha || this.fechaService.obtenerFechaActualISOString(), chat: arr[0]?.idChat || 0}
+      }
+    )
+    
+    this.chats.map(
+      chat => {
+        chat.ultimoMensaje = ultimoMensaje.filter(y => y.chat == chat.idChat)[0]?.mensajes || '';
+        chat.fechaUltimoMensaje = fechaUltimoMensaje.filter(y => y.chat == chat.idChat)[0]?.fecha || this.fechaService.obtenerFechaActualISOString();
+        return chat;
+      }
+    )
   }
 }
