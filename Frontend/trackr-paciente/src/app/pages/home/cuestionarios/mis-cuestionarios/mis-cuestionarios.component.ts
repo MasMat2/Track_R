@@ -1,5 +1,5 @@
 import { CommonModule, Time } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ExamenService } from '@http/cuestionarios/examen.service';
@@ -12,6 +12,7 @@ import { addIcons } from 'ionicons';
 import { ExamenDto } from 'src/app/shared/Dtos/cuestionarios/examen-dto';
 import { TabService } from 'src/app/services/dashboard/tab.service';
 import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-mis-cuestionarios',
@@ -25,7 +26,7 @@ import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinne
     HeaderComponent
   ]
 })
-export class MisCuestionariosComponent  implements OnInit {
+export class MisCuestionariosComponent  implements OnInit, OnDestroy {
 
   protected examenPendienteList: ExamenDto[] = [];
   protected examenContestadoList: ExamenDto[] = [];
@@ -33,6 +34,8 @@ export class MisCuestionariosComponent  implements OnInit {
   protected cantidadCuestionariosContestadosOcultos: number;
   protected mostrarTodosContestados: boolean = false;
   protected masDeCincoExamenes: boolean = false;
+
+  private destroy$ = new Subject<void>();
 
   protected segmentoSeleccionado = 'pendientes';
 
@@ -46,11 +49,13 @@ export class MisCuestionariosComponent  implements OnInit {
     addIcons({chevronForward});
 
     //Simula ionViewWillEnter
-    this.tabService.tabChange$.subscribe((tabId) => {
-      if (tabId === 'cuestionarios') {
-        this.cargarCuestionarios();
-      }
-    });
+    this.tabService.tabChange$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((tabId) => {
+        if (tabId === 'cuestionarios') {
+          this.cargarCuestionarios();
+        }
+      });
 
     this.examenService.actualizarCuestionarios$.subscribe(() => {
       this.cargarCuestionarios();
@@ -60,6 +65,11 @@ export class MisCuestionariosComponent  implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private async cargarCuestionarios() {
