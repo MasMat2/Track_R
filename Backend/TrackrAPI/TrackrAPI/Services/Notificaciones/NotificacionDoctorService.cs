@@ -54,6 +54,7 @@ public class NotificacionDoctorService
             notificacionUsuarioDto.IdUsuario,
             notificacionDto.Titulo,
             notificacionDto.Mensaje,
+            notificacionDto.ComplementoMensaje,
             notificacionDto.FechaAlta,
             notificacionUsuarioDto.Visto,
             notificacionDto.IdTipoNotificacion,
@@ -76,6 +77,7 @@ public class NotificacionDoctorService
         var notificacionDto = new NotificacionCapturaDTO(
             paciente.ObtenerNombreCompleto(),
             notificacionDoctorDto.Mensaje,
+            notificacionDoctorDto.ComplementoMensaje,
             notificacionDoctorDto.IdTipoNotificacion,
             notificacionDoctorDto.IdPersona,
             notificacionDoctorDto.IdChat);

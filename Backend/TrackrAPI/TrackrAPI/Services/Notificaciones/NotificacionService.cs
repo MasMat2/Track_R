@@ -24,6 +24,7 @@ public class NotificacionService
         {
             Titulo = notificacionDto.Titulo,
             Mensaje = notificacionDto.Mensaje,
+            ComplementoMensaje = notificacionDto.ComplementoMensaje,
             FechaAlta = DateTime.UtcNow,
             IdTipoNotificacion = notificacionDto.IdTipoNotificacion,
             IdPersona = notificacionDto.IdPersona,
@@ -36,6 +37,7 @@ public class NotificacionService
             notificacion.IdNotificacion,
             notificacion.Titulo,
             notificacion.Mensaje,
+            notificacion.ComplementoMensaje,
             notificacion.FechaAlta,
             notificacion.IdTipoNotificacion,
             notificacion.IdPersona,
