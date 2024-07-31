@@ -6,7 +6,6 @@ import { map, Observable, switchMap, tap } from 'rxjs';
 import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
 import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-service.service';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { MisDoctoresService } from '@http/gestion-expediente/mis-doctores.service';
 import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
 import { ChatPersonaService } from '../../../../shared/http/chat/chat-persona.service';
@@ -27,7 +26,6 @@ import { FechaService } from '@services/fecha.service';
     TableModule, 
     CommonModule,
     IonicModule,
-    HeaderComponent, 
     FormsModule,
     SearchbarComponent
   ],

@@ -9,9 +9,10 @@ import { ModalController } from '@ionic/angular/standalone';
 import { Examen } from '@models/examen/examen';
 import { ExamenReactivo } from '@models/examen/examen-reactivo';
 import { Respuesta } from '@models/examen/respuesta';
+import { FechaService } from '@services/fecha.service';
 import { ImageOnlyModalComponent } from '@sharedComponents/image-only-modal/image-only-modal.component';
 import { addIcons } from 'ionicons';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { OnExit } from 'src/app/shared/guards/exit.guard';
 
 
@@ -60,7 +61,8 @@ export class ResponderCuestionarioComponent  implements OnInit, OnExit {
     private route: ActivatedRoute,
     private router: Router,
     private alertController: AlertController,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private fechaService: FechaService
 
   ) { 
     addIcons({
@@ -118,7 +120,12 @@ export class ResponderCuestionarioComponent  implements OnInit, OnExit {
 
   private consultarExamen(idExamen: number) {
     this.cargandoSubject.next(true);
-    this.examenService.consultarMiExamen(idExamen).subscribe({
+    this.examenService.consultarMiExamen(idExamen).pipe(
+      map((data) => {
+        data.fechaExamen = this.fechaService.fechaUTCAFechaLocal(data.fechaExamen);
+        return data;
+      })
+    ).subscribe({
       next: (data)=> {
         this.examen = data;
         this.porcentajePorPregunta = 1/data.totalPreguntas;

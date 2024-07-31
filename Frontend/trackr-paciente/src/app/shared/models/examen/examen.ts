@@ -12,8 +12,8 @@ export class Examen{
     public estatus: boolean;
 
     public tipoExamen: string;
-    public fechaExamen: Date;
-    public horaExamen: Time;
+    public fechaExamen: string;
+    public horaExamen: string;
     public duracion: number;
     public totalPreguntas: number;
 

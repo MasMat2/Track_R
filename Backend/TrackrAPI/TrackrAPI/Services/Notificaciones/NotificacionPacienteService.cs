@@ -30,6 +30,7 @@ public class NotificacionPacienteService
             notificacionUsuarioDto.IdUsuario,
             notificacionDto.Titulo,
             notificacionDto.Mensaje,
+            notificacionDto.ComplementoMensaje,
             notificacionDto.FechaAlta,
             notificacionUsuarioDto.Visto,
             notificacionDto.IdTipoNotificacion,
@@ -50,6 +51,7 @@ public class NotificacionPacienteService
             IdNotificacion = n.IdNotificacion,
             IdTipoNotificacion = n.IdTipoNotificacion,
             Mensaje = n.Mensaje,
+            ComplementoMensaje = n.ComplementoMensaje,
             Titulo = n.Titulo,
             Visto = n.Visto
         });

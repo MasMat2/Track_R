@@ -16,6 +16,8 @@
   <div class="contenedor-principal">
     <div class="lista-notificaciones">
       <ion-item-group>
+
+        <!-- NOTIFICACIONES DE HOY -->
         <ion-item-divider *ngIf="(filtrarNotificacionesHoy(notificaciones$ | async).length > 0)">
           <ion-label>Hoy</ion-label>
         </ion-item-divider>
@@ -33,11 +35,22 @@
           </ion-icon>
           <ion-label>
             <h3 class="titulo">{{ notificacion.titulo }}</h3>
-            <p class="mensaje">{{ notificacion.mensaje }}</p>
+            <p 
+              *ngIf="!notificacion.complementoEsFecha"
+              class="mensaje">
+              {{ notificacion.mensaje }}, {{ notificacion.complementoMensaje}}
+            </p>
+
+            <p 
+              *ngIf="notificacion.complementoEsFecha" 
+              class="mensaje">
+              {{ notificacion.mensaje }} {{ notificacion.complementoMensaje | date: 'd MMMM, y, h:mm a': '': 'es-MX' }}
+            </p>
             <p class="fecha">{{ notificacion.fecha | date: 'MMMM d, y': '': 'es-MX' }}</p>
           </ion-label>
         </ion-item>
 
+        <!-- NOTIFICACIONES DE ESTA SEMANA (ANTERIORES A HOY) -->
         <ion-item-divider *ngIf="(filtrarNotificacionesSemana(notificaciones$ | async).length > 0)">
           <ion-label>Esta semana</ion-label>
         </ion-item-divider>
@@ -55,11 +68,22 @@
           </ion-icon>
           <ion-label>
             <h3 class="titulo">{{ notificacion.titulo }}</h3>
-            <p class="mensaje">{{ notificacion.mensaje }}</p>
+            <p 
+              *ngIf="!notificacion.complementoEsFecha"
+              class="mensaje">
+              {{ notificacion.mensaje }}, {{ notificacion.complementoMensaje}}
+            </p>
+
+            <p 
+              *ngIf="notificacion.complementoEsFecha" 
+              class="mensaje">
+              {{ notificacion.mensaje }} {{ notificacion.complementoMensaje | date: 'd MMMM, y, h:mm a': '': 'es-MX' }}
+            </p>
             <p class="fecha">{{ notificacion.fecha | date: 'MMMM d, y': '': 'es-MX' }}</p>
           </ion-label>
         </ion-item>
 
+        <!-- NOTIFICACIONES ANTERIORES A ESTA SEMANA -->
         <ion-item-divider *ngIf="(filtrarNotificacionesAnterioresSemana(notificaciones$ | async).length > 0)">
           <ion-label>Anteriores</ion-label>
         </ion-item-divider>
@@ -77,7 +101,17 @@
           </ion-icon>
           <ion-label>
             <h3 class="titulo">{{ notificacion.titulo }}</h3>
-            <p class="mensaje">{{ notificacion.mensaje }}</p>
+            <p 
+              *ngIf="!notificacion.complementoEsFecha"
+              class="mensaje">
+              {{ notificacion.mensaje }}, {{ notificacion.complementoMensaje}}
+            </p>
+
+            <p 
+              *ngIf="notificacion.complementoEsFecha" 
+              class="mensaje">
+              {{ notificacion.mensaje }} {{ notificacion.complementoMensaje | date: 'd MMMM, y, h:mm a': '': 'es-MX' }}
+            </p>
             <p class="fecha">{{ notificacion.fecha | date: 'MMMM d, y': '': 'es-MX' }}</p>
           </ion-label>
         </ion-item>

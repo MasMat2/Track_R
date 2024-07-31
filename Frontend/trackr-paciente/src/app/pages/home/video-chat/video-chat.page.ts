@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { HeaderComponent } from '../layout/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { SignalingHubService } from '@services/signaling-hub.service';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
@@ -16,7 +15,6 @@ import { Subject } from 'rxjs';
   imports: [
     CommonModule,
     IonicModule,
-    HeaderComponent,
     FormsModule
   ]
 })

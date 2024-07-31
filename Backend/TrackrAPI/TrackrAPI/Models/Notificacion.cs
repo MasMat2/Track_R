@@ -21,6 +21,7 @@ namespace TrackrAPI.Models
         public int IdTipoNotificacion { get; set; }
         public int? IdPersona { get; set; }
         public int? IdChat { get; set; }
+        public string? ComplementoMensaje { get; set; }
 
         public virtual Chat? IdChatNavigation { get; set; }
         public virtual Usuario? IdPersonaNavigation { get; set; }

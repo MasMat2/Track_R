@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AlertController, IonicModule, ModalController } from '@ionic/angular';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { ExpedienteEstudioService } from '@services/expediente-estudio.service';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { TableModule } from 'primeng/table';
@@ -25,7 +24,6 @@ import { ArchivoPrevisualizarComponent } from '@sharedComponents/archivo-previsu
     CommonModule,
     FormsModule,
     TableModule,
-    HeaderComponent,
     NgxExtendedPdfViewerModule,
     RouterModule,
     SearchbarComponent

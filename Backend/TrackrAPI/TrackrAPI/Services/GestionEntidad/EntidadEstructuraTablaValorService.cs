@@ -142,6 +142,7 @@ namespace TrackrAPI.Services.GestionEntidad
                     var notificacion = new NotificacionDoctorCapturaDTO(
 
                         "El paciente " + nombrePaciente + " ha registrado un valor fuera de rango en la variable " + nombreVariable + ".",
+                        null,
                         4,
                         idUsuario,
                         idUsuario,

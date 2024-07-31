@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { UsuarioWidgetService } from 'src/app/services/dashboard/usuario-widget.service';
-import { HeaderComponent } from '../layout/header/header.component';
 import { WidgetService } from 'src/app/services/dashboard/widget.service';
 import { Router, RouterModule } from '@angular/router'; 
 import { ChatHubServiceService } from 'src/app/services/dashboard/chat-hub-service.service';
@@ -20,7 +19,6 @@ import { CapacitorHealthkit} from '@perfood/capacitor-healthkit';
     IonicModule,
     CommonModule,
     FormsModule,
-    HeaderComponent,
     RouterModule,
   ],
   providers: [

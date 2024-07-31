@@ -6,6 +6,7 @@ public record NotificacionDoctorDTO(
     int IdUsuario,
     string NombrePaciente,
     string Mensaje,
+    string? ComplementoMensaje,
     DateTime FechaAlta,
     bool Visto,
     int IdTipoNotificacion,

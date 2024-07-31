@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { ExamenService } from '@http/cuestionarios/examen.service';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { Examen } from '@models/examen/examen';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { format} from 'date-fns';
 import { chevronForward } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
@@ -13,6 +12,7 @@ import { ExamenDto } from 'src/app/shared/Dtos/cuestionarios/examen-dto';
 import { TabService } from 'src/app/services/dashboard/tab.service';
 import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 import { Subject, takeUntil } from 'rxjs';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-mis-cuestionarios',
@@ -23,7 +23,6 @@ import { Subject, takeUntil } from 'rxjs';
     IonicModule,
     CommonModule,
     FormsModule,
-    HeaderComponent
   ]
 })
 export class MisCuestionariosComponent  implements OnInit, OnDestroy {
@@ -44,7 +43,8 @@ export class MisCuestionariosComponent  implements OnInit, OnDestroy {
     private router: Router,
     private alertController: AlertController,
     private tabService: TabService,
-    private spinnerService : LoadingSpinnerService
+    private spinnerService : LoadingSpinnerService,
+    private fechaService: FechaService
   ) { 
     addIcons({chevronForward});
 
@@ -114,8 +114,9 @@ export class MisCuestionariosComponent  implements OnInit, OnDestroy {
     });
   }
 
-  protected formatearFecha(fecha:Date ,hora: Time){
-    const fechaString = new Date(`${new Date(fecha).toDateString()} ${hora}`);
+  protected formatearFecha(fecha:string ,hora: string){
+    const nuevaFecha = new Date(`${new Date(fecha).toDateString()} ${hora}`);
+    const fechaString = this.fechaService.fechaUTCAFechaLocal(nuevaFecha);
     return fechaString;
   }
 
@@ -142,11 +143,11 @@ export class MisCuestionariosComponent  implements OnInit, OnDestroy {
     const fechaExamen = this.formatearFecha(examen.fechaExamen, examen.horaExamen);
     const fechaActual = new Date();
 
-    if (fechaExamen.toDateString() !== fechaActual.toDateString()) {
+    if (new Date(fechaExamen).toDateString() !== fechaActual.toDateString()) {
       return false;
     }
 
-    const milisegundos = fechaExamen.getTime() - fechaActual.getTime();
+    const milisegundos = new Date(fechaExamen).getTime() - fechaActual.getTime();
 
     const MS_IN_A_DAY: number = 86_400_000;
     const MS_IN_AN_HOUR: number = 3_600_000;
@@ -166,7 +167,7 @@ export class MisCuestionariosComponent  implements OnInit, OnDestroy {
   private async presentAlertError() {
     const alert = await this.alertController.create({
       header: 'Cuestionario no disponible',
-      subHeader: 'Aún no tienes acceso a este cuestionario',
+      subHeader: 'No tienes acceso a este cuestionario',
       cssClass: 'custom-alert color-error icon-info',
       buttons: ['OK'],
     });

@@ -19,6 +19,7 @@ import { utils, writeFile } from 'xlsx';
 import { map } from 'rxjs';
 import { RespuestasExcelDto } from '@dtos/gestion-examen/respuestas-excel-dto';
 import { ExamenReactivoExcelDto } from '@dtos/gestion-examen/examen-reactivo-excel-dto';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-programacionExamen',
@@ -82,7 +83,8 @@ export class ProgramacionExamenComponent implements OnInit {
     private modalService: BsModalService,
     private programacionExamenService: ProgramacionExamenService,
     private examenReactivoService: ExamenReactivoService,
-    private gridGeneralService: GridGeneralService
+    private gridGeneralService: GridGeneralService,
+    private fechaService: FechaService
   ) {}
 
   public ngOnInit(): void {
@@ -102,7 +104,19 @@ export class ProgramacionExamenComponent implements OnInit {
    * Consulta la informacion del grid.
    */
   private consultarGrid(): void {
-    this.programacionExamenService.consultarGeneral().subscribe((data) => {
+    this.programacionExamenService.consultarGeneral().pipe(
+      map((data) => {
+        return data.map(
+          examen => {
+            //examen.fechaAlta = new Date(this.fechaService.fechaUTCAFechaLocal(examen.fechaAlta));
+            examen.horaExamen = this.fechaService.horaUTCAHoraLocal(examen.horaExamen);
+            examen.fechaExamen = this.fechaService.fechaUTCAFechaLocal(examen.fechaExamen);
+
+            return examen;
+          }
+        );
+      })
+    ).subscribe((data) => {
       this.programacionExamenList = data;
     });
   }

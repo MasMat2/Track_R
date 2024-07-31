@@ -17,6 +17,9 @@ import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
 import { UsuarioDoctorDto } from '@dtos/seguridad/usuario-doctor-dto';
 import { Usuario } from '@models/seguridad/usuario';
 import { LoadingSpinnerService } from '../../../shared/services/loading-spinner.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CustomAlertComponent } from '@sharedComponents/custom-alert/custom-alert.component';
+import { CustomAlertData } from '@sharedComponents/interface/custom-alert-data';
 
 @Component({
   selector: 'app-paciente',
@@ -100,7 +103,8 @@ export class PacienteComponent implements OnInit {
     private usuarioService : UsuarioService,
     private misDoctoresService : MisDoctoresService,
     private modalMensajeService : MensajeService,
-    private spinnerService  : LoadingSpinnerService
+    private spinnerService  : LoadingSpinnerService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -168,24 +172,36 @@ export class PacienteComponent implements OnInit {
   }
 
   protected eliminar(paciente: UsuarioExpedienteGridDTO): void {
-    this.modalMensajeService
-      .modalConfirmacion(
-        '¿Desea eliminar el usuario <strong>' +
-          paciente.nombreCompleto +
-          '</strong>?',
-        this.TITULO_MODAL_ELIMINAR,
-        GeneralConstant.ICONO_CRUZ
-      )
-      .then((_: any) => {
-        var expedienteDoctorDto = {
-          idExpediente: paciente.idExpedienteTrackr,
-        } as UsuarioDoctorDto;
+    this.presentAlertEliminarPaciente(paciente);
+  }
 
+  private presentAlertEliminarPaciente(paciente: UsuarioExpedienteGridDTO){
+    const alert = this.dialog.open(CustomAlertComponent, {
+      panelClass: 'custom-alert',
+      data:{
+        header: 'Eliminar paciente',
+        subHeader: '¿Seguro(a) que desea eliminar este paciente?',
+        Icono: 'info',
+        Color: 'error',
+        twoButtons: true,
+        cancelButtonText: 'No, cancelar',
+        confirmButtonText: "Si, aceptar"
+      } as CustomAlertData,
+      autoFocus: false,
+      restoreFocus: false,
+    });
+
+    alert.beforeClosed().subscribe(result => {
+      var expedienteDoctorDto = {
+        idExpediente: paciente.idExpedienteTrackr,
+      } as UsuarioDoctorDto;
+
+      if(result == "confirm"){
         this.misDoctoresService.eliminar(expedienteDoctorDto).subscribe(() => {
-          this.modalMensajeService.modalExito(this.MENSAJE_EXITO_ELIMINAR);
           this.consultarPacientes();
         });
-      });
+      }
+    })
   }
 
   /**

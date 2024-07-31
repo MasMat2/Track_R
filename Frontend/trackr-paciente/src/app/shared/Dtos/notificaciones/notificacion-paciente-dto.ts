@@ -4,5 +4,6 @@ export interface NotificacionPacienteDTO extends NotificacionUsuarioBaseDTO
 {
   titulo: string;
   mensaje: string;
+  complementoMensaje: string;
   idChat?: number;
 }
