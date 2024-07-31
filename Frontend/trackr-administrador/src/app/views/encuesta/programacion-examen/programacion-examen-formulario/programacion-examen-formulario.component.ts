@@ -219,7 +219,7 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
   private agregar(): void {
     const MENSAJE_AGREGAR: string = 'La programación del Cuestionario ha sido agregada';
     
-    const fechaString = this.fechaService.fechaUTCAFechaLocal(new Date(this.programacionExamen.fechaExamen).toISOString()).split('T')[0];
+    const fechaString = this.fechaService.fechaUTCAFechaLocal(this.fechaSeleccionada.toISOString()).split('T')[0];
     const horaString = this.programacionExamen.horaExamen;
     const nuevafecha = new Date(`${fechaString}T${horaString}`);
 
