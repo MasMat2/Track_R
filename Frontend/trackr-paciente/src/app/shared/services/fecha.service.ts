@@ -7,8 +7,9 @@ export class FechaService {
 
   protected readonly now = new Date();
   protected readonly localOffset = this.now.getTimezoneOffset() * 60000;
-  protected readonly localISOTime = (new Date(this.now.getTime() - this.localOffset)).toISOString().slice(0,-1);
   protected readonly localDateTime = (new Date(this.now.getTime() - this.localOffset));
+  protected readonly localISODateTime = (new Date(this.now.getTime() - this.localOffset)).toISOString().slice(0,-1);
+  protected readonly localISOTime = (new Date(this.now.getTime() - this.localOffset)).toISOString().slice(0,-1).split('T')[1];
 
   constructor() { 
 
@@ -19,7 +20,7 @@ export class FechaService {
   }
 
   public obtenerFechaActualISOString(){
-    return this.localISOTime;
+    return this.localISODateTime;
   }
 
   public fechaLocalAFechaUTC(fechaLocal: string | Date){
@@ -27,10 +28,16 @@ export class FechaService {
       return fechaLocal.toISOString().slice(0,-1);
     }
     else if(typeof fechaLocal == "string"){
-      if(fechaLocal.endsWith('Z')){
-        fechaLocal = fechaLocal.slice(0, -1);
+      try {
+        if(fechaLocal.endsWith('Z')){
+          fechaLocal = fechaLocal.slice(0, -1);
+        }
+        return new Date(fechaLocal).toISOString().slice(0,-1);
+      } catch (error) {
+        console.error(error);
+        return this.localISODateTime;
       }
-      return new Date(fechaLocal).toISOString().slice(0,-1);
+
     }
     else{
       throw new Error("Tipo no válido.");
@@ -43,12 +50,17 @@ export class FechaService {
       return localISOTime;
     }
     else if(typeof fechaUTC == "string"){
-      if(fechaUTC.endsWith('Z')){
-        fechaUTC = fechaUTC.slice(0, -1);
+      try {
+        if(fechaUTC.endsWith('Z')){
+          fechaUTC = fechaUTC.slice(0, -1);
+        }
+        const fecha = new Date(fechaUTC);
+        const localISOTime = (new Date(fecha.getTime() - 2*(this.localOffset))).toISOString().slice(0,-1);
+        return localISOTime; 
+      } catch (error) {
+        console.error(error);
+        return this.localISODateTime;
       }
-      const fecha = new Date(fechaUTC);
-      const localISOTime = (new Date(fecha.getTime() - 2*(this.localOffset))).toISOString().slice(0,-1);
-      return localISOTime;
     }
     else{
       throw new Error("Tipo no válido.");
@@ -56,17 +68,29 @@ export class FechaService {
   }
 
   public horaUTCAHoraLocal(hora: string){
-    const dateTodayString = this.localISOTime.split('T')[0];
-    const fecha = new Date(`${dateTodayString}T${hora}`);
-    const localISOTime = (new Date(fecha.getTime() - 2*(this.localOffset))).toISOString().slice(0,-1);
-
-    return localISOTime.split('T')[1].split('.')[0];
+    try {
+      const dateTodayString = this.localISODateTime.split('T')[0];
+      const fecha = new Date(`${dateTodayString}T${hora}`);
+      const localISOTime = (new Date(fecha.getTime() - 2*(this.localOffset))).toISOString().slice(0,-1);
+  
+      return localISOTime.split('T')[1].split('.')[0];
+      
+    } catch (error) {
+      console.error(error);
+      return this.localISOTime;
+    }
   }
 
   public horaLocalAHoraUTC(hora: string){
-    const dateTodayString = this.localISOTime.split('T')[0];
-    const fecha = new Date(`${dateTodayString}T${hora}`);
+    try {
+      const dateTodayString = this.localISODateTime.split('T')[0];
+      const fecha = new Date(`${dateTodayString}T${hora}`);
+  
+      return fecha.toISOString().split('T')[1].split('.')[0];
+    } catch (error) {
+      console.error(error);
+      return this.localISOTime;
+    }
 
-    return fecha.toISOString().split('T')[1].split('.')[0];
   }
 }
