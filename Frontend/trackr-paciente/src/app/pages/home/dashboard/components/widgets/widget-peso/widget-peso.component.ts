@@ -20,7 +20,7 @@ export class WidgetPesoComponent  implements OnInit {
   protected unidadMedida: string = "kg";
   constructor() {
     addIcons({
-      'peso': '/assets/img/svg/Peso.svg'
+      'peso': 'assets/img/svg/Peso.svg'
     })
    }
 

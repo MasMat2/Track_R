@@ -8,7 +8,6 @@ import { combineLatestWith, map } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { chevronBack } from 'ionicons/icons';
 import { ModalController } from '@ionic/angular/standalone';
 
 interface WidgetSeleccionado extends Widget {
@@ -40,7 +39,10 @@ export class ConfiguracionDashboardPage  implements OnInit {
     private usuarioWidgetService: UsuarioWidgetService,
     private alertController: AlertController,
     private modalController: ModalController
-  ) { addIcons({chevronBack})}
+  ) { 
+    addIcons({
+    'chevron-left': 'assets/img/svg/chevron-left.svg'
+  })}
 
   protected widgets: WidgetSeleccionado[] = [];
   protected submiting = false;

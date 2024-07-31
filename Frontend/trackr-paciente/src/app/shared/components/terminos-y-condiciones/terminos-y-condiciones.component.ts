@@ -15,7 +15,11 @@ import { addIcons } from 'ionicons';
 })
 export class TerminosYCondicionesComponent  implements OnInit {
 
-  constructor(private modalCtrl: ModalController) { addIcons({chevronBack})}
+  constructor(private modalCtrl: ModalController) { 
+    addIcons({
+      'chevron-left': 'assets/img/svg/chevron-left.svg'
+    })
+  }
 
   ngOnInit() {}
 

@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { ModalController } from '@ionic/angular/standalone';
-import { chevronBack } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 
 @Component({
@@ -15,7 +14,11 @@ import { addIcons } from 'ionicons';
 })
 export class InfoLibreriasOpenSourceComponent  implements OnInit {
 
-  constructor(private modalCtrl: ModalController) { addIcons({chevronBack})}
+  constructor(private modalCtrl: ModalController) { 
+    addIcons({
+      'chevron-left': 'assets/img/svg/chevron-left.svg'
+    })
+  }
 
   ngOnInit() {}
 

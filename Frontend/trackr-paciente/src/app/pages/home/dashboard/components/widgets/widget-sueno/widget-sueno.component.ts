@@ -19,7 +19,7 @@ export class WidgetSuenoComponent  implements OnInit {
 
   constructor() {
     addIcons({
-      'suenio': '/assets/img/svg/Suenio.svg'
+      'suenio': 'assets/img/svg/Suenio.svg'
     })
    }
 

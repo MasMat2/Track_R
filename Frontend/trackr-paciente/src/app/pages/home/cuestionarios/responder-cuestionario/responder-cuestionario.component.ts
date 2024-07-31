@@ -66,9 +66,9 @@ export class ResponderCuestionarioComponent  implements OnInit, OnExit {
 
   ) { 
     addIcons({
-      'calendar': '/assets/img/svg/calendar.svg',
-      'clock': '/assets/img/svg/clock-2.svg',
-      'file-check': '/assets/img/svg/file-check-2.svg'
+      'calendar': 'assets/img/svg/calendar.svg',
+      'clock': 'assets/img/svg/clock-2.svg',
+      'file-check': 'assets/img/svg/file-check-2.svg'
     })
   }
 

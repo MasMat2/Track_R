@@ -6,8 +6,6 @@ import { ExamenService } from '@http/cuestionarios/examen.service';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { Examen } from '@models/examen/examen';
 import { format} from 'date-fns';
-import { chevronForward } from 'ionicons/icons';
-import { addIcons } from 'ionicons';
 import { ExamenDto } from 'src/app/shared/Dtos/cuestionarios/examen-dto';
 import { TabService } from 'src/app/services/dashboard/tab.service';
 import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
@@ -46,7 +44,6 @@ export class MisCuestionariosComponent  implements OnInit, OnDestroy {
     private spinnerService : LoadingSpinnerService,
     private fechaService: FechaService
   ) { 
-    addIcons({chevronForward});
 
     //Simula ionViewWillEnter
     this.tabService.tabChange$

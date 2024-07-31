@@ -24,7 +24,7 @@ export class WidgetPasosComponent  implements OnInit {
 
   constructor() {
     addIcons({
-      'pasos': '/assets/img/svg/Pasos.svg'
+      'pasos': 'assets/img/svg/Pasos.svg'
     })
    }
 

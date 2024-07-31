@@ -21,7 +21,7 @@ export class WidgetFrecuenciaComponent  implements OnInit {
 
   constructor() {
     addIcons({
-      'ritmo-cardiaco': '/assets/img/svg/Ritmo-cardiaco.svg'
+      'ritmo-cardiaco': 'assets/img/svg/Ritmo-cardiaco.svg'
     })
    }
 
