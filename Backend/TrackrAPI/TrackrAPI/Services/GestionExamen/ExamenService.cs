@@ -234,19 +234,22 @@ public class ExamenService
 
     public async Task EnviarNotificacion(Examen examen, List<int> idsUsuarios, int idUsuarioSesion)
     {
-
+        var pg = _programacionExamenRepository.Consultar(examen.IdProgramacionExamen);
+        DateTime fechaExamen = pg.FechaExamen.Value;
+        TimeSpan horaExamen = pg.HoraExamen.Value;
         var idTipoNotificacion =_tipoNotificacionRepository.ConsultarPorClave(GeneralConstant.ClaveNotificacionAlerta).IdTipoNotificacion;
-        var fechaLocal = examen.FechaAlta.Value.ToLocalTime();
-        var fecha = fechaLocal.ToString("dd/MM/yyyy HH:mm");
+
+        DateTime fechaCompletaExamen = new DateTime(fechaExamen.Year, fechaExamen.Month, fechaExamen.Day, horaExamen.Hours, horaExamen.Minutes, horaExamen.Seconds);
+        var fechaString = fechaCompletaExamen.ToString("yyyy-MM-ddTHH:mm:ssZ");
 
         var notificacion = new NotificacionCapturaDTO
         (
            "Nuevo examen programado",
-            $"Se le ha programado un examen para el día {fecha}",
+           "Se le ha programado un examen para el día:",
+           fechaString,
            idTipoNotificacion,
            idUsuarioSesion,
            null
-
         );
 
         await _notificacionPacienteService.Notificar(notificacion, idsUsuarios);

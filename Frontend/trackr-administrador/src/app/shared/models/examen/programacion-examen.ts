@@ -11,8 +11,8 @@ export class ProgramacionExamen{
     public clave: string;
     public duracion: number;
     public cantidadParticipantes: number;
-    public fechaExamen: Date;
-    public horaExamen: Time;
+    public fechaExamen: string;
+    public horaExamen: string;
     public fechaAlta: Date;
     public estatus: boolean;
     public promedio: number;

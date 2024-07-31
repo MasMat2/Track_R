@@ -40,6 +40,12 @@ public class ProgramacionExamenService
 
     public void Editar(ProgramacionExamen programacionExamen)
     {
+        var programacionExamenExistente = _programacionExamenRepository.Consultar(programacionExamen.IdProgramacionExamen);
+        if(programacionExamen is not null)
+        {
+            programacionExamen.FechaAlta = programacionExamenExistente.FechaAlta;
+        }
+
         _programacionExamenValidatorService.ValidarEditar(programacionExamen);
         _programacionExamenRepository.Editar(programacionExamen);
     }
