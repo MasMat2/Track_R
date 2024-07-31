@@ -117,12 +117,13 @@ public class RecordatorioTomasService : IRecordatorioTomasService
         foreach (var recordatorio in recordatoriosToProcess)
         {
 
-            var mensajeNotificacion = $"Tomar {recordatorio.IdExpedienteTratamientoNavigation.Cantidad} {recordatorio.IdExpedienteTratamientoNavigation.Unidad} , {recordatorio.Hora} ";
+            var mensajeNotificacion = $"Tomar {recordatorio.IdExpedienteTratamientoNavigation.Cantidad} {recordatorio.IdExpedienteTratamientoNavigation.Unidad}";
 
             var notificacion = new NotificacionCapturaDTO
             (
                 recordatorio.IdExpedienteTratamientoNavigation.Farmaco,
                 mensajeNotificacion,
+                recordatorio.Hora.ToString(),
                 6,
                 null,
                 null
