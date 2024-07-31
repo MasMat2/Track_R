@@ -67,7 +67,6 @@ export class NotificacionesComponent  implements OnInit
   private consultarNotificaciones(): void {
     this.notificaciones$ = this.notificacionHubService.notificaciones$.pipe(
       map((notificaciones) => {
-        console.log(notificaciones);
         return notificaciones.map((notificacion) => {
           // Convertir la fecha UTC a la hora local
           const localDate = this.fechaService.fechaUTCAFechaLocal(notificacion.fechaAlta);
@@ -229,7 +228,7 @@ export class NotificacionesComponent  implements OnInit
   }
 
   private complementoEsFecha(idTipoNotificacion: number){
-    return (this.esNotificacionExamen(idTipoNotificacion) || this.esNotificacionRecordatorio(idTipoNotificacion));
+    return (this.esNotificacionExamen(idTipoNotificacion));
   }
 
   private formatearComplemento(complemento: string, tipoNotificacion: number){
