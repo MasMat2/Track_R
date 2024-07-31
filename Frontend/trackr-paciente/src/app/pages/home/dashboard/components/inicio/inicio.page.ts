@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { WidgetSeguimientoComponent } from '../widgets/widget-seguimiento/widget-seguimiento.component';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { WidgetContainerComponent } from '../widgets/widget-container/widget-container.component';
 import { UsuarioWidgetService } from 'src/app/services/dashboard/usuario-widget.service';
 import { WidgetService } from 'src/app/services/dashboard/widget.service';
@@ -36,7 +35,6 @@ import { TabService } from 'src/app/services/dashboard/tab.service';
         CommonModule,
         FormsModule,
         WidgetSeguimientoComponent,
-        HeaderComponent,
         WidgetContainerComponent,
         RouterModule,
         SeguimientoPadecimientoComponent,

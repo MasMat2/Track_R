@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChatPersonaService } from '@http/chat/chat-persona.service';
 import { IonContent, IonicModule, PopoverController } from '@ionic/angular';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { Observable } from 'rxjs';
 import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
 import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';

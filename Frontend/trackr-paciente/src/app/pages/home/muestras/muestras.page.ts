@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { EntidadEstructuraTablaValorService } from '@http/gestion-expediente/entidad-estructura-tabla-valor.service';
 import { IonicModule } from '@ionic/angular';
 import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.module';
-import { HeaderComponent } from '../layout/header/header.component';
 import { MuestrasFormularioComponent } from './muestras-formulario/muestras-formulario.component';
 import { addIcons } from 'ionicons';
 import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
@@ -21,7 +20,6 @@ import { LoadingSpinnerService } from '../../../services/dashboard/loading-spinn
     CommonModule,
     IonicModule,
     FormsModule,
-    HeaderComponent,
     GridGeneralModule,
     MuestrasFormularioComponent,
     SharedModule

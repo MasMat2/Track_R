@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { ExamenService } from '@http/cuestionarios/examen.service';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { Examen } from '@models/examen/examen';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { format} from 'date-fns';
 import { chevronForward } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
@@ -23,7 +22,6 @@ import { Subject, takeUntil } from 'rxjs';
     IonicModule,
     CommonModule,
     FormsModule,
-    HeaderComponent
   ]
 })
 export class MisCuestionariosComponent  implements OnInit, OnDestroy {

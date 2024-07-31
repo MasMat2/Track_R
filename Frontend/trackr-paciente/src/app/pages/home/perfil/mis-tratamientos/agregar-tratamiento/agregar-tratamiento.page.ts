@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { PerfilTratamientoService } from '@http/gestion-perfil/perfil-tratamiento.service';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import {  ModalController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { ExpedienteTratamientoDetalleDto } from 'src/app/shared/Dtos/gestion-perfil/expediente-tratamiento-detalle-dto';
@@ -31,7 +30,6 @@ const CANTIDAD_MAXIMA = 99;
     CommonModule, 
     FormsModule, 
     ReactiveFormsModule, 
-    HeaderComponent, 
   ],
   providers: [CapacitorUtils, UnidadMedidaService]
 })
