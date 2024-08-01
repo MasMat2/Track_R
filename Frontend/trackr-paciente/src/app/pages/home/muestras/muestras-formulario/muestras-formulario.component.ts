@@ -18,6 +18,7 @@ import { AlertController, ModalController } from '@ionic/angular/standalone';
 import { GeneralConstant } from '@utils/general-constant';
 import { DirectiveModule } from 'src/app/shared/directives/directive.module';
 import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -51,7 +52,8 @@ export class MuestrasFormularioComponent implements OnInit {
     private dominioHospitalService:DominioHospitalService,
     private modalController: ModalController,
     private alertController: AlertController,
-    private loadingSpinner: LoadingSpinnerService
+    private loadingSpinner: LoadingSpinnerService,
+    private fechaService: FechaService
   ) { 
 
       addIcons({ 
@@ -89,7 +91,7 @@ export class MuestrasFormularioComponent implements OnInit {
           idSeccionVariable: seccionCampo.idSeccionCampo,
           valor: seccionCampo.valor.toString(),
           fueraDeRango: await this.estaFueraDeRango(seccionCampo),
-          fechaMuestra: new Date(this.fechaSeleccionada)
+          fechaMuestra: this.fechaService.fechaLocalAFechaUTC(this.fechaSeleccionada)
         });
       }
     }

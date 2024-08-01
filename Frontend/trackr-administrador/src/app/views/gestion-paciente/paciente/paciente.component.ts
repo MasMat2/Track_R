@@ -20,6 +20,7 @@ import { LoadingSpinnerService } from '../../../shared/services/loading-spinner.
 import { MatDialog } from '@angular/material/dialog';
 import { CustomAlertComponent } from '@sharedComponents/custom-alert/custom-alert.component';
 import { CustomAlertData } from '@sharedComponents/interface/custom-alert-data';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-paciente',
@@ -104,7 +105,8 @@ export class PacienteComponent implements OnInit {
     private misDoctoresService : MisDoctoresService,
     private modalMensajeService : MensajeService,
     private spinnerService  : LoadingSpinnerService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private fechaService: FechaService
   ) {}
 
   ngOnInit(): void {
@@ -236,6 +238,10 @@ export class PacienteComponent implements OnInit {
   public consultarValoresFueraRango(idUsuario : number): void {
     lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresFueraRangoUsuario(idUsuario))
       .then((valoresFueraRango: ValoresFueraRangoGridDTO[]) => {
+        valoresFueraRango.map(data => {
+          data.fechaHora = this.fechaService.fechaUTCAFechaLocal(data.fechaHora);
+          return data;
+        })
         this.valoresFueraRango = valoresFueraRango;
       }
     );

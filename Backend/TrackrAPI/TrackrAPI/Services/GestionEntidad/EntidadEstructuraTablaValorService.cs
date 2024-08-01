@@ -130,7 +130,7 @@ namespace TrackrAPI.Services.GestionEntidad
                     IdSeccion = muestra.IdSeccionVariable,
                     IdTabla = idUsuario,
                     Valor = muestra.Valor,
-                    FechaMuestra = muestra.FechaMuestra.ToLocalTime(),
+                    FechaMuestra = muestra.FechaMuestra,
                     FueraDeRango = muestra.FueraDeRango
                 };
 

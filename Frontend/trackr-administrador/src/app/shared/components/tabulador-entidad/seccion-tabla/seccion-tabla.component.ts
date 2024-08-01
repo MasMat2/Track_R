@@ -17,6 +17,7 @@ import { first } from 'rxjs/operators';
 import { sum } from 'lodash';
 import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
 import { Dominio } from '@models/catalogo/dominio';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-seccion-tabla',
@@ -38,7 +39,8 @@ export class SeccionTablaComponent implements OnInit {
     private modalService: BsModalService,
     private mensajeService: MensajeService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
-    private entidadEstructuraService : EntidadEstructuraService
+    private entidadEstructuraService : EntidadEstructuraService,
+    private fechaService: FechaService
   ) { }
 
   ngOnInit() {
@@ -88,6 +90,14 @@ export class SeccionTablaComponent implements OnInit {
 
   private obtenerMuestrasGrid() {
     this.entidadEstructuraTablaValorService.consultarGridMuestras(this.idTabla).subscribe((data) => {
+      data.map((muestra) => {
+        return muestra.registro.map(
+          registro => {
+            registro.fechaMuestra = new Date(this.fechaService.fechaUTCAFechaLocal(registro.fechaMuestra));
+            return registro;
+          }
+        )
+      })
       this.muestras = data;
     })
   }
