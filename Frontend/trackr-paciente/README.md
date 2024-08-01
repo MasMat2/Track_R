@@ -1,5 +1,5 @@
 Estado de apliacion en plataforma IOS:
-build ios 75
+build ios 80
 Servidor ios: azure
 Grupo de pruebas: US-IT
 
