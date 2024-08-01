@@ -25,7 +25,7 @@ export class WidgetPesoComponent  implements OnInit {
 
   constructor(private healthKitService: HealthkitService) { 
     addIcons({
-      'peso': '/assets/img/svg/Peso.svg'
+      'peso': 'assets/img/svg/Peso.svg'
     })
   }
 

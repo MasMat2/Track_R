@@ -8,7 +8,7 @@ export class ValoresFueraRangoGridDTO{
     unidadMedida: string;
     variable: string;
     parametro: string;
-    fechaHora: Date;
+    fechaHora: string;
     valorReferencia: string;
     fueraDeRango: boolean;
 }

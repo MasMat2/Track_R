@@ -21,7 +21,7 @@ export class WidgetSuenoComponent  implements OnInit {
 
   constructor(private healthKitService: HealthkitService) { 
     addIcons({
-      'suenio': '/assets/img/svg/Suenio.svg'
+      'suenio': 'assets/img/svg/Suenio.svg'
     })
   }
   

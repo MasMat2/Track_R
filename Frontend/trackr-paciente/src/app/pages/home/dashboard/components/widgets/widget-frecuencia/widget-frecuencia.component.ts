@@ -21,7 +21,7 @@ export class WidgetFrecuenciaComponent  implements OnInit {
   protected unidadMedida: string = "lpm";
   constructor(private healthKitService: HealthkitService) { 
     addIcons({
-      'ritmo-cardiaco': '/assets/img/svg/Ritmo-cardiaco.svg'
+      'ritmo-cardiaco': 'assets/img/svg/Ritmo-cardiaco.svg'
     })
   }
 

@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { addIcons } from 'ionicons';
-import { water, walk, scale, moon  } from 'ionicons/icons'
 
 @Component({
   selector: 'app-widget',
@@ -26,7 +24,6 @@ export class WidgetComponent  implements OnInit {
 
 
   constructor() {
-    addIcons({water, walk, scale, moon})
    }
 
   ngOnInit() {

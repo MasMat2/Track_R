@@ -20,6 +20,7 @@ import { HealthkitService } from '@services/healthkit.service';
 import { GeneralConstant } from '@utils/general-constant';
 import { DirectiveModule } from 'src/app/shared/directives/directive.module';
 import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -54,7 +55,8 @@ export class MuestrasFormularioComponent implements OnInit {
     private modalController: ModalController,
     private alertController: AlertController,
     private healthKitService: HealthkitService,
-    private loadingSpinner: LoadingSpinnerService
+    private loadingSpinner: LoadingSpinnerService,
+    private fechaService: FechaService
 
   ) { 
 
@@ -93,7 +95,7 @@ export class MuestrasFormularioComponent implements OnInit {
           idSeccionVariable: seccionCampo.idSeccionCampo,
           valor: seccionCampo.valor.toString(),
           fueraDeRango: await this.estaFueraDeRango(seccionCampo),
-          fechaMuestra: new Date(this.fechaSeleccionada)
+          fechaMuestra: this.fechaService.fechaLocalAFechaUTC(this.fechaSeleccionada)
         });
       }
     }

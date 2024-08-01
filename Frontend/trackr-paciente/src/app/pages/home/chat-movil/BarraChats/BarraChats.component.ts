@@ -51,7 +51,7 @@ export class BarraChatsComponent {
     private fechaService: FechaService
   ) {
     addIcons({
-      'chat-plus': ' ../assets/img/svg/chat-plus.svg'
+      'chat-plus': 'assets/img/svg/chat-plus.svg'
     });
   }
 

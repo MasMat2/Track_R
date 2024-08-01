@@ -10,6 +10,7 @@ import { addIcons } from 'ionicons';
 import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
 import { ModalController } from '@ionic/angular/standalone';
 import { LoadingSpinnerService } from '../../../services/dashboard/loading-spinner.service';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-muestras',
@@ -42,6 +43,7 @@ export class MuestrasPage implements OnInit {
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
     private modalController: ModalController,
     private loadingSpinner: LoadingSpinnerService,
+    private fechaService: FechaService,
   ) { addIcons({
       'plus': 'assets/img/svg/plus.svg',
       'calendar': 'assets/img/svg/calendar.svg',
@@ -57,6 +59,10 @@ export class MuestrasPage implements OnInit {
 
     this.entidadEstructuraTablaValorService.consultarValoresFueraRangoUsuarioSesion().subscribe({
       next: (valoresFueraRango: ValoresFueraRangoGridDTO[]) => {
+        valoresFueraRango.map((data) => {
+          data.fechaHora = this.fechaService.fechaUTCAFechaLocal(data.fechaHora);
+          return data;
+        })
         this.valoresFueraRango = valoresFueraRango.sort((a, b) => {
           return new Date(b.fechaHora).getTime() - new Date(a.fechaHora).getTime();
         });
