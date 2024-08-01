@@ -12,3 +12,7 @@ button{
         color: var(--error-200);
     }
 }
+
+::ng-deep .modal-content {
+    padding: 0 !important;
+}
