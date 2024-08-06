@@ -9,8 +9,9 @@ import { ArchivoService } from '@http/archivo/archivo.service';
 import { BehaviorSubject } from 'rxjs';
 import { AlertController } from '@ionic/angular/standalone';
 import { PdfVisorComponent } from '@sharedComponents/pdf-visor/pdf-visor.component';
-
-
+import { FileOpener, FileOpenerOptions } from '@capacitor-community/file-opener';
+import { async } from 'rxjs'; 
+import { Capacitor } from '@capacitor/core';
 
 
 @Component({
@@ -44,6 +45,7 @@ export class ArchivoPrevisualizarComponent implements OnInit, AfterViewInit {
   private cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private cargando$ = this.cargandoSubject.asObservable();
   private loading : any;
+  protected isIOSNative: boolean = false;
 
   constructor(
     private modalController: ModalController, 
@@ -57,12 +59,17 @@ export class ArchivoPrevisualizarComponent implements OnInit, AfterViewInit {
     }); 
   }
   
-  ngOnInit() {
+  async ngOnInit() {
     this.cargando$.subscribe(cargando => {
       if (cargando) {
         this.presentLoading();
       } else {
         this.dismissLoading();
+
+        if (Capacitor.isNativePlatform() && Capacitor.getPlatform() == 'ios') {
+          this.isIOSNative = true;
+          this.openFile(this.archivoBase64);
+        }
       }
     });
 
@@ -222,5 +229,35 @@ export class ArchivoPrevisualizarComponent implements OnInit, AfterViewInit {
     })
 
     alert.present();
+  }
+
+  async openFile(base64: string): Promise<void> {
+
+    const result = await Filesystem.writeFile({
+      path: `test.pdf`,
+      data: base64,
+      directory: Directory.Cache,
+      recursive: true
+      //encoding: Encoding.UTF8,
+    });
+
+    var url = result.uri;
+
+    const fileOpenerOptions: FileOpenerOptions = {
+      filePath: url,
+      contentType: 'application/pdf',
+      openWithDefault: true
+    };
+    await FileOpener.open(fileOpenerOptions);
+
+    await Filesystem.deleteFile({
+      path: `test.pdf`,
+      directory: Directory.Cache
+      //encoding: Encoding.UTF8,
+    });
+
+    console.log("Archivo cerrado");
+    this.regresarBtn();
+
   }
 }
