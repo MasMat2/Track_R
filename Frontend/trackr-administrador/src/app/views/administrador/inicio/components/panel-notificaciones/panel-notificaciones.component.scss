@@ -34,12 +34,14 @@
   align-items: center;
   border-bottom: 1px solid var(--neutral-200);
   background: var(--neutral-50);
+  cursor: pointer;
+  
+
 
   .contenido {
     display: flex;
     width: 100%;
     height: 100%;
-    cursor: pointer;
 
     .thumbnail {
       margin-right: 14px;
@@ -49,6 +51,7 @@
         width: 40px !important;
         height: 40px !important;
         border-radius: 13.33px !important;
+        object-fit: cover;
       }
     }
 
@@ -78,6 +81,10 @@
 .notificacion.vista{
   padding-left: 0 !important;
   background: var(--primary-50);
+}
+.notificacion:hover{
+  background: var(--primary-100);
+
 }
 
 .contenedor-marcador {

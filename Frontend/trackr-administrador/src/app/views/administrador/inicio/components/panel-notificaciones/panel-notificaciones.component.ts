@@ -11,6 +11,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Notificacion } from '@dtos/notificaciones/notificacion-dto';
 import { MeetService } from '@http/chats/meet.service';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-panel-notificaciones',
@@ -47,7 +48,8 @@ export class PanelNotificacionesComponent implements OnInit {
     private modalService: BsModalService,
     private sanitizer:DomSanitizer,
     private router:Router,
-    private meetService: MeetService
+    private meetService: MeetService,
+    private fechaService: FechaService
   ) { }
 
   ngOnInit() {
@@ -64,7 +66,7 @@ export class PanelNotificacionesComponent implements OnInit {
             idTipoNotificacion: notificacion.idTipoNotificacion,
             paciente: notificacion.nombrePaciente,
             mensaje: notificacion.mensaje,
-            fecha: notificacion.fechaAlta,
+            fecha: this.fechaService.fechaUTCAFechaLocal(notificacion.fechaAlta),
             imagen: (notificacion.imagen !== null || notificacion.imagen !== undefined) ? this.sanitizer.bypassSecurityTrustUrl(notificacion.imagen || '') : undefined,
             visto: notificacion.visto,
             idChat: notificacion.idChat

@@ -3,7 +3,7 @@ export interface Notificacion {
   idTipoNotificacion: number;
   paciente: string;
   mensaje: string;
-  fecha: Date;
+  fecha: string;
   imagen?: string;
   visto: boolean;
   idChat?: number;
