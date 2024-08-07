@@ -45,10 +45,10 @@ namespace TrackrAPI.Controllers.GestionExpediente
         }
 
         [HttpPost("agregar")]
-        public int Agregar(ExpedienteTratamientoDetalleDto expedienteTratamientoDto)
+        public async Task<int> Agregar(ExpedienteTratamientoDetalleDto expedienteTratamientoDto)
         {
             int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
-            return expedienteTratamientoService.Agregar(expedienteTratamientoDto, idUsuario);
+            return await expedienteTratamientoService.Agregar(expedienteTratamientoDto, idUsuario);
         }
 
         [HttpPut("editar")]

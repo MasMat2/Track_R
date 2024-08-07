@@ -22,7 +22,8 @@ import { GetRecordsOptions, Record } from '@pages/home/dashboard/interfaces/heal
 import { RecordType } from 'capacitor-health-connect-local';
 import { HealthConnectService } from 'src/app/services/dashboard/health-connect.service';
 import { DirectiveModule } from 'src/app/shared/directives/directive.module';
-
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -57,7 +58,9 @@ export class MuestrasFormularioComponent implements OnInit {
     private dominioHospitalService:DominioHospitalService,
     private modalController: ModalController,
     private alertController: AlertController,
-    private healthConnectservice: HealthConnectService
+    private healthConnectservice: HealthConnectService,
+    private loadingSpinner: LoadingSpinnerService,
+    private fechaService: FechaService
   ) { 
 
       addIcons({ 
@@ -107,7 +110,7 @@ export class MuestrasFormularioComponent implements OnInit {
           idSeccionVariable: seccionCampo.idSeccionCampo,
           valor: seccionCampo.valor.toString(),
           fueraDeRango: await this.estaFueraDeRango(seccionCampo),
-          fechaMuestra: new Date(this.fechaSeleccionada)
+          fechaMuestra: this.fechaService.fechaLocalAFechaUTC(this.fechaSeleccionada)
         });
       }
     }

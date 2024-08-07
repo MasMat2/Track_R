@@ -23,12 +23,12 @@
     <div class="lista-doctores"> 
       
       <ion-list style="margin-top: 16px;" lines="none" *ngIf="filtrando">
-        <ion-item class="doctor" *ngFor="let doctor of doctoresFiltrados" detail button detailIcon="chevron-right">
+        <ion-item class="doctor" *ngFor="let doctor of doctoresFiltrados" detail button detailIcon="chevron-right" (click)="mostrarAlertCrearChat(doctor.idUsuarioDoctor)">
           <ion-avatar slot="start">
             <ion-img *ngIf="doctor.urlImagen" alt="profile pic" [src]="doctor.urlImagen"></ion-img>
-            <ion-img *ngIf="!doctor.urlImagen" alt="profile pic" src="assets/img/svg/Image_placeholder.svg"></ion-img>
+            <ion-img *ngIf="!doctor.urlImagen" alt="profile pic" src="assets/img/svg/avatar-placeholder.svg"></ion-img>
           </ion-avatar>
-          <ion-label (click)="mostrarAlertCrearChat(doctor.idUsuarioDoctor)">{{doctor.titulo}} {{ doctor.nombre }}</ion-label>
+          <ion-label>{{doctor.titulo}} {{ doctor.nombre }}</ion-label>
         </ion-item>
       </ion-list>
 
@@ -37,12 +37,12 @@
           <ion-item-divider class="divider">
             {{ group.letra }}
           </ion-item-divider>
-          <ion-item class="doctor" *ngFor="let doctor of group.doctores" detail button detailIcon="chevron-right">
+          <ion-item class="doctor" *ngFor="let doctor of group.doctores" detail button detailIcon="chevron-right" (click)="mostrarAlertCrearChat(doctor.idUsuarioDoctor)">
             <ion-avatar slot="start">
               <ion-img *ngIf="doctor.urlImagen" alt="profile pic" [src]="doctor.urlImagen"></ion-img>
-              <ion-img *ngIf="!doctor.urlImagen" alt="profile pic" src="assets/img/svg/Image_placeholder.svg"></ion-img>
+              <ion-img *ngIf="!doctor.urlImagen" alt="profile pic" src="assets/img/svg/avatar-placeholder.svg"></ion-img>
             </ion-avatar>
-            <ion-label (click)="mostrarAlertCrearChat(doctor.idUsuarioDoctor)">{{doctor.titulo}} {{ doctor.nombre }}</ion-label>
+            <ion-label>{{doctor.titulo}} {{ doctor.nombre }}</ion-label>
           </ion-item>
         </ion-list>
       </ng-container>

@@ -9,7 +9,6 @@ import { ModalController } from '@ionic/angular/standalone';
 import { Examen } from '@models/examen/examen';
 import { ExamenReactivo } from '@models/examen/examen-reactivo';
 import { Respuesta } from '@models/examen/respuesta';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { ImageOnlyModalComponent } from '@sharedComponents/image-only-modal/image-only-modal.component';
 import { addIcons } from 'ionicons';
 import { BehaviorSubject, map, tap } from 'rxjs';
@@ -27,7 +26,6 @@ interface ExamenReactivoRespuestasArray extends ExamenReactivo {
     IonicModule,
     CommonModule,
     FormsModule,
-    HeaderComponent,
     RouterModule,
   ],
 })

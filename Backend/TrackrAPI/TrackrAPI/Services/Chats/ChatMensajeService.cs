@@ -102,7 +102,7 @@ public class ChatMensajeService
         {
             idTipoNotificacion = _tipoNotificacionRepository.ConsultarPorClave(GeneralConstant.ClaveNotificacionChat).IdTipoNotificacion;
         }
-        var notificacion = new NotificacionDoctorCapturaDTO(mensaje.Mensaje, idTipoNotificacion, mensaje.IdPersona, mensaje.IdPersona, mensaje.IdChat);
+        var notificacion = new NotificacionDoctorCapturaDTO(mensaje.Mensaje, null, idTipoNotificacion, mensaje.IdPersona, mensaje.IdPersona, mensaje.IdChat);
 
         await _notificacionService.Notificar(notificacion, idsPersonasChat);
 

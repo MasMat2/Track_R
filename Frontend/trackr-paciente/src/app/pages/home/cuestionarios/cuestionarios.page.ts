@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { HeaderComponent } from '../layout/header/header.component';
 
 @Component({
   selector: 'app-cuestionarios',
@@ -11,7 +10,6 @@ import { HeaderComponent } from '../layout/header/header.component';
   imports: [
     CommonModule,
     IonicModule,
-    HeaderComponent,
   ]
 })
 export class CuestionariosPage implements OnInit {

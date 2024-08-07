@@ -34,8 +34,6 @@ export class WidgetPasosComponent  implements OnInit {
   protected pasos: string = '0';
   protected unidadMedida: string = "pasos";
 
-  protected distancia: number;
-
   constructor(
     private healthConnectservice : HealthConnectService,
     private alertController: AlertController ) {

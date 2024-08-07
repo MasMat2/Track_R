@@ -67,6 +67,7 @@ public class ExpedienteRecomendacionService
         (
             doctor.Nombre,
             expedienteRecomendacionFormDTO.Descripcion ?? string.Empty,
+            null,
             5,
             doctor.IdUsuario,
             null

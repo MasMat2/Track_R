@@ -1781,6 +1781,8 @@ namespace TrackrAPI.Models
 
                 entity.ToTable("Notificacion", "Configuracion");
 
+                entity.Property(e => e.ComplementoMensaje).HasMaxLength(300);
+
                 entity.Property(e => e.FechaAlta).HasColumnType("datetime");
 
                 entity.Property(e => e.Mensaje).HasMaxLength(500);

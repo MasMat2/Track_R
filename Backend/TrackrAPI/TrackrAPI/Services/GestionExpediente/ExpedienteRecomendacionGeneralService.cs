@@ -62,6 +62,7 @@ public class ExpedienteRecomendacionGeneralService
             (
                 doctor.Nombre,
                 expedienteRecomendacionGeneralFormDTO.Descripcion ?? string.Empty,
+                null,
                 1,
                 doctor.IdUsuario,
                 null
@@ -100,6 +101,7 @@ public class ExpedienteRecomendacionGeneralService
             (
                 doctor.Nombre,
                 expedienteRecomendacionGeneralFormDTO.Descripcion ?? string.Empty,
+                null,
                 1,
                 doctor.IdUsuario,
                 null
@@ -141,6 +143,7 @@ public class ExpedienteRecomendacionGeneralService
             (
                 doctor.Nombre,
                 expedienteRecomendacionGeneralFormDTO.Descripcion ?? string.Empty,
+                null,
                 1,
                 doctor.IdUsuario,
                 null

@@ -111,24 +111,29 @@ export class InfoDiagnosticosComponent  implements OnInit {
       initialBreakpoint: 1,
       cssClass: 'custom-sheet-modal'
     });
-    modal.onWillDismiss().then(() => {
-      this.consultarDiagnosticos();
-    })
 
     await modal.present();
+
+    const {data, role} = await modal.onWillDismiss();
+    if(role == "confirm"){
+      this.consultarDiagnosticos();
+    }
+    else{
+      return
+    }
   }
 
   private eliminarAntecedente(antecedente: ExpedientePadecimientoDto){
-    this.eliminandoDiagnostico = true;
     this.expedientePadecimientoService.eliminar(antecedente.idExpedientePadecimiento).subscribe({
       next: () => {
-        this.consultarDiagnosticos();
+        this.eliminandoDiagnostico = true;
       },
       error: () => {
         this.eliminandoDiagnostico = false;
       },
       complete: () => {
         this.eliminandoDiagnostico = false;
+        this.consultarDiagnosticos();
         this.presentarAlertaEliminadoExitosamente();
       }
     });

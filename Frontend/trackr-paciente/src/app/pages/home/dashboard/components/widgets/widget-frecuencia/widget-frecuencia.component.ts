@@ -33,6 +33,11 @@ export class WidgetFrecuenciaComponent  implements OnInit {
 
   protected unidadMedida: string = "lpm";
 
+  constructor() {
+    addIcons({
+      'ritmo-cardiaco': 'assets/img/svg/Ritmo-cardiaco.svg'
+    })
+   }
 
   async ngOnInit() {
     await this.validarDisponibilidad();

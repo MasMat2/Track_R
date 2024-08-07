@@ -93,8 +93,12 @@ export class AntecedenteFormularioComponent  implements OnInit {
       error: () => {
       },
       complete: () => {
-        this.modalController.dismiss();
+        this.cerrarModal(null, "confirm");
       }
     })
+  }
+
+  protected cerrarModal(data: any, role: string){
+    this.modalController.dismiss(data, role);
   }
 }

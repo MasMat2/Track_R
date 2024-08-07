@@ -16,5 +16,5 @@ export interface TablaValorMuestraDTO {
     idSeccionVariable: number;
     valor: string;
     fueraDeRango: boolean;
-    fechaMuestra: Date;
+    fechaMuestra: string;
 }

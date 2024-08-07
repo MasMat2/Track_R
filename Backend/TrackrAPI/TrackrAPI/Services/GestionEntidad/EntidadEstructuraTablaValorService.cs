@@ -130,7 +130,7 @@ namespace TrackrAPI.Services.GestionEntidad
                     IdSeccion = muestra.IdSeccionVariable,
                     IdTabla = idUsuario,
                     Valor = muestra.Valor,
-                    FechaMuestra = muestra.FechaMuestra.ToLocalTime(),
+                    FechaMuestra = muestra.FechaMuestra,
                     FueraDeRango = muestra.FueraDeRango
                 };
 
@@ -142,6 +142,7 @@ namespace TrackrAPI.Services.GestionEntidad
                     var notificacion = new NotificacionDoctorCapturaDTO(
 
                         "El paciente " + nombrePaciente + " ha registrado un valor fuera de rango en la variable " + nombreVariable + ".",
+                        null,
                         4,
                         idUsuario,
                         idUsuario,

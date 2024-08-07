@@ -8,13 +8,14 @@ import {
   LogLevel,
 } from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
-import { catchError, filter, take, timeout } from 'rxjs/operators';
+import { catchError, filter, map, take, timeout } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Constants } from '@utils/constants/constants';
 import { ChatPersonaService } from '@http/chat/chat-persona.service';
 import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
 import { ChatPersonaFormDTO } from 'src/app/shared/Dtos/Chat/chat-persona-form-dto';
 import { AuthService } from 'src/app/auth/auth.service';
+import { FechaService } from '@services/fecha.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +26,17 @@ export class ChatHubServiceService {
   );
 
   private chatSubject = new BehaviorSubject<ChatDTO[]>([]);
-  public chat$ = this.chatSubject.asObservable();
+  public chat$ = this.chatSubject.asObservable().pipe(
+    map((chats) => {
+      return chats.map(chat => {
+        if(!chat.fechaYaFormateada){
+          chat.fecha = this.fechaService.fechaUTCAFechaLocal(chat.fecha);
+          chat.fechaYaFormateada = true;
+        }
+        return chat;
+      });
+    })
+  );
 
   private readonly endpoint = 'hub/chat';
 
@@ -33,7 +44,8 @@ export class ChatHubServiceService {
 
   constructor(
     private ChatPersonaService: ChatPersonaService,
-    private authService: AuthService
+    private authService: AuthService,
+    private fechaService: FechaService
   ) {
     this.iniciarConexion();
   }
@@ -89,34 +101,13 @@ export class ChatHubServiceService {
   }
 
   private async onNuevoChat(chat:ChatDTO,idPersonas:number[]){
-    chat.fecha = new Date();
 
-    const chats = this.chatSubject.value;
-    chats.push(chat);
-    //this.chatSubject.next(chats);
-    /*chat.fecha = new Date();
-
-    const chats = this.chatSubject.value;
-    chats.push(chat);
-    
-    let chatPersona: ChatPersonaFormDTO = {
-      idPersonas: idPersonas,
-      idChat: chat.idChat || 0,
-      idTipo: 2
-    }
-
-    this.ChatPersonaService.agregarPersonas(chatPersona).subscribe(res => {
-      this.chatSubject.next(chats);
-      console.log(chats)
-      this.connection.invoke('NuevaConexion',chats)
-    })*/
+    //no hacer nada de momento
+    //const chats = this.chatSubject.value;
+    //chats.push(chat);
   }
 
   private onNuevaConexion(chats: ChatDTO[]): void {
-    for (const chat of chats) {
-      chat.fecha = new Date(chat.fecha);
-    }
-
     this.chatSubject.next(chats);
   }
 
@@ -124,7 +115,7 @@ export class ChatHubServiceService {
     this.chatSubject.next(chats);
   }
 
-  private async ensureConnection(): Promise<void> {
+  public async ensureConnection(): Promise<void> {
     const timeoutms = 10_000;
 
     if (this.connection.state === HubConnectionState.Connected) {

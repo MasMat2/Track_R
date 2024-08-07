@@ -17,7 +17,6 @@ import { LocalidadSelectorDto } from 'src/app/shared/dtos/catalogo/localidad-sel
 import { municipioSelectorDto } from 'src/app/shared/dtos/catalogo/municipio-selector-dto';
 import { PaisSelectorDto } from 'src/app/shared/dtos/catalogo/pais-selector-dto';
 import { InformacionGeneralDto } from 'src/app/shared/dtos/perfil/informacion-general-dto';
-import { HeaderComponent } from '../../../../layout/header/header.component';
 import { ConfirmacionCorreoService } from '@http/seguridad/confirmacion-correo.service';
 import { ConfirmarCorreoDto } from '../../../../../../shared/Dtos/seguridad/confirmar-correo-dto';
 import { GeneroService } from '@http/catalogo/genero.service'
@@ -38,7 +37,6 @@ import { ChatPersonaService } from '@http/chat/chat-persona.service';
     RouterModule,
     ReactiveFormsModule,
     IonicModule,
-    HeaderComponent
   ]
 })
 export class InformacionGeneralComponent implements OnInit , OnExit {

@@ -11,6 +11,7 @@ import { addIcons } from 'ionicons';
 import { ModalController } from '@ionic/angular/standalone';
 import { Constants } from '@utils/constants/constants';
 import { ExamenService } from '@http/cuestionarios/examen.service';
+import { FechaService } from '../../../../../shared/services/fecha.service';
 
 @Component({
   selector: 'app-notificaciones',
@@ -28,6 +29,7 @@ export class NotificacionesComponent  implements OnInit
 {
   protected notificaciones$: Observable<NotificacionPacientePopOverDto[]>;
 
+  //TODO: Extraer de la bd usando las claves.
   //iconos correspondientes de lucidIcons
   protected iconMappings: any = {
     1: { name: 'earth'},
@@ -45,7 +47,8 @@ export class NotificacionesComponent  implements OnInit
     private popOverController:PopoverController,
     private modalController: ModalController,
     private cdr : ChangeDetectorRef,
-    private examenService : ExamenService
+    private examenService : ExamenService,
+    private fechaService: FechaService,
   ){ addIcons({
     'close' : 'assets/img/svg/x.svg',
     'circle-user' : 'assets/img/svg/circle-user.svg',
@@ -64,16 +67,17 @@ export class NotificacionesComponent  implements OnInit
   private consultarNotificaciones(): void {
     this.notificaciones$ = this.notificacionHubService.notificaciones$.pipe(
       map((notificaciones) => {
-        console.log(notificaciones);
         return notificaciones.map((notificacion) => {
           // Convertir la fecha UTC a la hora local
-          const localDate = new Date(notificacion.fechaAlta.getTime() - notificacion.fechaAlta.getTimezoneOffset() * 60000);
-    
+          const localDate = this.fechaService.fechaUTCAFechaLocal(notificacion.fechaAlta);
+          const complemento = this.formatearComplemento(notificacion.complementoMensaje, notificacion.idTipoNotificacion);
           return {
             idTipoNotificacion: notificacion.idTipoNotificacion,
             id: notificacion.idNotificacionUsuario,
             titulo: notificacion.titulo,
             mensaje: notificacion.mensaje,
+            complementoMensaje : complemento,
+            complementoEsFecha: this.complementoEsFecha(notificacion.idTipoNotificacion),
             fecha: localDate, // Asignar la fecha local
             visto: notificacion.visto,
             idChat: notificacion.idChat
@@ -83,24 +87,6 @@ export class NotificacionesComponent  implements OnInit
     );
   }
 
-  // protected async marcarComoVista(notificacion : NotificacionPacientePopOverDto) {
-  //   //http://localhost:8100/#/home/chat-movil/chat/340
-  //   if(!notificacion.visto)
-  //   {
-  //     await this.notificacionHubService.marcarComoVista(notificacion.id);
-  //     if(notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA)
-  //     {
-  //       //await this.modalTomarToma(notificacion.mensaje);
-  //       await this.presentAlertTomarTratamiento(notificacion)
-  //     } 
-  //   }
-  //   this.consultarNotificaciones();
-  //     if(notificacion.idChat !== null){
-  //       this.router.navigate(['home','chat-movil','chat',notificacion.idChat])
-  //       this.modalController.dismiss();
-  //     }
-  // }
-
   protected async marcarComoVista(event: Event, notificacion: NotificacionPacientePopOverDto) {
     event.preventDefault();
     event.stopPropagation();
@@ -109,9 +95,6 @@ export class NotificacionesComponent  implements OnInit
   
     this.cdr.detach(); 
   
-    
-
-
     const navigateAndDismiss = async (path: any[]) => {
       await this.modalController.dismiss();
       this.router.navigate(path);
@@ -211,23 +194,59 @@ export class NotificacionesComponent  implements OnInit
       return [];
   }
 
-  private esHoy(fecha: Date): boolean {
+  private esHoy(fecha: string): boolean {
     const hoy = new Date();
-    return fecha.toDateString() === hoy.toDateString();
+    const date = new Date(fecha);
+
+    return date.toDateString() === hoy.toDateString();
   }
 
-  private esEstaSemana(fecha: Date): boolean {
+  private esEstaSemana(fecha: string): boolean {
     const hoy = new Date();
+    const date = new Date(fecha);
     const haceUnaSemana = new Date();
+
     haceUnaSemana.setDate(hoy.getDate() - 7);
-    return fecha >= haceUnaSemana && fecha < hoy;
+    return date >= haceUnaSemana && date < hoy;
   }
 
-  private esAnteriorEstaSemana(fecha: Date): boolean {
+  private esAnteriorEstaSemana(fecha: string): boolean {
     const hoy = new Date();
+    const date = new Date(fecha);
+
     const haceUnaSemana = new Date();
     haceUnaSemana.setDate(hoy.getDate() - 7);
-    return fecha < haceUnaSemana;
+    return date < haceUnaSemana;
+  }
+
+  private esNotificacionExamen(idTipoNotificacion: number){
+    return idTipoNotificacion === 4
+  }
+
+  private esNotificacionRecordatorio(idTipoNotificacion: number){
+    return idTipoNotificacion === 6
+  }
+
+  private complementoEsFecha(idTipoNotificacion: number){
+    return (this.esNotificacionExamen(idTipoNotificacion));
+  }
+
+  private formatearComplemento(complemento: string, tipoNotificacion: number){
+    if(complemento == null){
+      return null
+    }
+
+    if(this.esNotificacionExamen(tipoNotificacion)){
+      const fecha = this.fechaService.fechaUTCAFechaLocal(complemento);
+      return fecha;
+    }
+    else if(this.esNotificacionRecordatorio(tipoNotificacion)){
+      const hora = this.fechaService.horaUTCAHoraLocal(complemento);
+      return hora;
+    }
+    else{
+      return complemento
+    }
   }
 
 }

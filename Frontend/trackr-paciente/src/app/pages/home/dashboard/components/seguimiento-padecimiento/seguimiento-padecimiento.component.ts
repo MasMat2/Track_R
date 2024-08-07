@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { EntidadEstructuraTablaValorService } from '@http/gestion-expediente/entidad-estructura-tabla-valor.service';
@@ -34,14 +33,12 @@ import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinne
   imports: [
     CommonModule,
     IonicModule,
-    HeaderComponent,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
     NgChartsModule,
     MatChipsModule,
     GridGeneralModule,
-    HeaderComponent
   ],
   providers: [
     SeccionCampoService,

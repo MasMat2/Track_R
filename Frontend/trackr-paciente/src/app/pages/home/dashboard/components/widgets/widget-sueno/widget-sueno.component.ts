@@ -34,7 +34,7 @@ export class WidgetSuenoComponent  implements OnInit {
     private healthConnectservice : HealthConnectService,
     private alertController: AlertController) { 
       addIcons({
-        'suenio': '/assets/img/svg/Suenio.svg'
+        'suenio': 'assets/img/svg/Suenio.svg'
       })
     }
 

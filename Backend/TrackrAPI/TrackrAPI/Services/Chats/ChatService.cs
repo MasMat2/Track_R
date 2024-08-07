@@ -43,7 +43,7 @@ public class ChatService
     public Chat AgregarChat(Chat chat)
     {
         chat.Habilitado = true;
-        chat.Fecha = new DateTime();
+        chat.Fecha = new DateTime().ToUniversalTime();
 
         _chatRepository.Agregar(chat);
 
@@ -70,7 +70,7 @@ public class ChatService
         {
             IdChat = x.IdChat,
             Titulo = x.Titulo,
-            Fecha = x.Fecha.ToLocalTime(),
+            Fecha = x.Fecha,
             Habilitado = x.Habilitado
         }).ToList();
 
@@ -86,28 +86,14 @@ public class ChatService
                         var user = _usuarioRepository.Consultar(persona);
                         chat.Titulo = user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno + " " + chat.Titulo;
                         var usuario = _usuarioRepository.ConsultarDto(persona);
-                        //if (usuario != null)
-                        //{
-                            //if (!string.IsNullOrEmpty(usuario.ImagenTipoMime))
-                            //{
-                                var imagen = _archivoService.ObtenerImagenUsuario(persona);
-                                if (imagen != null)
-                                {
-                                    chat.ImagenBase64 = imagen.ArchivoUrl != null ?  _sftpService.DownloadFile(imagen.ArchivoUrl): "" ;
-                                    chat.TipoMime = imagen.ArchivoTipoMime;
-                                    chat.IdCreadorChat = usuario.IdUsuario;
-                                }
 
-                                // string filePath = $"Archivos/Usuario/{usuario.IdUsuario}{MimeTypeMap.GetExtension(usuario.ImagenTipoMime)}";
-                                // if (File.Exists(filePath))
-                                // {
-                                //     byte[] imageArray = File.ReadAllBytes(filePath);
-                                //     chat.ImagenBase64 = Convert.ToBase64String(imageArray);
-                                //     chat.TipoMime = usuario.ImagenTipoMime;
-                                // }
-                                // chat.IdCreadorChat = usuario.IdUsuario;
-                            //}
-                        //}
+                        var imagen = _archivoService.ObtenerImagenUsuario(persona);
+                        if (imagen != null)
+                        {
+                            chat.ImagenBase64 = imagen.ArchivoUrl != null ?  _sftpService.DownloadFile(imagen.ArchivoUrl): "" ;
+                            chat.TipoMime = imagen.ArchivoTipoMime;
+                            chat.IdCreadorChat = usuario.IdUsuario;
+                        }
                     }
                 }
 

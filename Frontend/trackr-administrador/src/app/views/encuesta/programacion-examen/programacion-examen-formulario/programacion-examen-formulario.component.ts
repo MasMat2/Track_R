@@ -22,6 +22,7 @@ import { flatMap } from 'lodash';
 import { combineLatestWith, mergeMap } from 'rxjs';
 import { EncryptionService } from 'src/app/shared/services/encryption.service';
 import * as Utileria from '@utils/utileria';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-programacionExamen-formulario',
@@ -41,6 +42,7 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
   public personalList: Usuario[] = [];
   public tipoExamenList: TipoExamen[] = [];
   public examenList: Examen[] = [];
+  protected fechaSeleccionada: Date = new Date();
 
   // Inputs
   public accion: string;
@@ -115,6 +117,7 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
     private router: Router,
     private tipoExamenService: TipoExamenService,
     private usuarioService: UsuarioService,
+    private fechaService: FechaService
   ) {}
 
   public ngOnInit(): void {
@@ -145,10 +148,13 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
           const participantes = examenes.map(
             (element) => element.idUsuarioParticipante
           );
-
+          
+          console.log(programacionExamen);
           programacionExamen.participantes = participantes;
-          programacionExamen.fechaExamen = new Date(programacionExamen.fechaExamen);
-          programacionExamen.fechaAlta = new Date(programacionExamen.fechaAlta);
+          programacionExamen.fechaExamen = this.fechaService.fechaUTCAFechaLocal(programacionExamen.fechaExamen);
+          this.fechaSeleccionada = new Date(programacionExamen.fechaExamen);
+          programacionExamen.horaExamen = this.fechaService.horaUTCAHoraLocal(programacionExamen.horaExamen);
+          //programacionExamen.fechaAlta = new Date(this.fechaService.fechaUTCAFechaLocal(programacionExamen.fechaAlta))
 
           this.examenList = examenes;
           this.programacionExamen = programacionExamen;
@@ -212,6 +218,16 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
 
   private agregar(): void {
     const MENSAJE_AGREGAR: string = 'La programación del Cuestionario ha sido agregada';
+    
+    const fechaString = this.fechaService.fechaUTCAFechaLocal(this.fechaSeleccionada.toISOString()).split('T')[0];
+    const horaString = this.programacionExamen.horaExamen;
+    const nuevafecha = new Date(`${fechaString}T${horaString}`);
+
+    const fechaUTC = this.fechaService.fechaLocalAFechaUTC(nuevafecha);
+    const horaUTC = this.fechaService.horaLocalAHoraUTC(horaString);
+    
+    this.programacionExamen.fechaExamen = fechaUTC;
+    this.programacionExamen.horaExamen = horaUTC;
 
     this.programacionExamenService
       .agregar(this.programacionExamen)
@@ -231,11 +247,24 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
           this.submitting = true;
         }
       });
+
+      this.fechaSeleccionada = new Date();
   }
 
   private editar(): void {
     const MENSAJE_EDITAR: string = 'La programación de Cuestionario ha sido modificada';
 
+    const fechaString = this.fechaService.fechaUTCAFechaLocal(this.fechaSeleccionada.toISOString()).split('T')[0];
+    const horaString = this.programacionExamen.horaExamen;
+    const nuevafecha = new Date(`${fechaString}T${horaString}`);
+
+    const fechaUTC = this.fechaService.fechaLocalAFechaUTC(nuevafecha);
+    const horaUTC = this.fechaService.horaLocalAHoraUTC(horaString);
+    
+    this.programacionExamen.fechaExamen = fechaUTC;
+    this.programacionExamen.horaExamen = horaUTC;
+
+    console.log(this.programacionExamen);
     this.programacionExamenService
       .editar(this.programacionExamen)
       .pipe(
@@ -265,7 +294,7 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
     for (const participante of this.programacionExamen.participantes) {
       const examenExistente = this.examenList.findIndex(e => e.idUsuarioParticipante === participante);
       if (examenExistente >= 0) {
-        this.examenList[examenExistente].fechaAlta = this.programacionExamen.fechaExamen;
+        this.examenList[examenExistente].fechaAlta == new Date(this.programacionExamen.fechaExamen);
         continue;
       }
 

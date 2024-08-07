@@ -12,6 +12,7 @@ import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { AuthService } from '../../../auth/auth.service';
 import { addIcons } from 'ionicons';
 import { BehaviorSubject } from 'rxjs';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 
 @Component({
   selector: 'app-login',
@@ -33,17 +34,11 @@ export class LoginPage implements OnInit {
   protected pswInputType: string = "password";
   protected mostrarPwd: boolean = false;
 
-  //Estado de "cargando" para mostrar el alert con spinner
-  private cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private cargando$ = this.cargandoSubject.asObservable();
-  private loading : any;
-
-
   constructor(
     private loginService: LoginService,
     private router: Router,
     private authService: AuthService,
-    private alertController: AlertController,
+    private loadingSpinner: LoadingSpinnerService
   ) { 
     addIcons({
       'user': 'assets/img/svg/user.svg',
@@ -53,29 +48,8 @@ export class LoginPage implements OnInit {
       'info': 'assets/img/svg/info.svg',
     })
   }
-
-  async presentLoading() {
-    this.loading = await this.alertController.create({
-      cssClass: "custom-alert-loading"
-    })
-    return await this.loading.present();
-  }
-
-  async dismissLoading() {
-    if (this.loading) {
-      await this.loading.dismiss();
-      this.loading = null;
-    }
-  }
-    
+  
   ngOnInit() {
-    this.cargando$.subscribe(cargando => {
-      if (cargando) {
-        this.presentLoading();
-      } else {
-        this.dismissLoading();
-      }
-    });
   }
   /**
    * Valida que los campos del formulario sean requeridos y que el correo y la contraseña no estén vacíos.
@@ -84,7 +58,7 @@ export class LoginPage implements OnInit {
    * @returns
    */
   public async enviarFormulario(formulario: NgForm){
-    this.cargandoSubject.next(true);
+    this.loadingSpinner.presentLoading();
     this.btnSubmit = true;
 
     if(formulario.invalid){
@@ -113,11 +87,11 @@ export class LoginPage implements OnInit {
           .then((loginResponse: LoginResponse) => {
             this.authService.guardarToken(loginResponse.token);
 
-            this.cargandoSubject.next(false);
+            this.loadingSpinner.dismissLoading();
             this.router.navigate(['/home']);
           })
           .catch(error => {
-            this.cargandoSubject.next(false);
+            this.loadingSpinner.dismissLoading();
             this.authService.cerrarSesion(false);
             this.btnSubmit = false;
           });

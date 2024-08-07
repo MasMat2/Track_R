@@ -14,18 +14,21 @@ public class ExpedienteTratamientoService
     private readonly IExpedienteTrackrRepository expedienteTrackrRepository;
     private readonly IArchivoRepository _archivoRepository;
     private readonly SftpService _sftpService;
+    private readonly IRecordatorioTomasService _recordatorioTomasService;
     private readonly string defaultPath = Path.Combine("Archivos", "Tratamiento", "placeholder.png");
 
     public ExpedienteTratamientoService(
         IExpedienteTratamientoRepository expedienteTratamientoRepository,
         IExpedienteTrackrRepository expedienteTrackrRepository,
         IArchivoRepository archivoRepository,
-        SftpService sftpService
+        SftpService sftpService,
+        IRecordatorioTomasService recordatorioTomasService
     ){
         this.expedienteTratamientoRepository = expedienteTratamientoRepository;
         this.expedienteTrackrRepository = expedienteTrackrRepository;
         this._archivoRepository = archivoRepository;    
         _sftpService = sftpService;
+        _recordatorioTomasService = recordatorioTomasService;
     }
 
     public IEnumerable<ExpedienteTratamientoGridDTO> ConsultarParaGrid(int idUsuario)
@@ -256,21 +259,21 @@ public class ExpedienteTratamientoService
         {
             IdExpediente = expedienteTratamientoDto.IdExpediente,
             Farmaco = expedienteTratamientoDto.Farmaco,
-            FechaRegistro = DateTime.Now.ToLocalTime(),
+            FechaRegistro = DateTime.Now.ToUniversalTime(),
             Cantidad = expedienteTratamientoDto.Cantidad,
             Unidad = expedienteTratamientoDto.Unidad,
             Indicaciones = expedienteTratamientoDto.Indicaciones,
             IdPadecimiento = expedienteTratamientoDto.IdPadecimiento,
             IdUsuarioDoctor = expedienteTratamientoDto.IdUsuarioDoctor,
-            FechaInicio = expedienteTratamientoDto.FechaInicio.ToLocalTime(),
-            FechaFin = expedienteTratamientoDto.FechaFin.Value.ToLocalTime(),
+            FechaInicio = expedienteTratamientoDto.FechaInicio,
+            FechaFin = expedienteTratamientoDto.FechaFin,
         };
     }
 
     // Agregar Tratamiento
-    public int Agregar(ExpedienteTratamientoDetalleDto expedienteTratamientoDto, int idUsuario)
+    public async Task<int> Agregar(ExpedienteTratamientoDetalleDto expedienteTratamientoDto, int idUsuario)
     {
-        using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+        using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted } , TransactionScopeAsyncFlowOption.Enabled);
 
         int idExpediente = expedienteTrackrRepository.ConsultarPorUsuario(idUsuario).IdExpediente;
 
@@ -306,7 +309,12 @@ public class ExpedienteTratamientoService
 
         expedienteTratamientoRepository.AgregarRecordatorios(recordatorios);
 
+        _recordatorioTomasService.SetUpdate(true);
+        await _recordatorioTomasService.StartAsync(CancellationToken.None);
+
         scope.Complete();
+
+
 
         return idExpedienteTratamiento;
         

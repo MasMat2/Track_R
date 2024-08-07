@@ -4,7 +4,6 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { PickedFile } from '@capawesome/capacitor-file-picker';
 import { AlertController, IonicModule } from '@ionic/angular';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { ExpedienteEstudioService } from '@services/expediente-estudio.service';
 import { CapacitorUtils } from '@utils/capacitor-utils';
 import { ExpedienteEstudioFormularioCaptura } from 'src/app/shared/dtos/expediente-estudio-formulario-captura-dto';
@@ -20,7 +19,6 @@ import { addIcons } from 'ionicons';
   imports: [
     IonicModule,
     FormsModule,
-    HeaderComponent,
     CommonModule,
     RouterModule,
   ],

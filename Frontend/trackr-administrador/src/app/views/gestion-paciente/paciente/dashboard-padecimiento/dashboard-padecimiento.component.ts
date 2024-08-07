@@ -12,6 +12,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { last, lastValueFrom } from 'rxjs';
 import { ColDef, ICellRendererParams, ValueGetterParams } from 'ag-grid-community';
 import * as moment from 'moment';
+import { FechaService } from '@services/fecha.service';
 
 
 @Component({
@@ -73,10 +74,10 @@ export class DashboardPadecimientoComponent implements OnInit {
       field: 'fechaHora', 
       minWidth: 150,
       cellRenderer: (params: ICellRendererParams) => {
-        return moment(params.data.fechaHora).format('DD/MM/YYYY') + '   ' + moment(params.data.fechaHora, 'HH:mm:ss').format('LT');
+        return moment(new Date(params.data.fechaHora)).format('DD/MM/YYYY') + '   ' + moment(new Date(params.data.fechaHora), 'HH:mm:ss').format('LT');
       },
       valueGetter: (params: ValueGetterParams) => {
-        return moment(params.data.fechaHora).format('DD/MM/YYYY') + '   ' + moment(params.data.fechaHora, 'HH:mm:ss').format('LT');
+        return moment(new Date(params.data.fechaHora)).format('DD/MM/YYYY') + '   ' + moment(new Date(params.data.fechaHora), 'HH:mm:ss').format('LT');
       },
     },
     { 
@@ -142,6 +143,7 @@ export class DashboardPadecimientoComponent implements OnInit {
   constructor(
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
     private seccionCampoService: SeccionCampoService,
+    private fechaService: FechaService
   ) { 
   }
 
@@ -165,6 +167,10 @@ export class DashboardPadecimientoComponent implements OnInit {
   private consultarTodasVariables(): void {
     lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresTodasVariables(this.idPadecimiento, this.idUsuario))
       .then((todasVariables: ValoresFueraRangoGridDTO[]) => {
+        todasVariables.map((data) => {
+          data.fechaHora = this.fechaService.fechaUTCAFechaLocal(data.fechaHora);
+          return data;
+        })
         this.bitacoraMuestras = todasVariables;
       }
     );

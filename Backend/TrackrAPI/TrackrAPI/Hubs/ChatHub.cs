@@ -44,7 +44,7 @@ public class ChatHub : Hub<IChatHub>
 
     public async Task NuevoChat(Chat chat, List<int> idPersonas)
     {
-        chat.Fecha = DateTime.Now;
+        chat.Fecha = DateTime.Now.ToUniversalTime();
         chat.Habilitado = true;
         _chatService.NuevoChat(chat, idPersonas, ObtenerIdUsuario());
         await Clients.Caller.NuevoChat(chat, idPersonas);

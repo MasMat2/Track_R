@@ -2,7 +2,6 @@ import { Component, OnInit, AfterViewInit  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, NavController } from '@ionic/angular';
-import { HeaderComponent } from '../layout/header/header.component';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AudioInterface, ParticipantInterface } from './interfaces/jitsi-interface';
@@ -21,7 +20,7 @@ declare var JitsiMeetExternalAPI: any;
   templateUrl: './video-jitsi.page.html',
   styleUrls: ['./video-jitsi.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HeaderComponent, CallJitsiComponent, CreateJitsiMeetComponent, AnswerMeetComponent]
+  imports: [IonicModule, CommonModule, FormsModule, CallJitsiComponent, CreateJitsiMeetComponent, AnswerMeetComponent]
 })
 export class VideoJitsiPage implements OnInit {
 

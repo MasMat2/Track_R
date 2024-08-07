@@ -9,10 +9,11 @@ using TrackrAPI.Services.Notificaciones;
 
 namespace TrackrAPI.Helpers;
 
-public class RecordatorioTomasService : IHostedService, IDisposable
+public class RecordatorioTomasService : IRecordatorioTomasService
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private Timer _timer;
+    private bool Update { get; set; } = false;
 
     private readonly int waitTime = 5;
 
@@ -21,6 +22,10 @@ public class RecordatorioTomasService : IHostedService, IDisposable
     {
         
         _scopeFactory = scopeFactory;
+    }
+
+    public void SetUpdate(bool update){
+        Update = update;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -49,9 +54,9 @@ public class RecordatorioTomasService : IHostedService, IDisposable
                                 .FirstOrDefault();
 
             // Actualizar DistributedLock solo en el siguiente cuarto de hora y ejecutar proceso
-            if(dLock != null && EsSiguienteCuartoHora(dLock.LastUpdated)){
+            if(dLock != null && EsSiguienteCuartoHora(dLock.LastUpdated) || Update){
                 context.DistributedLocks.Attach(dLock);
-                dLock.LastUpdated = DateTime.Now;
+                dLock.LastUpdated = DateTime.Now.ToUniversalTime();
                 context.SaveChanges();
                 
                 ActualizarContador(context);
@@ -77,7 +82,7 @@ public class RecordatorioTomasService : IHostedService, IDisposable
     public bool EsSiguienteCuartoHora(DateTime lastUpdated)
     {
         DateTime nextQuarterDateTime = lastUpdated.AddMinutes(15 - (lastUpdated.Minute % 15));
-        return DateTime.Now > nextQuarterDateTime;
+        return DateTime.Now.ToUniversalTime() > nextQuarterDateTime;
     }
 
     // Procesos
@@ -93,7 +98,7 @@ public class RecordatorioTomasService : IHostedService, IDisposable
     }
 
     public async Task CrearTratamientoTomas(TrackrContext context , NotificacionPacienteService notificacionPacienteService){
-        DateTime now = DateTime.Now;
+        DateTime now = DateTime.Now.ToUniversalTime();
         int currentDay = ((int)now.DayOfWeek + 7) % 7; // Monday = 1, ..., Saturday = 6, Sunday = 0
         TimeSpan currentTime = now.TimeOfDay;
         TimeSpan timeIn15Minutes = currentTime + TimeSpan.FromMinutes(15);
@@ -112,12 +117,13 @@ public class RecordatorioTomasService : IHostedService, IDisposable
         foreach (var recordatorio in recordatoriosToProcess)
         {
 
-            var mensajeNotificacion = $"Tomar {recordatorio.IdExpedienteTratamientoNavigation.Cantidad} {recordatorio.IdExpedienteTratamientoNavigation.Unidad} , {recordatorio.Hora} ";
+            var mensajeNotificacion = $"Tomar {recordatorio.IdExpedienteTratamientoNavigation.Cantidad} {recordatorio.IdExpedienteTratamientoNavigation.Unidad}";
 
             var notificacion = new NotificacionCapturaDTO
             (
                 recordatorio.IdExpedienteTratamientoNavigation.Farmaco,
                 mensajeNotificacion,
+                recordatorio.Hora.ToString(),
                 6,
                 null,
                 null
