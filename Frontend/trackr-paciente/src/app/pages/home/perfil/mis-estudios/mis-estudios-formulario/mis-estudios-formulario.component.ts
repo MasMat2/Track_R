@@ -108,6 +108,7 @@ export class MisEstudiosFormularioPage implements OnInit {
         },
         complete: () => {
           this.presentarAlertaSuccess();
+          this.expedienteEstudioService.notifyExpedienteAdded();
         }
       });
   }
