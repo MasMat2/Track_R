@@ -10,7 +10,7 @@
         </ion-toolbar>
     </div>
 </ion-header>
-<ion-content *ngIf="!isIOSNative">
+<ion-content *ngIf="!isIOSNative || tipoMime !== 'application'">
     <div class="contenedor-principal">
         <div class="contenedor-imagen" *ngIf="tipoMime !== 'application'">
             <ion-img class="imagen" [src]="archivoBase64" *ngIf="tipoMime === 'image' || tipoMime === 'gif'"></ion-img>
@@ -20,7 +20,7 @@
         </div>
     </div>
 </ion-content>
-<ion-footer class="ion-no-border" *ngIf="!isIOSNative">
+<ion-footer class="ion-no-border" *ngIf="!isIOSNative || tipoMime !== 'application'">
     <div class="contenedor-footer">
         <ion-toolbar class="footer">
             <ion-buttons slot="start">
