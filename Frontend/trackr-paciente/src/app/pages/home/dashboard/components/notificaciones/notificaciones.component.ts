@@ -2,7 +2,7 @@ import { CommonModule, NgClass, NgFor } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AlertController, IonicModule, PopoverController } from '@ionic/angular';
 import { NotificacionPacienteHubService } from '@services/notificacion-paciente-hub.service';
-import { Observable , map} from 'rxjs';
+import { Observable , map, tap} from 'rxjs';
 import { NotificacionPacientePopOverDto } from '../../../../../shared/Dtos/notificaciones/notificacion-paciente-popover-dto';
 import { NotificacionPacienteService } from '../../../../../shared/http/gestion-perfil/notificacion-paciente.service';
 import { GeneralConstant } from '@utils/general-constant';
@@ -28,6 +28,8 @@ import { FechaService } from '../../../../../shared/services/fecha.service';
 export class NotificacionesComponent  implements OnInit 
 {
   protected notificaciones$: Observable<NotificacionPacientePopOverDto[]>;
+  protected notificaciones: NotificacionPacientePopOverDto[];
+
 
   //TODO: Extraer de la bd usando las claves.
   //iconos correspondientes de lucidIcons
@@ -83,6 +85,9 @@ export class NotificacionesComponent  implements OnInit
             idChat: notificacion.idChat
           } as NotificacionPacientePopOverDto;
         });
+      }),
+      tap(data => {
+        this.notificaciones = data;
       })
     );
   }
@@ -201,13 +206,22 @@ export class NotificacionesComponent  implements OnInit
     return date.toDateString() === hoy.toDateString();
   }
 
-  private esEstaSemana(fecha: string): boolean {
-    const hoy = new Date();
-    const date = new Date(fecha);
-    const haceUnaSemana = new Date();
+  // private esEstaSemana(fecha: string): boolean {
+  //   const hoy = new Date();
+  //   const date = new Date(fecha);
+  //   const haceUnaSemana = new Date();
 
-    haceUnaSemana.setDate(hoy.getDate() - 7);
-    return date >= haceUnaSemana && date < hoy;
+  //   haceUnaSemana.setDate(hoy.getDate() - 7);
+  //   return date >= haceUnaSemana && date < hoy;
+  // }
+
+  private esEstaSemana(fecha: string): boolean {     
+    const hoy = new Date();     
+    const date = new Date(fecha);     
+    const haceUnaSemana = new Date();  
+
+    haceUnaSemana.setDate(hoy.getDate() - 7);     
+    return date >= haceUnaSemana && (date.getDate() < (hoy.getDate()));   
   }
 
   private esAnteriorEstaSemana(fecha: string): boolean {
@@ -247,6 +261,10 @@ export class NotificacionesComponent  implements OnInit
     else{
       return complemento
     }
+  }
+
+  protected listaNotificacionesVacia(){
+    return this.notificaciones?.length == 0;
   }
 
 }
