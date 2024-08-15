@@ -149,7 +149,11 @@ export class NotificacionesComponent  implements OnInit
           text: 'Sí tomé la dosis',
           role: 'confirm',
           handler: () => {
-            this.notificacionHubService.marcarComoVista(notificacion.id, true);
+            this.notificacionHubService.marcarComoVista(notificacion.id, true).then(
+              () => {
+                this.presentAlertSuccessToma();
+              }
+            );
             this.notificacionPacienteService.actualizarWidgets();
           }
         }
@@ -159,8 +163,7 @@ export class NotificacionesComponent  implements OnInit
     await alert.present();
   }
 
-  protected async presentAlertSuccess() {
-
+  protected async presentAlertSuccessToma() {
     const alertSuccess = await this.alertController.create({
       header: 'Tratamiento registrado',
       subHeader: 'Se ha registrado correctamente la toma del tratamiento.',
@@ -168,7 +171,7 @@ export class NotificacionesComponent  implements OnInit
         text: 'De acuerdo',
         role: 'confirm',
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();
@@ -180,21 +183,21 @@ export class NotificacionesComponent  implements OnInit
 
   protected filtrarNotificacionesHoy(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
     if(notificaciones)
-      return notificaciones.filter(n => this.esHoy(n.fecha));
+      return notificaciones.filter(n => this.esHoy(n.fecha) && !n.visto);
     else
       return [];
   }
 
   protected filtrarNotificacionesSemana(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
     if(notificaciones)
-      return notificaciones.filter(n => this.esEstaSemana(n.fecha));
+      return notificaciones.filter(n => this.esEstaSemana(n.fecha) && !n.visto);
     else
       return [];
   }
 
   protected filtrarNotificacionesAnterioresSemana(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
     if(notificaciones)
-      return notificaciones.filter(n => this.esAnteriorEstaSemana(n.fecha));
+      return notificaciones.filter(n => this.esAnteriorEstaSemana(n.fecha) && !n.visto);
     else
       return [];
   }
