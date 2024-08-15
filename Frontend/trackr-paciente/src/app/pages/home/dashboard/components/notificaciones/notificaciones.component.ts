@@ -270,4 +270,10 @@ export class NotificacionesComponent  implements OnInit
     return this.notificaciones?.length == 0;
   }
 
+  protected todasNotificacionesVistas(){
+    return (
+      !(this.notificaciones?.filter(n => !n.visto).length > 0)
+    )
+  }
+
 }

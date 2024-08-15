@@ -15,9 +15,9 @@
 <ion-content class="primary">
   <div class="contenedor-principal">
     <div class="lista-notificaciones">
-      <div class="lista-vacia" *ngIf="listaNotificacionesVacia()">
+      <div class="lista-vacia" *ngIf="listaNotificacionesVacia() || todasNotificacionesVistas()">
         <ion-text>
-          <p>Nada por aquí. <br> Aún no tienes notificaciones.</p>
+          <p>Nada por aquí. <br> No tienes notificaciones pendientes.</p>
         </ion-text>
       </div>
       <ion-item-group *ngIf="!listaNotificacionesVacia()">
