@@ -28,7 +28,7 @@ export class AsignaturaComponent implements OnInit {
   protected asignaturas: Asignatura[] = [];
 
   public columns: ColDef[] = [
-    { headerName: 'Clave', field: 'idAsignatura', maxWidth: 150, },
+    { headerName: 'Clave', field: 'clave', maxWidth: 150, },
     { headerName: 'Estatus', field: 'estatus', maxWidth: 150, 
     valueGetter: (params: any) => params.data.estatus ? 'Activo' : 'Inactivo' },
   { headerName: 'Fecha Alta', field: 'fechaAlta', maxWidth: 200,
