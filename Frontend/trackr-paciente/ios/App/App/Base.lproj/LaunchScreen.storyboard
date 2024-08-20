@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17132" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17105"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -12,21 +12,40 @@
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
-                    <imageView key="view" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Splash" id="snD-IY-ifK">
+                    <view key="view" contentMode="scaleToFill" id="gw7-DZ-3hv">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </imageView>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="2-CEI_Blanco_PNG 1" translatesAutoresizingMaskIntoConstraints="NO" id="8jV-CL-Jp1">
+                                <rect key="frame" x="75" y="60" width="225" height="547"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="header_dark" translatesAutoresizingMaskIntoConstraints="NO" id="Vpg-dZ-iK8">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="142"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_oncotracker" translatesAutoresizingMaskIntoConstraints="NO" id="DQp-Ja-pEb">
+                                <rect key="frame" x="51.5" y="317.5" width="272" height="32"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="wDV-2I-4tT"/>
+                        <color key="backgroundColor" red="0.36078431370000003" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="DQp-Ja-pEb" firstAttribute="centerX" secondItem="gw7-DZ-3hv" secondAttribute="centerX" id="6A9-Dh-gdK"/>
+                            <constraint firstItem="8jV-CL-Jp1" firstAttribute="centerY" secondItem="gw7-DZ-3hv" secondAttribute="centerY" id="ITI-CW-4Qg"/>
+                            <constraint firstItem="8jV-CL-Jp1" firstAttribute="centerX" secondItem="gw7-DZ-3hv" secondAttribute="centerX" id="TZn-Hv-q37"/>
+                            <constraint firstItem="DQp-Ja-pEb" firstAttribute="centerY" secondItem="gw7-DZ-3hv" secondAttribute="centerY" id="deN-aS-5gU"/>
+                            <constraint firstItem="wDV-2I-4tT" firstAttribute="bottom" secondItem="8jV-CL-Jp1" secondAttribute="bottom" constant="60" id="vST-83-0VZ"/>
+                        </constraints>
+                    </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
     <resources>
-        <image name="Splash" width="1366" height="1366"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <image name="2-CEI_Blanco_PNG 1" width="225" height="35"/>
+        <image name="header_dark" width="390" height="153"/>
+        <image name="logo_oncotracker" width="272" height="32"/>
     </resources>
 </document>
