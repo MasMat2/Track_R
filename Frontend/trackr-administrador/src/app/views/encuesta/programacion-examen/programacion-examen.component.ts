@@ -53,7 +53,7 @@ export class ProgramacionExamenComponent implements OnInit {
   );
 
   protected columns: ColDef[] = [
-    { headerName: 'Clave', field: 'idProgramacionExamen', minWidth: 50, width: 50, },
+    { headerName: 'Clave', field: 'clave', minWidth: 50, width: 50, },
     { headerName: 'Responsable', field: 'usuarioResponsable', minWidth: 100, width: 100, },
     { headerName: 'Tipo Cuestionario', field: 'tipoExamen', minWidth: 100, width: 100, },
     { headerName: 'Fecha Programada', field: 'fechaExamen', minWidth: 70, width: 70, 

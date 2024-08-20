@@ -55,7 +55,7 @@ export class TipoExamenComponent implements OnInit {
   );
 
   protected columns: ColDef[] = [
-    { headerName: 'Clave', field: 'idTipoExamen', minWidth: 150, },
+    { headerName: 'Clave', field: 'clave', minWidth: 150, },
     { headerName: 'Tipo Cuestionario', field: 'nombre', minWidth: 150, },
     { headerName: 'Cantidad de Reactivos', field: 'totalPreguntas', minWidth: 150, },
     { headerName: 'Duración Total (Minutos)', field: 'duracion', minWidth: 150, },

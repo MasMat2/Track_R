@@ -17,7 +17,7 @@ import { AsignaturaFormularioComponent } from './asignatura-formulario/asignatur
   templateUrl: './asignatura.component.html',
 })
 export class AsignaturaComponent implements OnInit {
-  protected readonly NOMBRE_ENTIDAD: string = 'Cuestionarios';
+  protected readonly NOMBRE_ENTIDAD: string = 'Asignaturas';
 
   // Accesos
   protected tieneAccesoAgregar: boolean = false;
@@ -28,12 +28,12 @@ export class AsignaturaComponent implements OnInit {
   protected asignaturas: Asignatura[] = [];
 
   public columns: ColDef[] = [
-    { headerName: 'Clave', field: 'idAsignatura', maxWidth: 150, },
+    { headerName: 'Clave', field: 'clave', maxWidth: 150, },
     { headerName: 'Estatus', field: 'estatus', maxWidth: 150, 
     valueGetter: (params: any) => params.data.estatus ? 'Activo' : 'Inactivo' },
   { headerName: 'Fecha Alta', field: 'fechaAlta', maxWidth: 200,
     cellRenderer: (data: any) => { return data.value ? (new Date(data.value)).toLocaleDateString() : '';} },
-    { headerName: 'Cuestionarios', field: 'descripcion', minWidth: 300, },
+    { headerName: 'Asignaturas', field: 'descripcion', minWidth: 300, },
   ];
 
   constructor(

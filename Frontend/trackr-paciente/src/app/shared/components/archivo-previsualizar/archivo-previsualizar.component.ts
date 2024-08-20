@@ -70,7 +70,7 @@ export class ArchivoPrevisualizarComponent implements OnInit, AfterViewInit {
       } else if (this.archivo) {
         this.dismissLoading();
 
-        if (this.isIOSNative) {
+        if (this.isIOSNative && this.tipoMime == 'application') {
           this.openFile(this.archivo.nombre, this.archivoBase64);
         }
       }

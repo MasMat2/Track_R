@@ -16,9 +16,11 @@ import { PacienteVistaCuadriculaComponent } from './paciente-vista-cuadricula/pa
 import { PacienteComponent } from './paciente.component';
 import { ExpedienteConsumoMedicamentoModule } from './expediente-consumo-medicamento/expediente-consumo-medicamento.module';
 import { GestionAsistenteModule } from './gestion-asistente/gestion-asistente.module';
-import { ChevronDown, Download, Eye, Filter, LucideAngularModule, Pen, Plus, Search, Trash2, X } from 'lucide-angular';
+import { ChevronDown, Download, Eye, Filter, LucideAngularModule, Pen, Plus, Search, Trash2, X, ArrowDown, ArrowUp } from 'lucide-angular';
 import { CapitalizePipe } from 'src/app/shared/pipes/capitalize.pipe';
 import { MAT_RIPPLE_GLOBAL_OPTIONS, MatRippleModule, RippleGlobalOptions } from '@angular/material/core';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 
 
 @NgModule({
@@ -42,8 +44,11 @@ import { MAT_RIPPLE_GLOBAL_OPTIONS, MatRippleModule, RippleGlobalOptions } from 
     ExpedienteTratamientoModule,
     ExpedienteConsumoMedicamentoModule,
     GestionAsistenteModule,
-    LucideAngularModule.pick({ Search , ChevronDown , X,  Plus , Download, Pen, Filter, Trash2, Eye }),
-    MatRippleModule
+    LucideAngularModule.pick({ Search , ChevronDown , X,  Plus , Download, Pen, Filter, Trash2, Eye, ArrowDown, ArrowUp  }),
+    MatRippleModule,
+    BsDatepickerModule.forRoot(),
+
+    
   ],
   entryComponents: [
     PacienteVistaCuadriculaComponent,

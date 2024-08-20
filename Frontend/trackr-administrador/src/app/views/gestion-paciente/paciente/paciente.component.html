@@ -52,17 +52,34 @@
           </h2>
 
           <div class="buttons">
-            <button class="secondary">
+            <button class="secondary" 
+            (click)="openDatepicker()"
+            >
               Buscar por fecha
             </button>
+            <input
+              style="width: 0; height: 0; padding: 0; border: none;"
+              type="text" 
+              bsDatepicker 
+              #dp="bsDatepicker"
+              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" 
+              [(ngModel)]="fechaFiltro"
+              (ngModelChange)="filtrarPorFecha()"
+            >
 
-            <button class="secondary">
-                Orden
+            <button 
+              type="button"
+              class="secondary"
+              id="filtro-ordenar"
+              (click)="cambiarFiltroOrden()">
+              <lucide-icon *ngIf="ordenFiltro == 'ascendente'" name="arrow-up"></lucide-icon>
+              <lucide-icon *ngIf="ordenFiltro == 'descendente'" name="arrow-down"></lucide-icon>
+              Orden
             </button>
           </div>
 
           <div class="valores">
-            <div matRipple class="valor" *ngFor="let muestra of valoresFueraRango">
+            <div matRipple class="valor" *ngFor="let muestra of (filtradoPorFecha ? valoresFueraRangoFiltrados : valoresFueraRango)">
               <div class="valor-info">
                 <h3>
                   <span id="valor">{{muestra.valorRegistrado}}</span>
