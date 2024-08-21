@@ -1,6 +1,6 @@
 Estado de apliacion en plataforma IOS:
-build ios 92
-Servidor ios: atisc.mx
+build ios 93
+Servidor ios: azure
 Grupo de pruebas: US-IT
 
 Esta actualización aborda y resuelve problemas reportados por los usuarios para mejorar la funcionalidad y la experiencia general de la aplicación:
