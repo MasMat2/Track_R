@@ -19,6 +19,7 @@ export class ImageOnlyModalComponent  implements OnInit {
 
   @Input() nombreImagen:string='';
   @Input() archivo: string='';
+  @Input() archivoBase64: string='';
   @Input() archivoTipoMime:string='';
   protected imageSrc: SafeResourceUrl;
   
@@ -29,6 +30,10 @@ export class ImageOnlyModalComponent  implements OnInit {
   ngOnInit() {
     if(this.archivo || this.archivo != ""){
       this.imageSrc = `data:${this.archivoTipoMime};base64,${this.archivo}`;
+    }
+
+    if(this.archivoBase64 || this.archivoBase64 != ""){
+      this.imageSrc = this.archivoBase64;
     }
   }
 
