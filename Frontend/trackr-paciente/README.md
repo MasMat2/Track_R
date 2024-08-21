@@ -3,7 +3,7 @@ build ios 92
 Servidor ios: atisc.mx
 Grupo de pruebas: US-IT
 
-Esta actualización aborda y resuelve varios problemas reportados por los usuarios para mejorar la funcionalidad y la experiencia general de la aplicación:
+Esta actualización aborda y resuelve problemas reportados por los usuarios para mejorar la funcionalidad y la experiencia general de la aplicación:
 
 1. Visor de PDFs:
 - Se ha solucionado el problema que impedía la correcta visualización de archivos PDF.
