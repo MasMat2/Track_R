@@ -138,27 +138,12 @@ export class MisCuestionariosComponent  implements OnInit, OnDestroy {
 
   private esFechaValida(examen: Examen): boolean{
     const fechaExamen = this.formatearFecha(examen.fechaExamen, examen.horaExamen);
-    const fechaActual = new Date();
+    const fechaActual = new Date(new Date().toISOString());
 
-    if (new Date(fechaExamen).toDateString() !== fechaActual.toDateString()) {
-      return false;
+    if (new Date(fechaExamen).toDateString() <= fechaActual.toDateString()) {
+      return true;
     }
-
-    const milisegundos = new Date(fechaExamen).getTime() - fechaActual.getTime();
-
-    const MS_IN_A_DAY: number = 86_400_000;
-    const MS_IN_AN_HOUR: number = 3_600_000;
-    const MS_IN_A_MINUTE: number = 60_000;
-
-    const diferenciaMinutos = Math.round(
-      ((milisegundos % MS_IN_A_DAY) % MS_IN_AN_HOUR) / MS_IN_A_MINUTE
-    );
-
-    if (diferenciaMinutos > 5 || diferenciaMinutos <= -15) {
-      return false;
-
-    }
-    return true;
+    return false;
   }
 
   private async presentAlertError() {

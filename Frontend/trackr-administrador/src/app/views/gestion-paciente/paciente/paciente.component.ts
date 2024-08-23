@@ -1,5 +1,5 @@
 import { ExpedienteTrackrService } from '@http/seguridad/expediente-trackr.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-grid-dto';
 import { EncryptionService } from '@services/encryption.service';
@@ -21,6 +21,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CustomAlertComponent } from '@sharedComponents/custom-alert/custom-alert.component';
 import { CustomAlertData } from '@sharedComponents/interface/custom-alert-data';
 import { FechaService } from '@services/fecha.service';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 
 @Component({
   selector: 'app-paciente',
@@ -38,6 +39,14 @@ export class PacienteComponent implements OnInit {
   protected isVistaCuadricula: boolean = true;
   protected mostrarSidebar: boolean = false;
   protected esAsistente : boolean | null = null;
+
+  protected ordenFiltro: 'ascendente' |'descendente' = 'ascendente';
+  protected filtradoPorFecha: boolean = false;
+  protected fechaFiltro: Date;
+  @ViewChild('dp', { static: false }) datepicker: BsDatepickerDirective;
+  fechaSeleccionada: Date;
+
+
   anchoContenedor: string = '100%';
   paciente: UsuarioExpedienteSidebarDTO = {
     idUsuario: 0,
@@ -81,6 +90,7 @@ export class PacienteComponent implements OnInit {
 
   
   protected valoresFueraRango: ValoresFueraRangoGridDTO[];
+  protected valoresFueraRangoFiltrados: ValoresFueraRangoGridDTO[];
   protected columnsVariableFueraRango = [
     { headerName: 'Campo', field: 'parametro', minWidth: 10, resizable : false},
     { headerName: 'Valor', field: 'valorRegistrado', maxWidth: 100, resizable : false },
@@ -123,6 +133,7 @@ export class PacienteComponent implements OnInit {
   }
 
   toggleSidebar() {
+    this.filtradoPorFecha = false;
     this.mostrarSidebar = false;
   }
 
@@ -262,6 +273,40 @@ export class PacienteComponent implements OnInit {
         return (paciente.nombreCompleto.toLowerCase().indexOf(text.toLowerCase()) > -1);
       })
     }
+  }
+
+  protected cambiarFiltroOrden(){
+    this.ordenFiltro === 'ascendente' ? (this.ordenFiltro = 'descendente') : (this.ordenFiltro = 'ascendente');
+    this.ordenarlista(this.ordenFiltro);
+  }
+
+  protected ordenarlista(opcion: 'ascendente' | 'descendente'){
+    this.filtradoPorFecha = false;
+    this.valoresFueraRango?.sort((a, b) => {
+      const fechaA = new Date(a.fechaHora).getTime();
+      const fechaB = new Date(b.fechaHora).getTime();
+
+      if (opcion === 'ascendente') {
+        return fechaA - fechaB;
+      }
+      if(opcion === 'descendente') {
+        return fechaB - fechaA;
+      }
+
+      return 0;
+    });
+  }
+
+  protected filtrarPorFecha(){
+    this.filtradoPorFecha = true;
+    const fechaString = this.fechaService.fechaUTCAFechaLocal(new Date(this.fechaFiltro).toISOString());
+    const targetDate = fechaString?.split('T')[0]; // Solo toma la parte de la fecha, ignorando la hora
+    const coincidencias = this.valoresFueraRango?.filter(obj => obj.fechaHora?.split('T')[0] === targetDate);
+    this.valoresFueraRangoFiltrados = coincidencias;
+  }
+
+  openDatepicker() {
+    this.datepicker.show();
   }
 
 }

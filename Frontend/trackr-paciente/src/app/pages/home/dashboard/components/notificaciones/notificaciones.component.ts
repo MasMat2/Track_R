@@ -2,7 +2,7 @@ import { CommonModule, NgClass, NgFor } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AlertController, IonicModule, PopoverController } from '@ionic/angular';
 import { NotificacionPacienteHubService } from '@services/notificacion-paciente-hub.service';
-import { Observable , map} from 'rxjs';
+import { Observable , map, tap} from 'rxjs';
 import { NotificacionPacientePopOverDto } from '../../../../../shared/Dtos/notificaciones/notificacion-paciente-popover-dto';
 import { NotificacionPacienteService } from '../../../../../shared/http/gestion-perfil/notificacion-paciente.service';
 import { GeneralConstant } from '@utils/general-constant';
@@ -28,6 +28,8 @@ import { FechaService } from '../../../../../shared/services/fecha.service';
 export class NotificacionesComponent  implements OnInit 
 {
   protected notificaciones$: Observable<NotificacionPacientePopOverDto[]>;
+  protected notificaciones: NotificacionPacientePopOverDto[];
+
 
   //TODO: Extraer de la bd usando las claves.
   //iconos correspondientes de lucidIcons
@@ -83,6 +85,9 @@ export class NotificacionesComponent  implements OnInit
             idChat: notificacion.idChat
           } as NotificacionPacientePopOverDto;
         });
+      }),
+      tap(data => {
+        this.notificaciones = data;
       })
     );
   }
@@ -144,7 +149,11 @@ export class NotificacionesComponent  implements OnInit
           text: 'Sí tomé la dosis',
           role: 'confirm',
           handler: () => {
-            this.notificacionHubService.marcarComoVista(notificacion.id, true);
+            this.notificacionHubService.marcarComoVista(notificacion.id, true).then(
+              () => {
+                this.presentAlertSuccessToma();
+              }
+            );
             this.notificacionPacienteService.actualizarWidgets();
           }
         }
@@ -154,8 +163,7 @@ export class NotificacionesComponent  implements OnInit
     await alert.present();
   }
 
-  protected async presentAlertSuccess() {
-
+  protected async presentAlertSuccessToma() {
     const alertSuccess = await this.alertController.create({
       header: 'Tratamiento registrado',
       subHeader: 'Se ha registrado correctamente la toma del tratamiento.',
@@ -163,7 +171,7 @@ export class NotificacionesComponent  implements OnInit
         text: 'De acuerdo',
         role: 'confirm',
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();
@@ -175,21 +183,21 @@ export class NotificacionesComponent  implements OnInit
 
   protected filtrarNotificacionesHoy(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
     if(notificaciones)
-      return notificaciones.filter(n => this.esHoy(n.fecha));
+      return notificaciones.filter(n => this.esHoy(n.fecha) && !n.visto);
     else
       return [];
   }
 
   protected filtrarNotificacionesSemana(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
     if(notificaciones)
-      return notificaciones.filter(n => this.esEstaSemana(n.fecha));
+      return notificaciones.filter(n => this.esEstaSemana(n.fecha) && !n.visto);
     else
       return [];
   }
 
   protected filtrarNotificacionesAnterioresSemana(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
     if(notificaciones)
-      return notificaciones.filter(n => this.esAnteriorEstaSemana(n.fecha));
+      return notificaciones.filter(n => this.esAnteriorEstaSemana(n.fecha) && !n.visto);
     else
       return [];
   }
@@ -201,13 +209,22 @@ export class NotificacionesComponent  implements OnInit
     return date.toDateString() === hoy.toDateString();
   }
 
-  private esEstaSemana(fecha: string): boolean {
-    const hoy = new Date();
-    const date = new Date(fecha);
-    const haceUnaSemana = new Date();
+  // private esEstaSemana(fecha: string): boolean {
+  //   const hoy = new Date();
+  //   const date = new Date(fecha);
+  //   const haceUnaSemana = new Date();
 
-    haceUnaSemana.setDate(hoy.getDate() - 7);
-    return date >= haceUnaSemana && date < hoy;
+  //   haceUnaSemana.setDate(hoy.getDate() - 7);
+  //   return date >= haceUnaSemana && date < hoy;
+  // }
+
+  private esEstaSemana(fecha: string): boolean {     
+    const hoy = new Date();     
+    const date = new Date(fecha);     
+    const haceUnaSemana = new Date();  
+
+    haceUnaSemana.setDate(hoy.getDate() - 7);     
+    return date >= haceUnaSemana && (date.getDate() < (hoy.getDate()));   
   }
 
   private esAnteriorEstaSemana(fecha: string): boolean {
@@ -247,6 +264,16 @@ export class NotificacionesComponent  implements OnInit
     else{
       return complemento
     }
+  }
+
+  protected listaNotificacionesVacia(){
+    return this.notificaciones?.length == 0;
+  }
+
+  protected todasNotificacionesVistas(){
+    return (
+      !(this.notificaciones?.filter(n => !n.visto).length > 0)
+    )
   }
 
 }

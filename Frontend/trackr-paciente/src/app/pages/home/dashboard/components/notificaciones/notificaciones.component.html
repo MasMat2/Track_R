@@ -15,7 +15,12 @@
 <ion-content class="primary">
   <div class="contenedor-principal">
     <div class="lista-notificaciones">
-      <ion-item-group>
+      <div class="lista-vacia" *ngIf="listaNotificacionesVacia() || todasNotificacionesVistas()">
+        <ion-text>
+          <p>Nada por aquí. <br> No tienes notificaciones pendientes.</p>
+        </ion-text>
+      </div>
+      <ion-item-group *ngIf="!listaNotificacionesVacia()">
 
         <!-- NOTIFICACIONES DE HOY -->
         <ion-item-divider *ngIf="(filtrarNotificacionesHoy(notificaciones$ | async).length > 0)">

@@ -28,7 +28,7 @@ export class NivelExamenComponent implements OnInit {
   protected nivelExamenList: NivelExamen[] = [];
 
   protected columns: ColDef[] = [
-    { headerName: 'Clave', field: 'idNivelExamen', maxWidth: 200, },
+    { headerName: 'Clave', field: 'clave', maxWidth: 200, },
     { headerName: 'Estatus', field: 'estatus', minWidth: 100, 
       valueGetter: (params: any) => params.data.estatus ? 'Activo' : 'Inactivo' },
     { headerName: 'Fecha Alta', field: 'fechaAlta', minWidth: 100,

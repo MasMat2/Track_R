@@ -60,15 +60,18 @@ export class ArchivoPrevisualizarComponent implements OnInit, AfterViewInit {
   }
   
   async ngOnInit() {
+    if (Capacitor.isNativePlatform() && Capacitor.getPlatform() == 'ios') {
+      this.isIOSNative = true;
+    }
+
     this.cargando$.subscribe(cargando => {
       if (cargando) {
         this.presentLoading();
-      } else {
+      } else if (this.archivo) {
         this.dismissLoading();
 
-        if (Capacitor.isNativePlatform() && Capacitor.getPlatform() == 'ios') {
-          this.isIOSNative = true;
-          this.openFile(this.archivoBase64);
+        if (this.isIOSNative && this.tipoMime == 'application') {
+          this.openFile(this.archivo.nombre, this.archivoBase64);
         }
       }
     });
@@ -231,10 +234,10 @@ export class ArchivoPrevisualizarComponent implements OnInit, AfterViewInit {
     alert.present();
   }
 
-  async openFile(base64: string): Promise<void> {
+  async openFile(nombre:string, base64: string): Promise<void> {
 
     const result = await Filesystem.writeFile({
-      path: `test.pdf`,
+      path: nombre,
       data: base64,
       directory: Directory.Cache,
       recursive: true
@@ -251,7 +254,7 @@ export class ArchivoPrevisualizarComponent implements OnInit, AfterViewInit {
     await FileOpener.open(fileOpenerOptions);
 
     await Filesystem.deleteFile({
-      path: `test.pdf`,
+      path: nombre,
       directory: Directory.Cache
       //encoding: Encoding.UTF8,
     });

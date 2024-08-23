@@ -35,15 +35,17 @@
     </div>
 
       <!-- Items de Navegación -->
-      <div *ngFor="let item of navItems">
-        <app-menu-item
-          [item]="item"
-        ></app-menu-item>
+      <div class="mb-5">
+        <div *ngFor="let item of navItems">
+          <app-menu-item
+            [item]="item"
+          ></app-menu-item>
+        </div>
       </div>
 
 
     <!-- Utilidades -->
-    <div class="lateral-inferior pt-5">
+    <div class="lateral-inferior">
 
       <!-- <app-menu-item
         [item]="{ name: 'Buscar', icon: 'fas fa-magnifying-glass', url: 'administrador', claveTipoAcceso: '' }"

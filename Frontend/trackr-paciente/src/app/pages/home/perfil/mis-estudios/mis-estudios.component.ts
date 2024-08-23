@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AlertController, IonicModule, ModalController } from '@ionic/angular';
+import { AlertController, IonicModule, ModalController, ViewWillEnter } from '@ionic/angular';
 import { ExpedienteEstudioService } from '@services/expediente-estudio.service';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { TableModule } from 'primeng/table';
@@ -54,7 +54,15 @@ export class MisEstudiosPage implements OnInit {
     })
   }
 
+  ViewWillEnter(): void {
+    this.consultarEstudios();
+  }
+
   ngOnInit(): void {
+    this.expedienteEstudioService.expedienteAdded$.subscribe(() => {
+      this.ViewWillEnter();
+    })
+
     this.cargando$.subscribe(cargando => {
       if (cargando) {
         this.presentLoading();
@@ -65,6 +73,8 @@ export class MisEstudiosPage implements OnInit {
 
     this.consultarEstudios();
   }
+
+  
 
   private async presentLoading() {
     this.loading = await this.alertController.create({

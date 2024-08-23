@@ -268,7 +268,7 @@ export class ResponderCuestionarioComponent  implements OnInit, OnExit {
     const modal = await this.modalController.create({
       component: ImageOnlyModalComponent,
       cssClass: 'image-only-modal',
-      componentProps: {archivo: imagen}
+      componentProps: {archivoBase64: imagen}
     })
     if((imagen !== "") && (imagen !== "data:;base64,") && (imagen != null)){
       modal.present();

@@ -70,7 +70,7 @@ export class ChatComponent implements OnDestroy {
   obtenerChats(){
     //this.chats$ = this.ChatHubServiceService.chat$
     this.ChatHubServiceService.chat$.subscribe(res => {
-      this.chats = res;
+      this.chats = res
       this.obtenerUltimoMensaje();
       this.obtenerMensajes();
     })
@@ -115,13 +115,30 @@ export class ChatComponent implements OnDestroy {
     this.clickEnChat = true;
   }
 
-  obtenerUltimoMensaje():void{
-    let ultimoMensaje = this.mensajes.map(arr => arr[arr.length - 1]?.mensaje || "")
-    let fechaUltimoMensaje = this.mensajes.map(arr => arr[arr.length - 1]?.fecha || "")
+  private obtenerUltimoMensaje(): void {
+    const ultimoMensaje = this.mensajes.map(
+      (arr) =>{ return {mensajes: arr[arr.length - 1]?.mensaje || '', chat: arr[0]?.idChat || 0}}
+    );
 
-    this.chats.forEach((x,index) => {
-      x.ultimoMensaje = ultimoMensaje[index];
-      x.fechaUltimoMensaje = fechaUltimoMensaje[index];
-    })
+    const fechaUltimoMensaje = this.mensajes.map(
+      (arr) => {
+        return {fecha: arr[arr.length - 1]?.fecha || this.fechaService.obtenerFechaActualISOString(), chat: arr[0]?.idChat || 0}
+      }
+    )
+    
+    this.chats.map(
+      chat => {
+        chat.ultimoMensaje = ultimoMensaje.filter(y => y.chat == chat.idChat)[0]?.mensajes || '';
+        chat.fechaUltimoMensaje = fechaUltimoMensaje.filter(y => y.chat == chat.idChat)[0]?.fecha || '';
+        return chat;
+      }
+    )
+    
+    this.chats = this.chats.sort((a, b) => {
+      const fechaA = a.fechaUltimoMensaje ? new Date(a.fechaUltimoMensaje).getTime() : 0;
+      const fechaB = b.fechaUltimoMensaje ? new Date(b.fechaUltimoMensaje).getTime() : 0;
+    
+      return fechaB - fechaA;
+    });
   }
 }
