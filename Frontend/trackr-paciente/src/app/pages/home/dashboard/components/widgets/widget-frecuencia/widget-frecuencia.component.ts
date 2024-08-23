@@ -23,17 +23,11 @@ export class WidgetFrecuenciaComponent  implements OnInit {
   private availability: HealthConnectAvailabilityStatus = "Unavailable"; //Disponibilidad de healthConnect
 
   protected ritmoCardiaco: number = 0;
-  constructor(
-    private healthConnectService: HealthConnectService,
-    private alertController: AlertController) {
-      addIcons({
-        'ritmo-cardiaco': '/assets/img/svg/Ritmo-cardiaco.svg'
-      })
-     }
 
   protected unidadMedida: string = "lpm";
 
-  constructor() {
+  constructor(private healthConnectService: HealthConnectService,
+    private alertController: AlertController) {
     addIcons({
       'ritmo-cardiaco': 'assets/img/svg/Ritmo-cardiaco.svg'
     })
