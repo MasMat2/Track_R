@@ -29,7 +29,7 @@ export class SidebarNavDropdownComponent implements OnInit {
 
   @Output() logoutRequest = new EventEmitter<void>();
 
-  protected readonly imagenUsuario = 'assets/img/pruebas/user-image.png';
+  protected readonly imagenUsuario = "assets/img/svg/avatar-placeholder.svg";;
   protected readonly imagenLogotipo = 'assets/img/logo-trackr.png';
   protected urlImagen?: SafeUrl = undefined;
 
