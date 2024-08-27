@@ -58,7 +58,6 @@ export class SidebarNavDropdownComponent implements OnInit, OnDestroy {
 
   
   ngOnDestroy(): void {
-    console.log('ngOnDestroy'); 
     this.destroy$.next();  // Activa la desuscripción
     this.destroy$.complete(); // Libera recursos del Subject
   }
