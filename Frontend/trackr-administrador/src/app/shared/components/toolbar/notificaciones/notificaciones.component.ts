@@ -47,7 +47,6 @@ export class NotificacionesComponent implements OnInit{
   }
 
   private consultarNotificacionesNoVistas(): void {
-    this.notificacionHubService.iniciarConexion();
     this.notificaciones$ = this.notificacionHubService.notificaciones$.pipe(
       map((notificaciones) =>
         notificaciones
