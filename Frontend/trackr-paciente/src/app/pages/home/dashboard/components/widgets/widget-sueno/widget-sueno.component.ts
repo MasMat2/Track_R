@@ -67,10 +67,14 @@ export class WidgetSuenoComponent  implements OnInit {
             case 'AsleepREM':
                 this.suenoHorasREM += Math.floor(durationMinutes / 60);
                 this.suenoMinutosREM += Math.floor(durationMinutes % 60);
+                this.tiempoDormido += Math.floor(durationMinutes / 60); //Sumar sueno REM para tambien contarlo como sueno
+                this.minutostiempoDormido += Math.floor(durationMinutes % 60);
                 break;
             case 'AsleepDeep':
                 this.suenoHorasProfundo += Math.floor(durationMinutes / 60);
-                this.suenoMinutosProfundo += Math.floor(durationMinutes % 60); 
+                this.suenoMinutosProfundo += Math.floor(durationMinutes % 60);
+                this.tiempoDormido += Math.floor(durationMinutes / 60); //Sumar sueno profundo para tambien contarlo como sueno
+                this.minutostiempoDormido += Math.floor(durationMinutes % 60); 
                 break;
             default:
                 console.log('Estado de sueño desconocido:', sleepState);
