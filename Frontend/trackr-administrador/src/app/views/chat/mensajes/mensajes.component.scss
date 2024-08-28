@@ -352,6 +352,27 @@
   border: 2px solid white;
 }
 
+.w-6r{
+  width: 6rem;
+}
+
+.bg-none{
+  background: none !important;
+}
+
+.border-none{
+  border: none !important;
+}
+
+.dropdown-content  {
+  background: var(--neutral-100);
+  background-clip: border-box;
+}
+
+.dropdown-content a:hover {
+  background: var(--neutral-200);
+  background-clip: border-box;
+}
 
 // .message {
 //     margin-bottom: 10px;

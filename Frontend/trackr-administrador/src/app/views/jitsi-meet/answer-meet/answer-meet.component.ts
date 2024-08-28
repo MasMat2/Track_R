@@ -85,6 +85,7 @@ export class AnswerMeetComponent implements OnInit {
   };
 
   handleClose = () => {
+    this.router.navigate(['/administrador/chat']);
     this.newRoomApi.dispose();
   }
 
@@ -105,7 +106,6 @@ export class AnswerMeetComponent implements OnInit {
 
   handleVideoConferenceLeft = () => {
     this.newRoomApi.dispose();
-    this.router.navigate(['/thank-you']);
   }
 
   handleMuteStatus = (audio: AudioInterface) => {
