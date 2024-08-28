@@ -537,7 +537,7 @@ export class MensajesComponent{
     }
 
     if (mensaje.mensaje.includes('webrtc-' + this.idChat)) {
-      const regex = /webrtc-\d-(\d+)/;
+      const regex = /webrtc-\d+-(\d+)/;
       const match = mensaje.mensaje.match(regex);
       if (match && match.length > 0) {
         const codigo = match[1];

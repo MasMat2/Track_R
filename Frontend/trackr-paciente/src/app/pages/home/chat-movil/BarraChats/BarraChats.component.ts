@@ -62,7 +62,7 @@ export class BarraChatsComponent {
   }
 
   private ensureConnection(){
-    this.ChatHubServiceService.ensureConnection();
+    this.ChatHubServiceService.iniciarConexion();
   }
   
   //OBTENER SÓLO LOS CHATS

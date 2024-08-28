@@ -86,13 +86,12 @@ export class PanelNotificacionesComponent implements OnInit {
   }
 
   protected async marcarComoVista(notificacion: Notificacion) {
-     if (this.clicDeshabilitado) {
-      return;
-    } 
-  
+
     this.clicDeshabilitado = true;
     try {
-      await this.notificacionHubService.marcarComoVista(notificacion.id);
+      if(! notificacion.visto){
+        await this.notificacionHubService.marcarComoVista(notificacion.id);
+      }
       await this.meetService.redirigirMeet(notificacion);
       this.consultarNotificaciones();
     } catch (error) {

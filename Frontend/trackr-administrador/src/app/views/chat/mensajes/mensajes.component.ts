@@ -15,6 +15,7 @@ import { NgAudioRecorderService, OutputFormat } from 'ng-audio-recorder';
 import { GeneralConstant } from '@utils/general-constant';
 import { AlertifyService } from '@services/alertify.service';
 import { FechaService } from '@services/fecha.service';
+import { DataJitsiService } from '@http/chats/data-jitsi.service';
 
 @Component({
   selector: 'app-mensajes',
@@ -69,7 +70,8 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
     private modalService: BsModalService,
     private bsModalRef: BsModalRef,
     private alertifyService: AlertifyService,
-    private fechaService: FechaService
+    private fechaService: FechaService,
+    private dataJitsiService : DataJitsiService
   ) {}
  
   ngOnInit() {
@@ -140,6 +142,32 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
       mensaje.idArchivo !== null &&
       mensaje.idArchivo !== undefined
     );
+  }
+
+  crearLlamadaWebRTC() {
+    let idUsuario = this.idUsuario;
+
+    const newRoomName = `webrtc-${this.idChat}-${idUsuario}`;
+
+    const telefonoEmoji = "📞";
+    let mensaje = `${telefonoEmoji} Te espero la sala ${newRoomName}`;
+
+    let msg: ChatMensajeDTO = {
+      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
+      idChat: this.idChat,
+      mensaje: mensaje,
+      idPersona: idUsuario,
+      archivo: '',
+      idArchivo: 0,
+      esVideoChat: true
+    };
+
+    this.ChatMensajeHubService.enviarMensaje(msg);
+    this.router.navigate(['/administrador/webrtc', newRoomName]);
+  }
+
+  crearLlamadaJitsi() {
+      this.dataJitsiService.comenzarLlamada(this.idChat);
   }
   
   protected async onVerArchivo(mensaje: ChatMensajeDTO) {
