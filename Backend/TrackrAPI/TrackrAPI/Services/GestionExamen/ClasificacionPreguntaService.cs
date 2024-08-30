@@ -31,7 +31,7 @@ public class ClasificacionPreguntaService
                 IdClasificacionPregunta = dto.IdClasificacionPregunta,
                 Nombre = dto.Nombre,
                 Estatus = true,
-                Clave =  dto.Clave,
+                Clave =  GenerarClave(),
             };
             _clasificacionPreguntaRepository.Agregar(clasificacionPregunta);
 
@@ -40,6 +40,13 @@ public class ClasificacionPreguntaService
         {
             Console.WriteLine(ex.Message);
         }
+    }
+
+    private string GenerarClave()
+    {
+        var clasificacionPregunta = _clasificacionPreguntaRepository.ConsultarParaGrid().OrderByDescending(x => x.IdClasificacionPregunta).FirstOrDefault();
+
+        return (clasificacionPregunta.IdClasificacionPregunta + 1).ToString();
     }
 
     public void Editar(ClasificacionPreguntaFormularioDto dto)

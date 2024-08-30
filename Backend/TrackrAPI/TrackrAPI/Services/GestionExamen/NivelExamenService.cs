@@ -36,6 +36,7 @@ public class NivelExamenService
     {
         _nivelExamenValidatorService.ValidarAgregar(nivelExamen);
         _nivelExamenValidatorService.ValidarDuplicado(nivelExamen);
+        nivelExamen.Clave = GenerarClave();
         _nivelExamenRepository.Agregar(nivelExamen);
         return nivelExamen.IdNivelExamen;
     }
@@ -45,6 +46,13 @@ public class NivelExamenService
         _nivelExamenValidatorService.ValidarEditar(nivelExamen);
         _nivelExamenValidatorService.ValidarDuplicado(nivelExamen);
         _nivelExamenRepository.Editar(nivelExamen);
+    }
+
+    private string GenerarClave()
+    {
+        var nivelExamen = _nivelExamenRepository.ConsultarGeneral().OrderByDescending(x => x.IdNivelExamen).FirstOrDefault();
+
+        return (nivelExamen.IdNivelExamen + 1).ToString();
     }
 
     public void Eliminar(int idNivelExamen)

@@ -6,14 +6,12 @@
 
         <div class="col-md-4">
           <div class="form-group">
-            <label class="label-input required-label">Clave</label>
+            <label class="label-input required-label">Clavev</label>
             <div>
               <input #clave="ngModel" [(ngModel)]="entidad.clave" maxlength="30" name="clave" class="form-control"
-                type="text" maxlength="30" [required]="true" [disabled]="esEdicion" />
+                type="text" maxlength="30" [required]="false" [disabled]="true" />
             </div>
-            <div *ngIf="clave.errors?.['required'] && clave.touched" class="error">
-              La clave es requerida
-            </div>
+
           </div>
         </div>
 

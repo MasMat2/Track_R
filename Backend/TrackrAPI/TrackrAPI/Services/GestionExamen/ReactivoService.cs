@@ -75,6 +75,7 @@ public class ReactivoService
 
   public int Agregar(ReactivoDto reactivo)
     {
+        reactivo.Clave = GenerarClave();
         reactivoValidatorService.ValidarAgregar(reactivo);
         var agregar = ConvertirDtoModel(reactivo);
         reactivo.IdReactivo = reactivoRepository.Agregar(agregar).IdReactivo;
@@ -90,7 +91,13 @@ public class ReactivoService
         EscalaLikert(reactivo);
     }
 
+    private string GenerarClave()
+    {
+        var reactivo = reactivoRepository.ConsultarGeneral().OrderByDescending(x => x.IdReactivo).FirstOrDefault();
 
+        return (reactivo.IdReactivo + 1).ToString();
+    }
+    
     public void Eliminar(int idReactivo)
     {
         ReactivoDto? reactivo = reactivoRepository.Consultar(idReactivo);

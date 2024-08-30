@@ -18,11 +18,9 @@
               <label class="label-input required-label">Clave</label>
               <div>
                 <input #clave="ngModel" [(ngModel)]="reactivo.clave" name="clave" class="form-control" type="text"
-                  [required]="true" [disabled]="accion == 'Editar'" maxlength="30" />
+                  [disabled]="true" maxlength="30" />
               </div>
-              <div *ngIf="clave.errors?.['required'] && clave.touched" class="error">
-                La clave es requerida
-              </div>
+            
             </div>
           </div>
 
