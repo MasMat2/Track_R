@@ -53,9 +53,9 @@ export class ProgramacionExamenComponent implements OnInit {
   );
 
   protected columns: ColDef[] = [
-    { headerName: 'Clave', field: 'clave', minWidth: 50, width: 50, },
+    { headerName: 'Clave', field: 'clave', minWidth: 50, width: 50, valueGetter: (params: any) => (params.node.rowIndex + 1 ).toString()},
     { headerName: 'Responsable', field: 'usuarioResponsable', minWidth: 100, width: 100, },
-    { headerName: 'Tipo Cuestionario', field: 'tipoExamen', minWidth: 100, width: 100, },
+    { headerName: 'Cuestionario', field: 'tipoExamen', minWidth: 100, width: 100, },
     { headerName: 'Fecha Programada', field: 'fechaExamen', minWidth: 70, width: 70, 
       cellRenderer: (params: ICellRendererParams) => {
         return moment(params.data.fechaExamen).format('DD/MM/YYYY');

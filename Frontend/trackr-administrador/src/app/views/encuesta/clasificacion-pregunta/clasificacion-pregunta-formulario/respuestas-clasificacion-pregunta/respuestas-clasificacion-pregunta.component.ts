@@ -20,8 +20,8 @@ import { RespuestasClasificacionPreguntaService } from '@http/examen/respuestas-
 export class RespuestasClasificacionPreguntaComponent extends CrudBase<RespuestasClasificacionPreguntaGridDto> implements OnInit{
   @Input() idClasificacionPregunta: number;
   protected isCollapsed = true;
-  protected readonly HEADER_GRID: string = 'Respuesta Clasificación Pregunta';
-  protected readonly NOMBRE_ENTIDAD: string = 'Respuesta Clasificación Pregunta';
+  protected readonly HEADER_GRID: string = 'Respuesta';
+  protected readonly NOMBRE_ENTIDAD: string = 'Respuesta';
   private destroy$: Subject<void> = new Subject<void>();
 
   override crudConfig: ICrudConfig = {

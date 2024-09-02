@@ -39,7 +39,7 @@
 
           <div class="col-md-6">
             <div class="form-group">
-              <label class="label-input required-label">Tipo Cuestionario</label>
+              <label class="label-input required-label">Cuestionario</label>
               <div>
                 <input
                   #nombre="ngModel"
@@ -54,7 +54,7 @@
                 *ngIf="nombre.errors?.['required'] && nombre.touched"
                 class="error"
               >
-                El tipo Cuestionario es requerido
+                El Cuestionario es requerido
               </div>
             </div>
           </div>
@@ -63,7 +63,7 @@
         <div class="row justify-content-md-center">
           <div class="col-md-6">
             <div class="form-group">
-              <label class="label-input required-label">Cuestionario</label>
+              <label class="label-input required-label">Contenido</label>
               <div>
                 <ng-select
                   #asignaturaLst="ngModel"
@@ -75,20 +75,21 @@
                   [(ngModel)]="contenidoExamen.idAsignatura"
                   [placeholder]="placeHolderSelect"
                   [notFoundText]="placeHolderNoOptions"
+                  (change)="onSelectChange()"
                 ></ng-select>
               </div>
               <div
                 *ngIf="asignaturaLst.errors?.['required'] && asignaturaLst.touched"
                 class="error"
               >
-                La Cuestionario es requerido
+                La Contenido es requerido
               </div>
             </div>
           </div>
 
           <div class="col-md-6">
             <div class="form-group">
-              <label class="label-input required-label">Complejidad de Cuestionario</label>
+              <label class="label-input required-label">Categoria de evaluación</label>
               <div>
                 <ng-select
                   #nivelLst="ngModel"
@@ -100,13 +101,14 @@
                   [(ngModel)]="contenidoExamen.idNivelExamen"
                   [placeholder]="placeHolderSelect"
                   [notFoundText]="placeHolderNoOptions"
+                  (change)="onSelectChange()"
                 ></ng-select>
               </div>
               <div
                 *ngIf="nivelLst.errors?.['required'] && nivelLst.touched"
                 class="error"
               >
-                La Complejidad del Cuestionario es requerida
+                La categoría de evaluación requerida
               </div>
             </div>
           </div>

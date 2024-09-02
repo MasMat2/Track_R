@@ -50,7 +50,7 @@ export class ClasificacionPreguntaComponent extends CrudBase<ClasificacionPregun
     };
 
   protected columns: ColDef[] = [
-    { headerName: 'Clave', field: 'clave', minWidth: 50, width: 100 },
+    { headerName: 'Clave', field: 'clave', minWidth: 50, width: 100 , valueGetter: (params: any) => (params.node.rowIndex + 1 ).toString() },
     {
       headerName: 'Estatus', field: 'estatus', minWidth: 50, width: 100,
       valueGetter: (params) => params.data.estatus ? 'Activo' : 'Inactivo'

@@ -2,7 +2,7 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>Complejidad del Cuestionario - {{ accion }}</div>
+      <div>Categoria evaluación - {{ accion }}</div>
       <button class="btn-salir" (click)="cancelar()">
         <lucide-icon name="x" size="10"></lucide-icon>
       </button>
@@ -15,23 +15,7 @@
     >
       <div class="modal-body" id="modal">
         <div class="row">
-          <div class="col-1" style="width: 30%">
-            <div class="form-group">
-              <label class="label-input required-label">Clave</label>
-              <div>
-                <input
-                  #clave="ngModel"
-                  [(ngModel)]="nivelExamen.clave"
-                  maxlength="30"
-                  name="clave"
-                  class="form-control"
-                  type="text"
-                  disabled="true"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="col-1" style="width: 30%">
+          <div class="col" style="width: 30%">
             <div class="form-group">
               <label class="label-input required-label">Fecha Alta</label>
               <div class="calendario">
@@ -54,7 +38,7 @@
               </div>
             </div>
           </div>
-          <div class="col-1" style="width: 30%">
+          <div class="col" style="width: 30%">
             <div class="form-group">
               <label class="label-input required-label">Estatus</label>
               <div class="calendario">
@@ -72,7 +56,7 @@
         </div>
 
         <div class="row">
-          <div class="col-1" style="width: 60%">
+          <div class="col" style="width: 60%">
             <div class="form-group">
               <label class="label-input required-label">Complejidad</label>
               <div>

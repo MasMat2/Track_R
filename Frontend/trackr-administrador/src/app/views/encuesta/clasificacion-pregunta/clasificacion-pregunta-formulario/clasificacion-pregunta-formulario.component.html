@@ -3,20 +3,7 @@
       <form #formulario="ngForm" id="form" novalidate="novalidate" (keydown.enter)="$event.preventDefault()">
       <!-- Row -->
       <div class="row">
-
-        <div class="col-md-4">
-          <div class="form-group">
-            <label class="label-input required-label">Clavev</label>
-            <div>
-              <input #clave="ngModel" [(ngModel)]="entidad.clave" maxlength="30" name="clave" class="form-control"
-                type="text" maxlength="30" [required]="false" [disabled]="true" />
-            </div>
-
-          </div>
-        </div>
-
-
-        <div class="col-md-4">
+        <div class="col">
           <div class="form-group">
             <label class="label-input required-label">Clasificación Pregunta</label>
             <div>
@@ -30,7 +17,7 @@
         </div>
 
 
-        <div class="col-md-4">
+        <div class="col">
           <div class="form-group">
             <label class="label-input required-label">Estatus</label>
 

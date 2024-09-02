@@ -2,7 +2,7 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>Programación del Cuestionario - {{ accion }}</div>
+      <div>Cuestionario programado - {{ accion }}</div>
       <button class="btn-salir" (click)="cancelar()">
         <lucide-icon name="x" size="10"></lucide-icon>
       </button>
@@ -15,24 +15,7 @@
     >
       <div class="modal-body" id="modal">
         <div class="row">
-          <div class="col-md-2">
-            <div class="form-group">
-              <label class="label-input required-label">Clave</label>
-              <div>
-                <input
-                  #clave="ngModel"
-                  [(ngModel)]="programacionExamen.clave"
-                  name="clave"
-                  class="form-control"
-                  type="text"
-                  disabled="true"
-                  maxlength="30"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-5">
+          <div class="col-md">
             <div class="form-group">
               <label class="label-input required-label">Responsable</label>
               <div>
@@ -60,9 +43,9 @@
             </div>
           </div>
 
-          <div class="col-md-5">
+          <div class="col">
             <div class="form-group">
-              <label class="label-input required-label">Tipo Cuestionario</label>
+              <label class="label-input required-label">Cuestionario</label>
               <div>
                 <ng-select
                   #tipoExamenLst="ngModel"
@@ -81,7 +64,7 @@
                 *ngIf="tipoExamenLst.errors?.['required'] && tipoExamenLst.touched"
                 class="error"
               >
-                El tipo Cuestionario es requerido
+                El Cuestionario es requerido
               </div>
             </div>
           </div>

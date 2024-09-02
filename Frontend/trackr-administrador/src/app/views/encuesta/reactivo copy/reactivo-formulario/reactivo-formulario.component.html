@@ -13,18 +13,7 @@
         novalidate="novalidate">
 
         <div class="row" *ngIf="soloRespuestas">
-          <div class="col-md-4">
-            <div class="form-group">
-              <label class="label-input required-label">Clave</label>
-              <div>
-                <input #clave="ngModel" [(ngModel)]="reactivo.clave" name="clave" class="form-control" type="text"
-                  [disabled]="true" maxlength="30" />
-              </div>
-            
-            </div>
-          </div>
-
-          <div class="col-md-4">
+          <div class="col">
             <div class="form-group">
               <label class="label-input required-label">Asignatura</label>
               <div>
@@ -39,7 +28,7 @@
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col">
             <div class="form-group">
               <label class="label-input required-label">Nivel</label>
               <div>
