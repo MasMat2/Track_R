@@ -15,4 +15,11 @@ public class TipoNotificacionRepository : Repository<TipoNotificacion>, ITipoNot
             .Where( tn => tn.Clave == clave)
             .FirstOrDefault();
     }
+
+    public TipoNotificacion ConsultarPorId(int idTipoNotificacion)
+    {
+        return context.TipoNotificacion
+            .Where( tn => tn.IdTipoNotificacion == idTipoNotificacion)
+            .FirstOrDefault();
+    }
 }
