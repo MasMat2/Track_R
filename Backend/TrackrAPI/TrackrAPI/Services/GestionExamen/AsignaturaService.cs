@@ -36,8 +36,16 @@ public class AsignaturaService
     {
         _asignaturaValidatorService.ValidarAgregar(asignatura);
         _asignaturaValidatorService.ValidarDuplicado(asignatura);
+        asignatura.Clave = GenerarClave();
         _asignaturaRepository.Agregar(asignatura);
         return asignatura.IdAsignatura;
+    }
+
+    private string GenerarClave()
+    {
+        var asignatura = _asignaturaRepository.ConsultarGeneral().OrderByDescending(x => x.IdAsignatura).FirstOrDefault();
+
+        return (asignatura.IdAsignatura + 1).ToString();
     }
 
     public void Editar(Asignatura asignatura)

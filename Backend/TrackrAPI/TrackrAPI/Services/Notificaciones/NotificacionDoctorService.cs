@@ -15,6 +15,7 @@ public class NotificacionDoctorService
 {
     private readonly NotificacionService _notificacionService;
     private readonly NotificacionUsuarioService _notificacionUsuarioService;
+    private readonly ITipoNotificacionRepository _tipoNotificacionRepository;
     private readonly UsuarioService _usuarioService;
     private readonly ArchivoService _archivoService;
     private readonly IHubContext<NotificacionDoctorHub, INotificacionDoctorHub> _hubContext;
@@ -27,7 +28,8 @@ public class NotificacionDoctorService
         UsuarioService usuarioService,
         IHubContext<NotificacionDoctorHub, INotificacionDoctorHub> hubContext,
         ArchivoService archivoService,
-        IWebHostEnvironment hostingEnvironment)
+        IWebHostEnvironment hostingEnvironment,
+        ITipoNotificacionRepository tipoNotificacionRepository)
     {
         _notificacionService = notificacionService;
         _notificacionUsuarioService = notificacionUsuarioService;
@@ -35,6 +37,7 @@ public class NotificacionDoctorService
         _archivoService = archivoService;
         _hubContext = hubContext;
         _hostingEnvironment = hostingEnvironment;
+        _tipoNotificacionRepository = tipoNotificacionRepository;
     }
 
     private async Task<NotificacionDoctorDTO> Mapear(
@@ -46,7 +49,7 @@ public class NotificacionDoctorService
 
  
 
-        var claveNotificacion = _notificacionService.ConsultarClave(notificacionDto.IdTipoNotificacion);
+        var claveNotificacion = _tipoNotificacionRepository.ConsultarPorId(notificacionDto.IdTipoNotificacion).Clave;
 
         return new NotificacionDoctorDTO(
             notificacionUsuarioDto.IdNotificacionUsuario,

@@ -96,10 +96,10 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                     && etv.FechaMuestra >= fechaFiltro)
                 .Select(etv => new ValoresHistogramaDTO
                 {
-                    FechaMuestra = etv.FechaMuestra ?? new DateTime(),
-                    Valor = int.Parse(etv.Valor),
+                    FechaMuestra = etv.FechaMuestra ?? new DateTime().ToUniversalTime(),
+                    Valor = decimal.Parse(etv.Valor),
                     FueraDeRango = etv.FueraDeRango,
-                });
+                }).OrderByDescending(etv =>  etv.FechaMuestra);
         }
 
         public IEnumerable<ExpedienteMuestrasGridDTO> ConsultarGridMuestras(int idUsuario)

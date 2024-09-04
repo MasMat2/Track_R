@@ -23,6 +23,7 @@ import { BitacoraCompletaComponent } from './bitacora-completa/bitacora-completa
 import { EntidadEstructuraService } from '../../../../../shared/http/gestion-entidad/entidad-estructura.service';
 import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
 import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
+import { FechaService } from '@services/fecha.service';
 
 
 @Component({
@@ -53,7 +54,7 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   protected variableList: ExpedienteColumnaSelectorDTO[];
   protected idSeccionVariable: number;
   protected filtroTiempo: string;
-  protected valoresCampo: ValoresClaveCampoGridDto;
+  protected valoresCampo: ValoresClaveCampoGridDto = new ValoresClaveCampoGridDto();
   protected valorMin: number | null;
   protected valorMax: number | null;
   protected fechaMin: string;
@@ -174,7 +175,8 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private modalController: ModalController,
-    private loadingSpinner: LoadingSpinnerService
+    private loadingSpinner: LoadingSpinnerService,
+    private fechaService: FechaService
   
     ) { addIcons({
       'chevron-left': 'assets/img/svg/chevron-left.svg',
@@ -289,7 +291,16 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
       //Consulta los valores para Grid y Max/Min
       lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresPorClaveCampoParaGridUsuarioSesion(filtroClave, filtroTiempo))
       .then((response) => {
-        this.valoresCampo = response;
+        if(response){
+          this.valoresCampo.unidadMedida = response.unidadMedida;
+          this.valoresCampo.valores = response.valores.map(
+            (data) => {
+              data.fechaMuestra = this.fechaService.fechaUTCAFechaLocal(data.fechaMuestra);
+              return data;
+            }
+          );
+        }
+
         if(response.valores.length == 0)
           this.seleccionVacia = true;
         else

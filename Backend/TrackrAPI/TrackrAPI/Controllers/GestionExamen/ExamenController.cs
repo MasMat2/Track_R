@@ -128,4 +128,11 @@ public class ExamenController : ControllerBase
 
         return File(pdfBytes, "application/pdf");
     }
+
+    [HttpGet]
+    [Route("cantidadReactivos/{idAsignatura}/{idNivelExamen}")]
+    public int ConsultarCantidadReactivos(int idAsignatura, int idNivelExamen)
+    {
+        return _examenService.ConsultarCantidadReactivos(idAsignatura, idNivelExamen);
+    }
 }

@@ -93,14 +93,21 @@ public class ChatMensajeService
                                                     .ToList();
 
         int idTipoNotificacion;
+        string claveTipoNotificacion;
 
         if(mensaje.EsVideoChat == true)
         {
-            idTipoNotificacion = _tipoNotificacionRepository.ConsultarPorClave(GeneralConstant.ClaveNotificacionVideo).IdTipoNotificacion;
+            var notificacionVideo = _tipoNotificacionRepository.ConsultarPorClave(GeneralConstant.ClaveNotificacionVideo);
+            idTipoNotificacion = notificacionVideo.IdTipoNotificacion;
+            claveTipoNotificacion = GeneralConstant.ClaveNotificacionVideo;
+
+
         }
         else
         {
-            idTipoNotificacion = _tipoNotificacionRepository.ConsultarPorClave(GeneralConstant.ClaveNotificacionChat).IdTipoNotificacion;
+            var notificacionChat = _tipoNotificacionRepository.ConsultarPorClave(GeneralConstant.ClaveNotificacionChat);
+            idTipoNotificacion = notificacionChat.IdTipoNotificacion;
+            claveTipoNotificacion = GeneralConstant.ClaveNotificacionChat;
         }
         var notificacion = new NotificacionDoctorCapturaDTO(mensaje.Mensaje, null, idTipoNotificacion, mensaje.IdPersona, mensaje.IdPersona, mensaje.IdChat);
 

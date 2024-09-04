@@ -37,11 +37,22 @@ public class ContenidoExamenService
 
     public int Agregar(ContenidoExamen contenidoExamen)
     {
+        contenidoExamen.Clave = GenerarClave(contenidoExamen.IdTipoExamen);
         _contenidoExamenValidatorService.ValidarAgregar(contenidoExamen);
         _contenidoExamenRepository.Agregar(contenidoExamen);
         _tipoExamenService.CalcularReactivos(contenidoExamen.IdTipoExamen);
         return contenidoExamen.IdContenidoExamen;
     }
+
+    //generar clave
+        private string GenerarClave(int idTipoExamen)
+    {
+        var asignatura = _contenidoExamenRepository.ConsultarGeneral(idTipoExamen).OrderByDescending(x => x.IdContenidoExamen).FirstOrDefault();
+
+        return (asignatura.IdContenidoExamen + 1).ToString();
+    }
+
+
 
     public void Editar(ContenidoExamen contenidoExamen)
     {

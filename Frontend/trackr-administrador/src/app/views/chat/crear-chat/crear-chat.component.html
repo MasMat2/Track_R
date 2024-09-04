@@ -53,6 +53,7 @@
                 <label class="label-input required-label">Paciente(s)</label>
                 <div>
                   <ng-select
+                    appendTo="body"
                     #pacientes="ngModel"
                     name="pacientesSelect"
                     [items]="expedientes"
@@ -75,6 +76,7 @@
                 <label class="label-input required-label">Padecimiento</label>
                 <div>
                   <ng-select
+                    appendTo="body"
                     name="padecimientoSelect"
                     [items]="padecimientos"
                     bindLabel="nombre"

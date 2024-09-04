@@ -52,7 +52,9 @@ public class ProgramacionExamenController : ControllerBase
     [Route("agregar")]
     public int Agregar(ProgramacionExamen programacionExamen)
     {
-        return _programacionExamenService.Agregar(programacionExamen);
+        var idUsuarioSesion = Utileria.ObtenerIdUsuarioSesion(this);
+        var usuario = _usuarioService.Consultar(idUsuarioSesion);
+        return _programacionExamenService.Agregar(programacionExamen, usuario.IdCompania);
     }
 
     [HttpPut]

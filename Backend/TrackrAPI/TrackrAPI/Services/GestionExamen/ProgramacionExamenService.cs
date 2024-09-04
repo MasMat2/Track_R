@@ -31,11 +31,19 @@ public class ProgramacionExamenService
         return _programacionExamenRepository.ConsultarTodosParaSelector();
     }
 
-    public int Agregar(ProgramacionExamen programacionExamen)
+    public int Agregar(ProgramacionExamen programacionExamen, int idCompania)
     {
         _programacionExamenValidatorService.ValidarAgregar(programacionExamen);
+        programacionExamen.Clave = GenerarClave(idCompania);
         _programacionExamenRepository.Agregar(programacionExamen);
         return programacionExamen.IdProgramacionExamen;
+    }
+
+    private string GenerarClave(int idCompania)
+    {
+        var programacionExamen = _programacionExamenRepository.ConsultarGeneral(idCompania).OrderByDescending(x => x.IdProgramacionExamen).FirstOrDefault();
+
+        return (programacionExamen.IdProgramacionExamen + 1).ToString();
     }
 
     public void Editar(ProgramacionExamen programacionExamen)
