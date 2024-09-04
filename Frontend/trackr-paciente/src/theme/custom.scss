@@ -402,6 +402,19 @@ ion-grid.inputs {
       color: var(--error-200);
     }
   }
+  .input-text-success {
+    //Mensaje debajo del input
+    color: var(--primary-700);
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    font-family: var(--font-body);
+    gap: 6px;
+
+    ion-icon {
+      color: var(--primary-700);
+    }
+  }
 
   ion-item {
     //contenedor principal del input

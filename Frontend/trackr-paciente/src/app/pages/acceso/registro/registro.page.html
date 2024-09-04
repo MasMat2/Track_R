@@ -87,18 +87,60 @@
                     name="contrasenaName"
                     [type]="pswInputType"
                     maxlength="50"
+                    minlength="8"
                     placeholder="Ingresa una contraseña"
                     [required]="true">
                   </ion-input>
                   <ion-icon *ngIf="!mostrarPwd" slot="end" name="eye" (click)="mostrarContrasena()"></ion-icon>
                   <ion-icon *ngIf="mostrarPwd" slot="end" name="eye-off" (click)="mostrarContrasena()"></ion-icon>                  
                 </ion-item>
+
                 <div 
                   class="input-text-error" 
                   *ngIf="contrasena.errors?.['required'] && (contrasena.dirty || contrasena.touched)">
                   <ion-icon slot="start" name="info"></ion-icon>
                   La contraseña es requerida
                 </div>
+
+                <div 
+                  class="input-text-error" 
+                  *ngIf="!contrasenaMinimoCaracteresValidation() && (contrasena.dirty)">
+                  <ion-icon slot="start" name="x"></ion-icon>
+                  Mínimo 8 caracteres
+                </div>
+                <div 
+                  class="input-text-success" 
+                  *ngIf="contrasenaMinimoCaracteresValidation() && (contrasena.dirty)">
+                  <ion-icon slot="start" name="check"></ion-icon>
+                  Mínimo 8 caracteres
+                </div>
+
+                <div 
+                  class="input-text-error" 
+                  *ngIf="!contrasenaMayusculasYMinusculasValidation() && (contrasena.dirty)">
+                  <ion-icon slot="start" name="x"></ion-icon>
+                  Letras mayúsculas y minúsculas
+                </div>
+                <div 
+                  class="input-text-success" 
+                  *ngIf="contrasenaMayusculasYMinusculasValidation() && (contrasena.dirty)">
+                  <ion-icon slot="start" name="check"></ion-icon>
+                  Letras mayúsculas y minúsculas
+                </div>
+
+                <div 
+                  class="input-text-error" 
+                  *ngIf="!contrasenaNumerosYSimbolosValidation() && (contrasena.dirty)">
+                  <ion-icon slot="start" name="x"></ion-icon>
+                  Al menos un número y un símbolo
+                </div>
+                <div 
+                  class="input-text-success" 
+                  *ngIf="contrasenaNumerosYSimbolosValidation() && (contrasena.dirty)">
+                  <ion-icon slot="start" name="check"></ion-icon>
+                  Al menos un número y un símbolo
+                </div>
+
               </div>
             </ion-col>
           </ion-row>
@@ -129,7 +171,7 @@
                 </div>
                 <div 
                   class="input-text-error" 
-                  *ngIf="usuario.contrasena !== confirmarContrasena && (confirmacionContrasena.dirty || confirmacionContrasena.touched)">
+                  *ngIf="!contrasenasCoincidenValidation() && (confirmacionContrasena.dirty)">
                   <ion-icon slot="start" name="info"></ion-icon>
                   Las contraseñas no coinciden
                 </div>
@@ -289,7 +331,7 @@
             *ngIf="!procesoContinuado"
             class="dark"
             (click)="continuarProceso(true)"
-            [disabled]="!termsAccepted || submitting || !formulario.valid || !verificarContrasena()"
+            [disabled]="(!termsAccepted || submitting || !formulario.valid) || !contrasenaValida()"
           >
             Continuar
           </ion-button>
@@ -298,7 +340,7 @@
             *ngIf="procesoContinuado"
             class="dark"
             type="submit"
-            [disabled]="!termsAccepted || submitting || !formulario.valid"
+            [disabled]="(!termsAccepted || submitting || !formulario.valid) || !contrasenaValida()"
           >
             Guardar
           </ion-button>
