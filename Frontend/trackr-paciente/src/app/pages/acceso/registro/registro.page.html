@@ -104,6 +104,13 @@
 
                 <div 
                   class="input-text-error" 
+                  *ngIf="contrasenaContieneEspacios() && (contrasena.dirty || contrasena.touched)">
+                  <ion-icon slot="start" name="info"></ion-icon>
+                  La contraseña no puede contener espacios
+                </div>
+
+                <div 
+                  class="input-text-error" 
                   *ngIf="!contrasenaMinimoCaracteresValidation() && (contrasena.dirty)">
                   <ion-icon slot="start" name="x"></ion-icon>
                   Mínimo 8 caracteres

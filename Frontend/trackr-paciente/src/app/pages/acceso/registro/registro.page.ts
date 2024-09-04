@@ -208,7 +208,14 @@ export class RegistroPage implements OnInit {
     }
   }
 
-
+  protected contrasenaContieneEspacios(){
+    if (/\s/.test(this.usuario.contrasena)) {
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
 
   protected continuarProceso(input: boolean){
     this.procesoContinuado = input;
@@ -221,7 +228,8 @@ export class RegistroPage implements OnInit {
       this.contrasenasCoincidenValidation() &&
       this.contrasenaNumerosYSimbolosValidation() &&
       this.contrasenaMayusculasYMinusculasValidation() &&
-      this.contrasenaMinimoCaracteresValidation()
+      this.contrasenaMinimoCaracteresValidation() &&
+      !this.contrasenaContieneEspacios()
     )
   }
 }
