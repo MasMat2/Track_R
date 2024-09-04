@@ -97,7 +97,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 .Select(etv => new ValoresHistogramaDTO
                 {
                     FechaMuestra = etv.FechaMuestra ?? new DateTime().ToUniversalTime(),
-                    Valor = int.Parse(etv.Valor),
+                    Valor = decimal.Parse(etv.Valor),
                     FueraDeRango = etv.FueraDeRango,
                 }).OrderByDescending(etv =>  etv.FechaMuestra);
         }
