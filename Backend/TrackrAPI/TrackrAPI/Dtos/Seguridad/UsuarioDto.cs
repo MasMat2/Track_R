@@ -5,6 +5,7 @@ namespace TrackrAPI.Dtos.Seguridad
 {
     public class UsuarioDto
     {
+        public List<int> IdsPadecimientos { get; set; }
         public int IdUsuario { get; set; }
         public string Clave { get; set; }
         public string Nombre { get; set; }

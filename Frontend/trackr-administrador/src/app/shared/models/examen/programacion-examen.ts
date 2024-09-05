@@ -16,6 +16,7 @@ export class ProgramacionExamen{
     public fechaAlta: Date;
     public estatus: boolean;
     public promedio: number;
+    public idsPadecimiento : number[];
 
     public participantes: number[];
 

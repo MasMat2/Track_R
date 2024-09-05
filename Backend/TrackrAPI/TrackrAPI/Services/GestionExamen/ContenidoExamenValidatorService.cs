@@ -18,6 +18,7 @@ public class ContenidoExamenValidatorService
     }
 
     private readonly string MensajeClaveRequerido = "La clave es requerida";
+    private readonly string MensajeContenidoNivelDuplicado = "El contenido del examen ya existe";
 
     private readonly string MensajeExistencia = "El Cuestionario que se requería actualizar no existe";
 
@@ -30,6 +31,7 @@ public class ContenidoExamenValidatorService
     {
         ValidarRequerido(contenidoExamen);
         ValidarCantidadReactivos(contenidoExamen);
+        ValidarDuplicado(contenidoExamen);
     }
 
     public void ValidarEditar(ContenidoExamen contenidoExamen)
@@ -37,6 +39,14 @@ public class ContenidoExamenValidatorService
         ValidarRequerido(contenidoExamen);
         ValidarExistencia(contenidoExamen.IdContenidoExamen);
         ValidarCantidadReactivos(contenidoExamen);
+    }
+
+    public void ValidarDuplicado(ContenidoExamen contenidoExamen)
+    {
+        if (_contenidoExamenRepository.ConsultarDuplicado(contenidoExamen) != null)
+        {
+            throw new CdisException(MensajeContenidoNivelDuplicado);
+        }
     }
 
     public void ValidarEliminar(int idContenidoExamen)

@@ -179,7 +179,8 @@ namespace TrackrAPI.Repositorys.Seguridad
                                                   ? (" (" + u.IdTipoUsuarioNavigation.Nombre + ")") : ""),
                     IdPais = u.IdEstadoNavigation.IdPais,
                     NombrePerfil = u.IdPerfilNavigation.Nombre,
-                    Rfc = u.Rfc
+                    Rfc = u.Rfc,
+                    IdsPadecimientos = u.ExpedienteTrackr.FirstOrDefault().ExpedientePadecimiento.Select(ep => ep.IdPadecimiento).ToList()
                 })
                 .ToList();
         }
