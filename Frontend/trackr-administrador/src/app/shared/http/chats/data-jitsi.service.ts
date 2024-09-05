@@ -52,16 +52,17 @@ export class DataJitsiService {
 
 
   createNewRoom(numberCall : number): void {
+    const newRoomName = `${this.AppIDJitsi}/trackr-${this.idChat}-${numberCall}`;
+  
+    this.mandarMensajeLlamada(`📞 Te espero en la sala trackr-${this.idChat}-${numberCall}`);
+  
     const container = document.querySelector('#jaas-container');
     if (!container) {
       console.error('El contenedor #jaas-container no se encuentra en el DOM');
       return ;
     }
   
-    const newRoomName = `${this.AppIDJitsi}/trackr-${this.idChat}-${numberCall}`;
-  
-    this.mandarMensajeLlamada(`📞 Te espero en la sala trackr-${this.idChat}-${numberCall}`);
-  
+
     const newRoomOptions = {
       roomName: newRoomName,
       width: '100%',

@@ -7,10 +7,12 @@ namespace TrackrAPI.Services.GestionExamen;
 public class ProgramacionExamenValidatorService
 {
     private readonly IProgramacionExamenRepository _programacionExamenRepository;
+    private readonly ITipoExamenRepository _tipoExamenRepository;
 
-    public ProgramacionExamenValidatorService(IProgramacionExamenRepository programacionExamenRepository)
+    public ProgramacionExamenValidatorService(IProgramacionExamenRepository programacionExamenRepository, ITipoExamenRepository tipoExamenRepository)
     {
         _programacionExamenRepository = programacionExamenRepository;
+        _tipoExamenRepository = tipoExamenRepository;
     }
 
     private readonly string MensajeClaveRequerido = "La clave es requerida";
@@ -21,22 +23,34 @@ public class ProgramacionExamenValidatorService
     private readonly string MensajeDependencia = "El Cuestionario programado tiene participantes";
 
     private readonly string MensajeExistencia = "El Cuestionario que se requería actualizar no existe";
+    private readonly string MensajePreguntaRequerida = "El cuestionario debe tener al menos una pregunta";
 
     public void ValidarAgregar(ProgramacionExamen programacionExamen)
     {
         ValidarRequerido(programacionExamen);
+        ValidarPreguntas(programacionExamen);
     }
 
     public void ValidarEditar(ProgramacionExamen programacionExamen)
     {
         ValidarRequerido(programacionExamen);
         ValidarExistencia(programacionExamen.IdProgramacionExamen);
+        ValidarPreguntas(programacionExamen);
     }
 
     public void ValidarEliminar(int idProgramacionExamen)
     {
        ValidarExistencia(idProgramacionExamen);
        ValidarDependencia(idProgramacionExamen);
+    }
+
+    public void ValidarPreguntas(ProgramacionExamen programacionExamen)
+    {
+        var tipoExamen = _tipoExamenRepository.Consultar(programacionExamen.IdTipoExamen);
+        if (tipoExamen.TotalPreguntas < 1)
+        {
+            throw new CdisException(MensajePreguntaRequerida);
+        }
     }
 
     public void ValidarRequerido(ProgramacionExamen programacionExamen)

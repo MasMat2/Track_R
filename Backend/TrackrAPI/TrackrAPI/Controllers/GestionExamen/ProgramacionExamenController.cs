@@ -38,7 +38,7 @@ public class ProgramacionExamenController : ControllerBase
             throw new CdisException("El usuario no existe");
         }
 
-        return _programacionExamenService.ConsultarGeneral((int)usuario.IdCompania!);
+        return _programacionExamenService.ConsultarGeneral((int)usuario.IdCompania!, idUsuarioSesion);
     }
 
     [HttpGet]
