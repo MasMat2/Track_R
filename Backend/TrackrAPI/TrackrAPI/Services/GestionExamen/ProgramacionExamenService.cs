@@ -22,9 +22,9 @@ public class ProgramacionExamenService
         ProgramacionExamenDto? programacionExamen = _programacionExamenRepository.Consultar(idProgramacionExamen);
         return programacionExamen;
     }
-    public IEnumerable<ProgramacionExamenGridDto> ConsultarGeneral(int idCompania)
+    public IEnumerable<ProgramacionExamenGridDto> ConsultarGeneral(int idCompania, int idUsuarioSesion)
     {
-        return _programacionExamenRepository.ConsultarGeneral(idCompania);
+        return _programacionExamenRepository.ConsultarGeneral(idCompania, idUsuarioSesion);
     }
     public IEnumerable<ProgramacionExamenGridDto> ConsultarTodosParaSelector()
     {
