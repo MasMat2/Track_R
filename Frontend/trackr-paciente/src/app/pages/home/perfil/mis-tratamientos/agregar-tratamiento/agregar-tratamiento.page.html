@@ -55,7 +55,7 @@
                     <ion-button id="decrementar" (click)="decrementarCantidad()">
                       <ion-icon slot="icon-only" name="minus"></ion-icon>
                     </ion-button>
-                    <ion-input type="number" formControlName="cantidad" [(ngModel)]="cantidadFarmaco"></ion-input>
+                    <ion-input type="number" inputmode="decimal" formControlName="cantidad" [(ngModel)]="cantidadFarmaco"></ion-input>
                     <ion-button id="incrementar" (click)="incrementarCantidad()">
                       <ion-icon slot="icon-only" name="plus"></ion-icon>
                     </ion-button>
