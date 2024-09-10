@@ -70,7 +70,7 @@ public class ContenidoExamenRepository : Repository<ContenidoExamen>, IContenido
     public ContenidoExamen ConsultarDuplicado(ContenidoExamen contenidoExamen)
     {
         return context.ContenidoExamen
-            .Where(p => p.IdAsignatura  == contenidoExamen.IdAsignatura && p.IdNivelExamen == contenidoExamen.IdNivelExamen)
+            .Where(p => p.IdAsignatura  == contenidoExamen.IdAsignatura && p.IdNivelExamen == contenidoExamen.IdNivelExamen && p.Estatus == true)
             .FirstOrDefault();
     }
 }
