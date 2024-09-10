@@ -42,6 +42,7 @@ export class ContenidoExamenComponent implements OnInit {
     { headerName: 'Categoría evaluación', field: 'nivelExamen', minWidth: 150, },
     { headerName: 'Cantidad de Reactivos', field: 'totalPreguntas', minWidth: 150, },
     { headerName: 'Duración Total (Minutos)', field: 'duracion', minWidth: 150, },
+    { headerName: 'Estatus', field: 'estatus', minWidth: 150, valueGetter: (params: any) => (params.data.estatus) ? 'Activo' : 'Inactivo' },
   ];
 
   constructor(
