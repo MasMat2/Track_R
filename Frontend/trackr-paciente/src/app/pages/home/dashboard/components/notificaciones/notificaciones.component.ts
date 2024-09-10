@@ -29,6 +29,7 @@ export class NotificacionesComponent  implements OnInit
 {
   protected notificaciones$: Observable<NotificacionPacientePopOverDto[]>;
   protected notificaciones: NotificacionPacientePopOverDto[];
+  protected segmentoSeleccionado = 'vistas';
 
 
   //TODO: Extraer de la bd usando las claves.
@@ -64,6 +65,11 @@ export class NotificacionesComponent  implements OnInit
   ngOnInit() 
   {
     this.consultarNotificaciones();
+  }
+
+  
+  protected changeSection(section:string){
+    this.segmentoSeleccionado = section;
   }
 
   private consultarNotificaciones(): void {
@@ -188,6 +194,14 @@ export class NotificacionesComponent  implements OnInit
       return [];
   }
 
+  protected filtrarNotificacionesVistasHoy(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
+    if(notificaciones)
+      return notificaciones.filter(n => this.esHoy(n.fecha) && n.visto);
+    else
+      return [];
+  }
+
+
   protected filtrarNotificacionesSemana(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
     if(notificaciones)
       return notificaciones.filter(n => this.esEstaSemana(n.fecha) && !n.visto);
@@ -195,9 +209,22 @@ export class NotificacionesComponent  implements OnInit
       return [];
   }
 
+  protected filtrarNotificacionesVistasSemana(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
+    if(notificaciones)
+      return notificaciones.filter(n => this.esEstaSemana(n.fecha) && n.visto);
+    else
+      return [];
+  }
+
   protected filtrarNotificacionesAnterioresSemana(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
     if(notificaciones)
       return notificaciones.filter(n => this.esAnteriorEstaSemana(n.fecha) && !n.visto);
+    else
+      return [];
+  }
+  protected filtrarNotificacionesVistasAnterioresSemana(notificaciones: NotificacionPacientePopOverDto[] | null): NotificacionPacientePopOverDto[] {
+    if(notificaciones)
+      return notificaciones.filter(n => this.esAnteriorEstaSemana(n.fecha) && n.visto);
     else
       return [];
   }
