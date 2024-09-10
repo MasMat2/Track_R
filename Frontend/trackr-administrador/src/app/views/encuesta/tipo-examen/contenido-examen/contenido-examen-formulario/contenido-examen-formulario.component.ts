@@ -60,6 +60,7 @@ export class ContenidoExamenFormularioComponent implements OnInit {
   }
 
   onSelectChange(): void {
+    this.consultarNivelesExamen();
     if(this.contenidoExamen.idAsignatura && this.contenidoExamen.idNivelExamen) {
       this.examenService.consultarCantidadReactivos(this.contenidoExamen.idAsignatura, this.contenidoExamen.idNivelExamen).subscribe((cantidadReactivos: number) => {
         this.contenidoExamen.totalPreguntas = cantidadReactivos;
@@ -88,7 +89,7 @@ export class ContenidoExamenFormularioComponent implements OnInit {
 
   private consultarNivelesExamen(): void {
     this.nivelExamenService
-      .consultarTodosParaSelector()
+      .consultarTodosParaSelectorAsignatura(this.contenidoExamen.idAsignatura ?? 0)
       .subscribe((nivelesExamen: NivelExamen[]) => {
         this.nivelExamenList = nivelesExamen;
       });
