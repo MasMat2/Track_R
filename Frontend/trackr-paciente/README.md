@@ -1,5 +1,5 @@
 Estado de aplicacion en plataforma IOS:
-build ios 105
+build ios 106
 Servidor ios: azure
 Grupo de pruebas: US-IT
 
