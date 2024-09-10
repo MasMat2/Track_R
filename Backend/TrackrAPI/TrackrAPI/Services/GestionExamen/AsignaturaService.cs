@@ -45,7 +45,9 @@ public class AsignaturaService
     {
         var asignatura = _asignaturaRepository.ConsultarGeneral().OrderByDescending(x => x.IdAsignatura).FirstOrDefault();
 
-        return (asignatura.IdAsignatura + 1).ToString();
+        int idAsignatura = asignatura?.IdAsignatura ?? 0;
+
+        return (idAsignatura + 1).ToString();
     }
 
     public void Editar(Asignatura asignatura)

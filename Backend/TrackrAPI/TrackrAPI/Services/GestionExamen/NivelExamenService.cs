@@ -52,7 +52,9 @@ public class NivelExamenService
     {
         var nivelExamen = _nivelExamenRepository.ConsultarGeneral().OrderByDescending(x => x.IdNivelExamen).FirstOrDefault();
 
-        return (nivelExamen.IdNivelExamen + 1).ToString();
+        int idNivelExamen = nivelExamen?.IdNivelExamen ?? 0;
+
+        return (idNivelExamen + 1).ToString();
     }
 
     public void Eliminar(int idNivelExamen)

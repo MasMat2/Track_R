@@ -46,7 +46,9 @@ public class ClasificacionPreguntaService
     {
         var clasificacionPregunta = _clasificacionPreguntaRepository.ConsultarParaGrid().OrderByDescending(x => x.IdClasificacionPregunta).FirstOrDefault();
 
-        return (clasificacionPregunta.IdClasificacionPregunta + 1).ToString();
+        int idClasificacionPregunta = clasificacionPregunta?.IdClasificacionPregunta ?? 0;
+
+        return (idClasificacionPregunta + 1).ToString();
     }
 
     public void Editar(ClasificacionPreguntaFormularioDto dto)

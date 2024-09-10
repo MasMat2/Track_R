@@ -48,7 +48,9 @@ public class TipoExamenService
     {
         var tipoExamen = _tipoExamenRepository.ConsultarGeneral().OrderByDescending(x => x.IdTipoExamen).FirstOrDefault();
 
-        return (tipoExamen.IdTipoExamen + 1).ToString();
+        int idTipoExamen = tipoExamen?.IdTipoExamen ?? 0;
+
+        return (idTipoExamen + 1).ToString();
     }
 
     public void Editar(TipoExamen tipoExamen)
