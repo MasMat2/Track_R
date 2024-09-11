@@ -109,6 +109,22 @@
             </ion-item>
           </ion-list>
         </div>
+
+        <div *ngIf="reactivoList[indice].necesitaRevision">
+          <textarea
+              placeholder="Añade un comentario..."
+              class="texto-mensaje"
+              #descripcion="ngModel"
+              [(ngModel)]="reactivoList[indice].respuestaAlumno"
+              name="mensaje"
+              type="text"
+              maxlength="500"
+              autocomplete="off"
+              rows="3"
+              required
+              >
+            </textarea>
+        </div>
       </div>
       <div class="botones-pregunta">
         <div class="botones" [ngClass]="indice === 0 ? 'botones-column' : 'botones-row'" *ngIf="true">

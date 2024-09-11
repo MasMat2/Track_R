@@ -8,4 +8,5 @@ public class ContenidoExamenGridDto
     public string Clave { get; set; } = null!;
     public int? TotalPreguntas { get; set; }
     public double? Duracion { get; set; }
+    public bool Estatus { get; set; }
 }

@@ -95,7 +95,9 @@ public class ReactivoService
     {
         var reactivo = reactivoRepository.ConsultarGeneral().OrderByDescending(x => x.IdReactivo).FirstOrDefault();
 
-        return (reactivo.IdReactivo + 1).ToString();
+        int idReactivo = reactivo?.IdReactivo ?? 0;
+
+        return (idReactivo + 1).ToString();
     }
     
     public void Eliminar(int idReactivo)

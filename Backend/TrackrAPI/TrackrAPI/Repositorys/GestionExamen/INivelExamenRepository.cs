@@ -7,6 +7,7 @@ public interface INivelExamenRepository : IRepository<NivelExamen>
 {
     public NivelExamenDto? Consultar(int idNivelExamen);
     public IEnumerable<NivelExamenGridDto> ConsultarGeneral();
+    public IEnumerable<NivelExamenGridDto> ConsultarTodosParaSelector(int idAsignatura);
     public IEnumerable<NivelExamenGridDto> ConsultarTodosParaSelector();
     public NivelExamen? ConsultarConDependencias(int idNivelExamen);
     public NivelExamen? ConsultarDuplicado(NivelExamen nivelExamen);

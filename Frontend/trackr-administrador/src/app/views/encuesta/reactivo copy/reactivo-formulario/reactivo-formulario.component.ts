@@ -150,6 +150,8 @@ export class Reactivo1FormularioComponent implements OnInit {
     else if (this.accion === FORM_ACTION.Editar) {
       this.editar();
     }
+
+    this.onClose(true);
   }
 
   private agregar(): void {

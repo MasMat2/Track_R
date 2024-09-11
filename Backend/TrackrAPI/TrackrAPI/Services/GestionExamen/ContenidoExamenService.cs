@@ -44,14 +44,16 @@ public class ContenidoExamenService
         return contenidoExamen.IdContenidoExamen;
     }
 
-    //generar clave
-        private string GenerarClave(int idTipoExamen)
+    private string GenerarClave(int idTipoExamen)
     {
-        var asignatura = _contenidoExamenRepository.ConsultarGeneral(idTipoExamen).OrderByDescending(x => x.IdContenidoExamen).FirstOrDefault();
+        var asignatura = _contenidoExamenRepository.ConsultarGeneral(idTipoExamen)
+            .OrderByDescending(x => x.IdContenidoExamen)
+            .FirstOrDefault();
 
-        return (asignatura.IdContenidoExamen + 1).ToString();
+        int idContenidoExamen = asignatura?.IdContenidoExamen ?? 0;
+
+        return (idContenidoExamen + 1).ToString();
     }
-
 
 
     public void Editar(ContenidoExamen contenidoExamen)

@@ -9,7 +9,7 @@
       </button>
     </div>
     <div class="modal-body" id="modal">
-      <form (keydown.enter)="$event.preventDefault()" #formulario="ngForm" (ngSubmit)="enviarFormulario(formulario)"
+      <form (keydown.enter)="$event.preventDefault()" #formulario="ngForm" 
         novalidate="novalidate">
 
         <div class="row" *ngIf="soloRespuestas">
@@ -219,7 +219,7 @@
         <div class="text-right">
           <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar
           </button>
-          <button [disabled]="submitting" type="submit" class="btn-primario btn-margin-left">
+          <button [disabled]="submitting" type="submit" class="btn-primario btn-margin-left" (click)="enviarFormulario(formulario)">
             Guardar Reactivo
           </button>
         </div>

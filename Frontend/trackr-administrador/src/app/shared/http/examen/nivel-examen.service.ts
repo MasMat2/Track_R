@@ -15,6 +15,10 @@ export class NivelExamenService {
     return this.http.get<NivelExamen[]>(this.dataUrl + 'consultarTodosParaSelector');
   }
 
+  public consultarTodosParaSelectorAsignatura(idAsignatura : number): Observable<NivelExamen[]> {
+    return this.http.get<NivelExamen[]>(this.dataUrl + `consultarTodosParaSelector/${idAsignatura}`);
+  }
+
   public consultar(idNivelExamen: number): Observable<NivelExamen> {
     return this.http.get<NivelExamen>(this.dataUrl + `consultar/${idNivelExamen}`);
   }

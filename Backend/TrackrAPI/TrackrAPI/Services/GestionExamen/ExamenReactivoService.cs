@@ -67,7 +67,9 @@ public RespuestasExcelDto ConsultarReactivosExamenExcel(int idProgramacionExamen
     
     foreach (var reactivo in reactivos)
     {
-        reactivo.RespuestaAlumno = _respuestaRepository.ConsultarRespuestaContestada(reactivo.IdReactivo, reactivo.RespuestaAlumno).RespuestaFormateada;
+        if(!reactivo.NecesitaRevision){
+         reactivo.RespuestaAlumno = _respuestaRepository.ConsultarRespuestaContestada(reactivo.IdReactivo, reactivo.RespuestaAlumno).RespuestaFormateada;
+        }
     }
 
     List<string> headers = new List<string> { "Marca temporal", "Usuario", "Correo electronico" }; // Datos de la persona que respondió

@@ -72,6 +72,7 @@ public class ExamenReactivoRepository : Repository<ExamenReactivo>, IExamenReact
                 IdReactivo = p.IdReactivo,
                 Pregunta = p.IdReactivoNavigation.Pregunta ?? string.Empty,
                 RespuestaAlumno = p.RespuestaAlumno ?? string.Empty,
+                NecesitaRevision = p.IdReactivoNavigation.NecesitaRevision ?? false
             })
             
             .ToList();

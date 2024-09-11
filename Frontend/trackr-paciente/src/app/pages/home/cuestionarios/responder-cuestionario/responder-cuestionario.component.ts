@@ -180,6 +180,13 @@ export class ResponderCuestionarioComponent  implements OnInit, OnExit {
   }
 
   protected hayRespuestaSeleccionada(preguntaIndex: number): boolean{
+
+    if(this.reactivoList[preguntaIndex].necesitaRevision){
+      if(this.reactivoList[preguntaIndex].respuestaAlumno.trim()){
+        return true;
+      }
+    }
+
     if((this.reactivoList[preguntaIndex].respuestaSeleccionadaIndex != undefined) && this.reactivoList[preguntaIndex].respuestaAlumno != ""){
       return true
     }

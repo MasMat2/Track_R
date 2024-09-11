@@ -43,7 +43,8 @@ public class ProgramacionExamenService
     {
         var programacionExamen = _programacionExamenRepository.ConsultarGeneral(idCompania).OrderByDescending(x => x.IdProgramacionExamen).FirstOrDefault();
 
-        return (programacionExamen.IdProgramacionExamen + 1).ToString();
+        int idProgramacionExamen = programacionExamen?.IdProgramacionExamen ?? 0;
+        return (idProgramacionExamen + 1).ToString();
     }
 
     public void Editar(ProgramacionExamen programacionExamen)
