@@ -110,7 +110,7 @@
           </ion-list>
         </div>
 
-        <div *ngIf="reactivoList[indice].necesitaRevision">
+        <div *ngIf="reactivoList[indice].necesitaRevision || reactivoList[indice].preguntaAbierta">
           <textarea
               placeholder="Añade un comentario..."
               class="texto-mensaje"

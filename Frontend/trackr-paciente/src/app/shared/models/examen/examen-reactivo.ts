@@ -17,6 +17,7 @@ export class ExamenReactivo{
     public imagenBase64: string;
     public respuestas: Respuesta[];
     public necesitaRevision: boolean;
+    public preguntaAbierta: boolean;
 
     constructor() {}
 }
