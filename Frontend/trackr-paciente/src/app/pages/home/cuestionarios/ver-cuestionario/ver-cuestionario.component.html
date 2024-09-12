@@ -56,7 +56,7 @@
             </p>
           </ion-label>
 
-          <div *ngIf="reactivo.necesitaRevision">
+          <div *ngIf="reactivo.necesitaRevision || reactivo.preguntaAbierta">
             <textarea
                 class="texto-mensaje"
                 name="mensaje"
