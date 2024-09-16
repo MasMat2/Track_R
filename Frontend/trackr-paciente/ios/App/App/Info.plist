@@ -67,7 +67,7 @@
 	<true/>
 	<key>LSApplicationQueriesSchemes</key>
     <array>
-		<string>omronconnect</string>
+		<string>Baumanometro</string>
     </array>
 </dict>
 </plist>
