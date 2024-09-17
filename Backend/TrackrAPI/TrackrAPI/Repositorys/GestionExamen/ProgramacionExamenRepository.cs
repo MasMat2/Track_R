@@ -60,11 +60,11 @@ public class ProgramacionExamenRepository : Repository<ProgramacionExamen>, IPro
         return prograexamens;
 
     }
-    public IEnumerable<ProgramacionExamenGridDto> ConsultarGeneral(int idCompania, int idUsuarioSesion)
+    public IEnumerable<ProgramacionExamenGridDto> ConsultarGeneral(int idCompania, List<int> idUsuarioSesion)
     {
         
         var prograexamens = context.ProgramacionExamen
-            .Where(p => p.Estatus == true && p.IdUsuarioResponsableNavigation.IdCompania == idCompania && p.IdUsuarioResponsable == idUsuarioSesion)
+            .Where(p => p.Estatus == true && p.IdUsuarioResponsableNavigation.IdCompania == idCompania && idUsuarioSesion.Contains(p.IdUsuarioResponsable))
             .OrderBy(p => p.Clave)
             .Select(p => new ProgramacionExamenGridDto
             {
