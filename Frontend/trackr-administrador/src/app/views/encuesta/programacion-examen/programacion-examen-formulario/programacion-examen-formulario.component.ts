@@ -25,6 +25,7 @@ import * as Utileria from '@utils/utileria';
 import { FechaService } from '@services/fecha.service';
 import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
 import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
+import { AlertifyService } from '@services/alertify.service';
 
 @Component({
   selector: 'app-programacionExamen-formulario',
@@ -123,7 +124,8 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
     private tipoExamenService: TipoExamenService,
     private usuarioService: UsuarioService,
     private fechaService: FechaService,
-    private entidadEstructuraService : EntidadEstructuraService
+    private entidadEstructuraService : EntidadEstructuraService,
+    private alertifyService : AlertifyService
   ) {}
 
   public ngOnInit(): void {
@@ -143,6 +145,29 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
       this.consultarProgramacionExamen(this.idProgramacionExamen!);
     }
   }
+
+
+    private presentAlertError(): Promise<Boolean> {
+      return new Promise((resolve) => {
+        this.alertifyService.presentAlert({
+          header: 'Error al crear cuestionario',
+          subHeader: 'Añada participantes.',
+          Icono: 'info',
+          Color: 'error',
+          twoButtons: false,
+          confirmButtonText: "Cerrar",
+          cancelButtonText: ''
+        }, (result) => {
+          if(result == "confirm"){
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        });
+      });
+    }
+    
+
 
   private consultarProgramacionExamen(idProgramacionExamen: number): void {
     const programacionExamen$ = this.programacionExamenService.consultar(idProgramacionExamen);
@@ -215,6 +240,11 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
   protected enviarFormulario(formulario: NgForm): void {
     this.submitting = true;
 
+    if(this.programacionExamen.participantes.length == 0){
+      this.presentAlertError();
+      this.submitting = false;
+      return;
+    }
     if (!formulario.valid) {
       this.formularioService.validarCamposRequeridos(formulario);
       this.submitting = false;
