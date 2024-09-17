@@ -19,6 +19,12 @@ namespace TrackrAPI.Repositorys.Catalogo
                 .Where(es => es.IdUsuario == idUsuario && es.IdEspecialidad == idEspecialidad)
                 .FirstOrDefaultAsync();  
         }
+        public async Task<List<EspecialidadUsuario>>? ConsultarPorUsuario(int idUsuario)
+        {
+            return await context.EspecialidadUsuario
+                .Where(es => es.IdUsuario == idUsuario)
+                .ToListAsync();  
+        }
 
         public async Task AgregarAsync(EspecialidadUsuario especialidadUsuario)
         {

@@ -7,6 +7,7 @@ namespace TrackrAPI.Repositorys.Catalogo
     public interface IEspecialidadUsuarioRepository : IRepository<EspecialidadUsuario>
     {
         Task<EspecialidadUsuario>? ConsultarPorUsuario(int idUsuario, int idEspecialidad);
+        Task<List<EspecialidadUsuario>> ConsultarPorUsuario(int idUsuario);
         
         Task AgregarAsync(EspecialidadUsuario especialidadUsuario);
         Task EliminarAsync(int idEspecialidadUsuario);

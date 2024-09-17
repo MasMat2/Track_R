@@ -257,7 +257,7 @@ namespace TrackrAPI.Services.Seguridad
                             IdUsuario = usuario.IdUsuario
                         };
 
-                        await especialidadUsuarioService.Agregar(especialidadUsuario);
+                        await especialidadUsuarioService.Guardar(especialidadUsuario);
                     }
 
                 }
@@ -449,20 +449,31 @@ namespace TrackrAPI.Services.Seguridad
                     })
                     .ToList();
 
-                if (usuarioDto.IdsEspecialidad.Any())
+                List<EspecialidadUsuario> usuarioEspecialidades;
+
+                if (usuarioDto.IdsEspecialidad != null && usuarioDto.IdsEspecialidad.Any())
                 {
-                    foreach (var idEspecialidad in usuarioDto.IdsEspecialidad)
-                    {
-                        EspecialidadUsuario especialidadUsuario = new()
-                        {
-                            IdEspecialidad = idEspecialidad,
-                            IdUsuario = usuario.IdUsuario
-                        };
-
-                        await this.especialidadUsuarioService.Agregar(especialidadUsuario);
-                    }
-
+                    usuarioEspecialidades = usuarioDto.IdsEspecialidad    
+                                                .Select( idEspecialidad => {
+                                                    return new EspecialidadUsuario(){
+                                                        IdEspecialidad = idEspecialidad,
+                                                        IdUsuario = usuarioDto.IdUsuario
+                                                    };
+                                                    }).ToList();
                 }
+                else
+                {
+                    usuarioEspecialidades = new List<EspecialidadUsuario>
+                    {
+                        new EspecialidadUsuario
+                        {
+                            IdEspecialidad = 0,
+                            IdUsuario = usuarioDto.IdUsuario
+                        }
+                    };
+                }
+                await especialidadUsuarioService.Guardar(usuarioEspecialidades);
+       
 
                 usuarioRolService.Guardar(usuarioRols);
 
@@ -497,7 +508,7 @@ namespace TrackrAPI.Services.Seguridad
                             IdUsuario = usuario.IdUsuario
                         };
 
-                        await this.especialidadUsuarioService.Agregar(especialidadUsuario);
+                        await this.especialidadUsuarioService.Guardar(especialidadUsuario);
                     }
 
                 }
