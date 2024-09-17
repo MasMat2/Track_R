@@ -109,7 +109,7 @@ export class SidebarNavDropdownComponent implements OnInit, OnDestroy {
   public logout() {
     this.logoutRequest.emit();
     this.usuarioImagenService.actualizarImagen('');
-    this.notificacionHubService.limpiarNotificaciones();
+    this.notificacionHubService.detenerConexion();
 
   }
 
