@@ -50,6 +50,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<EntidadEstructuraTablaValor> EntidadEstructuraTablaValor { get; set; } = null!;
         public virtual DbSet<EntidadEstructuraValor> EntidadEstructuraValor { get; set; } = null!;
         public virtual DbSet<Especialidad> Especialidad { get; set; } = null!;
+        public virtual DbSet<EspecialidadUsuario> EspecialidadUsuario { get; set; } = null!;
         public virtual DbSet<Estado> Estado { get; set; } = null!;
         public virtual DbSet<EstadoCivil> EstadoCivil { get; set; } = null!;
         public virtual DbSet<EstatusExamen> EstatusExamen { get; set; } = null!;
@@ -1013,6 +1014,30 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.Nombre).HasMaxLength(150);
             });
 
+            modelBuilder.Entity<EspecialidadUsuario>(entity =>
+            {
+                entity.HasKey(e => e.IdEspecialidadUsuario)
+                    .HasName("PK__Especial__8E3C25650A92899F");
+
+                entity.ToTable("EspecialidadUsuario", "Trackr");
+
+                entity.Property(e => e.IdEspecialidadUsuario).HasColumnName("idEspecialidadUsuario");
+
+                entity.Property(e => e.IdEspecialidad).HasColumnName("idEspecialidad");
+
+                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
+
+                entity.HasOne(d => d.IdEspecialidadNavigation)
+                    .WithMany(p => p.EspecialidadUsuario)
+                    .HasForeignKey(d => d.IdEspecialidad)
+                    .HasConstraintName("FK__Especiali__idEsp__77A09B57");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.EspecialidadUsuario)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .HasConstraintName("FK__Especiali__idUsu__7894BF90");
+            });
+
             modelBuilder.Entity<Estado>(entity =>
             {
                 entity.HasKey(e => e.IdEstado);
@@ -1311,7 +1336,7 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.ArchivoUrl).HasMaxLength(250);
 
-                entity.Property(e => e.Cantidad).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.Cantidad).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Farmaco).HasMaxLength(200);
 
@@ -2358,6 +2383,7 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.LastWriteTime).HasColumnType("datetime");
             });
+
 
             modelBuilder.Entity<TipoAcceso>(entity =>
             {

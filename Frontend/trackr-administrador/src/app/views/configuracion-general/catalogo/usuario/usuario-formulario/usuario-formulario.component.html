@@ -177,6 +177,24 @@
                   </div>
                 </div>
               </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="label-input required-label">Especialidad</label>
+                  <div>
+                    <ng-select
+                      #especialidad="ngModel"
+                      name="especialidad"
+                      bindLabel="nombre"
+                      bindValue="idEspecialidad"
+                      [items]="especialidadList"
+                      [multiple]="true"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                      [(ngModel)]="especialidadSeleccionadas"
+                    ></ng-select>
+                  </div>
+                </div>
+              </div>
 
               <div class="col-md-3">
                 <div class="form-group">

@@ -74,5 +74,6 @@ export class Usuario {
   public idsRol: any;
   public idsCompania: any;
   public nombreCompania: string;
+  public idsEspecialidad: number[];
   constructor() {}
 }

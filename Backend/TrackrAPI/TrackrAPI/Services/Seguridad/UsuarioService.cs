@@ -26,6 +26,7 @@ namespace TrackrAPI.Services.Seguridad
     {
         private IUsuarioRepository usuarioRepository;
         private IExpedienteTrackrRepository expedienteTrackrRepository;
+        private readonly EspecialidadUsuarioService especialidadUsuarioService;
         private IExpedientePadecimientoRepository expedientePadecimientoRepository;
         private IWebHostEnvironment hostingEnvironment;
         private ITipoUsuarioRepository tipoUsuarioRepository;
@@ -69,7 +70,8 @@ namespace TrackrAPI.Services.Seguridad
             IAsistenteDoctorRepository asistenteDoctorRepository,
             IArchivoRepository archivoRepository,
             ExpedienteDoctorService expedienteDoctorService,
-            SftpService sftpService)
+            SftpService sftpService,
+            EspecialidadUsuarioService especialidadUsuarioService)
         {
             this.usuarioRepository = usuarioRepository;
             this.expedienteTrackrRepository = expedienteTrackrRepository;
@@ -92,6 +94,7 @@ namespace TrackrAPI.Services.Seguridad
             this._archivoRepository = archivoRepository;
             this._expedienteDoctorService = expedienteDoctorService;
             this._sftpService = sftpService;
+            this.especialidadUsuarioService = especialidadUsuarioService;
         }
 
         public Usuario Consultar(int idUsuario)
@@ -243,6 +246,20 @@ namespace TrackrAPI.Services.Seguridad
                 if (usuarioDto.AdministradorCompania != true && (usuarioDto.IdsRol == null || usuarioDto.IdsRol.Count == 0))
                 {
                     throw new CdisException("Se debe seleccionar al menos un rol");
+                }
+
+                if(usuarioDto.IdsEspecialidad.Any())
+                {
+                    foreach (var idEspecialidad in usuarioDto.IdsEspecialidad){
+                        EspecialidadUsuario especialidadUsuario = new ()
+                        {
+                            IdEspecialidad = idEspecialidad,
+                            IdUsuario = usuario.IdUsuario
+                        };
+
+                        await especialidadUsuarioService.Agregar(especialidadUsuario);
+                    }
+
                 }
 
                 List<Rol> roles = usuarioDto.IdsRol?.Select(idRol => rolService.Consultar(idRol)).ToList();
@@ -432,6 +449,21 @@ namespace TrackrAPI.Services.Seguridad
                     })
                     .ToList();
 
+                if (usuarioDto.IdsEspecialidad.Any())
+                {
+                    foreach (var idEspecialidad in usuarioDto.IdsEspecialidad)
+                    {
+                        EspecialidadUsuario especialidadUsuario = new()
+                        {
+                            IdEspecialidad = idEspecialidad,
+                            IdUsuario = usuario.IdUsuario
+                        };
+
+                        await this.especialidadUsuarioService.Agregar(especialidadUsuario);
+                    }
+
+                }
+
                 usuarioRolService.Guardar(usuarioRols);
 
                 scope.Complete();
@@ -448,11 +480,28 @@ namespace TrackrAPI.Services.Seguridad
             usuarioRepository.Editar(usuarioConsultado);
         }
 
-        public void Editar(Usuario usuario)
+        public async Task  Editar(UsuarioDto usuarioDto)
         {
-            List<Rol> roles = usuarioRolService.ConsultarPorUsuario(usuario.IdUsuario)
+            var usuario = MapearUsuario(usuarioDto);
+
+            List<Rol> roles = usuarioRolService.ConsultarPorUsuario(usuarioDto.IdUsuario)
                 .Select(usuarioRol => rolService.Consultar(usuarioRol.IdRol))
                 .ToList();
+            
+           if(usuarioDto.IdsEspecialidad.Any())
+                {
+                    foreach (var idEspecialidad in usuarioDto.IdsEspecialidad){
+                        EspecialidadUsuario especialidadUsuario = new ()
+                        {
+                            IdEspecialidad = idEspecialidad,
+                            IdUsuario = usuario.IdUsuario
+                        };
+
+                        await this.especialidadUsuarioService.Agregar(especialidadUsuario);
+                    }
+
+                }
+
 
             usuarioValidatorService.ValidarEditar(usuario, roles);
             //bitacoraMovimientoUsuarioService.Agregar(GeneralConstant.TipoMovimientoUsuarioEdicion, "Edición del usuario " + usuario.ObtenerNombreCompleto(), null);
@@ -834,10 +883,10 @@ namespace TrackrAPI.Services.Seguridad
             return usuarioRepository.ConsultarDiagnosticosUsuarioTrackr(idUsuario);
         }
 
-        public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion, int idUsuario)
+        public async Task ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion, int idUsuario)
         {
 
-            var usuario = usuarioRepository.Consultar(idUsuario);
+            var usuario = usuarioRepository.ConsultarDto(idUsuario);
             var expediente = expedienteTrackrRepository.ConsultarPorUsuario(usuario.IdUsuario);
 
 
@@ -854,7 +903,7 @@ namespace TrackrAPI.Services.Seguridad
             usuario.Correo = informacion.Correo;
             usuario.TelefonoMovil = informacion.TelefonoMovil;
 
-            Editar(usuario);
+            await Editar(usuario);
             expedienteTrackrRepository.Editar(expediente);
         }
 

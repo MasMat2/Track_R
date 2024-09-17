@@ -130,9 +130,9 @@ namespace TrackrAPI.Controllers.Seguridad
 
         [HttpPut]
         [Route("editar")]
-        public void Editar(Usuario usuario)
+        public async Task Editar(UsuarioDto usuario)
         {
-            usuarioService.Editar(usuario);
+            await usuarioService.Editar(usuario);
         }
 
         [HttpDelete]
@@ -297,9 +297,9 @@ namespace TrackrAPI.Controllers.Seguridad
         }
 
         [HttpPut("actualizarInformacionGeneral")]
-        public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion)
+        public async Task ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion)
         {
-            usuarioService.ActualizarInformacionGeneralTrackr(informacion, Utileria.ObtenerIdUsuarioSesion(this)); 
+            await usuarioService.ActualizarInformacionGeneralTrackr(informacion, Utileria.ObtenerIdUsuarioSesion(this)); 
         }
 
         [HttpPut("actualizarInformacionDomicilio")]
