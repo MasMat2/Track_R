@@ -39,7 +39,7 @@ export class ContenidoExamenComponent implements OnInit {
   protected columns: ColDef[] = [
     { headerName: 'Clave', field: 'idContenidoExamen', minWidth: 150, valueGetter: (params: any) => (params.node.rowIndex + 1 ).toString()},
     { headerName: 'Cuestionario', field: 'asignatura', minWidth: 150, },
-    { headerName: 'Categoría evaluación', field: 'nivelExamen', minWidth: 150, },
+    { headerName: 'Categorización', field: 'nivelExamen', minWidth: 150, },
     { headerName: 'Cantidad de Reactivos', field: 'totalPreguntas', minWidth: 150, },
     { headerName: 'Duración Total (Minutos)', field: 'duracion', minWidth: 150, },
     { headerName: 'Estatus', field: 'estatus', minWidth: 150, valueGetter: (params: any) => (params.data.estatus) ? 'Activo' : 'Inactivo' },

@@ -17,7 +17,7 @@ import { NivelExamenFormularioComponent } from './nivel-examen-formulario/nivel-
   templateUrl: './nivel-examen.component.html',
 })
 export class NivelExamenComponent implements OnInit {
-  protected readonly HEADER_GRID: string = 'Complejidad del Cuestionario';
+  protected readonly HEADER_GRID: string = 'Categorización';
 
   // Accesos
   protected tieneAccesoAgregar: boolean = false;
@@ -33,7 +33,7 @@ export class NivelExamenComponent implements OnInit {
       valueGetter: (params: any) => params.data.estatus ? 'Activo' : 'Inactivo' },
     { headerName: 'Fecha Alta', field: 'fechaAlta', minWidth: 100,
       cellRenderer: (data: any) => { return data.value ? (new Date(data.value)).toLocaleDateString() : '';} },
-    { headerName: 'Complejidad Cuestionario', field: 'descripcion', minWidth: 300, },
+    { headerName: 'Categorización', field: 'descripcion', minWidth: 300, },
   ];
 
   constructor(

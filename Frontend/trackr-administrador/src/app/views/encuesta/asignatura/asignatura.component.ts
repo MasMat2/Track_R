@@ -33,7 +33,7 @@ export class AsignaturaComponent implements OnInit {
     valueGetter: (params: any) => params.data.estatus ? 'Activo' : 'Inactivo' },
   { headerName: 'Fecha Alta', field: 'fechaAlta', maxWidth: 200,
     cellRenderer: (data: any) => { return data.value ? (new Date(data.value)).toLocaleDateString() : '';} },
-    { headerName: 'Asignaturas', field: 'descripcion', minWidth: 300, },
+    { headerName: 'Tipo de  evaluación', field: 'descripcion', minWidth: 300, },
   ];
 
   constructor(
