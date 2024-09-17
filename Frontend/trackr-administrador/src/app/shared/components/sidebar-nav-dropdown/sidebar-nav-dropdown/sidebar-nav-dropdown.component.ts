@@ -17,6 +17,7 @@ import { UsuarioService } from '@http/seguridad/usuario.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomAlertComponent } from '@sharedComponents/custom-alert/custom-alert.component';
 import { CustomAlertData } from '@sharedComponents/interface/custom-alert-data';
+import { NotificacionDoctorHubService } from '@services/notificacion-doctor-hub.service';
 
 @Component({
   selector: 'app-nav-dropdown',
@@ -53,7 +54,8 @@ export class SidebarNavDropdownComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private bsModalRef: BsModalRef,
     private usuarioService: UsuarioService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificacionHubService: NotificacionDoctorHubService,
   ) { }
 
   
@@ -107,6 +109,7 @@ export class SidebarNavDropdownComponent implements OnInit, OnDestroy {
   public logout() {
     this.logoutRequest.emit();
     this.usuarioImagenService.actualizarImagen('');
+    this.notificacionHubService.limpiarNotificaciones();
 
   }
 
