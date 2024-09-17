@@ -3,8 +3,10 @@
     <ion-tab-bar slot="bottom" [ngStyle]="{'display': mostrarFooter ? 'flex' : 'none'}">
       <ion-tab-button 
         tab="chat-movil" 
+        (click)="cambiarTab('chat-movil')"
         class="tab" 
-        [ngClass]="{'selected' : selectedTab === 'chat-movil'}">
+        [ngClass]="{'selected' : selectedTab === 'chat-movil'}"
+        >
         <ion-icon [name]="selectedTab === 'chat-movil' ? 'message-square-more-filled' : 'message-square-more'"></ion-icon>
       </ion-tab-button>
       <ion-tab-button 
