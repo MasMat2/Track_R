@@ -35,6 +35,15 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
             .OrderByDescending(n => n.IdNotificacionNavigation.FechaAlta)
             .Take(limite);
     }
+    private IQueryable<NotificacionUsuario> ConsultarPorUsuario(List<int> idsDoctor)
+    {
+        const int limite = 10;
+
+        return context.NotificacionUsuario
+            .Where(n => idsDoctor.Contains(n.IdUsuario))
+            .OrderByDescending(n => n.IdNotificacionNavigation.FechaAlta)
+            .Take(limite);
+    }
 
     public IEnumerable<NotificacionPacienteDTO> ConsultarPorPaciente(int idUsuario)
     {
@@ -53,9 +62,9 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
             ));
     }
 
-    public async Task<IEnumerable<NotificacionDoctorDTO>> ConsultarPorDoctor(int idUsuario)
+    public async Task<IEnumerable<NotificacionDoctorDTO>> ConsultarPorDoctor(List<int> idsDoctor)
     {
-        var notificacionesUsuario = ConsultarPorUsuario(idUsuario)
+        var notificacionesUsuario = ConsultarPorUsuario(idsDoctor)
             .Include(n => n.IdNotificacionNavigation.NotificacionDoctor)
             .Include(n => n.IdNotificacionNavigation.IdTipoNotificacionNavigation)
             .Include(n => n.IdNotificacionNavigation)
