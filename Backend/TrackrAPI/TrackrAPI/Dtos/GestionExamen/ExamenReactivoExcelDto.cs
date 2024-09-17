@@ -7,5 +7,6 @@
         public string Pregunta { get; set; } = null!;
         public string RespuestaAlumno { get; set; } = null!;
         public bool NecesitaRevision { get; set; } 
+        public bool PreguntaAbierta { get; set; }
     }
 }
