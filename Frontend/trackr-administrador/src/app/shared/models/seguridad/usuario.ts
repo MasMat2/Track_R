@@ -72,7 +72,7 @@ export class Usuario {
   public idExpediente: number;
 
   public idsRol: any;
-  public idsCompania: any;
+  public idsCompania: number[];
   public nombreCompania: string;
   public idsEspecialidad: number[];
   constructor() {}
