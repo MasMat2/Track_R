@@ -6,4 +6,5 @@ export interface CustomAlertData{
     twoButtons: boolean;
     cancelButtonText: string;
     confirmButtonText: string;
+    image?: string;
 }

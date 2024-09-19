@@ -1,8 +1,8 @@
 import { CommonModule, NgClass, NgFor } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { AlertController, IonicModule, PopoverController } from '@ionic/angular';
+import { AlertController, IonicModule, IonicSafeString, PopoverController } from '@ionic/angular';
 import { NotificacionPacienteHubService } from '@services/notificacion-paciente-hub.service';
-import { Observable , map, tap} from 'rxjs';
+import { Observable , last, lastValueFrom, map, tap} from 'rxjs';
 import { NotificacionPacientePopOverDto } from '../../../../../shared/Dtos/notificaciones/notificacion-paciente-popover-dto';
 import { NotificacionPacienteService } from '../../../../../shared/http/gestion-perfil/notificacion-paciente.service';
 import { GeneralConstant } from '@utils/general-constant';
@@ -12,7 +12,11 @@ import { ModalController } from '@ionic/angular/standalone';
 import { Constants } from '@utils/constants/constants';
 import { ExamenService } from '@http/cuestionarios/examen.service';
 import { FechaService } from '../../../../../shared/services/fecha.service';
+import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
+import { DataJitsiService } from '@pages/home/video-jitsi/service-jitsi/data-jitsi.service';
 import { FormsModule } from '@angular/forms';
+import { ArchivoService } from '@services/archivo.service';
+import { UsuarioService } from '@services/usuario.service';
 
 @Component({
   selector: 'app-notificaciones',
@@ -32,6 +36,7 @@ export class NotificacionesComponent  implements OnInit
   protected notificaciones$: Observable<NotificacionPacientePopOverDto[]>;
   protected notificaciones: NotificacionPacientePopOverDto[];
   protected segmentoSeleccionado = 'pendientes';
+  private validandoMeet = false;
 
 
   //TODO: Extraer de la bd usando las claves.
@@ -54,6 +59,9 @@ export class NotificacionesComponent  implements OnInit
     private cdr : ChangeDetectorRef,
     private examenService : ExamenService,
     private fechaService: FechaService,
+    private dataJitsiService: DataJitsiService,
+    private route: Router,
+    private usuarioService : UsuarioService
   ){ addIcons({
     'close' : 'assets/img/svg/x.svg',
     'circle-user' : 'assets/img/svg/circle-user.svg',
@@ -66,6 +74,7 @@ export class NotificacionesComponent  implements OnInit
 
   ngOnInit() 
   {
+    this.validandoMeet = false;
     this.consultarNotificaciones();
   }
 
@@ -90,12 +99,15 @@ export class NotificacionesComponent  implements OnInit
             complementoEsFecha: this.complementoEsFecha(notificacion.idTipoNotificacion),
             fecha: localDate, // Asignar la fecha local
             visto: notificacion.visto,
-            idChat: notificacion.idChat
+            idChat: notificacion.idChat,
+            idUsuario: notificacion.idUsuario
           } as NotificacionPacientePopOverDto;
         });
       }),
       tap(data => {
         this.notificaciones = data;
+        const ultimaNotificacion = this.notificaciones[0];
+        this.validarMeet(ultimaNotificacion);
       })
     );
   }
@@ -103,7 +115,6 @@ export class NotificacionesComponent  implements OnInit
   protected async marcarComoVista(event: Event, notificacion: NotificacionPacientePopOverDto) {
     event.preventDefault();
     event.stopPropagation();
-  
     const scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
   
     this.cdr.detach(); 
@@ -112,6 +123,7 @@ export class NotificacionesComponent  implements OnInit
       await this.modalController.dismiss();
       this.router.navigate(path);
     };
+
 
     if (notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA && !notificacion.visto) {
       await this.presentAlertTomarTratamiento(notificacion);
@@ -170,6 +182,87 @@ export class NotificacionesComponent  implements OnInit
 
     await alert.present();
   }
+
+  protected async presentAlertVideollamada(notificacion : NotificacionPacientePopOverDto, codigo : string){
+    const MENSAJE_TOMA = 'Tiene una llamada entrante'
+    const idUsuario = notificacion.idUsuario as number;
+    const imagenPerfil = await lastValueFrom(this.usuarioService.consultarImagenPerfil(idUsuario));
+    console.log('imagenPerfil', imagenPerfil);
+    
+    const alert = await this.alertController.create({
+      header: notificacion.titulo,
+      subHeader: `${MENSAJE_TOMA}`,
+      cssClass: 'custom-alert color-primary two-buttons',
+      backdropDismiss: false, 
+      message: '<img src="'+imagenPerfil+'" style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto; display: block;">',
+      buttons: [
+        {
+          text: 'No contestar', 
+          role: 'cancel',
+          handler: () => {
+          
+          }
+        },
+        {
+          text: 'Contestar',
+          role: 'confirm',
+          handler: () => {
+            
+             this.contestarLlamada(codigo);
+          }
+        }
+      ],
+    });
+
+    await alert.present();
+  }
+
+
+  protected async validarMeet(mensaje: NotificacionPacientePopOverDto) {
+    if (this.validandoMeet) {
+      return;
+    }
+
+    this.validandoMeet = true;
+
+    if (mensaje.mensaje.includes('trackr-' + mensaje.idChat)) {
+      const regex = /trackr-\d+-\d+/;
+      const match = mensaje.mensaje.match(regex);
+      if (match && match.length > 0) {
+        const codigo = match[0];
+
+        await this.presentAlertVideollamada(mensaje, codigo);
+
+      } else {
+        console.error("Error al validar codigo meet jitsi.");
+      }
+
+      this.validandoMeet = false;
+    }
+
+    if (mensaje.mensaje.includes('webrtc-' + mensaje.idChat)) {
+      const regex = /webrtc-\d+-(\d+)/;
+      const match = mensaje.mensaje.match(regex);
+      if (match && match.length > 0) {
+        const codigo = match[1];
+        this.route.navigate(['/home/chat', codigo]);
+
+      } else {
+        console.error("Error al validar codigo meet jitsi.");
+      }
+
+      this.validandoMeet = false;
+    }
+  }
+
+  contestarLlamada(meetCode: string) {
+    this.route.navigate(['/home/video-jitsi/answer-call', meetCode]);
+    setTimeout(() => {
+      this.dataJitsiService.contestarLlamada(meetCode);
+    }, 200);
+  }
+
+
 
   protected async presentAlertSuccessToma() {
     const alertSuccess = await this.alertController.create({
@@ -296,10 +389,16 @@ export class NotificacionesComponent  implements OnInit
   }
 
   protected listaNotificacionesVacia(){
+    if(this.notificaciones == null){
+      return
+    }
     return this.notificaciones?.length == 0;
   }
 
   protected todasNotificacionesVistas(){
+    if(this.notificaciones == null){
+      return
+    }
     return (
       !(this.notificaciones?.filter(n => !n.visto).length > 0)
     )
