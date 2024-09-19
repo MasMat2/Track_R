@@ -103,6 +103,16 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultarPorRFC(rfc);
         }
 
+    [HttpGet("consultarImagenPerfil/{idUsuario}")]
+    public async Task<IActionResult> ConsultarImagenPerfil(int idUsuario)
+    {
+        var imagenBytes = await usuarioService.ObtenerBytesImagenUsuario(idUsuario);
+        if (imagenBytes == null)
+        {
+            return NotFound("Imagen no encontrada");
+        }
+        return Ok(imagenBytes);
+    }
         [HttpGet]
         [Route("consultarPorTipoUsuario/{claveTipoUsuario}")]
         public IEnumerable<UsuarioDto> ConsultarPorTipoUsuario(string claveTipoUsuario)

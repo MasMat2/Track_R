@@ -9,4 +9,5 @@ export class NotificacionPacientePopOverDto
     public fecha: string;
     public visto: boolean;
     public idChat?:number; 
+    public idUsuario?:number;
 }
