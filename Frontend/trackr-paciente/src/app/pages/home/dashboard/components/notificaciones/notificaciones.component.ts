@@ -12,6 +12,7 @@ import { ModalController } from '@ionic/angular/standalone';
 import { Constants } from '@utils/constants/constants';
 import { ExamenService } from '@http/cuestionarios/examen.service';
 import { FechaService } from '../../../../../shared/services/fecha.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-notificaciones',
@@ -22,14 +23,15 @@ import { FechaService } from '../../../../../shared/services/fecha.service';
     IonicModule,
     NgFor,
     NgClass,
-    CommonModule
+    CommonModule,
+    FormsModule
   ]
 })
 export class NotificacionesComponent  implements OnInit 
 {
   protected notificaciones$: Observable<NotificacionPacientePopOverDto[]>;
   protected notificaciones: NotificacionPacientePopOverDto[];
-  protected segmentoSeleccionado = 'vistas';
+  protected segmentoSeleccionado = 'pendientes';
 
 
   //TODO: Extraer de la bd usando las claves.
