@@ -13,6 +13,7 @@ import { UsuarioExpedienteGridDTO } from 'src/app/shared/Dtos/seguridad/usuario-
 import { InformacionPerfilDto } from 'src/app/shared/Dtos/perfil/informacion-perfil-dto';
 import { TerminosYCondicionesComponent } from '@sharedComponents/terminos-y-condiciones/terminos-y-condiciones.component';
 import { InfoLibreriasOpenSourceComponent } from '@sharedComponents/info-librerias-opensource/info-librerias-opensource.component';
+import { AvisoPrivacidadComponent } from '@sharedComponents/aviso-privacidad/aviso-privacidad.component';
 
 
 @Component({
@@ -116,6 +117,13 @@ export class InicioPerfilComponent  implements OnInit {
   protected async mostrarTerminosYCondiciones() {
     const modal = await this.modalController.create({
       component: TerminosYCondicionesComponent,
+    });
+
+    modal.present();
+  }
+  protected async mostrarAvisoPrivacidad() {
+    const modal = await this.modalController.create({
+      component: AvisoPrivacidadComponent,
     });
 
     modal.present();
