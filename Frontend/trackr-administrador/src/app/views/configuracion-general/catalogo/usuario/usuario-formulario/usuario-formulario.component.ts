@@ -59,6 +59,9 @@ import { Observable, Observer, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { ArchivoService } from './../../../../../shared/http/catalogo/archivo.service';
 import { AlertifyService } from '@services/alertify.service';
+import { EspecialidadService } from '@http/catalogo/especialidad.service';
+import { Especialidad } from '@models/catalogo/especialidad';
+import { EspecialidadGridDto } from '@dtos/catalogo/especialidad-grid-dto';
 
 /**
  * Formulario de usuario, permite agregar, editar y eliminar.
@@ -97,8 +100,10 @@ export class UsuarioFormularioComponent implements OnInit {
   public puntoVentaList: PuntoVenta[];
   public areaList: Area[];
   public regimenFiscalList: RegimenFiscal[];
+  public especialidadList : EspecialidadGridDto[];
 
   public rolSeleccionados: number[] = [];
+  public especialidadSeleccionadas: number[] = [];
 
   public tieneRolVendedor: boolean = false;
   public tieneRolMedico: boolean = false;
@@ -212,7 +217,8 @@ export class UsuarioFormularioComponent implements OnInit {
     private codigoPostalService: CodigoPostalService,
     private archivoService: ArchivoService,
     private usuarioImagenService: UsuarioImagenService,
-    private alertifyService : AlertifyService
+    private alertifyService : AlertifyService,
+    private especialidadService : EspecialidadService
   ) {}
 
   public ngOnInit(): void {
@@ -253,6 +259,7 @@ export class UsuarioFormularioComponent implements OnInit {
     this.consultarMetodosPago();
     this.consultarFormasPago();
     this.cargarSugerenciasCodigoPostal();
+    this.consultarEspecialidades();
   }
 
   private consultarAccesoContrasena(): void {
@@ -272,6 +279,14 @@ export class UsuarioFormularioComponent implements OnInit {
   private consultarPerfiles(): void {
     this.perfilService.consultarPorCompania().subscribe((data) => {
       this.perfilList = data;
+    });
+  }
+
+  private consultarEspecialidades(): void {
+    this.especialidadService.consultarParaGrid().subscribe((data) => {
+      this.especialidadList = data;
+      this.especialidadSeleccionadas = this.especialidadList.filter((especialidad) => 
+        this.usuario.idsEspecialidad.includes(especialidad.idEspecialidad)).map((especialidad) => especialidad.idEspecialidad);
     });
   }
 
@@ -681,6 +696,7 @@ export class UsuarioFormularioComponent implements OnInit {
     }
 
     this.usuario.idsRol = this.rolSeleccionados;
+    this.usuario.idsEspecialidad = this.especialidadSeleccionadas;
 
     let exito: boolean = false;
     if (this.accion === GeneralConstant.MODAL_ACCION_AGREGAR) {

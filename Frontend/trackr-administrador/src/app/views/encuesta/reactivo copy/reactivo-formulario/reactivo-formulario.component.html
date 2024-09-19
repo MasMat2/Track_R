@@ -15,7 +15,7 @@
         <div class="row" *ngIf="soloRespuestas">
           <div class="col">
             <div class="form-group">
-              <label class="label-input required-label">Asignatura</label>
+              <label class="label-input required-label">Tipo de evaluación</label>
               <div>
                 <ng-select #asignaturaLst="ngModel" name="asignaturaLstName" bindLabel="descripcion"
                   bindValue="idAsignatura" [items]="asignaturaList" [required]="true"
@@ -23,21 +23,21 @@
                   [notFoundText]="placeHolderNoOptions"></ng-select>
               </div>
               <div *ngIf="asignaturaLst.errors?.['required'] && asignaturaLst.touched" class="error">
-                La asignatura es requerida
+                El tipo de evaluación es requerida
               </div>
             </div>
           </div>
 
           <div class="col">
             <div class="form-group">
-              <label class="label-input required-label">Nivel</label>
+              <label class="label-input required-label">Categorización</label>
               <div>
                 <ng-select #nivelLst="ngModel" name="nivelLstName" bindLabel="descripcion" bindValue="idNivelExamen"
                   [items]="nivelExamenList" [required]="true" [(ngModel)]="reactivo.idNivelExamen"
                   [placeholder]="placeHolderSelect" [notFoundText]="placeHolderNoOptions"></ng-select>
               </div>
               <div *ngIf="nivelLst.errors?.['required'] && nivelLst.touched" class="error">
-                El nivel es requerido
+                La categorización es requerida
               </div>
             </div>
           </div>

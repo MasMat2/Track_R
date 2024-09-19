@@ -16,19 +16,19 @@
   <div class="contenedor-principal">
 
     <ion-toolbar class="segment-toolbar">
-      <ion-segment  value="no-vistas" color="morado-custom">
-        <ion-segment-button value="pendientes" (click)="changeSection('no-vistas')">
+      <ion-segment [(ngModel)]="segmentoSeleccionado"  value="no-vistas" color="morado-custom">
+        <ion-segment-button value="pendientes" (click)="changeSection('pendientes')">
           <ion-label>No vistas</ion-label>
         </ion-segment-button>
           
-        <ion-segment-button value="contestados" (click)="changeSection('vistas')">
+        <ion-segment-button value="vistas" (click)="changeSection('vistas')">
           <ion-label>Vistas</ion-label>
         </ion-segment-button>
       </ion-segment>
     </ion-toolbar>
 
 
-    <div class="lista-notificaciones" id="pendientes" *ngIf="segmentoSeleccionado === 'no-vistas'">
+    <div class="lista-notificaciones" id="pendientes" *ngIf="segmentoSeleccionado === 'pendientes'">
       <div class="lista-vacia" *ngIf="listaNotificacionesVacia() || todasNotificacionesVistas()">
         <ion-text>
           <p>Nada por aquí. <br> No tienes notificaciones pendientes.</p>

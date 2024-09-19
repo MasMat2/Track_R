@@ -8,6 +8,7 @@ using TrackrAPI.Dtos.Seguridad;
 using System;
 using TrackrAPI.Dtos.Perfil;
 using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Dtos.Catalogo;
 
 namespace TrackrAPI.Repositorys.Seguridad
 {
@@ -295,7 +296,13 @@ namespace TrackrAPI.Repositorys.Seguridad
                     IdTipoCliente = u.IdTipoCliente,
                     IdsRol = u.UsuarioRol.Select(ur => ur.IdRol).ToList(),
                     IdMetodoPago = u.IdMetodoPago,
-                    IdSatFormaPago = u.IdSatFormaPago
+                    IdSatFormaPago = u.IdSatFormaPago,
+                    Especialidades = u.EspecialidadUsuario.Select(eu => new EspecialidadUsuarioDto
+                    {
+                        IdEspecialidad = eu.IdEspecialidad,
+                        NombreEspecaliad = eu.IdEspecialidadNavigation.Nombre
+                    }).ToList(),
+                    IdsEspecialidad = u.EspecialidadUsuario.Select(eu => (int) eu.IdEspecialidad).ToList(),
                 })
                 .FirstOrDefault();
         }

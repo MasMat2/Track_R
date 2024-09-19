@@ -33,6 +33,7 @@ export class NotificacionesComponent implements OnInit{
 
   ngOnInit() {
     this.consultarNotificacionesNoVistas();
+    this.notificacionHubService.iniciarConexion();
   }
 
   public mostrarNotificaciones(){

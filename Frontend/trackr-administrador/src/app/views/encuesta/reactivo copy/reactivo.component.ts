@@ -60,7 +60,7 @@ export class Reactivo1Component implements OnInit {
       minWidth: 80,
     },
     {
-      headerName: 'Categoría Evaluación',
+      headerName: 'Categorización',
       field: 'nivelExamen',
       minWidth: 80,
     },

@@ -16,6 +16,7 @@ namespace TrackrAPI.Models
             ConfirmacionCorreo = new HashSet<ConfirmacionCorreo>();
             DomicilioIdUsuarioNavigation = new HashSet<Domicilio>();
             DomicilioIdUsuarioRepartidorNavigation = new HashSet<Domicilio>();
+            EspecialidadUsuario = new HashSet<EspecialidadUsuario>();
             Examen = new HashSet<Examen>();
             ExpedienteDoctor = new HashSet<ExpedienteDoctor>();
             ExpedientePadecimiento = new HashSet<ExpedientePadecimiento>();
@@ -107,6 +108,7 @@ namespace TrackrAPI.Models
         public virtual ICollection<ConfirmacionCorreo> ConfirmacionCorreo { get; set; }
         public virtual ICollection<Domicilio> DomicilioIdUsuarioNavigation { get; set; }
         public virtual ICollection<Domicilio> DomicilioIdUsuarioRepartidorNavigation { get; set; }
+        public virtual ICollection<EspecialidadUsuario> EspecialidadUsuario { get; set; }
         public virtual ICollection<Examen> Examen { get; set; }
         public virtual ICollection<ExpedienteDoctor> ExpedienteDoctor { get; set; }
         public virtual ICollection<ExpedientePadecimiento> ExpedientePadecimiento { get; set; }

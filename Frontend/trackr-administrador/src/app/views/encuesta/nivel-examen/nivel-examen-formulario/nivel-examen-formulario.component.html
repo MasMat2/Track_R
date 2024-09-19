@@ -2,7 +2,7 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>Categoria evaluación - {{ accion }}</div>
+      <div>Categorización - {{ accion }}</div>
       <button class="btn-salir" (click)="cancelar()">
         <lucide-icon name="x" size="10"></lucide-icon>
       </button>
@@ -58,7 +58,7 @@
         <div class="row">
           <div class="col" style="width: 60%">
             <div class="form-group">
-              <label class="label-input required-label">Complejidad</label>
+              <label class="label-input required-label">Categorización</label>
               <div>
                 <input
                   #descripcion="ngModel"
@@ -74,7 +74,7 @@
                 *ngIf="descripcion.errors?.['required'] && descripcion.touched"
                 class="error"
               >
-                La complejidad es requerida
+                La categorización es requerida
               </div>
             </div>
           </div>
