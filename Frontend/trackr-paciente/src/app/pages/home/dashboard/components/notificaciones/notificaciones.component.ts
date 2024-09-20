@@ -61,7 +61,7 @@ export class NotificacionesComponent  implements OnInit
     private fechaService: FechaService,
     private dataJitsiService: DataJitsiService,
     private route: Router,
-    private usuarioService : UsuarioService
+    private usuarioService : UsuarioService,
   ){ addIcons({
     'close' : 'assets/img/svg/x.svg',
     'circle-user' : 'assets/img/svg/circle-user.svg',
@@ -107,17 +107,13 @@ export class NotificacionesComponent  implements OnInit
       tap(data => {
         this.notificaciones = data;
         const ultimaNotificacion = this.notificaciones[0];
-        this.validarMeet(ultimaNotificacion);
+        this.notificacionPacienteService.validarMeet(ultimaNotificacion);
       })
     );
   }
 
-  protected async marcarComoVista(event: Event, notificacion: NotificacionPacientePopOverDto) {
-    event.preventDefault();
-    event.stopPropagation();
+  protected async marcarComoVista(notificacion: NotificacionPacientePopOverDto) {
     const scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
-  
-    this.cdr.detach(); 
   
     const navigateAndDismiss = async (path: any[]) => {
       await this.modalController.dismiss();
@@ -183,77 +179,6 @@ export class NotificacionesComponent  implements OnInit
     await alert.present();
   }
 
-  protected async presentAlertVideollamada(notificacion : NotificacionPacientePopOverDto, codigo : string){
-    const MENSAJE_TOMA = 'Tiene una llamada entrante'
-    const idUsuario = notificacion.idUsuario as number;
-    const imagenPerfil = await lastValueFrom(this.usuarioService.consultarImagenPerfil(idUsuario));
-    console.log('imagenPerfil', imagenPerfil);
-    
-    const alert = await this.alertController.create({
-      header: notificacion.titulo,
-      subHeader: `${MENSAJE_TOMA}`,
-      cssClass: 'custom-alert color-primary two-buttons',
-      backdropDismiss: false, 
-      message: '<img src="'+imagenPerfil+'" style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto; display: block;">',
-      buttons: [
-        {
-          text: 'No contestar', 
-          role: 'cancel',
-          handler: () => {
-          
-          }
-        },
-        {
-          text: 'Contestar',
-          role: 'confirm',
-          handler: () => {
-            
-             this.contestarLlamada(codigo);
-          }
-        }
-      ],
-    });
-
-    await alert.present();
-  }
-
-
-  protected async validarMeet(mensaje: NotificacionPacientePopOverDto) {
-    if (this.validandoMeet) {
-      return;
-    }
-
-    this.validandoMeet = true;
-
-    if (mensaje.mensaje.includes('trackr-' + mensaje.idChat)) {
-      const regex = /trackr-\d+-\d+/;
-      const match = mensaje.mensaje.match(regex);
-      if (match && match.length > 0) {
-        const codigo = match[0];
-
-        await this.presentAlertVideollamada(mensaje, codigo);
-
-      } else {
-        console.error("Error al validar codigo meet jitsi.");
-      }
-
-      this.validandoMeet = false;
-    }
-
-    if (mensaje.mensaje.includes('webrtc-' + mensaje.idChat)) {
-      const regex = /webrtc-\d+-(\d+)/;
-      const match = mensaje.mensaje.match(regex);
-      if (match && match.length > 0) {
-        const codigo = match[1];
-        this.route.navigate(['/home/chat', codigo]);
-
-      } else {
-        console.error("Error al validar codigo meet jitsi.");
-      }
-
-      this.validandoMeet = false;
-    }
-  }
 
   contestarLlamada(meetCode: string) {
     this.route.navigate(['/home/video-jitsi/answer-call', meetCode]);

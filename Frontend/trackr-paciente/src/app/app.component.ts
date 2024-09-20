@@ -1,6 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { NotificacionPacienteHubService } from '@services/notificacion-paciente-hub.service';
 import { addIcons } from 'ionicons';
+import { map, Subject, subscribeOn, takeUntil, tap } from 'rxjs';
+import { NotificacionPacientePopOverDto } from './shared/Dtos/notificaciones/notificacion-paciente-popover-dto';
+import { FechaService } from '@services/fecha.service';
+import { NotificacionPacienteService } from '@http/gestion-perfil/notificacion-paciente.service';
+import { take } from 'lodash';
 
 @Component({
   selector: 'app-root',
@@ -11,11 +17,87 @@ import { addIcons } from 'ionicons';
     IonicModule
   ]
 })
-export class AppComponent {
-  constructor() {
+export class AppComponent implements OnDestroy, OnInit {
+  constructor(private notificacionHubService : NotificacionPacienteHubService,
+              private fechaService : FechaService,
+              private notificacionPacienteService: NotificacionPacienteService) {
+
     addIcons({
       'chevron-left': 'assets/img/svg/chevron-left.svg',
       'info': 'assets/img/svg/info.svg',
     })
+  }
+
+  private destroy$ = new Subject<void>();
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  ngOnInit(): void {
+    this.consultarNotificaciones();
+  }
+
+
+  private consultarNotificaciones(): void {
+    this.notificacionHubService.notificaciones$.pipe(takeUntil(this.destroy$),
+      map((notificaciones) => {
+        return notificaciones.map((notificacion) => {
+          // Convertir la fecha UTC a la hora local
+          const localDate = this.fechaService.fechaUTCAFechaLocal(notificacion.fechaAlta);
+          const complemento = this.formatearComplemento(notificacion.complementoMensaje, notificacion.idTipoNotificacion);
+          return {
+            idTipoNotificacion: notificacion.idTipoNotificacion,
+            id: notificacion.idNotificacionUsuario,
+            titulo: notificacion.titulo,
+            mensaje: notificacion.mensaje,
+            complementoMensaje : complemento,
+            complementoEsFecha: this.complementoEsFecha(notificacion.idTipoNotificacion),
+            fecha: localDate, // Asignar la fecha local
+            visto: notificacion.visto,
+            idChat: notificacion.idChat,
+            idUsuario: notificacion.idUsuario
+          } as NotificacionPacientePopOverDto;
+        });
+      }),
+     
+    ).subscribe(async (notificacion) => {
+      const ultimaNotificacion = notificacion[0];
+      console.log(ultimaNotificacion);
+       await this.notificacionPacienteService.validarMeet(ultimaNotificacion); 
+    });
+  }
+  private formatearComplemento(complemento: string, tipoNotificacion: number){
+    if(complemento == null){
+      return null
+    }
+
+    if(this.esNotificacionExamen(tipoNotificacion)){
+      const fecha = this.fechaService.fechaUTCAFechaLocal(complemento);
+      return fecha;
+    }
+    else if(this.esNotificacionRecordatorio(tipoNotificacion)){
+      const hora = this.fechaService.horaUTCAHoraLocal(complemento);
+      return hora;
+    }
+    else{
+      return complemento
+    }
+
+    
+  }
+
+  private esNotificacionExamen(idTipoNotificacion: number){
+    return idTipoNotificacion === 4
+  }
+
+  private esNotificacionRecordatorio(idTipoNotificacion: number){
+    return idTipoNotificacion === 6
+  }
+
+  
+  private complementoEsFecha(idTipoNotificacion: number){
+    return (this.esNotificacionExamen(idTipoNotificacion));
   }
 }
