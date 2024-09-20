@@ -62,6 +62,13 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
             ));
     }
 
+     public Task<NotificacionUsuario> Consultar(int idNotificacionUsuario){
+        return context.NotificacionUsuario
+                         .Include(n => n.IdNotificacionNavigation)       
+                        .Where(n => n.IdNotificacionUsuario == idNotificacionUsuario)
+                        .FirstOrDefaultAsync();
+     }
+
     public async Task<IEnumerable<NotificacionDoctorDTO>> ConsultarPorDoctor(List<int> idsDoctor)
     {
         var notificacionesUsuario = ConsultarPorUsuario(idsDoctor)
