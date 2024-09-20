@@ -32,6 +32,7 @@ public class ChatPersonaRepository : Repository<ChatPersona>, IChatPersonaReposi
     {
         return context.ChatPersona
                       .Include(x => x.IdPersonaNavigation)
+                      .ThenInclude( p => p.IdPerfilNavigation)
                       .Where(x => x.IdChat == IdChat)
                       .ToList();
     }
