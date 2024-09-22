@@ -18,6 +18,9 @@ export class NotificacionPacienteService {
     private dataUrl = 'notificacion/';
     private actualizarWidgetsSource = new BehaviorSubject<boolean>(false);
     actualizarWidgets$ = this.actualizarWidgetsSource.asObservable();
+
+    private iniciarConexionNotiSource = new BehaviorSubject<boolean>(false);
+    iniciarConexionNoti$ = this.iniciarConexionNotiSource.asObservable();
     private validandoMeet = false;
 
 
@@ -41,6 +44,10 @@ export class NotificacionPacienteService {
     actualizarWidgets() {
         this.actualizarWidgetsSource.next(true);
       }
+
+  comenzarConexionNoti(){
+    this.iniciarConexionNotiSource.next(true);
+  }
       
   public async validarMeet(mensaje: NotificacionPacientePopOverDto) {
     if (this.validandoMeet) {
