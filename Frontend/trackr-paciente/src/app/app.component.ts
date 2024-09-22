@@ -21,7 +21,7 @@ export class AppComponent implements OnDestroy, OnInit {
   constructor(private notificacionHubService : NotificacionPacienteHubService,
               private fechaService : FechaService,
               private notificacionPacienteService: NotificacionPacienteService) {
-
+    this.consultarNotificaciones();
     addIcons({
       'chevron-left': 'assets/img/svg/chevron-left.svg',
       'info': 'assets/img/svg/info.svg',
