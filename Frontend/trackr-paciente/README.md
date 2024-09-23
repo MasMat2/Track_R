@@ -1,5 +1,5 @@
 Estado de aplicacion en plataforma IOS:
-build ios 116
+build ios 118
 Servidor ios: atisc.mx
 Grupo de pruebas: US-IT
 
