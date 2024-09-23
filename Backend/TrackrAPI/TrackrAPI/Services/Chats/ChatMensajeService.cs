@@ -93,14 +93,16 @@ public class ChatMensajeService
         {
 
         int? idArchivo = null;
+
+        var usuarioEmisor = _usuarioRepository.Consultar(mensaje.IdPersona);
         var idsPacientesChat = _chatPersonaRepository.ConsultarPersonasPorChat(mensaje.IdChat)
-                                                    .Where(cP => cP.IdPersona != mensaje.IdPersona && cP.IdPersonaNavigation.IdPerfilNavigation.Clave == GeneralConstant.ClavePerfilPaciente)
+                                                    .Where(cP => cP.IdPersona != usuarioEmisor.IdUsuario && cP.IdPersonaNavigation.IdPerfilNavigation.Clave == GeneralConstant.ClavePerfilPaciente)
                                                     .Select(x => x.IdPersona)
                                                     .Distinct()
                                                     .ToList();
 
         var idsMedicosChat = _chatPersonaRepository.ConsultarPersonasPorChat(mensaje.IdChat)
-                                                    .Where(cP => cP.IdPersona != mensaje.IdPersona && cP.IdPersonaNavigation.IdPerfilNavigation.Clave == GeneralConstant.ClavePerfilMedico)
+                                                    .Where(cP => cP.IdPersona != usuarioEmisor.IdUsuario && cP.IdPersonaNavigation.IdPerfilNavigation.Clave == GeneralConstant.ClavePerfilMedico)
                                                     .Select(x => x.IdPersona)
                                                     .Distinct()
                                                     .ToList();
@@ -125,7 +127,7 @@ public class ChatMensajeService
 
      
         var notificacionDoctor = new NotificacionDoctorCapturaDTO(mensaje.Mensaje, null, idTipoNotificacion, mensaje.IdPersona, mensaje.IdPersona, mensaje.IdChat);
-        var notificacionPaciente = new NotificacionCapturaDTO(mensaje.Mensaje, mensaje.Mensaje, null, idTipoNotificacion, mensaje.IdPersona, mensaje.IdChat);
+        var notificacionPaciente = new NotificacionCapturaDTO(usuarioEmisor.ObtenerNombreCompleto(), mensaje.Mensaje, null, idTipoNotificacion, mensaje.IdPersona, mensaje.IdChat);
 
         await _notificacionDoctorService.Notificar(notificacionDoctor, idsMedicosChat);
         await _notificacionPacienteService.Notificar(notificacionPaciente, idsPacientesChat);

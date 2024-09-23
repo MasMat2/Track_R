@@ -140,7 +140,9 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
     this.notificacionesSubject.next(this.notificacionesSubject.value);
   }
 
-  private async ensureConnection(): Promise<void> {
+
+
+  public async ensureConnection(): Promise<void> {
     const timeoutms = 10_000;
 
     if (this.connection.state === HubConnectionState.Connected) {
