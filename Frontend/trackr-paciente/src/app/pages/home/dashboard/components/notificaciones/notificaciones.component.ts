@@ -84,6 +84,7 @@ export class NotificacionesComponent  implements OnInit
   }
 
   private consultarNotificaciones(): void {
+    this.notificacionHubService.ensureConnection();
     this.notificaciones$ = this.notificacionHubService.notificaciones$.pipe(
       map((notificaciones) => {
         return notificaciones.map((notificacion) => {
@@ -113,13 +114,13 @@ export class NotificacionesComponent  implements OnInit
   }
 
   protected async marcarComoVista(notificacion: NotificacionPacientePopOverDto) {
-    const scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
   
     const navigateAndDismiss = async (path: any[]) => {
       await this.modalController.dismiss();
       this.router.navigate(path);
     };
 
+    console.log(notificacion);
 
     if (notificacion.idTipoNotificacion == GeneralConstant.ID_TIPO_NOTIFICACION_TOMA && !notificacion.visto) {
       await this.presentAlertTomarTratamiento(notificacion);
@@ -138,11 +139,7 @@ export class NotificacionesComponent  implements OnInit
         await this.notificacionHubService.marcarComoVista(notificacion.id);
     }
     this.consultarNotificaciones();
-  
-    setTimeout(() => {
-      window.scrollTo(0, scrollPosition); // Restore scroll position
-      this.cdr.reattach(); // Reattach change detection
-    }, 0);
+
   }
 
   protected async presentAlertTomarTratamiento(notificacion : NotificacionPacientePopOverDto){
