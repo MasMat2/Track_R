@@ -2,7 +2,7 @@
   <div class="datos-paciente-editando" *ngIf="!esAgregar()">
     <div class="contenido-datos">
       <div class="foto-perfil">
-        <img [src]="url" alt="imagen de usuario">
+        <img [src]="url ?? urlImagenDefault" alt="imagen de usuario">
       </div>
       <div class="datos">
         <h2 id="nombre">{{nombreCompleto}}</h2>

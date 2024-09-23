@@ -56,7 +56,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
   //Imagen
   public imagenBase64: any;
   public url: any;
-  public urlImagenDefault = './assets/img/svg/ico-36x36-header-usuario.svg'
+  public urlImagenDefault = 'assets/img/svg/avatar-placeholder.svg'
   protected readonly imagenUsuario = 'assets/img/pruebas/user-image.png';
   protected urlImagen?: SafeUrl = undefined;
 
@@ -274,6 +274,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
   protected esAgregar(){
     return this.accion == "Agregar";
   }
+  
 
 
 }
