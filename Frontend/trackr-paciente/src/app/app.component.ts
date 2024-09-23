@@ -2,11 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { NotificacionPacienteHubService } from '@services/notificacion-paciente-hub.service';
 import { addIcons } from 'ionicons';
-import { map, Subject, subscribeOn, takeUntil, tap } from 'rxjs';
+import { map, Observable, Subject, subscribeOn, takeUntil, tap } from 'rxjs';
 import { NotificacionPacientePopOverDto } from './shared/Dtos/notificaciones/notificacion-paciente-popover-dto';
 import { FechaService } from '@services/fecha.service';
 import { NotificacionPacienteService } from '@http/gestion-perfil/notificacion-paciente.service';
 import { take } from 'lodash';
+import { routes } from './app.routes';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -20,8 +22,12 @@ import { take } from 'lodash';
 export class AppComponent implements OnDestroy, OnInit {
   constructor(private notificacionHubService : NotificacionPacienteHubService,
               private fechaService : FechaService,
-              private notificacionPacienteService: NotificacionPacienteService) {
-
+              private notificacionPacienteService: NotificacionPacienteService,
+              private router : Router) {
+    this.notificacionPacienteService.iniciarConexionNoti$.pipe( takeUntil(this.destroy$)).subscribe(() => {
+    this.consultarNotificaciones(); 
+    })
+                
     addIcons({
       'chevron-left': 'assets/img/svg/chevron-left.svg',
       'info': 'assets/img/svg/info.svg',
@@ -35,13 +41,13 @@ export class AppComponent implements OnDestroy, OnInit {
     this.destroy$.complete();
   }
 
-  ngOnInit(): void {
-    this.consultarNotificaciones();
+  async ngOnInit() {
   }
 
 
-  private consultarNotificaciones(): void {
-    this.notificacionHubService.notificaciones$.pipe(takeUntil(this.destroy$),
+  private async consultarNotificaciones() {
+    await this.notificacionHubService.iniciarConexion();
+    this.notificacionHubService.notificaciones$.pipe(
       map((notificaciones) => {
         return notificaciones.map((notificacion) => {
           // Convertir la fecha UTC a la hora local
@@ -64,7 +70,6 @@ export class AppComponent implements OnDestroy, OnInit {
      
     ).subscribe(async (notificacion) => {
       const ultimaNotificacion = notificacion[0];
-      console.log(ultimaNotificacion);
        await this.notificacionPacienteService.validarMeet(ultimaNotificacion); 
     });
   }
