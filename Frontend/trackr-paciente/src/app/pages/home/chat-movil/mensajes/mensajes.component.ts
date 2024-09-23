@@ -118,10 +118,10 @@ export class MensajesComponent{
     }
 
   ionViewWillEnter() {
+    this.ensureConnection();
     this.obtenerIdUsuario();
     this.obtenerIdChat();
     this.solicitarPermisos();
-    this.ensureConnection();
   }
 
   ngAfterViewInit() {
@@ -129,7 +129,8 @@ export class MensajesComponent{
   }
   
   private ensureConnection(): void {
-    this.ChatHubServiceService.ensureConnection();
+    this.ChatHubServiceService.iniciarConexion();
+    this.ChatMensajeHubService.iniciarConexion();
   }
 
   obtenerIdChat() {
