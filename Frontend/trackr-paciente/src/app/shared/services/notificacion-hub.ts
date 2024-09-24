@@ -19,7 +19,6 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
     protected endpoint: string,
     private authService : AuthService 
   ) {
-    this.iniciarConexion();
   }
 
   public async iniciarConexion() {
