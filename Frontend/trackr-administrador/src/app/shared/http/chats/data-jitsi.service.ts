@@ -113,14 +113,12 @@ export class DataJitsiService {
   };
 
   obtenerChats(){
-    this.chatMensajeHubServiceService.iniciarConexion();
     this.chats$ = this.chatMensajeHubServiceService.chat$;
     this.chats$.subscribe(res => {
       this.chats = res;
     })
   }
   obtenerMensajes(){
-    this.mensajeHubService.iniciarConexion();
     this.mensajes$ = this.mensajeHubService.chatMensaje$;
     this.mensajes$.subscribe(res => {
       this.mensajes = res;
