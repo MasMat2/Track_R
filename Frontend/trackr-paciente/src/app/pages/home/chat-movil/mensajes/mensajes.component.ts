@@ -118,7 +118,7 @@ export class MensajesComponent{
     }
 
   ionViewWillEnter() {
-    this.ensureConnection();
+    //this.ensureConnection();
     this.obtenerIdUsuario();
     this.obtenerIdChat();
     this.solicitarPermisos();
