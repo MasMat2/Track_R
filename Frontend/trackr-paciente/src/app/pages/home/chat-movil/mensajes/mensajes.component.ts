@@ -118,7 +118,6 @@ export class MensajesComponent{
     }
 
   ionViewWillEnter() {
-    this.ensureConnection();
     this.obtenerIdUsuario();
     this.obtenerIdChat();
     this.solicitarPermisos();
@@ -128,10 +127,7 @@ export class MensajesComponent{
     this.scrollContentToBottom();
   }
   
-  private ensureConnection(): void {
-    this.ChatHubServiceService.iniciarConexion();
-    this.ChatMensajeHubService.iniciarConexion();
-  }
+
 
   obtenerIdChat() {
     this.router.params.subscribe(params => {

@@ -5,23 +5,26 @@
         <div class="slot-start">
           <div id="foto-perfil">
             <div class="avatar-container">
-              <img 
+              <div *ngIf="personas">
+
+                <img 
                 class="avatar" 
                 [src]="imagenChat != '' ? (imagenChat | urlImagen : tipoMime) : 'assets/img/svg/avatar-placeholder.svg'" 
                 alt=""
-              />
-                 <div class="badge-img">+{{personas.length-1}}</div>
-              <div class="hover-panel">
-                <!-- Contenido del panel -->
-                <h3>Miembros del chat</h3>
-
-                <div class="personas">  
-                  <p *ngFor="let persona of personas">
-                    <img [src]="persona.imagenBase64" alt="">
-                    <label>
-                      {{ persona.nombre }}
-                    </label>
-                  </p>
+                />
+                <div class="badge-img">+{{personas.length-1}}</div>
+                <div class="hover-panel">
+                  <!-- Contenido del panel -->
+                  <h3>Miembros del chat</h3>
+                  
+                  <div class="personas">  
+                    <p *ngFor="let persona of personas">
+                      <img [src]="persona.imagenBase64" alt="">
+                      <label>
+                        {{ persona.nombre }}
+                      </label>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
