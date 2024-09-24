@@ -30,6 +30,13 @@ public class NotificacionUsuarioService
         return notificacionUsuario;
     }
 
+    public async Task<NotificacionUsuarioDto> ConsultarDto(int idNotificacionUsuario)
+    {
+        var notificacionUsuario = await  _notificacionUsuarioRepository.Consultar(idNotificacionUsuario);
+        notificacionUsuario.IdUsuario = (int) notificacionUsuario.IdNotificacionNavigation.IdPersona;
+        return Mapear(notificacionUsuario);
+    }
+
     private NotificacionUsuarioDto Mapear(NotificacionUsuario notificacionUsuario)
     {
         var notificacionUsuarioDto = new NotificacionUsuarioDto(
@@ -67,7 +74,8 @@ public class NotificacionUsuarioService
     {
         var notificacionUsuario = GenerarNotificacionUsuario(idNotificacion, idUsuario);
 
-        _notificacionUsuarioRepository.Agregar(notificacionUsuario);
+        var notificacionAgregada =_notificacionUsuarioRepository.Agregar(notificacionUsuario);
+        notificacionUsuario.IdNotificacionUsuario = notificacionAgregada.IdNotificacionUsuario;
 
         return Mapear(notificacionUsuario);
     }
@@ -76,10 +84,18 @@ public class NotificacionUsuarioService
     {
         var notificacionesUsuario = idsUsuario
             .Select((idUsuario) => GenerarNotificacionUsuario(idNotificacion, idUsuario));
+            
+        List<NotificacionUsuarioDto> notificacionesUsuarioDto = new();
 
-        _notificacionUsuarioRepository.Agregar(notificacionesUsuario);
+        foreach(var notificacionUsuario in notificacionesUsuario)
+        {
+            var notificacionAgregada = _notificacionUsuarioRepository.Agregar(notificacionUsuario);
+            
+            notificacionesUsuarioDto.Add(Mapear(notificacionAgregada));
+        }
 
-        return notificacionesUsuario.Select(nu => Mapear(nu));
+   
+        return notificacionesUsuarioDto;
     }
 
     public void MarcarComoVistas(List<int> idNotificacionUsuario, bool tomaTomada)

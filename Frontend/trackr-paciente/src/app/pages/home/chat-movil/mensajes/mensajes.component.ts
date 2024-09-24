@@ -121,16 +121,13 @@ export class MensajesComponent{
     this.obtenerIdUsuario();
     this.obtenerIdChat();
     this.solicitarPermisos();
-    this.ensureConnection();
   }
 
   ngAfterViewInit() {
     this.scrollContentToBottom();
   }
   
-  private ensureConnection(): void {
-    this.ChatHubServiceService.ensureConnection();
-  }
+
 
   obtenerIdChat() {
     this.router.params.subscribe(params => {

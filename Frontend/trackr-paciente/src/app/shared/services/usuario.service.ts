@@ -15,4 +15,8 @@ export class UsuarioService {
     return this.http.get<UsuarioDto>(this.dataUrl + `consultarMiUsuario`);
   }
 
+  consultarImagenPerfil(idUsuario: number): Observable<string> {
+    return this.http.get(this.dataUrl+ `consultarImagenPerfil/${idUsuario}`, { responseType: 'text' });
+  }
+
 }

@@ -13,6 +13,7 @@ import { AuthService } from '../../../auth/auth.service';
 import { addIcons } from 'ionicons';
 import { BehaviorSubject } from 'rxjs';
 import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
+import { NotificacionPacienteService } from '@http/gestion-perfil/notificacion-paciente.service';
 
 @Component({
   selector: 'app-login',
@@ -38,7 +39,8 @@ export class LoginPage implements OnInit {
     private loginService: LoginService,
     private router: Router,
     private authService: AuthService,
-    private loadingSpinner: LoadingSpinnerService
+    private loadingSpinner: LoadingSpinnerService,
+    private notificacionPacienteService : NotificacionPacienteService
   ) { 
     addIcons({
       'user': 'assets/img/svg/user.svg',
@@ -72,7 +74,8 @@ export class LoginPage implements OnInit {
       return;
     }
 
-    this.autenticarPaciente();
+    await this.autenticarPaciente();
+    this.notificacionPacienteService.comenzarConexionNoti();
     this.btnSubmit = false;
   }
 
