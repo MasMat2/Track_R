@@ -39,8 +39,18 @@ public class TipoExamenService
     {
         _tipoExamenValidatorService.ValidarAgregar(tipoExamen);
         _tipoExamenValidatorService.ValidarDuplicado(tipoExamen);
+        tipoExamen.Clave = GenerarClave();
         _tipoExamenRepository.Agregar(tipoExamen);
         return tipoExamen.IdTipoExamen;
+    }
+
+    private string GenerarClave()
+    {
+        var tipoExamen = _tipoExamenRepository.ConsultarGeneral().OrderByDescending(x => x.IdTipoExamen).FirstOrDefault();
+
+        int idTipoExamen = tipoExamen?.IdTipoExamen ?? 0;
+
+        return (idTipoExamen + 1).ToString();
     }
 
     public void Editar(TipoExamen tipoExamen)

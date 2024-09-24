@@ -5,4 +5,5 @@ namespace TrackrAPI.Repositorys.Notificaciones;
 public interface INotificacionRepository : IRepository<Notificacion>
 {
     public Notificacion? Consultar(int idNotificacion);
+    public string ConsultarClave(int idNotificacion);
 }

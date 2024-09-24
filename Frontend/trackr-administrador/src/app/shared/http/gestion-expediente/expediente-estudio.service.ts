@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ExpedienteEstudioDTO } from '@dtos/gestion-expediente/expediente-recomendacion/expediente-estudio-dto';
 import { ExpedienteEstudioGridDTO } from '@dtos/gestion-expediente/expediente-recomendacion/expediente-estudio-grid-dto';
 import { ExpedienteEstudio } from '@models/gestion-expediente/expediente-estudio';
 
@@ -12,7 +13,7 @@ export class ExpedienteEstudioService {
     constructor(public http: HttpClient) {}
 
     consultar(idExpedienteEstudio: number) {
-        return this.http.get<ExpedienteEstudio>(this.dataUrl + `consultar/${idExpedienteEstudio}`);
+        return this.http.get<ExpedienteEstudioDTO>(this.dataUrl + `consultar/${idExpedienteEstudio}`);
     }
 
     consultarPorUsuario(idUsuario: number) {

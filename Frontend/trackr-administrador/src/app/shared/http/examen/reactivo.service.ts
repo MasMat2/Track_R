@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Reactivo } from '@models/examen/reactivo';
 import { Observable } from 'rxjs';
+import { ArchivoDto } from '@dtos/archivos/archivo-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +34,9 @@ export class ReactivoService {
 
   public eliminar(idReactivo: number): Observable<void> {
     return this.http.delete<void>(this.dataUrl + `eliminar/${idReactivo}`);
+  }
+
+  consultarArchivo(idReactivo:number): Observable<ArchivoDto> {
+    return this.http.get<ArchivoDto>(this.dataUrl + `consultarArchivo/${idReactivo}`);
   }
 }

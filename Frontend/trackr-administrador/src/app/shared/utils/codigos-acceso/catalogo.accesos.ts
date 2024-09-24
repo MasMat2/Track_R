@@ -26,3 +26,10 @@ export enum ACCESO_ESPECIALIDAD {
   Editar = 'APESPE2000',
   Eliminar = 'APESPE3000',
 }
+
+export  enum ACCESO_UNIDAD_MEDIDA {
+  Consultar = 'APUNMD0000',
+  Agregar = 'APUNMD1000',
+  Editar = 'APUNMD2000',
+  Eliminar = 'APUNMD3000',
+}

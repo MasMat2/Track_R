@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using TrackrAPI.Dtos.Catalogo;
 
 namespace TrackrAPI.Dtos.Seguridad
 {
     public class UsuarioDto
     {
+        public List<EspecialidadUsuarioDto> Especialidades { get; set; }
+        public List<int> IdsEspecialidad { get; set; }
+        public List<int> IdsPadecimientos { get; set; }
         public int IdUsuario { get; set; }
         public string Clave { get; set; }
         public string Nombre { get; set; }
@@ -55,6 +59,7 @@ namespace TrackrAPI.Dtos.Seguridad
         public int? IdMetodoPago { get; set; }
         public bool? AdministradorCompania { get; set; }
         public string? EntreCalles { get; set; }
+        public string Hospital { get; set; }
 
         public List<int> IdsRol { get; set; }
         public List<int> IdsCompania { get; set; }

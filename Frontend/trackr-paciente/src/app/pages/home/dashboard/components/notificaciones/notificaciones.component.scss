@@ -1,54 +1,14 @@
-@import "../../../../../../theme/variables.scss";
+.contenedor-header-dark{
+  justify-content: space-between;
+  min-height: 160px;
 
-
-ion-header{
-  border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
-  background: var(--primary-50);
-}
-
-.contenedor-header{
-  height: 20vh;
-  width: 100%;
-  background: var(--primary-800);
-
-  ion-toolbar{
-    height: 100%;
-    width: 100%;
-    --background: url('../../../../../../assets/header_dark.svg');
-
-    //medidas máximas para que no se estire el svg
-    max-height: 153px;
-    max-width: 390px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding-bottom: 20px;
-
-    .buttons{
-      ion-button{
-        margin-left: 16px;
-        ion-icon{
-          font-size: 32px;
-          color: var(--primary-50);
-  
-        }
-      }
-
-      ion-button::part(native){
-        padding: 0;
+  .boton-cerrar{
+    --padding-top: 32px;
+    ion-button{
+      ion-icon{
+        font-size: 32px;
       }
     }
-
-    .title{
-      ion-title{
-        padding-left: 32px;
-        font-family: var(--font-display);
-        font-size: 24px;
-        color: var(--neutral-50);
-      }
-    }
-    
   }
 }
 
@@ -93,26 +53,25 @@ ion-header{
         background: var(--primary-700);
       }
 
-      .notificacion-label{
-        ion-label{
-          .titulo{
-            font-family: var(--font-body);
-            font-size: 16px;
-            color: var(--primary-700);
-          }
-          .mensaje{
-            font-family: var(--font-body);
-            font-size: 16px;
-            color: var(--neutral-900);
-          }
-          .fecha{
-            font-family: var(--font-body);
-            font-size: 14px;
-            color: var(--neutral-400);
-            margin-top: 16px;
-          }
+      ion-label{
+        .titulo{
+          font-family: var(--font-body);
+          font-size: 16px;
+          color: var(--primary-700);
+        }
+        .mensaje{
+          font-family: var(--font-body);
+          font-size: 16px;
+          color: var(--neutral-900);
+        }
+        .fecha{
+          font-family: var(--font-body);
+          font-size: 14px;
+          color: var(--neutral-400);
+          margin-top: 16px;
         }
       }
+      
     }
 
     ion-item::part(native){

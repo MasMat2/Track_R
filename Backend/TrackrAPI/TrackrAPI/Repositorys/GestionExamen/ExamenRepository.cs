@@ -41,13 +41,12 @@ public class ExamenRepository : Repository<Examen>, IExamenRepository
     public IEnumerable<ExamenGridDto> ConsultarMisExamenes(int idUsuario)
     {
         return context.Examen
-            .Where(p => p.IdUsuarioParticipante == idUsuario && p.IdEstatusExamen == 1 && p.Estatus == true
-                    && p.IdProgramacionExamenNavigation.FechaExamen >= System.DateTime.Now.Date)
+            .Where(p => p.IdUsuarioParticipante == idUsuario && p.IdEstatusExamen == 1 && p.Estatus == true)
             .OrderBy(p => p.IdExamen)
             .Select(p => new ExamenGridDto {
                 IdExamen = p.IdExamen,
                 TipoExamen = p.IdProgramacionExamenNavigation.IdTipoExamenNavigation.Nombre ?? string.Empty,
-                FechaExamen = p.IdProgramacionExamenNavigation.FechaExamen,
+                FechaExamen = p.IdProgramacionExamenNavigation.FechaExamen.Value,
                 HoraExamen = p.IdProgramacionExamenNavigation.HoraExamen,
                 Duracion = p.IdProgramacionExamenNavigation.Duracion,
                 TotalPreguntas = p.IdProgramacionExamenNavigation.IdTipoExamenNavigation.TotalPreguntas
@@ -137,7 +136,9 @@ public class ExamenRepository : Repository<Examen>, IExamenRepository
             {
                 IdExamen = p.IdExamen,
                 TipoExamen = p.IdProgramacionExamenNavigation.IdTipoExamenNavigation.Nombre ?? string.Empty,
-                FechaExamen = p.IdProgramacionExamenNavigation.FechaExamen,
+                FechaExamen = p.IdProgramacionExamenNavigation.FechaExamen.HasValue 
+                    ? p.IdProgramacionExamenNavigation.FechaExamen.Value 
+                    : (DateTime?)null,
                 HoraExamen = p.IdProgramacionExamenNavigation.HoraExamen,
                 Duracion = p.IdProgramacionExamenNavigation.Duracion,
                 NombreUsuario = p.IdUsuarioParticipanteNavigation.Nombre + " " + p.IdUsuarioParticipanteNavigation.ApellidoPaterno + " " + p.IdUsuarioParticipanteNavigation.ApellidoMaterno,

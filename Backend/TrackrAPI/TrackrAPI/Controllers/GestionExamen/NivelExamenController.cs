@@ -24,6 +24,13 @@ public class NivelExamenController : ControllerBase
     }
 
     [HttpGet]
+    [Route("consultarTodosParaSelector/{idAsignatura}")]
+    public IEnumerable<NivelExamenGridDto> ConsultarTodosParaSelector(int idAsignatura)
+    {
+        return _nivelExamenService.ConsultarTodosParaSelector(idAsignatura);
+    } 
+
+    [HttpGet]
     [Route("consultarGeneral")]
     public IEnumerable<NivelExamenGridDto> ConsultarGeneral()
     {

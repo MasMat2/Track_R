@@ -6,11 +6,10 @@ import { EntidadEstructuraService } from '../../../../../../../shared/http/gesti
 import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
 import { lastValueFrom } from 'rxjs';
 import { addIcons } from 'ionicons';
-import { calendarOutline, chevronUp, chevronDown } from 'ionicons/icons';
 import { validarCamposRequeridos } from '@utils/utileria';
 import { AgregarExpedientePadecimientoDto } from 'src/app/shared/Dtos/seguridad/agregar-expediente-padecimiento-dto';
 import { ExpedientePadecimientoService } from '../../../../../../../shared/http/gestion-expediente/expediente-padecimiento.service';
-import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
+import { MisDoctoresService } from '@http/gestion-expediente/mis-doctores.service';
 import { UsuarioDoctoresDto } from 'src/app/shared/Dtos/usuario-doctores-dto';
 import { ExpedientePadecimientoDto } from '@dtos/seguridad/expediente-padecimiento-dto';
 import { ModalController } from '@ionic/angular/standalone';
@@ -41,7 +40,13 @@ export class DiagnosticoFormularioComponent  implements OnInit {
     private expedientePadecimientoService: ExpedientePadecimientoService,
     private doctoresService: MisDoctoresService,
     private modalController: ModalController
-  ) { addIcons({calendarOutline, chevronUp, chevronDown})}
+  ) { 
+    addIcons({
+      'chevron-up': 'assets/img/svg/chevron-up.svg',
+      'chevron-down': 'assets/img/svg/chevron-down.svg',
+      'calendar': 'assets/img/svg/calendar.svg'
+    })
+  }
 
   ngOnInit() {
     this.consultarDiagnosticosSelector();
@@ -69,6 +74,9 @@ export class DiagnosticoFormularioComponent  implements OnInit {
 
   protected enviarFormulario(formulario: NgForm) {
     this.btnSubmit = true;
+    if(this.expedientePadecimientoDto.fechaDiagnostico == null){
+      this.expedientePadecimientoDto.fechaDiagnostico = new Date();
+    }
     if (!formulario.valid) {
       validarCamposRequeridos(formulario);
       return;
@@ -84,9 +92,13 @@ export class DiagnosticoFormularioComponent  implements OnInit {
       error: () => {
       },
       complete: () => {
-        this.modalController.dismiss();
+        this.cerrarModal(null, "confirm");
       }
     })
+  }
+
+  protected cerrarModal(data: any, role: string){
+    this.modalController.dismiss(data, role);
   }
 
 }

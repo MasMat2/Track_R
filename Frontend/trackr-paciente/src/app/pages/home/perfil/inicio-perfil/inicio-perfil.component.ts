@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { chevronForward, chevronDown} from 'ionicons/icons';
 import { AuthService } from '../../../../auth/auth.service';
 import { AlertController } from '@ionic/angular/standalone';
 import { Constants } from '@utils/constants/constants';
@@ -14,6 +13,7 @@ import { UsuarioExpedienteGridDTO } from 'src/app/shared/Dtos/seguridad/usuario-
 import { InformacionPerfilDto } from 'src/app/shared/Dtos/perfil/informacion-perfil-dto';
 import { TerminosYCondicionesComponent } from '@sharedComponents/terminos-y-condiciones/terminos-y-condiciones.component';
 import { InfoLibreriasOpenSourceComponent } from '@sharedComponents/info-librerias-opensource/info-librerias-opensource.component';
+import { AvisoPrivacidadComponent } from '@sharedComponents/aviso-privacidad/aviso-privacidad.component';
 
 
 @Component({
@@ -32,7 +32,7 @@ export class InicioPerfilComponent  implements OnInit {
 
   protected informacionPerfil$: Observable<InformacionPerfilDto>;
   protected infoPerfil: InformacionPerfilDto;
-  protected fotoPerfilUrl: string;
+  protected fotoPerfilUrl: string = "assets/img/svg/avatar-placeholder.svg";
 
   protected pacientes: UsuarioExpedienteGridDTO[];
 
@@ -44,14 +44,15 @@ export class InicioPerfilComponent  implements OnInit {
     private usuarioService: UsuarioService,
   ) { 
     addIcons({
-      chevronForward,
-      chevronDown,
       'persona':'assets/img/svg/user.svg',
       'cruz': 'assets/img/svg/cross.svg', 
       'portapapeles-mas': 'assets/img/svg/clipboard-plus.svg',
       'pildora': 'assets/img/svg/pill.svg',
       'cerrar-sesion': 'assets/img/svg/log-out.svg',
-      'informacion': 'assets/img/svg/info.svg'
+      'informacion': 'assets/img/svg/info.svg',
+      'chevron-down': 'assets/img/svg/chevron-down.svg',
+      'chevron-right': 'assets/img/svg/chevron-right.svg',
+
     })
   }
 
@@ -93,9 +94,8 @@ export class InicioPerfilComponent  implements OnInit {
 
   protected async presentarAlertaCerrarSesion() {
     const alert = await this.alertCtrl.create({
-      header: '¿Seguro que deseas cerrar sesión?',
-      message: Constants.ALERT_DELETE,
-      cssClass: 'custom-alert-delete',
+      header: '¿Seguro(a) que deseas cerrar sesión?',
+      cssClass: 'custom-alert color-error icon-info two-buttons',
       buttons: [
         {
           text: 'No, regresar',
@@ -121,6 +121,13 @@ export class InicioPerfilComponent  implements OnInit {
 
     modal.present();
   }
+  protected async mostrarAvisoPrivacidad() {
+    const modal = await this.modalController.create({
+      component: AvisoPrivacidadComponent,
+    });
+
+    modal.present();
+  }
 
   protected async mostrarInfoLibreriasOpenSource() {
     const modal = await this.modalController.create({
@@ -137,10 +144,7 @@ export class InicioPerfilComponent  implements OnInit {
     this.informacionPerfil$.subscribe({
       next: (info) => {
         this.infoPerfil = info;
-        if(this.infoPerfil.imagenBase64 == null){
-          this.fotoPerfilUrl = "https://ionicframework.com/docs/img/demos/avatar.svg";
-        }
-        else{
+        if(this.infoPerfil?.imagenBase64.archivo != null){
           this.fotoPerfilUrl = `data:${info.imagenBase64?.archivoMime};base64,` + info.imagenBase64?.archivo;
         }
       },

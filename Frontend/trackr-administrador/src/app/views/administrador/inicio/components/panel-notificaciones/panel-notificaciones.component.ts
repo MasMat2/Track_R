@@ -9,6 +9,9 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { ModalPanelNotificacionesComponent } from './modal-panel-notificaciones/modal-panel-notificaciones.component';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { Notificacion } from '@dtos/notificaciones/notificacion-dto';
+import { MeetService } from '@http/chats/meet.service';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-panel-notificaciones',
@@ -17,26 +20,26 @@ import { Router } from '@angular/router';
 })
 export class PanelNotificacionesComponent implements OnInit {
 
+  protected iconMappings: any = {
+    2: { name: 'message-square-more'},
+    3: {name : 'phone'},
+    4: { name: 'chevron-right' },
+
+  };
+
   protected pacientes$: Observable<Usuario[]>;
-  protected tiposNotificacion: { idTipoNotificacion: number, nombre: string }[] = [
-    { idTipoNotificacion: 2, nombre: 'Chat' },
-    { idTipoNotificacion: 3, nombre: 'Video' },
-    { idTipoNotificacion: 4, nombre: 'Alerta' },
-  ];
+  // protected tiposNotificacion: { idTipoNotificacion: number, nombre: string }[] = [
+  //   { idTipoNotificacion: 2, nombre: 'Chat' },
+  //   { idTipoNotificacion: 3, nombre: 'Video' },
+  //   { idTipoNotificacion: 4, nombre: 'Alerta' },
+  // ];
 
   protected idPaciente?: number;
   protected idTipoNotificacion?: number;
   protected mensaje: string;
 
-  protected notificaciones$: Observable<{
-    id: number,
-    paciente: string,
-    mensaje: string,
-    fecha: Date,
-    imagen?: string | SafeUrl,
-    visto: boolean,
-    idChat?: number
-  }[]>;
+  protected notificaciones$: Observable<Notificacion[]>;
+  protected clicDeshabilitado = false;
 
   constructor(
     private notificacionService: NotificacionService,
@@ -44,7 +47,9 @@ export class PanelNotificacionesComponent implements OnInit {
     private usuarioService: UsuarioService,
     private modalService: BsModalService,
     private sanitizer:DomSanitizer,
-    private router:Router
+    private router:Router,
+    private meetService: MeetService,
+    private fechaService: FechaService
   ) { }
 
   ngOnInit() {
@@ -58,13 +63,14 @@ export class PanelNotificacionesComponent implements OnInit {
         map(notificaciones => notificaciones.map((notificacion) => {
           return {
             id: notificacion.idNotificacionUsuario,
+            idTipoNotificacion: notificacion.idTipoNotificacion,
             paciente: notificacion.nombrePaciente,
             mensaje: notificacion.mensaje,
-            fecha: notificacion.fechaAlta,
+            fecha: this.fechaService.fechaUTCAFechaLocal(notificacion.fechaAlta),
             imagen: (notificacion.imagen !== null || notificacion.imagen !== undefined) ? this.sanitizer.bypassSecurityTrustUrl(notificacion.imagen || '') : undefined,
             visto: notificacion.visto,
             idChat: notificacion.idChat
-          };
+          } as Notificacion;
         }))
       );
   }
@@ -79,9 +85,20 @@ export class PanelNotificacionesComponent implements OnInit {
     this.notificacionService.notificar(dto).subscribe();
   }
 
-  protected async marcarComoVista(idNotificacionUsuario: number) {
-    await this.notificacionHubService.marcarComoVista(idNotificacionUsuario);
-    this.consultarNotificaciones();
+  protected async marcarComoVista(notificacion: Notificacion) {
+
+    this.clicDeshabilitado = true;
+    try {
+      if(! notificacion.visto){
+        await this.notificacionHubService.marcarComoVista(notificacion.id);
+      }
+      await this.meetService.redirigirMeet(notificacion);
+      this.consultarNotificaciones();
+    } catch (error) {
+      console.error('Error al marcar como vista:', error);
+    } finally {
+      this.clicDeshabilitado = false;
+    }
   }
 
   protected mostrarModal(notificacion:any){
@@ -95,6 +112,10 @@ export class PanelNotificacionesComponent implements OnInit {
       }
       this.modalService.show(ModalPanelNotificacionesComponent,{initialState});
     }
+  }
+
+  protected cerrarModal(){
+    this.modalService.hide();
   }
 
 }

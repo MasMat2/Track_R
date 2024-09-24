@@ -1,16 +1,15 @@
 <ion-header class="ion-no-border">
-  <div class="contenedor-header">
+  <div class="contenedor-header-dark">
     <ion-toolbar>
-      <ion-buttons slot="start">
+      <ion-buttons class="start" slot="start">
         <ion-button routerLink="">
-          <ion-icon slot="start" name="chevron-back"></ion-icon>
-          Atrás
+          <ion-icon slot="start" name="chevron-left"></ion-icon>
+          <ion-label>Atrás</ion-label>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </div>
 </ion-header>
-
 <ion-content>
   <div class="contenedor-principal">
     <div class="saludo">
@@ -19,74 +18,89 @@
         <p>Ingresa tu usuario y contraseña para iniciar sesión.</p>
       </ion-text>
     </div>
-    <form 
-      #formulario="ngForm"
-      novalidate="novalidate"
-      (ngSubmit)="enviarFormulario(formulario)"
-    >
-      <div class="formulario">
+    <div class="formulario">
+      <form
+        #formulario="ngForm"
+        novalidate="novalidate"
+        (ngSubmit)="enviarFormulario(formulario)">
         <div class="contenido-formulario">
-          
-            <ion-list class="inputs">
-              <div class="input">
-                <ion-text><p>Usuario</p></ion-text>
-                <ion-item lines="none" class="normal-input">
-                  <div class="input-icon">
-                    <ion-icon name="person-outline"></ion-icon>
+          <ion-grid class="inputs ion-no-padding">
+            <ion-row>
+              <ion-col size="12">
+                <div class="input">
+                  <ion-label>Usuario</ion-label>
+                  <ion-item lines="none" class="general-input icon-left">
+                    <ion-icon slot="start" name="user"></ion-icon>
+                    <ion-input
+                      #correo="ngModel"
+                      [(ngModel)]="loginRequest.correo"
+                      id="correo"
+                      name="correo"
+                      type="text"
+                      maxlength="50"
+                      required="true"
+                      autocomplete="off"
+                      placeholder="Escribe tu usuario aquí">
+                    </ion-input>
+                  </ion-item>
+                  <div 
+                    class="input-text-error"
+                    *ngIf="correo.errors?.['required'] && (correo.dirty || correo.touched)">
+                    <ion-icon slot="start" name="info"></ion-icon>
+                    El usuario es requerido
                   </div>
-                  <ion-input
-                    #correo="ngModel"
-                    [(ngModel)]="loginRequest.correo"
-                    id="correo"
-                    name="correo"
-                    type="text"
-                    maxlength="50"
-                    required="true"
-                    autocomplete="off"
-                    placeholder="Escribe tu usuario aquí"
-                  >
-                  </ion-input>
-                </ion-item>
-              </div>
-              <div class="input">
-                <ion-text><p>Contraseña</p></ion-text>
-                <ion-item lines="none" class="password-input">
-                  <ion-input 
-                    #contrasena="ngModel"
-                    [(ngModel)]="loginRequest.contrasena"
-                    id="contrasena"
-                    name="contrasena"
-                    [type]="pswInputType"
-                    autocomplete="off"
-                    required="true"
-                    maxlength="50"
-                    placeholder="Escribe tu contraseña aquí"
-                  >
-                  </ion-input>
-                  <div class="input-icon">
-                    <ion-button class="btn-mostrar-contrasena" fill="clear"(click)="mostrarContrasena()">
-                      <ion-icon *ngIf="!mostrarPwd" slot="icon-only" name="eye-outline"></ion-icon>
-                      <ion-icon *ngIf="mostrarPwd" slot="icon-only" name="eye-off-outline"></ion-icon>
-                    </ion-button>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">
+                <div class="input">
+                  <ion-label>Contraseña</ion-label>
+                  <ion-item lines="none" class="general-input icon-right">
+                    <ion-input
+                      #contrasena="ngModel"
+                      [(ngModel)]="loginRequest.contrasena"
+                      id="contrasena"
+                      name="contrasena"
+                      [type]="pswInputType"
+                      autocomplete="off"
+                      required="true"
+                      maxlength="100"
+                      placeholder="Escribe tu contraseña aquí">
+                    </ion-input>
+                    <ion-icon *ngIf="!mostrarPwd" slot="end" name="eye" (click)="mostrarContrasena()"></ion-icon>
+                    <ion-icon *ngIf="mostrarPwd" slot="end" name="eye-off" (click)="mostrarContrasena()"></ion-icon>
+                  </ion-item>
+                  <div 
+                    class="input-text-error" 
+                    *ngIf="contrasena.errors?.['required'] && (contrasena.dirty || contrasena.touched)">
+                    <ion-icon slot="start" name="info"></ion-icon>
+                    La contraseña es requerida
                   </div>
-                </ion-item>
-              </div>
-            </ion-list>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </div>
-        <div class="botones">
-          <ion-button class="btn-login" type="submit" [disabled]="btnSubmit || !formulario.valid">
+        <div class="botones botones-column">
+          <ion-button
+            class="dark"
+            type="submit"
+            [disabled]="btnSubmit || !formulario.valid">
             Iniciar Sesión
           </ion-button>
-          <a routerLink="/acceso/peticion-restablecer-contrasena"  class="recuperar-contrasena">¿Olvidaste tu contraseña?</a>
+          <a
+            routerLink="/acceso/peticion-restablecer-contrasena"
+            class="recuperar-contrasena">
+            ¿Olvidaste tu contraseña?
+          </a>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-  <!-- alerta de cargando cuando se necesite -->
-
 </ion-content>
 
-<ion-footer class="ion-no-border" >
+<ion-footer class="ion-no-border">
   <div class="contenedor-footer">
     <ion-text>
       <p>CHRISTUS MUGUERZA</p>

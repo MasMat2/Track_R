@@ -1,23 +1,22 @@
 <ion-header class="ion-no-border">
-  <div class="contenedor-header">
+  <div class="contenedor-header-light">
     <ion-toolbar>
-      <ion-buttons slot="start">
+      <ion-buttons class="start" slot="start">
         <ion-button routerLink="/acceso/login">
-          <ion-icon slot="start" name="chevron-back"></ion-icon>
-          Atrás
+          <ion-icon slot="start" name="chevron-left"></ion-icon>
+          <ion-label>Atrás</ion-label>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </div>
 </ion-header>
-<ion-content>
+<ion-content class="primary">
   <div class="contenedor-principal">
     <div class="mensaje">
       <ion-text>
         <h1>¿Olvidaste tu contraseña?</h1>
         <p>
-          Confirma tu nombre de usuario y recibirás un enlace a tu correo
-          electrónico para restablecer tu contraseña.
+          Confirma tu correo electrónico y recibirás un enlace para restablecer tu contraseña.
         </p>
       </ion-text>
     </div>
@@ -28,46 +27,52 @@
         (ngSubmit)="recuperarContrasena(formulario)"
       >
         <div class="contenido-formulario">
-          <ion-list class="inputs">
-            <div class="input">
-              <ion-text><p>Nombre de usuario</p></ion-text>
-              <ion-item lines="none">
-                <ion-button fill="clear" slot="start" disabled>
-                  <ion-icon slot="icon-only" name="person-outline"></ion-icon>
-                </ion-button>
-                <ion-input
-                  #correo="ngModel"
-                  [(ngModel)]="usuario.correo"
-                  id="correo"
-                  name="correo"
-                  type="text"
-                  maxlength="50"
-                  required="true"
-                  autocomplete="off"
-                  placeholder="Escribe tu usuario aquí"
-                >
-                </ion-input>
-              </ion-item>
-            </div>
-          </ion-list>
+          <ion-grid class="inputs ion-no-padding">
+            <ion-row>
+              <ion-col size="12">
+                <div class="input">
+                  <ion-label>Correo electrónico</ion-label>
+                  <ion-item lines="none" class="general-input icon-left">
+                    <ion-icon slot="start" name="user"></ion-icon>
+                    <ion-input
+                      #correo="ngModel"
+                      [(ngModel)]="usuario.correo"
+                      id="correo"
+                      name="correo"
+                      type="email"
+                      maxlength="50"
+                      required="true"
+                      autocomplete="off"
+                      placeholder="Escribe tu email aquí"
+                      email>
+                    </ion-input>
+                  </ion-item>
+                  <div 
+                    class="input-text-error" 
+                    *ngIf="correo.errors?.['required'] && (correo.dirty || correo.touched)">
+                    <ion-icon slot="start" name="info"></ion-icon>
+                    El usuario es requerido
+                  </div>
+                  <div 
+                    class="input-text-error" 
+                    *ngIf="!correo.valid && (correo.dirty || correo.touched)">
+                      <ion-icon slot="start" name="info"></ion-icon>
+                      Ingrese un correo válido
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </div>
-        <div class="botones">
+        <div class="botones botones-column">
           <ion-button
-            class="btn-login"
+            class="dark"
             type="submit"
-            [disabled]="btnSubmit || !formulario.valid"
-          >
+            [disabled]="btnSubmit || !formulario.valid">
             Confirmar
           </ion-button>
         </div>
       </form>
     </div>
   </div>
-  <!-- alerta de cargando cuando se necesite -->
-  <ion-alert
-    [isOpen]="cargando$ | async"
-    [message]="spinner"
-    cssClass="custom-alert-loading"
-  >
-  </ion-alert>
 </ion-content>

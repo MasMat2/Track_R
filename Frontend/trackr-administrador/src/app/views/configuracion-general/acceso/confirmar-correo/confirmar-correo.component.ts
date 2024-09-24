@@ -17,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ConfirmarCorreoComponent implements OnInit {
 
-  datos: ConfirmarCorreoDto = {correo: '', token: ''};
+  datos: ConfirmarCorreoDto = {correo: '', token: '', idUsuario: null};
   listo: boolean = false;
 
   constructor(
@@ -27,7 +27,7 @@ export class ConfirmarCorreoComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.datos.correo = params['id'];
+      this.datos.idUsuario = params['id'];
       this.datos.token = params['tkn'];
     });
     this.validarConfirmacion();

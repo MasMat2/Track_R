@@ -1,17 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ChatDTO } from '@dtos/chats/chat-dto';
 import { ChatHubServiceService } from '@services/chat-hub-service.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil, tap } from 'rxjs';
 import { ChatMensajeHubService } from '../../shared/services/chat-mensaje-hub.service';
 import { ChatMensajeDTO } from '@dtos/chats/chat-mensaje-dto';
 import { ActivatedRoute } from '@angular/router';
+import { ChatPersonaService } from '@http/chats/chat-persona.service';
+import { SessionService } from '@services/session.service';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent {
+export class ChatComponent implements OnDestroy {
   protected chats$: Observable<ChatDTO[]>;
   protected chats:ChatDTO[] = [];
   protected chatMensajes$: Observable<ChatMensajeDTO[][]>
@@ -20,18 +23,37 @@ export class ChatComponent {
   protected idChatSeleccionado: number;
   protected mensajesChatSeleccionado: ChatMensajeDTO[]; 
   protected tituloChatSeleccionado: string;
+  protected imagenChatSeleccionado: string;
+  protected tipoMimeSeleccionado: string;
+  private idUsuario : number | null;
+  private unsubscribe$ = new Subject<void>();
 
   protected clickEnChat = false;
 
   constructor(
     private ChatHubServiceService:ChatHubServiceService,
     private chatMensajeHubService:ChatMensajeHubService,
-    private route:ActivatedRoute
-  ) { }
+    private route:ActivatedRoute,
+    private chatPersonaService : ChatPersonaService,
+    private sessionService : SessionService,
+    private fechaService: FechaService
+  ) {
+    this.chatPersonaService.idChatPadre$
+    .pipe(takeUntil(this.unsubscribe$.asObservable()))
+    .subscribe(idChat => {
+      this.obtenerChatSeleccionado(idChat);
+    });
+   }
 
-  ngOnInit(): void {
+  async ngOnInit(){
     this.obtenerChats();
-    //this.obtenerMensajes();
+    this.idUsuario = this.sessionService.obtenerIdUsuarioSesion();
+  }
+
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   obtenerId(){
@@ -46,37 +68,33 @@ export class ChatComponent {
   }
 
   obtenerChats(){
-    this.chats$ = this.ChatHubServiceService.chat$
-    this.chats$.subscribe(res => {
-      this.chats = res;
+    //this.chats$ = this.ChatHubServiceService.chat$
+    this.ChatHubServiceService.chat$.subscribe(res => {
+      this.chats = res
       this.obtenerUltimoMensaje();
       this.obtenerMensajes();
     })
   }
 
   obtenerMensajes(){
-    this.chatMensajes$ = this.chatMensajeHubService.chatMensaje$
-
+    //TODO:no descargar los mensajes hasta entrar al chat
+    this.chatMensajes$ = this.chatMensajeHubService.chatMensaje$;
+    
     this.chatMensajes$.subscribe(res =>{
+      if(this.idChatSeleccionado != undefined){
+        this.obtenerChatSeleccionado(this.idChatSeleccionado);
+      }
       this.mensajes = res;
       this.obtenerUltimoMensaje();
-      this.obtenerId();
-      // this.route.params.subscribe(params => {
-      //   const idChat = Number(params['id']);
-      //   if(idChat !== undefined){
-      //     this.idChatSeleccionado = idChat;
-      //     this.obtenerChatSeleccionado(idChat);
-      //   }
-      // })
     })
   }
 
   enviarMensaje(idChat:number): void{
     let msg: ChatMensajeDTO = {
-      fecha: new Date(),
+      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
       idChat,
       mensaje: this.contenido,
-      idPersona:5333,
+      idPersona:this.idUsuario as number,
       idArchivo: 0
     }
 
@@ -84,15 +102,43 @@ export class ChatComponent {
   }
 
   obtenerChatSeleccionado(id:number){
+
+    if(this.chats.length == 0){
+      this.obtenerChats();
+    }
     this.idChatSeleccionado = id;
     this.mensajesChatSeleccionado = this.mensajes.find(array => array.some(x => x.idChat === this.idChatSeleccionado)) || [];
     let aux = this.chats.find(x => x.idChat == id)
     this.tituloChatSeleccionado = aux?.titulo || "";
+    this.imagenChatSeleccionado = aux?.imagenBase64 || "";
+    this.tipoMimeSeleccionado = aux?.tipoMime || "";
     this.clickEnChat = true;
   }
 
-  obtenerUltimoMensaje():void{
-    let ultimoMensaje = this.mensajes.map(arr => arr[arr.length - 1]?.mensaje || "")
-    this.chats.forEach((x,index) => {x.ultimoMensaje = ultimoMensaje[index]})
+  private obtenerUltimoMensaje(): void {
+    const ultimoMensaje = this.mensajes.map(
+      (arr) =>{ return {mensajes: arr[arr.length - 1]?.mensaje || '', chat: arr[0]?.idChat || 0}}
+    );
+
+    const fechaUltimoMensaje = this.mensajes.map(
+      (arr) => {
+        return {fecha: arr[arr.length - 1]?.fecha || this.fechaService.obtenerFechaActualISOString(), chat: arr[0]?.idChat || 0}
+      }
+    )
+    
+    this.chats.map(
+      chat => {
+        chat.ultimoMensaje = ultimoMensaje.filter(y => y.chat == chat.idChat)[0]?.mensajes || '';
+        chat.fechaUltimoMensaje = fechaUltimoMensaje.filter(y => y.chat == chat.idChat)[0]?.fecha || '';
+        return chat;
+      }
+    )
+    
+    this.chats = this.chats.sort((a, b) => {
+      const fechaA = a.fechaUltimoMensaje ? new Date(a.fechaUltimoMensaje).getTime() : 0;
+      const fechaB = b.fechaUltimoMensaje ? new Date(b.fechaUltimoMensaje).getTime() : 0;
+    
+      return fechaB - fechaA;
+    });
   }
 }

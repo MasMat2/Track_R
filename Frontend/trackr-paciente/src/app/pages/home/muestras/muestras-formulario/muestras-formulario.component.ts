@@ -10,12 +10,15 @@ import { SeccionCampo } from '@models/gestion-expediente/seccion-campo';
 import { CampoExpedienteModule } from '@sharedComponents/campo-expediente/campo-expediente.module';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { SeccionMuestraDTO } from '@dtos/gestion-expediente/seccion-muestra-dto';
-import { NavigationEnd, Router } from '@angular/router';
 import { DominioHospitalService } from '@http/catalogo/dominio-hospital.service';
 import { PadecimientoMuestraDTO } from '@dtos/gestion-expediente/padecimiento-muestra-dto';
 import { addIcons } from 'ionicons';
 import { validarCamposRequeridos } from '@utils/utileria';
 import { AlertController, ModalController } from '@ionic/angular/standalone';
+import { GeneralConstant } from '@utils/general-constant';
+import { DirectiveModule } from 'src/app/shared/directives/directive.module';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -28,7 +31,8 @@ import { AlertController, ModalController } from '@ionic/angular/standalone';
     IonicModule,
     SharedModule,
     CommonModule,
-    CampoExpedienteModule],
+    CampoExpedienteModule,
+    DirectiveModule,],
     providers: [SeccionCampoService, EntidadEstructuraTablaValorService,]
 })
 export class MuestrasFormularioComponent implements OnInit {
@@ -39,31 +43,24 @@ export class MuestrasFormularioComponent implements OnInit {
   protected seccionSeleccionada: SeccionMuestraDTO;
   protected seccionYaSeleccionada: boolean = false;
   protected submitting: boolean = false;
+  protected variablesHealthKit = GeneralConstant.VARIABLES_HEALTHKIT;
+  protected variablesExistenEnHealthKit: boolean = false;
 
   constructor(
     private seccionCampoService: SeccionCampoService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
-    private router : Router,
     private dominioHospitalService:DominioHospitalService,
     private modalController: ModalController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private loadingSpinner: LoadingSpinnerService,
+    private fechaService: FechaService
   ) { 
 
       addIcons({ 
         'chevron-up': 'assets/img/svg/chevron-up.svg',
-        'chevron-down': 'assets/img/svg/chevron-down.svg'
+        'chevron-down': 'assets/img/svg/chevron-down.svg',
+        'swap-vertical-outline': 'assets/img/svg/swap-vertical-outline.svg',
       })
-      // this.router.events
-      // .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
-      // .subscribe(async (event: NavigationEnd) =>
-      //  {
-      //   const currentUrl = event.urlAfterRedirects;
-      //   if ( currentUrl === '/home/clinicos') 
-      //   {
-      //     this.consultarArbol();
-  
-      //   }
-      // });
     }
 
   ngOnInit() {
@@ -74,8 +71,6 @@ export class MuestrasFormularioComponent implements OnInit {
     lastValueFrom(this.seccionCampoService.consultarPorSeccion())
     .then((arbolPadecimiento: PadecimientoMuestraDTO[]) => {
       this.arbolPadecimiento = arbolPadecimiento;
-      console.log(arbolPadecimiento);
-      console.log(this.arbolPadecimiento);
     });
   }
   
@@ -83,7 +78,6 @@ export class MuestrasFormularioComponent implements OnInit {
   protected async enviarFormulario(formulario: NgForm) {
     this.submitting = true;
 
-    console.log(this.seccionSeleccionada);
     if (!formulario.valid) {
       validarCamposRequeridos(formulario);
       return;
@@ -97,11 +91,10 @@ export class MuestrasFormularioComponent implements OnInit {
           idSeccionVariable: seccionCampo.idSeccionCampo,
           valor: seccionCampo.valor.toString(),
           fueraDeRango: await this.estaFueraDeRango(seccionCampo),
-          fechaMuestra: new Date(this.fechaSeleccionada)
+          fechaMuestra: this.fechaService.fechaLocalAFechaUTC(this.fechaSeleccionada)
         });
       }
     }
-    console.log(camposAgregados);
     if (camposAgregados.length === 0) {
       this.submitting = false;
       return;
@@ -110,7 +103,8 @@ export class MuestrasFormularioComponent implements OnInit {
     this.agregar(camposAgregados);
   }
 
-  private agregar(campoAgregar: TablaValorMuestraDTO[]): void {
+  private agregar(campoAgregar: TablaValorMuestraDTO[]) {
+    this.loadingSpinner.presentLoading();
     this.entidadEstructuraTablaValorService.agregarMuestra(campoAgregar).subscribe(
       {
         next: ()=> {
@@ -120,12 +114,19 @@ export class MuestrasFormularioComponent implements OnInit {
           this.seccionYaSeleccionada = false;
         },
         complete : () => {
-          this.modalController.dismiss(null, 'confirm');
+          this.loadingSpinner.dismissLoading();
+          this.presentarAlertSuccess();
+        }
+        ,
+        error: () => {
+          this.loadingSpinner.dismissLoading();
+          this.submitting = false;
         }
       }
     );
   }
 
+  //mover al backend
   private async estaFueraDeRango(campo: SeccionCampo) {
     const dominio = campo.idDominioNavigation;
 
@@ -137,7 +138,6 @@ export class MuestrasFormularioComponent implements OnInit {
 
     //Verificacion de la tabla dominio hospital
     let domHos = await lastValueFrom(this.dominioHospitalService.obtenerDominioHospital(dominio.idDominio,0))
-    console.log(domHos)
     if(domHos != null){
       if(domHos.valorMaximo != null){
         dominio.valorMaximo = Number(domHos.valorMaximo)
@@ -164,6 +164,7 @@ export class MuestrasFormularioComponent implements OnInit {
 
   protected onChangeSeccion(){
     this.seccionYaSeleccionada = true;
+    this.variablesExistenEnHealthKit = this.seccionSeleccionada.seccionesCampo.every(seccionCampo => this.variablesHealthKit.includes(seccionCampo.clave));
   }
 
   protected valoresInputValidos(){
@@ -180,5 +181,31 @@ export class MuestrasFormularioComponent implements OnInit {
     }
 
     return true;
+  }
+
+  async syncronizeData(){
+    this.seccionSeleccionada.seccionesCampo.forEach(async variable => {
+      await this.callPlugin();
+    });
+  }
+
+  async callPlugin(){
+
+  }
+
+  protected async presentarAlertSuccess() {
+    const alertSuccess = await this.alertController.create({
+      header: 'Datos registrados exitosamente.',
+      buttons: [{
+        text: 'De acuerdo',
+        role: 'confirm',
+        handler: () => {
+          this.modalController.dismiss(null, 'confirm');
+        }
+      }],
+      cssClass: 'custom-alert color-primary icon-check',
+    });
+
+    await alertSuccess.present();
   }
 }

@@ -1,0 +1,21 @@
+<mat-toolbar>
+    <div class="contenedor-toolbar">
+        <div class="logo">
+            <img src="assets/img/svg/oncotrackerlogo_morado.svg" alt="">
+        </div>
+        <div class="contenido">
+            <div class="row">
+                <div class="col-6" style="padding: 0;">
+                    <div class="searchbar">
+                        <app-searchbar (search)="handleSearch($event)"></app-searchbar>
+                    </div>
+                </div>
+                <div class="col-6" style="padding: 0;">
+                    <div class="botones-toolbar">
+                        <app-notificaciones></app-notificaciones>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-toolbar>

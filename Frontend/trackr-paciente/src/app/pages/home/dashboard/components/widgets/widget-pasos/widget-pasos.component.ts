@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { WidgetComponent } from '../widget/widget.component';
-import { HealthData } from '../../../../../../shared/Dtos/health-data/health-data-interface';
-import { HealthService } from '@services/health.service';
+import { IonicModule } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+
 
 
 @Component({
@@ -13,44 +14,28 @@ import { HealthService } from '@services/health.service';
   imports: [
     CommonModule,
     WidgetComponent,
+    IonicModule,
   ]
 })
 export class WidgetPasosComponent  implements OnInit {
 
-  //protected pasos: number = 15_000;
-  protected meta: number = 0;
+  protected pasos: number = 0;
+  protected unidadMedida: string = "pasos";
 
-  protected metros: number = 0;
-  protected horas: number = 0;
-  protected minutos: number = 0;
-
-  protected pasos : HealthData;
-  protected distancia: number = 0;
-
-  constructor(private healthService: HealthService) { }
+  constructor() {
+    addIcons({
+      'pasos': 'assets/img/svg/Pasos.svg'
+    })
+   }
 
   ngOnInit() {
 
-    this.healthService.getPermissionState(); 
 
 
-    this.healthService.getPasos().then(data => {
-      this.pasos = data;
-      this.distancia = Math.round(this.pasos.value*0.68);
-    }).catch(error => {
-      // handle error here
-      console.error(error);
-    });
   }
 
   updateDataSteps(){
-    this.healthService.getPasos().then(data => {
-      this.pasos = data;
-      this.distancia = Math.round(this.pasos.value*0.68);
-    }).catch(error => {
-      // handle error here
-      console.error(error);
-    });
+    
   }
 
 }

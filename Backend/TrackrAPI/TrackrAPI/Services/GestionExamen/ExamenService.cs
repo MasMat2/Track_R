@@ -6,6 +6,9 @@ using TrackrAPI.Helpers;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using System;
+using TrackrAPI.Services.Notificaciones;
+using TrackrAPI.Dtos.Notificaciones;
+using TrackrAPI.Repositorys.Notificaciones;
 
 
 namespace TrackrAPI.Services.GestionExamen;
@@ -21,6 +24,8 @@ public class ExamenService
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly CorreoHelper _correoHelper;
     private readonly IConverter _converter;
+    private readonly NotificacionPacienteService _notificacionPacienteService;
+    private readonly ITipoNotificacionRepository _tipoNotificacionRepository;
 
     private readonly string AsuntoCorreo = "Programación de examen";
 
@@ -33,7 +38,9 @@ public class ExamenService
         IExamenReactivoRepository examenReactivoRepository,
         IReactivoRepository reactivoRepository,
         IContenidoExamenRepository contenidoExamenRepository,
-        IConverter converter)
+        IConverter converter,
+        NotificacionPacienteService notificacionPacienteService,
+        ITipoNotificacionRepository tipoNotificacionRepository)
     {
         _correoHelper = correoHelper;
         _examenRepository = examenRepository;
@@ -44,6 +51,8 @@ public class ExamenService
         _programacionExamenRepository = programacionExamenRepository;
         _usuarioRepository = usuarioRepository;
         _converter = converter;
+        _notificacionPacienteService = notificacionPacienteService;
+        _tipoNotificacionRepository = tipoNotificacionRepository;
     }
 
     public Examen? Consultar(int idExamen)
@@ -157,6 +166,11 @@ public class ExamenService
         return examenDto;
     }
 
+    public int ConsultarCantidadReactivos(int idAsignatura, int idNivelExamen)
+    {
+        return _reactivoRepository.ConsultarCantidadReactivos(idAsignatura, idNivelExamen);
+    }
+
     public int Agregar(Examen examen)
     {
         _examenValidatorService.ValidarAgregar(examen);
@@ -183,7 +197,7 @@ public class ExamenService
         }
     }
 
-    public void Actualizar(List<Examen> examenList)
+    public void Actualizar(List<Examen> examenList , int idUsuarioSesion)
     {
         if (examenList[0].IdProgramacionExamen == 0)
         {
@@ -208,10 +222,11 @@ public class ExamenService
 
                 if (!string.IsNullOrWhiteSpace(usuario.CorreoPersonal))
                 {
-                    EnviarCorreo(usuario.CorreoPersonal, examen);
                 }
             }
         }
+
+        EnviarNotificacion(examenList[0], examenList.Select(p => p.IdUsuarioParticipante).ToList() , idUsuarioSesion);
 
         foreach (Examen examen in examenDto)
         {
@@ -222,6 +237,29 @@ public class ExamenService
         }
     }
 
+    public async Task EnviarNotificacion(Examen examen, List<int> idsUsuarios, int idUsuarioSesion)
+    {
+        var pg = _programacionExamenRepository.Consultar(examen.IdProgramacionExamen);
+        DateTime fechaExamen = pg.FechaExamen.Value;
+        TimeSpan horaExamen = pg.HoraExamen.Value;
+        var idTipoNotificacion =_tipoNotificacionRepository.ConsultarPorClave(GeneralConstant.ClaveNotificacionAlerta).IdTipoNotificacion;
+
+        DateTime fechaCompletaExamen = new DateTime(fechaExamen.Year, fechaExamen.Month, fechaExamen.Day, horaExamen.Hours, horaExamen.Minutes, horaExamen.Seconds);
+        var fechaString = fechaCompletaExamen.ToString("yyyy-MM-ddTHH:mm:ssZ");
+
+        var notificacion = new NotificacionCapturaDTO
+        (
+           "Nuevo examen programado",
+           "Se le ha programado un examen para el día:",
+           fechaString,
+           idTipoNotificacion,
+           idUsuarioSesion,
+           null
+        );
+
+        await _notificacionPacienteService.Notificar(notificacion, idsUsuarios);
+
+    }
     public void EnviarCorreo(string correo, Examen examen)
     {
         // var programacionExamen = _programacionExamenRepository.Consultar(examen.IdProgramacionExamen);
@@ -302,6 +340,7 @@ public class ExamenService
     public string GenerarPdf(int idExamen)
     {
         string preguntas = "";
+        
         var index = 0;
 
         var examen = _examenRepository.ConsultarMiExamen(idExamen);
@@ -309,18 +348,22 @@ public class ExamenService
 
         foreach (var reactivo in reactivos)
         {
+            string respuestas = "";
+            foreach(var respuesta in reactivo.Respuestas)
+              respuestas += $"<p><b>{respuesta.Clave})</b> {respuesta.Respuesta1}</p> <br>";
+                    
             if (reactivo.ImagenBase64 != "" && reactivo.ImagenBase64 != "data:;base64,")
             {
-                preguntas +=
+            preguntas +=
                     @$"
                         <div class='pregunta'>
-                           <h3>{ index+1 }.- { reactivo.Pregunta }</h3>
-                           <div style='text-align: center; margin-top: 10px; margin-bottom: 10px;'>
-                               <img id='logo' class='imagenPregunta' src='{ reactivo.ImagenBase64 }' height='200'/>
-                           </div>
-                           <p>{ reactivo.Respuesta }</p>
-                           <p>Respondió: <span style='font-weight: bold;'>{ reactivo.RespuestaAlumno }</span></p>
-                       </div>
+                        <h3>{ index+1 }.- { reactivo.Pregunta }</h3>
+                        <div style='text-align: center; margin-top: 10px; margin-bottom: 10px;'>
+                            <img id='logo' class='imagenPregunta' src='{ reactivo.ImagenBase64 }' height='200'/>
+                        </div>
+                        {respuestas}
+                        <p>Respondió: <span style='font-weight: bold;'>{ reactivo.RespuestaAlumno }</span></p>
+                    </div>
                     ";
             }
             else
@@ -329,10 +372,10 @@ public class ExamenService
                 @$"
                     <div class='pregunta'>
                         <h3>{index+1 }.- { reactivo.Pregunta }</h3>
-                        <p> { reactivo.Respuesta }</p>
+                       {respuestas}
                         <p>Respondió: <span style='font-weight: bold;'>{ reactivo.RespuestaAlumno }</span></p>
                     </div>
-                ";
+                ";      
             }
             index++;
         }

@@ -45,7 +45,7 @@ export class GeneralConstant {
   public static GRID_ACCION_COMPLEMENTO = 'complementoPago';
   public static GRID_ACCION_PDF_COMPLEMENTO = 'pdfComplemento';
   public static GRID_ACCION_DESCARGAR_PDF = 'descargarPdf';
-
+  public static GRID_ACCION_DESCARGAR_EXCEL = 'descargarExcel';
 
   public static COMPONENT_ACCION_AGREGAR = 'Agregar';
   public static COMPONENT_ACCION_EDITAR = 'Editar';
@@ -377,6 +377,15 @@ export class GeneralConstant {
     class: 'modal-medium modal-size-md modal-position-center'
   };
 
+  public static CONFIG_MODAL_SMALL_CUSTOM: any = {
+    animated: true,
+    keyboard: false,
+    backdrop: 'static',
+    ignoreBackdropClick: true,
+    size: 'md',
+    class: 'modal-sm modal-size-md modal-position-center modal-content-color'
+  };
+
   public static CONFIG_MODAL_SMALL: any = {
     animated: true,
     keyboard: false,
@@ -443,4 +452,14 @@ export class GeneralConstant {
 
   public static ORIGEN_ESCENARIO_CONFIGURACION_CONTABLE = "configuracion-contable";
   public static ORIGEN_ESCENARIO_SALIDA_PERSONAL = "salida-personal";
+
+  public static  TIPO_NOTIFICACION = {
+    General: 'GRL',
+    Chat: 'CHT',
+    Video: 'VID',
+    Alerta: 'ALT',
+    Recomendacion: 'RCM',
+    Eecordatorio: 'RCD'
+  };
+
 }

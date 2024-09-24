@@ -37,18 +37,19 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
             .FirstOrDefault();
     }
 
-    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(List<int> idDoctorList)
+    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid(List<int> idDoctorList, int idCompania)
     {
         return context.ExpedienteDoctor
                       .Include(x => x.IdExpedienteNavigation)
                       .Include(x => x.IdExpedienteNavigation.ExpedientePadecimiento)
                       .ThenInclude(x => x.IdPadecimientoNavigation)
+                      .Where( ed => ed.IdExpedienteNavigation.IdUsuarioNavigation.IdCompania == idCompania)
                       .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.UsuarioRol.Any(ur => ur.IdRolNavigation.Clave == GeneralConstant.ClaveRolPaciente) &&
                        idDoctorList.Contains(ep.IdUsuarioDoctor))
                         .GroupBy(ep => ep.IdExpedienteNavigation.IdUsuario)
                         .Select(group => new UsuarioExpedienteGridDTO
                         {
-                            IdExpedienteTrackr = group.Key,
+                            IdExpedienteTrackr = group.FirstOrDefault().IdExpedienteNavigation.IdExpediente,
                             IdUsuario = group.Key,
                             DoctorAsociado = group.FirstOrDefault().IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre + " " + group.FirstOrDefault().IdUsuarioDoctorNavigation.ApellidoPaterno,
                             NombreCompleto = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ObtenerNombreCompleto(),
@@ -80,8 +81,9 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
     public int VariablesFueraRango(int idUsuario)
     {
         var currentDateUtc = DateTime.UtcNow.Date;
+        var oneMonthAgo = currentDateUtc.AddMonths(-1);
         return context.EntidadEstructuraTablaValor
-            .Where(eetv => eetv.IdTabla == idUsuario && eetv.FueraDeRango == true && eetv.FechaMuestra.Value.Date == currentDateUtc)
+            .Where(eetv => eetv.IdTabla == idUsuario && eetv.FueraDeRango == true && eetv.FechaMuestra.Value.Date <= currentDateUtc && eetv.FechaMuestra.Value.Date >= oneMonthAgo)
             .Count();
     }
 
@@ -198,6 +200,45 @@ public class ExpedienteTrackrRepository : Repository<ExpedienteTrackr>, IExpedie
     public IEnumerable<ExpedienteTrackr> ConsultarExpedientes()
     {
         return context.ExpedienteTrackr;
+    }
+
+    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaRecomendacionesGenerales()
+    {
+        return context.ExpedienteDoctor
+                      .Include(x => x.IdExpedienteNavigation)
+                      .Include(x => x.IdExpedienteNavigation.ExpedientePadecimiento)
+                      .ThenInclude(x => x.IdPadecimientoNavigation)
+                      .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.UsuarioRol.Any(ur => ur.IdRolNavigation.Clave == GeneralConstant.ClaveRolPaciente))
+                        .GroupBy(ep => ep.IdExpedienteNavigation.IdUsuario)
+                        .Select(group => new UsuarioExpedienteGridDTO
+                        {
+                            IdExpedienteTrackr = group.Key,
+                            IdUsuario = group.Key,
+                            DoctorAsociado = group.FirstOrDefault().IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre + " " + group.FirstOrDefault().IdUsuarioDoctorNavigation.ApellidoPaterno,
+                            NombreCompleto = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ObtenerNombreCompleto(),
+                            Patologias = group.FirstOrDefault().IdExpedienteNavigation.ExpedientePadecimiento.ObtenerPadecimientos(),
+                            Edad = (DateTime.Today.Year - group.FirstOrDefault().IdExpedienteNavigation.FechaNacimiento.Year - (DateTime.Today.DayOfYear < group.FirstOrDefault().IdExpedienteNavigation.FechaNacimiento.DayOfYear ? 1 : 0)).ToString() + " años",
+                            TipoMime = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ImagenTipoMime
+                        })
+                    .ToList();
+        // return context.ExpedientePadecimiento
+        //     .Include(ep => ep.IdExpedienteNavigation)
+        //     .Include(et => et.IdExpedienteNavigation.ExpedientePadecimiento)
+        //     .ThenInclude(ep => ep.IdPadecimientoNavigation)
+        //         .Where(ep => ep.IdExpedienteNavigation.IdUsuarioNavigation.UsuarioRol.Any( ur => ur.IdRolNavigation.Clave == GeneralConstant.ClaveRolPaciente) &&
+        //                idDoctorList.Contains(ep.IdUsuarioDoctor))
+        //         .GroupBy(ep => ep.IdExpedienteNavigation.IdUsuario)
+        //         .Select(group => new UsuarioExpedienteGridDTO
+        //     {
+        //         IdExpedienteTrackr = group.Key,
+        //         IdUsuario = group.Key,
+        //         DoctorAsociado = group.FirstOrDefault().IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre + " " + group.FirstOrDefault().IdUsuarioDoctorNavigation.ApellidoPaterno,
+        //         NombreCompleto = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ObtenerNombreCompleto(),
+        //         Patologias = group.FirstOrDefault().IdExpedienteNavigation.ExpedientePadecimiento.ObtenerPadecimientos(),
+        //         Edad = (DateTime.Today.Year - group.FirstOrDefault().IdExpedienteNavigation.FechaNacimiento.Year).ToString() + " años",
+        //         TipoMime = group.FirstOrDefault().IdExpedienteNavigation.IdUsuarioNavigation.ImagenTipoMime
+        //     })
+        //     .ToList();
     }
 
 

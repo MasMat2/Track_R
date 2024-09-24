@@ -1,53 +1,67 @@
 
 :host ::ng-deep {
-  .titulo-seccion {
-    margin-bottom: 10px;
-    color: rgb(78, 78, 78);
-    font-size: 16px;
+  .titulo-seccion{
+    width: 100%;
+    margin: 0;
+    margin-top: 48px;
+    margin-bottom: 16px;
+    font-family: var(--font-body);
+    font-size: 20px;
+    color: var(--neutral-600);
   }
 
   .card {
-    border-radius: 20px;
+    border-radius: 8px;
     height: 100%;
+    border: none;
+    box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.08);
+
+  }
+
+  .row{
+    padding: 0 !important;
   }
 }
 
-.scrollable-panel {
-  max-height: 100vh; 
-  overflow-y: auto; 
-}
-
-.popover-custom {
-  max-width: 500px !important; // ajusta el ancho máximo según tus necesidades
-  width: auto !important; // ancho automático para ajustar el contenido
-}
-
-.center {
-  font-size: 30px;
-  margin: 0 auto;
-  display: block;
-  position: relative;
-  top: 10px;  
+.contenedor{
+  padding: 56px 42px 56px 42px;
 }
 
 .titulo-contenedor{
-  display: flex;
-  align-items: center;
-
-  .saludo{
-    margin-right: 1rem;
-
-    .perfil{
-      color:  gray;
-      font-size: 1rem;
-    }
-  
+  padding: 0;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-bottom: 16px;
+  background: transparent;
+  h2{
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--primary-700);
   }
+  h3{
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 20px;
+    color: var(--neutral-700);
 
-
-  .nombre-doctor {
-    font-weight: 500;
-    font-size: 34px;
   }
-  
 }
+
+// .scrollable-panel {
+//   max-height: 100vh;
+//   overflow-y: auto;
+// }
+
+// .popover-custom {
+//   max-width: 500px !important; // ajusta el ancho máximo según tus necesidades
+//   width: auto !important; // ancho automático para ajustar el contenido
+// }
+
+// .center {
+//   font-size: 30px;
+//   margin: 0 auto;
+//   display: block;
+//   position: relative;
+//   top: 10px;
+// }

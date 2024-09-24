@@ -8,10 +8,11 @@ import {
   LogLevel
 } from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
-import { catchError, filter, take, timeout } from 'rxjs/operators';
+import { catchError, filter, map, take, timeout } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Constants } from '@utils/constants/constants';
 import { ChatMensajeDTO } from '@dtos/chats/chat-mensaje-dto';
+import { FechaService } from './fecha.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,13 +21,26 @@ export class ChatMensajeHubService {
   private connectionStatus = new BehaviorSubject<HubConnectionState>(HubConnectionState.Disconnected);
   
   private chatMensajeSubject = new BehaviorSubject<ChatMensajeDTO[][]>([]);
-  public chatMensaje$ = this.chatMensajeSubject.asObservable();
+  //public chatMensaje$ = this.chatMensajeSubject.asObservable();
+  public chatMensaje$ = this.chatMensajeSubject.asObservable().pipe(
+    map((chats) => {
+      return chats.map(chat => {
+        return chat.map(mensaje => {
+          if (!mensaje.fechaYaFormateada) {
+            mensaje.fecha = this.fechaService.fechaUTCAFechaLocal(mensaje.fecha);
+            mensaje.fechaYaFormateada = true; // Marca la fecha del mensaje como formateada (así se manejan mensajes entrantes)
+          }
+          return mensaje;
+        });
+      });
+    })
+  )
 
   private readonly endpoint = 'hub/chatMensaje';
 
   private connection:HubConnection;
 
-  constructor() { 
+  constructor(private fechaService: FechaService) { 
     this.iniciarConexion();
   }
 
@@ -110,7 +124,8 @@ export class ChatMensajeHubService {
       this.connection.state === HubConnectionState.Disconnected ||
       this.connection.state === HubConnectionState.Disconnecting
     ) {
-      throw new Error ('No se ha iniciado la conexion con el Hub de Notificaciones');
+      await this.iniciarConexion();
+      console.log('No se ha iniciado la conexión con el Hub de Notificaciones, Reconectando...');
     }
     else if(
       this.connection.state === HubConnectionState.Connecting ||

@@ -39,16 +39,31 @@ public class ExpedienteDoctorController : ControllerBase
     [HttpGet("selector")]
     public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarSelector()
     {
-
         int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
         return _expedienteDoctorService.ConsultarSelector(idUsuario);
     }
 
+    [HttpGet("selectorPorUsuario")]
+    public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarPorUsuarioParaSelector()
+    {
+        int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+        return _expedienteDoctorService.ConsultarPorUsuarioSelector(idUsuario);
+    }
+
     [HttpDelete]
-    public void Eliminar(ExpedienteDoctorDTO expedienteDoctorDTO)
+    public void Eliminar(ExpedienteDoctorDTO expedienteDoctorDTO) //Para eliminar un doctor desde track administrador (el doctor se elimina a si mismo)
+    {
+        int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+        expedienteDoctorDTO.IdUsuarioDoctor = idUsuario;
+        _expedienteDoctorService.Eliminar(expedienteDoctorDTO);
+    }
+
+    [HttpDelete("eliminarDoctorTrackr")]
+    public void EliminarDoctorTrackr(ExpedienteDoctorDTO expedienteDoctorDTO) //Para eliminar un doctor desde track movil (el usuario elimina al doctor)
     {
         _expedienteDoctorService.Eliminar(expedienteDoctorDTO);
     }
+
     [HttpPost]
     public void Agregar(ExpedienteDoctorDTO expedienteDoctorDTO)
     {

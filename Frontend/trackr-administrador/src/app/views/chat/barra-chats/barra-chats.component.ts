@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ChatDTO } from '@dtos/chats/chat-dto';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CrearChatComponent } from '../crear-chat/crear-chat.component';
+import { ChatPersonaService } from '@http/chats/chat-persona.service';
 
 @Component({
   selector: 'app-barra-chats',
@@ -13,10 +14,11 @@ export class BarraChatsComponent {
   @Output() idChatPadre = new EventEmitter<number>();
   @Input() ultmoMensajes: string[];
 
-  constructor(private modal:BsModalService){}
+  constructor(private modal:BsModalService){
+  }
 
   enviarIdChat(idChat:number){
-    this.idChatPadre.emit(idChat)
+    this.idChatPadre.emit(idChat);
   }
 
   abrirModal(){

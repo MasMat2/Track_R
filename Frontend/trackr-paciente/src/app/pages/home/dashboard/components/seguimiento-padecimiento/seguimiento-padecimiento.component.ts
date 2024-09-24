@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { EntidadEstructuraTablaValorService } from '@http/gestion-expediente/entidad-estructura-tabla-valor.service';
@@ -19,6 +18,12 @@ import { ValoresClaveCampoGridDto } from 'src/app/shared/Dtos/gestion-entidades/
 import { addIcons } from 'ionicons';
 import { ValoresPorClaveCampo } from 'src/app/shared/Dtos/gestion-expediente/valores-clave-campo';
 import { ValoresHistogramaDTO } from '../../../../../shared/Dtos/gestion-entidades/valores-histograma-dto';
+import { ModalController } from '@ionic/angular/standalone';
+import { BitacoraCompletaComponent } from './bitacora-completa/bitacora-completa.component';
+import { EntidadEstructuraService } from '../../../../../shared/http/gestion-entidad/entidad-estructura.service';
+import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
+import { FechaService } from '@services/fecha.service';
 
 
 @Component({
@@ -29,14 +34,12 @@ import { ValoresHistogramaDTO } from '../../../../../shared/Dtos/gestion-entidad
   imports: [
     CommonModule,
     IonicModule,
-    HeaderComponent,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
     NgChartsModule,
     MatChipsModule,
     GridGeneralModule,
-    HeaderComponent
   ],
   providers: [
     SeccionCampoService,
@@ -47,10 +50,11 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
 
   protected HEADER_GRID = 'Bitacora de muestras';
   private idPadecimiento: string;
+  protected padecimiento: ExpedientePadecimientoSelectorDTO;
   protected variableList: ExpedienteColumnaSelectorDTO[];
   protected idSeccionVariable: number;
   protected filtroTiempo: string;
-  protected valoresCampo: ValoresClaveCampoGridDto;
+  protected valoresCampo: ValoresClaveCampoGridDto = new ValoresClaveCampoGridDto();
   protected valorMin: number | null;
   protected valorMax: number | null;
   protected fechaMin: string;
@@ -60,7 +64,6 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   protected seleccionadoFiltroTiempo: boolean = false;
   protected seleccionVacia: boolean = true;
   protected labelHistograma: string = "";
-  protected mostrarTodoLista: boolean = false;
   protected valoresfiltroTiempo = [
     {
       label: 'Hoy',
@@ -167,9 +170,13 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
 
   constructor(
     private seccionCampoService: SeccionCampoService,
+    private entidadEstructuraService: EntidadEstructuraService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
     private route: ActivatedRoute,
     private router: Router,
+    private modalController: ModalController,
+    private loadingSpinner: LoadingSpinnerService,
+    private fechaService: FechaService
   
     ) { addIcons({
       'chevron-left': 'assets/img/svg/chevron-left.svg',
@@ -183,6 +190,7 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.idPadecimiento = params.get('id') ?? '';
+      this.consultarPadecimiento();
     });
 
     this.consultarSeccionesPadecimiento();
@@ -283,7 +291,16 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
       //Consulta los valores para Grid y Max/Min
       lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresPorClaveCampoParaGridUsuarioSesion(filtroClave, filtroTiempo))
       .then((response) => {
-        this.valoresCampo = response;
+        if(response){
+          this.valoresCampo.unidadMedida = response.unidadMedida;
+          this.valoresCampo.valores = response.valores.map(
+            (data) => {
+              data.fechaMuestra = this.fechaService.fechaUTCAFechaLocal(data.fechaMuestra);
+              return data;
+            }
+          );
+        }
+
         if(response.valores.length == 0)
           this.seleccionVacia = true;
         else
@@ -335,6 +352,22 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
     this.chart?.update();
   }
     
+  private consultarPadecimiento(){
+    this.loadingSpinner.presentLoading();
+
+    this.entidadEstructuraService.consultarPadecimientoPorId(parseInt(this.idPadecimiento)).subscribe({
+      next: (data) => {
+        this.padecimiento = data;
+      },
+      error: () => {
+        this.loadingSpinner.dismissLoading();
+      },
+      complete: () => {
+        this.loadingSpinner.dismissLoading();
+      }
+    })
+  }
+
   private consultarSeccionesPadecimiento(): void {
     lastValueFrom(this.seccionCampoService.consultarSeccionesPadecimientos(this.idPadecimiento))
       .then((seccionesPadecimiento: ExpedienteColumnaSelectorDTO[]) => {
@@ -383,11 +416,17 @@ export class SeguimientoPadecimientoComponent  implements OnInit {
     }
   }
 
-  protected mostrarTodo(){
-    this.mostrarTodoLista = true;
+  protected async mostrarTodo(){
+    const modal = await this.modalController.create({
+      component: BitacoraCompletaComponent,
+      componentProps: {
+        valoresCampo: this.valoresCampo,
+        variable: this.variableList.filter(variable => (variable.idSeccionVariable == this.idSeccionVariable)).map(v => v.variable),
+        periodo: this.filtroTiempo,
+        padecimiento: this.padecimiento.nombre
+      }
+    });
 
-    //abrir modal de lista completa con busqueda
+    modal.present();
   }
-
-
 }

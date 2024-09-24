@@ -5,6 +5,7 @@ export class UsuarioDoctoresDto {
         public idUsuarioDoctor: number;
         public idExpedienteDoctor: number;
         public nombre: string;
+        public titulo: string;
         public ambito: string;
         public hospital: string;
         public urlImagen? : any;

@@ -9,6 +9,7 @@ import { ModalModule } from "ngx-bootstrap/modal";
 import { DirectiveModule } from "src/app/shared/directives/directive.module";
 import { SharedModule } from "src/app/shared/shared.module";
 import { JerarquiaAccesoFormularioComponent } from "./jerarquia-acceso-formulario.component";
+import { LucideAngularModule, X } from "lucide-angular";
 
 @NgModule({
     declarations: [JerarquiaAccesoFormularioComponent],
@@ -18,7 +19,9 @@ import { JerarquiaAccesoFormularioComponent } from "./jerarquia-acceso-formulari
         NgSelectModule,
         TreeModule,
         AngularTreeGridModule,
-        ModalModule.forChild(),
+        ModalModule.forChild(), 
+        LucideAngularModule.pick({X}),
+
     ],
     entryComponents: [JerarquiaAccesoFormularioComponent],
     providers: [

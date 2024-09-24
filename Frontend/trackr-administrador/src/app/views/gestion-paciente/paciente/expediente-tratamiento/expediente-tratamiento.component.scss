@@ -1,0 +1,37 @@
+.cards-container {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.card {
+  box-shadow: 0 !important;
+  border: none !important;
+  .contenido-card {
+    padding: 32px;
+  }
+}
+
+.subseccion {
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--primary-700);
+  border-bottom: 1px solid var(--neutral-200);
+  margin: 0;
+  padding: 30px;
+  width: 100%;
+}
+
+.contenedor-histograma{
+    height: 320px;
+}
+
+.row{
+    margin: 0 !important;
+}
+
+.no-padding{
+    padding: 0 !important;
+}

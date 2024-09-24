@@ -27,6 +27,7 @@ import { UsuarioImagenService } from '@services/usuario-imagen.service';
 import { Genero } from '@models/catalogo/genero';
 import { ExpedienteTrackrService } from '@http/seguridad/expediente-trackr.service';
 import { ExpedienteConsumoMedicamentoComponent } from '../expediente-consumo-medicamento/expediente-consumo-medicamento.component';
+import { SeccionTablaComponent } from '@sharedComponents/tabulador-entidad/seccion-tabla/seccion-tabla.component';
 
 @Component({
   selector: 'app-expediente-formulario',
@@ -55,7 +56,7 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
   //Imagen
   public imagenBase64: any;
   public url: any;
-  public urlImagenDefault = './assets/img/svg/ico-36x36-header-usuario.svg'
+  public urlImagenDefault = 'assets/img/svg/avatar-placeholder.svg'
   protected readonly imagenUsuario = 'assets/img/pruebas/user-image.png';
   protected urlImagen?: SafeUrl = undefined;
 
@@ -64,11 +65,11 @@ export class ExpedienteFormularioComponent implements OnInit, AfterContentInit {
   direccion: string;
   genero: number;
   edad: string;
-  idHospital: number;
+  hospital: string;
   colonia: string;
   municipio: string;
   estado: string;
-ciudad: string
+  ciudad: string
 
 
   constructor(
@@ -101,8 +102,9 @@ ciudad: string
         this.usuarioService.consultar(idUsuario).subscribe
           ({
             next: (data) => {
+              var da  = data;
               this.nombreCompleto = data.nombre + " " + data.apellidoPaterno + " " + data.apellidoMaterno;
-              this.idHospital = data.idHospital;
+              this.hospital = data.hospital;
               this.ciudad = data.ciudad,
               this.colonia = data.colonia
             }, error: (error) => { }
@@ -138,6 +140,7 @@ ciudad: string
     this.agregarTabTratamientos();
     this.agregarTabConsumoMedicamento();
     this.agregarTabRecomendaciones();
+    this.agregarTabMuestras();
   }
 
   private agregarTabInformacionGeneral(): void {
@@ -252,6 +255,26 @@ ciudad: string
         this.padecimientosList = padecimientos;
       });
   }
+
+  public async agregarTabMuestras() {
+    const muestras: ExternalTemplate = {
+      component: SeccionTablaComponent,
+      label: 'Muestras',
+      args: {
+        idTabla : this.idUsuario
+      },
+      enabled: this.idUsuario != null ? true : false,
+      externalSubmit: true,
+      submitControl: false
+    };
+
+    this.externalTemplates.push(muestras);
+  }
+
+  protected esAgregar(){
+    return this.accion == "Agregar";
+  }
+  
 
 
 }

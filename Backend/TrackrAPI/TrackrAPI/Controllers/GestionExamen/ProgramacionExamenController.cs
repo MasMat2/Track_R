@@ -38,7 +38,7 @@ public class ProgramacionExamenController : ControllerBase
             throw new CdisException("El usuario no existe");
         }
 
-        return _programacionExamenService.ConsultarGeneral((int)usuario.IdCompania!);
+        return _programacionExamenService.ConsultarGeneral((int)usuario.IdCompania!, idUsuarioSesion);
     }
 
     [HttpGet]
@@ -52,7 +52,9 @@ public class ProgramacionExamenController : ControllerBase
     [Route("agregar")]
     public int Agregar(ProgramacionExamen programacionExamen)
     {
-        return _programacionExamenService.Agregar(programacionExamen);
+        var idUsuarioSesion = Utileria.ObtenerIdUsuarioSesion(this);
+        var usuario = _usuarioService.Consultar(idUsuarioSesion);
+        return _programacionExamenService.Agregar(programacionExamen, usuario.IdCompania);
     }
 
     [HttpPut]

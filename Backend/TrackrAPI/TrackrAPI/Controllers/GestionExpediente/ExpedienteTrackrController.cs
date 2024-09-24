@@ -26,7 +26,8 @@ public class ExpedienteTrackrController : ControllerBase
     [Route("consultarWrapperPorUsuario/{idUsuario}")]
     public ExpedienteWrapper ConsultarWrapperPorUsuario(int idUsuario)
     {
-        return _expedienteTrackrService.ConsultarWrapperPorUsuario(idUsuario);
+        int idDoctor = Utileria.ObtenerIdUsuarioSesion(this);
+        return _expedienteTrackrService.ConsultarWrapperPorUsuario(idUsuario , idDoctor);
     }
 
     [HttpPost("agregarWrapper")]
@@ -38,14 +39,15 @@ public class ExpedienteTrackrController : ControllerBase
     [HttpPost("editarWrapper")]
     public int EditarWrapper(ExpedienteWrapper expedienteWrapper)
     {
-        return _expedienteTrackrService.EditarWrapper(expedienteWrapper);
+        int idUsuario  = Utileria.ObtenerIdUsuarioSesion(this);
+        return _expedienteTrackrService.EditarWrapper(expedienteWrapper, idUsuario);
     }
 
     [HttpGet("consultarParaGrid/")]
     public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaGrid()
     {
-        var usuario  =  _usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
-        return _expedienteTrackrService.ConsultarParaGrid(usuario.IdUsuario , usuario.IdCompania);
+        var usuario = _usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
+        return _expedienteTrackrService.ConsultarParaGrid(usuario.IdUsuario, usuario.IdCompania);
     }
 
     [HttpDelete("eliminar/{idExpediente}")]
@@ -54,22 +56,32 @@ public class ExpedienteTrackrController : ControllerBase
         _expedienteTrackrService.Eliminar(idExpediente);
     }
     [HttpGet("sidebar/{idUsuario}")]
-    public UsuarioExpedienteSidebarDTO ConsultarParaSidebar(int idUsuario)
+    public async Task<UsuarioExpedienteSidebarDTO> ConsultarParaSidebar(int idUsuario)
     {
-        return _expedienteTrackrService.ConsultarParaSidebar(idUsuario);
+        var usuario =  _expedienteTrackrService.ConsultarParaSidebar(idUsuario);
+        var imgUsuario = await _usuarioService.ObtenerBytesImagenUsuario(idUsuario);
+
+        usuario.ImagenBase64 = imgUsuario;
+        return usuario;
     }
 
     [HttpGet("apegoMedicamentoUsuarios")]
     public IEnumerable<ApegoTomaMedicamentoDto> ApegoMedicamentoUsuarios()
     {
-        var usuario  =  _usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
-        return _expedienteTrackrService.ApegoMedicamentoUsuarios(usuario.IdUsuario , usuario.IdCompania);
+        var usuario = _usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
+        return _expedienteTrackrService.ApegoMedicamentoUsuarios(usuario.IdUsuario, usuario.IdCompania);
     }
 
     [HttpGet("apegoTratamientoPorPaciente/{idPaciente}")]
     public IEnumerable<ApegoTomaMedicamentoDto> ApegoTratamientoPorPaciente(int idPaciente)
     {
         return _expedienteTrackrService.ApegoTratamientoPorPaciente(idPaciente);
+    }
+
+    [HttpGet("consultarParaRecomendacionesGenerales/")]
+    public IEnumerable<UsuarioExpedienteGridDTO> ConsultarParaRecomendacionesGenerales()
+    {
+        return _expedienteTrackrService.ConsultarParaRecomendacionesGenerales();
     }
 
 }

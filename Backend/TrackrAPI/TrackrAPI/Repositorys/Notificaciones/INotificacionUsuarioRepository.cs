@@ -6,6 +6,7 @@ namespace TrackrAPI.Repositorys.Notificaciones;
 public interface INotificacionUsuarioRepository : IRepository<NotificacionUsuario>
 {
     public IEnumerable<NotificacionPacienteDTO> ConsultarPorPaciente(int idUsuario);
-    public IEnumerable<NotificacionDoctorDTO> ConsultarPorDoctor(int idUsuario);
-    public void MarcarComoVistas(List<int> idNotificacionUsuario);
+    public Task<NotificacionUsuario> Consultar(int idNotificacionUsuario);
+    public Task<IEnumerable<NotificacionDoctorDTO>> ConsultarPorDoctor(List<int> idsDoctor);
+    public void MarcarComoVistas(List<int> idNotificacionUsuario, bool tomaTomada);
 }

@@ -136,7 +136,9 @@ export class GridGeneralComponent implements OnInit, AfterViewInit, OnChanges {
     defaultColDef: {
       resizable: true,
       filter: true,
-      sortable: true
+      sortable: true,
+      wrapText: true,
+      autoHeight: true,
     },
     floatingFilter: false,
     floatingFiltersHeight: 36,

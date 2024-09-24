@@ -16,7 +16,7 @@ import * as Utileria from '@utils/utileria'
 })
 export class ExamenComponent implements OnInit {
 
-  protected readonly HEADER_GRID: string = 'Mis Exámenes';
+  protected readonly HEADER_GRID: string = 'Mis Cuestionarios';
 
   // Grid
   protected examenPendienteList: Examen[] = [];
@@ -59,7 +59,7 @@ export class ExamenComponent implements OnInit {
   protected columnasConRevisar: ColDef[] = [
     {
       headerName: 'Clave',
-      field: 'clave',
+      field: 'idExamen',
       minWidth: 70,
       width: 70,
     },
@@ -88,7 +88,7 @@ export class ExamenComponent implements OnInit {
   protected columnasSinRevisar: ColDef[] = [
     {
       headerName: 'Clave',
-      field: 'clave',
+      field: 'idExamen',
       minWidth: 70,
       width: 70,
     },

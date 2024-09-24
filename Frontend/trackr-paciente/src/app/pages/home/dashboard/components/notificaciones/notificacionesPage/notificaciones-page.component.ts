@@ -6,8 +6,8 @@ import { Observable, map } from 'rxjs';
 import { CommonModule, NgIf } from '@angular/common';
 import { NotificacionPacientePopOverDto } from 'src/app/shared/Dtos/notificaciones/notificacion-paciente-popover-dto';
 import { addIcons } from 'ionicons';
-import { notificationsOutline, ellipse } from 'ionicons/icons'
 import { ModalController } from '@ionic/angular/standalone';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-notificaciones-page',
@@ -26,9 +26,13 @@ export class NotificacionesPageComponent implements OnInit
 
   constructor(
     private modalController : ModalController,
-    private notificacionHubService : NotificacionPacienteHubService
+    private notificacionHubService : NotificacionPacienteHubService,
+    private fechaService: FechaService,
   ){
-    addIcons({notificationsOutline, ellipse})
+    addIcons({
+      'bell': 'assets/img/svg/bell.svg',
+      'circle-filled': 'assets/img/svg/circle_filled.svg'
+    })
   }
 
   ngOnInit()
@@ -55,7 +59,7 @@ export class NotificacionesPageComponent implements OnInit
           id: notificacion.idNotificacionUsuario,
           titulo: notificacion.titulo,
           mensaje: notificacion.mensaje,
-          fecha: notificacion.fechaAlta,
+          fecha: this.fechaService.fechaUTCAFechaLocal(notificacion.fechaAlta),
           visto: notificacion.visto,
         } as NotificacionPacientePopOverDto)) 
       )

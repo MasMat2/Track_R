@@ -14,11 +14,12 @@ export class AnswerMeetComponent implements OnInit {
 
   protected localStream: MediaStream;
 
-  protected domain: string = "meet.jit.si"; // For self hosted use your domain
+  protected domain: string = "8x8.vc"; // For self hosted use your domain
   protected room: any;
   protected options: any;
   protected newRoomApi: any;
   protected user: any;
+  private AppIDJitsi = 'vpaas-magic-cookie-c25fa0da2cd344ba8d41a873768065ec';
 
   private meetName: string;
 
@@ -34,7 +35,7 @@ export class AnswerMeetComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      this.meetName = params.get('meet-name')!;
+      this.meetName = this.AppIDJitsi + '/' + params.get('meet-name')!;
     });
 
     this.iniciarWebCam();
@@ -56,7 +57,7 @@ export class AnswerMeetComponent implements OnInit {
       interfaceConfigOverwrite: {
         //overwrite interface properties
       },
-      parentNode: document.querySelector('#jitsi-answer-call-iframe'),
+      parentNode: document.querySelector('#jaas-container'),
       userInfo: {
         displayName: "Doctor"
       }
@@ -84,37 +85,35 @@ export class AnswerMeetComponent implements OnInit {
   };
 
   handleClose = () => {
+    this.router.navigate(['/administrador/chat']);
     this.newRoomApi.dispose();
-    console.log("handleClose");
   }
 
   handleParticipantLeft = async (participant: ParticipantInterface) => {
-    console.log("handleParticipantLeft", participant); // { id: "2baa184e" }
+    //console.log("handleParticipantLeft", participant);  { id: "2baa184e" }
     const data = await this.getParticipants();
   }
 
   handleParticipantJoined = async (participant: ParticipantInterface) => {
-    console.log("handleParticipantJoined", participant); // { id: "2baa184e", displayName: "Shanu Verma", formattedDisplayName: "Shanu Verma" }
+    //console.log("handleParticipantJoined", participant);  { id: "2baa184e", displayName: "Shanu Verma", formattedDisplayName: "Shanu Verma" }
     const data = await this.getParticipants();
   }
 
   handleVideoConferenceJoined = async (participant: ParticipantInterface) => {
-    console.log("handleVideoConferenceJoined", participant); // { roomName: "bwb-bfqi-vmh", id: "8c35a951", displayName: "Akash Verma", formattedDisplayName: "Akash Verma (me)"}
+    //console.log("handleVideoConferenceJoined", participant);  { roomName: "bwb-bfqi-vmh", id: "8c35a951", displayName: "Akash Verma", formattedDisplayName: "Akash Verma (me)"}
     const data = await this.getParticipants();
   }
 
   handleVideoConferenceLeft = () => {
     this.newRoomApi.dispose();
-    console.log("handleVideoConferenceLeft");
-    this.router.navigate(['/thank-you']);
   }
 
   handleMuteStatus = (audio: AudioInterface) => {
-    console.log("handleMuteStatus", audio); // { muted: true }
+    //console.log("handleMuteStatus", audio);  { muted: true }
   }
 
   handleVideoStatus = (video: AudioInterface) => {
-    console.log("handleVideoStatus", video); // { muted: true }
+    //console.log("handleVideoStatus", video);  { muted: true }
   }
 
   getParticipants() {

@@ -73,4 +73,8 @@ export class ExamenService {
     );
   }
 
+  public consultarCantidadReactivos(idAsignatura : number , idNivelExamen : number): Observable<number> {
+    return this.http.get<number>(this.dataUrl + `cantidadReactivos/${idAsignatura}/${idNivelExamen}`);
+  }
+
 }

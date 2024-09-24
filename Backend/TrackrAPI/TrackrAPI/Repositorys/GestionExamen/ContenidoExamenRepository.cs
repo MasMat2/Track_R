@@ -33,7 +33,7 @@ public class ContenidoExamenRepository : Repository<ContenidoExamen>, IContenido
     public IEnumerable<ContenidoExamenGridDto> ConsultarGeneral(int idTipoExamen)
     {
         return context.ContenidoExamen
-            .Where(p => p.Estatus == true && p.IdTipoExamen == idTipoExamen)
+            .Where(p => p.IdTipoExamen == idTipoExamen)
             .OrderBy(p => p.Clave)
             .Select(p => new ContenidoExamenGridDto
             {
@@ -42,7 +42,8 @@ public class ContenidoExamenRepository : Repository<ContenidoExamen>, IContenido
                 NivelExamen = p.IdNivelExamenNavigation.Descripcion ?? string.Empty,
                 Clave = p.Clave ?? string.Empty,
                 TotalPreguntas = p.TotalPreguntas,
-                Duracion = p.Duracion
+                Duracion = p.Duracion,
+                Estatus = p.Estatus ?? false
             })
             .ToList();
     }
@@ -65,5 +66,12 @@ public class ContenidoExamenRepository : Repository<ContenidoExamen>, IContenido
         return context.ContenidoExamen
             .Where(p => p.Estatus == true && p.IdTipoExamen == idTipoExamen)
             .ToList();
+    }
+
+    public ContenidoExamen ConsultarDuplicado(ContenidoExamen contenidoExamen)
+    {
+        return context.ContenidoExamen
+            .Where(p => p.IdAsignatura  == contenidoExamen.IdAsignatura && p.IdNivelExamen == contenidoExamen.IdNivelExamen && p.Estatus == true && p.IdTipoExamen == contenidoExamen.IdTipoExamen)
+            .FirstOrDefault();
     }
 }

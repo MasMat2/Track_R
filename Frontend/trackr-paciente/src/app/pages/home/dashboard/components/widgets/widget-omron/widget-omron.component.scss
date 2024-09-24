@@ -1,0 +1,25 @@
+.contenido {
+  height: 80px;
+  position: relative;
+}
+
+.header {
+  height: 100%;
+  width: 100%;
+  padding: 0 16px 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+
+  ion-label {
+    font-size: 16px;
+    font-family: var(--font-body);
+    font-weight: bold;
+    color: var(--neutral-900);
+  }
+
+  ion-icon {
+    font-size: 32px;
+    color: var(--primary-500);
+  }
+}

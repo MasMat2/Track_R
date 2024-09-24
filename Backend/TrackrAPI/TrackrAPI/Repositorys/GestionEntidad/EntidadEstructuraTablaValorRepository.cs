@@ -70,11 +70,12 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         public IEnumerable<EntidadEstructuraTablaValor> ConsultarValoresPorCampos(int idExpediente, List<int> claveCampos, bool? fueraRango)
         {
             // Inicia la consulta
-            var currentDay = DateTime.UtcNow.Date;
+            var currentDate = DateTime.UtcNow.Date;
+            var oneMonthAgo = currentDate.AddMonths(-1);
             var queryValoresCampos = context.EntidadEstructuraTablaValor
                 .Include(ep => ep.IdEntidadEstructuraNavigation)
                 .Where(ep => claveCampos.Contains( (int) ep.IdSeccion)
-                    && ep.IdTabla == idExpediente && ep.FechaMuestra.Value.Date == currentDay);
+                      && ep.IdTabla == idExpediente && ep.FechaMuestra.Value.Date >= oneMonthAgo && ep.FechaMuestra.Value.Date <= currentDate);
 
             // Si fueraRango tiene un valor, añade la condición a la consulta
             if (fueraRango.HasValue)
@@ -95,10 +96,10 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                     && etv.FechaMuestra >= fechaFiltro)
                 .Select(etv => new ValoresHistogramaDTO
                 {
-                    FechaMuestra = etv.FechaMuestra ?? new DateTime(),
-                    Valor = int.Parse(etv.Valor),
+                    FechaMuestra = etv.FechaMuestra ?? new DateTime().ToUniversalTime(),
+                    Valor = decimal.Parse(etv.Valor),
                     FueraDeRango = etv.FueraDeRango,
-                });
+                }).OrderByDescending(etv =>  etv.FechaMuestra);
         }
 
         public IEnumerable<ExpedienteMuestrasGridDTO> ConsultarGridMuestras(int idUsuario)

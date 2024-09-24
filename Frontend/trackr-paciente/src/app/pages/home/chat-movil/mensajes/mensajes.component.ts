@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChatPersonaService } from '@http/chat/chat-persona.service';
 import { IonContent, IonicModule, PopoverController } from '@ionic/angular';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { Observable } from 'rxjs';
 import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
 import { ChatDTO } from 'src/app/shared/Dtos/Chat/chat-dto';
@@ -13,7 +12,6 @@ import { ChatHubServiceService } from '../../../../services/dashboard/chat-hub-s
 import { ArchivoService } from '../../../../shared/http/archivo/archivo.service';
 import { ArchivoFormDTO } from '../../../../shared/Dtos/archivos/archivo-form-dto';
 import { addIcons } from 'ionicons';
-import {cameraOutline, paperPlane, videocamOutline, chevronBack, trash, mic, micOutline, documentOutline, send, ellipsisVerticalOutline } from 'ionicons/icons';
 //Libreria de capacitor para grabar audio
 import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder';
 
@@ -21,7 +19,7 @@ import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, Cur
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
 import { PlataformaService } from 'src/app/services/dashboard/plataforma.service';
 import { ModalController } from '@ionic/angular';
-import { ArchivoPrevisualizarComponent } from './archivo-previsualizar/archivo-previsualizar.component';
+import { ArchivoPrevisualizarComponent } from '@sharedComponents/archivo-previsualizar/archivo-previsualizar.component';
 
 import { timer, Subject } from 'rxjs';
 import { finalize, map, takeUntil, takeWhile } from 'rxjs/operators';
@@ -30,6 +28,9 @@ import { PressDirective } from 'src/app/shared/directives/press.directive';
 import { SwipeDirective } from 'src/app/shared/directives/swipe.directive';
 import { CapacitorUtils } from '@utils/capacitor-utils';
 import { format } from 'date-fns';
+import { AudioWaveComponent } from '@sharedComponents/audio-wave/audio-wave.component';
+import { DataJitsiService } from '@pages/home/video-jitsi/service-jitsi/data-jitsi.service';
+import { FechaService } from '@services/fecha.service';
 
 
 
@@ -39,7 +40,14 @@ import { format } from 'date-fns';
   templateUrl: './mensajes.component.html',
   styleUrls: ['./mensajes.component.scss'],
   standalone: true,
-  imports: [FormsModule, CommonModule, IonicModule, HeaderComponent, PressDirective, SwipeDirective],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    IonicModule, 
+    PressDirective, 
+    SwipeDirective,
+    AudioWaveComponent
+  ],
   providers: [CapacitorUtils]
 })
 export class MensajesComponent{
@@ -50,7 +58,7 @@ export class MensajesComponent{
   protected chatMensajes$: Observable<ChatMensajeDTO[][]>
   protected chatMensajes: ChatMensajeDTO[][]
   protected chat: ChatDTO = {
-    fecha: new Date(),
+    fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
     habilitado: true,
     titulo: 'Chat',
     idCreadorChat: 0,
@@ -77,6 +85,9 @@ export class MensajesComponent{
   protected grabacionCancelada: boolean = false;
   protected audio?: string = '';
   protected audio2?: string;
+  protected isAudioPlaying: boolean = false;
+
+  protected xd = 0;
 
   constructor(
     private ChatMensajeHubService: ChatMensajeHubService,
@@ -89,18 +100,20 @@ export class MensajesComponent{
     private ModalController:ModalController,
     private capacitorUtils: CapacitorUtils,
     private PopoverController:PopoverController,
-    private rout: ActivatedRoute
+    private rout: ActivatedRoute,
+    private dataJitsiService: DataJitsiService,
+    private fechaService: FechaService
   ) { 
-      addIcons({videocamOutline, 
-        chevronBack, 
-        cameraOutline, 
-        paperPlane, 
-        trash, 
-        documentOutline,
-        mic,
-        micOutline,
-        send,
-        ellipsisVerticalOutline
+      addIcons({
+        'file': 'assets/img/svg/file.svg',
+        'chevron-left': 'assets/img/svg/chevron-left.svg',
+        'camera': 'assets/img/svg/camera.svg',
+        'send': 'assets/img/svg/send-filled.svg',
+        'send-filled': 'assets/img/svg/send_filled.svg',
+        'trash': 'assets/img/svg/trash-2.svg',
+        'mic': 'assets/img/svg/mic.svg',
+        'ellipsis-vertical': 'assets/img/svg/ellipsis-vertical.svg',
+        'video': 'assets/img/svg/video.svg',
       }); 
     }
 
@@ -109,6 +122,12 @@ export class MensajesComponent{
     this.obtenerIdChat();
     this.solicitarPermisos();
   }
+
+  ngAfterViewInit() {
+    this.scrollContentToBottom();
+  }
+  
+
 
   obtenerIdChat() {
     this.router.params.subscribe(params => {
@@ -120,7 +139,7 @@ export class MensajesComponent{
 
   obtenerChat() {
     this.ChatHubServiceService.chat$.subscribe(res => {
-      this.chat = res.find(x => x.idChat == this.idChat) || { fecha: new Date(), habilitado: false, idCreadorChat: 0 }
+      this.chat = res.find(x => x.idChat == this.idChat) || { fecha: this.fechaService.fechaLocalAFechaUTC(new Date()), habilitado: false, idCreadorChat: 0 }
     })
   }
 
@@ -138,12 +157,12 @@ export class MensajesComponent{
     this.alturaTextAreaAlterada = false;
 
     let msg: ChatMensajeDTO = {
-      fecha: new Date(),
+      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
       idChat: this.idChat,
       mensaje: this.msg,
-      idPersona: 5333,
+      idPersona: this.idUsuario,
       archivo: '',
-      idArchivo: 0
+      idArchivo: 0,
     }
 
     //Agregar logica para subir archivo
@@ -153,7 +172,7 @@ export class MensajesComponent{
       msg.archivo = byte;
       msg.archivoNombre = this.archivo.name;
       msg.archivoTipoMime = this.archivo.type;
-      msg.fechaRealizacion = new Date();
+      msg.fechaRealizacion = this.fechaService.fechaLocalAFechaUTC(new Date());
       msg.nombre = this.archivo.name;
     }
 
@@ -165,7 +184,7 @@ export class MensajesComponent{
       msg.archivo = byte;
       msg.archivoNombre = nombreFoto;
       msg.archivoTipoMime = "image/jpeg";
-      msg.fechaRealizacion = new Date();
+      msg.fechaRealizacion = this.fechaService.fechaLocalAFechaUTC(new Date());
       msg.nombre = nombreFoto;
     }
 
@@ -173,8 +192,8 @@ export class MensajesComponent{
       msg.archivo = this.audio;
       msg.archivoNombre = `audio-${Date.now()}.wav`
       msg.archivoTipoMime = "audio/wav"
-      msg.fechaRealizacion = new Date();
-      msg.nombre = `audio-${Date.now()}.wav`
+      msg.fechaRealizacion = this.fechaService.fechaLocalAFechaUTC(new Date());
+      msg.nombre = `audio-${this.fechaService.fechaLocalAFechaUTC(new Date())}.wav`
     }
 
     this.ChatMensajeHubService.enviarMensaje(msg);
@@ -199,13 +218,12 @@ export class MensajesComponent{
     });
   }
 
-  mostrarMensaje(id: number) {
+  protected esMensajeMio(id: number) {
     return id == this.idUsuario;
   }
 
   obtenerMensajes() {
-    this.chatMensajes$ = this.ChatMensajeHubService.chatMensaje$;
-
+    this.chatMensajes$ = this.ChatMensajeHubService.chatMensaje$
     this.chatMensajes$.subscribe((res) => {
       this.chatMensajes = res;
       this.obtenerChatSeleccionado();
@@ -271,11 +289,11 @@ export class MensajesComponent{
       let byte = await this.readFileAsByteArray(this.archivo);
 
       let aux: ArchivoFormDTO = {
-        idUsuario: 5333,
+        idUsuario: this.idUsuario,
         archivo: Array.from(byte),
         archivoNombre: this.archivo.name,
         archivoTipoMime: this.archivo.type,
-        fechaRealizacion: new Date(),
+        fechaRealizacion: this.fechaService.fechaLocalAFechaUTC(new Date()),
         nombre: this.archivo.name
       }
 
@@ -284,12 +302,16 @@ export class MensajesComponent{
     }
   }
 
-  clickArchivo(idArchivo: number) {
-    this.ArchivoService.getArchivo(idArchivo).subscribe( async res => {
-      const modal =  await this.ModalController.create({component: ArchivoPrevisualizarComponent,componentProps:{archivo:res}});
-      modal.present();
+  protected async clickArchivo(_idArchivo: number) {
+    const modal = await this.ModalController.create({
+      component: ArchivoPrevisualizarComponent,
+      componentProps: {
+        fileSource: 'id', 
+        idArchivo: _idArchivo
+      }
+    })
 
-    });
+    modal.present();
   }
 
   async downloadFileMobile(fileBase64: string, nombre?: string, mime?: string) {
@@ -351,18 +373,19 @@ export class MensajesComponent{
       this.audio2 = '';
       this.isAudio = false;
     }
+    this.fileInput.nativeElement.value = "";
     this.fileInput.nativeElement.click();
   }
 
-  imprimirFecha(fecha: Date): string {
-    let x = new Date(fecha)
-    return `${x.getDate()}/${x.getMonth() + 1}/${x.getFullYear()} - ${x.getHours()}:${x.getMinutes()}`
-  }
+  // imprimirFecha(fecha: Date): string {
+  //   let x = new Date(fecha)
+  //   return `${x.getDate()}/${x.getMonth() + 1}/${x.getFullYear()} - ${x.getHours()}:${x.getMinutes()}`
+  // }
 
-  // Esta función se llama después de cada actualización de la vista
-  ngAfterViewChecked() {
-    this.scrollContentToBottom();
-  }
+  //Esta función se llama después de cada actualización de la vista
+  // ngAfterViewChecked() {
+  //   this.scrollContentToBottom();
+  // }
 
   // Función para desplazar automáticamente hacia abajo al final de la lista
   scrollContentToBottom(){
@@ -457,6 +480,10 @@ export class MensajesComponent{
 
   crearLlamadaJitsi() {
     this.route.navigate(['/home/video-jitsi/create-call', this.idChat]);
+    //Le damos tiempo de que carge el componente para poder realizar la llamada
+    setTimeout(() => {
+      this.dataJitsiService.comenzarLlamada(this.idChat);
+    }, 200);
   }
 
   crearLlamadaWebRTC() {
@@ -468,12 +495,13 @@ export class MensajesComponent{
     let mensaje = `${telefonoEmoji} Te espero la sala ${newRoomName}`;
 
     let msg: ChatMensajeDTO = {
-      fecha: new Date(),
+      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
       idChat: this.idChat,
       mensaje: mensaje,
       idPersona: idUsuario,
       archivo: '',
-      idArchivo: 0
+      idArchivo: 0,
+      esVideoChat: true
     };
 
     this.ChatMensajeHubService.enviarMensaje(msg);
@@ -482,41 +510,50 @@ export class MensajesComponent{
 
   contestarLlamada(meetCode: string) {
     this.route.navigate(['/home/video-jitsi/answer-call', meetCode]);
+    setTimeout(() => {
+      this.dataJitsiService.contestarLlamada(meetCode);
+    }, 200);
   }
 
-  validarMeet(msj: string) {
-    console.log(msj);
-    if (msj.includes('trackr-' + this.idChat)) {
-      const regex = /trackr-\d{3}-\d+/;
-      const match = msj.match(regex);
+  protected validarMeet(mensaje: ChatMensajeDTO) {
+    if(this.esMensajeMio(mensaje.idPersona)){
+      return;
+    }
+
+    if (mensaje.mensaje.includes('trackr-' + this.idChat)) {
+      const regex = /trackr-\d+-\d+/;
+      const match = mensaje.mensaje.match(regex);
       if (match && match.length > 0) {
         const codigo = match[0];
         this.contestarLlamada(codigo);
       } else {
-        console.log("Error al validar codigo meet jitsi.");
+        console.error("Error al validar codigo meet jitsi.");
       }
 
 
     }
 
-    if (msj.includes('webrtc-' + this.idChat)) {
-      const regex = /webrtc-\d{3}-(\d+)/;
-      const match = msj.match(regex);
+    if (mensaje.mensaje.includes('webrtc-' + this.idChat)) {
+      const regex = /webrtc-\d+-(\d+)/;
+      const match = mensaje.mensaje.match(regex);
       if (match && match.length > 0) {
         const codigo = match[1];
         this.route.navigate(['/home/chat', codigo]);
 
       } else {
-        console.log("Error al validar codigo meet jitsi.");
+        console.error("Error al validar codigo meet jitsi.");
       }
-
-
     }
   }
 
   //verificar si se está escribiendo un mensaje (mensaje no vacío)
-  escribiendoMensaje(){
-    return !(/^ *$/.test(this.msg))
+  protected escribiendoMensaje(){
+    if(this.isAudio || this.archivo){
+      return true;
+    }
+    else{
+      return !(/^ *$/.test(this.msg));
+    }
   }
 
   protected presionarGrabarAudio(event: any) {
@@ -587,7 +624,7 @@ export class MensajesComponent{
 
     let mensaje: ChatMensajeDTO = {
       idChat:this.idChat,
-      fecha: new Date(),
+      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
       idPersona: 0,
       mensaje: 'He abandonado el chat',
       idArchivo: 0
@@ -609,6 +646,30 @@ export class MensajesComponent{
 
   esAudio(mime?:string):boolean{
     return mime != null  ? mime.split("/")[0] == 'audio' : false
+  }
+
+  protected hayAdjuntoEnMensaje(mensaje: ChatMensajeDTO) {
+    return (
+      mensaje.idArchivo !== 0 &&
+      mensaje.idArchivo !== null &&
+      mensaje.idArchivo !== undefined
+    );
+  }
+
+  protected adjuntoEsAudio(mensaje: ChatMensajeDTO) {
+    return (mensaje.archivoTipoMime === 'audio/wav' || mensaje.archivoTipoMime === 'audio/webm');
+  }
+
+  protected setColorAudio(idPersona: number): 'light' | 'dark' {
+    if (this.idUsuario == idPersona) {
+      return 'dark';
+    } else {
+      return 'light';
+    }
+  }
+
+  protected onAudioPlay(option: boolean) {
+    this.isAudioPlaying = option;
   }
 
 

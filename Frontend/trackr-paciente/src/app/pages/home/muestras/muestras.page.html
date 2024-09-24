@@ -1,16 +1,16 @@
 <ion-header class="ion-no-border">
-  <div class="contenedor-header">
+  <div class="contenedor-header-dark">
     <ion-toolbar>
       <ion-title>Datos clínicos</ion-title>
-      <ion-buttons slot="end">
-        <ion-button (click)="AgregarDatosClinicos()">
-          <ion-icon slot="icon-only" name="plus"></ion-icon>
+      <ion-buttons class="end" slot="end">
+        <ion-button class="icon-only" (click)="AgregarDatosClinicos()">
+          <ion-icon name="plus"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </div>
 </ion-header> 
-<ion-content>
+<ion-content class="primary">
   <div class="contenedor-principal">
     <div class="selector-tiempo">
       <div class="label">
@@ -19,11 +19,15 @@
       <div class="datetime-buttons">
         <div class="datetime-input" id="date-picker">
           <ion-item lines="none" class="date-input">
-            <ion-icon name="calendar" slot="start"></ion-icon>
+            <ion-icon
+              id="dateIcon" 
+              name="calendar" 
+              slot="start">
+            </ion-icon>
             <ion-datetime-button datetime="date"></ion-datetime-button>
           </ion-item>
 
-          <ion-modal [keepContentsMounted]="true">
+          <ion-modal [keepContentsMounted]="true" trigger="dateIcon">
             <ng-template>
               <ion-datetime
                 presentation="date"
@@ -35,19 +39,22 @@
                 locale="es-MX"
                 showDefaultButtons="true"
                 cancelText="Cancelar"
-                doneText="Ok"
-                (ionChange)="onFechaChange()">
+                doneText="Ok">
               </ion-datetime>
             </ng-template>
           </ion-modal>
         </div>
         <div class="datetime-input" id="time-picker">
           <ion-item lines="none" class="date-input">
-            <ion-icon name="clock-2" slot="start"></ion-icon>
+            <ion-icon
+              id="timeIcon"
+              name="clock-2" 
+              slot="start">
+            </ion-icon>
             <ion-datetime-button datetime="time"></ion-datetime-button>
           </ion-item>
 
-          <ion-modal [keepContentsMounted]="true">
+          <ion-modal [keepContentsMounted]="true" trigger="timeIcon">
             <ng-template>
               <ion-datetime
                 presentation="time"
@@ -60,7 +67,6 @@
                 showDefaultButtons="true"
                 cancelText="Cancelar"
                 doneText="Ok"
-                (ionChange)="onFechaChange()"
                 hourCycle="h12">
               </ion-datetime>
             </ng-template>
@@ -74,7 +80,7 @@
       </div>
       <div class="lista-vacia" *ngIf="listaValoresVacia()">
         <ion-text>
-          <p>Nada Por aquí. <br> Aún no hay valores fuera de rango.</p>
+          <p>Nada por aquí. <br> Aún no hay valores fuera de rango.</p>
         </ion-text>
       </div>
       <ion-list lines="full" *ngIf="!listaValoresVacia()">

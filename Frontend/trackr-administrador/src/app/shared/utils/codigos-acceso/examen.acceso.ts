@@ -2,7 +2,8 @@ export enum ACCESO_ASIGNATURA {
   Consultar = 'APASIG0000',
   Agregar = 'APASIG1000',
   Editar = 'APASIG2000',
-  Eliminar = 'APASIG3000'
+  Eliminar = 'APASIG3000',
+  NoAcceso = ''
 };
 
 export enum ACCESO_TIPO_EXAMEN {
@@ -36,4 +37,18 @@ export enum ACCESO_PROGRAMACION_EXAMEN {
   Agregar = 'APPREX1000',
   Editar = 'APPREX2000',
   Eliminar = 'APPREX3000'
+};
+
+export enum ACCESO_CLASIFICACION_PREGUNTA {
+  Consultar = 'ACLPR0000',
+  Agregar = 'ACLPR1000',
+  Editar = 'ACLPR2000',
+  Eliminar = 'ACLPR3000'
+};
+
+export enum ACCESO_RESPUESTA_CLASPREGUNTA {
+  Consultar = 'ACRECP0000',
+  Agregar = 'ACRECP1000',
+  Editar = 'ACRECP2000',
+  Eliminar = 'ACRECP3000'
 };

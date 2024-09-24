@@ -53,6 +53,7 @@ export class EspecialidadFormularioComponent extends CrudFormularioBase<Especial
         }),
         map((especialidad: EspecialidadFormularioConsultaDto) => {
           const capturaDto = new EspecialidadFormularioCapturaDto();
+          capturaDto.idEspecialidad = especialidad.idEspecialidad;
           capturaDto.nombre = especialidad.nombre;
 
           return capturaDto;
@@ -63,8 +64,6 @@ export class EspecialidadFormularioComponent extends CrudFormularioBase<Especial
   
 
   protected override agregar(especialidad: EspecialidadFormularioCapturaDto): Observable<void> {
-    console.log(especialidad);
-    console.log(this.especialidadService.agregar(especialidad));
     return this.especialidadService.agregar(especialidad);
   }
 

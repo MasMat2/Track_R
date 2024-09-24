@@ -3,14 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular/standalone';
-import { Constants } from '@utils/constants/constants';
 import { addIcons } from 'ionicons';
-import { chevronBack, add, trashOutline} from 'ionicons/icons';
 import { AntecedenteFormularioComponent } from './antecedente-formulario/antecedente-formulario.component';
 import { ExpedientePadecimientoDto } from '@dtos/seguridad/expediente-padecimiento-dto';
 import { UsuarioService } from '@http/seguridad/usuario.service';
 import { ExpedientePadecimientoService } from '@http/gestion-expediente/expediente-padecimiento.service';
 import { RouterModule } from '@angular/router';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 
 @Component({
   selector: 'app-info-antecedentes',
@@ -27,23 +26,38 @@ import { RouterModule } from '@angular/router';
 export class InfoAntecedentesComponent  implements OnInit {
 
   protected misAntecedentes: ExpedientePadecimientoDto[];
+  protected eliminandoAntecedente: boolean = false;
 
   constructor(
     private alertController: AlertController,
     private modalController: ModalController,
     private usuarioService: UsuarioService,
-    private expedientePadecimientoService: ExpedientePadecimientoService
-  ) { addIcons({chevronBack, add, trashOutline}) }
+    private expedientePadecimientoService: ExpedientePadecimientoService,
+    private loadingSpinner: LoadingSpinnerService
+  ) { 
+    addIcons({
+      'chevron-left': 'assets/img/svg/chevron-left.svg',
+      'plus': 'assets/img/svg/plus.svg',
+      'trash': 'assets/img/svg/trash-2.svg'
+    }) 
+  }
 
   ngOnInit() {
     this.consultarAntecedentes();
   }
 
   private consultarAntecedentes(){
+    this.loadingSpinner.presentLoading();
     this.usuarioService.consultarAntecedentesUsuario().subscribe({
       next:(value) => {
         this.misAntecedentes = value;
       },
+      error: () => {
+        this.loadingSpinner.dismissLoading();
+      },
+      complete: () => {
+        this.loadingSpinner.dismissLoading();
+      }
     })
   }
 
@@ -51,8 +65,7 @@ export class InfoAntecedentesComponent  implements OnInit {
     const alert = await this.alertController.create({
       header: '¿Seguro que deseas eliminar este elemento?',
       subHeader: 'No podrás recuperarlo',
-      message: Constants.ALERT_DELETE,
-      cssClass: 'custom-alert-delete',
+      cssClass: 'custom-alert color-error icon-trash two-buttons',
       buttons: [
         {
           text: 'No, regresar',
@@ -72,15 +85,13 @@ export class InfoAntecedentesComponent  implements OnInit {
   }
 
   protected async presentarAlertaEliminadoExitosamente() {
-
     const alertSuccess = await this.alertController.create({
       header: 'Elemento eliminado exitosamente',
-      message: Constants.ALERT_SUCCESS,
       buttons: [{
         text: 'De acuerdo',
         role: 'confirm',
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();
@@ -95,22 +106,29 @@ export class InfoAntecedentesComponent  implements OnInit {
       cssClass: 'custom-sheet-modal'
       
     });
-    modal.onWillDismiss().then(() => {
-      this.consultarAntecedentes();
-    })
 
     await modal.present();
+
+    const {data, role} = await modal.onWillDismiss();
+    if(role == "confirm"){
+      this.consultarAntecedentes();
+    }
+    else{
+      return
+    }
   }
 
   private eliminarAntecedente(antecedente: ExpedientePadecimientoDto){
     this.expedientePadecimientoService.eliminar(antecedente.idExpedientePadecimiento).subscribe({
       next: () => {
-        this.consultarAntecedentes();
+        this.eliminandoAntecedente = true;
       },
       error: () => {
-
+        this.eliminandoAntecedente = false;
       },
       complete: () => {
+        this.eliminandoAntecedente = false;
+        this.consultarAntecedentes();
         this.presentarAlertaEliminadoExitosamente();
       }
     });

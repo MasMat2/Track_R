@@ -2,8 +2,8 @@
   <div class="contenedor-header">
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-button (click)="cerrarModal()">
-          <ion-icon slot="icon-only" name="close"></ion-icon>
+        <ion-button (click)="cerrarModal(null, 'cancel')">
+          <ion-icon slot="icon-only" name="x"></ion-icon>
         </ion-button>
       </ion-buttons>
       <ion-title>
@@ -14,34 +14,33 @@
 </ion-header>
 
 <!-- fullscreen para que pase por detrás del footer -->
-<ion-content fullscreen>
+<ion-content fullscreen class="neutral">
   <div class="contenedor-principal">
     <div class="lista-doctores">
-      <ion-list>
+      <div class="lista-vacia" *ngIf="listaDoctoresVacia()">
+        <ion-text>
+          <p>Nada por aquí. <br> No tienes doctores disponibles</p>
+        </ion-text>
+      </div>
+
+      <ion-list *ngIf="!listaDoctoresVacia()">
         <ion-item *ngFor="let doctor of doctoresSelector" button (click)="seleccionDoctor(doctor)" lines="none">
           <ion-label>
             <h3>{{doctor.nombre}}</h3>
             <p>{{doctor.ambito}}</p>
           </ion-label>
-          <ion-icon *ngIf="currentDoctor?.idUsuarioDoctor === doctor.idUsuarioDoctor" name="checkmark"></ion-icon>
+          <ion-icon *ngIf="currentDoctor?.idUsuarioDoctor === doctor.idUsuarioDoctor" name="check"></ion-icon>
         </ion-item>
       </ion-list>
     </div>
   </div>
-  <ion-alert
-    [isOpen]="cargando$ | async"
-    [message]="spinner"
-    cssClass="custom-alert-loading"
-  >
-  </ion-alert>
 </ion-content>
-
 <ion-footer class="ion-no-border">
   <div class="contenedor-footer">
     <div class="gradiente">
     </div>
-    <div class="botones">
-      <ion-button class="guardar" (click)="agregar()">Guardar</ion-button>
+    <div class="botones botones-column">
+      <ion-button [disabled]="!doctorSeleccionado()" class="dark" (click)="agregar()">Guardar</ion-button>
     </div>
   </div>
 </ion-footer>

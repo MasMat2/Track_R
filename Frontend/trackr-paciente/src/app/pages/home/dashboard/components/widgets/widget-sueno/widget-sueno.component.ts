@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { WidgetComponent } from '../widget/widget.component';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { addIcons } from 'ionicons';
 
 @Component({
   selector: 'app-widget-sueno',
@@ -16,15 +17,15 @@ import { IonicModule } from '@ionic/angular';
 })
 export class WidgetSuenoComponent  implements OnInit {
 
-  constructor() { }
+  constructor() {
+    addIcons({
+      'suenio': 'assets/img/svg/Suenio.svg'
+    })
+   }
 
-  protected suenoActual: number = 0;
-  protected horasMinDiarias: number = 0;
-  protected minutosMinDiarias: number = 0;
-  protected tiempoDormido: number = 0;
-  protected minutostiempoDormido: number = 0;
-  protected suenoProfundo: number = 0;
-  protected minsuenoProfundo: number = 0;
+   protected horas: number = 0;
+   protected minutos: number = 0;
+   
   ngOnInit() {}
 
 }

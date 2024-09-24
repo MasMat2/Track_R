@@ -2,7 +2,7 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>{{ accion }} Entidad</div>
+      <div>Padecimiento - {{ accion }}</div>
       <button type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
         <i class="far fa-times-circle"></i>
       </button>
@@ -13,6 +13,7 @@
       #formulario="ngForm"
       (ngSubmit)="onSubmit(formulario)"
       novalidate="novalidate"
+      class="overflow-auto"
     >
     <div class="modal-body" id="modal">
       <div class="container">
@@ -97,7 +98,7 @@
                   <!-- Selector de Pestaña -->
                   <div class="col-md-9">
                     <div class="form-group">
-                      <label class="label-input required-label">Pestaña Padre</label>
+                      <label class="label-input required-label">Padecimiento</label>
                       <ng-select
                         #jerarquiaPadre="ngModel"
                         disabled
@@ -115,7 +116,7 @@
                   <!-- Switch Nueva Pestaña -->
                   <div class="col-md-3">
                     <div class="form-group">
-                      <label class="label-input required-label">Nueva Pestaña</label>
+                      <label class="label-input required-label">Nuevo padecimiento</label>
                       <div class="form-group switch-flex">
                         <label class="switch" for="nuevoNodo">
                           <input
@@ -139,7 +140,7 @@
                 <!-- Grid de Secciones -->
                 <div class="row mb-4" *ngIf="!esNuevaPestana">
                   <div class="col-md-12">
-                    <div class="subseccion">Secciones</div>
+                    <div class="subseccion">Parametros</div>
                     <app-grid-general
                       [headerName]="HEADER_GRID_SECCIONES"
                       [data]="seccionesList"
@@ -199,21 +200,23 @@
 
                     <!--Es Antecedente-->
                     <div class="col-md-3">
-                      <label class="label-input required-label">¿Es antecedente?</label>
-                      <div class="form-group switch-flex">
-                        <label class="switch">
-                          <input
-                              #antecedente="ngModel"
-                              name="antecedente"
-                              id="antecedente"
-                              type="checkbox"
-                              [(ngModel)]="entidadEstructura.esAntecedente"
-                          />
-                          <div class="slider round">
-                            <span class="on">Sí</span>
-                            <span class="off">No</span>
-                          </div>
-                        </label>
+                      <div class="form-group">
+                        <label class="label-input required-label">¿Es antecedente?</label>
+                        <div class="form-group switch-flex">
+                          <label class="switch">
+                            <input
+                                #antecedente="ngModel"
+                                name="antecedente"
+                                id="antecedente"
+                                type="checkbox"
+                                [(ngModel)]="entidadEstructura.esAntecedente"
+                            />
+                            <div class="slider round">
+                              <span class="on">Sí</span>
+                              <span class="off">No</span>
+                            </div>
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -236,7 +239,7 @@
                         </div>
                       </div>
                     </div>
-                </div>
+                  </div>
 
                 <!-- Botón Agregar Estructura de Jerarquía -->
                 <div class="row mb-4">

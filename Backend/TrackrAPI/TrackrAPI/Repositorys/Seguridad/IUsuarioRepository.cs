@@ -14,6 +14,7 @@ namespace TrackrAPI.Repositorys.Seguridad
         public Usuario Login(string correo, string contrasena, string claveRol);
         public Usuario ConsultarPorCorreo(string correo, string claveTipoUsuario);
         public Usuario ConsultarPorCorreo(string correo);
+        public Usuario ConsultarPorUsername(string username);
         public Usuario ConsultarPorCorreoPersonal(string correoPersonal);
         public Usuario ConsultarPorUsuario(string usuario);
         public Usuario Consultar(int idUsuario);
@@ -46,9 +47,11 @@ namespace TrackrAPI.Repositorys.Seguridad
         //public Usuario ConsultarDependencias(int idUsuario);
         public IEnumerable<UsuarioDto> ConsultarPorNombre(string filtro);
         public InformacionGeneralDTO ConsultarInformacionGeneralTrackr(int idUsuario);
+        public InformacionDomicilioDTO ConsultarInformacionDomicilioTrackr(int idUsuario);
         public InformacionPerfilTrackrDTO ConsultarInformacionPerfilTrackr(int idUsuario);
         public IEnumerable<ExpedientePadecimientoDTO> ConsultarAntecedentesUsuarioTrackr(int idUsuario);
         public IEnumerable<ExpedientePadecimientoDTO> ConsultarDiagnosticosUsuarioTrackr(int idUsuario);
+        public IEnumerable<UsuarioDto> ListarUsuariosExcluidosPorRol(string rolExcluido, int idCompania);
 
 
        public UsuarioDomicilioDto ConsultaDomicilioPorId(int? idUsuario);

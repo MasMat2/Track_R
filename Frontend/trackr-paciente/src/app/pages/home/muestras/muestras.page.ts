@@ -5,12 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { EntidadEstructuraTablaValorService } from '@http/gestion-expediente/entidad-estructura-tabla-valor.service';
 import { IonicModule } from '@ionic/angular';
 import { GridGeneralModule } from '@sharedComponents/grid-general/grid-general.module';
-import { lastValueFrom } from 'rxjs';
-import { HeaderComponent } from '../layout/header/header.component';
 import { MuestrasFormularioComponent } from './muestras-formulario/muestras-formulario.component';
 import { addIcons } from 'ionicons';
 import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
-import { AlertController, ModalController } from '@ionic/angular/standalone';
+import { ModalController } from '@ionic/angular/standalone';
+import { LoadingSpinnerService } from '../../../services/dashboard/loading-spinner.service';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-muestras',
@@ -21,7 +21,6 @@ import { AlertController, ModalController } from '@ionic/angular/standalone';
     CommonModule,
     IonicModule,
     FormsModule,
-    HeaderComponent,
     GridGeneralModule,
     MuestrasFormularioComponent,
     SharedModule
@@ -43,7 +42,8 @@ export class MuestrasPage implements OnInit {
   constructor(
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
     private modalController: ModalController,
-    private alertController: AlertController
+    private loadingSpinner: LoadingSpinnerService,
+    private fechaService: FechaService,
   ) { addIcons({
       'plus': 'assets/img/svg/plus.svg',
       'calendar': 'assets/img/svg/calendar.svg',
@@ -55,22 +55,29 @@ export class MuestrasPage implements OnInit {
   }
 
   public consultarValoresFueraRango(): void {
-    lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresFueraRangoUsuarioSesion())
-      .then((valoresFueraRango: ValoresFueraRangoGridDTO[]) => {
-        console.log(valoresFueraRango);
-        this.valoresFueraRango = valoresFueraRango;
-        console.log(this.valoresFueraRango);
+    this.loadingSpinner.presentLoading();
+
+    this.entidadEstructuraTablaValorService.consultarValoresFueraRangoUsuarioSesion().subscribe({
+      next: (valoresFueraRango: ValoresFueraRangoGridDTO[]) => {
+        valoresFueraRango.map((data) => {
+          data.fechaHora = this.fechaService.fechaUTCAFechaLocal(data.fechaHora);
+          return data;
+        })
+        this.valoresFueraRango = valoresFueraRango.sort((a, b) => {
+          return new Date(b.fechaHora).getTime() - new Date(a.fechaHora).getTime();
+        });
+      },
+      error: () => {
+        this.loadingSpinner.dismissLoading();
+      },
+      complete: ()=> {
+        this.loadingSpinner.dismissLoading();
       }
-    );
+    })
   }
 
   protected listaValoresVacia(){
     return this.valoresFueraRango?.length <= 0;
-  }
-
-  protected onFechaChange(){
-    console.log(this.dateToday);
-    console.log(this.fechaSeleccionada);
   }
 
   protected async AgregarDatosClinicos(){
@@ -80,7 +87,6 @@ export class MuestrasPage implements OnInit {
       breakpoints : [0, 1],
       initialBreakpoint: 1,
       cssClass: 'custom-sheet-modal'
-      
     });
  
     await modal.present();
@@ -88,22 +94,8 @@ export class MuestrasPage implements OnInit {
     const {data, role} = await modal.onWillDismiss();
 
     if(role == 'confirm'){
-      this.presentarAlertSuccess();
       this.consultarValoresFueraRango();
     }
-  }
-
-  protected async presentarAlertSuccess() {
-    const alertSuccess = await this.alertController.create({
-      header: 'Datos registrados exitosamente.',
-      buttons: [{
-        text: 'De acuerdo',
-        role: 'confirm'
-      }],
-      cssClass: 'custom-alert-success',
-    });
-
-    await alertSuccess.present();
   }
 
 }

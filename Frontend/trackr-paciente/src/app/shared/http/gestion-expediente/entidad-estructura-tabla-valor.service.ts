@@ -4,6 +4,7 @@ import { EntidadTablaRegistroDto, TablaValorMuestraDTO } from '@dtos/gestion-ent
 import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera-rango-grid-dto';
 import { Observable } from 'rxjs';
 import { ValoresPorClaveCampo } from '../../Dtos/gestion-expediente/valores-clave-campo';
+import { ValoresClaveCampoGridDto } from '../../Dtos/gestion-entidades/valores-clave-campo-grid-dto';
 
 @Injectable()
 export class EntidadEstructuraTablaValorService {
@@ -39,8 +40,8 @@ export class EntidadEstructuraTablaValorService {
     return this.http.get<ValoresPorClaveCampo>(this.dataUrl + `valoresPorClaveCampo/usuarioSesion/${idSeccionVariable}/${filtroTiempo}`);
   }
 
-  public consultarValoresPorClaveCampoParaGridUsuarioSesion(idSeccionVariable: number, filtroTiempo: string): Observable<any> {
-    return this.http.get<any>(this.dataUrl + `valoresPorClaveCampoParaGrid/usuarioSesion/${idSeccionVariable}/${filtroTiempo}`);
+  public consultarValoresPorClaveCampoParaGridUsuarioSesion(idSeccionVariable: number, filtroTiempo: string): Observable<ValoresClaveCampoGridDto> {
+    return this.http.get<ValoresClaveCampoGridDto>(this.dataUrl + `valoresPorClaveCampoParaGrid/usuarioSesion/${idSeccionVariable}/${filtroTiempo}`);
   }
 
 }

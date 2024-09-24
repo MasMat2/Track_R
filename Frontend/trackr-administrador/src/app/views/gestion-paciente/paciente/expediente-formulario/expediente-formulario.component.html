@@ -1,37 +1,19 @@
-<div *ngIf="accion != 'Agregar'">
-  <div class="modal-header">
-    <div class="bg-white bg-white d-flex align-items-center gap-2">
-      <div class="img-container">
-        <img [src]="url" alt="Imagen de Usuario" />
+<div class="contenedor-principal">
+  <div class="datos-paciente-editando" *ngIf="!esAgregar()">
+    <div class="contenido-datos">
+      <div class="foto-perfil">
+        <img [src]="url ?? urlImagenDefault" alt="imagen de usuario">
       </div>
-      <div class="bg-white">
-        <div style="font-weight: 550; font-size:1.5rem;">
-          Paciente: {{nombreCompleto}}
-        </div>
+      <div class="datos">
+        <h2 id="nombre">{{nombreCompleto}}</h2>
+        <h3><span id="edad">{{edad}} años</span> | <span id="locacion">{{ciudad}}, {{estado}}</span></h3>
       </div>
-    </div>
-
-      <div class="datos" style="background-color: #EFEDE4; padding: 1%;">
-        <div style="font-size: 0.6em">
-          {{edad}} años
-        </div>
-        <div style="font-size: 0.6em">
-          {{colonia}}
-          </div>
-          <div style="font-size: 0.6em">
-            {{ciudad}}, {{estado}}
-          </div>
-          <div style="font-size: 0.6em">
-          {{idHospital}}
-          </div>
     </div>
   </div>
-</div>
-<div class="contendor">
-  <div class="cuerpo-contenedor" style="padding-bottom: 0;">
+
+  <div class="contenedor-tabs">
     <app-tabulador-entidad [claveEntidad]="claveEntidadExpedienteTrackr" [idTabla]="idUsuario"
       [externalTemplates]="externalTemplates">
     </app-tabulador-entidad>
   </div>
-
 </div>

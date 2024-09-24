@@ -5,9 +5,9 @@ using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Repositorys.GestionExpediente;
 
-public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>, IExpedienteTratamientoRepository
+public class ExpedienteTratamientoRepository : Repository<ExpedienteTratamiento>, IExpedienteTratamientoRepository
 {
-    public ExpedienteTratamientoRepository(TrackrContext context): base(context)
+    public ExpedienteTratamientoRepository(TrackrContext context) : base(context)
     {
         base.context = context;
     }
@@ -16,7 +16,21 @@ public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>,
     {
         return context.ExpedienteTratamiento
             .Include(et => et.IdPadecimientoNavigation)
+            .Include(tr => tr.TratamientoRecordatorio)
             .Where(et => et.IdExpedienteNavigation.IdUsuario == idUsuario);
+    }
+
+    public ExpedienteTratamiento ConsultarTratamiento(int idExpedienteTratamiento)
+    {
+        return context.ExpedienteTratamiento
+            .Where(et => et.IdExpedienteTratamiento == idExpedienteTratamiento)
+            .Include(et => et.IdPadecimientoNavigation)
+            .Include(et => et.IdUsuarioDoctorNavigation)
+            .ThenInclude(et => et.IdTituloAcademicoNavigation)
+            .Include(et => et.TratamientoRecordatorio)
+            .ThenInclude(tr => tr.TratamientoToma)
+            .AsSplitQuery()
+            .SingleOrDefault();
     }
 
     public IEnumerable<ExpedienteTratamiento> ConsultarTratamientos(int idUsuario)
@@ -24,9 +38,12 @@ public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>,
         return context.ExpedienteTratamiento
             .Where(et => et.IdExpedienteNavigation.IdUsuario == idUsuario)
             .Include(et => et.IdPadecimientoNavigation)
+            .Include(et => et.IdUsuarioDoctorNavigation)
+            .ThenInclude(et => et.IdTituloAcademicoNavigation)
             .Include(et => et.TratamientoRecordatorio)
             .ThenInclude(tr => tr.TratamientoToma)
             .AsSplitQuery()
+            .OrderByDescending(et => et.IdExpedienteTratamiento)
             .ToList();
     }
 
@@ -55,15 +72,35 @@ public class ExpedienteTratamientoRepository: Repository<ExpedienteTratamiento>,
     }
 
     public int Agregar(ExpedienteTratamiento expedienteTratamiento)
-    {      
+    {
         var entry = context.ExpedienteTratamiento.Add(expedienteTratamiento);
         context.SaveChanges();
         return entry.Entity.IdExpedienteTratamiento;
     }
 
-    public void AgregarRecordatorios(IEnumerable<TratamientoRecordatorio> recordatorios){
+    public void AgregarRecordatorios(IEnumerable<TratamientoRecordatorio> recordatorios)
+    {
         context.TratamientoRecordatorio.AddRange(recordatorios);
         context.SaveChanges();
     }
+
+    public void EliminarRecordatorios(IEnumerable<TratamientoRecordatorio> recordatorios)
+    {
+        context.TratamientoRecordatorio.RemoveRange(recordatorios);
+        context.SaveChanges();
+    }
+
+    public IEnumerable<TratamientoToma> ConsultarTratamientoTomas(int idTratamientoRecordatorio)
+    {
+        return context.TratamientoToma.Where(tt => tt.IdTratamientoRecordatorio == idTratamientoRecordatorio);
+    }
+
+    public void EliminarTratamientoTomas(IEnumerable<TratamientoToma> tt)
+    {
+        context.TratamientoToma.RemoveRange(tt);
+        context.SaveChanges();
+    }
+
+
 
 }

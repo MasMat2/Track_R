@@ -1,25 +1,89 @@
-@import "../../../../../../theme/variables.scss";
+//@import "../../../../../../theme/variables.scss";
 
-ion-header{
-    ion-title{
-      font-weight: bold;
+.contenedor-principal {
+  height: 100%;
+  .titulo {
+    height: 8vh;
+    padding: 16px 32px 0 32px;
+
+    ion-text {
+      text-align: start;
+      h3 {
+        margin: 0;
+        color: var(--primary-700);
+        font-family: var(--font-display);
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 32px;
+      }
     }
-    .primary-toolbar{
-      --background: url('../../../../../../assets/header_light.svg');
-      height: 20vh;
-      color: var(--color-terceario);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-    }
+  }
 }
 
-ion-content{
-    --background: #F3F4FA;
+.contenedor-barra-busqueda{
+  padding: 32px;
+  padding-top: 0;
+  padding-bottom: 16px;
 }
 
-ion-title{
-    color: var(--color-terceario);
+.lista-doctores{
+
+  ion-list{
+    padding: 0;
+    background: var(--primary-50);
+  }
+  .divider{
+    height: 64px;
+    --padding-start: 32px;
+    font-family: var(font-body);
+    font-size: 16px;
     font-weight: bold;
-    padding-top: 3vh;
+    --color: var(--neutral-900);
+    --background: var(--primary-50);
+    border: none;
+  }
+  .doctor{
+    --padding-start: 32px;
+    --inner-padding-end: 32px;
+    --min-height: 64px;
+    --detail-icon-color: var(--neutral-400);
+    --detail-icon-font-size: 24px;
+    --detail-icon-opacity: 1;
+    border-bottom: 1px solid var(--neutral-200);
+
+    ion-avatar{
+      height: 40px;
+      width: 40px;
+    }
+
+    ion-label{
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: var(--neutral-900);
+    }
+  }
 }
+
+// ion-header{
+//     ion-title{
+//       font-weight: bold;
+//     }
+//     .primary-toolbar{
+//       --background: url('../../../../../../assets/header_light.svg');
+//       height: 20vh;
+//       color: var(--color-terceario);
+//       display: flex;
+//       flex-direction: column;
+//       justify-content: flex-end;
+//     }
+// }
+
+// ion-content{
+//     --background: #F3F4FA;
+// }
+
+// ion-title{
+//     color: var(--color-terceario);
+//     font-weight: bold;
+//     padding-top: 3vh;
+// }

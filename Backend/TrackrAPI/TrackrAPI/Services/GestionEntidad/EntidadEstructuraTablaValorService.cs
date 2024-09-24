@@ -115,9 +115,9 @@ namespace TrackrAPI.Services.GestionEntidad
 
         public async Task AgregarMuestra(TablaValorMuestraDTO[] muestraDTO, int idUsuario)
         {
-            using var ts = new TransactionScope();
-         
-            
+            using var ts = new TransactionScope(TransactionScopeOption.Required,
+                                                 new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                 TransactionScopeAsyncFlowOption.Enabled);
             foreach (var muestra in muestraDTO)
             {
                     var idSeccion = seccionCampoRepository.Consultar(muestra.IdSeccionVariable).IdSeccion;
@@ -142,6 +142,7 @@ namespace TrackrAPI.Services.GestionEntidad
                     var notificacion = new NotificacionDoctorCapturaDTO(
 
                         "El paciente " + nombrePaciente + " ha registrado un valor fuera de rango en la variable " + nombreVariable + ".",
+                        null,
                         4,
                         idUsuario,
                         idUsuario,
@@ -245,7 +246,8 @@ namespace TrackrAPI.Services.GestionEntidad
                         FechaHora = valor.FechaMuestra,
                         ValorRegistrado = valor.Valor,
                         ValorReferencia = valorReferencia,
-                        unidadMedida = columnaCorrespondiente.UnidadMedida
+                        unidadMedida = columnaCorrespondiente.UnidadMedida,
+                        fueraDeRango = valor.FueraDeRango,
                     });
                 }
             }

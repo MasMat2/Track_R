@@ -24,7 +24,7 @@ public class ProgramacionExamenRepository : Repository<ProgramacionExamen>, IPro
                 Clave = p.Clave ?? string.Empty,
                 Duracion = p.Duracion,
                 CantidadParticipantes = p.CantidadParticipantes,
-                FechaExamen = p.FechaExamen,
+                FechaExamen = p.FechaExamen.Value,
                 HoraExamen = p.HoraExamen,
                 FechaAlta = p.FechaAlta,
                 Estatus = p.Estatus ?? false,
@@ -49,7 +49,30 @@ public class ProgramacionExamenRepository : Repository<ProgramacionExamen>, IPro
                 Clave = p.Clave ?? string.Empty,
                 UsuarioResponsable = p.IdUsuarioResponsableNavigation.Nombre + " " + p.IdUsuarioResponsableNavigation.ApellidoPaterno,
                 TipoExamen = p.IdTipoExamenNavigation.Nombre ?? string.Empty,
-                FechaExamen = p.FechaExamen,
+                FechaExamen = p.FechaExamen.Value,
+                HoraExamen = p.HoraExamen,
+                Duracion = p.Duracion,
+                PorcentajeAvance = CalcularPorcentajeAvance(p.IdProgramacionExamen, p.Examen.ToList()),
+                Estatus = p.Estatus ?? false
+            })
+            .ToList();
+
+        return prograexamens;
+
+    }
+    public IEnumerable<ProgramacionExamenGridDto> ConsultarGeneral(int idCompania, List<int> idUsuarioSesion)
+    {
+        
+        var prograexamens = context.ProgramacionExamen
+            .Where(p => p.Estatus == true && p.IdUsuarioResponsableNavigation.IdCompania == idCompania && idUsuarioSesion.Contains(p.IdUsuarioResponsable))
+            .OrderBy(p => p.Clave)
+            .Select(p => new ProgramacionExamenGridDto
+            {
+                IdProgramacionExamen = p.IdProgramacionExamen,
+                Clave = p.Clave ?? string.Empty,
+                UsuarioResponsable = p.IdUsuarioResponsableNavigation.Nombre + " " + p.IdUsuarioResponsableNavigation.ApellidoPaterno,
+                TipoExamen = p.IdTipoExamenNavigation.Nombre ?? string.Empty,
+                FechaExamen = p.FechaExamen.Value,
                 HoraExamen = p.HoraExamen,
                 Duracion = p.Duracion,
                 PorcentajeAvance = CalcularPorcentajeAvance(p.IdProgramacionExamen, p.Examen.ToList()),

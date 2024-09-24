@@ -1,6 +1,6 @@
 <div class="modal-content">
   <div class="modal-header">
-    {{ titulo }} Acceso
+     Acceso - {{ titulo }}
     <button *ngIf="esModal" type="button" class="close pull-right" aria-label="Close" (click)="cancelar()">
       <i class="far fa-times-circle"></i>
     </button>
@@ -132,10 +132,14 @@
           <div class="form-group">
             <label class="label-input required-label">Icono Menú</label>
             <div class="d-flex">
-              <i
-                *ngIf="acceso.idIcono"
-                class="{{ acceso.claseIcono + ' icono-acceso' }}"
-              ></i>
+              <div class="muestra-icono-acceso">
+                <i-lucide 
+                  *ngIf="acceso.idIcono && (acceso.claseIcono != '')" 
+                  [name]="acceso.claseIcono"
+                  class="icono"
+                  size="24">
+                </i-lucide>
+              </div>
               <ng-select
                 #iconoLst="ngModel"
                 name="IconoName"
@@ -200,9 +204,4 @@
       </div>
     </form>
   </div>
-</div>
-
-<div id="loading-cdis" *ngIf="btnSubmit">
-  <img src="assets/img/spinner.gif" alt="Procesando..." />
-  <span>Procesando... por favor espere</span>
 </div>

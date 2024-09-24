@@ -51,8 +51,8 @@ export class TokenInterceptor implements HttpInterceptor {
           }
           /* Errores inesperados */
           else {
-            const MENSAJE_ERROR_INESPERADO: string = 'Ocurrió un error inesperado, favor de contactar al administrador del sistema.';
-            this.presentarAlerta('Algo Salió Mal.', MENSAJE_ERROR_INESPERADO);
+            const MENSAJE_ERROR_INESPERADO: string = 'Ocurrió un error inesperado.\n Favor de contactar al administrador del sistema.';
+            this.presentarAlerta('Algo salió mal.', MENSAJE_ERROR_INESPERADO);
           }
 
           return throwError(() => new Error(error));
@@ -100,9 +100,8 @@ export class TokenInterceptor implements HttpInterceptor {
     const alert = await this.alertController.create({
       header: header,
       subHeader: subheader,
-      message: Constants.ALERT_ERROR,
       buttons: ['Cerrar'],
-      cssClass: 'custom-alert-error'
+      cssClass: 'custom-alert color-error icon-info'
     });
 
     await alert.present();

@@ -8,6 +8,7 @@ using System.IO;
 using TrackrAPI.Services.Inventario;
 using TrackrAPI.Services.Archivos;
 using System.Runtime.Serialization.Formatters.Binary;
+using TrackrAPI.Services.Sftp;
 
 namespace TrackrAPI.Controllers.Catalogo
 {
@@ -20,13 +21,15 @@ namespace TrackrAPI.Controllers.Catalogo
         private readonly CompaniaLogotipoService companiaLogotipoService;
         private readonly UsuarioService usuarioService;
         private readonly ArchivoService archivoService;
+        private readonly SftpService _sftpService;
 
         public ArchivoController(
             IWebHostEnvironment hostingEnvironment,
             HospitalLogotipoService hospitalLogotipoService,
             CompaniaLogotipoService companiaLogotipoService,
             UsuarioService usuarioService,
-            ArchivoService archivoService
+            ArchivoService archivoService,
+            SftpService sftpService
             )
         {
             this.hostingEnvironment = hostingEnvironment;
@@ -34,6 +37,7 @@ namespace TrackrAPI.Controllers.Catalogo
             this.companiaLogotipoService = companiaLogotipoService;
             this.usuarioService = usuarioService;
             this.archivoService = archivoService;
+            _sftpService = sftpService;
         }
 
         [HttpGet("HospitalLogotipo/{idHospitalLogotipo}")]
@@ -88,48 +92,42 @@ namespace TrackrAPI.Controllers.Catalogo
         [HttpGet("usuario/{idUsuario}")]
         public IActionResult ObtenerUsuarioImagen(int idUsuario)
         {
-            var usuario = usuarioService.Consultar(idUsuario);
-            string path;
+            byte[] imageFileStream;
             string tipoMime;
-
-            // if (string.IsNullOrWhiteSpace(usuario.ImagenTipoMime))
-            // {
-            //     path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
-            //     tipoMime = "image/svg+xml";
-            // }
-            // else
-            // {
             var archivo = archivoService.ObtenerImagenUsuario(idUsuario);
+
+
+            var imgPath = archivo?.ArchivoUrl;
+            var mimeType = archivo?.ArchivoTipoMime;
+
+            if(imgPath == null){
+                return NotFound();
+            }
+            var imagenPerfilBase64 = _sftpService.DownloadFile(imgPath);
+            var imagenPerfilBytes = Convert.FromBase64String(imagenPerfilBase64);
+
+/* 
             if (archivo == null)
             {
-                path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
+                var path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
+                imageFileStream = Convert.FromBase64String(usuarioService.ObtenerImagenUsuario(idUsuario));
                 tipoMime = "image/svg+xml";
+            }
+            else if(archivo != null && (archivo.ArchivoUrl != null || archivo.ArchivoUrl == ""))
+            {
+                tipoMime = archivo.ArchivoTipoMime;
+                imageFileStream = Convert.FromBase64String(usuarioService.ObtenerImagenUsuario(idUsuario, tipoMime));
+
             }
             else
             {
-                MemoryStream ms = new MemoryStream();
-
-                BinaryFormatter binForm = new BinaryFormatter();
-                ms.Write(archivo.Archivo1, 0, archivo.Archivo1.Length);
-                ms.Seek(0, SeekOrigin.Begin);
-                return File(ms, archivo.ArchivoTipoMime);
-
-            }
+                var path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
+                imageFileStream = System.IO.File.ReadAllBytes(path);
+                tipoMime = "image/svg+xml";
+            } */
 
 
-            // path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"{usuario.IdUsuario}{ MimeTypeMap.GetExtension(usuario.ImagenTipoMime)}");
-            // tipoMime = usuario.ImagenTipoMime;
-
-            // if (!System.IO.File.Exists(path))
-            // {
-            //     path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
-            //     tipoMime = "image/svg+xml";
-            // }
-            // }
-
-            var imageFileStream = System.IO.File.OpenRead(path);
-
-            return File(imageFileStream, tipoMime);
+            return File(imagenPerfilBytes, mimeType);
         }
         [HttpGet("usuarioEnSesionImagen/")]
         public IActionResult ObtenerUsuarioEnSesionImagen()

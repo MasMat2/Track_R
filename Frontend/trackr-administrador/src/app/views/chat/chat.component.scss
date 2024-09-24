@@ -1,9 +1,28 @@
-.rellenar-div{
-    height: 80vh;
-    background-color: #EFEDE4;
+.row {
+  margin: 0 !important;
 }
 
-.mensajes{
-    min-height: 80vh;
-    background-color: #EFEDE4;
+.no-padding {
+  padding: 0 !important;
+}
+.padding-izquierda {
+  padding-left: 16px !important;
+}
+.padding-derecha {
+  padding-right: 16px !important;
+}
+
+.contenedor-principal {
+  height: 100%;
+  width: 100%;
+  padding: 24px 56px 36px 32px;
+  .row {
+    height: 100%;
+  }
+}
+.barra-chats {
+  height: 100%;
+}
+.mensajes {
+  height: 100%;
 }

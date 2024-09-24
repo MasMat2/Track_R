@@ -17,6 +17,7 @@ import { first } from 'rxjs/operators';
 import { sum } from 'lodash';
 import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
 import { Dominio } from '@models/catalogo/dominio';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-seccion-tabla',
@@ -24,7 +25,6 @@ import { Dominio } from '@models/catalogo/dominio';
   styleUrls: ['./seccion-tabla.component.scss']
 })
 export class SeccionTablaComponent implements OnInit {
-  @Input() public entidadEstructuraSeccion: EntidadEstructura;
   @Input() public idTabla: number;
  
  public campos: SeccionCampo[] = [];
@@ -39,11 +39,11 @@ export class SeccionTablaComponent implements OnInit {
     private modalService: BsModalService,
     private mensajeService: MensajeService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
-    private entidadEstructuraService : EntidadEstructuraService
+    private entidadEstructuraService : EntidadEstructuraService,
+    private fechaService: FechaService
   ) { }
 
   ngOnInit() {
-    this.entidadEstructuraSeccion.campos.sort((a, b) => a.orden - b.orden);
     this.valoresVariablesPadecimiento();
   }
 
@@ -54,7 +54,6 @@ export class SeccionTablaComponent implements OnInit {
         this.agregarFechaHora();
         this.seccionCampoList = this.seccionCampoList.concat(data);
         this.campos = this.campos.concat(data);
-        this.agregarFueraDeRango();
         this.obtenerMuestrasGrid();
     });
   }
@@ -88,16 +87,17 @@ export class SeccionTablaComponent implements OnInit {
         this.campos.unshift(fecha, hora);
     }
     
-  private agregarFueraDeRango() {
-    var fueraDeRango = new SeccionCampo();
-    fueraDeRango.clave = 'F-Rango';
-    fueraDeRango.descripcion = 'Fuera de Rango';
-    fueraDeRango.orden = 1000;
-    this.seccionCampoList.push(fueraDeRango);
-  }
 
   private obtenerMuestrasGrid() {
     this.entidadEstructuraTablaValorService.consultarGridMuestras(this.idTabla).subscribe((data) => {
+      data.map((muestra) => {
+        return muestra.registro.map(
+          registro => {
+            registro.fechaMuestra = new Date(this.fechaService.fechaUTCAFechaLocal(registro.fechaMuestra));
+            return registro;
+          }
+        )
+      })
       this.muestras = data;
     })
   }
@@ -106,22 +106,10 @@ export class SeccionTablaComponent implements OnInit {
     this.seleccionado = registro;
   }
 
-  private actualizarGrid(): void {
-    const subscription = this.entidadEstructuraTablaValorService
-      .consultarPorPestanaSeccion(this.entidadEstructuraSeccion.idEntidadEstructura, this.idTabla)
-      .subscribe({
-        next: (registros: RegistroTabla[]) => {
-          subscription.unsubscribe();
-          this.entidadEstructuraSeccion.registrosTabla = registros;
-        }
-      });
-  }
 
+  public obtenerValor(claveColumna: string, valores: ExpedienteMuestrasRegistroDTO , index : number, idSeccionValor : number) : string  {
 
-  public obtenerValor(claveColumna: string, valores: ExpedienteMuestrasRegistroDTO , firstRegistro : boolean , lastColumna : boolean, idSeccionValor : number) : string  {
-    if(lastColumna && firstRegistro)
-      return ' _ ';
-
+    var firstRegistro = index == 0;
     if(claveColumna == 'ME-fecha' && valores.fechaMuestra != undefined && firstRegistro)
     {
       
@@ -148,10 +136,14 @@ export class SeccionTablaComponent implements OnInit {
 
   }
 
-  public obtenerValorEstilo(valor: ExpedienteMuestrasRegistroDTO , first : boolean) : string
+  public obtenerValorEstilo(valor: ExpedienteMuestrasRegistroDTO , columnaClave : string) : string
   {   
-    if(first)
-     return valor.fueraDeRango ? 'fuera-de-rango' : 'no-fuera-de-rango';
+    if(columnaClave == 'ME-fecha' || columnaClave == 'ME-hora')
+      return '';
+
+    if(valor.idSeccionVariable > 0){
+      return valor.fueraDeRango ? 'fuera-de-rango' : 'no-fuera-de-rango';
+    }
     else
       return '';
   }
@@ -161,8 +153,7 @@ export class SeccionTablaComponent implements OnInit {
     const initialState = {
       accion: 'Agregar',
       idTabla: this.idTabla,
-      idPestanaSeccion: this.entidadEstructuraSeccion.idEntidadEstructura,
-      nombreSeccion: this.entidadEstructuraSeccion.nombre,
+      nombreSeccion: 'Agregar muestra',
       campos: this.campos,
     };
 
@@ -222,8 +213,8 @@ export class SeccionTablaComponent implements OnInit {
       accion: 'Editar',
       numeroRegistro: this.seleccionado.idEntidadEstructuraTablaValor,
       idTabla: this.idTabla,
-      idPestanaSeccion: this.entidadEstructuraSeccion.idEntidadEstructura,
-      nombreSeccion: this.entidadEstructuraSeccion.nombre,
+      idPestanaSeccion: this.seleccionado.idEntidadEstructura,
+      nombreSeccion: 'Editar registro',
       campos: this.campos,
     };
 
@@ -275,7 +266,7 @@ export class SeccionTablaComponent implements OnInit {
     for (const campo of this.seleccionado.registro) {
 
 
-      const v = this.seccionCampoList.find(c => c.clave === campo.claveCampo);
+      const v = this.seccionCampoList.find(c => c.idSeccionCampo === campo.idSeccionVariable);
 
       if(v){
       

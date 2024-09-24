@@ -46,7 +46,7 @@ export class CompaniaInformacionFormularioComponent implements OnInit {
 
   // Se utilza cuando el componente se llama sin utilizar el componente padre (compania-formulario)
   @Input()
-  public titulo: string = 'Agregar Compañía';
+  public titulo: string = 'Compañía - Agregar';
 
   @Input()
   public idCompania: number;
@@ -182,7 +182,7 @@ export class CompaniaInformacionFormularioComponent implements OnInit {
     const companiaLogotipo = await this.companiaLogotipoService
       .consultarPorCompania(idCompania)
       .toPromise()
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
 
     this.companiaLogotipo = companiaLogotipo ?? null;
   }

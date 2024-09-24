@@ -2,14 +2,9 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>{{ accion }} Tipo de Cuestionario</div>
-      <button
-        type="button"
-        class="close pull-right"
-        aria-label="Close"
-        (click)="cancelar()"
-      >
-        <i class="far fa-times-circle"></i>
+      <div>Cuestionario - {{ accion }}</div>
+      <button class="btn-salir" (click)="cancelar()">
+        <lucide-icon name="x" size="10"></lucide-icon>
       </button>
     </div>
     <form
@@ -20,32 +15,9 @@
     >
       <div class="modal-body" id="modal">
         <div class="row justify-content-md-center">
-          <div class="col-md-6">
+          <div class="col">
             <div class="form-group">
-              <label class="label-input required-label">Clave</label>
-              <div>
-                <input
-                  #clave="ngModel"
-                  [(ngModel)]="tipoExamen.clave"
-                  name="clave"
-                  class="form-control"
-                  type="text"
-                  [required]="true"
-                  [disabled]="esEditar()"
-                />
-              </div>
-              <div
-                *ngIf="clave.errors?.['required'] && clave.touched"
-                class="error"
-              >
-                La clave es requerida
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="label-input required-label">Tipo de Examen</label>
+              <label class="label-input required-label">Cuestionario</label>
               <div>
                 <input
                   #nombre="ngModel"
@@ -60,14 +32,14 @@
                 *ngIf="nombre.errors?.['required'] && nombre.touched"
                 class="error"
               >
-                El tipo de cuestionario es requerido
+                El Tipo Cuestionario es requerido
               </div>
             </div>
           </div>
         </div>
 
         <div class="row justify-content-md-center">
-          <div class="col-md-6">
+          <div class="col">
             <div class="form-group">
               <label class="label-input required-label"
                 >Cantidad de Reactivos</label
@@ -88,12 +60,12 @@
                 "
                 class="error"
               >
-                La cantidad de reactivos es requerida
+                La cantidad de Reactivos es requerida
               </div>
             </div>
           </div>
 
-          <div class="col-md-6">
+          <div class="col">
             <div class="form-group">
               <label class="label-input required-label"
                 >Duración (Minutos)</label

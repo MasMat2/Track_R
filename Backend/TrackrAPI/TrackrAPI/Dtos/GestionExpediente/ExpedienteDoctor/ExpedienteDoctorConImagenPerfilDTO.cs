@@ -6,6 +6,7 @@
         public int IdExpedienteDoctor { get; set; }
         public int IdExpediente { get; set; }
         public string Nombre { get; set; } = string.Empty;
+        public string Titulo { get; set; } = string.Empty;
         public string Ambito { get; set; } = string.Empty;
         public string Hospital { get; set; } = string.Empty;
         public string TipoMime { get; set; }

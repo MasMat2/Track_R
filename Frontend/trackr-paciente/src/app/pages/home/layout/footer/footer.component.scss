@@ -1,55 +1,30 @@
 @import "../../../../../theme/variables.scss";
 
-.footer{
-  background-color: var(--neutral-100);
+.footer {
+  background-color: var(--primary-50);
   ion-tab-bar {
-      background-color: var(--neutral-50);
-      contain: size layout style  !important; //necesario para que el tab central pueda sobresalir
-      border-radius: 20px 20px 0 0;
-      width: 100%;
-      height: 10vh;
+    background-color: var(--neutral-50);
+    border-radius: 20px 20px 0 0;
+    width: 100%;
+    height: 10vh;
 
-      ion-tab-button:not(.tab-central){ //todos los tabs excepto el central
-        --background: transparent;
-        --color-selected: var(--primary-700);
+    ion-tab-button {
+      --background: transparent;
+      --color-selected: var(--primary-700);
+      display: flex;
+      ion-icon {
+        font-size: 24px;
       }
+    }
+    ion-tab-button::part(native){
+      height: 36px;
+      width: 56px;
+      border-radius: 20px;
+    }
 
-      .tab-central{
-        --background: var(--primary-700);
-        --color: var(--neutral-50);
-        --color-selected: var(--neutral-50);
-        height: 6vh;
-        max-width: 6vh;
-        border-radius: 50%;
-        margin-top: -4vh;
-      }
+    .selected::part(native){
+      transition: 0.2s ease-in;
+      background-color: var(--primary-50);
+    }
   }
-
-
 }
-
-
-
-
-
-
-
-// ion-tab-bar {
-//   //contain: none;
-//   contain: size layout style  !important;
-//   --border-radius: 20px 20px 0 0;
-//   --border: 2px solid black;
-// }
-
-// ion-tab-bar ion-tab-button:nth-child(2) {
-//   --background: #1b8472;
-//   --color: rgba(255, 255, 255, .6);
-//   --color-selected: #ffffff;
-
-//   border-radius: 50%;
-//   max-width: 80px;
-//   height: 80px;
-  
-//   margin-top: -40px;
-// }
-

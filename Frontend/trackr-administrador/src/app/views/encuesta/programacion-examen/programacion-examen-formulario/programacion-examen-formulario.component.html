@@ -2,14 +2,9 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>{{ accion }} Programación de Cuestionario</div>
-      <button
-        type="button"
-        class="close pull-right"
-        aria-label="Close"
-        (click)="cancelar()"
-      >
-        <i class="far fa-times-circle"></i>
+      <div>Cuestionario programado - {{ accion }}</div>
+      <button class="btn-salir" (click)="cancelar()">
+        <lucide-icon name="x" size="10"></lucide-icon>
       </button>
     </div>
     <form
@@ -20,31 +15,7 @@
     >
       <div class="modal-body" id="modal">
         <div class="row">
-          <div class="col-md-2">
-            <div class="form-group">
-              <label class="label-input required-label">Clave</label>
-              <div>
-                <input
-                  #clave="ngModel"
-                  [(ngModel)]="programacionExamen.clave"
-                  name="clave"
-                  class="form-control"
-                  type="text"
-                  [required]="true"
-                  [disabled]="accion == 'Editar'"
-                  maxlength="30"
-                />
-              </div>
-              <div
-                *ngIf="clave.errors?.['required'] && clave.touched"
-                class="error"
-              >
-                La clave es requerida
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-5">
+          <div class="col-md">
             <div class="form-group">
               <label class="label-input required-label">Responsable</label>
               <div>
@@ -53,7 +24,7 @@
                   name="usuarioResponsableLstName"
                   bindLabel="nombreCompleto"
                   bindValue="idUsuario"
-                  [items]="usuarioList"
+                  [items]="personalList"
                   [required]="true"
                   [(ngModel)]="programacionExamen.idUsuarioResponsable"
                   [placeholder]="DROPDOWN_PLACEHOLDER"
@@ -72,9 +43,9 @@
             </div>
           </div>
 
-          <div class="col-md-5">
+          <div class="col">
             <div class="form-group">
-              <label class="label-input required-label">Tipo de Cuestionario</label>
+              <label class="label-input required-label">Cuestionario</label>
               <div>
                 <ng-select
                   #tipoExamenLst="ngModel"
@@ -93,7 +64,7 @@
                 *ngIf="tipoExamenLst.errors?.['required'] && tipoExamenLst.touched"
                 class="error"
               >
-                El tipo de cuestionario es requerido
+                El Cuestionario es requerido
               </div>
             </div>
           </div>
@@ -154,7 +125,7 @@
                   autocomplete="off"
                   placeholder="dd/mm/aaaa"
                   name="fechaExamenName"
-                  [(ngModel)]="programacionExamen.fechaExamen"
+                  [(ngModel)]="fechaSeleccionada"
                   [required]="true"
                   bsDatepicker
                 />
@@ -165,7 +136,7 @@
                 "
                 class="error"
               >
-                La fecha del cuestionario es requerida
+                La fecha del Cuestionario es requerida
               </div>
             </div>
           </div>
@@ -187,14 +158,47 @@
                 *ngIf="horaExamen.errors?.['required'] && horaExamen.touched"
                 class="error"
               >
-                La hora del cuestionario es requerida
+                La hora del Cuestionario es requerida
               </div>
             </div>
           </div>
         </div>
 
+        <div class="participantes">
+          <div class="row">
+            <div class="col-md-12">
+              <label class="label-input required-label" style="color: var(--neutral-500);" >A quién se enviará el cuestionario</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-check">
+                <input type="radio"
+                       class="form-check-input"
+                       name="destinatario"
+                       id="padecimiento"
+                       value="2"
+                       [(ngModel)]="tipoCuestionario"
+                      >
+                <label for="padecimiento" class="form-check-label">Pacientes</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check">
+                <input type="radio"
+                       class="form-check-input"
+                       name="destinatario"
+                       id="pacientes"
+                       value="3"
+                       [(ngModel)]="tipoCuestionario"
+                       >
+                <label for="pacientes" class="form-check-label">Pacientes por padecimiento</label>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="row">
-          <div class="col-md-11">
+          <div *ngIf="tipoCuestionario == 2" class="col-md-11">
             <div class="form-group">
               <label class="label-input required-label">Participantes</label>
               <div>
@@ -203,13 +207,13 @@
                   name="participantesLstName"
                   bindLabel="nombreCompleto"
                   bindValue="idUsuario"
-                  [items]="usuarioList"
+                  [items]="pacienteList"
                   [multiple]="true"
                   [required]="true"
+                  appendTo="body"
                   [(ngModel)]="programacionExamen.participantes"
                   [placeholder]="DROPDOWN_PLACEHOLDER"
                   [notFoundText]="DROPDOWN_NO_OPTIONS"
-                  (ngModelChange)="selectChange()"
                 ></ng-select>
               </div>
               <div
@@ -219,6 +223,34 @@
                 class="error"
               >
                 Los participantes son requeridos
+              </div>
+            </div>
+          </div>
+          <div *ngIf="tipoCuestionario == 3" class="col-md-11">
+            <div class="form-group">
+              <label class="label-input required-label">Padecimientos</label>
+              <div>
+                <ng-select
+                  #padecimientosLst="ngModel"
+                  name="padecimientosLstName"
+                  bindLabel="nombre"
+                  bindValue="idPadecimiento"
+                  [items]="padecmientoList"
+                  [multiple]="true"
+                  appendTo="body"
+                  [placeholder]="DROPDOWN_PLACEHOLDER"
+                  [notFoundText]="DROPDOWN_NO_OPTIONS"
+                  [(ngModel)]="programacionExamen.idsPadecimiento"
+                  required="true"
+                ></ng-select>
+              </div>
+              <div
+                *ngIf="
+                  padecimientosLst.errors?.['required'] && padecimientosLst.touched
+                "
+                class="error"
+              >
+                Debe seleccionar al menos un padecimiento
               </div>
             </div>
           </div>
@@ -237,7 +269,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> 
 
         <div class="row" *ngIf="examenList.length > 0">
           <div class="col-md-12">
@@ -257,25 +289,10 @@
 
       <div class="modal-footer">
         <div class="text-right">
-          <button type ="button" 
-            class="btn-secundario mr-3"
-            (click)="cancelar();"
-            >Cancelar
-          </button>
-          <button
-            [disabled]="submitting"
-            type="submit"
-            class="btn-primario btn-margin-left"
-          >
-            Guardar
-          </button>
+          <button type ="button" class="btn-secundario btn-margin-right" (click)="cancelar();">Cancelar</button>
+          <button [disabled]="submitting" type="submit" class="btn-primario btn-margin-left">Guardar</button>
         </div>
       </div>
     </form>
   </div>
-</div>
-
-<div id="loading-cdis" *ngIf="submitting">
-  <img src="assets/img/spinner.gif" alt="Procesando..." />
-  <span>Procesando... por favor espere</span>
 </div>

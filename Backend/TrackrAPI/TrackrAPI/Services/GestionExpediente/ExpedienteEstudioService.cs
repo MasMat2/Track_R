@@ -1,6 +1,10 @@
-﻿using TrackrAPI.Dtos.GestionExpediente;
+﻿using System.Transactions;
+using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Models;
+using TrackrAPI.Repositorys.Archivos;
 using TrackrAPI.Repositorys.GestionExpediente;
+using TrackrAPI.Services.Sftp;
+using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Services.GestionExpediente
 
@@ -8,10 +12,17 @@ namespace TrackrAPI.Services.GestionExpediente
     public class ExpedienteEstudioService
     {
         private readonly IExpedienteEstudioRepository _expedienteEstudioRepository;
+        private readonly SftpService _sftpService;
+        private readonly IArchivoRepository _archivoRepository;
 
-        public ExpedienteEstudioService(IExpedienteEstudioRepository expedienteEstudioRepository)
-        {
+        public ExpedienteEstudioService(
+            IExpedienteEstudioRepository expedienteEstudioRepository,
+            SftpService sftpService,
+            IArchivoRepository archivoRepository
+        ) {
             _expedienteEstudioRepository = expedienteEstudioRepository;
+            _sftpService = sftpService;
+            _archivoRepository = archivoRepository;
         }
 
         /// <summary>
@@ -29,25 +40,49 @@ namespace TrackrAPI.Services.GestionExpediente
         /// </summary>
         /// <param name="idExpedienteEstudio">IdEstudio a consultar</param>
         /// <returns>Estudio Consultado</returns>
-        public ExpedienteEstudio Consultar(int idExpedienteEstudio)
+        public ExpedienteEstudioDTO Consultar(int idExpedienteEstudio)
         {
-            return _expedienteEstudioRepository.Consultar(idExpedienteEstudio);
+            var expediente = _expedienteEstudioRepository.Consultar(idExpedienteEstudio);
+
+            var expedientedto = new ExpedienteEstudioDTO
+            {
+                IdExpedienteEstudio = expediente.IdExpedienteEstudio,
+                IdExpediente = expediente.IdExpediente,
+                Nombre = expediente.Nombre,
+                FechaRealizacion = expediente.FechaRealizacion,
+                ArchivoBase64 = _sftpService.DownloadFile(expediente.IdArchivoNavigation.ArchivoUrl),
+                ArchivoTipoMime = expediente.IdArchivoNavigation.ArchivoTipoMime
+            };
+
+            return expedientedto;
         }
 
         public void Agregar(ExpedienteEstudioFormularioCapturaDTO expedienteEstudioDTO, int idUsuario)
         {
+            using var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+
+            if (expedienteEstudioDTO.Archivo is null)
+            {
+                throw new CdisException("Debe agregar un adjunto");
+            }
+
             int idExpediente = _expedienteEstudioRepository.ConsultarIdExpediente(idUsuario);
+
+            var archivo = this.GuardarArchivo(expedienteEstudioDTO.Archivo, expedienteEstudioDTO.ArchivoNombre, expedienteEstudioDTO.ArchivoTipoMime, idUsuario);
 
             var expedienteEstudio = new ExpedienteEstudio()
             {
                 IdExpediente = idExpediente,
                 Nombre = expedienteEstudioDTO.Nombre,
-                FechaRealizacion = DateTime.Now,
-                Archivo = expedienteEstudioDTO.Archivo,
-                ArchivoTipoMime = expedienteEstudioDTO.ArchivoTipoMime,
-                ArchivoNombre = expedienteEstudioDTO.ArchivoNombre
+                FechaRealizacion = expedienteEstudioDTO.FechaRealizacion,
+                IdArchivo = archivo.id,
+                ArchivoUrl = archivo.url
             };
+
             _expedienteEstudioRepository.Agregar(expedienteEstudio);
+
+            scope.Complete();
+
         }
 
         public void Eliminar(int idExpedienteEstudio)
@@ -56,19 +91,30 @@ namespace TrackrAPI.Services.GestionExpediente
             _expedienteEstudioRepository.Eliminar(expedienteEstudio);
         }
 
-        /*public int Agregar()
+        public (int id, string url) GuardarArchivo(byte[] archivo, string nombre, string tipoMime, int idUsuario)
         {
-            ExpedienteEstudio expedienteEstudio = new ExpedienteEstudio();
-            byte[] pdfData = File.ReadAllBytes("D:/Users/osval/Downloads/mock.pdf");
-            expedienteEstudio.Archivo = pdfData;
-            expedienteEstudio.Nombre = "Rayos X Tobillo";
-            expedienteEstudio.ArchivoNombre = "Rayos X Tobillo";
-            expedienteEstudio.FechaRealizacion = DateTime.UtcNow;
-            expedienteEstudio.IdExpediente = 9;
-            expedienteEstudio.ArchivoTipoMime = "application/pdf";
+            string nombreArchivo = $"{nombre}";
+            string path = Path.Combine("Archivos", "Expediente", $"{Guid.NewGuid()}.{tipoMime.Split('/')[1]}");
+            var archivoBase64 = Convert.ToBase64String(archivo);
 
-            expedienteEstudio = expedienteEstudioRepository.Agregar(expedienteEstudio);
-            return expedienteEstudio.IdExpedienteEstudio;
-        }*/
+            _sftpService.UploadBytesFile(path, archivoBase64);
+
+            var archivoEstudio = new Archivo
+            {
+                Nombre = nombreArchivo,
+                ArchivoNombre = nombreArchivo,
+                ArchivoTipoMime = tipoMime,
+                ArchivoUrl = path,
+                FechaRealizacion = DateTime.Now,
+                IdUsuario = idUsuario
+            };
+
+
+            var fileUploaded = _archivoRepository.Agregar(archivoEstudio);
+
+            return (fileUploaded.IdArchivo, fileUploaded.ArchivoUrl);
+
+        }
+
     }
 }

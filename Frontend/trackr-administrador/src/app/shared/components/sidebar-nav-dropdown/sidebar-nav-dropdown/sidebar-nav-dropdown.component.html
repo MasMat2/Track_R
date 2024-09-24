@@ -2,8 +2,22 @@
   <!-- Barra lateral -->
   <mat-sidenav mode="side" opened>
     <div class="lateral-superior">
+
+      <div class="presentacion" *ngIf="usuario$ |async; let usuario">
+        <div class="foto-perfil" slot="start">
+          <img 
+            *ngIf="urlImagen !== undefined" 
+            [src]="urlImagen" 
+            alt="Imagen de Usuario"
+          />
+        </div>
+        <div class="datos">
+          <h3>{{usuario.tituloAcademico}} {{usuario.nombreCompleto}}</h3>
+          <p>{{usuario.nombrePerfil}}</p>
+        </div>
+      </div>
       <!--Imagen de Usuario -->
-      <div class="text-center pt-3 pb-4">
+      <!-- <div class="text-center pt-3 pb-4">
         <img *ngIf="urlImagen !== undefined" 
           class="imagen-usuario" 
           [src]="urlImagen" 
@@ -17,29 +31,30 @@
           <button mat-menu-item (click)="logout()">Salir</button>
         </mat-menu>
        <br>
-      </div>
+      </div> -->
     </div>
 
       <!-- Items de Navegación -->
-      <div *ngFor="let item of navItems">
-        <app-menu-item
-          [item]="item"
-        ></app-menu-item>
+      <div class="mb-5">
+        <div *ngFor="let item of navItems">
+          <app-menu-item
+            [item]="item"
+          ></app-menu-item>
+        </div>
       </div>
 
 
     <!-- Utilidades -->
-    <div class="lateral-inferior pt-5">
+    <div class="lateral-inferior">
 
-      <app-menu-item
+      <!-- <app-menu-item
         [item]="{ name: 'Buscar', icon: 'fas fa-magnifying-glass', url: 'administrador', claveTipoAcceso: '' }"
       >
-      </app-menu-item>
+      </app-menu-item> -->
 
       <app-menu-item
-        [item]="{ name: 'Notificaciones', icon: 'fa-regular fa-bell', url: 'administrador', claveTipoAcceso: '' }"
-        (click)="mostrarNotificaciones()"
-      >
+        [item]="{ name: 'Cerrar sesión', icon: 'log-out', url: 'administrador', claveTipoAcceso: '' }"
+        (click)="presentAlertCerrarSesion()">
       </app-menu-item>
 
       <button

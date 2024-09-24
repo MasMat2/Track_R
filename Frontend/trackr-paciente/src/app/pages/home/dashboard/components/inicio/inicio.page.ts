@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { WidgetSeguimientoComponent } from '../widgets/widget-seguimiento/widget-seguimiento.component';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { WidgetContainerComponent } from '../widgets/widget-container/widget-container.component';
 import { UsuarioWidgetService } from 'src/app/services/dashboard/usuario-widget.service';
 import { WidgetService } from 'src/app/services/dashboard/widget.service';
@@ -15,12 +14,12 @@ import { SeguimientoPadecimientoComponent } from '../seguimiento-padecimiento/se
 import { NotificacionPacienteService } from '@http/gestion-perfil/notificacion-paciente.service';
 import { Observable, lastValueFrom } from 'rxjs';
 import { addIcons } from 'ionicons';
-import { notificationsOutline, menu, settingsOutline} from 'ionicons/icons';
 import { ModalController } from '@ionic/angular/standalone';
 import { ConfiguracionDashboardPage } from '../configuracion-dashboard/configuracion-dashboard.page';
 import { InformacionPerfilDto } from 'src/app/shared/Dtos/perfil/informacion-perfil-dto';
 import { UsuarioService } from '@http/seguridad/usuario.service';
 import { NotificacionesPageComponent } from '../notificaciones/notificacionesPage/notificaciones-page.component';
+import { TabService } from 'src/app/services/dashboard/tab.service';
 
 @Component({
     selector: 'app-inicio',
@@ -36,7 +35,6 @@ import { NotificacionesPageComponent } from '../notificaciones/notificacionesPag
         CommonModule,
         FormsModule,
         WidgetSeguimientoComponent,
-        HeaderComponent,
         WidgetContainerComponent,
         RouterModule,
         SeguimientoPadecimientoComponent,
@@ -54,7 +52,7 @@ export class InicioPage implements OnInit {
 
   protected informacionHeader$: Observable<InformacionPerfilDto>;
   protected infoHeader: InformacionPerfilDto;
-  protected fotoPerfilUrl: string;
+  protected fotoPerfilUrl: string = "assets/img/svg/avatar-placeholder.svg";
 
   constructor(
     private widgetService : WidgetService,
@@ -62,15 +60,25 @@ export class InicioPage implements OnInit {
     private router: Router,
     private notificacionPacienteService : NotificacionPacienteService,
     private modalController: ModalController,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private tabService : TabService,
   ) { 
     this.notificacionPacienteService.actualizarWidgets$.subscribe(() => {
       this.consultarInfoWidgetsSeguimiento();
     });
 
+    this.tabService.tabChange$.subscribe((tabId) => {
+      if (tabId === 'dashboard') {
+        this.consultarInfoWidgetsSeguimiento();
+        this.consultarWidgets();
+      }
+    });
+
     //this.navegarConfigADashboardChanges();
     
-    addIcons({notificationsOutline, menu, settingsOutline})
+    addIcons({
+      'settings': 'assets/img/svg/settings.svg'
+    })
   }
 
   ngOnInit() {
@@ -90,10 +98,7 @@ export class InicioPage implements OnInit {
       next: (info) => {
         this.infoHeader = info;
         this.infoHeader.nombre = info.nombre.split(" ")[0]; //solo el primer nombre
-        if(this.infoHeader.imagenBase64 == null){
-          this.fotoPerfilUrl = "assets/img/svg/Image_placeholder.svg";
-        }
-        else{
+        if(this.infoHeader?.imagenBase64.archivo != null){
           this.fotoPerfilUrl = `data:${info.imagenBase64?.archivoMime};base64,` + info.imagenBase64?.archivo;
         }
       },

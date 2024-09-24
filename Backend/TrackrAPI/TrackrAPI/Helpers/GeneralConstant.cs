@@ -166,7 +166,7 @@
         public const string ClaveRolClienteLinea = "008";
         public const string ClaveRolGestorFlujos = "011";
         public const string ClaveRolPaciente = "014";
-        public const string ClaveRolAsistente = "014";
+        public const string ClaveRolAsistente = "021";
 
         public const string RFCPublicoGeneral = "XAXX010101000";
 
@@ -417,12 +417,82 @@
         public static readonly string TipoMovimientoUsuarioEliminacion = "Eliminación";
         public static readonly string TipoMovimientoUsuarioEntradaPersonal = "Entrada Personal";
         public static readonly string TipoMovimientoUsuarioSalidaPersonal = "Salida Personal";
-        public static readonly string[] WidgetsDefault = { "w-sue" , "w-pes" , "w-fre" , "w-pas" };
-        public static readonly string ClaveNotificacionRecordatorio = "GRL";
+        public static readonly string[] WidgetsDefault = { "w-sue" , "w-pes" , "w-fre" , "w-pas" , "w-omr" };
+        public static readonly string ClaveNotificacionGeneral = "GRL";
+        public static readonly string ClaveNotificacionChat = "CHT";
+        public static readonly string ClaveNotificacionVideo = "VID";
+        public static readonly string ClaveNotificacionAlerta = "ALT";
+        public static readonly string ClaveNotificacionRecomendacion = "RCM";
+        public static readonly string ClaveNotificacionRecordatorio = "RCD";
         public static readonly int IdTipoUsuarioChatAdmin = 1;
         public static readonly string ClaveTipoUsuarioChatAdmin = "001";
         public static readonly int idEstatusExamenTerminado = 3;
         public static readonly int idEstatusExamenPresentandose = 2;
         public static readonly int idEstatusExamenProgramado = 1;
+
+        public const string SlackJsonMessageStart = @"{
+                'blocks': [
+                    {
+                        'type': 'header',
+                        'text': {
+                            'type': 'plain_text',
+                            'text': 'Nueva Excepcion en {0}',
+                            'emoji': true
+                        }
+                    },
+                    {
+                        'type': 'section',
+                        'fields': [
+                            {
+                                'type': 'mrkdwn',
+                                'text': '*Cuando*: \n{1}'
+                            },
+                            {
+                                'type': 'mrkdwn',
+                                'text': '*Error:*\n {2}'
+                            }
+                        ]
+                    },
+                    {
+                        'type': 'context',
+                        'elements': [
+                            {
+                                'type': 'image',
+                                'image_url': 'https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg',
+                                'alt_text': 'cute cat'
+                            },
+                            {
+                                'type': 'image',
+                                'image_url': 'https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg',
+                                'alt_text': 'cute cat'
+                            },
+                            {
+                                'type': 'image',
+                                'image_url': 'https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg',
+                                'alt_text': 'cute cat'
+                            },
+                            {
+                                'type': 'plain_text',
+                                'text': '{3}',
+                                'emoji': true
+                            }
+                        ]
+                    },
+                    {
+                        'type': 'divider'
+                    },
+                    {
+                        'type': 'section',
+                        'text': {
+                            'type': 'mrkdwn',
+                            'text': '";
+
+        public const string SlackJsonMessageEnd = @"'
+                    }
+                }
+            ]
+        }";
+
+
     }
 }

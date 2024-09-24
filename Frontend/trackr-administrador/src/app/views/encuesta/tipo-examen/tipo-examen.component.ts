@@ -20,7 +20,7 @@ import { TipoExamenFormularioComponent } from './tipo-examen-formulario/tipo-exa
 })
 export class TipoExamenComponent implements OnInit {
 
-  public readonly HEADER_GRID: string = 'Tipos de Examen';
+  public readonly HEADER_GRID: string = 'Tipo Cuestionario';
 
   // Accesos
   protected tieneAccesoAgregar: boolean = false;
@@ -55,26 +55,10 @@ export class TipoExamenComponent implements OnInit {
   );
 
   protected columns: ColDef[] = [
-    {
-      headerName: 'Clave',
-      field: 'clave',
-      minWidth: 150,
-    },
-    {
-      headerName: 'Tipo de Examen',
-      field: 'nombre',
-      minWidth: 150,
-    },
-    {
-      headerName: 'Cantidad de Reactivos',
-      field: 'totalPreguntas',
-      minWidth: 150,
-    },
-    {
-      headerName: 'Duración Total (Minutos)',
-      field: 'duracion',
-      minWidth: 150,
-    },
+    { headerName: 'Clave', field: 'clave', minWidth: 150, valueGetter: (params: any) => (params.node.rowIndex + 1 ).toString()},
+    { headerName: 'Cuestionario', field: 'nombre', minWidth: 150, },
+    { headerName: 'Cantidad de Reactivos', field: 'totalPreguntas', minWidth: 150, },
+    { headerName: 'Duración Total (Minutos)', field: 'duracion', minWidth: 150, },
     this.columnaDetalle,
   ];
 
@@ -144,7 +128,7 @@ export class TipoExamenComponent implements OnInit {
       TipoExamenFormularioComponent,
       {
         initialState: initialState,
-        ...MODAL_CONFIG.Default,
+        ...MODAL_CONFIG.Large,
       }
     );
   }
@@ -171,15 +155,15 @@ export class TipoExamenComponent implements OnInit {
       TipoExamenFormularioComponent,
       {
         initialState: initialState,
-        ...MODAL_CONFIG.Default,
+        ...MODAL_CONFIG.Large,
       }
     );
   }
 
   private eliminar(tipoExamen: TipoExamen) {
-    const MENSAJE_EXITO: string = 'El tipo de cuestionario ha sido eliminado';
-    const TITULO_MODAL: string = 'Eliminar Tipo de Cuestionario';
-    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar el tipo de cuestionario: <strong>${tipoExamen.nombre}</strong>?`;
+    const MENSAJE_EXITO: string = 'El Tipo Cuestionarioi ha sido eliminada';
+    const TITULO_MODAL: string = 'Eliminar Tipo Cuestionario';
+    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar el tipo Cuestionario: <strong>${tipoExamen.nombre}</strong>?`;
 
     this.mensajeService
       .modalConfirmacion(

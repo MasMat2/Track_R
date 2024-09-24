@@ -1,18 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');
-
+/* 
 .video-container {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   margin: 80px 10px;
 }
+ */
 
-video {
-  width: 40vw;
-  height: 30vw;
-  margin: 2rem;
-  background: #2c3e50;
-}
 
 .videos {
   display: flex;
@@ -29,4 +24,68 @@ video {
 #callInput{
     min-height: 0 !important;
     height: 45px;
+}
+
+ion-content{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+ 
+
+  .video-container{
+    display: flex;
+    height: 90%;
+    flex-direction: column;
+    margin: 0;
+    
+    #local{
+      display: flex;
+      justify-content: center;
+      height: 50%;
+      background-color: var(--primary-50);
+    }
+    
+    #remote{
+      display: flex;
+      justify-content: center;
+      height: 50%;
+      background-color: var(--primary-50);
+    }
+    
+    video{
+      border-radius: 13px;
+      width: 100%;
+      height: 100%;
+      
+    }
+
+  }
+
+  #botones{
+    background-color: var(--primary-50);
+    margin: 0;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+  }
+
+}
+
+button{
+  padding: 0px 32px; 
+  border-radius: 8px;
+  background-color: var(--primary-700);
+  color: white;
+  font-family: var(--font-body);
+  font-size: 16px;
+  height: 36px;
+  border: none;
+  display: block;
+  &:hover{
+    background-color: var(--primary-600);
+  }
+
+  &:disabled{
+    background-color: var(--primary-300);
+  }
 }

@@ -162,6 +162,19 @@ namespace TrackrAPI.Repositorys.GestionEntidad
                 });
         }
 
+        public ExpedientePadecimientoSelectorDTO ConsultarPadecimientoPorId(int idPadecimiento)
+        {
+            return context.EntidadEstructura
+                .Where(e => (e.Tabulacion == true) &&
+                            (e.IdEntidadNavigation.Clave == GeneralConstant.ClaveEntidadPadecimiento) && 
+                            (e.IdEntidadEstructura == idPadecimiento))
+                .Select(e => new ExpedientePadecimientoSelectorDTO
+                {
+                    IdPadecimiento = e.IdEntidadEstructura,
+                    Nombre = e.Nombre ?? string.Empty,
+                }).FirstOrDefault();
+        }
+
         public IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarAntecedentesParaSelector()
         {
             return context.EntidadEstructura

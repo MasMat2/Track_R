@@ -83,15 +83,12 @@ export class VideoChatPage extends EventTarget {
 
     this.route.paramMap.subscribe(params => {
       this.callerId = params.get('id')!;
-      console.log(this.callerId);
 
       if(!this.callerId){
-        console.log("calling");
         this.is_caller = true;
         this.signalingHubService.crearLlamada();
 
       }else{
-        console.log("answering");
         this.is_caller = false;
         this.signalingHubService.crearLlamada(this.callerId);
       }
@@ -103,7 +100,6 @@ export class VideoChatPage extends EventTarget {
       if(json_string.length <= 0) return;
 
       var message = JSON.parse(json_string);
-      console.log(message);
       switch (message.type) {
 
         case "local-id":
@@ -121,7 +117,6 @@ export class VideoChatPage extends EventTarget {
           break;
 
         case "remove-remote":
-          console.log('remove-remote');
           this.remoteStream = new MediaStream();
           break;
       }
@@ -163,7 +158,6 @@ export class VideoChatPage extends EventTarget {
   // Callee listener
   offerReceived = async (offer: any) => {
     
-    console.log("offerReceived");
     this.startRTC();
 
     if (!this.pc.currentRemoteDescription) {
@@ -178,7 +172,6 @@ export class VideoChatPage extends EventTarget {
       });
     };
 
-    console.log("answer");
     const answerDescription = await this.pc.createAnswer();
     await this.pc.setLocalDescription(answerDescription);
 
@@ -187,7 +180,6 @@ export class VideoChatPage extends EventTarget {
       sdp: answerDescription.sdp,
     };
 
-    console.log("send answer");
     await this.signalingHubService.sendMessage(({
       type: "video-answer",
       answer: answer
@@ -207,7 +199,6 @@ export class VideoChatPage extends EventTarget {
     // Pull tracks from remote stream, add to video stream
     this.pc.ontrack = (event) => {
       event.streams[0].getTracks().forEach((track) => {
-        console.log('Received remote track');
         this.remoteStream.addTrack(track);
       });
     };
@@ -221,7 +212,6 @@ export class VideoChatPage extends EventTarget {
       if(json_string.length <= 0) return;
 
       var message = JSON.parse(json_string);
-      console.log(message);
       switch (message.type) {
         case "new-ice-candidate":
           this.pc.addIceCandidate(message.candidate);
@@ -252,7 +242,6 @@ export class VideoChatPage extends EventTarget {
   }
 
   closeStreams = () => {
-    console.log(this.localStream, this.remoteStream);
 
     if (this.localStream) {
       this.localStream.getTracks().forEach(track => track.stop());

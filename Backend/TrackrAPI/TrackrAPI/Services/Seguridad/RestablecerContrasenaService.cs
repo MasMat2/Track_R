@@ -116,7 +116,7 @@ namespace TrackrAPI.Services.Seguridad
                 Imagenes = new List<MimePart> { logotipoTrackr }
             };
 
-            await _correoHelper.Enviar(correo);
+             _correoHelper.Enviar(correo);
         }
         private async Task<MimePart> DescargarLogo(string imageUrl, string contentId)
         {

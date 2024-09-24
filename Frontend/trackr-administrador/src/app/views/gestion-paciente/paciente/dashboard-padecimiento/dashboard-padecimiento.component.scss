@@ -1,0 +1,57 @@
+.row {
+  margin: 0 !important;
+}
+.no-padding {
+  padding: 0 !important;
+}
+
+.cards-container {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.card {
+  box-shadow: 0 !important;
+  border: none !important;
+  .contenido-card {
+    padding: 32px;
+  }
+}
+
+.subseccion {
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--primary-700);
+  border-bottom: 1px solid var(--neutral-200);
+  margin: 0;
+  padding: 30px;
+  width: 100%;
+}
+
+.contenedor-selector-variable {
+  padding-right: 16px !important;
+  .select {
+  }
+  .lista-filtros {
+    margin-top: 24px;
+
+    mat-chip-listbox {
+      width: 100%;
+      .mat-mdc-chip {
+        --mdc-chip-elevated-container-color: var(--primary-100);
+      }
+
+      //color del chip seleccionado
+      .mat-mdc-chip-selected {
+        --mdc-chip-elevated-container-color: var(--primary-700) !important;
+      }
+    }
+  }
+}
+.contenedor-histograma {
+  padding-left: 16px !important;
+  height: 320px;
+}

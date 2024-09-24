@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { addIcons } from 'ionicons';
-import { water, walk, scale, moon  } from 'ionicons/icons'
 
 @Component({
   selector: 'app-widget',
@@ -18,14 +16,17 @@ export class WidgetComponent  implements OnInit {
 
   @Input() public title: string;
   @Input() public iconClass?: string;
-  @Input() public widgetClass?: string; //(seguimiento o salud)
+  @Input() public widgetClass: string; //(seguimiento o salud)
   @Input() public colorBackground?: string;
   @Input() public colorTitle?: string;
+  @Input() public customHeight?: boolean;
+  @Input() public button?: boolean;
+
 
   constructor() {
-    addIcons({water, walk, scale, moon})
    }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
 }

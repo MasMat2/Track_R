@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ReactivoFormularioComponent } from './reactivo-formulario.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { LucideAngularModule, X } from 'lucide-angular';
 
 @NgModule({
   declarations: [ReactivoFormularioComponent],
@@ -11,7 +12,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     CommonModule,
     FormsModule,
     NgSelectModule,
-    BsDatepickerModule
+    BsDatepickerModule,
+    LucideAngularModule.pick({X}),
   ],
   exports: [],
   providers: [],

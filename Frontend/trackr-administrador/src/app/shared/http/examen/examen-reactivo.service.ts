@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { RespuestasExcelDto } from '@dtos/gestion-examen/respuestas-excel-dto';
 import { ExamenReactivo } from '@models/examen/examen-reactivo';
 import { Observable } from 'rxjs';
 
@@ -41,5 +42,9 @@ export class ExamenReactivoService {
 
   public revisar(examenReactivoList: ExamenReactivo[]): Observable<number> {
     return this.http.post<number>(this.dataUrl + 'revisar', examenReactivoList);
+  }
+
+  public consultarReactivosExamenParaExcel(idProgramacionExamen: number): Observable<RespuestasExcelDto>{
+    return this.http.get<RespuestasExcelDto>(this.dataUrl + `consultarReactivosExamenParaExcel/${idProgramacionExamen}`);
   }
 }

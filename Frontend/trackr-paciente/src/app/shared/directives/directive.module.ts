@@ -7,6 +7,7 @@ import { FormatoNombreDirective } from './formato-nombre.directive';
 import { FormatoNumericoDirective } from './formato-numerico.directive';
 import { FormatoRfcDirective } from './formato-rfc.directive';
 import { PermitirSoloNumerosDirective } from './permitir-solo-numero.directive';
+import { MaxDigitsDirective } from './max-digits.directive';
 
 
 
@@ -18,7 +19,8 @@ import { PermitirSoloNumerosDirective } from './permitir-solo-numero.directive';
     FormatoNombreDirective,
     FormatoNumericoDirective,
     FormatoRfcDirective,
-    PermitirSoloNumerosDirective
+    PermitirSoloNumerosDirective,
+    MaxDigitsDirective
   ],
   imports: [
     CommonModule
@@ -30,7 +32,8 @@ import { PermitirSoloNumerosDirective } from './permitir-solo-numero.directive';
     FormatoNombreDirective,
     FormatoNumericoDirective,
     FormatoRfcDirective,
-    PermitirSoloNumerosDirective
+    PermitirSoloNumerosDirective,
+    MaxDigitsDirective
   ]
 })
 export class DirectiveModule { }

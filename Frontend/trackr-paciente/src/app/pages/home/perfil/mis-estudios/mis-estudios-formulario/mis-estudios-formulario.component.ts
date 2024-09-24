@@ -4,15 +4,12 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { PickedFile } from '@capawesome/capacitor-file-picker';
 import { AlertController, IonicModule } from '@ionic/angular';
-import { HeaderComponent } from '@pages/home/layout/header/header.component';
 import { ExpedienteEstudioService } from '@services/expediente-estudio.service';
 import { CapacitorUtils } from '@utils/capacitor-utils';
 import { ExpedienteEstudioFormularioCaptura } from 'src/app/shared/dtos/expediente-estudio-formulario-captura-dto';
 import { validarCamposRequeridos } from 'src/app/shared/utils/utileria';
 import { ModalController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { eyeOutline, personOutline, calendarOutline, cameraOutline, documentOutline, trashOutline} from 'ionicons/icons';
-import { Constants } from '@utils/constants/constants';
 
 @Component({
   selector: 'app-mis-estudios-formulario',
@@ -22,7 +19,6 @@ import { Constants } from '@utils/constants/constants';
   imports: [
     IonicModule,
     FormsModule,
-    HeaderComponent,
     CommonModule,
     RouterModule,
   ],
@@ -33,8 +29,7 @@ export class MisEstudiosFormularioPage implements OnInit {
   private files: PickedFile[] = [];
   protected isPictureTaken: boolean = false;
   protected esArchivoSeleccionado: boolean = false;
-  protected fecha = new Date();
-  protected fechastring: string = this.fecha.toISOString();
+  protected fechastring: string = new Date().toISOString();
   private image_src: string = '';
   private mimeType: string = '';
   protected btnSubmit = false;
@@ -46,7 +41,15 @@ export class MisEstudiosFormularioPage implements OnInit {
     private expedienteEstudioService: ExpedienteEstudioService,
     private router: Router,
     private modalController: ModalController,
-  ) {addIcons({eyeOutline, personOutline, calendarOutline, cameraOutline, documentOutline, trashOutline})}
+  ) {
+    addIcons({
+    'eye': 'assets/img/svg/eye.svg',
+    'user': 'assets/img/svg/user.svg',
+    'calendar': 'assets/img/svg/calendar.svg',
+    'camera': 'assets/img/svg/camera.svg',
+    'file': 'assets/img/svg/file.svg',
+    })
+  }
 
   ngOnInit() {}
 
@@ -65,6 +68,8 @@ export class MisEstudiosFormularioPage implements OnInit {
 
   protected enviarFormulario(formulario: NgForm) {
     this.btnSubmit = true;
+    if(this.expedienteEstudio.fechaRealizacion == null)
+      this.expedienteEstudio.fechaRealizacion = new Date();
     if (!formulario.valid) {
       validarCamposRequeridos(formulario);
       this.btnSubmit = false;
@@ -103,6 +108,7 @@ export class MisEstudiosFormularioPage implements OnInit {
         },
         complete: () => {
           this.presentarAlertaSuccess();
+          this.expedienteEstudioService.notifyExpedienteAdded();
         }
       });
   }
@@ -111,12 +117,8 @@ export class MisEstudiosFormularioPage implements OnInit {
     this.modalController.dismiss();
   }
 
-  protected imprimirFecha(){
-    console.log(this.fechastring);
-  }
-
   protected eliminarAdjunto(){
-    this.expedienteEstudio.archivo = '';
+    this.expedienteEstudio.archivo = null;
     this.expedienteEstudio.archivoNombre = '';
     this.expedienteEstudio.archivoTipoMime = '';
 
@@ -129,7 +131,6 @@ export class MisEstudiosFormularioPage implements OnInit {
     const alertSuccess = await this.alertController.create({
       header: 'Estudio registrado',
       subHeader: 'El estudio ha sido registrado correctamente',
-      message: Constants.ALERT_SUCCESS,
       buttons: [{
         text: 'De acuerdo',
         role: 'confirm',
@@ -137,9 +138,10 @@ export class MisEstudiosFormularioPage implements OnInit {
           this.modalController.dismiss();
         }
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();
   }
+  
 }

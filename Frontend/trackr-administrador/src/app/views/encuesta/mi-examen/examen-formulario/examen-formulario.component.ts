@@ -15,6 +15,7 @@ import {
   DROPDOWN_NO_OPTIONS,
   DROPDOWN_PLACEHOLDER,
 } from '../../../../shared/utils/constants/constants';
+import { Respuesta } from '@models/examen/respuesta';
 
 @Component({
   selector: 'app-reactivo-formulario',
@@ -25,11 +26,11 @@ export class ExamenFormularioComponent implements OnInit {
   protected readonly DROPDOWN_PLACEHOLDER: string = DROPDOWN_PLACEHOLDER;
   protected readonly DROPDOWN_NO_OPTIONS: string = DROPDOWN_NO_OPTIONS;
 
-  private MENSAJE_ULTIMO_MINUTO: string = 'Queda un minuto para finalizar el examen';
+  private MENSAJE_ULTIMO_MINUTO: string = 'Queda un minuto para finalizar el Cuestionario';
   private MENSAJE_NO_SUFICIENTES_REACTIVOS: string =
-    'No hay suficientes reactivos para aplicar este examen';
+    'No hay suficientes reactivos para aplicar este cuestionario';
 
-  private TITULO_MODAL_TERMINAR: string = 'Terminar Examen';
+  private TITULO_MODAL_TERMINAR: string = 'Terminar Cuestionario';
 
   // Inputs
   public accion: string;
@@ -91,6 +92,10 @@ export class ExamenFormularioComponent implements OnInit {
     });
   }
 
+  public validarRespuesta(claveReactivo : string , respuestaAlumno : string){
+
+    return claveReactivo ===  respuestaAlumno;
+  }
   consultarExamen(idExamen: number) {
     this.examenService.consultarMiExamen(idExamen).subscribe((data) => {
       this.examen = data;
@@ -192,7 +197,7 @@ export class ExamenFormularioComponent implements OnInit {
   public terminarExamen() {
     this.mensajeService
       .modalConfirmacion(
-        '¿Seguro que deseas terminar el examen?',
+        '¿Seguro que deseas terminar el Cuestionario?',
         this.TITULO_MODAL_TERMINAR,
         GeneralConstant.ICONO_CRUZ
       )
@@ -223,7 +228,6 @@ export class ExamenFormularioComponent implements OnInit {
   protected descargarRespuestas(idExamen: number){
     this.examenService.descargarRespuestasPDF(idExamen).subscribe(
       (data) => {
-        console.log(this.examen);
         const a = document.createElement('a');
         const objectUrl = URL.createObjectURL(data);
         a.href = objectUrl;

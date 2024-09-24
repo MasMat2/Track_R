@@ -34,7 +34,7 @@ public class WidgetService
         _expedienteTrackrService = expedienteTrackrService;
     }
 
-    public IEnumerable<UsuarioPadecimientosDTO> Consultar(int idUsuario)
+    public IEnumerable<UsuarioPadecimientosDTO> ConsultarWidgetsSeguimiento(int idUsuario)
     {
         var padecimientoUsuario = _expedientePadecimientoRepository.ConsultarPorUsuario(idUsuario);
 
@@ -44,23 +44,30 @@ public class WidgetService
         var variablesPadecimiento = ValoresVariablesPadecimiento(idUsuario);
 
         var infoWidgetUsuario = padecimientoUsuarioSeleccionado
-        .Select(usuarioNuevo => new
+        .Select(usuarioNuevo => 
         {
-            idExpediente = usuarioNuevo.IdExpediente,
-            idPadecimiento = usuarioNuevo.IdPadecimiento,
-            nombrePadecimiento = usuarioNuevo.NombrePadecimiento,
-            idWidgetPadecimiento = variablesPadecimiento.FirstOrDefault(vp => vp.IdPadecimiento == usuarioNuevo.IdPadecimiento).IdWidgetEntidad,
-            descripcion = variablesPadecimiento.FirstOrDefault(vp => vp.IdPadecimiento == usuarioNuevo.IdPadecimiento).DescripcionWidget,
-            variables = variablesPadecimiento.FirstOrDefault(vp => vp.IdPadecimiento == usuarioNuevo.IdPadecimiento)?.Variables.ToList().Any() == false
-                                ? new List<VariableDTO>() { new VariableDTO() {
-                                        VariableClave = "No hay registros clínicos",
-                                        Descripcion = "No hay registros clínicos",
-                                        MostrarDashboard = true,
-                                        IconoClase = "fas fa-exclamation-triangle",
-                                        ValorVariable = "-",
-                                        unidadMedida = ""
-                                     }}
-                                : variablesPadecimiento.FirstOrDefault(vp => vp.IdPadecimiento == usuarioNuevo.IdPadecimiento).Variables.ToList()
+            var variablePadecimiento = variablesPadecimiento.FirstOrDefault(vp => vp.IdPadecimiento == usuarioNuevo.IdPadecimiento);
+
+            var variables = variablePadecimiento == null || variablePadecimiento.Variables?.Any() != true
+                ? new List<VariableDTO>() { new() {
+                    VariableClave = "No hay registros clínicos",
+                    Descripcion = "No hay registros clínicos",
+                    MostrarDashboard = true,
+                    IconoClase = "fas fa-exclamation-triangle",
+                    ValorVariable = "-",
+                    unidadMedida = ""
+                }}
+                : variablePadecimiento.Variables.ToList();
+
+            return new
+            {
+                idExpediente = usuarioNuevo.IdExpediente,
+                idPadecimiento = usuarioNuevo.IdPadecimiento,
+                nombrePadecimiento = usuarioNuevo.NombrePadecimiento,
+                idWidgetPadecimiento = variablePadecimiento?.IdWidgetEntidad,
+                descripcion = variablePadecimiento?.DescripcionWidget,
+                variables
+            };
         })
         .GroupBy(result => result.idExpediente)
         .Select(group => new UsuarioPadecimientosDTO

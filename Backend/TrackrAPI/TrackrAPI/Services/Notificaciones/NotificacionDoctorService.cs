@@ -15,6 +15,7 @@ public class NotificacionDoctorService
 {
     private readonly NotificacionService _notificacionService;
     private readonly NotificacionUsuarioService _notificacionUsuarioService;
+    private readonly ITipoNotificacionRepository _tipoNotificacionRepository;
     private readonly UsuarioService _usuarioService;
     private readonly ArchivoService _archivoService;
     private readonly IHubContext<NotificacionDoctorHub, INotificacionDoctorHub> _hubContext;
@@ -27,7 +28,8 @@ public class NotificacionDoctorService
         UsuarioService usuarioService,
         IHubContext<NotificacionDoctorHub, INotificacionDoctorHub> hubContext,
         ArchivoService archivoService,
-        IWebHostEnvironment hostingEnvironment)
+        IWebHostEnvironment hostingEnvironment,
+        ITipoNotificacionRepository tipoNotificacionRepository)
     {
         _notificacionService = notificacionService;
         _notificacionUsuarioService = notificacionUsuarioService;
@@ -35,27 +37,19 @@ public class NotificacionDoctorService
         _archivoService = archivoService;
         _hubContext = hubContext;
         _hostingEnvironment = hostingEnvironment;
+        _tipoNotificacionRepository = tipoNotificacionRepository;
     }
 
-    private NotificacionDoctorDTO Mapear(
+    private async Task<NotificacionDoctorDTO> Mapear(
         NotificacionDTO notificacionDto,
         NotificacionUsuarioDto notificacionUsuarioDto,
         int idPaciente)
     {
-        var img = _archivoService.ObtenerImagenUsuario((int)notificacionDto.IdPersona);
-        string imgData;
+        var img = await _usuarioService.ObtenerBytesImagenUsuario((int)idPaciente);
 
-        if(img is null)
-        {
-            var path = Path.Combine(_hostingEnvironment.ContentRootPath, "Archivos", "Usuario", $"default.svg");
-            var tipoMime = "image/svg+xml";
-            var imgDefault = File.ReadAllBytes(path);
-            imgData = "data:" + tipoMime + ";base64," + Convert.ToBase64String(imgDefault);
-        }
-        else
-        {
-            imgData = "data:" + img.ArchivoTipoMime + ";base64," + Convert.ToBase64String(img.Archivo1);
-        }
+ 
+
+        var claveNotificacion = _tipoNotificacionRepository.ConsultarPorId(notificacionDto.IdTipoNotificacion).Clave;
 
         return new NotificacionDoctorDTO(
             notificacionUsuarioDto.IdNotificacionUsuario,
@@ -63,12 +57,14 @@ public class NotificacionDoctorService
             notificacionUsuarioDto.IdUsuario,
             notificacionDto.Titulo,
             notificacionDto.Mensaje,
+            notificacionDto.ComplementoMensaje,
             notificacionDto.FechaAlta,
             notificacionUsuarioDto.Visto,
             notificacionDto.IdTipoNotificacion,
             idPaciente,
-            imgData,
-            notificacionDto.IdChat
+            img,
+            notificacionDto.IdChat,
+            claveNotificacion
         );
     }
 
@@ -84,6 +80,7 @@ public class NotificacionDoctorService
         var notificacionDto = new NotificacionCapturaDTO(
             paciente.ObtenerNombreCompleto(),
             notificacionDoctorDto.Mensaje,
+            notificacionDoctorDto.ComplementoMensaje,
             notificacionDoctorDto.IdTipoNotificacion,
             notificacionDoctorDto.IdPersona,
             notificacionDoctorDto.IdChat);
@@ -91,9 +88,9 @@ public class NotificacionDoctorService
         return notificacionDto;
     }
 
-    public IEnumerable<NotificacionDoctorDTO> ConsultarPorDoctor(int idUsuario)
+    public async Task<IEnumerable<NotificacionDoctorDTO>> ConsultarPorDoctor(int idUsuario)
     {
-        return _notificacionUsuarioService.ConsultarPorDoctor(idUsuario);
+        return await _notificacionUsuarioService.ConsultarPorDoctor(idUsuario);
     }
 
     public async Task Notificar(NotificacionDoctorCapturaDTO notificacionDoctorCaptura, int idDoctor)
@@ -104,7 +101,7 @@ public class NotificacionDoctorService
 
         var resultado = _notificacionService.Agregar(notificacionCaptura, idDoctor);
 
-        var notificacionDoctor = Mapear(
+        var notificacionDoctor = await Mapear(
             resultado.Notificacion,
             resultado.NotificacionUsuario,
             notificacionDoctorCaptura.IdPaciente);
@@ -116,14 +113,19 @@ public class NotificacionDoctorService
 
     public async Task Notificar(NotificacionDoctorCapturaDTO notificacionDoctorCaptura, List<int> idsDoctor)
     {
-        using var ts = new TransactionScope();
+        using var ts = new TransactionScope(TransactionScopeOption.Required,
+                                                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                TransactionScopeAsyncFlowOption.Enabled);
 
         var notificacionCaptura = Mapear(notificacionDoctorCaptura);
 
         var resultado = _notificacionService.Agregar(notificacionCaptura, idsDoctor);
-        var notificacionesDoctor = resultado.NotificacionesUsuario
-            .Select(nu => Mapear(resultado.Notificacion, nu, notificacionDoctorCaptura.IdPaciente));
-
+        var notificacionesDoctor = new List<NotificacionDoctorDTO>();
+        foreach (var nu in resultado.NotificacionesUsuario)
+        {
+            var notificacionDoctor = await Mapear(resultado.Notificacion, nu, notificacionDoctorCaptura.IdPaciente);
+            notificacionesDoctor.Add(notificacionDoctor);
+        }
         var tasks = notificacionesDoctor.Select(EnviarNotificacion);
 
         await Task.WhenAll(tasks);

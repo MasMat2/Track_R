@@ -22,5 +22,7 @@ namespace TrackrAPI.Repositorys.GestionEntidad
         IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarDiagnosticosParaSelector();
         IEnumerable<ExpedientePadecimientoSelectorDTO> ConsultarAntecedentesParaSelector();
         IEnumerable<EntidadEstructura> ValoresVariablesPadecimiento(int idUsuario);
+        public ExpedientePadecimientoSelectorDTO ConsultarPadecimientoPorId(int idPadecimiento);
+
     }
 }

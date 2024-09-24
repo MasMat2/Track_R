@@ -30,6 +30,7 @@ import { TipoClienteService } from "@http/catalogo/tipo-cliente.service";
 import { TituloAcademicoService } from "@http/catalogo/titulo-academico.service";
 import { UsuarioLocacionService } from "@http/seguridad/usuario-locacion.service";
 import { UsuarioRolService } from "@http/seguridad/usuario-rol.service";
+import { LucideAngularModule, X } from "lucide-angular";
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { UsuarioRolService } from "@http/seguridad/usuario-rol.service";
     ModalModule.forChild(),
     NgSelectModule,
     UsuarioFormularioModule,
-    GridFiltroModule
+    GridFiltroModule,
+    LucideAngularModule.pick({X})
   ],
   declarations: [UsuarioComponent],
   entryComponents: [UsuarioFormularioComponent],

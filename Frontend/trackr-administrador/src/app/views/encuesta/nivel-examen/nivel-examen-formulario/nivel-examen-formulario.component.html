@@ -2,14 +2,9 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>{{ accion }} Nivel Examen</div>
-      <button
-        type="button"
-        class="close pull-right"
-        aria-label="Close"
-        (click)="cancelar()"
-      >
-        <i class="far fa-times-circle"></i>
+      <div>Categorización - {{ accion }}</div>
+      <button class="btn-salir" (click)="cancelar()">
+        <lucide-icon name="x" size="10"></lucide-icon>
       </button>
     </div>
     <form
@@ -19,36 +14,51 @@
       novalidate="novalidate"
     >
       <div class="modal-body" id="modal">
-        <div class="row justify-content-md-center">
-          <div class="col-md-6">
+        <div class="row">
+          <div class="col" style="width: 30%">
             <div class="form-group">
-              <label class="label-input required-label">Clave</label>
-              <div>
+              <label class="label-input required-label">Fecha Alta</label>
+              <div class="calendario">
                 <input
-                  #clave="ngModel"
-                  [(ngModel)]="nivelExamen.clave"
-                  maxlength="30"
-                  name="clave"
-                  class="form-control"
+                  #fechaAlta="ngModel"
                   type="text"
-                  [required]="true"
-                  [disabled]="esEditar()"
+                  class="form-control"
+                  autocomplete="off"
+                  placeholder="dd/mm/aaaa"
+                  [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+                  name="fechaAlta"
+                  [(ngModel)]="nivelExamen.fechaAlta"
+                  required
+                  bsDatepicker
+                  disabled="disabled"
                 />
               </div>
-              <div
-                *ngIf="clave.errors?.['required'] && clave.touched"
-                class="error"
-              >
-                La clave es requerida
+              <div *ngIf="fechaAlta.errors?.['required'] && fechaAlta.touched" class="error">
+                La fecha alta es requerida
+              </div>
+            </div>
+          </div>
+          <div class="col" style="width: 30%">
+            <div class="form-group">
+              <label class="label-input required-label">Estatus</label>
+              <div class="calendario">
+                <input 
+                   [value]="nivelExamen.estatus ? 'Activo' : 'Inactivo'" 
+                   name="estatusContrato"
+                   class="form-control"
+                   type="text" 
+                   [required]="true" 
+                   disabled="disabled"
+                 />
               </div>
             </div>
           </div>
         </div>
 
-        <div class="row justify-content-md-center">
-          <div class="col-md-6">
+        <div class="row">
+          <div class="col" style="width: 60%">
             <div class="form-group">
-              <label class="label-input required-label">Descripción</label>
+              <label class="label-input required-label">Categorización</label>
               <div>
                 <input
                   #descripcion="ngModel"
@@ -64,7 +74,7 @@
                 *ngIf="descripcion.errors?.['required'] && descripcion.touched"
                 class="error"
               >
-                La descripción es requerida
+                La categorización es requerida
               </div>
             </div>
           </div>

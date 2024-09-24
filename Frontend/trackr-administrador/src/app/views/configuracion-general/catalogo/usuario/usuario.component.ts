@@ -223,7 +223,7 @@ export class UsuarioComponent implements OnInit {
           const idCompania= this.companiaList
             .find((compania) =>
             compania.clave == claveCompania)?.idCompania;
-          this.filtro.idsCompania = idCompania;
+          this.filtro.idsCompania = idCompania !== undefined ? [idCompania] : [];
           this.gridFiltro.modificarVisibilidadColumna('nombreCompania', this.esUsuarioCompaniaBase);
       });
   }

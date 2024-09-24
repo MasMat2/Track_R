@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -29,13 +29,13 @@ namespace TrackrAPI.Models
         public virtual DbSet<ChatMensaje> ChatMensaje { get; set; } = null!;
         public virtual DbSet<ChatMensajeVisto> ChatMensajeVisto { get; set; } = null!;
         public virtual DbSet<ChatPersona> ChatPersona { get; set; } = null!;
+        public virtual DbSet<ClasificacionPregunta> ClasificacionPregunta { get; set; } = null!;
         public virtual DbSet<CodigoPostal> CodigoPostal { get; set; } = null!;
         public virtual DbSet<Colonia> Colonia { get; set; } = null!;
         public virtual DbSet<Compania> Compania { get; set; } = null!;
         public virtual DbSet<CompaniaContacto> CompaniaContacto { get; set; } = null!;
         public virtual DbSet<CompaniaLogotipo> CompaniaLogotipo { get; set; } = null!;
         public virtual DbSet<ConfirmacionCorreo> ConfirmacionCorreo { get; set; } = null!;
-        public virtual DbSet<ConfirmacionCorreo1> ConfirmacionCorreo1 { get; set; } = null!;
         public virtual DbSet<ContenidoExamen> ContenidoExamen { get; set; } = null!;
         public virtual DbSet<Departamento> Departamento { get; set; } = null!;
         public virtual DbSet<DetalleExpedienteRecomendacionesGenerales> DetalleExpedienteRecomendacionesGenerales { get; set; } = null!;
@@ -50,6 +50,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<EntidadEstructuraTablaValor> EntidadEstructuraTablaValor { get; set; } = null!;
         public virtual DbSet<EntidadEstructuraValor> EntidadEstructuraValor { get; set; } = null!;
         public virtual DbSet<Especialidad> Especialidad { get; set; } = null!;
+        public virtual DbSet<EspecialidadUsuario> EspecialidadUsuario { get; set; } = null!;
         public virtual DbSet<Estado> Estado { get; set; } = null!;
         public virtual DbSet<EstadoCivil> EstadoCivil { get; set; } = null!;
         public virtual DbSet<EstatusExamen> EstatusExamen { get; set; } = null!;
@@ -99,11 +100,14 @@ namespace TrackrAPI.Models
         public virtual DbSet<ProyectoEstatus> ProyectoEstatus { get; set; } = null!;
         public virtual DbSet<Reactivo> Reactivo { get; set; } = null!;
         public virtual DbSet<RegimenFiscal> RegimenFiscal { get; set; } = null!;
+        public virtual DbSet<Respuesta> Respuesta { get; set; } = null!;
+        public virtual DbSet<RespuestasClasificacionPregunta> RespuestasClasificacionPregunta { get; set; } = null!;
         public virtual DbSet<RestablecerContrasena> RestablecerContrasena { get; set; } = null!;
         public virtual DbSet<Rol> Rol { get; set; } = null!;
         public virtual DbSet<RolAcceso> RolAcceso { get; set; } = null!;
         public virtual DbSet<Seccion> Seccion { get; set; } = null!;
         public virtual DbSet<SeccionCampo> SeccionCampo { get; set; } = null!;
+        public virtual DbSet<SftpCache> SftpCache { get; set; } = null!;
         public virtual DbSet<TipoAcceso> TipoAcceso { get; set; } = null!;
         public virtual DbSet<TipoChatPersona> TipoChatPersona { get; set; } = null!;
         public virtual DbSet<TipoCompania> TipoCompania { get; set; } = null!;
@@ -118,6 +122,7 @@ namespace TrackrAPI.Models
         public virtual DbSet<TratamientoToma> TratamientoToma { get; set; } = null!;
         public virtual DbSet<Turno> Turno { get; set; } = null!;
         public virtual DbSet<UnidadMedida> UnidadMedida { get; set; } = null!;
+        public virtual DbSet<UnidadesMedida> UnidadesMedida { get; set; } = null!;
         public virtual DbSet<Usuario> Usuario { get; set; } = null!;
         public virtual DbSet<UsuarioLocacion> UsuarioLocacion { get; set; } = null!;
         public virtual DbSet<UsuarioRol> UsuarioRol { get; set; } = null!;
@@ -243,6 +248,8 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.ArchivoTipoMime)
                     .HasMaxLength(200)
                     .IsUnicode(false);
+
+                entity.Property(e => e.ArchivoUrl).HasMaxLength(255);
 
                 entity.Property(e => e.FechaRealizacion).HasColumnType("datetime");
 
@@ -435,6 +442,23 @@ namespace TrackrAPI.Models
                     .HasConstraintName("FK__ChatPerso__IdTip__080C0D4A");
             });
 
+            modelBuilder.Entity<ClasificacionPregunta>(entity =>
+            {
+                entity.HasKey(e => e.IdClasificacionPregunta);
+
+                entity.ToTable("ClasificacionPregunta", "Proyectos");
+
+                entity.Property(e => e.IdClasificacionPregunta).HasColumnName("idClasificacionPregunta");
+
+                entity.Property(e => e.Clave)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<CodigoPostal>(entity =>
             {
                 entity.HasKey(e => e.IdCodigoPostal);
@@ -605,24 +629,6 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdUsuario)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Confirmac__idUsu__3D73F9C2");
-            });
-
-            modelBuilder.Entity<ConfirmacionCorreo1>(entity =>
-            {
-                entity.HasKey(e => e.IdConfirmacionCorreo)
-                    .HasName("PK__Confirma__C8248F4CC682CBCB");
-
-                entity.ToTable("ConfirmacionCorreo");
-
-                entity.Property(e => e.IdConfirmacionCorreo).HasColumnName("idConfirmacionCorreo");
-
-                entity.Property(e => e.Clave).HasMaxLength(500);
-
-                entity.Property(e => e.FechaAlta)
-                    .HasColumnType("datetime")
-                    .HasColumnName("fechaAlta");
-
-                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
             });
 
             modelBuilder.Entity<ContenidoExamen>(entity =>
@@ -1008,6 +1014,30 @@ namespace TrackrAPI.Models
                 entity.Property(e => e.Nombre).HasMaxLength(150);
             });
 
+            modelBuilder.Entity<EspecialidadUsuario>(entity =>
+            {
+                entity.HasKey(e => e.IdEspecialidadUsuario)
+                    .HasName("PK__Especial__8E3C25650A92899F");
+
+                entity.ToTable("EspecialidadUsuario", "Trackr");
+
+                entity.Property(e => e.IdEspecialidadUsuario).HasColumnName("idEspecialidadUsuario");
+
+                entity.Property(e => e.IdEspecialidad).HasColumnName("idEspecialidad");
+
+                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
+
+                entity.HasOne(d => d.IdEspecialidadNavigation)
+                    .WithMany(p => p.EspecialidadUsuario)
+                    .HasForeignKey(d => d.IdEspecialidad)
+                    .HasConstraintName("FK__Especiali__idEsp__77A09B57");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.EspecialidadUsuario)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .HasConstraintName("FK__Especiali__idUsu__7894BF90");
+            });
+
             modelBuilder.Entity<Estado>(entity =>
             {
                 entity.HasKey(e => e.IdEstado);
@@ -1163,21 +1193,22 @@ namespace TrackrAPI.Models
 
                 entity.ToTable("ExpedienteEstudio", "Trackr");
 
-                entity.Property(e => e.Archivo).HasColumnType("image");
-
-                entity.Property(e => e.ArchivoNombre)
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ArchivoTipoMime)
-                    .HasMaxLength(200)
+                entity.Property(e => e.ArchivoUrl)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.FechaRealizacion).HasColumnType("datetime");
 
+                entity.Property(e => e.IdArchivo).HasColumnName("idArchivo");
+
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.IdArchivoNavigation)
+                    .WithMany(p => p.ExpedienteEstudio)
+                    .HasForeignKey(d => d.IdArchivo)
+                    .HasConstraintName("FK_ExpedienteEstudio_Archivo");
 
                 entity.HasOne(d => d.IdExpedienteNavigation)
                     .WithMany(p => p.ExpedienteEstudio)
@@ -1303,7 +1334,9 @@ namespace TrackrAPI.Models
 
                 entity.ToTable("ExpedienteTratamiento", "Trackr");
 
-                entity.Property(e => e.Cantidad).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.ArchivoUrl).HasMaxLength(250);
+
+                entity.Property(e => e.Cantidad).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Farmaco).HasMaxLength(200);
 
@@ -1313,15 +1346,16 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
 
-                entity.Property(e => e.Imagen).HasColumnType("image");
-
-                entity.Property(e => e.ImagenTipoMime)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                entity.Property(e => e.IdArchivo).HasColumnName("idArchivo");
 
                 entity.Property(e => e.Indicaciones).HasMaxLength(500);
 
                 entity.Property(e => e.Unidad).HasMaxLength(100);
+
+                entity.HasOne(d => d.IdArchivoNavigation)
+                    .WithMany(p => p.ExpedienteTratamiento)
+                    .HasForeignKey(d => d.IdArchivo)
+                    .HasConstraintName("FK_ExpedienteTratamiento_Archivo");
 
                 entity.HasOne(d => d.IdExpedienteNavigation)
                     .WithMany(p => p.ExpedienteTratamiento)
@@ -1772,6 +1806,8 @@ namespace TrackrAPI.Models
 
                 entity.ToTable("Notificacion", "Configuracion");
 
+                entity.Property(e => e.ComplementoMensaje).HasMaxLength(300);
+
                 entity.Property(e => e.FechaAlta).HasColumnType("datetime");
 
                 entity.Property(e => e.Mensaje).HasMaxLength(500);
@@ -2206,6 +2242,45 @@ namespace TrackrAPI.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<Respuesta>(entity =>
+            {
+                entity.HasKey(e => e.IdRespuesta)
+                    .HasName("PK__Respuest__D3480198C0EB8F2F");
+
+                entity.ToTable("Respuesta", "Proyectos");
+
+                entity.Property(e => e.Clave).HasMaxLength(30);
+
+                entity.Property(e => e.Respuesta1)
+                    .HasMaxLength(2000)
+                    .HasColumnName("Respuesta");
+
+                entity.HasOne(d => d.IdReactivoNavigation)
+                    .WithMany(p => p.RespuestaNavigation)
+                    .HasForeignKey(d => d.IdReactivo)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Respuesta__IdRea__5733CBC5");
+            });
+
+            modelBuilder.Entity<RespuestasClasificacionPregunta>(entity =>
+            {
+                entity.HasKey(e => e.IdRespuestasClasificacionPregunta)
+                    .HasName("PK__Respuest__B00235C9F755D13F");
+
+                entity.Property(e => e.Identificador)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.IdClasificacionPreguntaNavigation)
+                    .WithMany(p => p.RespuestasClasificacionPregunta)
+                    .HasForeignKey(d => d.IdClasificacionPregunta)
+                    .HasConstraintName("FK__Respuesta__IdCla__5086CE36");
+            });
+
             modelBuilder.Entity<RestablecerContrasena>(entity =>
             {
                 entity.HasKey(e => e.IdRestablecerContrasena);
@@ -2297,6 +2372,18 @@ namespace TrackrAPI.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__SeccionCa__IdSec__70698DE3");
             });
+
+            modelBuilder.Entity<SftpCache>(entity =>
+            {
+                entity.ToTable("SftpCache", "Trackr");
+
+                entity.Property(e => e.FilePath)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LastWriteTime).HasColumnType("datetime");
+            });
+
 
             modelBuilder.Entity<TipoAcceso>(entity =>
             {
@@ -2483,6 +2570,15 @@ namespace TrackrAPI.Models
                     .WithMany(p => p.UnidadMedida)
                     .HasForeignKey(d => d.IdCompania)
                     .HasConstraintName("FK__UnidadMed__IdCom__31C24FF4");
+            });
+
+            modelBuilder.Entity<UnidadesMedida>(entity =>
+            {
+                entity.ToTable("UnidadesMedida", "Configuracion");
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Usuario>(entity =>

@@ -1,15 +1,15 @@
 mat-sidenav-container{
-  height: 100vh;
+  height: 90vh;
 }
 
 mat-sidenav {
-  width: 110px;
-  height: 100vh;
-  background-color: var(--color-primario);
+  width: 250px;
+  height: 90vh;
+  background-color: var(--neutral-50);
 }
 
 mat-sidenav-content {
-  background-color: #ffffff;
+  background-color: var(--primary-50) !important;
 }
 
 .contenedor {
@@ -30,6 +30,9 @@ mat-sidenav-content {
   position:absolute;
   bottom: 0;
   justify-content: space-between;
+  z-index: 3;
+  background: white;
+  opacity: 1;
 }
 
 .logotipo {
@@ -39,11 +42,6 @@ mat-sidenav-content {
   height: 80px;
 }
 
-.imagen-usuario {
-  cursor: pointer;
-  border-radius: 100%;
-}
-
 .item {
   text-align: center;
   font-size: 1.75em;
@@ -51,4 +49,42 @@ mat-sidenav-content {
   cursor: pointer;
   padding: 1rem 0.7rem 1rem 0.7rem !important;
   transition: 0.3s ease;
+}
+
+.presentacion{
+  display: flex;
+  align-items: center;
+  padding-left: 36px;
+  padding-right: 36px;
+  margin-bottom: 32px;
+  margin-top: 32px;
+  .foto-perfil{
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 100%;
+    }
+  }
+
+  .datos{
+    h3, p{
+      width: 144px !important;
+      overflow: hidden;
+      white-space: nowrap;
+      margin: 0;
+      margin-left: 12px;
+      text-overflow: ellipsis;
+      font-family: var(--font-body);
+      padding-right: 24px;
+    }
+    h3{
+      font-size: 16px;
+      color: var(--neutral-900);
+      font-weight: bold;
+    }
+    p{
+      font-size: 14px;
+      color: var(--neutral-500);
+    }
+  }
 }

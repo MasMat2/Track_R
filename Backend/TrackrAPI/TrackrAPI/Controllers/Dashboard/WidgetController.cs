@@ -23,7 +23,7 @@ public class WidgetController : ControllerBase
     public IEnumerable<UsuarioPadecimientosDTO> WidgetsPorUsuario()
     {
         int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
-        return _widgetService.Consultar(idUsuario);
+        return _widgetService.ConsultarWidgetsSeguimiento(idUsuario);
 
     }
 

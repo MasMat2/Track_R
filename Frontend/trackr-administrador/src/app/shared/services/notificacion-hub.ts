@@ -1,6 +1,6 @@
 import { HubConnectionState, HubConnection, IHttpConnectionOptions, HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { Constants } from "@utils/constants/constants";
-import { BehaviorSubject, filter, take, timeout, catchError } from "rxjs";
+import { BehaviorSubject, filter, take, timeout, catchError, map } from "rxjs";
 import { environment } from "src/environments/environment";
 import { NotificacionUsuarioBaseDTO } from '../dtos/notificaciones/notificacion-usuario-base-dto';
 
@@ -8,7 +8,7 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
   protected connectionStatus = new BehaviorSubject<HubConnectionState>(HubConnectionState.Disconnected);
 
   protected notificacionesSubject = new BehaviorSubject<T[]>([]);
-  public notificaciones$ = this.notificacionesSubject.asObservable();
+  public notificaciones$ = this.notificacionesSubject.asObservable()
 
   protected connection: HubConnection;
 
@@ -73,14 +73,14 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
     return this.notificacionesSubject.value;
   }
 
-  public async marcarComoVista(id: number) {
-    this.marcarComoVistas([id]);
+  public async marcarComoVista(id: number, tomaTomada: boolean = true) {
+    this.marcarComoVistas([id], tomaTomada);
   }
 
-  public async marcarComoVistas(ids: number[]) {
+  public async marcarComoVistas(ids: number[], tomaTomada: boolean = true) {
     await this.ensureConnection();
 
-    await this.connection.invoke('MarcarComoVistas', ids);
+    await this.connection.invoke('MarcarComoVistas', ids, tomaTomada);
   }
 
   public async marcarTodasComoVistas() {
@@ -98,7 +98,7 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
   }
 
   protected onNuevaNotificacion(notificacion: T): void {
-    notificacion.fechaAlta = new Date(notificacion.fechaAlta);
+    //notificacion.fechaAlta = new Date(notificacion.fechaAlta);
 
     const notificaciones = this.notificacionesSubject.value;
     notificaciones.splice(0, 0, notificacion);
@@ -108,7 +108,7 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
 
   protected onNuevaConexion(notificaciones: T[]): void {
     for (const notificacion of notificaciones) {
-      notificacion.fechaAlta = new Date(notificacion.fechaAlta);
+      //notificacion.fechaAlta = new Date(notificacion.fechaAlta);
     }
 
     this.notificacionesSubject.next(notificaciones);
@@ -129,6 +129,10 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
     }
 
     this.notificacionesSubject.next(this.notificacionesSubject.value);
+  }
+
+  public limpiarNotificaciones(): void {
+    this.notificacionesSubject.next([]);
   }
 
   private async ensureConnection(): Promise<void> {

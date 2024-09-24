@@ -1,11 +1,16 @@
 .fuera-de-rango {
-    background-color: #bc4b51;
+    color: var(--error-200);
+    font-weight: bold;
 }
 
 .no-fuera-de-rango {
-    background-color: #8cb369;
+    color: var(--success-200);
 }
 
 td:empty::before {
     content: '\00a0';
+}
+
+.mat-mdc-tab-body-content {
+    overflow-y: hidden;
 }

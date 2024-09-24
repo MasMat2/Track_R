@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AsignaturaService } from '@http/examen/asignatura.service';
 import { ContenidoExamenService } from '@http/examen/contenido-examen.service';
+import { ExamenService } from '@http/examen/examen.service';
 import { NivelExamenService } from '@http/examen/nivel-examen.service';
 import { Asignatura } from '@models/examen/asignatura';
 import { ContenidoExamen } from '@models/examen/contenido-examen';
@@ -40,7 +41,8 @@ export class ContenidoExamenFormularioComponent implements OnInit {
     private mensajeService: MensajeService,
     private contenidoExamenService: ContenidoExamenService,
     private asignaturaService: AsignaturaService,
-    private nivelExamenService: NivelExamenService
+    private nivelExamenService: NivelExamenService,
+    private examenService : ExamenService,
   ) {}
 
   public ngOnInit(): void {
@@ -55,6 +57,15 @@ export class ContenidoExamenFormularioComponent implements OnInit {
 
     this.consultarAsignaturas();
     this.consultarNivelesExamen();
+  }
+
+  onSelectChange(): void {
+    this.consultarNivelesExamen();
+    if(this.contenidoExamen.idAsignatura && this.contenidoExamen.idNivelExamen) {
+      this.examenService.consultarCantidadReactivos(this.contenidoExamen.idAsignatura, this.contenidoExamen.idNivelExamen).subscribe((cantidadReactivos: number) => {
+        this.contenidoExamen.totalPreguntas = cantidadReactivos;
+      });
+    }
   }
 
   private consultarContenidoExamen(idContenidoExamen: number): void {
@@ -78,7 +89,7 @@ export class ContenidoExamenFormularioComponent implements OnInit {
 
   private consultarNivelesExamen(): void {
     this.nivelExamenService
-      .consultarTodosParaSelector()
+      .consultarTodosParaSelectorAsignatura(this.contenidoExamen.idAsignatura ?? 0)
       .subscribe((nivelesExamen: NivelExamen[]) => {
         this.nivelExamenList = nivelesExamen;
       });

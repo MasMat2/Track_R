@@ -1,0 +1,22 @@
+<!-- <h1></h1> -->
+<div [ngClass]="customAlertData.Color">
+    <div mat-dialog-content class="contenido-alert">
+        <div class="header">
+            <div id="icono" [ngClass]="customAlertData.Icono"></div>
+        </div>
+        <div class="content">
+            <h3 id="header">{{customAlertData.header}}</h3>
+            <p id="subheader">{{customAlertData.subHeader}}</p>
+        </div>
+    </div>
+    <div mat-dialog-actions class="botones-alert">
+        <div class="single-button" *ngIf="!customAlertData.twoButtons">
+            <button class="confirm" mat-flat-button (click)="cerrarAlertConfirm()">{{customAlertData.confirmButtonText}}</button>
+        </div>
+        <div class="two-buttons" *ngIf="customAlertData.twoButtons">
+            <button class="cancel" (click)="cerrarAlertCancel()" mat-flat-button>{{customAlertData.cancelButtonText}}</button>
+            <button class="confirm" (click)="cerrarAlertConfirm()" mat-flat-button>{{customAlertData.confirmButtonText}}</button>
+        </div>
+    </div>
+</div>
+

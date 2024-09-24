@@ -60,6 +60,7 @@ public class ExpedienteDoctorService
             Ambito = "Endicronologia",
             Hospital = dto.IdUsuarioDoctorNavigation.IdCompaniaNavigation.Nombre,
             Nombre = dto.IdUsuarioDoctorNavigation.Nombre + " " + dto.IdUsuarioDoctorNavigation.ApellidoPaterno + " " + dto.IdUsuarioDoctorNavigation.ApellidoMaterno,
+            Titulo = dto.IdUsuarioDoctorNavigation.IdTituloAcademicoNavigation.Nombre ?? ""
         }).ToList();
 
         foreach (var doctor in doctores)
@@ -89,17 +90,20 @@ public class ExpedienteDoctorService
         int idCompania = _usuarioRepository.ConsultarDto(idUsuario).IdCompania;
         return _expedienteDoctorRepository.ConsultarSelector(idExpediente, idCompania);
     }
+
+    public IEnumerable<ExpedienteDoctorSelectorDTO> ConsultarPorUsuarioSelector(int idUsuario)
+    {
+        int idExpediente = _expedienteTrackrRepository.ConsultarPorUsuario(idUsuario).IdExpediente;
+        return _expedienteDoctorRepository.ConsultarPorUsuarioParaSelector(idExpediente);
+    }
+
     public void Eliminar(ExpedienteDoctorDTO expedienteDoctorDTO)
     {
 
         _expedienteDoctorValidatorService.ValidarEliminar(expedienteDoctorDTO.IdUsuarioDoctor);
-        var expedienteDoctor = new ExpedienteDoctor
-        {
-            IdUsuarioDoctor = expedienteDoctorDTO.IdUsuarioDoctor,
-            IdExpediente = expedienteDoctorDTO.IdExpediente,
-            IdExpedienteDoctor = expedienteDoctorDTO.IdExpedienteDoctor
-        };
 
+        var expedienteDoctor = _expedienteDoctorRepository.ConsultarExpedientePorDoctor(expedienteDoctorDTO.IdExpediente, expedienteDoctorDTO.IdUsuarioDoctor);
+       
         _expedienteDoctorRepository.Eliminar(expedienteDoctor);
     }
 

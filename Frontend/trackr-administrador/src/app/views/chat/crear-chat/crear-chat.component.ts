@@ -12,6 +12,7 @@ import { ChatPersonaService } from '../../../shared/http/chats/chat-persona.serv
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { UsuarioService } from '@http/seguridad/usuario.service';
 import { lastValueFrom } from 'rxjs';
+import { FechaService } from '@services/fecha.service';
 
 @Component({
   selector: 'app-crear-chat',
@@ -31,13 +32,16 @@ export class CrearChatComponent {
   protected nombreDoctor: string;
 
 
-  constructor(private entidadEstructuraService:EntidadEstructuraService,
-              private expedienteTrackrService:ExpedienteTrackrService,
-              private ChatHubServiceService:ChatHubServiceService,
-              private SessionService:SessionService,
-              private ChatPersonaService:ChatPersonaService,
-              private modal:BsModalRef,
-              private usuarioService : UsuarioService) {}
+  constructor(
+    private entidadEstructuraService:EntidadEstructuraService,          
+    private expedienteTrackrService:ExpedienteTrackrService,
+    private ChatHubServiceService:ChatHubServiceService,
+    private SessionService:SessionService,
+    private ChatPersonaService:ChatPersonaService,
+    private modal:BsModalRef,
+    private usuarioService : UsuarioService,
+    private fechaService: FechaService
+  ) {}
 
   
   ngOnInit(){
@@ -52,7 +56,6 @@ export class CrearChatComponent {
   }
 
   public tieneMismoDoctor(): boolean {
-      console.log(this.personas.length)
       // Obtén el doctorAsociado del primer idUsuario seleccionado
       const expedienteInicial = this.expedientes.find(expediente => expediente.idUsuario === this.personas[0]);
       if (!expedienteInicial) 
@@ -102,7 +105,7 @@ export class CrearChatComponent {
     if(this.tipo == 3){
       this.personas.push(this.idUsuario)
     let chat: ChatDTO ={
-      fecha: new Date(),
+      fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
       habilitado: true,
       titulo: this.tituloChat,
       idCreadorChat: this.idUsuario
@@ -113,7 +116,7 @@ export class CrearChatComponent {
     else if(this.tipo == 2 ){
       this.idPacientesPadecimiento.push(this.idUsuario);
       let chat:ChatDTO ={
-        fecha: new Date(),
+        fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
         habilitado: true,
         titulo: this.tituloChat,
         idCreadorChat: this.idUsuario
@@ -123,7 +126,7 @@ export class CrearChatComponent {
     else if(this.tipo == 1){
       this.personas.push(this.idUsuario)
       let chat: ChatDTO ={
-        fecha: new Date(),
+        fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
         habilitado: true,
         titulo: this.tituloChat,
         idCreadorChat: this.idUsuario
@@ -186,6 +189,10 @@ export class CrearChatComponent {
 
   seleccionarTodos(){
     this.personas = this.expedientes.map(x => x.idUsuario);
+  }
+
+  protected seleccionarPacientes(){
+    this.personas = [];
   }
   
   

@@ -37,11 +37,11 @@ public class ExpedienteRecomendacionController : ControllerBase
     }
 
     [HttpPost]
-    public void Agregar(ExpedienteRecomendacionFormDTO expedienteRecomendacionFormDTO)
+    public async Task Agregar(ExpedienteRecomendacionFormDTO expedienteRecomendacionFormDTO)
     {
         int IdDoctor = Utileria.ObtenerIdUsuarioSesion(this);
         expedienteRecomendacionFormDTO.IdDoctor = IdDoctor;
-        _expedienteRecomendacionService.Agregar(expedienteRecomendacionFormDTO);
+        await _expedienteRecomendacionService.Agregar(expedienteRecomendacionFormDTO);
     }
 
     [HttpPut]

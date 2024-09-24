@@ -12,6 +12,7 @@ namespace TrackrAPI.Models
         public string? RespuestaAlumno { get; set; }
         public DateTime? FechaAlta { get; set; }
         public bool? Estatus { get; set; }
+        public int? RespuestaValor { get; set; }
 
         public virtual Examen IdExamenNavigation { get; set; } = null!;
         public virtual Reactivo IdReactivoNavigation { get; set; } = null!;

@@ -1,25 +1,25 @@
 <ion-header class="ion-no-border">
-  <div class="contenedor-header">
+  <div class="contenedor-header-light">
     <ion-toolbar>
-      <ion-buttons slot="start">
+      <ion-buttons class="start" slot="start">
         <ion-button (click)="regresarBtn()">
           <ion-icon slot="start" name="chevron-left"></ion-icon>
-          Atrás
+          <ion-label>Atrás</ion-label>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </div>
 </ion-header>
-<ion-content>
+<ion-content class="primary">
   <div class="contenedor-principal">
     <div class="titulo">
       <ion-text>
-        <h3>Seguimiento de padecimiento</h3>
+        <h3>Seguimiento de {{padecimiento?.nombre}}</h3>
       </ion-text>
     </div>
     <div class="selector-variable">
       <div class="inputs">
-        <div class="input">
+        <div class="input first-input">
           <ion-text><p>Seleccionar variable</p></ion-text>
           <ion-item lines="none" class="select-input">
             <ion-select 

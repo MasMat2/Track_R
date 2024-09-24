@@ -18,8 +18,11 @@ using TrackrAPI.Hubs;
 using TrackrAPI.Models;
 using TrackrAPI.Services.GestionEntidad;
 using TrackrAPI.Services.Seguridad;
+using TrackrAPI.Services.Sftp;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 // TODO: 2023-05-09 -> Esta es una configuración temporal para evitar
 // que se validen los modelos en los controladores migrados de ATI.
@@ -71,6 +74,9 @@ builder.Services.Scan(scan => scan
 
 // Cambiar de Transient (por builder.Services.Scan) a Singleton
 builder.Services.AddSingleton<RsaService>();
+builder.Services.AddSingleton<IRecordatorioTomasService, RecordatorioTomasService>();
+//builder.Services.AddSingleton<SftpService>();
+
 
 // Crea una nueva instancia de JwtSettings y la configura con los valores del appsettings.json
 var jwtSettings = new JwtSettings();
@@ -111,9 +117,9 @@ builder.Services.AddHostedService<RecordatorioTomasService>();
 
 var app = builder.Build();
 
-app.UseExceptionHandler(builder =>
+app.UseExceptionHandler(webApplicationBuilder =>
 {
-    builder.Run(async context =>
+    webApplicationBuilder.Run(async context =>
     {
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
@@ -133,9 +139,15 @@ app.UseExceptionHandler(builder =>
                 context.Response.AddApplicationError(((CdisException)error.Error).ErrorMessage);
                 await context.Response.WriteAsync(((CdisException)error.Error).ErrorMessage);
             }
-            else
+                else
             {
                 string errorMessageDefault = "Ocurri� un error inesperado, favor de contactar al administrador del sistema";
+                var notificarPorSlack = builder.Configuration.GetSection("Slack:NotificarEnvioPorSlack")?.Value;
+                
+                if (notificarPorSlack == "1")
+                {
+                    await Logger.NotificarPorSlack(exceptionHandlerPathFeature.Error);
+                }
                 Logger.WriteError(exceptionHandlerPathFeature.Error, app.Environment);
 
                 context.Response.AddApplicationError(errorMessageDefault);

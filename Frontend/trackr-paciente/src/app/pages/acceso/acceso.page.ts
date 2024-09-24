@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { ScreenOrientationService } from '@services/screen-orientation.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 
 
@@ -21,10 +22,22 @@ import { ScreenOrientationService } from '@services/screen-orientation.service';
 })
 export class AccesoPage implements OnInit {
   
-  constructor(private orientacionService: ScreenOrientationService) { }
+  constructor(
+    private orientacionService: ScreenOrientationService,
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.orientacionService.lockPortrait();
+    this.usuarioLogeado();
   }
 
+  private async usuarioLogeado(){
+    const logged = await this.authService.isAuthenticated();
+
+    if(logged){
+      this.router.navigateByUrl('/home');
+    }
+  }
 }

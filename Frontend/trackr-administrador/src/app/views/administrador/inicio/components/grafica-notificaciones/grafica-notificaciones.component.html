@@ -2,33 +2,26 @@
   Mis Pacientes esta semana
 </div>
 
-
-<div class="container">
-  <canvas
-    baseChart
-    [data]="chartData"
-    [type]="chartType"
-    [options]="chartOptions"
-    [plugins]="chartPlugins"
-  >
-  </canvas>
-
-  <div class="labels">
-    <div class="row">
-      <div class="col-3">
-        <span class="numero" [ngStyle]="{ color: colors[0] }">{{ data[0] }}</span>
-      </div>
-      <div class="col-9">
-        <span class="texto">{{ etiquetas[0] }}</span>
-      </div>
+  <div class="card">
+    <div class="chart">
+      <canvas
+        baseChart
+        [data]="chartData"
+        [type]="chartType"
+        [options]="chartOptions"
+        [plugins]="chartPlugins"
+      >
+      </canvas>
     </div>
-    <div class="row">
-      <div class="col-3">
-        <span class="numero" [ngStyle]="{ color: colors[1] }">{{ data[1] }}</span>
+    <div class="labels">
+      <div class="label">
+        <div class="color" style="background: var(--success-200);"></div>
+        <h3>Solicitudes atendidas ({{data[0]}})</h3>
       </div>
-      <div class="col-9">
-        <span class="texto">{{ etiquetas[1] }}</span>
+      <div class="label">
+        <div class="color" style="background: var(--error-200);"></div>
+        <h3>Solicitudes sin atender ({{data[1]}})</h3>
       </div>
     </div>
   </div>
-</div>
+  

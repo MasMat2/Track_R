@@ -36,7 +36,9 @@ public class NivelExamenRepository : Repository<NivelExamen>, INivelExamenReposi
             {
                 IdNivelExamen = p.IdNivelExamen,
                 Clave = p.Clave ?? string.Empty,
-                Descripcion = p.Descripcion ?? string.Empty
+                Descripcion = p.Descripcion ?? string.Empty,
+                FechaAlta = p.FechaAlta,
+                Estatus = p.Estatus
             })
             .ToList();
     }
@@ -50,7 +52,26 @@ public class NivelExamenRepository : Repository<NivelExamen>, INivelExamenReposi
             {
                 IdNivelExamen = p.IdNivelExamen,
                 Clave = p.Clave ?? string.Empty,
-                Descripcion = p.Descripcion ?? string.Empty
+                Descripcion = p.Descripcion ?? string.Empty,
+                FechaAlta = p.FechaAlta,
+                Estatus = p.Estatus
+            })
+            .ToList();
+    }
+
+    public IEnumerable<NivelExamenGridDto> ConsultarTodosParaSelector(int idAsignatura)
+    {
+        return context.NivelExamen
+            .Where(p => p.Estatus == true)
+            .Where( p => p.Reactivo.Any( r => r.IdAsignatura == idAsignatura ))
+            .OrderBy(p => p.Clave)
+            .Select(p => new NivelExamenGridDto
+            {
+                IdNivelExamen = p.IdNivelExamen,
+                Clave = p.Clave ?? string.Empty,
+                Descripcion = p.Descripcion ?? string.Empty,
+                FechaAlta = p.FechaAlta,
+                Estatus = p.Estatus
             })
             .ToList();
     }

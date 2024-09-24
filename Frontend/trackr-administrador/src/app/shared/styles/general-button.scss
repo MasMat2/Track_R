@@ -7,22 +7,18 @@ button {
 
   &.btn-primario,
   &.btn-secundario,
-  &.btn-secundario-cancelar,
-  &.btn-terceario,
-  &.btn-terceario,
-  &.btn-cuaternario {
+  &.btn-secundario-cancelar{
+    font-family: var(--font-body);
+    font-size: 14px;
     transition: 200ms;
     width: auto;
-    min-height: 40px;
-    border: 1px #f2f2f2 solid;
-    color: #fff;
+    height: 44px;
     font-size: 14px;
-    -webkit-box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
-    -moz-box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
-    box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.25);
-    width: 180px !important;
-    max-width: 100%;
-    border-radius: 20px;
+    min-width: 120px !important;
+    max-width: 180px !important;
+    width: 100%;
+    border-radius: 4px;
+    border: none;
   }
   &:disabled {
     opacity: 0.5;
@@ -54,19 +50,39 @@ button {
 
 .btn-primario,
 .btn-filtro {
-  background-color: $color-primario;
+  background-color: var(--primary-700);
+  color: var(--neutral-50);
   &:hover {
-    background-color: $color-primario-hover;
+    background-color: var(--primary-600);
   }
 }
 
 .btn-terceario {
-  background-color: $color-terceario;
-  color: #000000 !important;
+  background-color: var(--primary-700);
+  color: var(--primary-700);
+  min-width: 60px !important;
+  height: 44px;
+  border-radius: 4px;
+  color: var(--neutral-50);
+  border: none !important;
   &:hover {
-    background-color: $color-terceario-hover;
+    background-color: var(--primary-200);
   }
 }
+
+.btn-agregar-foto {
+  min-width: 60px !important;
+  height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--primary-400);
+  background: var(--primary-100);
+  color: var(--primary-700);
+  font-family: var(--font-body);
+  padding: 0px 14px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+}	
 
 .btn-cuaternario {
   background-color: $color-cuaternario;
@@ -76,11 +92,14 @@ button {
 }
 
 .btn-secundario {
-  background-color: $color-secundario;
+  background-color: var(--neutral-50);
+  color: var(--primary-700) !important;
+  border: 1px solid var(--primary-700) !important;
   C5C5C5 &:hover {
-    background-color: $color-secundario-hover;
+    background-color: var(--primary-200);
   }
 }
+
 
 .btn-secundario-cancelar {
   background-color: #a5a5a5; 
@@ -90,7 +109,7 @@ button {
 }
 
 .btn-secundario:hover {
-  background: $color-secundario-hover;
+  background: var(--primary-200);
 }
 
 .btn-primario i {
@@ -131,29 +150,24 @@ button {
 }
 
 .btn-agregar{
-  font-size: small;
-  color: #fbe5d6;
+  height: 100%;
+  width: 100%;
+  height: 44px;
+  max-width: 180px !important;
+  border: none;
+  border-radius: 8px;
 
-  padding: 1px 10px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
 
-  background-color: #802492;
-  &:hover {
-    background-color: #9228a7;
-  }
+  color: var(--neutral-50);
+  background-color: var(--primary-700);
 
   transition: 200ms;
-  width: auto;
+  &:hover {
+    background-color: var(--primary-500);
+  }
 
-  border: 1px #f2f2f2 solid;
-  color: #fff;
-  font-size: 14px;
-  text-align: center;
-  border-radius: 20px;
-  text-wrap: true;
-  width: 180px !important;
-  max-width: 100%;
-  height: 40px;
-  max-height: 100%;
-  align-content: center;
-  
 }

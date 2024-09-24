@@ -1,33 +1,77 @@
 @import "variables";
 
 .form-control {
-  border: 1px #d9d9d9 solid;
-  color: #000000;
-  font-size: 0.80rem;
-  border-radius: $border-radius-inputs !important;
-  height: calc(1.5em + 0.75rem + 7px) !important;
+  border: 1px solid var(--neutral-300);
+  color: var(--neutral-800);
+  font-size: 14px;
+  border-radius: 8px!important;
+  height: 42px !important;
+}
+.form-control-textarea {
+  border: 1px solid var(--neutral-300);
+  color: var(--neutral-800);
+  font-size: 14px;
+  border-radius: 8px!important;
 }
 
 .form-group {
   position: relative;
-  margin-top: 25px;
+  margin-top: 20px;
+  width: 100%;
 
   .label-input {
-    position: absolute;
-    top: -11px;
-    left: 16px;
-    z-index: 1002;
-    background-color: white;
-    padding: 0 5px;
-    font-size: 11px;
-    color: gray;
+    margin-bottom: 12px;
+    background-color: transparent;
+     padding: 0 !important;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    color: var(--neutral-700);
   }
 }
 
 input,
 textarea {
-  border-radius: 20px !important;
+  color: var(--neutral-800) !important;
+  font-family: var(--font-body) !important;
+  font-size: 14px !important;
 }
+
+input:focus{
+  outline: none !important;
+}
+textarea:focus{
+  outline: none !important;
+}
+
+.custom-textarea-container{
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  background: var(--primary-50);
+  border: 1px solid var(--primary-100);
+  border-radius: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+
+  textarea{
+    width: 100%;
+    padding: 0px;
+    font-size: 16px !important;
+    background: red !important;
+    background: transparent !important;
+    border: none !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  textarea::-webkit-scrollbar{
+    display: none !important;
+  }
+}
+.custom-textarea-container:focus-within{
+  border: 1px solid var(--primary-500);
+}
+
+
 
 // .ag-theme-balham .ag-icon-checkbox-checked {
 //   color: $color-primario;
@@ -37,24 +81,93 @@ textarea {
 input.ng-touched.ng-invalid:not(:focus),
 textarea.ng-touched.ng-invalid:not(:focus),
 .ng-select.ng-invalid.ng-touched:not(.ng-select-focused) .ng-select-container {
-  border: 1px solid #c00000;
+  border: 1px solid var(--error-200);
 }
+
 
 // Focus
 .form-control:focus,
+.form-control-textarea:focus,
 .ng-select.ng-select-focused .ng-select-container {
-  border: 2px $color-terceario-hover solid;
+  border: 1px solid var(--primary-700);
   box-shadow: none;
+}
+
+.ng-select .ng-select-container {
+  min-height: 42px;
+}
+
+.ng-select.ng-select-multiple .ng-select-container {
+  height: fit-content !important;
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value{
+  color: var(--neutral-50);
+  background-color: var(--primary-700);
+  border-radius: 16px;
+  padding: 4px;
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.left{
+  border: none;
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.left:hover{
+  //border: none;
+  background: none;
 }
 
 // Disabled
 .disabled,
 textarea:disabled  {
   opacity: 1 !important;
-  background-color: #e4e7ea !important;
+  background: var(--neutral-100) !important;
+}
+
+.form-control:disabled,
+.date-form-control:disabled{
+  opacity: 1 !important;
+  background: var(--neutral-100) !important;
 }
 
 // Calendario - Date
+
+.date-form-control-container{
+  border: 1px solid var(--neutral-300);
+  font-size: 0.80rem;
+  border-radius: 8px!important;
+  height: 42px !important;
+  position: relative  !important;
+
+  .date-form-control{
+    padding-left: 12px;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+  }
+
+  .date-form-control.focused{
+    border: none !important;
+  }
+
+  input.ng-touched.ng-invalid:not(:focus){
+    border: none !important;
+  }
+
+  .contenedor-icono{
+    position: absolute !important;
+    right: 12px;
+    top: 8px;
+
+    .icono{
+      color: var(--neutral-600) !important;
+    }
+  }
+ 
+}
+
 
 .bs-datepicker-container {
   padding: 0;
@@ -78,22 +191,23 @@ textarea:disabled  {
 .bs-datepicker-head,
 .bs-datepicker-body table td span.selected
 {
-  background-color: $color-primario !important;
-  color: #ffffff !important;
+  background-color: var(--primary-700) !important;
+  color: var(--neutral-50) !important;
 }
 
 .bs-datepicker-body table td span.disabled {
-  color: #e6e6e6 !important;
+  color: var(--primary-100) !important;
 }
 
 .bs-datepicker-body table td span.is-other-month {
-  color: #54708b;
+  color: var(--neutral-400);
 }
-
-//
 
 textarea {
   resize: none !important;
+  padding-top: 10px;
+  padding-left: 10px;
+  width: 100%;
 }
 
 app-number-input.ng-invalid.ng-touched.ng-dirty input {
@@ -105,8 +219,10 @@ app-number-input.ng-invalid.ng-touched.ng-dirty input {
 }
 
 .error {
-  color: rgba(255, 0, 0, 0.74);
-  font-size: 0.86em;
+  color: var(--error-200);
+  margin-top: 6px;
+  font-size: 0.8rem;
+  font-family: var(--font-body);
 }
 
 // Input - Time / Hora
@@ -350,6 +466,12 @@ input[type=checkbox][disabled]:before {
 
 // Radio Buttons
 
+
+.form-check-input:checked{
+  background-color: var(--primary-700) !important;
+  border: var(--primary-900) !important;
+  box-shadow: none !important;
+}
 /* The container */
 .container-radio {
   position: relative;

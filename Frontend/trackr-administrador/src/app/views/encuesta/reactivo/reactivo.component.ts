@@ -132,7 +132,7 @@ export class ReactivoComponent implements OnInit {
       ReactivoFormularioComponent,
       {
         initialState: initialState,
-        ...MODAL_CONFIG.Default
+        ...MODAL_CONFIG.Large
       }
     );
   }
@@ -158,7 +158,7 @@ export class ReactivoComponent implements OnInit {
       ReactivoFormularioComponent,
       {
         initialState: initialState,
-        ...MODAL_CONFIG.Default
+        ...MODAL_CONFIG.Large
       }
     );
   }

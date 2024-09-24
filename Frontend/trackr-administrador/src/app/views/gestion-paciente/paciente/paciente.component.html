@@ -1,203 +1,160 @@
-<mat-sidenav-container style="background-color: white;">
+<mat-sidenav-container>
   <mat-sidenav #sidenav mode="side" [opened]="mostrarSidebar" position="end" [fixedInViewport]="true">
     <div class="container-fluid">
-      <div class="d-flex justify-content-end">
-        <div class="button">
 
-          <button
-            type="button"
-            aria-label="Close"
-            (click)="toggleSidebar()"
-          >
-            <i class="far fa-times-circle"></i>
+      <div class="header-paciente">
+          <button type="button" class="btn" (click)="toggleSidebar()">
+            <lucide-icon size="24" name="x"></lucide-icon>
           </button>
-        </div>
       </div>
+
       <div *ngIf="paciente">
-        <div class="bg-white d-flex align-items-center gap-2">
-          <div class="img-container">
-            <img
-              [src]="
-                paciente.imagenBase64 != undefined || null
-                  ? (paciente.imagenBase64 | urlImagen : paciente.tipoMime)
-                  : 'assets/img/default-user.jpg'
-              "
-              class="rounded"
-            />
+        <div class="info-paciente">
+          <div class="img-contenedor">
+            <img [src]="paciente.imagenBase64 != undefined || null
+                              ? (paciente.imagenBase64)
+                              : 'assets/img/default-user.jpg'
+                          " />
           </div>
-          <div class="bg-white">
-            <div style="font-weight: 400; font-size: medium;">
-              Paciente
-            </div>
+          <div class="nombre-container">
+            <h1 class="nombre">
+              {{paciente.nombreCompleto}}
+            </h1>
+            <p class="edad"> {{paciente.genero}} | {{paciente.edad + ' años'}} </p>
+          </div>
+          
             <div
               style="
                 font-weight: 300;
                 font-size: larger;">
-              {{ paciente.nombreCompleto }}
             </div>
-          </div>
         </div>
 
-        <div class="text-container">
-          <div class="datos">
-            <div class="font-weight-small mt-3"  style="font-size: 0.9em" *ngIf="paciente.genero">
-             {{paciente.genero}} 
-            </div>
-            <div class="font-weight-bold mt-2" style="font-size: .9rem">
-              {{ paciente.edad + " años" }}
-            </div>
-            <div class="font-weight-light mt-2" style="font-size: 0.6rem">
-              <span *ngIf="paciente.colonia">{{ paciente.colonia }}, </span>
-            </div>
-            <div class="font-weight-light mt-2" style="font-size: 0.6rem">
-              <span *ngIf="paciente.ciudad">{{ paciente.ciudad }}, </span>
-              <span *ngIf="paciente.estado">{{ paciente.estado }}</span>
-            </div>
-          </div>
-        </div>
-        <div
-          class="padecimientos mt-3 bg-white"
-          *ngIf="paciente.padecimientos && paciente.padecimientos.length > 0"
-        >
-          <div class="p-3">
-            <label
-              class="font-weight-normal"
-              style="
-                font-weight: 400;
-                font-size: .9rem;
-                color: gray;
-              "
-            >
+        <section class="padecimientos" *ngIf="paciente.padecimientos && paciente.padecimientos.length > 0">
+            <h2>
               Padecimientos
-            </label>
-            <ul>
-              <li *ngFor="let padecimiento of paciente.padecimientos">
-                <div>
-                  <label
-                  class="font-weight-normal"
-                  style="
-                    font-weight: 300;
-                    font-size: .7rem;
-                    color: gray;
-                  "
-                    >{{ padecimiento.nombre }} -- Desde
-                    {{ padecimiento.fechaDiagnostico | date : "yyyy" }}</label
-                  >
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
+            </h2>
+              <div *ngFor="let padecimiento of paciente.padecimientos">
+                <article class="padecimiento">
+                  <div class="purple-dot-container">
+                    <div class="purple-dot"></div>
+                  </div>
+                  <div class="info-padecimiento">
+                    <h3>{{ padecimiento.nombre }}</h3>
+                    <p>Desde {{ padecimiento.fechaDiagnostico | date : "MMMM yyyy" | capitalize }}</p>
+                  </div>
+                </article>
+              </div>
+        </section>
+        <section class="valoresFueraRango">
+          <h2>
+            Valores fuera de rango
+          </h2>
 
-          <div class="p-3">
-            <label 
-              class="font-weight-normal"
-              style="
-              font-weight: 400;
-              font-size: .9rem;
-              color: gray;
-            ">Valores Fuera de Rango</label>
-            
-            <app-grid-general
-              [headerName]="HEADER_GRID"
-              [data]="valoresFueraRango"
-              [children]="columnsVariableFueraRango"
-              [disableDelete]="true"
-              [disableEdit]="true"
-              [disableXLS]="true"
-              
+          <div class="buttons">
+            <button class="secondary" 
+            (click)="openDatepicker()"
             >
-            </app-grid-general>
+              Buscar por fecha
+            </button>
+            <input
+              style="width: 0; height: 0; padding: 0; border: none;"
+              type="text" 
+              bsDatepicker 
+              #dp="bsDatepicker"
+              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" 
+              [(ngModel)]="fechaFiltro"
+              (ngModelChange)="filtrarPorFecha()"
+            >
+
+            <button 
+              type="button"
+              class="secondary"
+              id="filtro-ordenar"
+              (click)="cambiarFiltroOrden()">
+              <lucide-icon *ngIf="ordenFiltro == 'ascendente'" name="arrow-up"></lucide-icon>
+              <lucide-icon *ngIf="ordenFiltro == 'descendente'" name="arrow-down"></lucide-icon>
+              Orden
+            </button>
           </div>
-  </mat-sidenav>
-  
-  <mat-sidenav-content>
-    <div class="contenedor" style="width: 100%">
-      <div class="titulo-contenedor-paciente">
-         Pacientes
-         <h3 class="filter-text">Filtros de Búsqueda de pacientes</h3>
-         <div class="d-flex justify-content-end">
-            <div class="d-flex">
-              <input
-                type="text"
-                class="form-control"
-                style="width: 450px"
-                placeholder="Buscar..."
-                aria-label="Buscar"
-                (change)="filtrarPacientes($event)"
-                [disabled]="!isVistaCuadricula"
-              />
-              <button class="btn-buscar" type="button" (change)="filtrarPacientes($event)" [disabled]="!isVistaCuadricula">
-                <img class="filter-primario" src="assets/img/svg/ico-18x18-buscar.svg"/>
-              </button>
-              <div class="d-flex align-items-center" style="color: gray">
-                <button class="btn" type="button" style="color: gray">
-                  <img
-                    class="filter-gray"
-                    src="assets/img/svg/ico-18x18-Filtros.svg"
-                  />
-                  Filtros
-                </button>
+
+          <div class="valores">
+            <div matRipple class="valor" *ngFor="let muestra of (filtradoPorFecha ? valoresFueraRangoFiltrados : valoresFueraRango)">
+              <div class="valor-info">
+                <h3>
+                  <span id="valor">{{muestra.valorRegistrado}}</span>
+                  <span id="unidadMedida"> {{muestra.unidadMedida}}</span>
+                </h3>
+                <p>
+                  <span id="variable">{{muestra.variable}}</span>
+                  <span> &bull; </span>
+                  <span id="parametro">{{muestra.parametro}}</span>
+                </p>
+                <p>{{muestra.fechaHora | date: "MMMM d, y 'a las' h:mm a" : '' : 'es-MX' | capitalize}}</p>
               </div>
             </div>
           </div>
-      </div>
+        </section>
 
-      <div class="row">
-        <hr class="col-md-12"/>
       </div>
-
-      <div
-        class="d-flex align-items-center justify-content-between"
-        style="margin-left: 10px"
-      >
-        <div class="contenedor-agregar justify-content-start" >
-          <button class="btn-agregar" (click)="agregar()">Agregar Paciente</button>
-          <button class="btn-terceario" (click)="agregarAsistente()" *ngIf="esAsistente !== null">{{ esAsistente  ? 'Mis doctores' : 'Agregar asistentes'}}</button>
-        </div>
-        <div class="justify-content-end">
-          <div style="text-align: right">
-            <button type="button" class="btn" (click)="isVistaCuadricula = true">
-              <img
-                src="assets/img/svg/ico-18x18-Grid-Bloques.svg"
-                [ngClass]="isVistaCuadricula ? 'filter-primario' : null"
-              />
-            </button>
-            <button
-              type="button"
-              class="btn"
-              (click)="isVistaCuadricula = false"
-              title="Vista de Lista"
-            >
-              <img
-                src="assets/img/svg/ico-18x18-Grid-Lista.svg"
-                [ngClass]="!isVistaCuadricula ? 'filter-primario' : null"
-              />
-            </button>
+    </div>
+        
+  </mat-sidenav>
+  
+  <mat-sidenav-content>
+    <div class="contenedor-principal" style="width: 100%">
+    
+      <div class="titulo-contenedor-paciente">
+        <h1 class="saludo">
+          Pacientes
+        </h1>
+        <div class="contenedor-filtros row">
+          <div class="col-md-9 no-padding">
+            <div class="contenedor-searchbar">
+              <div class="searchbar">
+                <i-lucide class="icono" name="search"></i-lucide>
+                <input type="text" placeholder="Buscar" (input)="filtrarPacientes($event)">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 no-padding">
+            <div class="botones"> 
+              <div id="filtros">
+                <button style="min-width: 88px;">
+                  <lucide-icon name="filter"></lucide-icon>
+                  Filtros
+                </button>
+              </div>
+    
+              <div id="agregar" class="dropdown">
+                  <button  class="add-button">
+                    <lucide-icon name="plus"></lucide-icon>
+                    <span>
+                      Agregar...
+                    </span>
+                    <img src="assets/img/svg/bar-vertical.svg">
+                    <lucide-icon name="chevron-down"></lucide-icon>
+                  </button>
+                  <div class="dropdown-content">
+                    <a (click)="agregar()">Paciente</a>
+                    <img src="assets/img/svg/bar-horizontal.svg">
+                    <a (click)="agregarAsistente()"> {{ esAsistente ? 'Médico' : 'Asistente'}}</a>
+                  </div>
+                  <!-- <button class="btn-terceario" (click)="agregarAsistente()" *ngIf="esAsistente !== null">{{ esAsistente  ? 'Mis doctores' : 'Agregar asistentes'}}</button> -->
+              </div>
+            </div>
           </div>
         </div>
+    
       </div>
-
-      <div class="row">
-        <div class="col-12">
-          <ng-container *ngIf="isVistaCuadricula; else vistaLista">
-            <app-paciente-vista-cuadricula
+      <div class="tabla-pacientes">
+        <div class="col-12 contenedor-tabla">
+          <ng-container *ngIf="isVistaCuadricula">
+              <app-paciente-vista-cuadricula
               [pacientes]="pacientesFiltrados"
-              (event)="onGridClick($event)"
-            >
+              (event)="onGridClick($event)">
             </app-paciente-vista-cuadricula>
           </ng-container>
-          <ng-template #vistaLista>
-            <app-grid-general
-              [headerName]="HEADER_GRID"
-              [data]="pacientes"
-              [children]="columns"
-              (event)="onGridClick($event)"
-            >
-            </app-grid-general>
-          </ng-template>
         </div>
       </div>
     </div>

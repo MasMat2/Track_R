@@ -20,7 +20,7 @@ import { TipoAccesoService } from '@http/seguridad/tipo-acceso.service';
 })
 export class AccesoFormularioComponent implements OnInit {
 
-  public titulo = 'Alta';
+  public titulo = 'Agregar';
   public TITULO_MODAL_ELIMINAR = 'Eliminar imagen acceso';
   public placeHolderSelect = GeneralConstant.PLACEHOLDER_DROPDOWN;
   public placeHolderNoOptions = GeneralConstant.PLACEHOLDER_DROPDOWN_NO_OPTIONS;
@@ -116,7 +116,7 @@ export class AccesoFormularioComponent implements OnInit {
         this.acceso = data;
         this.onIconoChange(this.acceso.idIcono);
         this.onTipoAccesoChange(this.acceso.idTipoAcceso);
-        this.titulo = 'Modificar';
+        this.titulo = 'Editar';
       });
     }
   }
@@ -180,8 +180,9 @@ export class AccesoFormularioComponent implements OnInit {
   }
 
   public onIconoChange(idIcono?: number) {
+    this.acceso.claseIcono = '';
     const icono = this.iconoList.find((i) => i.idIcono === idIcono);
-    if (icono !== undefined) {
+    if (icono !== undefined && icono.clase != '') {
       this.acceso.claseIcono = icono.clase;
     }
   }

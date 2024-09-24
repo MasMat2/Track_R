@@ -2,14 +2,9 @@
 <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>{{ accion }} Sección</div>
-      <button
-        type="button"
-        class="close pull-right"
-        aria-label="Close"
-        (click)="cancelar()"
-      >
-        <i class="far fa-times-circle"></i>
+      <div> {{ accion }} Parámetro</div>
+      <button class="btn-salir" (click)="cancelar()">
+        <lucide-icon name="x" size="10"></lucide-icon>
       </button>
     </div>
     <div class="modal-body">
@@ -48,7 +43,7 @@
           </div>
           <div class="col-md-4">
             <div class="form-group">
-              <label class="label-input required-label">Sección</label>
+              <label class="label-input required-label">Parámetro</label>
               <div>
                 <input
                   #nombreSeccion="ngModel"

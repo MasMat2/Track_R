@@ -40,5 +40,21 @@ namespace TrackrAPI.Helpers
             }
             catch (Exception) { }
         }
+
+    public static async Task NotificarPorSlack(Exception ex)
+        {
+         try
+            {
+                var urlWithAccessToken = "https://hooks.slack.com/services/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";
+                var client = new SlackClient(urlWithAccessToken);
+
+                await client.PostMessage(username: null,
+                           text: ex?.Message,
+                           errorMessage: ex?.StackTrace);
+            }
+            catch (Exception exd) { 
+                Console.WriteLine("Error al enviar notificación por Slack: " + exd.Message);
+            } 
+        }
     }
 }

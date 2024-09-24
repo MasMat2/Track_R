@@ -103,6 +103,16 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultarPorRFC(rfc);
         }
 
+    [HttpGet("consultarImagenPerfil/{idUsuario}")]
+    public async Task<IActionResult> ConsultarImagenPerfil(int idUsuario)
+    {
+        var imagenBytes = await usuarioService.ObtenerBytesImagenUsuario(idUsuario);
+        if (imagenBytes == null)
+        {
+            return NotFound("Imagen no encontrada");
+        }
+        return Ok(imagenBytes);
+    }
         [HttpGet]
         [Route("consultarPorTipoUsuario/{claveTipoUsuario}")]
         public IEnumerable<UsuarioDto> ConsultarPorTipoUsuario(string claveTipoUsuario)
@@ -113,12 +123,12 @@ namespace TrackrAPI.Controllers.Seguridad
 
         [HttpPost]
         [Route("agregar")]
-        public int Agregar(UsuarioDto usuarioDto)
+        public async Task<int> Agregar(UsuarioDto usuarioDto)
         {
             var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
             usuarioDto.IdHospital = (int)usuario.IdHospital;
             usuarioDto.IdCompania = usuario.IdCompania;
-            return usuarioService.Agregar(usuarioDto, (int)usuario.IdHospital, usuario.IdUsuario);
+            return await usuarioService.Agregar(usuarioDto, (int)usuario.IdHospital, usuario.IdUsuario);
         }
 
         [AllowAnonymous]
@@ -130,9 +140,9 @@ namespace TrackrAPI.Controllers.Seguridad
 
         [HttpPut]
         [Route("editar")]
-        public void Editar(Usuario usuario)
+        public async Task Editar(UsuarioDto usuario)
         {
-            usuarioService.Editar(usuario);
+            await usuarioService.Editar(usuario);
         }
 
         [HttpDelete]
@@ -150,9 +160,9 @@ namespace TrackrAPI.Controllers.Seguridad
 
         [HttpPut]
         [Route("editarAdministrador")]
-        public void EditarAdministrador(UsuarioDto usuarioDto)
+        public async Task EditarAdministrador(UsuarioDto usuarioDto)
         {
-            usuarioService.EditarAdministrador(usuarioDto);
+            await usuarioService.EditarAdministrador(usuarioDto);
         }
 
         [HttpPut]
@@ -271,6 +281,12 @@ namespace TrackrAPI.Controllers.Seguridad
         {
             return usuarioService.ConsultarInformacionGeneralTrackr(Utileria.ObtenerIdUsuarioSesion(this));
         }
+        [HttpGet("consultarInformacionDomicilio")]
+        public InformacionDomicilioDTO ConsultarInformacionDomicilio()
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            return usuarioService.ConsultarInformacionDomicilioTrackr(idUsuario);
+        }
 
         [HttpGet("consultarInformacionPerfil")]
         public InformacionPerfilTrackrDTO ConsultarInformacionPerfil()
@@ -291,9 +307,16 @@ namespace TrackrAPI.Controllers.Seguridad
         }
 
         [HttpPut("actualizarInformacionGeneral")]
-        public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion)
+        public async Task ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion)
         {
-            usuarioService.ActualizarInformacionGeneralTrackr(informacion, Utileria.ObtenerIdUsuarioSesion(this)); 
+            await usuarioService.ActualizarInformacionGeneralTrackr(informacion, Utileria.ObtenerIdUsuarioSesion(this)); 
+        }
+
+        [HttpPut("actualizarInformacionDomicilio")]
+        public void ActualizarInformacionDomicilioTrackr(InformacionDomicilioDTO informacion)
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            usuarioService.ActualizarInformacionDomicilioTrackr(informacion, idUsuario);
         }
 
         [HttpGet("consultaDomicilioPorId/{idUsuario}")]
@@ -303,17 +326,17 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultaDomicilioPorId(idUsuario);
         }
         [HttpGet("consultarAsistentes")]
-        public IEnumerable<UsuarioDto> ConsultarAsistentes()
+        public async Task<IEnumerable<UsuarioDto>> ConsultarAsistentes()
         {
             var usuario = usuarioService.Consultar(Utileria.ObtenerIdUsuarioSesion(this));
-            return usuarioService.ConsultarAsistentes((int)usuario.IdCompania , usuario.IdUsuario);
+            return await usuarioService.ConsultarAsistentes((int)usuario.IdCompania , usuario.IdUsuario);
         }
 
         [HttpGet("asistentesPorDoctor")]
-        public IEnumerable<AsistenteDoctorDto> ConsultarAsistentesPorDoctor()
+        public async Task<IEnumerable<AsistenteDoctorDto>> ConsultarAsistentesPorDoctor()
         {
             int idDoctor  = Utileria.ObtenerIdUsuarioSesion(this);
-            return usuarioService.ConsultarAsistentePorDoctor(idDoctor);
+            return await usuarioService.ConsultarAsistentePorDoctor(idDoctor);
         }
 
         [HttpGet("misDoctores")]
@@ -323,17 +346,17 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultarDoctoresPorAsistente(idAsistente);
         }
 
-        [HttpPost("asistente/{idAsistente}")]
-        public void AgregarAsistente(int idAsistente)
+        [HttpPost("asistente/agregar")]
+        public void AgregarAsistente(List<int> idAsistentes)
         {
             int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
-            usuarioService.AgregarAsistente(idUsuario , idAsistente);
+            usuarioService.AgregarAsistente(idUsuario , idAsistentes);
         }
 
-        [HttpDelete("asistente/{idAsistenteDoctor}")]
-        public void EliminarAsistente(int idAsistenteDoctor)
+        [HttpPost("asistente/eliminar")]
+        public void EliminarAsistente(List<int> idAsistentes)
         {
-            usuarioService.EliminarAsistente(idAsistenteDoctor);
+            usuarioService.EliminarAsistente(idAsistentes);
         }
 
         [HttpGet("esMedico")]
@@ -348,6 +371,24 @@ namespace TrackrAPI.Controllers.Seguridad
         {
             var usuario = usuarioService.ConsultarDto(Utileria.ObtenerIdUsuarioSesion(this));
             return usuarioService.EsAsistente(usuario.IdCompania , usuario.IdUsuario);
+        }
+
+        [HttpGet]
+        [Route("consultarPacientesParaSelector")]
+        public IEnumerable<UsuarioDto> ConsultarPacientesParaSelector()
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            var idCompania = usuarioService.Consultar(idUsuario).IdCompania;
+            return usuarioService.ConsultarPorRol(GeneralConstant.ClaveRolPaciente, idCompania);
+        }
+
+        [HttpGet]
+        [Route("consultarPersonalParaSelector")]
+        public IEnumerable<UsuarioDto> ConsultarPersonal()
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            var idCompania = usuarioService.Consultar(idUsuario).IdCompania;
+            return usuarioService.ConsultarPersonal(idCompania);
         }
     }
 }

@@ -1,5 +1,57 @@
+<ion-header class="ion-no-border">
+  <div class="contenedor-header-light">
+    <ion-toolbar>
+      <ion-buttons class="start" slot="start">
+        <ion-button (click)="regresarBtn()">
+          <ion-icon name="chevron-left"></ion-icon>
+          <ion-label>Atrás</ion-label>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+</ion-header>
+<ion-content class="primary">
+  <div class="contenedor-principal">
+    <div class="titulo">
+      <ion-text>
+        <h3>Nuevo chat</h3>
+      </ion-text>
+    </div>
+    <div class="contenedor-barra-busqueda">
+      <app-searchbar (search)="handleSearch($event)"></app-searchbar>
+    </div>
+    <div class="lista-doctores"> 
+      
+      <ion-list style="margin-top: 16px;" lines="none" *ngIf="filtrando">
+        <ion-item class="doctor" *ngFor="let doctor of doctoresFiltrados" detail button detailIcon="chevron-right" (click)="mostrarAlertCrearChat(doctor.idUsuarioDoctor)">
+          <ion-avatar slot="start">
+            <ion-img *ngIf="doctor.urlImagen" alt="profile pic" [src]="doctor.urlImagen"></ion-img>
+            <ion-img *ngIf="!doctor.urlImagen" alt="profile pic" src="assets/img/svg/avatar-placeholder.svg"></ion-img>
+          </ion-avatar>
+          <ion-label>{{doctor.titulo}} {{ doctor.nombre }}</ion-label>
+        </ion-item>
+      </ion-list>
 
-<ion-header>
+      <ng-container *ngFor="let group of gruposDoctores">
+        <ion-list lines="none" *ngIf="!filtrando">
+          <ion-item-divider class="divider">
+            {{ group.letra }}
+          </ion-item-divider>
+          <ion-item class="doctor" *ngFor="let doctor of group.doctores" detail button detailIcon="chevron-right" (click)="mostrarAlertCrearChat(doctor.idUsuarioDoctor)">
+            <ion-avatar slot="start">
+              <ion-img *ngIf="doctor.urlImagen" alt="profile pic" [src]="doctor.urlImagen"></ion-img>
+              <ion-img *ngIf="!doctor.urlImagen" alt="profile pic" src="assets/img/svg/avatar-placeholder.svg"></ion-img>
+            </ion-avatar>
+            <ion-label>{{doctor.titulo}} {{ doctor.nombre }}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ng-container>
+    </div>
+  </div>
+</ion-content>
+
+
+<!-- <ion-header>
   <ion-toolbar class="primary-toolbar">
       <ion-buttons>
           <ion-button fill="clear" (click)="regresarBtn()">
@@ -48,14 +100,4 @@
       </ion-item>
     </ion-list>
   </ng-container>
-
-  <!-- <ion-list>
-    <ion-item *ngFor="let doctor of doctores">
-      <ion-avatar>
-        <ion-img *ngIf="doctor.urlImagen" alt="profile pic" [src]="doctor.urlImagen"></ion-img>
-        <ion-img *ngIf="!doctor.urlImagen" alt="profile pic" src="https://ionicframework.com/docs/img/demos/avatar.svg"></ion-img>
-      </ion-avatar>
-      <ion-label style="padding-left: 2vh;">{{doctor.nombre}}</ion-label>
-    </ion-item>
-  </ion-list> -->
-</ion-content>
+</ion-content> -->

@@ -1,0 +1,230 @@
+<div class="d-flex">
+  <div class="barra-lateral-modal"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div *ngIf="soloRespuestas">{{ accion }} Reactivo</div>
+      <div *ngIf="!soloRespuestas">Ver Respuestas</div>
+      <button class="btn-salir" (click)="cancelar()">
+        <lucide-icon name="x" size="10"></lucide-icon>
+      </button>
+    </div>
+    <div class="modal-body" id="modal">
+      <form (keydown.enter)="$event.preventDefault()" #formulario="ngForm" 
+        novalidate="novalidate">
+
+        <div class="row" *ngIf="soloRespuestas">
+          <div class="col">
+            <div class="form-group">
+              <label class="label-input required-label">Tipo de evaluación</label>
+              <div>
+                <ng-select #asignaturaLst="ngModel" name="asignaturaLstName" bindLabel="descripcion"
+                  bindValue="idAsignatura" [items]="asignaturaList" [required]="true"
+                  [(ngModel)]="reactivo.idAsignatura" [placeholder]="placeHolderSelect"
+                  [notFoundText]="placeHolderNoOptions"></ng-select>
+              </div>
+              <div *ngIf="asignaturaLst.errors?.['required'] && asignaturaLst.touched" class="error">
+                El tipo de evaluación es requerida
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <label class="label-input required-label">Categorización</label>
+              <div>
+                <ng-select #nivelLst="ngModel" name="nivelLstName" bindLabel="descripcion" bindValue="idNivelExamen"
+                  [items]="nivelExamenList" [required]="true" [(ngModel)]="reactivo.idNivelExamen"
+                  [placeholder]="placeHolderSelect" [notFoundText]="placeHolderNoOptions"></ng-select>
+              </div>
+              <div *ngIf="nivelLst.errors?.['required'] && nivelLst.touched" class="error">
+                La categorización es requerida
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="soloRespuestas">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="label-input required-label">Pregunta</label>
+              <div>
+                <textarea #pregunta="ngModel" [(ngModel)]="reactivo.pregunta" name="pregunta"
+                  class="form-control preguntaTextArea" [required]="true"></textarea>
+              </div>
+              <div *ngIf="pregunta.errors?.['required'] && pregunta.touched" class="error">
+                La pregunta es requerida
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subseccion" *ngIf="soloRespuestas">
+          Imagen de Soporte visual
+        </div>
+        <div class="row" *ngIf="soloRespuestas">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="label-input required-label"></label>
+              <div>
+                <app-input-archivo [label]="'Cargar Imagen'" [contieneAyuda]="false" [id]="'archivoImagen'"
+                  [idRegistroArchivo]="reactivo.idReactivo" [nombreArchivo]="reactivo.imagenNombre"
+                  (archivoDto)="recibirImagen($event)" (downl_endpoint)="downl_endpoint.bind(this)">
+                </app-input-archivo>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div style="text-align: center; margin-top: 15px">
+              <img *ngIf="reactivo.imagen" id="logo" [src]="imagenBase64" height="200" />
+
+              <img *ngIf="!reactivo.imagen" id="logo" [src]="URL_IMAGEN_DEFAULT" height="200" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <button type="button" class="btn-secundario btn-alinear" (click)="borrarImagen()">
+              Limpiar Imagen
+            </button>
+          </div>
+        </div>
+
+        <div class="subseccion" *ngIf="soloRespuestas">
+          Respuestas a Mostrar
+        </div>
+
+        <div class="row" *ngIf="soloRespuestas">
+          <div class="col-md-4">
+            <div class="row">
+              <div class="col-md-4">
+                <label class="label-input required-label" style="font-size: 12px;">Escala de Likert</label>
+                <label class="switch">
+                  <input class="accent" checked="checked" #escalaLikert id="escalaLikert" name="escalaLikert"
+                    type="checkbox" [(ngModel)]="reactivo.escalaLikert" (ngModelChange)="cambiosReglasNegocio()" 
+                    [disabled]="reactivo.abierta"/>
+                  <span class="slider round">
+                    <span class="on">Sí</span>
+                    <span class="off">No</span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-md-7">
+                <div class="form-group contenedor-inferior">
+                  <label class="label-input required-label ">Clasificación Pregunta</label>
+                  <div>
+                    <ng-select #clasificacionLst="ngModel" name="clasificacionLstName" bindLabel="value"
+                      bindValue="id" [items]="clasificacionPreguntaList" [required]="true"
+                      [(ngModel)]="reactivo.idClasificacionPregunta" [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions" [required]="reactivo.escalaLikert"
+                      [disabled]="!reactivo.escalaLikert || reactivo.abierta"></ng-select>
+                  </div>
+                  <div *ngIf="clasificacionLst.errors?.['required'] && clasificacionLst.touched" class="error">
+                    La clasificacion es requerida
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="col-md-4">
+              <label class="label-input required-label" style="font-size: 12px;">Pregunta Abierta</label>
+              <label class="switch">
+                <input class="accent" checked="checked" #preguntaAbierta id="preguntaAbierta" name="preguntaAbierta"
+                  type="checkbox" [(ngModel)]="reactivo.abierta" (ngModelChange)="cambiosReglasNegocio()" [disabled]="reactivo.escalaLikert"/>
+                <span class="slider round">
+                  <span class="on">Sí</span>
+                  <span class="off">No</span>
+                </span>
+              </label>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row">
+              <div class="col-md-6">
+                <label class="label-input required-label" style="font-size: 12px;">¿Necesita Revisión?</label>
+                <label class="switch">
+                  <input class="accent" checked="checked" #necesitaRevision id="necesitaRevision" name="necesitaRevision"
+                    type="checkbox" [(ngModel)]="reactivo.necesitaRevision" />
+                  <span class="slider round">
+                    <span class="on">Sí</span>
+                    <span class="off">No</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="soloRespuestas">
+          <div class="col-md-4">
+            <button type="button" class="btn-primario btn-alinear" (click)="abrirRespuesta()"
+              [disabled]="reactivo.abierta || accion === 'Agregar' || reactivo.escalaLikert"
+              [hidden]="accion === 'Agregar'">
+              Agregar Respuesta
+            </button>
+          </div>
+
+          <div class="col-md-4">
+            <div class="col-md-4">
+              <label class="label-input required-label" style="font-size: 12px;">Respuesta Simple</label>
+              <label class="switch">
+                <input [disabled]="reactivo.escalaLikert || reactivo.abierta || reactivo.multiple" class="accent" checked="checked"
+                  #respuestaSimple id="respuestaSimple" name="respuestaSimple" type="checkbox"
+                  [(ngModel)]="reactivo.simple" (ngModelChange)="cambiosReglasNegocio()"/>
+                <span class="slider round">
+                  <span class="on">Sí</span>
+                  <span class="off">No</span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="row">
+              <div class="col-md-6">
+                <label class="label-input required-label" style="font-size: 12px;">Respuesta Múltiple</label>
+                <label class="switch">
+                  <input [disabled]="reactivo.escalaLikert || reactivo.abierta || reactivo.simple" class="accent" checked="checked"
+                    #respuestaMultiple id="respuestaMultiple" name="respuestaMultiple" type="checkbox"
+                    [(ngModel)]="reactivo.multiple" (ngModelChange)="cambiosReglasNegocio()"/>
+                  <span class="slider round">
+                    <span class="on">Sí</span>
+                    <span class="off">No</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="soloRespuestas" [hidden]="accion === 'Agregar'">
+          <div class="col-md-8">
+            <app-grid-general #gridRespuestas [disableXLS]="true" [data]="respuestasList" [children]="preguntasColumns"
+              (event)="onGridClick($event)" [accesoEditar]="accesoEditarRespuesta"
+              [accesoEliminar]="accesoEliminarRespuesta" [disableEdit]="reactivo.escalaLikert" 
+              [disableDelete]="reactivo.escalaLikert">
+            </app-grid-general>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="!soloRespuestas">
+          <div class="col-md-12">
+            <app-grid-general #gridRespuestas [disableXLS]="true" [data]="respuestasList" [children]="preguntasColumns"
+              (event)="onGridClick($event)" [accesoEditar]="noAcceso" [accesoEliminar]="noAcceso">
+            </app-grid-general>
+          </div>
+        </div>
+
+      
+
+      <div class="modal-footer" *ngIf="soloRespuestas">
+        <div class="text-right">
+          <button type="button" class="btn-secundario mr-3" (click)="cancelar()">Cancelar
+          </button>
+          <button [disabled]="submitting" type="submit" class="btn-primario btn-margin-left" (click)="enviarFormulario(formulario)">
+            Guardar Reactivo
+          </button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>

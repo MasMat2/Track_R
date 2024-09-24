@@ -44,7 +44,7 @@ public class ChatHub : Hub<IChatHub>
 
     public async Task NuevoChat(Chat chat, List<int> idPersonas)
     {
-        chat.Fecha = DateTime.Now;
+        chat.Fecha = DateTime.Now.ToUniversalTime();
         chat.Habilitado = true;
         _chatService.NuevoChat(chat, idPersonas, ObtenerIdUsuario());
         await Clients.Caller.NuevoChat(chat, idPersonas);
@@ -52,7 +52,7 @@ public class ChatHub : Hub<IChatHub>
         foreach (var idPersona in idPersonas)
         {
             var chats = _chatService.ConsultarChats(idPersona);
-            Clients.User(idPersona.ToString()).CargarChats(chats);
+            await Clients.User(idPersona.ToString()).CargarChats(chats);
         }
     }
 
@@ -65,7 +65,7 @@ public class ChatHub : Hub<IChatHub>
 
     public async Task EliminarChat(int idChat)
     {
-        var personas = _chatPersonaService.ObtenerPersonasChatSelector(idChat);
+        var personas = await _chatPersonaService.ObtenerPersonasChatSelector(idChat);
 
         if (personas.Count > 1)
         {

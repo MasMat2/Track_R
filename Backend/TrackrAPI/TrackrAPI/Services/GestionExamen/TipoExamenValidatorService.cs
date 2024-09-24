@@ -17,15 +17,15 @@ public class TipoExamenValidatorService
     private static readonly int LongitudClave = 5;
     private readonly string MensajeClaveLongitud = $"La longitud máxima de la clave son {LongitudClave } caracteres";
 
-    private readonly string MensajeNombreRequerido = "El tipo de examen es requerido";
+    private readonly string MensajeNombreRequerido = "El Tipo cuestionario es requerido";
     private static readonly int LongitudNombre = 200;
     private readonly string MensajeNombreLongitud = $"La longitud máxima de la descripción son {LongitudNombre } caracteres";
 
-    private readonly string MensajeDependencia = "El tipo examen tiene contenido examen agregados y no se puede eliminar";
+    private readonly string MensajeDependencia = "El Tipo cuestionario tiene información agregada y no se puede eliminar";
 
-    private readonly string MensajeExistencia = "El tipo examen que se requería actualizar no existe";
+    private readonly string MensajeExistencia = "El Tipo cuestionario que se requería actualizar no existe";
 
-    private readonly string MensajeDuplicado = "El tipo de examen que intenta agregar ya existe";
+    private readonly string MensajeDuplicado = "El Tipo cuestionario que intenta agregar ya existe";
 
     public void ValidarAgregar(TipoExamen tipoExamen)
     {
@@ -47,17 +47,8 @@ public class TipoExamenValidatorService
     public void ValidarRequerido(TipoExamen tipoExamen)
     {
         Validator.ValidarRequerido(
-            tipoExamen.Clave,
-            MensajeClaveRequerida);
-
-        Validator.ValidarRequerido(
             tipoExamen.Nombre,
             MensajeNombreRequerido);
-
-        Validator.ValidarLongitudMaximaString(
-            tipoExamen.Clave,
-            LongitudClave,
-            MensajeClaveLongitud);
 
         Validator.ValidarLongitudMaximaString(
             tipoExamen.Nombre,

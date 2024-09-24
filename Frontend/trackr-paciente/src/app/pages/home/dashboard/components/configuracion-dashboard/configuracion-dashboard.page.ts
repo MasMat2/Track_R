@@ -8,9 +8,7 @@ import { combineLatestWith, map } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { chevronBack } from 'ionicons/icons';
 import { ModalController } from '@ionic/angular/standalone';
-import { Constants } from '@utils/constants/constants';
 
 interface WidgetSeleccionado extends Widget {
   seleccionado: boolean;
@@ -41,7 +39,10 @@ export class ConfiguracionDashboardPage  implements OnInit {
     private usuarioWidgetService: UsuarioWidgetService,
     private alertController: AlertController,
     private modalController: ModalController
-  ) { addIcons({chevronBack})}
+  ) { 
+    addIcons({
+    'chevron-left': 'assets/img/svg/chevron-left.svg'
+  })}
 
   protected widgets: WidgetSeleccionado[] = [];
   protected submiting = false;
@@ -109,7 +110,6 @@ export class ConfiguracionDashboardPage  implements OnInit {
     const alertSuccess = await this.alertController.create({
       header: 'Widgets actualizados',
       subHeader: 'La información se ha actualizado correctamente.',
-      message: Constants.ALERT_SUCCESS,
       buttons: [{
         text: 'De acuerdo',
         role: 'confirm',
@@ -117,7 +117,7 @@ export class ConfiguracionDashboardPage  implements OnInit {
           this.cerrarModalConfirmar();
         }
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();

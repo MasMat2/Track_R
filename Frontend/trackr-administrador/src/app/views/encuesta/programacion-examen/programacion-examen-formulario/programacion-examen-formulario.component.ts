@@ -22,6 +22,10 @@ import { flatMap } from 'lodash';
 import { combineLatestWith, mergeMap } from 'rxjs';
 import { EncryptionService } from 'src/app/shared/services/encryption.service';
 import * as Utileria from '@utils/utileria';
+import { FechaService } from '@services/fecha.service';
+import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
+import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
+import { AlertifyService } from '@services/alertify.service';
 
 @Component({
   selector: 'app-programacionExamen-formulario',
@@ -32,14 +36,19 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
 
   protected programacionExamen = new ProgramacionExamen();
   protected submitting = false;
+  protected tipoCuestionario : number;
+  protected idsPadecimientos : number[] = [];
 
   // Selectores
   protected readonly DROPDOWN_PLACEHOLDER = DROPDOWN_PLACEHOLDER;
   protected readonly DROPDOWN_NO_OPTIONS = DROPDOWN_NO_OPTIONS;
 
-  public usuarioList: Usuario[] = [];
+  public pacienteList: Usuario[] = [];
+  public padecmientoList : ExpedientePadecimientoSelectorDTO[] = [];
+  public personalList: Usuario[] = [];
   public tipoExamenList: TipoExamen[] = [];
   public examenList: Examen[] = [];
+  protected fechaSeleccionada: Date = new Date();
 
   // Inputs
   public accion: string;
@@ -48,7 +57,7 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
   public onClose: (actualizar: boolean) => void;
 
   // Grid
-  protected readonly HEADER_GRID: string = 'Exámenes';
+  protected readonly HEADER_GRID: string = 'Cuestionarios';
 
   private readonly COLUMNA_DETALLE: ColDef = Object.assign(
     {
@@ -114,12 +123,17 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
     private router: Router,
     private tipoExamenService: TipoExamenService,
     private usuarioService: UsuarioService,
+    private fechaService: FechaService,
+    private entidadEstructuraService : EntidadEstructuraService,
+    private alertifyService : AlertifyService
   ) {}
 
   public ngOnInit(): void {
 
-    this.consultarUsuarios();
+    this.consultarPacientes();
+    this.consultarPersonal();
     this.consultarTipoExamen();
+    this.consultarPadecmientos();
 
     this.programacionExamen.participantes = [];
 
@@ -132,6 +146,29 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
     }
   }
 
+
+    private presentAlertError(): Promise<Boolean> {
+      return new Promise((resolve) => {
+        this.alertifyService.presentAlert({
+          header: 'Error al crear cuestionario',
+          subHeader: 'Añada participantes.',
+          Icono: 'info',
+          Color: 'error',
+          twoButtons: false,
+          confirmButtonText: "Cerrar",
+          cancelButtonText: ''
+        }, (result) => {
+          if(result == "confirm"){
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        });
+      });
+    }
+    
+
+
   private consultarProgramacionExamen(idProgramacionExamen: number): void {
     const programacionExamen$ = this.programacionExamenService.consultar(idProgramacionExamen);
     const examenes$ = this.examenService.consultarCalificaciones(idProgramacionExamen);
@@ -143,10 +180,13 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
           const participantes = examenes.map(
             (element) => element.idUsuarioParticipante
           );
-
+          
+          console.log(programacionExamen);
           programacionExamen.participantes = participantes;
-          programacionExamen.fechaExamen = new Date(programacionExamen.fechaExamen);
-          programacionExamen.fechaAlta = new Date(programacionExamen.fechaAlta);
+          programacionExamen.fechaExamen = this.fechaService.fechaUTCAFechaLocal(programacionExamen.fechaExamen);
+          this.fechaSeleccionada = new Date(programacionExamen.fechaExamen);
+          programacionExamen.horaExamen = this.fechaService.horaUTCAHoraLocal(programacionExamen.horaExamen);
+          //programacionExamen.fechaAlta = new Date(this.fechaService.fechaUTCAFechaLocal(programacionExamen.fechaAlta))
 
           this.examenList = examenes;
           this.programacionExamen = programacionExamen;
@@ -154,11 +194,25 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
       );
   }
 
-  private consultarUsuarios(): void {
+  private consultarPadecmientos(): void {
+    this.entidadEstructuraService.consultarPadecimientosParaSelector().subscribe(data => {
+      this.padecmientoList = data;
+    })
+  }
+
+  private consultarPacientes(): void {
     this.usuarioService
-      .consultarGeneral()
+      .consultarPacientesParaSelector()
       .subscribe((usuarios: Usuario[]) => {
-        this.usuarioList = usuarios.filter((u) => u.habilitado);
+        this.pacienteList = usuarios;
+      });
+  }
+
+  private consultarPersonal(): void {
+    this.usuarioService
+      .consultarPersonalParaSelector()
+      .subscribe((usuarios: Usuario[]) => {
+        this.personalList = usuarios;
       });
   }
 
@@ -186,6 +240,11 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
   protected enviarFormulario(formulario: NgForm): void {
     this.submitting = true;
 
+    if(this.programacionExamen.participantes.length == 0){
+      this.presentAlertError();
+      this.submitting = false;
+      return;
+    }
     if (!formulario.valid) {
       this.formularioService.validarCamposRequeridos(formulario);
       this.submitting = false;
@@ -201,7 +260,17 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
   }
 
   private agregar(): void {
-    const MENSAJE_AGREGAR: string = 'La programación de examen ha sido agregada';
+    const MENSAJE_AGREGAR: string = 'La programación del Cuestionario ha sido agregada';
+    
+    const fechaString = this.fechaService.fechaUTCAFechaLocal(this.fechaSeleccionada.toISOString()).split('T')[0];
+    const horaString = this.programacionExamen.horaExamen;
+    const nuevafecha = new Date(`${fechaString}T${horaString}`);
+
+    const fechaUTC = this.fechaService.fechaLocalAFechaUTC(nuevafecha);
+    const horaUTC = this.fechaService.horaLocalAHoraUTC(horaString);
+    
+    this.programacionExamen.fechaExamen = fechaUTC;
+    this.programacionExamen.horaExamen = horaUTC;
 
     this.programacionExamenService
       .agregar(this.programacionExamen)
@@ -221,11 +290,24 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
           this.submitting = true;
         }
       });
+
+      this.fechaSeleccionada = new Date();
   }
 
   private editar(): void {
-    const MENSAJE_EDITAR: string = 'La programación de examen ha sido modificada';
+    const MENSAJE_EDITAR: string = 'La programación de Cuestionario ha sido modificada';
 
+    const fechaString = this.fechaService.fechaUTCAFechaLocal(this.fechaSeleccionada.toISOString()).split('T')[0];
+    const horaString = this.programacionExamen.horaExamen;
+    const nuevafecha = new Date(`${fechaString}T${horaString}`);
+
+    const fechaUTC = this.fechaService.fechaLocalAFechaUTC(nuevafecha);
+    const horaUTC = this.fechaService.horaLocalAHoraUTC(horaString);
+    
+    this.programacionExamen.fechaExamen = fechaUTC;
+    this.programacionExamen.horaExamen = horaUTC;
+
+    console.log(this.programacionExamen);
     this.programacionExamenService
       .editar(this.programacionExamen)
       .pipe(
@@ -250,10 +332,21 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
   }
 
   private passToList(): void {
-    const participantes: number[] = this.examenList.map(e => e.idUsuarioParticipante);
+    const idPadecimientos = this.programacionExamen.idsPadecimiento;
+
+    if (this.programacionExamen.idsPadecimiento) {
+      this.programacionExamen.participantes = this.pacienteList
+        .filter((p) =>
+          p.idsPadecimientos.some((idP) => idPadecimientos.includes(idP))
+        )
+        .map((p) => p.idUsuario);
+    }
+
 
     for (const participante of this.programacionExamen.participantes) {
-      if (participantes.includes(participante)) {
+      const examenExistente = this.examenList.findIndex(e => e.idUsuarioParticipante === participante);
+      if (examenExistente >= 0) {
+        this.examenList[examenExistente].fechaAlta == new Date(this.programacionExamen.fechaExamen);
         continue;
       }
 
@@ -265,7 +358,6 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
       examen.estatus = true;
 
       this.examenList.push(examen);
-      console.log(this.examenList)
     }
   }
 
@@ -313,7 +405,5 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
     )
   }
 
-  selectChange(){
-    console.log(this.programacionExamen.participantes)
-  }
+
 }

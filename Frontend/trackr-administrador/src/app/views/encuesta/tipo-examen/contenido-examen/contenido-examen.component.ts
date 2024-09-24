@@ -22,7 +22,7 @@ import { ICONO } from '@utils/constants/font-awesome-icons';
   templateUrl: './contenido-examen.component.html',
 })
 export class ContenidoExamenComponent implements OnInit {
-  protected readonly HEADER_GRID: string = 'Contenido de Cuestionario';
+  protected readonly HEADER_GRID: string = 'Contenido del cuestionario';
 
   // Inputs
   public idTipoExamen: number;
@@ -37,31 +37,12 @@ export class ContenidoExamenComponent implements OnInit {
   protected contenidoExamenList: ContenidoExamen[] = [];
 
   protected columns: ColDef[] = [
-    {
-      headerName: 'Clave',
-      field: 'clave',
-      minWidth: 150,
-    },
-    {
-      headerName: 'Asignatura',
-      field: 'asignatura',
-      minWidth: 150,
-    },
-    {
-      headerName: 'Nivel de Cuestionario',
-      field: 'nivelExamen',
-      minWidth: 150,
-    },
-    {
-      headerName: 'Cantidad de Reactivos',
-      field: 'totalPreguntas',
-      minWidth: 150,
-    },
-    {
-      headerName: 'Duración Total (Minutos)',
-      field: 'duracion',
-      minWidth: 150,
-    },
+    { headerName: 'Clave', field: 'idContenidoExamen', minWidth: 150, valueGetter: (params: any) => (params.node.rowIndex + 1 ).toString()},
+    { headerName: 'Cuestionario', field: 'asignatura', minWidth: 150, },
+    { headerName: 'Categorización', field: 'nivelExamen', minWidth: 150, },
+    { headerName: 'Cantidad de Reactivos', field: 'totalPreguntas', minWidth: 150, },
+    { headerName: 'Duración Total (Minutos)', field: 'duracion', minWidth: 150, },
+    { headerName: 'Estatus', field: 'estatus', minWidth: 150, valueGetter: (params: any) => (params.data.estatus) ? 'Activo' : 'Inactivo' },
   ];
 
   constructor(
@@ -152,7 +133,7 @@ export class ContenidoExamenComponent implements OnInit {
       ContenidoExamenFormularioComponent,
       {
         initialState: initialState,
-        ...MODAL_CONFIG.Default,
+        ...MODAL_CONFIG.Large,
       }
     );
   }
@@ -180,15 +161,15 @@ export class ContenidoExamenComponent implements OnInit {
       ContenidoExamenFormularioComponent,
       {
         initialState: initialState,
-        ...MODAL_CONFIG.Default,
+        ...MODAL_CONFIG.Large,
       }
     );
   }
 
   private eliminar(contenidoExamen: ContenidoExamen): void {
-    const MENSAJE_EXITO: string = 'El contenido del examen ha sido eliminado';
-    const TITULO_MODAL: string = 'Eliminar Contenido del Examen';
-    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar el contenido del examen: <strong>${contenidoExamen.clave}</strong>?`;
+    const MENSAJE_EXITO: string = 'El contenido del cuestionario ha sido eliminado';
+    const TITULO_MODAL: string = 'Eliminar Contenido del cuestionario';
+    const MENSAJE_CONFIRMACION: string = `¿Desea eliminar el contenido del Cuestionario: <strong>${contenidoExamen.clave}</strong>?`;
 
     this.mensajeService
       .modalConfirmacion(

@@ -19,7 +19,6 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
     protected endpoint: string,
     private authService : AuthService 
   ) {
-    this.iniciarConexion();
   }
 
   public async iniciarConexion() {
@@ -81,14 +80,14 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
     return this.notificacionesSubject.value;
   }
 
-  public async marcarComoVista(id: number) {
-    this.marcarComoVistas([id]);
+  public async marcarComoVista(id: number, tomaTomada : boolean = true) {
+    this.marcarComoVistas([id] , tomaTomada);
   }
 
-  public async marcarComoVistas(ids: number[]) {
+  public async marcarComoVistas(ids: number[], tomaTomada : boolean = true) {
     await this.ensureConnection();
 
-    await this.connection.invoke('MarcarComoVistas', ids);
+    await this.connection.invoke('MarcarComoVistas', ids, tomaTomada);
   }
 
   public async marcarTodasComoVistas() {
@@ -140,7 +139,9 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
     this.notificacionesSubject.next(this.notificacionesSubject.value);
   }
 
-  private async ensureConnection(): Promise<void> {
+
+
+  public async ensureConnection(): Promise<void> {
     const timeoutms = 10_000;
 
     if (this.connection.state === HubConnectionState.Connected) {

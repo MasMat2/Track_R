@@ -14,6 +14,7 @@ import { Constants } from '@utils/constants/constants';
 import { ChatDTO } from '@dtos/chats/chat-dto';
 import { ChatPersonaService } from '../http/chats/chat-persona.service';
 import { ChatPersonaFormDTO } from '../dtos/chats/chat-persona-form-dto';
+import { FechaService } from './fecha.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,7 @@ export class ChatHubServiceService {
 
   private connection:HubConnection;
 
-  constructor(private ChatPersonaService:ChatPersonaService) { 
+  constructor(private ChatPersonaService:ChatPersonaService, private fechaService: FechaService) { 
     this.iniciarConexion();
   }
 
@@ -88,7 +89,7 @@ export class ChatHubServiceService {
   }
 
   private onNuevoChat(chat:ChatDTO,idPersonas:number[]): void{
-    chat.fecha = new Date();
+    chat.fecha = this.fechaService.fechaLocalAFechaUTC(new Date());
 
     const chats = this.chatSubject.value;
     chats.push(chat);
@@ -112,7 +113,7 @@ export class ChatHubServiceService {
 
   private onNuevaConexion(chats: ChatDTO[]): void{
     for(const chat of chats){
-      chat.fecha = new Date(chat.fecha);
+      chat.fecha = this.fechaService.fechaUTCAFechaLocal(chat.fecha);
     }
 
     this.chatSubject.next(chats);

@@ -1,131 +1,25 @@
-ion-header{
-    border-radius: 0; //TODO: quitar el estilo global del border radius que se le pone al header en variables.scss
-    background: var(--primary-50);
-}
+.contenedor-principal {
+  background: var(--primary-50);
+  height: 80vh;
 
-ion-content{
-    --background: var(--primary-50);
-}
+  .titulo {
+    height: 8vh;
+    padding: 16px 32px 0 32px;
 
-.contenedor-header{
-    height: 20vh;
-    width: 100%;
-  
-    ion-toolbar{
-      height: 100%;
-      width: 100%;
-      --background: url('/assets/header_light.svg');
-  
-      //medidas máximas para que no se estire el svg
-      max-height: 153px;
-      max-width: 390px;
-  
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding-bottom: 20px;
-  
-      ion-button{
-        font-family: var(--font-body);
-        font-weight: 400;
-        font-size: 18px;
+    ion-text {
+      text-align: start;
+      h3 {
+        margin: 0;
         color: var(--primary-700);
+        font-family: var(--font-display);
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 32px;
       }
     }
+  }
+
+  .lista-antecedentes {
+    height: 72vh;
+  }
 }
-
-.contenedor-principal{
-    background: var(--primary-50);
-    height: 80vh;
-
-    .titulo{
-        height: 8vh;
-        padding: 16px 32px 0 32px;
-
-        ion-text{
-            text-align: start;
-            h3{
-                margin: 0;
-                color: var(--primary-700);
-                font-family: var(--font-display);
-                font-size: 24px;
-                font-weight: 700;
-                line-height: 32px;
-            }
-        }
-    }
-
-    .lista-vacia{
-        height: 72vh;
-        padding-top: 20vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        ion-text{
-            text-align: center;
-            p{
-                font-size: 16px;
-                line-height: 22px;
-                font-family: var(--font-body);
-                color: var(--neutral-500);
-            }
-        }
-
-        ion-button{
-            min-width: 187px;
-            height: 44px;
-            font-family: var(--font-body);
-            font-weight: bold;
-            font-size: 16px;
-            --border-radius: 8px;
-            color: var(--primary-700);
-            --border-color: var(--primary-700);
-            --border-width: 1px;
-        }
-    }
-
-    .lista-antecedentes{
-        height: 72vh;
-
-        ion-list{
-            background: var(--primary-50);
-            ion-item{
-                --border-width: 0 0 2px 0;
-                --border-color: var(--primary-50);
-
-                ion-label{
-                    padding-left: 16px;
-                    h3{
-                        font-family: var(--font-body);
-                        font-size: 16px;
-                        color: var(--neutral-900);
-                    }
-
-                    p{
-                        font-family: var(--font-body);
-                        font-size: 14px;
-                        color: var(--neutral-600);
-
-                    }
-                }
-                ion-button{
-                    padding-right: 8.8px !important;
-                    margin-right: 0 !important;
-                    --ripple-color: var(--error-200);
-                    ion-icon{
-                        color: var(--error-200);
-                    }                
-                }
-
-            }
-        }
-    }
-}
-
-// ion-modal{
-//     --border-radius: 16px !important;
-// }
-
-
-

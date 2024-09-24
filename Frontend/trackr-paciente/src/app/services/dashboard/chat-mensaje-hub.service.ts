@@ -8,12 +8,12 @@ import {
   LogLevel,
 } from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
-import { catchError, filter, take, timeout } from 'rxjs/operators';
+import { catchError, filter, map, take, timeout } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Constants } from '@utils/constants/constants';
 import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ChatHubServiceService } from './chat-hub-service.service';
+import { FechaService } from '@services/fecha.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,14 +24,28 @@ export class ChatMensajeHubService {
   );
 
   private chatMensajeSubject = new BehaviorSubject<ChatMensajeDTO[][]>([]);
-  public chatMensaje$ = this.chatMensajeSubject.asObservable();
+  public chatMensaje$ = this.chatMensajeSubject.asObservable().pipe(
+    map((chats) => {
+      return chats.map(chat => {
+        return chat.map(mensaje => {
+          if (!mensaje.fechaYaFormateada) {
+            mensaje.fecha = this.fechaService.fechaUTCAFechaLocal(mensaje.fecha);
+            mensaje.fechaYaFormateada = true; // Marca la fecha del mensaje como formateada (así se manejan mensajes entrantes)
+          }
+          return mensaje;
+        });
+      });
+    })
+  );
 
   private readonly endpoint = 'hub/chatMensaje';
 
   private connection: HubConnection;
 
-  constructor(private authService: AuthService,
-              private chatHub:ChatHubServiceService) {
+  constructor(
+    private authService: AuthService,
+    private chatHub:ChatHubServiceService, private fechaService: FechaService
+  ) {
     this.iniciarConexion();
   }
 
@@ -56,7 +70,7 @@ export class ChatMensajeHubService {
       .withUrl(url, connectionConfig)
       .build();
 
-    this.connection.on('NuevoMensaje', (chatMensaje: ChatMensajeDTO) =>
+    this.connection.on('NuevoMensaje', (chatMensaje: ChatMensajeDTO) => 
       this.onNuevoChatMensaje(chatMensaje)
     );
 
@@ -119,6 +133,11 @@ export class ChatMensajeHubService {
 
   private async ensureConnection(): Promise<void> {
     const timeoutms = 10_000;
+    const token = await this.authService.obtenerToken();
+
+    if (!token) {
+        throw new Error('No se encontró un token válido');
+    }
 
     if (this.connection.state === HubConnectionState.Connected) {
       return;
@@ -126,14 +145,14 @@ export class ChatMensajeHubService {
       this.connection.state === HubConnectionState.Disconnected ||
       this.connection.state === HubConnectionState.Disconnecting
     ) {
-      throw new Error(
-        'No se ha iniciado la conexion con el Hub de Notificaciones'
-      );
+      await this.iniciarConexion();
+      console.log('No se ha iniciado la conexion con el Hub de Notificaciones , Reconectando...');
+      return;
     } else if (
       this.connection.state === HubConnectionState.Connecting ||
       this.connection.state === HubConnectionState.Reconnecting
     ) {
-      this.connectionStatus.asObservable().pipe(
+        await this.connectionStatus.asObservable().pipe(
         filter((state) => state === HubConnectionState.Connected),
         take(1),
         timeout(timeoutms),
@@ -142,10 +161,12 @@ export class ChatMensajeHubService {
             'No se pudo establecer la conexión con el Hub de Notificaciones'
           );
         })
-      );
+        ).toPromise();
+    } else {
+        // Intentar reconectar si el estado es distinto a Connected
+      await this.iniciarConexion();
     }
-  }
-
+}
   public async enviarMensaje(mensaje: ChatMensajeDTO) {
     await this.ensureConnection();
 

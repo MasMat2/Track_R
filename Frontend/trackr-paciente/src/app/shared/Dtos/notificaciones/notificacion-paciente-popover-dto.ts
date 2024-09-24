@@ -4,7 +4,10 @@ export class NotificacionPacientePopOverDto
     public id: number;
     public titulo: string;
     public mensaje: string;
-    public fecha: Date;
+    public complementoMensaje?: string;
+    public complementoEsFecha?: boolean;
+    public fecha: string;
     public visto: boolean;
     public idChat?:number; 
+    public idUsuario?:number;
 }

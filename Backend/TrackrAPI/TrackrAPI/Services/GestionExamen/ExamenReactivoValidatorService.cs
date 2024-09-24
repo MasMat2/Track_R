@@ -15,12 +15,12 @@ public class ExamenReactivoValidatorService
 
     private readonly string MensajeClaveRequerido = "La clave es requerida";
     private readonly string MensajeResponsableRequerida = "El responsable es requerido";
-    private readonly string MensajeFechaHoraRequerida = "La fecha y hora de examen es requerida";
-    private readonly string MensajeTipoExamenRequerida = "El tipo de examen es requerido";
+    private readonly string MensajeFechaHoraRequerida = "La fecha y hora del cuestionario es requerida";
+    private readonly string MensajeTipoExamenRequerida = "El tipo cuestionario es requerido";
 
-    private readonly string MensajeDependencia = "El examen programado tiene participantes";
+    private readonly string MensajeDependencia = "El cuestionario programado tiene participantes";
 
-    private readonly string MensajeExistencia = "La examen que se requería actualizar no existe";
+    private readonly string MensajeExistencia = "El cuestionario que se requería actualizar no existe";
 
     public void ValidarAgregar(ExamenReactivo examenReactivo)
     {

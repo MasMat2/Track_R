@@ -1,18 +1,23 @@
 using TrackrAPI.Dtos.Notificaciones;
 using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Notificaciones;
+using TrackrAPI.Repositorys.Seguridad;
+using TrackrAPI.Services.Seguridad;
 
 namespace TrackrAPI.Services.Notificaciones;
 
 public class NotificacionUsuarioService
 {
     private readonly INotificacionUsuarioRepository _notificacionUsuarioRepository;
+    private readonly UsuarioService _usuarioService;
+    private readonly IAsistenteDoctorRepository _asistenteDoctorRepository;
 
-    public NotificacionUsuarioService(INotificacionUsuarioRepository notificacionUsuarioRepository)
+    public NotificacionUsuarioService(INotificacionUsuarioRepository notificacionUsuarioRepository, UsuarioService usuarioService, IAsistenteDoctorRepository asistenteDoctorRepository)
     {
         _notificacionUsuarioRepository = notificacionUsuarioRepository;
+        _usuarioService = usuarioService;
+        _asistenteDoctorRepository = asistenteDoctorRepository;
     }
-
     private NotificacionUsuario GenerarNotificacionUsuario(int idNotificacion, int idUsuario)
     {
         var notificacionUsuario = new NotificacionUsuario
@@ -23,6 +28,13 @@ public class NotificacionUsuarioService
         };
 
         return notificacionUsuario;
+    }
+
+    public async Task<NotificacionUsuarioDto> ConsultarDto(int idNotificacionUsuario)
+    {
+        var notificacionUsuario = await  _notificacionUsuarioRepository.Consultar(idNotificacionUsuario);
+        notificacionUsuario.IdUsuario = (int) notificacionUsuario.IdNotificacionNavigation.IdPersona;
+        return Mapear(notificacionUsuario);
     }
 
     private NotificacionUsuarioDto Mapear(NotificacionUsuario notificacionUsuario)
@@ -41,16 +53,29 @@ public class NotificacionUsuarioService
         return _notificacionUsuarioRepository.ConsultarPorPaciente(idUsuario);
     }
 
-    public IEnumerable<NotificacionDoctorDTO> ConsultarPorDoctor(int idUsuario)
+    public async Task<IEnumerable<NotificacionDoctorDTO>> ConsultarPorDoctor(int idUsuario)
     {
-        return _notificacionUsuarioRepository.ConsultarPorDoctor(idUsuario);
+        int idCompania = _usuarioService.ConsultarDto(idUsuario).IdCompania;
+        bool esAsistente = _usuarioService.EsAsistente(idCompania, idUsuario);
+
+        List<int> idDoctorList = new();
+        if(esAsistente)
+        {
+            idDoctorList = _asistenteDoctorRepository.ConsultarDoctoresPorAsistente(idUsuario)
+                                                     .Select(ad => ad.IdUsuario).ToList();
+                                                     
+        }else{
+            idDoctorList.Add(idUsuario);
+        }
+        return await _notificacionUsuarioRepository.ConsultarPorDoctor(idDoctorList);
     }
 
     public NotificacionUsuarioDto Agregar(int idNotificacion, int idUsuario)
     {
         var notificacionUsuario = GenerarNotificacionUsuario(idNotificacion, idUsuario);
 
-        _notificacionUsuarioRepository.Agregar(notificacionUsuario);
+        var notificacionAgregada =_notificacionUsuarioRepository.Agregar(notificacionUsuario);
+        notificacionUsuario.IdNotificacionUsuario = notificacionAgregada.IdNotificacionUsuario;
 
         return Mapear(notificacionUsuario);
     }
@@ -59,14 +84,22 @@ public class NotificacionUsuarioService
     {
         var notificacionesUsuario = idsUsuario
             .Select((idUsuario) => GenerarNotificacionUsuario(idNotificacion, idUsuario));
+            
+        List<NotificacionUsuarioDto> notificacionesUsuarioDto = new();
 
-        _notificacionUsuarioRepository.Agregar(notificacionesUsuario);
+        foreach(var notificacionUsuario in notificacionesUsuario)
+        {
+            var notificacionAgregada = _notificacionUsuarioRepository.Agregar(notificacionUsuario);
+            
+            notificacionesUsuarioDto.Add(Mapear(notificacionAgregada));
+        }
 
-        return notificacionesUsuario.Select(nu => Mapear(nu));
+   
+        return notificacionesUsuarioDto;
     }
 
-    public void MarcarComoVistas(List<int> idNotificacionUsuario)
+    public void MarcarComoVistas(List<int> idNotificacionUsuario, bool tomaTomada)
     {
-        _notificacionUsuarioRepository.MarcarComoVistas(idNotificacionUsuario);
+        _notificacionUsuarioRepository.MarcarComoVistas(idNotificacionUsuario, tomaTomada);
     }
 }

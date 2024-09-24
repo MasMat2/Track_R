@@ -197,7 +197,6 @@ export class SeccionTablaFormularioComponent implements OnInit {
 
     //Verificacion de la tabla dominio hospital
     let domHos = await lastValueFrom(this.dominioHospitalService.obtenerDominioHospital(dominio.idDominio,0))
-    console.log(domHos)
     if(domHos != null){
       if(domHos.valorMaximo != null){
         dominio.valorMaximo = Number(domHos.valorMaximo)

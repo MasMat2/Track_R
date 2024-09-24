@@ -9,5 +9,7 @@ export class Usuario{
   public idPerfil: number;
   public idTipoUsuario: number;
   public idCompania: number;
+  public hospital : string;
+
 
 }

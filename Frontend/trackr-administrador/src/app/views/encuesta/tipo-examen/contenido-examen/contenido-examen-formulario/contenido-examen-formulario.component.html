@@ -2,7 +2,7 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>{{ accion }} Contenido del Examen</div>
+      <div>Contenido del Cuestionario - {{ accion }} </div>
       <button
         type="button"
         class="close pull-right"
@@ -20,32 +20,10 @@
     >
       <div class="modal-body" id="modal">
         <div class="row justify-content-md-center">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="label-input required-label">Clave</label>
-              <div>
-                <input
-                  #clave="ngModel"
-                  [(ngModel)]="contenidoExamen.clave"
-                  name="clave"
-                  class="form-control"
-                  type="text"
-                  [required]="true"
-                  maxlength="30"
-                />
-              </div>
-              <div
-                *ngIf="clave.errors?.['required'] && clave.touched"
-                class="error"
-              >
-                La clave es requerida
-              </div>
-            </div>
-          </div>
 
-          <div class="col-md-6">
+          <div class="col-md">
             <div class="form-group">
-              <label class="label-input required-label">Tipo de Examen</label>
+              <label class="label-input required-label">Cuestionario</label>
               <div>
                 <input
                   #nombre="ngModel"
@@ -60,7 +38,7 @@
                 *ngIf="nombre.errors?.['required'] && nombre.touched"
                 class="error"
               >
-                El tipo de Examen es requerido
+                El Cuestionario es requerido
               </div>
             </div>
           </div>
@@ -69,7 +47,7 @@
         <div class="row justify-content-md-center">
           <div class="col-md-6">
             <div class="form-group">
-              <label class="label-input required-label">Asignatura</label>
+              <label class="label-input required-label">Contenido</label>
               <div>
                 <ng-select
                   #asignaturaLst="ngModel"
@@ -81,20 +59,21 @@
                   [(ngModel)]="contenidoExamen.idAsignatura"
                   [placeholder]="placeHolderSelect"
                   [notFoundText]="placeHolderNoOptions"
+                  (change)="onSelectChange()"
                 ></ng-select>
               </div>
               <div
                 *ngIf="asignaturaLst.errors?.['required'] && asignaturaLst.touched"
                 class="error"
               >
-                La asignatura es requerida
+                La Contenido es requerido
               </div>
             </div>
           </div>
 
           <div class="col-md-6">
             <div class="form-group">
-              <label class="label-input required-label">Nivel</label>
+              <label class="label-input required-label">Categoria de evaluación</label>
               <div>
                 <ng-select
                   #nivelLst="ngModel"
@@ -106,13 +85,14 @@
                   [(ngModel)]="contenidoExamen.idNivelExamen"
                   [placeholder]="placeHolderSelect"
                   [notFoundText]="placeHolderNoOptions"
+                  (change)="onSelectChange()"
                 ></ng-select>
               </div>
               <div
                 *ngIf="nivelLst.errors?.['required'] && nivelLst.touched"
                 class="error"
               >
-                El nivel es requerido
+                La categoría de evaluación requerida
               </div>
             </div>
           </div>
@@ -142,7 +122,7 @@
                 "
                 class="error"
               >
-                La cantidad de reactivos es requerido
+                La cantidad de Reactivos es requerida
               </div>
             </div>
           </div>

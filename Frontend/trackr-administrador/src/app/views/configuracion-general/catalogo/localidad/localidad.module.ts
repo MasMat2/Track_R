@@ -9,13 +9,16 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { LocalidadFormularioComponent } from './localidad-formulario/localidad-formulario.component';
 import { LocalidadComponent } from './localidad.component';
 import { LocalidadRoutingModule } from './localidad.routing.module';
+import { LucideAngularModule, X } from 'lucide-angular';
 
 @NgModule({
     imports: [
       LocalidadRoutingModule,
       SharedModule,
       DirectiveModule,
-      ModalModule.forChild()
+      ModalModule.forChild(),
+      LucideAngularModule.pick({X}),
+
     ],
     declarations: [
       LocalidadComponent,

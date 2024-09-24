@@ -1,10 +1,102 @@
-.overflow{
-    height: 78vh;
-    padding-top: 3vh;
-    overflow-y: auto;
+.contenedor-principal{
+    height: 100% !important;
 }
 
-.centrar{
-    display: grid;
-    place-items: center;
+.card {
+    box-shadow: 0 !important;
+    border: none !important;
+    height: 100%;
+}
+
+.header{
+    min-height: 80px !important;
+}
+
+.card-content{
+    height: 100%;
+    overflow-y: hidden;
+}
+
+.contenido-header{
+    height: 100%;
+    padding: 0 28px 0 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .titulo{
+        font-family: var(--font-body);
+        font-size: 18px;
+        color: var(--neutral-900);
+        font-weight: bold;
+    }
+    .buttons{
+        button{
+            color: var(--primary-700);
+        }
+    }
+}
+
+.lista-chats{
+    height: 100%;
+    overflow-y: scroll;
+    .item{
+        cursor: pointer;
+        display: flex;
+        min-height: 80px;
+        width: 100%;
+        padding-left: 28px;
+        padding-right: 28px;
+        #foto-perfil{
+            display: flex;
+            align-items: center;
+            margin-right: 12px;
+            .avatar{
+                width: 48px;
+                height: 48px;
+                border-radius: 16px;
+                object-fit: cover;
+            }
+        }
+        .informacion{
+            width: calc(100% - 60px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-family: var(--font-body);
+            .titulo{
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                #nombre-chat{
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: var(--neutral-900);
+                    width: calc(100% - 40px);
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: inline-block;
+                }
+                #fecha{
+                    font-size: 10px;
+                    color: var(--neutral-500);
+                }
+            }
+            .mensaje{
+                width: 100%;
+                #ultimo-mensaje{
+                    font-size: 14px;
+                    color: var(--neutral-500);
+                    width: calc(100% - 40px);
+                    display: inline-block;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+    }
+    .item:hover{
+        background: var(--primary-100) !important;
+    }
 }

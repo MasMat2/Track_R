@@ -1,177 +1,356 @@
 <ion-header class="ion-no-border">
-  <div class="contenedor-header">
+  <div class="contenedor-header-light">
     <ion-toolbar>
-      <ion-buttons slot="start">
+      <ion-buttons class="start" slot="start">
         <ion-button routerLink="inicio-perfil">
-          <ion-icon slot="start" name="chevron-back"></ion-icon>
-          Atrás
+          <ion-icon slot="start" name="chevron-left"></ion-icon>
+          <ion-label>Atrás</ion-label>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </div>
 </ion-header>
 
-<ion-content>
+<ion-content class="primary">
   <div class="contenedor-principal">
     <div class="titulo">
       <ion-text>
         <h3>Domicilio</h3>
       </ion-text>
     </div>
-
-    <div *ngIf="informacionUsuario$ | async as informacionUsuario">
-      <form #formulario="ngForm" novalidate="novalidate" (ngSubmit)="enviarFormulario(formulario)">
-        <ion-grid>
-
-          <div class="seccion">
+    <div
+      class="formulario"
+      *ngIf="informacionUsuario$ | async as informacionUsuario"
+    >
+      <form
+        #formulario="ngForm"
+        novalidate="novalidate"
+        (ngSubmit)="enviarFormulario(formulario)"
+      >
+        <div class="contenido-formulario">
+          <ion-grid class="inputs ion-no-padding">
             <ion-row>
-              <ion-col size="6">
+              <ion-col size="6" class="padding-derecho">
                 <div class="input">
                   <ion-label>País</ion-label>
-                  <ion-input  #pais="ngModel" id="pais" name="pais"
-                    fill="outline" (click)="openPaisModal()" [ngModel]="nombrePais" readonly="true">
-                    <ion-icon *ngIf="!modalEstadoAbierto" slot="end" name="chevron-down" ></ion-icon>
-                    <ion-icon *ngIf="modalEstadoAbierto" slot="end" name="chevron-up"></ion-icon>
-                  </ion-input>
+                  <ion-item lines="none" class="select-input">
+                    <ion-select
+                      id="pais"
+                      name="paisName"
+                      #pais="ngModel"
+                      interface="action-sheet"
+                      [interfaceOptions]="{
+                        cssClass: 'custom-select-action-sheet'
+                      }"
+                      cancelText="Cancelar"
+                      placeholder="Seleccionar"
+                      toggleIcon="chevron-down"
+                      (ionChange)="onChangePais()"
+                      [(ngModel)]="informacionUsuario.idPais"
+                      required
+                    >
+                      <ion-select-option
+                        *ngFor="let pais of paisList"
+                        [value]="pais.idPais"
+                      >
+                        {{ pais.nombre }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                  <div
+                    *ngIf="pais.errors?.['required'] && (pais.dirty || pais.touched)"
+                    class="input-text-error"
+                  >
+                    <ion-icon slot="start" name="info"></ion-icon>
+                    El Pais es requerido
+                  </div>
                 </div>
               </ion-col>
-              <ion-col size="6">
+              <ion-col size="6" class="padding-izquierdo">
                 <div class="input">
                   <ion-label>Código Postal</ion-label>
-                  <ion-input #codigoPostal="ngModel" id="codigoPostal" name="codigoPostal" fill="outline" type="text"
-                    [disabled]="!informacionUsuario.idPais" [maxlength]="esPaisExtranjero ? null : 5"
-                    [minlength]="esPaisExtranjero ? null : 5" placeholder="Código Postal"
-                    (ionChange)="onChangeCodigoPostal()" [(ngModel)]="informacionUsuario.codigoPostal">
-                  </ion-input>
+                  <ion-item lines="none" class="general-input" [ngClass]="{'input-disabled': codigoPostalDisabled()}">
+                    <ion-input
+                      #codigoPostal="ngModel"
+                      id="codigoPostal"
+                      name="codigoPostal"
+                      type="text"
+                      inputmode="numeric"
+                      [maxlength]="esPaisExtranjero ? null : 5"
+                      [minlength]="esPaisExtranjero ? null : 5"
+                      placeholder="Código Postal"
+                      [disabled]="codigoPostalDisabled()"
+                      (ionChange)="onChangeCodigoPostal()"
+                      [(ngModel)]="informacionUsuario.codigoPostal"
+                      
+                    >
+                    </ion-input>
+                  </ion-item>
+                  <!-- <div
+                    *ngIf="codigoPostal.errors?.['required'] && (codigoPostal.dirty || codigoPostal.touched)"
+                    class="input-text-error"
+                  >
+                    <ion-icon slot="start" name="info"></ion-icon>
+                    El CP es requerido
+                  </div> -->
                 </div>
               </ion-col>
             </ion-row>
-
-
-
             <ion-row>
               <ion-col size="12">
                 <div class="input">
                   <ion-label>Estado</ion-label>
-                  <ion-input  id="estado" name="estado"
-                    fill="outline" [disabled]="!informacionUsuario.idPais" [ngModel] = "nombreEstado" readonly="true" (click)="openEstadoModal()">
-                    <ion-icon *ngIf="!modalEstadoAbierto" slot="end" name="chevron-down" ></ion-icon>
-                    <ion-icon *ngIf="modalEstadoAbierto" slot="end" name="chevron-up"></ion-icon>
-                  </ion-input>
+                  <ion-item lines="none" class="select-input" [ngClass]="{'input-disabled': estadoDisabled()}">
+                    <ion-select
+                      id="estado"
+                      name="estadoName"
+                      #estado="ngModel"
+                      interface="action-sheet"
+                      [interfaceOptions]="{
+                        cssClass: 'custom-select-action-sheet'
+                      }"
+                      cancelText="Cancelar"
+                      placeholder="Seleccionar"
+                      toggleIcon="chevron-down"
+                      [disabled]="estadoDisabled()"
+                      (ionChange)="onChangeEstado()"
+                      [(ngModel)]="informacionUsuario.idEstado"
+                      required
+                    >
+                      <ion-select-option
+                        *ngFor="let estado of estadoList"
+                        [value]="estado.idEstado"
+                      >
+                        {{ estado.nombre }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                  <div
+                    *ngIf="estado.errors?.['required'] && (estado.dirty || estado.touched)"
+                    class="input-text-error"
+                  >
+                    <ion-icon slot="start" name="info"></ion-icon>
+                    El estado es requerido
+                  </div>
                 </div>
               </ion-col>
             </ion-row>
-
-
             <ion-row>
-              <ion-col size="6">
+              <ion-col size="6" class="padding-derecho">
                 <div class="input">
                   <ion-label>Municipio</ion-label>
-                  <ion-input  #municipio="ngModel" id="municipio"
-                    name="municipio" fill="outline" [disabled]="!informacionUsuario.idEstado" readonly="true"
-                    [ngModel]="nombreMunicipio">
-                    <ion-icon *ngIf="!modalMunicipioAbierto" slot="end" name="chevron-down" (click)="openMunicipioModal()"></ion-icon>
-                    <ion-icon *ngIf="modalMunicipioAbierto" slot="end" name="chevron-up"></ion-icon>
-                  </ion-input>
+                  <ion-item lines="none" class="select-input" [ngClass]="{'input-disabled': municipioDisabled()}">
+                    <ion-select
+                      id="municipio"
+                      name="municipioName"
+                      #municipio="ngModel"
+                      interface="action-sheet"
+                      [interfaceOptions]="{
+                        cssClass: 'custom-select-action-sheet'
+                      }"
+                      cancelText="Cancelar"
+                      placeholder="Seleccionar"
+                      toggleIcon="chevron-down"
+                      [disabled]="municipioDisabled()"
+                      [(ngModel)]="informacionUsuario.idMunicipio"
+                      
+                    >
+                      <ion-select-option
+                        *ngFor="let municipio of municipioList"
+                        [value]="municipio.idMunicipio"
+                      >
+                        {{ municipio.nombre }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                  <!-- <div
+                    *ngIf="municipio.errors?.['required'] && (municipio.dirty || municipio.touched)"
+                    class="input-text-error"
+                  >
+                    <ion-icon slot="start" name="info"></ion-icon>
+                    El municipio es requerido
+                  </div> -->
                 </div>
               </ion-col>
-              <ion-col size="6">
+              <ion-col size="6" class="padding-izquierdo">
                 <div class="input">
                   <ion-label>Localidad</ion-label>
-                  <ion-input #localidad="ngModel" id="localidad"
-                    name="localidad" fill="outline" [disabled]="!informacionUsuario.idEstado"
-                    [ngModel]="nombreLocalidad" readonly="true" (click)="openLocalidadModal()">
-                    <ion-icon *ngIf="!modalLocalidadAbierto" slot="end" name="chevron-down" ></ion-icon>
-                    <ion-icon *ngIf="modalLocalidadAbierto" slot="end" name="chevron-up"></ion-icon>
-                  </ion-input>
+                  <ion-item lines="none" class="select-input" [ngClass]="{'input-disabled': localidadDisabled()}">
+                    <ion-select
+                      id="localidad"
+                      name="localidadName"
+                      #localidad="ngModel"
+                      interface="action-sheet"
+                      [interfaceOptions]="{
+                        cssClass: 'custom-select-action-sheet'
+                      }"
+                      cancelText="Cancelar"
+                      placeholder="Seleccionar"
+                      toggleIcon="chevron-down"
+                      [disabled]="localidadDisabled()"
+                      [(ngModel)]="informacionUsuario.idLocalidad"
+                      
+                    >
+                      <ion-select-option
+                        *ngFor="let localidad of localidadList"
+                        [value]="localidad.idLocalidad"
+                      >
+                        {{ localidad.nombre }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                  <!-- <div
+                    *ngIf="localidad.errors?.['required'] && (localidad.dirty || localidad.touched)"
+                    class="input-text-error"
+                  >
+                    <ion-icon slot="start" name="info"></ion-icon>
+                    La localidad es requerida
+                  </div> -->
                 </div>
-
               </ion-col>
             </ion-row>
-
             <ion-row>
               <ion-col size="12">
                 <div class="input">
                   <ion-label>Colonia</ion-label>
-                  <ion-input  #colonia="ngModel" id="colonia" name="colonia"
-                    fill="outline" [disabled]="informacionUsuario.codigoPostal?.length !== 5"
-                    [ngModel]="nombreColonia" (click)="openColoniaModal()" readonly="true" required="true">
-                    <ion-icon *ngIf="!modalColoniaAbierto" slot="end" name="chevron-down" ></ion-icon>
-                    <ion-icon *ngIf="modalColoniaAbierto" slot="end" name="chevron-up"></ion-icon>
-                  </ion-input>
-
+                  <ion-item lines="none" class="select-input" [ngClass]="{'input-disabled': coloniaDisabled()}">
+                    <ion-select
+                      id="colonia"
+                      name="coloniaName"
+                      #colonia="ngModel"
+                      interface="action-sheet"
+                      [interfaceOptions]="{
+                        cssClass: 'custom-select-action-sheet'
+                      }"
+                      cancelText="Cancelar"
+                      placeholder="Seleccionar"
+                      toggleIcon="chevron-down"
+                      [disabled]="coloniaDisabled()"
+                      [(ngModel)]="informacionUsuario.idColonia"
+                      
+                    >
+                      <ion-select-option
+                        *ngFor="let colonia of coloniaList"
+                        [value]="colonia.idColonia"
+                      >
+                        {{ colonia.nombre }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
                   <div
-                  *ngIf="colonia.errors?.['required'] && (colonia.dirty || colonia.touched)"
-                  class="error"
-                >
-                  <ion-icon slot="start" name="informacion"></ion-icon>
-                  La colonia es requerida
+                    *ngIf="colonia.errors?.['required'] && (colonia.dirty || colonia.touched)"
+                    class="input-text-error"
+                  >
+                    <ion-icon slot="start" name="info"></ion-icon>
+                    La colonia es requerida
+                  </div>
                 </div>
-                </div>
-
               </ion-col>
             </ion-row>
-
             <ion-row>
               <ion-col size="12">
                 <div class="input">
                   <ion-label>Calle</ion-label>
-                  <ion-input #calle="ngModel" id="calle" name="calle" fill="outline" type="text" maxlength="50"
-                    autocomplete="off" placeholder="Calle" [(ngModel)]="informacionUsuario.calle">
-                  </ion-input>
+                  <ion-item lines="none" class="general-input">
+                    <ion-input
+                      #calle="ngModel"
+                      id="calle"
+                      name="calle"
+                      type="text"
+                      maxlength="50"
+                      autocomplete="off"
+                      placeholder="Calle"
+                      [(ngModel)]="informacionUsuario.calle"
+                    >
+                    </ion-input>
+                  </ion-item>
+                  <!-- <div
+                    *ngIf="calle.errors?.['required'] && (calle.dirty || calle.touched)"
+                    class="input-text-error"
+                  >
+                    <ion-icon slot="start" name="info"></ion-icon>
+                    La calle es requerida
+                  </div> -->
                 </div>
               </ion-col>
             </ion-row>
-
             <ion-row>
-              <ion-col size="6">
-
+              <ion-col size="6" class="padding-derecho">
                 <div class="input">
                   <ion-label>Núm. exterior</ion-label>
-                  <ion-input #numExterior="ngModel" id="numExterior" name="numExterior" fill="outline" type="text"
-                    maxlength="6" autocomplete="off" placeholder="Número Exterior"
-                    [(ngModel)]="informacionUsuario.numeroExterior">
-                  </ion-input>
+                  <ion-item lines="none" class="general-input">
+                    <ion-input
+                      #numExterior="ngModel"
+                      id="numExterior"
+                      name="numExterior"
+                      type="text"
+                      maxlength="6"
+                      autocomplete="off"
+                      placeholder="Número Exterior"
+                      [(ngModel)]="informacionUsuario.numeroExterior"
+                    >
+                    </ion-input>
+                  </ion-item>
+                  <!-- <div
+                    *ngIf="numExterior.errors?.['required'] && (numExterior.dirty || numExterior.touched)"
+                    class="input-text-error"
+                  >
+                    <ion-icon slot="start" name="info"></ion-icon>
+                    El numero exterior es requerido
+                  </div> -->
                 </div>
               </ion-col>
-              <ion-col size="6">
+              <ion-col size="6" class="paddng-izquierdo">
                 <div class="input">
                   <ion-label>Núm. Interior</ion-label>
-                  <ion-input #numInterior="ngModel" id="numInterior" name="numInterior" fill="outline" type="text"
-                    maxlength="6" autocomplete="off" placeholder="Número Interior"
-                    [(ngModel)]="informacionUsuario.numeroInterior">
-                  </ion-input>
+                  <ion-item lines="none" class="general-input">
+                    <ion-input
+                      #numInterior="ngModel"
+                      id="numInterior"
+                      name="numInterior"
+                      type="text"
+                      maxlength="6"
+                      autocomplete="off"
+                      placeholder="Número Interior"
+                      [(ngModel)]="informacionUsuario.numeroInterior"
+                    >
+                    </ion-input>
+                  </ion-item>
                 </div>
-
               </ion-col>
             </ion-row>
-
-
             <ion-row>
               <ion-col size="12">
                 <div class="input">
                   <ion-label>Entre calles</ion-label>
-                  <ion-input #entreCalles="ngModel" id="entreCalles" name="entreCalles" fill="outline" type="text"
-                    maxlength="50" autocomplete="off" placeholder="Entre calles"
-                    [(ngModel)]="informacionUsuario.entreCalles">
-                  </ion-input>
+                  <ion-item lines="none" class="general-input">
+                    <ion-input
+                      #entreCalles="ngModel"
+                      id="entreCalles"
+                      name="entreCalles"
+                      type="text"
+                      maxlength="50"
+                      autocomplete="off"
+                      placeholder="Entre calles"
+                      [(ngModel)]="informacionUsuario.entreCalles"
+                    >
+                    </ion-input>
+                  </ion-item>
                 </div>
-
               </ion-col>
             </ion-row>
-
-          </div>
-
-          <ion-row class="mt-4">
-            <ion-col>
-              <ion-button class="btn-enviar" [disabled]="submiting" type="submit">Guardar</ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+          </ion-grid>
+        </div>
+        <div class="botones botones-column">
+          <ion-button
+            type="submit"
+            [disabled]="submiting || formulario.invalid || !formulario.dirty"
+            class="dark"
+          >
+            Guardar
+          </ion-button>
+        </div>
       </form>
     </div>
-
-
-
-
   </div>
+</ion-content>

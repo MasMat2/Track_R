@@ -10,6 +10,18 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { ModalBaseComponent } from '@sharedComponents/modal-base/modal-base.component';
 import { ModalBaseModule } from '@sharedComponents/modal-base/modal-base.module';
+import { MatListModule } from '@angular/material/list'
+import { MatIconModule } from '@angular/material/icon';
+import { NgAudioRecorderModule } from 'ng-audio-recorder';
+import { LucideAngularModule } from 'lucide-angular';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatRippleModule } from '@angular/material/core';
+import { AudioWaveComponent } from '@sharedComponents/audio-wave/audio-wave.component';
+import {TextFieldModule} from '@angular/cdk/text-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgxExtendedPdfViewerCommonModule } from 'ngx-extended-pdf-viewer/lib/ngx-extended-pdf-viewer-common.module';
+import { NgxExtendedPdfViewerService } from 'ngx-extended-pdf-viewer';
 
 
 
@@ -22,11 +34,23 @@ import { ModalBaseModule } from '@sharedComponents/modal-base/modal-base.module'
   ],
   imports: [
     CommonModule,
+    RouterModule,
     FormsModule,
     TableModule,
     NgSelectModule,
     PipesModule,
-    ModalBaseModule
-  ]
+    ModalBaseModule,
+    MatListModule,
+    MatIconModule,
+    NgAudioRecorderModule,
+    MatButtonModule,
+    MatRippleModule,
+    LucideAngularModule,
+    AudioWaveComponent,
+    MatFormFieldModule,
+    TextFieldModule
+  ],
+  exports: [BarraChatsComponent],
+  providers: [NgxExtendedPdfViewerService]
 })
 export class ChatModule { }

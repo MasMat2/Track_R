@@ -8,6 +8,8 @@ import { BusquedaExpedienteModule } from '../busqueda-expediente/busqueda-expedi
 import { BusquedaExpedienteComponent } from '../busqueda-expediente/busqueda-expediente.component';
 import { UsuarioFormularioModule } from 'src/app/views/configuracion-general/catalogo/usuario/usuario-formulario/usuario-formulario.module';
 import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
+import { MatButtonModule } from '@angular/material/button';
+import { LucideAngularModule } from 'lucide-angular';
 
 @NgModule({
     declarations: [ExpedienteGeneralFormularioComponent],
@@ -26,7 +28,9 @@ import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructu
         BsDatepickerModule,
         ReactiveFormsModule,
         BusquedaExpedienteModule,
-        UsuarioFormularioModule
+        UsuarioFormularioModule,
+        MatButtonModule,
+        LucideAngularModule
     ]
 })
 export class ExpedienteGeneralFormularioModule {}

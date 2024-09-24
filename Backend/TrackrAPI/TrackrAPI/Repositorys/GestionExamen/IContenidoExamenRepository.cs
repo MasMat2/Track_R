@@ -6,6 +6,7 @@ namespace TrackrAPI.Repositorys.GestionExamen;
 public interface IContenidoExamenRepository : IRepository<ContenidoExamen>
 {
     public ContenidoExamenDto? Consultar(int idContenidoExamen);
+    public ContenidoExamen ConsultarDuplicado(ContenidoExamen contenidoExamen);
     public IEnumerable<ContenidoExamenGridDto> ConsultarGeneral(int idTipoExamen);
     public IEnumerable<ContenidoExamenGridDto> ConsultarTodosParaSelector();
     public IEnumerable<ContenidoExamen> ConsultarTodosNoFormato(int idTipoExamen);

@@ -26,7 +26,7 @@
               <div>
                 <input
                   #clave="ngModel"
-                  [(ngModel)]="reactivo.clave"
+                  [(ngModel)]="reactivo.idReactivo"
                   name="clave"
                   class="form-control"
                   type="text"
@@ -34,12 +34,6 @@
                   [disabled]="accion == 'Editar'"
                   maxlength="30"
                 />
-              </div>
-              <div
-                *ngIf="clave.errors?.['required'] && clave.touched"
-                class="error"
-              >
-                La clave es requerida
               </div>
             </div>
           </div>
@@ -72,7 +66,7 @@
 
           <div class="col-md-4">
             <div class="form-group">
-              <label class="label-input required-label">Asignatura</label>
+              <label class="label-input required-label">Cuestionario</label>
               <div>
                 <ng-select
                   #asignaturaLst="ngModel"
@@ -90,14 +84,14 @@
                 *ngIf="asignaturaLst.errors?.['required'] && asignaturaLst.touched"
                 class="error"
               >
-                La asignatura es requerida
+                El cuestionario es requerido
               </div>
             </div>
           </div>
 
           <div class="col-md-4">
             <div class="form-group">
-              <label class="label-input required-label">Nivel</label>
+              <label class="label-input required-label">Categorización</label>
               <div>
                 <ng-select
                   #nivelLst="ngModel"
@@ -115,7 +109,7 @@
                 *ngIf="nivelLst.errors?.['required'] && nivelLst.touched"
                 class="error"
               >
-                El nivel es requerido
+                La categorización es requerida
               </div>
             </div>
           </div>
@@ -326,9 +320,4 @@
       </div>
     </form>
   </div>
-</div>
-
-<div id="loading-cdis" *ngIf="submitting">
-  <img src="assets/img/spinner.gif" alt="Procesando..." />
-  <span>Procesando... por favor espere</span>
 </div>

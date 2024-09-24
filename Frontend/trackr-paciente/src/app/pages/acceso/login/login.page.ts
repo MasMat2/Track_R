@@ -11,9 +11,9 @@ import * as Utileria from '@utils/utileria';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { AuthService } from '../../../auth/auth.service';
 import { addIcons } from 'ionicons';
-import { chevronBack, eyeOffOutline, eyeOutline, personOutline } from 'ionicons/icons';
-import { Constants } from '@utils/constants/constants';
 import { BehaviorSubject } from 'rxjs';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
+import { NotificacionPacienteService } from '@http/gestion-perfil/notificacion-paciente.service';
 
 @Component({
   selector: 'app-login',
@@ -30,51 +30,28 @@ import { BehaviorSubject } from 'rxjs';
 export class LoginPage implements OnInit {
   
   loginRequest: LoginRequest = new LoginRequest();
-  loading : any;
   loginResponse: LoginResponse = new LoginResponse();
   btnSubmit: boolean = false;
   protected pswInputType: string = "password";
   protected mostrarPwd: boolean = false;
 
-  protected spinner: string = Constants.ALERT_SPINNER;
-
-  //Estado de "cargando" para mostrar el alert con spinner
-  cargandoSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  cargando$ = this.cargandoSubject.asObservable();
-
   constructor(
     private loginService: LoginService,
     private router: Router,
     private authService: AuthService,
-    private alertController: AlertController,
-    private loadingController: LoadingController
+    private loadingSpinner: LoadingSpinnerService,
+    private notificacionPacienteService : NotificacionPacienteService
   ) { 
-    addIcons({chevronBack, eyeOffOutline, eyeOutline, personOutline})
+    addIcons({
+      'user': 'assets/img/svg/user.svg',
+      'eye': 'assets/img/svg/eye.svg',
+      'eye-off': 'assets/img/svg/eye-off.svg',
+      'chevron-left': 'assets/img/svg/chevron-left.svg',
+      'info': 'assets/img/svg/info.svg',
+    })
   }
-
-  async presentLoading() {
-    this.loading = await this.loadingController.create({
-      spinner: null,
-      cssClass: 'custom-loading',
-    });
-    return await this.loading.present();
-  }
-
-    async dismissLoading() {
-    if (this.loading) {
-      await this.loading.dismiss();
-      this.loading = null;
-    }
-  }
-    
+  
   ngOnInit() {
-    this.cargando$.subscribe(cargando => {
-      if (cargando) {
-        this.presentLoading();
-      } else {
-        this.dismissLoading();
-  }
-    });
   }
   /**
    * Valida que los campos del formulario sean requeridos y que el correo y la contraseña no estén vacíos.
@@ -83,7 +60,7 @@ export class LoginPage implements OnInit {
    * @returns
    */
   public async enviarFormulario(formulario: NgForm){
-    this.cargandoSubject.next(true);
+    this.loadingSpinner.presentLoading();
     this.btnSubmit = true;
 
     if(formulario.invalid){
@@ -97,8 +74,8 @@ export class LoginPage implements OnInit {
       return;
     }
 
-    //await alertSpinner.present();
-    this.autenticarPaciente();
+    await this.autenticarPaciente();
+    this.notificacionPacienteService.comenzarConexionNoti();
     this.btnSubmit = false;
   }
 
@@ -113,11 +90,11 @@ export class LoginPage implements OnInit {
           .then((loginResponse: LoginResponse) => {
             this.authService.guardarToken(loginResponse.token);
 
-            this.cargandoSubject.next(false);
+            this.loadingSpinner.dismissLoading();
             this.router.navigate(['/home']);
           })
           .catch(error => {
-            this.cargandoSubject.next(false);
+            this.loadingSpinner.dismissLoading();
             this.authService.cerrarSesion(false);
             this.btnSubmit = false;
           });

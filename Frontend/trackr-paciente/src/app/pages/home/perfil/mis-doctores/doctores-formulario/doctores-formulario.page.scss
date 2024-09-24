@@ -1,21 +1,11 @@
 @import "../../../../../../theme/variables.scss";
 
-
-
-ion-header{
-  
-}
-
-ion-content{
-  --background: var(--neutral-50);
-}
-
 ion-footer{
   --background: var(--neutral-50);
 }
 
 .contenedor-header{
-  height: 10vh;
+  height: 15vh;
   background: var(--neutral-50);
   display: flex;
   align-items: flex-end;
@@ -31,14 +21,23 @@ ion-footer{
       font-size: 18px;
       color: var(--neutral-900);
     }
+    ion-buttons{
+      margin-left: 16px;
+    }
   }
 }
 
 .contenedor-principal{
-  padding: 0 32px 0 16px; //los ion item ya incluyen 16px de padding a la izquierda
   background: var(--neutral-50);
   .lista-doctores{
+    ion-list{
+      background: var(--neutral-50);
+      padding: 0;
+      padding-top: 16px;
+    }
     ion-item{
+      --inner-padding-end: 32px;
+      --padding-start: 32px;
       ion-label{
         h3{
           font-family: var(--font-body);
@@ -51,14 +50,11 @@ ion-footer{
           color: var(--neutral-400);
         }
       }
-
       ion-icon{
+        font-size: 24px;
         color: var(--primary-700);
       }
     }
-  }
-  ion-list{
-    background: var(--neutral-50);
   }
 }
 
@@ -72,32 +68,8 @@ ion-footer{
     background: linear-gradient(rgba(243, 244, 250, 0), rgba(243, 244, 250, 1));
   }
   .botones{
-    background: rgba(243, 244, 250, 1);
     height: 60%;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 0 32px 36px 32px;
-
-    ion-button{
-      font-family: var(--font-body);
-      font-size: 16px;
-      width: 100%;
-      max-width: 600px;
-      height: 44px;
-      --border-radius: 8px;
-      color: var(--neutral-50);
-      --background: var(--primary-700);
-    }
-
-    .btn-login{
-      --background: var(--primary-700);
-    }
-
-    .btn-login.button-disabled{
-      opacity: 1;
-      --background: var(--primary-300);
-    }
+    background: rgba(243, 244, 250, 1);
   }
 }

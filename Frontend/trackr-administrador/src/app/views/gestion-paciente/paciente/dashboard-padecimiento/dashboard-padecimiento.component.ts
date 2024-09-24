@@ -12,6 +12,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { last, lastValueFrom } from 'rxjs';
 import { ColDef, ICellRendererParams, ValueGetterParams } from 'ag-grid-community';
 import * as moment from 'moment';
+import { FechaService } from '@services/fecha.service';
 
 
 @Component({
@@ -38,7 +39,32 @@ export class DashboardPadecimientoComponent implements OnInit {
   public idSeccionCampo: number;
   public variableList: ExpedienteColumnaSelectorDTO[] = [];
   protected filtroTiempo: string;
-
+  protected valoresfiltroTiempo = [
+    {
+      label: 'Hoy',
+      value : 'hoy' 
+    },
+    {
+      label: '1 Semana',
+      value : '1 semana' 
+    },
+    {
+      label: '2 Semanas',
+      value : '2 semanas' 
+    },
+    {
+      label: '3 Semanas',
+      value : '3 semanas' 
+    },
+    {
+      label: '1 Mes',
+      value : '1 mes' 
+    },
+    {
+      label: '2 Meses',
+      value : '2 meses' 
+    },
+  ]
   // Configuracion Columnas DataGrid
   public columns = [
     { headerName: 'Variable', field: 'variable', minWidth: 150 },
@@ -48,14 +74,34 @@ export class DashboardPadecimientoComponent implements OnInit {
       field: 'fechaHora', 
       minWidth: 150,
       cellRenderer: (params: ICellRendererParams) => {
-        return moment(params.data.fechaHora).format('DD/MM/YYYY') + '   ' + moment(params.data.fechaHora, 'HH:mm:ss').format('LT');
+        return moment(new Date(params.data.fechaHora)).format('DD/MM/YYYY') + '   ' + moment(new Date(params.data.fechaHora), 'HH:mm:ss').format('LT');
       },
       valueGetter: (params: ValueGetterParams) => {
-        return moment(params.data.fechaHora).format('DD/MM/YYYY') + '   ' + moment(params.data.fechaHora, 'HH:mm:ss').format('LT');
+        return moment(new Date(params.data.fechaHora)).format('DD/MM/YYYY') + '   ' + moment(new Date(params.data.fechaHora), 'HH:mm:ss').format('LT');
       },
     },
-    { headerName: 'Valor Registrado', field: 'valorRegistrado', minWidth: 150 },
-    { headerName: 'Valor de Referencia (min-máx)', field: 'valorReferencia', minWidth: 150 },
+    { 
+      headerName: 'Valor Registrado', field: 'valorRegistrado', minWidth: 150,
+      cellRenderer: (params: any) => {
+        const unidadMedida = params.data.unidadMedida;
+        //Definir color del icono de fuera de rango
+        let colorIcono: string = "";
+        params.data.fueraDeRango ? (colorIcono = 'var(--error-200)') : (colorIcono = 'var(--success-200)');
+
+        return '<span style="display:flex">' +     
+        `<div style="color: ${colorIcono}; font-size: 12px; margin-right: 8px"><i class="fa fa-circle"></i></div>`
+        + `${params.value} ${unidadMedida}` +
+        '</span>'
+      }
+    },
+    { headerName: 'Valor de Referencia (min-máx)', field: 'valorReferencia', minWidth: 150,
+      cellRenderer: (params: any) => {
+        const unidadMedida = params.data.unidadMedida;
+        return `<span>${params.value} ${unidadMedida}</span>`;
+      }
+
+    },
+
   ];
 
     // Configuraciones Select
@@ -65,22 +111,11 @@ export class DashboardPadecimientoComponent implements OnInit {
     // Colores Histograma
 
     private readonly backgroundColor = [
-      'rgba(255, 99, 132, 0.2)',
-      'rgba(255, 159, 64, 0.2)',
-      'rgba(255, 205, 86, 0.2)',
-      'rgba(75, 192, 192, 0.2)',
-      'rgba(54, 162, 235, 0.2)',
-      'rgba(153, 102, 255, 0.2)',
-      'rgba(201, 203, 207, 0.2)'
+      'rgba(105, 94, 147, 1)',
     ];
+    
     private readonly borderColor = [
-      'rgb(255, 99, 132)',
-      'rgb(255, 159, 64)',
-      'rgb(255, 205, 86)',
-      'rgb(75, 192, 192)',
-      'rgb(54, 162, 235)',
-      'rgb(153, 102, 255)',
-      'rgb(201, 203, 207)'
+      'rgba(105, 94, 147, 1)',
     ];
   
 
@@ -95,43 +130,51 @@ export class DashboardPadecimientoComponent implements OnInit {
         label: "Niveles de Glucosa",
         data: [],
         backgroundColor: this.backgroundColor,
-        // backgroundColor: ["red", "green", "blue"],
         borderColor: this.borderColor,
-        borderWidth: 1
-        // hoverBackgroundColor: ["darkred", "darkgreen", "darkblue"],
       }
     ],
   };
-  public barChartOptions:ChartOptions = {plugins: {legend: {display: false}}};
+  public barChartOptions:ChartOptions = {
+    plugins: {legend: {display: false}},
+    responsive: true,
+    maintainAspectRatio: false,
+  };
 
   constructor(
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
     private seccionCampoService: SeccionCampoService,
+    private fechaService: FechaService
   ) { 
   }
 
   ngOnInit() {
-    this.consultarValoresFueraRango();
+    //this.consultarValoresFueraRango();
     this.consultarTodasVariables();
     this.consultarSeccionesPadecimiento();
   }
 
   public onGridClick(event: any): void {
-    console.log(event);
   }
 
-  private consultarValoresFueraRango(): void {
-    lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresFueraRango(this.idPadecimiento, this.idUsuario))
-      .then((valoresFueraRango: ValoresFueraRangoGridDTO[]) => {
-        this.valoresFueraRango = valoresFueraRango;
-      }
-    );
-  }
+  // private consultarValoresFueraRango(): void {
+  //   lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresFueraRango(this.idPadecimiento, this.idUsuario))
+  //     .then((valoresFueraRango: ValoresFueraRangoGridDTO[]) => {
+  //       this.valoresFueraRango = valoresFueraRango;
+  //     }
+  //   );
+  // }
 
   private consultarTodasVariables(): void {
     lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresTodasVariables(this.idPadecimiento, this.idUsuario))
       .then((todasVariables: ValoresFueraRangoGridDTO[]) => {
+        todasVariables.map((data) => {
+          data.fechaHora = this.fechaService.fechaUTCAFechaLocal(data.fechaHora);
+          return data;
+        })
         this.bitacoraMuestras = todasVariables;
+        this.bitacoraMuestras = this.bitacoraMuestras.sort((a, b) => {
+          return new Date(b.fechaHora).getTime() - new Date(a.fechaHora).getTime();
+        });
       }
     );
   }
@@ -169,9 +212,9 @@ export class DashboardPadecimientoComponent implements OnInit {
         return {
           // labels: labels.map(label => valoresPorClaveCampo[label][index]?.fechaMuestra ?? 'Sin fecha'),
           data: labels.map(label => valoresPorClaveCampo[label][index]?.valor ?? 0),
-          backgroundColor: this.backgroundColor[index],
-          borderColor: this.borderColor[index],
-          borderWidth: 1,
+          backgroundColor: this.backgroundColor,
+          borderColor: this.borderColor,
+          //borderWidth: 1,
           // label: this.variableList.find(variable => variable.clave == this.claveVariable)?.variable ?? 'Sin nombre',
         };
       });

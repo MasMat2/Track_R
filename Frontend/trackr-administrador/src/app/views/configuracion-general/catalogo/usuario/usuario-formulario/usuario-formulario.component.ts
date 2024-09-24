@@ -58,6 +58,10 @@ import * as Utileria from '@utils/utileria';
 import { Observable, Observer, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { ArchivoService } from './../../../../../shared/http/catalogo/archivo.service';
+import { AlertifyService } from '@services/alertify.service';
+import { EspecialidadService } from '@http/catalogo/especialidad.service';
+import { Especialidad } from '@models/catalogo/especialidad';
+import { EspecialidadGridDto } from '@dtos/catalogo/especialidad-grid-dto';
 
 /**
  * Formulario de usuario, permite agregar, editar y eliminar.
@@ -71,7 +75,7 @@ export class UsuarioFormularioComponent implements OnInit {
   @ViewChild('formulario', { static: false }) public formulario: NgForm;
   @ViewChild('codigoPostal', { static: false }) public codigoPostal: NgModel;
 
-  public titulo = 'Alta';
+  public titulo = 'Agregar';
   public accion = 'Agregar';
   public desdeExpediente = false;
   public onClose: any;
@@ -96,8 +100,10 @@ export class UsuarioFormularioComponent implements OnInit {
   public puntoVentaList: PuntoVenta[];
   public areaList: Area[];
   public regimenFiscalList: RegimenFiscal[];
+  public especialidadList : EspecialidadGridDto[];
 
   public rolSeleccionados: number[] = [];
+  public especialidadSeleccionadas: number[] = [];
 
   public tieneRolVendedor: boolean = false;
   public tieneRolMedico: boolean = false;
@@ -131,6 +137,7 @@ export class UsuarioFormularioComponent implements OnInit {
   // Imagen
   public imagenBase64: any;
   public url: any;
+  public urlName: string;
   public urlImagenDefault = './assets/img/svg/ico-36x36-header-usuario.svg';
 
   // Permisos
@@ -209,12 +216,14 @@ export class UsuarioFormularioComponent implements OnInit {
     private satFormaPagoService: SatFormaPagoService,
     private codigoPostalService: CodigoPostalService,
     private archivoService: ArchivoService,
-    private usuarioImagenService: UsuarioImagenService
+    private usuarioImagenService: UsuarioImagenService,
+    private alertifyService : AlertifyService,
+    private especialidadService : EspecialidadService
   ) {}
 
   public ngOnInit(): void {
     if (this.usuario.idUsuario > 0) {
-      this.titulo = 'Modificar';
+      this.titulo = 'Editar';
       this.accion = GeneralConstant.MODAL_ACCION_EDITAR;
       this.esEdicion = true;
       this.consultarPermisos(this.usuario.idUsuario);
@@ -250,6 +259,7 @@ export class UsuarioFormularioComponent implements OnInit {
     this.consultarMetodosPago();
     this.consultarFormasPago();
     this.cargarSugerenciasCodigoPostal();
+    this.consultarEspecialidades();
   }
 
   private consultarAccesoContrasena(): void {
@@ -269,6 +279,14 @@ export class UsuarioFormularioComponent implements OnInit {
   private consultarPerfiles(): void {
     this.perfilService.consultarPorCompania().subscribe((data) => {
       this.perfilList = data;
+    });
+  }
+
+  private consultarEspecialidades(): void {
+    this.especialidadService.consultarParaGrid().subscribe((data) => {
+      this.especialidadList = data;
+      this.especialidadSeleccionadas = this.especialidadList.filter((especialidad) => 
+        this.usuario.idsEspecialidad.includes(especialidad.idEspecialidad)).map((especialidad) => especialidad.idEspecialidad);
     });
   }
 
@@ -593,11 +611,20 @@ export class UsuarioFormularioComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]);
 
       reader.onload = () => {
-        this.url = reader.result;
-        this.usuario.imagenBase64 = this.url;
+        const base64Url = reader.result as string;
+        this.usuario.imagenBase64 = base64Url;
+        this.url = this.sanitizer.bypassSecurityTrustUrl(base64Url);
         this.usuario.imagenTipoMime = event.target.files[0].type;
+        this.urlName = event.target.files[0].name;
       };
     }
+  }
+
+  public async eliminarImagen(): Promise<void> {
+    this.url = '';
+    this.usuario.imagenBase64 = '';
+    this.usuario.imagenTipoMime = '';
+    this.urlName = '';
   }
 
   public async agregar(): Promise<boolean> {
@@ -605,7 +632,7 @@ export class UsuarioFormularioComponent implements OnInit {
     await this.usuarioService.agregar(this.usuario).toPromise()
       .then((data) => {
         this.usuario.idUsuario = data ?? 0;
-        this.modalMensajeService.modalExito(this.MENSAJE_AGREGAR);
+        this.presentAlertAddExito();
         exito = true;
       })
       .catch(() => {
@@ -619,13 +646,12 @@ export class UsuarioFormularioComponent implements OnInit {
   }
 
   public async editar(): Promise<boolean> {
-    console.log("Se edito")
     this.usuario.contrasenaActualizada = this.usuario.contrasena;
 
     let exito: boolean = false;
     await this.usuarioService.editarAdministrador(this.usuario).toPromise()
       .then((data) => {
-        this.modalMensajeService.modalExito(this.MENSAJE_EDITAR);
+        this.presentAlertEditExito();
         exito = true;
       })
       .catch(() => {
@@ -670,6 +696,7 @@ export class UsuarioFormularioComponent implements OnInit {
     }
 
     this.usuario.idsRol = this.rolSeleccionados;
+    this.usuario.idsEspecialidad = this.especialidadSeleccionadas;
 
     let exito: boolean = false;
     if (this.accion === GeneralConstant.MODAL_ACCION_AGREGAR) {
@@ -684,6 +711,7 @@ export class UsuarioFormularioComponent implements OnInit {
 
     if (this.desdeExpediente) {
       this.onClose(this.usuario.idUsuario);
+      
     }
     else {
       this.onClose(this.usuario.idUsuario);
@@ -838,4 +866,47 @@ export class UsuarioFormularioComponent implements OnInit {
 
     formulario.reset();
   }
+
+  private presentAlertAddExito(): Promise<Boolean> {
+    return new Promise((resolve) => {
+      this.alertifyService.presentAlert({
+        header: 'Usuario registrado',
+        subHeader: 'Se ha dado de alta el usuario correctamente',
+        Icono: 'check',
+        Color: 'primary',
+        twoButtons: false,
+        confirmButtonText: "De acuerdo",
+        cancelButtonText: ''
+      }, (result) => {
+        if(result == "confirm"){
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  
+  private presentAlertEditExito(): Promise<Boolean> {
+    return new Promise((resolve) => {
+      this.alertifyService.presentAlert({
+        header: 'Usuario registrado',
+        subHeader: 'Se ha editado el usuario correctamente',
+        Icono: 'check',
+        Color: 'primary',
+        twoButtons: false,
+        confirmButtonText: "De acuerdo",
+        cancelButtonText: ''
+      }, (result) => {
+        if(result == "confirm"){
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  
 }

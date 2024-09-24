@@ -1,5 +1,5 @@
 import { ExpedienteTrackrService } from '@http/seguridad/expediente-trackr.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsuarioExpedienteGridDTO } from '@dtos/seguridad/usuario-expediente-grid-dto';
 import { EncryptionService } from '@services/encryption.service';
@@ -12,6 +12,16 @@ import { ValoresFueraRangoGridDTO } from '@dtos/gestion-expediente/valores-fuera
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { GestionAsistenteComponent } from './gestion-asistente/gestion-asistente.component';
 import { UsuarioService } from '@http/seguridad/usuario.service';
+import { MisDoctoresService } from '@http/seguridad/mis-doctores.service';
+import { MensajeService } from '@sharedComponents/mensaje/mensaje.service';
+import { UsuarioDoctorDto } from '@dtos/seguridad/usuario-doctor-dto';
+import { Usuario } from '@models/seguridad/usuario';
+import { LoadingSpinnerService } from '../../../shared/services/loading-spinner.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CustomAlertComponent } from '@sharedComponents/custom-alert/custom-alert.component';
+import { CustomAlertData } from '@sharedComponents/interface/custom-alert-data';
+import { FechaService } from '@services/fecha.service';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 
 @Component({
   selector: 'app-paciente',
@@ -19,11 +29,24 @@ import { UsuarioService } from '@http/seguridad/usuario.service';
   styleUrls: ['./paciente.component.scss'],
 })
 export class PacienteComponent implements OnInit {
+
+
+  private TITULO_MODAL_ELIMINAR = 'Eliminar usuario';
+  private MENSAJE_EXITO_ELIMINAR = 'Expediente eliminado correctamente';
+
   protected pacientes: UsuarioExpedienteGridDTO[] = [];
   protected pacientesFiltrados: UsuarioExpedienteGridDTO[] = [];
   protected isVistaCuadricula: boolean = true;
   protected mostrarSidebar: boolean = false;
   protected esAsistente : boolean | null = null;
+
+  protected ordenFiltro: 'ascendente' |'descendente' = 'ascendente';
+  protected filtradoPorFecha: boolean = false;
+  protected fechaFiltro: Date;
+  @ViewChild('dp', { static: false }) datepicker: BsDatepickerDirective;
+  fechaSeleccionada: Date;
+
+
   anchoContenedor: string = '100%';
   paciente: UsuarioExpedienteSidebarDTO = {
     idUsuario: 0,
@@ -67,6 +90,7 @@ export class PacienteComponent implements OnInit {
 
   
   protected valoresFueraRango: ValoresFueraRangoGridDTO[];
+  protected valoresFueraRangoFiltrados: ValoresFueraRangoGridDTO[];
   protected columnsVariableFueraRango = [
     { headerName: 'Campo', field: 'parametro', minWidth: 10, resizable : false},
     { headerName: 'Valor', field: 'valorRegistrado', maxWidth: 100, resizable : false },
@@ -87,7 +111,12 @@ export class PacienteComponent implements OnInit {
     private expedienteTrackrService: ExpedienteTrackrService,
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
     private modalService: BsModalService,
-    private usuarioService : UsuarioService
+    private usuarioService : UsuarioService,
+    private misDoctoresService : MisDoctoresService,
+    private modalMensajeService : MensajeService,
+    private spinnerService  : LoadingSpinnerService,
+    private dialog: MatDialog,
+    private fechaService: FechaService
   ) {}
 
   ngOnInit(): void {
@@ -104,6 +133,7 @@ export class PacienteComponent implements OnInit {
   }
 
   toggleSidebar() {
+    this.filtradoPorFecha = false;
     this.mostrarSidebar = false;
   }
 
@@ -149,13 +179,42 @@ export class PacienteComponent implements OnInit {
       GestionAsistenteComponent,
       {
         initialState,
-        ...GeneralConstant.CONFIG_MODAL_MEDIUM
+        ...GeneralConstant.CONFIG_MODAL_SMALL_CUSTOM 
       }
     );
   }
 
-  protected eliminar(data: any): void {
-    this.expedienteTrackrService.eliminar(data.idExpediente);
+  protected eliminar(paciente: UsuarioExpedienteGridDTO): void {
+    this.presentAlertEliminarPaciente(paciente);
+  }
+
+  private presentAlertEliminarPaciente(paciente: UsuarioExpedienteGridDTO){
+    const alert = this.dialog.open(CustomAlertComponent, {
+      panelClass: 'custom-alert',
+      data:{
+        header: 'Eliminar paciente',
+        subHeader: '¿Seguro(a) que desea eliminar este paciente?',
+        Icono: 'info',
+        Color: 'error',
+        twoButtons: true,
+        cancelButtonText: 'No, cancelar',
+        confirmButtonText: "Si, aceptar"
+      } as CustomAlertData,
+      autoFocus: false,
+      restoreFocus: false,
+    });
+
+    alert.beforeClosed().subscribe(result => {
+      var expedienteDoctorDto = {
+        idExpediente: paciente.idExpedienteTrackr,
+      } as UsuarioDoctorDto;
+
+      if(result == "confirm"){
+        this.misDoctoresService.eliminar(expedienteDoctorDto).subscribe(() => {
+          this.consultarPacientes();
+        });
+      }
+    })
   }
 
   /**
@@ -163,11 +222,13 @@ export class PacienteComponent implements OnInit {
    * aquellos con clave de perfil PACIENTE.
    */
   protected consultarPacientes(): void {
+    this.spinnerService.openSpinner();
     lastValueFrom(this.expedienteTrackrService.consultarParaGrid()).then(
       (pacientes: UsuarioExpedienteGridDTO[]) => {
 
         this.pacientes = pacientes;
         this.pacientesFiltrados = pacientes;
+        this.spinnerService.closeSpinner();
       }
     );
   }
@@ -188,6 +249,10 @@ export class PacienteComponent implements OnInit {
   public consultarValoresFueraRango(idUsuario : number): void {
     lastValueFrom(this.entidadEstructuraTablaValorService.consultarValoresFueraRangoUsuario(idUsuario))
       .then((valoresFueraRango: ValoresFueraRangoGridDTO[]) => {
+        valoresFueraRango.map(data => {
+          data.fechaHora = this.fechaService.fechaUTCAFechaLocal(data.fechaHora);
+          return data;
+        })
         this.valoresFueraRango = valoresFueraRango;
       }
     );
@@ -208,6 +273,40 @@ export class PacienteComponent implements OnInit {
         return (paciente.nombreCompleto.toLowerCase().indexOf(text.toLowerCase()) > -1);
       })
     }
+  }
+
+  protected cambiarFiltroOrden(){
+    this.ordenFiltro === 'ascendente' ? (this.ordenFiltro = 'descendente') : (this.ordenFiltro = 'ascendente');
+    this.ordenarlista(this.ordenFiltro);
+  }
+
+  protected ordenarlista(opcion: 'ascendente' | 'descendente'){
+    this.filtradoPorFecha = false;
+    this.valoresFueraRango?.sort((a, b) => {
+      const fechaA = new Date(a.fechaHora).getTime();
+      const fechaB = new Date(b.fechaHora).getTime();
+
+      if (opcion === 'ascendente') {
+        return fechaA - fechaB;
+      }
+      if(opcion === 'descendente') {
+        return fechaB - fechaA;
+      }
+
+      return 0;
+    });
+  }
+
+  protected filtrarPorFecha(){
+    this.filtradoPorFecha = true;
+    const fechaString = this.fechaService.fechaUTCAFechaLocal(new Date(this.fechaFiltro).toISOString());
+    const targetDate = fechaString?.split('T')[0]; // Solo toma la parte de la fecha, ignorando la hora
+    const coincidencias = this.valoresFueraRango?.filter(obj => obj.fechaHora?.split('T')[0] === targetDate);
+    this.valoresFueraRangoFiltrados = coincidencias;
+  }
+
+  openDatepicker() {
+    this.datepicker.show();
   }
 
 }

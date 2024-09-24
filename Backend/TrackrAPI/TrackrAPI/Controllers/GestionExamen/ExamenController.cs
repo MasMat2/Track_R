@@ -116,7 +116,8 @@ public class ExamenController : ControllerBase
     [Route("actualizar")]
     public void Actualizar(List<Examen> examenList)
     {
-        _examenService.Actualizar(examenList);
+        int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+        _examenService.Actualizar(examenList , idUsuario);
     }
 
     [HttpPost]
@@ -126,5 +127,12 @@ public class ExamenController : ControllerBase
         byte[] pdfBytes = _examenService.descargarRespuestasPdf(idExamen);
 
         return File(pdfBytes, "application/pdf");
+    }
+
+    [HttpGet]
+    [Route("cantidadReactivos/{idAsignatura}/{idNivelExamen}")]
+    public int ConsultarCantidadReactivos(int idAsignatura, int idNivelExamen)
+    {
+        return _examenService.ConsultarCantidadReactivos(idAsignatura, idNivelExamen);
     }
 }

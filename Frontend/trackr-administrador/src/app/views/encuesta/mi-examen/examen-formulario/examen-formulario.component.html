@@ -36,7 +36,7 @@
                   Si desea regresar al Reactivo anterior de Clic en el botón Anterior.
                 </li>
                 <li>
-                  Si desea Terminar el examen antes de finalizarlo presione Finalizar Examen.
+                  Si desea Terminar el cuestionario antes de finalizarlo presione Finalizar cuestionario.
                 </li>
               </ul>
             </div>
@@ -53,7 +53,7 @@
                 class="btn-primario btn-margin-left btn-cargar"
                 (click)="consultarReactivos()"
               >
-                Iniciar Examen
+                Iniciar Cuestionario
               </button>
             </div>
           </div>
@@ -71,7 +71,7 @@
                 (click)="terminarExamen()"
                 class="finishButton"
                 *ngIf="!blockQuestions"
-                >Finalizar Examen</a
+                >Finalizar Cuestionario</a
               >
               <a
                 (click)="cancelar()"
@@ -103,41 +103,36 @@
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-md-12">
-              <h5 class="respuestas">{{ reactivoList[indice].respuesta }}</h5>
-            </div>
-          </div>
 
           <div class="row">
             <div class="col-md-8">
               <div
                 class="form-group"
-                *ngIf="reactivoList[indice].necesitaRevision"
               >
                 <label class="label-input required-label">Respuesta</label>
-                <div>
+
+                <div *ngIf="reactivoList[indice].necesitaRevision">
                   <textarea
-                    #respuestaCorrecta="ngModel"
-                    [(ngModel)]="reactivoList[indice].respuestaAlumno"
-                    name="respuestaCorrecta"
-                    class=" respuesta"
+                    class="form-control"
+                    name="respuesta"
                     type="text"
-                    [required]="true"
-                    [disabled]="blockQuestions"
+                    autocomplete="off"
                     rows="3"
-                    style="width: 100%;"
+                    [(ngModel)]="reactivoList[indice].respuestaAlumno"
+                    [disabled]="true"
                   ></textarea>
                 </div>
-                <div
-                  *ngIf="
-                    respuestaCorrecta.errors?.['required'] &&
-                    respuestaCorrecta.touched
-                  "
-                  class="error"
-                >
-                  La respuesta es requerida
-                </div>
+
+                <div *ngFor="let reactivo of reactivoList[indice].respuestas" class="field-checkbox">
+                  <p-checkbox 
+                      [label]="reactivo.respuesta1" 
+                      name="group" 
+                      [disabled]="true"
+                      [name]="reactivo.clave"
+                      [ngModel]="validarRespuesta(reactivo.clave , reactivoList[indice].respuestaAlumno)"
+                      [binary]="true"
+                     />
+              </div>
               </div>
               <div
                 class="form-group respuesta"
@@ -169,16 +164,6 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-1 check">
-              <i
-                class="fas fa-check icon upload respuesta"
-                *ngIf="blockQuestions && reactivoList[indice].resultado"
-              ></i>
-              <i
-                class="fas fa-times icon notUpload respuesta"
-                *ngIf="blockQuestions && !reactivoList[indice].resultado"
-              ></i>
-            </div>
           </div>
 
           <div class="row">
@@ -193,7 +178,7 @@
               </button>
               <button
                 type="button"
-                class="btn-primario btn-margin-left btn-cargar"
+                class="btn-primario btn-margin-left"
                 (click)="siguiente()"
                 *ngIf="
                   indice + 1 != reactivoList.length ||
@@ -204,11 +189,11 @@
               </button>
               <button
                 type="button"
-                class="btn-primario btn-margin-left btn-cargar"
+                class="btn-primario btn-margin-left "
                 (click)="terminarExamen()"
                 *ngIf="indice + 1 == reactivoList.length && !blockQuestions"
               >
-                Finalizar Examen
+                Finalizar Cuestionario
               </button>
             </div>
           </div>
@@ -217,7 +202,7 @@
           <div class="row">
             <div class="col-md-12">
               <h1 class="titulo">
-                Gracias por su participación en el examen
+                Gracias por su participación
                 <i>{{ examen.tipoExamen }}</i>
               </h1>
               <h2 class="titulo calificacion">
@@ -232,7 +217,7 @@
             <div class="col-md-12 reglasContainer">
               <ul>
                 <li>
-                  Si hay algún problema con la calificación o el examen favor de
+                  Si hay algún problema con la calificación o el cuestionario favor de
                   comunicarse con un representante.
                 </li>
               </ul>
@@ -253,7 +238,3 @@
   </div>
 </div>
 
-<div id="loading-cdis" *ngIf="submitting">
-  <img src="assets/img/spinner.gif" alt="Procesando..." />
-  <span>Procesando... por favor espere</span>
-</div>

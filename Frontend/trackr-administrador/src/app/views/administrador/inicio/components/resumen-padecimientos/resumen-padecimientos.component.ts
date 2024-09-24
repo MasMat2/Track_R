@@ -33,24 +33,24 @@ export class ResumenPadecimientosComponent implements OnInit {
     )
   }
 
-  protected filtrarPadecimientos(){
-    if(this.padecimientoFiltroSeleccionadoList && this.padecimientoFiltroSeleccionadoList.length > 0){
-      this.padecimientosFiltrados = this.padecimientoFiltroSeleccionadoList;
-      this.cantidadFiltro = this.padecimientosFiltrados.length;
-      this.filtrando = true;
-    }
-    else{
-      this.padecimientos$.subscribe(
-        pads => {
-          this.padecimientosFiltrados = pads;
-          this.filtrando = false;
-        }
-      )
-    }
-  }
+  // protected filtrarPadecimientos(){
+  //   if(this.padecimientoFiltroSeleccionadoList && this.padecimientoFiltroSeleccionadoList.length > 0){
+  //     this.padecimientosFiltrados = this.padecimientoFiltroSeleccionadoList;
+  //     this.cantidadFiltro = this.padecimientosFiltrados.length;
+  //     this.filtrando = true;
+  //   }
+  //   else{
+  //     this.padecimientos$.subscribe(
+  //       pads => {
+  //         this.padecimientosFiltrados = pads;
+  //         this.filtrando = false;
+  //       }
+  //     )
+  //   }
+  // }
 
-  protected activarFiltro(){
-    this.verFiltro = !this.verFiltro;
-  }
+  // protected activarFiltro(){
+  //   this.verFiltro = !this.verFiltro;
+  // }
 
 }

@@ -9,8 +9,8 @@ import { IonicModule } from '@ionic/angular';
 import { AlertController, ModalController } from '@ionic/angular/standalone';
 import { Constants } from '@utils/constants/constants';
 import { addIcons } from 'ionicons';
-import { chevronBack, add, trashOutline} from 'ionicons/icons';
 import { DiagnosticoFormularioComponent } from './diagnostico-formulario/diagnostico-formulario.component';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 
 
 
@@ -29,13 +29,20 @@ import { DiagnosticoFormularioComponent } from './diagnostico-formulario/diagnos
 export class InfoDiagnosticosComponent  implements OnInit {
 
   protected misDiagnosticos: ExpedientePadecimientoDto[];
+  protected eliminandoDiagnostico: boolean = false;
   
   constructor(
     private alertController: AlertController,
     private modalController: ModalController,
     private usuarioService: UsuarioService,
-    private expedientePadecimientoService: ExpedientePadecimientoService
-  ) { addIcons({chevronBack, add, trashOutline}) }
+    private expedientePadecimientoService: ExpedientePadecimientoService,
+    private loadingSpinner: LoadingSpinnerService
+  ) { 
+    addIcons({
+      'chevron-left': 'assets/img/svg/chevron-left.svg',
+      'plus': 'assets/img/svg/plus.svg',
+      'trash': 'assets/img/svg/trash-2.svg',
+    }) }
 
   ngOnInit() {
     this.consultarDiagnosticos();
@@ -44,19 +51,26 @@ export class InfoDiagnosticosComponent  implements OnInit {
 
 
   private consultarDiagnosticos(){
+    this.loadingSpinner.presentLoading();
+
     this.usuarioService.consultarDiagnosticosUsuario().subscribe({
       next:(value) => {
         this.misDiagnosticos = value;
       },
+      error: () => {
+        this.loadingSpinner.dismissLoading();
+      },
+      complete: () => {
+        this.loadingSpinner.dismissLoading();
+      }
     })
   }
 
-  protected async presentarAlertaEliminarDiagnostico(diagnostico: ExpedientePadecimientoDto) {
+  protected async presentarAlertaEliminarDiagnostico(diagnostico: ExpedientePadecimientoDto) { 
     const alert = await this.alertController.create({
       header: '¿Seguro que deseas eliminar este elemento?',
       subHeader: 'No podrás recuperarlo',
-      message: Constants.ALERT_DELETE,
-      cssClass: 'custom-alert-delete',
+      cssClass: 'custom-alert color-error icon-trash two-buttons',
       buttons: [
         {
           text: 'No, regresar',
@@ -79,12 +93,11 @@ export class InfoDiagnosticosComponent  implements OnInit {
 
     const alertSuccess = await this.alertController.create({
       header: 'Elemento eliminado exitosamente',
-      message: Constants.ALERT_SUCCESS,
       buttons: [{
         text: 'De acuerdo',
         role: 'confirm',
       }],
-      cssClass: 'custom-alert-success',
+      cssClass: 'custom-alert color-primary icon-check',
     });
 
     await alertSuccess.present();
@@ -98,22 +111,29 @@ export class InfoDiagnosticosComponent  implements OnInit {
       initialBreakpoint: 1,
       cssClass: 'custom-sheet-modal'
     });
-    modal.onWillDismiss().then(() => {
-      this.consultarDiagnosticos();
-    })
 
     await modal.present();
+
+    const {data, role} = await modal.onWillDismiss();
+    if(role == "confirm"){
+      this.consultarDiagnosticos();
+    }
+    else{
+      return
+    }
   }
 
   private eliminarAntecedente(antecedente: ExpedientePadecimientoDto){
     this.expedientePadecimientoService.eliminar(antecedente.idExpedientePadecimiento).subscribe({
       next: () => {
-        this.consultarDiagnosticos();
+        this.eliminandoDiagnostico = true;
       },
       error: () => {
-
+        this.eliminandoDiagnostico = false;
       },
       complete: () => {
+        this.eliminandoDiagnostico = false;
+        this.consultarDiagnosticos();
         this.presentarAlertaEliminadoExitosamente();
       }
     });

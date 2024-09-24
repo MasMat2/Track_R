@@ -1,4 +1,5 @@
-﻿using TrackrAPI.Dtos.GestionExpediente;
+﻿using Microsoft.EntityFrameworkCore;
+using TrackrAPI.Dtos.GestionExpediente;
 using TrackrAPI.Models;
 
 namespace TrackrAPI.Repositorys.GestionExpediente
@@ -14,6 +15,8 @@ namespace TrackrAPI.Repositorys.GestionExpediente
         public ExpedienteEstudio Consultar(int idExpedienteEstudio)
         {
             return context.ExpedienteEstudio
+                .Include(ee => ee.IdExpedienteNavigation)
+                .Include(ee => ee.IdArchivoNavigation)
                 .Where(ee => ee.IdExpedienteEstudio == idExpedienteEstudio)
                 .FirstOrDefault();
         }
@@ -28,7 +31,8 @@ namespace TrackrAPI.Repositorys.GestionExpediente
                     IdExpediente = ee.IdExpediente,
                     FechaRealizacion = ee.FechaRealizacion,
                     Nombre = ee.Nombre,
-                    ArchivoTipoMime=ee.ArchivoTipoMime
+                    IdArchivo = ee.IdArchivo,
+                    UrlArchivo = ee.ArchivoUrl ?? "",
                 })
                 .ToList();
         }
