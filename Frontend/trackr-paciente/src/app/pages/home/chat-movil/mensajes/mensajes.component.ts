@@ -128,10 +128,6 @@ export class MensajesComponent{
     this.scrollContentToBottom();
   }
   
-  private ensureConnection(): void {
-    this.ChatHubServiceService.iniciarConexion();
-    this.ChatMensajeHubService.iniciarConexion();
-  }
 
   obtenerIdChat() {
     this.router.params.subscribe(params => {

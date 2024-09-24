@@ -45,7 +45,8 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
 
-  private async consultarNotificaciones() {
+  private async consultarNotificaciones() { 
+    //Iniciar conexión con el hub de forma global
     await this.notificacionHubService.iniciarConexion();
     this.notificacionHubService.notificaciones$.pipe(
       map((notificaciones) => {
