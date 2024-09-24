@@ -1,6 +1,6 @@
 Estado de aplicacion en plataforma IOS:
-build ios 121
-Servidor ios: azure
+build ios 123
+Servidor ios: atisc.mx
 Grupo de pruebas: US-IT
 
 Esta actualización aborda y resuelve problemas reportados por los usuarios para mejorar la funcionalidad y la experiencia general de la aplicación:
