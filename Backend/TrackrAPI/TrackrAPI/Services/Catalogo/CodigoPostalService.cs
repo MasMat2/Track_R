@@ -74,11 +74,17 @@ namespace TrackrAPI.Services.Catalogo
 
         public List<EntidadFederativaExcelDto> ConsultarEstadosExcel()
         {
-            string path = "Backend/TrackrAPI/TrackrAPI/Archivos/Excel/ENTIDAD_FEDERATIVA_201602.xlsx";
+            string path = Path.Combine("Archivos", "Excel", "ENTIDAD_FEDERATIVA_201602.xlsx");
             var entidadFederativaList = new List<EntidadFederativaExcelDto>();
 
             // Load the Excel file
             FileInfo fileInfo = new(path);
+
+                // Verificar si el archivo existe
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException($"El archivo Excel no se encontró en la ruta especificada: {path}");
+            }
             // Set the license context
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (ExcelPackage package = new(fileInfo))
@@ -110,12 +116,18 @@ namespace TrackrAPI.Services.Catalogo
 
         public List<MunicipioExcelDto> ConsultarMunicipioExcel()
         {
-               string path = Path.Combine("Backend", "TrackrAPI", "TrackrAPI", "Archivos", "Excel", "MUNICIPIOS_202407.xlsx");
+               string path = Path.Combine("Archivos", "Excel", "MUNICIPIOS_202407.xlsx");
 
             var municipioList = new List<MunicipioExcelDto>();
 
             // Load the Excel file
             FileInfo fileInfo = new(path);
+
+                // Verificar si el archivo existe
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException($"El archivo Excel no se encontró en la ruta especificada: {path}");
+            }
             // Set the license context
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (ExcelPackage package = new(fileInfo))
@@ -219,11 +231,17 @@ namespace TrackrAPI.Services.Catalogo
         }
         private List<CodigoPostalExcelDto> ConsultarCodigoPostalExcel()
         {
-            string path = "Backend/TrackrAPI/TrackrAPI/Archivos/Excel/CODIGO_POSTAL_20240819.xlsx";
+            string path = Path.Combine("Archivos", "Excel", "CODIGO_POSTAL_20240819.xlsx");
             var codigoPostalList = new List<CodigoPostalExcelDto>();
 
             // Load the Excel file
             FileInfo fileInfo = new FileInfo(path);
+
+                // Verificar si el archivo existe
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException($"El archivo Excel no se encontró en la ruta especificada: {path}");
+            }
             // Set the license context
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (ExcelPackage package = new ExcelPackage(fileInfo))
