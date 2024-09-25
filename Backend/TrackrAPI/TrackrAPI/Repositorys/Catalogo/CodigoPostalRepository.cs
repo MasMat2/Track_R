@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Repositorys.Catalogo
 {
@@ -115,36 +116,61 @@ namespace TrackrAPI.Repositorys.Catalogo
                       .FirstOrDefault();
         }
 
-    public void BulkInsert(List<CodigoPostal> codigoPostalList)
+public void BulkInsert(List<CodigoPostal> codigoPostalList)
     {
-  
-        using (var connection = new SqlConnection(connectionString))
+        const int batchSize = 10000; // Tamaño del lote
+        var totalBatches = (int)Math.Ceiling((double)codigoPostalList.Count / batchSize);
+
+        try
         {
-            connection.Open();
-
-            using (var bulkCopy = new SqlBulkCopy(connection))
+            using (var connection = new SqlConnection(connectionString))
             {
-                bulkCopy.DestinationTableName = "Configuracion.CodigoPostal";
+                connection.Open();
 
-                // Mapear las columnas
-                bulkCopy.ColumnMappings.Add("CodigoPostal1", "CodigoPostal");
-                bulkCopy.ColumnMappings.Add("Colonia", "Colonia");
-                bulkCopy.ColumnMappings.Add("IdMunicipio", "IdMunicipio");
-
-                // Crear DataTable a partir de la lista
-                var table = new DataTable();
-                table.Columns.Add("CodigoPostal1", typeof(string));
-                table.Columns.Add("Colonia", typeof(string));
-                table.Columns.Add("IdMunicipio", typeof(int));
-
-                foreach (var codigoPostal in codigoPostalList)
+                for (int batch = 0; batch < totalBatches; batch++)
                 {
-                    table.Rows.Add(codigoPostal.CodigoPostal1, codigoPostal.Colonia, codigoPostal.IdMunicipio);
-                }
+                    using (var bulkCopy = new SqlBulkCopy(connection))
+                    {
+                        // Especificar el esquema y el nombre de la tabla
+                        bulkCopy.DestinationTableName = "Configuracion.CodigoPostal";
 
-                bulkCopy.WriteToServer(table);
+                        // Aumentar el tiempo de espera
+                        bulkCopy.BulkCopyTimeout = 600; // Tiempo de espera en segundos (10 minutos)
+
+                        // Mapear las columnas
+                        bulkCopy.ColumnMappings.Add("CodigoPostal1", "CodigoPostal");
+                        bulkCopy.ColumnMappings.Add("Colonia", "Colonia");
+                        bulkCopy.ColumnMappings.Add("IdMunicipio", "IdMunicipio");
+
+                        // Crear DataTable a partir del lote
+                        var table = new DataTable();
+                        table.Columns.Add("CodigoPostal1", typeof(string));
+                        table.Columns.Add("Colonia", typeof(string));
+                        table.Columns.Add("IdMunicipio", typeof(int));
+
+                        var batchItems = codigoPostalList.Skip(batch * batchSize).Take(batchSize);
+                        foreach (var codigoPostal in batchItems)
+                        {
+                            table.Rows.Add(codigoPostal.CodigoPostal1, codigoPostal.Colonia, codigoPostal.IdMunicipio);
+                        }
+
+                        // Realizar el bulk insert
+                        bulkCopy.WriteToServer(table);
+                    }
+                }
             }
         }
+        catch (SqlException ex)
+        {
+            // Manejo de excepciones SQL
+            throw new CdisException($"Error al realizar el bulk insert: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            // Manejo de excepciones generales
+            throw new CdisException($"Error inesperado: {ex.Message}");
+        }
     }
-    }
+}
+
 }
