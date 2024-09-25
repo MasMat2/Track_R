@@ -14,5 +14,6 @@ namespace TrackrAPI.Repositorys.Catalogo
         public IEnumerable<CodigoPostalDto> ConsultarPorMunicipio(int idMunicipio);
         public IEnumerable<CodigoPostalDto> ConsultarPorPaisBusqueda(string codigoPostal, int idPais);
         public CodigoPostal ConsultarPorColonia(string colonia);
+        public void BulkInsert(List<CodigoPostal> codigoPostalList);
     }
 }

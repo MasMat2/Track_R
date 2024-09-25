@@ -146,7 +146,6 @@ namespace TrackrAPI.Services.Catalogo
                     };
 
                     municipioList.Add(municipio);
-                    Console.WriteLine(municipio.CVE_ENT + " " + municipio.CVE_MUN + " " + municipio.NOM_MUN);
                 }
             }
 
@@ -290,12 +289,11 @@ namespace TrackrAPI.Services.Catalogo
         }
         public void CargaExcel()
         {
-
-
             var municipiosExcel = MapearMunicipios();
             var codigoPostalExcel = ConsultarCodigoPostalExcel();
-            var codigoPostalList = new ConcurrentBag<CodigoPostal>();
 
+            var codigoPostalList = new ConcurrentBag<CodigoPostal>();
+        
             var municipiosDict = municipiosExcel
             .GroupBy(m => m.CVE_MUN)
             .ToDictionary(g => g.Key, g => g.First());
@@ -322,11 +320,9 @@ namespace TrackrAPI.Services.Catalogo
                 }
             });
 
-            // Convertir ConcurrentBag a List
             var finalCodigoPostalList = codigoPostalList.ToList();
-
             codigoPostalRepository.Truncate();
-            codigoPostalRepository.Agregar(finalCodigoPostalList);
+            codigoPostalRepository.BulkInsert(finalCodigoPostalList);
         }
 
 
