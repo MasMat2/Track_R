@@ -53,6 +53,11 @@ namespace TrackrAPI.Repositorys.Catalogo
                       .ToList();
         }
 
+        public IEnumerable<CodigoPostal> ConsultarTodos()
+        {
+            return context.CodigoPostal;
+        }
+
         public IEnumerable<CodigoPostalDto> ConsultarPorCodigoPostal(string codigoPostal)
         {
             return context.CodigoPostal

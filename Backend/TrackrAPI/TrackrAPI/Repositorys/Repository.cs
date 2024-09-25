@@ -79,6 +79,12 @@ namespace TrackrAPI.Repositorys
             }
         }
 
+        public void Truncate()
+        {
+            var tableName = context.Model.FindEntityType(typeof(T)).GetTableName();
+            context.Database.ExecuteSqlRaw($"TRUNCATE TABLE {tableName}");
+        }
+
         public void Editar(IEnumerable<T> objetos)
         {
             foreach (T objeto in objetos)

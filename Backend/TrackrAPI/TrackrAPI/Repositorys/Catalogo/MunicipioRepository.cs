@@ -71,4 +71,16 @@ public class MunicipioRepository : Repository<Municipio>, IMunicipioRepository
             .Where(m => m.IdMunicipio == idMunicipio)
             .FirstOrDefault();
     }
+
+    public Municipio? ConsultarPorNombre(string nombre)
+    {
+        return context.Municipio
+            .Where(m => m.Nombre.ToLower() == nombre.ToLower())
+            .FirstOrDefault();
+    }
+
+    public IEnumerable<Municipio> ConsultarTodos()
+    {
+        return context.Municipio;
+    }
 }
