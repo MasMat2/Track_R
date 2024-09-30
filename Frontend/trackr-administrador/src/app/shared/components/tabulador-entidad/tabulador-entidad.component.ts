@@ -13,6 +13,8 @@ import * as Utileria from '@utils/utileria';
 import * as moment from 'moment';
 import { MensajeService } from '../mensaje/mensaje.service';
 import { ExternalTemplate } from './external-template';
+import { ActivatedRoute } from '@angular/router';
+import { EncryptionService } from '@services/encryption.service';
 
 /**
  * Componente que por medio de la entidad que recibe, renderiza las tabulaciónes y sus contenidos en base a su estructura.
@@ -41,6 +43,7 @@ export class TabuladorEntidadComponent implements OnInit {
 
   public loading: boolean = true;
   public btnSubmit: boolean = false;
+  private idPadecimiento : number;
 
   public entidadEstructuras: EntidadEstructura[] = [];
 
@@ -50,13 +53,31 @@ export class TabuladorEntidadComponent implements OnInit {
     private entidadEstructuraTablaValorService: EntidadEstructuraTablaValorService,
     private entidadService: EntidadService,
     private mensajeService: MensajeService,
-    private cdr : ChangeDetectorRef
+    private cdr : ChangeDetectorRef,
+    private activatedRoute : ActivatedRoute,
+    private encryptionService : EncryptionService
   ) { }
 
-  public async ngOnInit() : Promise<void> {
-    const idEntidad = await this.consultarIdEntidad(this.claveEntidad);
-    await this.consultarEntidadEstructura(idEntidad);
-    this.onSelectTabChange(0);
+  public async ngOnInit(): Promise<void> {
+    this.activatedRoute.queryParams.subscribe(async (params) => {
+      this.idPadecimiento = Number(
+        this.encryptionService.readUrlParams(params).p
+      );
+
+      const idEntidad = await this.consultarIdEntidad(this.claveEntidad);
+      await this.consultarEntidadEstructura(idEntidad);
+      var tabulacionFiltro = this.externalTemplates.find((template) => {
+        return template.args['idPadecimiento'] === this.idPadecimiento;
+      });
+
+      var tabulacionIndex = 0;
+      if (tabulacionFiltro) {
+        var tabulacionIndex = this.externalTemplates.indexOf(tabulacionFiltro);
+        this.selectedTab = tabulacionIndex;
+      }
+
+      this.onSelectTabChange(tabulacionIndex);
+    });
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -93,8 +114,7 @@ export class TabuladorEntidadComponent implements OnInit {
     this.enviarFormularioExterno.emit(true);
   }
 
-  public async onSelectTabChange(index: number): Promise<void> {
-
+  public async onSelectTabChange(index: number): Promise<void> {   
     const externalTemplatesLength = this.externalTemplates.length;
 
     this.selectedTab = index;

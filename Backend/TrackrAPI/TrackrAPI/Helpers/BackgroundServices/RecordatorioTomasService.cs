@@ -126,6 +126,7 @@ public class RecordatorioTomasService : IRecordatorioTomasService
                 recordatorio.Hora.ToString(),
                 6,
                 null,
+                null,
                 null
             );
 

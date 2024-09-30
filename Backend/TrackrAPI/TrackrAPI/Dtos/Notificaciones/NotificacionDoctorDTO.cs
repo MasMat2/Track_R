@@ -13,5 +13,6 @@ public record NotificacionDoctorDTO(
     int IdPaciente,
     string ? Imagen,
     int ? IdChat,
-    string ? ClaveTipoNotificacion
+    string ? ClaveTipoNotificacion,
+    int ? IdPadecimiento
 );
