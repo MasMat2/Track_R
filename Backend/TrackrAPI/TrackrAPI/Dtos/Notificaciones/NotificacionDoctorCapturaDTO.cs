@@ -6,5 +6,6 @@ public record NotificacionDoctorCapturaDTO(
     int IdTipoNotificacion,
     int IdPaciente,
     int ? IdPersona,
-    int ? IdChat
+    int ? IdChat,
+    int ? IdPadecimiento
 );

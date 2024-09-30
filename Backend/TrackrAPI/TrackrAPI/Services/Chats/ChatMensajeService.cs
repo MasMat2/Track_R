@@ -126,8 +126,8 @@ public class ChatMensajeService
         }
 
      
-        var notificacionDoctor = new NotificacionDoctorCapturaDTO(mensaje.Mensaje, null, idTipoNotificacion, mensaje.IdPersona, mensaje.IdPersona, mensaje.IdChat);
-        var notificacionPaciente = new NotificacionCapturaDTO(usuarioEmisor.ObtenerNombreCompleto(), mensaje.Mensaje, null, idTipoNotificacion, mensaje.IdPersona, mensaje.IdChat);
+        var notificacionDoctor = new NotificacionDoctorCapturaDTO(mensaje.Mensaje, null, idTipoNotificacion, mensaje.IdPersona, mensaje.IdPersona, mensaje.IdChat, null);
+        var notificacionPaciente = new NotificacionCapturaDTO(usuarioEmisor.ObtenerNombreCompleto(), mensaje.Mensaje, null, idTipoNotificacion, mensaje.IdPersona, mensaje.IdChat, null);
 
         await _notificacionDoctorService.Notificar(notificacionDoctor, idsMedicosChat);
         await _notificacionPacienteService.Notificar(notificacionPaciente, idsPacientesChat);

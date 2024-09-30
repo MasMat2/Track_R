@@ -70,6 +70,7 @@ public class ExpedienteRecomendacionService
             null,
             5,
             doctor.IdUsuario,
+            null,
             null
         );
 

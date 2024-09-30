@@ -8,4 +8,5 @@ export interface NotificacionDoctorDTO extends NotificacionUsuarioBaseDTO {
   imagen?:string;
   idChat?:number;
   claveTipoNotificacion: string;
+  idPadecimiento?: number;
 }

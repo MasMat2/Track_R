@@ -64,7 +64,9 @@ public class NotificacionDoctorService
             idPaciente,
             img,
             notificacionDto.IdChat,
-            claveNotificacion
+            claveNotificacion,
+            null
+            
         );
     }
 
@@ -83,7 +85,8 @@ public class NotificacionDoctorService
             notificacionDoctorDto.ComplementoMensaje,
             notificacionDoctorDto.IdTipoNotificacion,
             notificacionDoctorDto.IdPersona,
-            notificacionDoctorDto.IdChat);
+            notificacionDoctorDto.IdChat,
+            notificacionDoctorDto.IdPadecimiento);
 
         return notificacionDto;
     }
