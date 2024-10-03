@@ -13,5 +13,6 @@ namespace TrackrAPI.Repositorys
         void Editar(IEnumerable<T> objetos);
         void Eliminar(T objeto);
         void Eliminar(IEnumerable<T> objetos);
+        void Truncate();
     }
 }

@@ -146,7 +146,8 @@ namespace TrackrAPI.Services.GestionEntidad
                         4,
                         idUsuario,
                         idUsuario,
-                        null
+                        null,
+                        IdEntidadEstructuraHijo
                     );
                     await _notificacionDoctorService.Notificar(notificacion, idsDoctores);
                 }

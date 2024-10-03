@@ -120,10 +120,10 @@ export class MisCuestionariosComponent  implements OnInit, OnDestroy {
   protected responderCuestionario(idExamen: number) {
     this.examenService.consultarMiExamenIndividual(idExamen)
       .subscribe((examen) => {
-          if (!this.esFechaValida(examen)) {
+/*           if (!this.esFechaValida(examen)) {
            this.presentAlertError();
            return;
-         }
+         } */
          this.navigateResponderCuestionario(idExamen);
       });
   }

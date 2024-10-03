@@ -44,25 +44,24 @@ export class LoginService {
   }
 
   public authenticate(loginRequest: LoginRequest): Observable<LoginResponse> {
-    if (!this.publicKey) {
-      return throwError(() => new Error('Public key is not set.'));
-    }
-
-
-    return observableFrom(this.isPublicKeyReady()).pipe(
+    return observableFrom(this.setServerPublicKey()).pipe(
       switchMap(() => {
+        if (!this.publicKey) {
+          return throwError(() => new Error('Public key is not set.'));
+        }
+  
         // Copy loginRequest to encrypt password, and keep original loginRequest object
         var encryptedLoginRequest = new LoginRequest();
         Object.assign(encryptedLoginRequest, loginRequest);
         
         // Encrypt the password
         const encrypted = this.publicKey.encrypt(loginRequest.contrasena, "RSA-OAEP");
-
+  
         // Convert to Base64 string
         encryptedLoginRequest.contrasena = forge.util.encode64(encrypted);
-
+  
         var esMobile = false;
-
+  
         return this.http.post<LoginResponse>(this.dataUrl + `authenticate/${esMobile}`, encryptedLoginRequest);
       }),
       catchError(error => {

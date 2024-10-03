@@ -6,5 +6,6 @@ public record NotificacionCapturaDTO(
     string? ComplementoMensaje,
     int IdTipoNotificacion,
     int ? IdPersona,
-    int ? IdChat
+    int ? IdChat,
+    int ? IdPadecimiento
 );

@@ -73,4 +73,62 @@ export class RestablecerContrasenaComponent implements OnInit {
     this.procesarActualizacion(this.restablecerContrasena);
   }
 
+  protected contrasenasCoincidenValidation(): boolean {
+    if(this.restablecerContrasena.contrasenaActualizada != this.confirmarContrasena){
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
+  protected contrasenaMinimoCaracteresValidation(){
+    const minCaracteres = 8;
+    if(this.restablecerContrasena.contrasenaActualizada?.length < minCaracteres){
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
+  protected contrasenaNumerosYSimbolosValidation(){
+    if (!/\d/.test(this.restablecerContrasena.contrasenaActualizada) || !/[!@#$%^&*(),.?":{}|<>]/.test(this.restablecerContrasena.contrasenaActualizada)) {
+      return false;
+    }
+    else{
+      return true;
+    };
+  }
+
+  protected contrasenaMayusculasYMinusculasValidation(){
+    if (!/[A-Z]/.test(this.restablecerContrasena.contrasenaActualizada) || !/[a-z]/.test(this.restablecerContrasena.contrasenaActualizada)){
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
+  protected contrasenaContieneEspacios(){
+    if (/\s/.test(this.restablecerContrasena.contrasenaActualizada)) {
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  protected contrasenaValida(){
+    return(
+      this.contrasenasCoincidenValidation() &&
+      this.contrasenaNumerosYSimbolosValidation() &&
+      this.contrasenaMayusculasYMinusculasValidation() &&
+      this.contrasenaMinimoCaracteresValidation() &&
+      !this.contrasenaContieneEspacios()
+    )
+  }
+
+
+
 }

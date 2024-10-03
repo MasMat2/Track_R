@@ -1819,6 +1819,11 @@ namespace TrackrAPI.Models
                     .HasForeignKey(d => d.IdChat)
                     .HasConstraintName("FK_Notificacion_Chat");
 
+                entity.HasOne(d => d.IdPadecimientoNavigation)
+                    .WithMany(p => p.Notificacion)
+                    .HasForeignKey(d => d.IdPadecimiento)
+                    .HasConstraintName("FK_Notificacion_EntidadEstructura");
+
                 entity.HasOne(d => d.IdPersonaNavigation)
                     .WithMany(p => p.Notificacion)
                     .HasForeignKey(d => d.IdPersona)

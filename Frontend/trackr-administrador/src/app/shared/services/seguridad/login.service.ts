@@ -22,16 +22,21 @@ export class LoginService {
     return new Promise<void>((resolve, reject) => {
       this.http.get(this.dataUrl + 'obtenerLlavePublica', { responseType: 'text' }).subscribe({
         next: (publicKeyBase64: string) => {
-          const publicKeyBytes = forge.util.decode64(publicKeyBase64);
-          const publicKeyAsn1 = forge.asn1.fromDer(publicKeyBytes);
-          this.publicKey = forge.pki.publicKeyFromAsn1(publicKeyAsn1);
-          resolve();
+          try {
+            const publicKeyBytes = forge.util.decode64(publicKeyBase64);
+            const publicKeyAsn1 = forge.asn1.fromDer(publicKeyBytes);
+            this.publicKey = forge.pki.publicKeyFromAsn1(publicKeyAsn1);
+            resolve();
+          } catch (error) {
+            console.error('Failed to set public key:', error);
+            reject(error);
+          }
         },
         error: (error) => {
+          console.error('Failed to fetch public key:', error);
           reject(error);
         }
-      }
-      );
+      });
     });
   }
 
@@ -43,25 +48,24 @@ export class LoginService {
   }
 
   public authenticate(loginRequest: LoginRequest): Observable<LoginResponse> {
-    if (!this.publicKey) {
-      return throwError(() => new Error('Public key is not set.'));
-    }
-
-
-    return observableFrom(this.isPublicKeyReady()).pipe(
+    return observableFrom(this.setServerPublicKey()).pipe(
       switchMap(() => {
+        if (!this.publicKey) {
+          return throwError(() => new Error('Public key is not set.'));
+        }
+  
         // Copy loginRequest to encrypt password, and keep original loginRequest object
         var encryptedLoginRequest = new LoginRequest();
         Object.assign(encryptedLoginRequest, loginRequest);
         
         // Encrypt the password
         const encrypted = this.publicKey.encrypt(loginRequest.contrasena, "RSA-OAEP");
-
+  
         // Convert to Base64 string
         encryptedLoginRequest.contrasena = forge.util.encode64(encrypted);
-
+  
         var esMobile = false;
-
+  
         return this.http.post<LoginResponse>(this.dataUrl + `authenticate/${esMobile}`, encryptedLoginRequest);
       }),
       catchError(error => {

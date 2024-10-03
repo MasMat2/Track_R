@@ -41,4 +41,9 @@ export class MunicipioService {
   public eliminar(idEstado: number): Observable<void> {
     return this.http.delete<void>(this.dataUrl + `${idEstado}`);
   }
+
+  public sincronizarMunicipiosExcel(): Observable<void> {
+    return this.http.post<void>(this.dataUrl + 'actualizarEstadosExcel', null);
+  }
+
 }

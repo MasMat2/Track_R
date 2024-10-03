@@ -12,6 +12,7 @@ namespace TrackrAPI.Models
             ExpedientePadecimiento = new HashSet<ExpedientePadecimiento>();
             ExpedienteTratamiento = new HashSet<ExpedienteTratamiento>();
             InverseIdEntidadEstructuraPadreNavigation = new HashSet<EntidadEstructura>();
+            Notificacion = new HashSet<Notificacion>();
             Widget = new HashSet<Widget>();
         }
 
@@ -36,6 +37,7 @@ namespace TrackrAPI.Models
         public virtual ICollection<ExpedientePadecimiento> ExpedientePadecimiento { get; set; }
         public virtual ICollection<ExpedienteTratamiento> ExpedienteTratamiento { get; set; }
         public virtual ICollection<EntidadEstructura> InverseIdEntidadEstructuraPadreNavigation { get; set; }
+        public virtual ICollection<Notificacion> Notificacion { get; set; }
         public virtual ICollection<Widget> Widget { get; set; }
     }
 }

@@ -3,13 +3,18 @@ using TrackrAPI.Dtos.Catalogo;
 using TrackrAPI.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Data.SqlClient;
+using System.Data;
+using TrackrAPI.Helpers;
 
 namespace TrackrAPI.Repositorys.Catalogo
 {
     public class CodigoPostalRepository : Repository<CodigoPostal>, ICodigoPostalRepository
     {
-        public CodigoPostalRepository(TrackrContext context): base(context)
+        private readonly string connectionString;
+        public CodigoPostalRepository(TrackrContext context, IConfiguration configuration): base(context)
         {
+            this.connectionString = configuration.GetConnectionString("DefaultConnection");
             base.context = context;
         }
 
@@ -51,6 +56,11 @@ namespace TrackrAPI.Repositorys.Catalogo
                           e.IdMunicipio,
                           e.IdMunicipioNavigation.IdEstadoNavigation.Nombre))
                       .ToList();
+        }
+
+        public IEnumerable<CodigoPostal> ConsultarTodos()
+        {
+            return context.CodigoPostal;
         }
 
         public IEnumerable<CodigoPostalDto> ConsultarPorCodigoPostal(string codigoPostal)
@@ -105,5 +115,62 @@ namespace TrackrAPI.Repositorys.Catalogo
                       .Where(e => e.Colonia == colonia)
                       .FirstOrDefault();
         }
+
+public void BulkInsert(List<CodigoPostal> codigoPostalList)
+    {
+        const int batchSize = 10000; // Tamaño del lote
+        var totalBatches = (int)Math.Ceiling((double)codigoPostalList.Count / batchSize);
+
+        try
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                for (int batch = 0; batch < totalBatches; batch++)
+                {
+                    using (var bulkCopy = new SqlBulkCopy(connection))
+                    {
+                        // Especificar el esquema y el nombre de la tabla
+                        bulkCopy.DestinationTableName = "Configuracion.CodigoPostal";
+
+                        // Aumentar el tiempo de espera
+                        bulkCopy.BulkCopyTimeout = 600; // Tiempo de espera en segundos (10 minutos)
+
+                        // Mapear las columnas
+                        bulkCopy.ColumnMappings.Add("CodigoPostal1", "CodigoPostal");
+                        bulkCopy.ColumnMappings.Add("Colonia", "Colonia");
+                        bulkCopy.ColumnMappings.Add("IdMunicipio", "IdMunicipio");
+
+                        // Crear DataTable a partir del lote
+                        var table = new DataTable();
+                        table.Columns.Add("CodigoPostal1", typeof(string));
+                        table.Columns.Add("Colonia", typeof(string));
+                        table.Columns.Add("IdMunicipio", typeof(int));
+
+                        var batchItems = codigoPostalList.Skip(batch * batchSize).Take(batchSize);
+                        foreach (var codigoPostal in batchItems)
+                        {
+                            table.Rows.Add(codigoPostal.CodigoPostal1, codigoPostal.Colonia, codigoPostal.IdMunicipio);
+                        }
+
+                        // Realizar el bulk insert
+                        bulkCopy.WriteToServer(table);
+                    }
+                }
+            }
+        }
+        catch (SqlException ex)
+        {
+            // Manejo de excepciones SQL
+            throw new CdisException($"Error al realizar el bulk insert: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            // Manejo de excepciones generales
+            throw new CdisException($"Error inesperado: {ex.Message}");
+        }
     }
+}
+
 }

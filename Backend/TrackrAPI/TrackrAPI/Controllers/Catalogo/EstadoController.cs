@@ -58,5 +58,13 @@ namespace TrackrAPI.Controllers.Catalogo
         {
             estadoService.Eliminar(idEstado);
         }
+
+        [HttpPost("actualizarEstadosExcel")]
+        public void SincronizarPlantillaExcel()
+        {
+            estadoService.SincronizarPlantillaExcel();
+        }
+
+        
     }
 }
