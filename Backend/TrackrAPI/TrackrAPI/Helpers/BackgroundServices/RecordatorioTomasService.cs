@@ -118,19 +118,19 @@ public class RecordatorioTomasService : IRecordatorioTomasService
         {
 
             var mensajeNotificacion = $"Tomar {recordatorio.IdExpedienteTratamientoNavigation.Cantidad} {recordatorio.IdExpedienteTratamientoNavigation.Unidad}";
-
+            var idUsuario = recordatorio.IdExpedienteTratamientoNavigation.IdExpedienteNavigation.IdUsuario;
             var notificacion = new NotificacionCapturaDTO
             (
                 recordatorio.IdExpedienteTratamientoNavigation.Farmaco,
                 mensajeNotificacion,
                 recordatorio.Hora.ToString(),
                 6,
-                null,
+                idUsuario,
                 null,
                 null
             );
 
-            var notificacionInsertada = await notificacionPacienteService.Notificar(notificacion , recordatorio.IdExpedienteTratamientoNavigation.IdExpedienteNavigation.IdUsuario);
+            var notificacionInsertada = await notificacionPacienteService.Notificar(notificacion , idUsuario);
 
             var toma = new TratamientoToma
             {
