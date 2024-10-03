@@ -198,9 +198,6 @@ namespace TrackrAPI.Services.Seguridad
                     </body>
                 ";
 
-            AlternateView htmlView = AlternateView.CreateAlternateViewFromString(mensaje, null, MediaTypeNames.Text.Html);
-            htmlView.LinkedResources.Add(logotipoHospital);
-
             var correo = new Correo
             {
                 Receptor = usuarioCompleto.CorreoPersonal,
