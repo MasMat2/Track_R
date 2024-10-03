@@ -74,7 +74,7 @@ namespace TrackrAPI.Controllers.Catalogo
         }
 
         [HttpPost]
-        [Route("cargaExcel")]
+        [Route("actualizarCodigosPostalesExcel")]
         public void CargaExcel()
         {
             codigoPostalService.CargaExcel();

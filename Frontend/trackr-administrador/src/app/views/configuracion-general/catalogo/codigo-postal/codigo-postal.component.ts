@@ -7,6 +7,10 @@ import { CodigoAcceso } from '@utils/codigo-acceso';
 import { GeneralConstant } from '@utils/general-constant';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { CodigoPostalFormularioComponent } from './codigo-postal-formulario/codigo-postal-formulario.component';
+import { ArchivoService } from '@http/catalogo/archivo.service';
+import { LoadingSpinnerService } from '@services/loading-spinner.service';
+import { ArchivoCarga } from '@dtos/archivos/archivo-carga';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-codigo-postal',
@@ -37,6 +41,8 @@ export class CodigoPostalComponent implements OnInit {
     private modalService: BsModalService,
     private bsModalRef: BsModalRef,
     private codigoPostalService: CodigoPostalService,
+    private archivoService : ArchivoService,
+    private loadingSpinnerService: LoadingSpinnerService
 
   ) { }
 
@@ -113,5 +119,77 @@ export class CodigoPostalComponent implements OnInit {
         });
       });
   }
+
+  protected sincronizarPlantilla(): void {
+    this.loadingSpinnerService.openSpinner();
+    this.codigoPostalService.sincronizarEstadosExcel().subscribe({
+      next: () => {
+        this.mensajeService.modalExito('Códigos postales sincronizados correctamente');
+        this.consultarGrid();
+        this.loadingSpinnerService.closeSpinner();
+      },
+      error: (err) => {
+        console.error('Error al sincronizar los códigos postales:', err);
+        this.loadingSpinnerService.closeSpinner();
+      },
+    });
+  }
+
+  protected subirPlantilla(){
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.xlsx';
+
+    input.onchange = (event: Event) => {
+      if (event && event.target && (event.target as HTMLInputElement).files) {
+        const file: File = (event.target as HTMLInputElement).files![0];
+        if (file) {
+
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => {
+
+            // Eliminar el prefijo data:[<mediatype>][;base64], de la cadena Base64
+            const base64String = (reader.result as string).split(',')[1];
+
+            const archivoCargaExcel = {
+              archivoBase64: base64String,
+              archivoNombre: file.name,
+              archivoTipoMime: file.type
+            } as unknown as ArchivoCarga;
+
+            this.loadingSpinnerService.openSpinner();
+            this.archivoService.subirArchivoCargaMasivaCodigosPostales(archivoCargaExcel).subscribe({
+              next: () => {
+                this.mensajeService.modalExito('Estados cargados correctamente');
+                this.consultarGrid();
+                this.loadingSpinnerService.closeSpinner();
+               
+              },
+              error: (err) => {
+                console.error('Error al cargar los estados:', err);
+                this.loadingSpinnerService.closeSpinner();              }
+            });
+          }
+
+   
+        }
+      }
+    };
+
+    input.click();
+  }
+
+
+  protected descargarPlantilla(){
+    this.archivoService.descargarPlantillaCargaMasivaCodigosPostales().subscribe((data) => {
+      const a = document.createElement('a');
+      const objectUrl = URL.createObjectURL(data);
+      a.href = objectUrl;
+      a.download = 'PlantillaCargaMasivaCodigosPostales.xlsx';
+      a.click();
+      URL.revokeObjectURL(objectUrl);
+    });
+}
 
 }

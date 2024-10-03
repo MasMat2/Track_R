@@ -51,4 +51,9 @@ export class ArchivoService {
             responseType: 'blob'
         });
     }
+
+    public subirArchivoCargaMasivaCodigosPostales(archivo: ArchivoCarga): Observable<any> {
+        return this.http.post(this.dataUrl + 'subirArchivoCargaMasivaCodigosPostales',archivo);
+    }
+
 }

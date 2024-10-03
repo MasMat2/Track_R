@@ -3,6 +3,8 @@ using TrackrAPI.Models;
 using TrackrAPI.Repositorys.Catalogo;
 using OfficeOpenXml;
 using System.Collections.Concurrent;
+using TrackrAPI.Helpers;
+using TrackrAPI.Dtos.Archivos;
 
 namespace TrackrAPI.Services.Catalogo
 {
@@ -14,13 +16,15 @@ namespace TrackrAPI.Services.Catalogo
         private readonly IMunicipioRepository _municipioRepository;
         private readonly EstadoService _estadoService;
         private readonly MunicipioService _municipioService;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
         public CodigoPostalService(ICodigoPostalRepository codigoPostalRepository,
              CodigoPostalValidatorService codigoPostalValidatorService,
              IEstadoRepository estadoRepository,
              IMunicipioRepository municipioRepository,
              EstadoService estadoService,
-             MunicipioService municipioService)
+             MunicipioService municipioService,
+             IWebHostEnvironment hostingEnvironment)
         {
             this.codigoPostalRepository = codigoPostalRepository;
             this.codigoPostalValidatorService = codigoPostalValidatorService;
@@ -28,6 +32,7 @@ namespace TrackrAPI.Services.Catalogo
             _municipioRepository = municipioRepository;
             _estadoService = estadoService;
             _municipioService = municipioService;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         public CodigoPostalDto ConsultarDto(int idCodigoPostal)
@@ -80,6 +85,80 @@ namespace TrackrAPI.Services.Catalogo
 
 
         // Existing methods...
+
+        private static void ValidarFormatoExcel(string excelBase64)
+        {
+            byte[] fileBytes = Convert.FromBase64String(excelBase64);
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            using MemoryStream stream = new(fileBytes);
+            using ExcelPackage package = new(stream);
+            try
+            {
+                // Obtener la primera hoja de cálculo
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+
+
+                // Verificar la existencia de las columnas esperadas
+                if (worksheet.Cells[1, 1].Text != "d_codigo" ||
+                    worksheet.Cells[1, 2].Text != "d_asenta" ||
+                    worksheet.Cells[1, 3].Text != "d_tipo_asenta" ||
+                    worksheet.Cells[1, 4].Text != "D_mnpio" ||
+                    worksheet.Cells[1, 5].Text != "d_estado" ||
+                    worksheet.Cells[1, 6].Text != "d_ciudad" ||
+                    worksheet.Cells[1, 7].Text != "d_CP" ||
+                    worksheet.Cells[1, 8].Text != "c_estado" ||
+                    worksheet.Cells[1, 9].Text != "c_oficina" ||
+                    worksheet.Cells[1, 10].Text != "c_CP" ||
+                    worksheet.Cells[1, 11].Text != "c_tipo_asenta" ||
+                    worksheet.Cells[1, 12].Text != "c_mnpio" ||
+                    worksheet.Cells[1, 13].Text != "id_asenta_cpcons" ||
+                    worksheet.Cells[1, 14].Text != "d_zona" ||
+                    worksheet.Cells[1, 15].Text != "c_cve_ciudad")
+                {
+                    throw new FormatException("El formato del archivo Excel no es válido. Las columnas esperadas no están presentes.");
+                }
+
+
+    
+            }
+            catch
+            {
+                throw new CdisException("El archivo Excel no tiene el formato correcto. Verifique que el archivo tenga el formato correcto y vuelva a intentarlo.");
+            }
+        }
+
+        public async Task SubirArchivoExcel(ArchivoCarga archivo)
+        {
+            ValidarFormatoExcel(archivo.ArchivoBase64);
+
+            if (archivo == null || string.IsNullOrEmpty(archivo.ArchivoBase64))
+            {
+                throw new CdisException("No se proporcionó un archivo para subir.");
+            }
+
+            var path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Excel", GeneralConstant.NombreExcelCodigoPostal);
+
+            // Ensure the directory exists
+            var directory = Path.GetDirectoryName(path);
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            // Delete the existing file if it exists
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+
+            // Decode the Base64 string
+            byte[] fileBytes = Convert.FromBase64String(archivo.ArchivoBase64);
+
+            // Save the file
+            await File.WriteAllBytesAsync(path, fileBytes);
+        }
 
         private List<CodigoPostalExcelDto> ConsultarCodigoPostalExcel()
         {

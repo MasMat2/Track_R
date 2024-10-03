@@ -45,4 +45,8 @@ export class CodigoPostalService {
   eliminar(idCodigoPostal: number): Observable<void> {
     return this.http.delete<void>(this.dataUrl + `eliminar/${idCodigoPostal}`);
   }
+
+  sincronizarEstadosExcel(): Observable<void> {
+    return this.http.post<void>(this.dataUrl + 'actualizarCodigosPostalesExcel', null);
+  }
 }
