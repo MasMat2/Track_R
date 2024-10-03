@@ -7,6 +7,7 @@ namespace TrackrAPI.Repositorys.Catalogo
     public interface IEstadoRepository : IRepository<Estado>
     {
         IEnumerable<Estado> ConsultarParaGrid();
+        IEnumerable<Estado> ConsultarTodos();
         IEnumerable<Estado> ConsultarPorPais(int idPais);
         Estado? Consultar(int idEstado);
         Estado? Consultar(string nombre, int idPais);

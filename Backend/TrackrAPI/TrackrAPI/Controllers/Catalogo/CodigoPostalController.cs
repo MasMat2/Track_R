@@ -73,5 +73,12 @@ namespace TrackrAPI.Controllers.Catalogo
             codigoPostalService.Eliminar(idCodigoPostal);
         }
 
+        [HttpPost]
+        [Route("actualizarCodigosPostalesExcel")]
+        public void CargaExcel()
+        {
+            codigoPostalService.CargaExcel();
+        }
+
     }
 }

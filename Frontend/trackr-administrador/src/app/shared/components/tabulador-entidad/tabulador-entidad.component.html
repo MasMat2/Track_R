@@ -2,6 +2,7 @@
 <mat-tab-group
   *ngIf="!loading"
   animationDuration="0ms"
+  [selectedIndex]="selectedTab"
   (selectedIndexChange)="onSelectTabChange($event)"
 >
   <!-- Componentes Externos -->

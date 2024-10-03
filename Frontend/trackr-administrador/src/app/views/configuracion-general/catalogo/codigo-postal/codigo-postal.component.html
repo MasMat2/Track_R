@@ -6,6 +6,9 @@
         <div class="contenedor-agregar" (click)="agregar()" *ngIf="tieneAccesoAgregar">
           <button class="btn-agregar">Agregar Código Postal</button>
         </div>
+        <button class="btn-agregar secundario col m-3" (click)="sincronizarPlantilla()">Sincronizar </button>
+        <button  class="btn-agregar secundario col" (click)="subirPlantilla()">Subir archivo excel</button>
+        <button  class="btn-agregar secundario col m-3" (click)="descargarPlantilla()">Descargar excel </button>
         <app-grid-general
           [headerName]="HEADER_GRID"
           [data]="CodigoPostalList"

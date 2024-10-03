@@ -29,6 +29,7 @@ public class NotificacionService
             IdTipoNotificacion = notificacionDto.IdTipoNotificacion,
             IdPersona = notificacionDto.IdPersona,
             IdChat = notificacionDto.IdChat,
+            IdPadecimiento = notificacionDto.IdPadecimiento
         };
 
         notificacionRepository.Agregar(notificacion);

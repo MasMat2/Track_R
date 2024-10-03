@@ -170,4 +170,21 @@ button {
     background-color: var(--primary-500);
   }
 
+  &.secundario {
+    background-color: var(--neutral-50);
+    color: var(--primary-700);
+    border: 1px solid var(--primary-700);
+    &:hover {
+      background-color: var(--primary-200);
+    }
+  }
+
+  &.terciario {
+    background-color: var(--primary-700);
+    color: var(--neutral-50);
+    &:hover {
+      background-color: var(--primary-600);
+    }
+  }
+
 }

@@ -95,10 +95,11 @@ public class NotificacionUsuarioRepository : Repository<NotificacionUsuario>, IN
                 nu.IdNotificacionNavigation.FechaAlta,
                 nu.Visto,
                 nu.IdNotificacionNavigation.IdTipoNotificacion,
-                nu.IdNotificacionNavigation.NotificacionDoctor.FirstOrDefault()?.IdPaciente ?? 0,
+                nu.IdNotificacionNavigation.IdPersona ?? 0,
                 imagenUsuario,
                 nu.IdNotificacionNavigation.IdChat,
-                nu.IdNotificacionNavigation.IdTipoNotificacionNavigation.Clave
+                nu.IdNotificacionNavigation.IdTipoNotificacionNavigation.Clave,
+                nu.IdNotificacionNavigation.IdPadecimiento
             ));
         }
         
