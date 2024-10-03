@@ -9,6 +9,7 @@ using TrackrAPI.Services.Inventario;
 using TrackrAPI.Services.Archivos;
 using System.Runtime.Serialization.Formatters.Binary;
 using TrackrAPI.Services.Sftp;
+using TrackrAPI.Dtos.Archivos;
 
 namespace TrackrAPI.Controllers.Catalogo
 {
@@ -22,6 +23,8 @@ namespace TrackrAPI.Controllers.Catalogo
         private readonly UsuarioService usuarioService;
         private readonly ArchivoService archivoService;
         private readonly SftpService _sftpService;
+        private readonly EstadoService _estadoService;
+
 
         public ArchivoController(
             IWebHostEnvironment hostingEnvironment,
@@ -29,7 +32,8 @@ namespace TrackrAPI.Controllers.Catalogo
             CompaniaLogotipoService companiaLogotipoService,
             UsuarioService usuarioService,
             ArchivoService archivoService,
-            SftpService sftpService
+            SftpService sftpService,
+            EstadoService estadoService
             )
         {
             this.hostingEnvironment = hostingEnvironment;
@@ -38,6 +42,7 @@ namespace TrackrAPI.Controllers.Catalogo
             this.usuarioService = usuarioService;
             this.archivoService = archivoService;
             _sftpService = sftpService;
+            _estadoService = estadoService;
         }
 
         [HttpGet("HospitalLogotipo/{idHospitalLogotipo}")]
@@ -140,6 +145,39 @@ namespace TrackrAPI.Controllers.Catalogo
         public IActionResult DescargarPlantillaArticulos()
         {
             string path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "PlantillasCargaMasiva", $"Plantilla Articulos.xlsx");
+            string tipoMime = "application/vnd.ms-excel";
+            var imageFileStream = System.IO.File.OpenRead(path);
+            return File(imageFileStream, tipoMime);
+        }
+
+        [HttpGet("descargarPlantillaCargaMasivaEstados")]
+        public IActionResult DescargarPlantillaCargaMasivaEstados()
+        {
+            string path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Excel", GeneralConstant.NombreExcelEstado);
+            string tipoMime = "application/vnd.ms-excel";
+            var imageFileStream = System.IO.File.OpenRead(path);
+            return File(imageFileStream, tipoMime);
+        }
+
+        [HttpPost("subirArchivoCargaMasivaEstados")]
+        public async Task SubirArchivoCargaMasivaEstados(ArchivoCarga archivo)
+        {
+           await _estadoService.SubirArchivoExcel(archivo);
+        }
+        
+        [HttpGet("descargarPlantillaCargaMasivaMunicipios")]
+        public IActionResult DescargarPlantillaCargaMasivaMunicipios()
+        {
+            string path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Excel", GeneralConstant.NombreExcelMunicipio);
+            string tipoMime = "application/vnd.ms-excel";
+            var imageFileStream = System.IO.File.OpenRead(path);
+            return File(imageFileStream, tipoMime);
+        }
+
+        [HttpGet("descargarPlantillaCargaMasivaCodigosPostales")]
+        public IActionResult DescargarPlantillaCargaMasivaColonias()
+        {
+            string path = Path.Combine(hostingEnvironment.ContentRootPath, "Archivos", "Excel", GeneralConstant.NombreExcelCodigoPostal);
             string tipoMime = "application/vnd.ms-excel";
             var imageFileStream = System.IO.File.OpenRead(path);
             return File(imageFileStream, tipoMime);

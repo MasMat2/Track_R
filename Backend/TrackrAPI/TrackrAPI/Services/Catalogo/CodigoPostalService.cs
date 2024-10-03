@@ -12,16 +12,19 @@ namespace TrackrAPI.Services.Catalogo
         private CodigoPostalValidatorService codigoPostalValidatorService;
         private readonly IEstadoRepository _estadoRepository;
         private readonly IMunicipioRepository _municipioRepository;
+        private readonly EstadoService _estadoService;
 
         public CodigoPostalService(ICodigoPostalRepository codigoPostalRepository,
              CodigoPostalValidatorService codigoPostalValidatorService,
              IEstadoRepository estadoRepository,
-             IMunicipioRepository municipioRepository)
+             IMunicipioRepository municipioRepository,
+             EstadoService estadoService)
         {
             this.codigoPostalRepository = codigoPostalRepository;
             this.codigoPostalValidatorService = codigoPostalValidatorService;
             _estadoRepository = estadoRepository;
             _municipioRepository = municipioRepository;
+            _estadoService = estadoService;
         }
 
         public CodigoPostalDto ConsultarDto(int idCodigoPostal)
@@ -72,45 +75,6 @@ namespace TrackrAPI.Services.Catalogo
             codigoPostalRepository.Eliminar(codigoPostal);
         }
 
-        public List<EntidadFederativaExcelDto> ConsultarEstadosExcel()
-        {
-            string path = Path.Combine("Archivos", "Excel", "ENTIDAD_FEDERATIVA_201602.xlsx");
-            var entidadFederativaList = new List<EntidadFederativaExcelDto>();
-
-            // Load the Excel file
-            FileInfo fileInfo = new(path);
-
-                // Verificar si el archivo existe
-            if (!File.Exists(path))
-            {
-                throw new FileNotFoundException($"El archivo Excel no se encontró en la ruta especificada: {path}");
-            }
-            // Set the license context
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            using (ExcelPackage package = new(fileInfo))
-            {
-                // Get the first worksheet
-                ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
-
-                // Iterate over each row starting from the second row
-                for (int row = 2; row <= worksheet.Dimension.End.Row; row++)
-                {
-                    var entidadFederativa = new EntidadFederativaExcelDto
-                    {
-                        CATALOG_KEY = worksheet.Cells[row, 1].Text,
-                        ENTIDAD_FEDERATIVA = worksheet.Cells[row, 2].Text,
-                        ABREVIATURA = worksheet.Cells[row, 3].Text
-                    };
-
-                    entidadFederativaList.Add(entidadFederativa);
-                }
-            }
-
-            return entidadFederativaList;
-
-
-        }
-
 
         // Existing methods...
 
@@ -152,44 +116,12 @@ namespace TrackrAPI.Services.Catalogo
             return municipioList;
         }
 
-        private List<EntidadFederativaExcelDto> ActualizarEstados()
-        {
-            var entidadesExcel = ConsultarEstadosExcel();
-            var entidadesBdd = _estadoRepository.ConsultarTodos().ToList();
-
-            foreach (var entidadExcel in entidadesExcel)
-            {
-                var entidadBdd = entidadesBdd.FirstOrDefault(e => e.Nombre.Equals(entidadExcel.ENTIDAD_FEDERATIVA, StringComparison.OrdinalIgnoreCase));
-                if (entidadBdd == null)
-                {
-                    entidadBdd = new Estado
-                    {
-                        Nombre = entidadExcel.ENTIDAD_FEDERATIVA,
-                        IdPais = 1, // México
-                        Clave = entidadExcel.ABREVIATURA
-                    };
-                    var estadoAgregado = _estadoRepository.Agregar(entidadBdd);
-
-                    entidadExcel.IdEstado = estadoAgregado.IdEstado;
-                }
-                else
-                {
-                    entidadExcel.IdEstado = entidadBdd.IdEstado;
-                }
-
-            }
-
-
-            return entidadesExcel;
-        }
-
-
         private List<MunicipioExcelDto> MapearMunicipios()
         {
             var municipiosExcel = ConsultarMunicipioExcel();
             var municipiosBdd = _municipioRepository.ConsultarTodos().ToList();
 
-            var estadosExcel = ActualizarEstados();
+            var estadosExcel = _estadoService.SincronizarPlantillaExcel();
 
             var municipiosConNombreEstado = new List<MunicipioExcelDto>();
 

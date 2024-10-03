@@ -5,14 +5,21 @@
 
   <div class="cuerpo-contenedor">
     <div class="row">
+      <div
+      class="contenedor-agregar col-12"
+    
+      *ngIf="tieneAccesoAgregar$ | async"
+    >
+      <button class="btn-agregar col"   (click)="onAgregarClick()">Agregar {{ tituloBoton }} </button>
+   
+        <button *ngIf="tieneAccesoDescargarPlantilla" class="btn-agregar secundario col m-3" (click)="onSincronizarClick()">Sincronizar </button>
+        <button *ngIf="tieneAccesoDescargarPlantilla" class="btn-agregar secundario col" (click)="onSubirPlantillaClick()">Subir archivo excel</button>
+        <button  *ngIf="tieneAccesoDescargarPlantilla" class="btn-agregar secundario col m-3" (click)="onDescargarPlantillaClick()">Descargar excel </button>
+      
+    </div>
+    </div>
+    <div class="row">
       <div class="col-12">
-        <div
-          class="contenedor-agregar"
-          (click)="onAgregarClick()"
-          *ngIf="tieneAccesoAgregar$ | async"
-        >
-          <button class="btn-agregar">Agregar {{ tituloBoton }} </button>
-        </div>
         <app-grid-general
           #grid
           [headerName]="crudConfig.nombreEntidad"

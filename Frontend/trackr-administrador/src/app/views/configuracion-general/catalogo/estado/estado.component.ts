@@ -9,8 +9,11 @@ import { ACCESO_ESTADO } from '@utils/codigos-acceso/catalogo.accesos';
 import { MODAL_CONFIG } from '@utils/constants/modal';
 import { ColDef } from 'ag-grid-community';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { EstadoFormularioComponent } from './estado-formulario/estado-formulario.component';
+import { ArchivoService } from '@http/catalogo/archivo.service';
+import { LoadingSpinnerService } from '@services/loading-spinner.service';
+import { ArchivoCarga } from '@dtos/archivos/archivo-carga';
 
 @Component({
   templateUrl: 'estado.component.html',
@@ -55,6 +58,8 @@ export class EstadoComponent extends CrudBase<EstadoGridDto> implements OnInit {
     accesoService: AccesoService,
     modalService: BsModalService,
     mensajeService: MensajeService,
+    private archivoService: ArchivoService,
+    private loadingSpinnerService : LoadingSpinnerService
   ) {
     super(
       accesoService,
@@ -74,4 +79,69 @@ export class EstadoComponent extends CrudBase<EstadoGridDto> implements OnInit {
   protected override eliminar(idEstado: number): Observable<void> {
     return this.estadoService.eliminar(idEstado);
   }
-}
+
+  protected descargarPlantillaCargaMasiva(): void {
+    this.archivoService.descargarPlantillaCargaMasivaEstados().subscribe((data) => {
+      const a = document.createElement('a');
+      const objectUrl = URL.createObjectURL(data);
+      a.href = objectUrl;
+      a.download = 'PlantillaCargaMasivaEstados.xlsx';
+      a.click();
+      URL.revokeObjectURL(objectUrl);
+    })
+  }
+
+  protected sincronizarPlantilla(){    
+    this.loadingSpinnerService.openSpinner();
+    this.estadoService.sincronizarEstadosExcel().subscribe(() => {
+      this.loadingSpinnerService.closeSpinner();
+      this.mensajeService.modalExito('Estados sincronizados correctamente');
+    });
+  }
+
+  protected subirPlantillaExcel(){
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.xlsx';
+
+    input.onchange = (event: Event) => {
+      if (event && event.target && (event.target as HTMLInputElement).files) {
+        const file: File = (event.target as HTMLInputElement).files![0];
+        if (file) {
+
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => {
+
+            // Eliminar el prefijo data:[<mediatype>][;base64], de la cadena Base64
+            const base64String = (reader.result as string).split(',')[1];
+
+            const archivoCargaExcel = {
+              archivoBase64: base64String,
+              archivoNombre: file.name,
+              archivoTipoMime: file.type
+            } as unknown as ArchivoCarga;
+
+            this.loadingSpinnerService.openSpinner();
+            this.archivoService.subirArchivoCargaMasivaEstados(archivoCargaExcel).subscribe({
+              next: () => {
+                this.mensajeService.modalExito('Estados cargados correctamente');
+                this.consultarGrid().pipe(
+                  tap(() => this.loadingSpinnerService.closeSpinner())
+                ).subscribe();
+              },
+              error: (err) => {
+                console.error('Error al cargar los estados:', err);
+                this.loadingSpinnerService.closeSpinner();              }
+            });
+          }
+
+   
+        }
+      }
+    };
+
+    input.click();
+  }
+
+  }
