@@ -33,8 +33,6 @@ export class ArchivoService {
     }
 
     public subirArchivoCargaMasivaEstados(archivo: ArchivoCarga): Observable<any> {
-      
-
         return this.http.post(this.dataUrl + 'subirArchivoCargaMasivaEstados',archivo);
     }
 
@@ -42,6 +40,10 @@ export class ArchivoService {
         return this.http.get(this.dataUrl + 'descargarPlantillaCargaMasivaMunicipios', {
             responseType: 'blob'
         });
+    }
+
+    public subirArchivoCargaMasivaMunicipios(archivo: ArchivoCarga): Observable<any> {
+        return this.http.post(this.dataUrl + 'subirArchivoCargaMasivaMunicipios',archivo);
     }
 
     public descargarPlantillaCargaMasivaCodigosPostales(): Observable<any> {

@@ -24,6 +24,7 @@ namespace TrackrAPI.Controllers.Catalogo
         private readonly ArchivoService archivoService;
         private readonly SftpService _sftpService;
         private readonly EstadoService _estadoService;
+        private readonly MunicipioService _municipioService;
 
 
         public ArchivoController(
@@ -33,7 +34,8 @@ namespace TrackrAPI.Controllers.Catalogo
             UsuarioService usuarioService,
             ArchivoService archivoService,
             SftpService sftpService,
-            EstadoService estadoService
+            EstadoService estadoService,
+            MunicipioService municipioService
             )
         {
             this.hostingEnvironment = hostingEnvironment;
@@ -43,6 +45,7 @@ namespace TrackrAPI.Controllers.Catalogo
             this.archivoService = archivoService;
             _sftpService = sftpService;
             _estadoService = estadoService;
+            _municipioService = municipioService;
         }
 
         [HttpGet("HospitalLogotipo/{idHospitalLogotipo}")]
@@ -163,6 +166,11 @@ namespace TrackrAPI.Controllers.Catalogo
         public async Task SubirArchivoCargaMasivaEstados(ArchivoCarga archivo)
         {
            await _estadoService.SubirArchivoExcel(archivo);
+        }
+        [HttpPost("subirArchivoCargaMasivaMunicipios")]
+        public async Task SubirArchivoCargaMasivaMunicipios(ArchivoCarga archivo)
+        {
+           await _municipioService.SubirArchivoExcel(archivo);
         }
         
         [HttpGet("descargarPlantillaCargaMasivaMunicipios")]

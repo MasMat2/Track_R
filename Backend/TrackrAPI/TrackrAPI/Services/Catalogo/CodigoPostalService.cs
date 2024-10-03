@@ -13,18 +13,21 @@ namespace TrackrAPI.Services.Catalogo
         private readonly IEstadoRepository _estadoRepository;
         private readonly IMunicipioRepository _municipioRepository;
         private readonly EstadoService _estadoService;
+        private readonly MunicipioService _municipioService;
 
         public CodigoPostalService(ICodigoPostalRepository codigoPostalRepository,
              CodigoPostalValidatorService codigoPostalValidatorService,
              IEstadoRepository estadoRepository,
              IMunicipioRepository municipioRepository,
-             EstadoService estadoService)
+             EstadoService estadoService,
+             MunicipioService municipioService)
         {
             this.codigoPostalRepository = codigoPostalRepository;
             this.codigoPostalValidatorService = codigoPostalValidatorService;
             _estadoRepository = estadoRepository;
             _municipioRepository = municipioRepository;
             _estadoService = estadoService;
+            _municipioService = municipioService;
         }
 
         public CodigoPostalDto ConsultarDto(int idCodigoPostal)
@@ -78,88 +81,6 @@ namespace TrackrAPI.Services.Catalogo
 
         // Existing methods...
 
-        public List<MunicipioExcelDto> ConsultarMunicipioExcel()
-        {
-               string path = Path.Combine("Archivos", "Excel", "MUNICIPIOS_202407.xlsx");
-
-            var municipioList = new List<MunicipioExcelDto>();
-
-            // Load the Excel file
-            FileInfo fileInfo = new(path);
-
-                // Verificar si el archivo existe
-            if (!File.Exists(path))
-            {
-                throw new FileNotFoundException($"El archivo Excel no se encontró en la ruta especificada: {path}");
-            }
-            // Set the license context
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            using (ExcelPackage package = new(fileInfo))
-            {
-                // Get the first worksheet
-                ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
-
-                // Iterate over each row starting from the second row
-                for (int row = 2; row <= worksheet.Dimension.End.Row; row++)
-                {
-                    var municipio = new MunicipioExcelDto
-                    {
-                        CVE_ENT = worksheet.Cells[row, 1].Text,
-                        CVE_MUN = worksheet.Cells[row, 2].Text,
-                        NOM_MUN = worksheet.Cells[row, 3].Text
-                    };
-
-                    municipioList.Add(municipio);
-                }
-            }
-
-            return municipioList;
-        }
-
-        private List<MunicipioExcelDto> MapearMunicipios()
-        {
-            var municipiosExcel = ConsultarMunicipioExcel();
-            var municipiosBdd = _municipioRepository.ConsultarTodos().ToList();
-
-            var estadosExcel = _estadoService.SincronizarPlantillaExcel();
-
-            var municipiosConNombreEstado = new List<MunicipioExcelDto>();
-
-            foreach (var municipio in municipiosExcel)
-            {
-
-                var municipioBdd = municipiosBdd.FirstOrDefault(m => m.Nombre.Equals(municipio.NOM_MUN, StringComparison.OrdinalIgnoreCase));
-                if (municipioBdd == null)
-                {
-                    var estado = estadosExcel.FirstOrDefault(e => e.CATALOG_KEY == municipio.CVE_ENT);
-                    if (estado != null)
-                    {
-                        var municipioAgregado = new Municipio
-                        {
-                            Nombre = municipio.NOM_MUN.Length > 50 ? municipio.NOM_MUN[..50] : municipio.NOM_MUN,
-                            IdEstado = (int)estado.IdEstado,
-                            Clave = municipio.CVE_MUN
-                        };
-                        var municipioAgregadoBdd = _municipioRepository.Agregar(municipioAgregado);
-                        municipio.IdMunicipio = municipioAgregadoBdd.IdMunicipio;
-                        municipio.IdEstado = municipioAgregadoBdd.IdEstado;
-
-                        municipiosConNombreEstado.Add(municipio);
-                    }
-                }
-                else
-                {
-                    municipio.IdMunicipio = municipioBdd.IdMunicipio;
-                    municipio.IdEstado = municipioBdd.IdEstado;
-
-                    municipiosConNombreEstado.Add(municipio);
-                }
-
-
-            }
-
-            return municipiosConNombreEstado;
-        }
         private List<CodigoPostalExcelDto> ConsultarCodigoPostalExcel()
         {
             string path = Path.Combine("Archivos", "Excel", "CODIGO_POSTAL_20240819.xlsx");
@@ -221,7 +142,7 @@ namespace TrackrAPI.Services.Catalogo
         }
         public void CargaExcel()
         {
-            var municipiosExcel = MapearMunicipios();
+            var municipiosExcel = _municipioService.SincronizarPlantillaExcel();
             var codigoPostalExcel = ConsultarCodigoPostalExcel();
 
             var codigoPostalList = new ConcurrentBag<CodigoPostal>();
