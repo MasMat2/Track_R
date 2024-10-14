@@ -219,6 +219,7 @@ export class DataJitsiService {
   }
 
   handleVideoConferenceLeft = () => {
+    this.localStream.getTracks().forEach(track => track.stop());
     this.router.navigate(['/home']);
   }
 
