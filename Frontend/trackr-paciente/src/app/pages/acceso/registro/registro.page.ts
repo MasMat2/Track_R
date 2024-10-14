@@ -12,6 +12,7 @@ import { UsuarioNuevoTrackrDto } from 'src/app/shared/Dtos/seguridad/usuario-nue
 import { addIcons } from 'ionicons';
 import { BehaviorSubject } from 'rxjs';
 import { TerminosYCondicionesComponent } from '@sharedComponents/terminos-y-condiciones/terminos-y-condiciones.component';
+import { AvisoPrivacidadComponent } from '@sharedComponents/aviso-privacidad/aviso-privacidad.component';
 
 
 @Component({
@@ -144,6 +145,14 @@ export class RegistroPage implements OnInit {
 
     const modal = await this.modalController.create({
       component: TerminosYCondicionesComponent,
+    });
+
+    modal.present();
+  }
+  protected async mostrarAvisoDePrivacidad() {
+
+    const modal = await this.modalController.create({
+      component: AvisoPrivacidadComponent,
     });
 
     modal.present();
