@@ -49,7 +49,7 @@ export class DominioComponent implements OnInit {
   );
 
   public columns = [
-    { headerName: 'Dominio', field: 'nombre', minWidth: 150 },
+    { headerName: 'Variables', field: 'nombre', minWidth: 150 },
     { headerName: 'Descripción', field: 'descripcion', minWidth: 150 },
     this.columnaEditar,
     this.columnaEliminar
