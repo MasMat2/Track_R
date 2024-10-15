@@ -1,13 +1,10 @@
 Estado de aplicacion en plataforma IOS:
-build ios 126
+build ios 128
 Servidor ios: azure
 Grupo de pruebas: US-IT
 
 Esta actualización aborda y resuelve problemas reportados por los usuarios para mejorar la funcionalidad y la experiencia general de la aplicación:
 
-1. Visor de PDFs:
-- Se ha solucionado el problema que impedía la correcta visualización de archivos PDF.
-2. Notificaciones:
-- Ahora se muestra correctamente la leyenda "No tienes notificaciones" cuando no hay notificaciones disponibles.
-3. Mis Estudios:
-- Al guardar un estudio en el apartado "Mis Estudios", ahora se actualiza correctamente la información.
+1. Uso de camara:
+- Se mejoro el uso de la camara en la plataforma jitsi
+
