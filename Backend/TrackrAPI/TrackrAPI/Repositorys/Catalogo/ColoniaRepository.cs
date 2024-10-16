@@ -31,6 +31,11 @@ namespace TrackrAPI.Repositorys.Catalogo
                 }).ToList();
         }
 
+        public IEnumerable<Colonia> Consultar(){
+            return context.Colonia.ToList();
+        }
+
+
         public IEnumerable<Colonia> ConsultarPorCodigoParaSelector(string codigoPostal)
         {
             return context.Colonia

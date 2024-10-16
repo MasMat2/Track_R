@@ -262,7 +262,7 @@ namespace TrackrAPI.Services.Catalogo
                     {
                         Nombre = entidadExcel.ENTIDAD_FEDERATIVA,
                         IdPais = 1, // México
-                        Clave = entidadExcel.ABREVIATURA
+                        Clave = entidadExcel.CATALOG_KEY
                     };
                     var estadoAgregado = estadoRepository.Agregar(entidadBdd);
 
@@ -270,7 +270,10 @@ namespace TrackrAPI.Services.Catalogo
                 }
                 else
                 {
-                    entidadExcel.IdEstado = entidadBdd.IdEstado;
+                    entidadBdd.Nombre = entidadExcel.ENTIDAD_FEDERATIVA;
+                    entidadBdd.Clave = entidadExcel.CATALOG_KEY;
+                    estadoRepository.Editar(entidadBdd);                    
+                    
                 }
 
             }

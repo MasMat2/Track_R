@@ -160,7 +160,7 @@ namespace TrackrAPI.Services.Catalogo
             await File.WriteAllBytesAsync(path, fileBytes);
         }
 
-        private List<CodigoPostalExcelDto> ConsultarCodigoPostalExcel()
+        public  List<CodigoPostalExcelDto> ConsultarCodigoPostalExcel()
         {
             string path = Path.Combine("Archivos", "Excel", "CODIGO_POSTAL_20240819.xlsx");
             var codigoPostalList = new List<CodigoPostalExcelDto>();
@@ -224,16 +224,23 @@ namespace TrackrAPI.Services.Catalogo
             var municipiosExcel = _municipioService.SincronizarPlantillaExcel();
             var codigoPostalExcel = ConsultarCodigoPostalExcel();
 
+            var codigoPostalBdd = codigoPostalRepository.ConsultarTodos();
+
+            var codigoPostalAAgregar = new List<CodigoPostal>();
+
+            
+
             var codigoPostalList = new ConcurrentBag<CodigoPostal>();
         
-            var municipiosDict = municipiosExcel
-            .GroupBy(m => m.CVE_MUN)
-            .ToDictionary(g => g.Key, g => g.First());
+        var municipiosDict = municipiosExcel
+            .GroupBy(m => new { m.CVE_ENT, m.CVE_MUN }) // Agrupa por la combinación de CVE_ENT y CVE_MUN
+            .Select(g => g.First())  // Selecciona el primer elemento de cada grupo
+            .ToDictionary(m => $"{m.CVE_ENT}_{m.CVE_MUN}", m => m); // Crea un diccionario con la clave formada por CVE_ENT y CVE_MUN
 
             // Usar Parallel.ForEach para procesar los códigos postales en paralelo
             Parallel.ForEach(codigoPostalExcel, codigoPostal =>
             {
-                if (municipiosDict.TryGetValue(codigoPostal.c_mnpio, out var municipio))
+                if (municipiosDict.TryGetValue($"{codigoPostal.c_estado}_{codigoPostal.c_mnpio}", out var municipio))
                 {
                     codigoPostal.idMunicipio = municipio.IdMunicipio;
 

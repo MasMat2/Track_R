@@ -487,9 +487,16 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.Clave).HasMaxLength(20);
 
-                entity.Property(e => e.CodigoPostal).HasMaxLength(10);
+                entity.Property(e => e.CodigoPostal)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Nombre).HasMaxLength(500);
+
+                entity.HasOne(d => d.IdMunicipioNavigation)
+                    .WithMany(p => p.Colonia)
+                    .HasForeignKey(d => d.IdMunicipio)
+                    .HasConstraintName("FK__Colonia__IdMunic__7A7D0802");
             });
 
             modelBuilder.Entity<Compania>(entity =>
