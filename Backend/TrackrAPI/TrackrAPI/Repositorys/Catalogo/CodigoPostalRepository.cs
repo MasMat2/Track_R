@@ -63,6 +63,14 @@ namespace TrackrAPI.Repositorys.Catalogo
             return context.CodigoPostal;
         }
 
+        public void EliminarSinDependencias(){
+            var codigoPostal = context.CodigoPostal
+                      .Where(e => !context.Colonia.Any(d => d.IdCodigoPostal == e.IdCodigoPostal))
+                      .ToList();
+            context.CodigoPostal.RemoveRange(codigoPostal);
+        }
+
+
         public IEnumerable<CodigoPostalDto> ConsultarPorCodigoPostal(string codigoPostal)
         {
             return context.CodigoPostal

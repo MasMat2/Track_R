@@ -493,6 +493,11 @@ namespace TrackrAPI.Models
 
                 entity.Property(e => e.Nombre).HasMaxLength(500);
 
+                entity.HasOne(d => d.IdCodigoPostalNavigation)
+                    .WithMany(p => p.ColoniaNavigation)
+                    .HasForeignKey(d => d.IdCodigoPostal)
+                    .HasConstraintName("FK__Colonia__IdCodig__04FA9675");
+
                 entity.HasOne(d => d.IdMunicipioNavigation)
                     .WithMany(p => p.Colonia)
                     .HasForeignKey(d => d.IdMunicipio)

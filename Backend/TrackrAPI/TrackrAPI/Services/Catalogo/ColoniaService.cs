@@ -63,6 +63,7 @@ namespace TrackrAPI.Services.Catalogo
 
             var coloniasAAgregar = new ConcurrentBag<Colonia>();
             var coloniasAEditar = new ConcurrentBag<Colonia>();
+            var codigosPostalesBdd = _codigoPostalService.ConsultarTodos();
 
             var coloniasBdd = coloniaRepository.Consultar();
 
@@ -79,7 +80,13 @@ namespace TrackrAPI.Services.Catalogo
                         .ToDictionary(m => $"{m.Nombre}_{m.ClaveEstado}_{m.Clave}", x => x)
             );
 
-            var coloniasExcel = codigosPostalesExcel.DistinctBy(x => new { x.d_asenta, x.c_mnpio }).Select(x => new ColoniaDto
+            var codigoPostalDict = new ConcurrentDictionary<string, CodigoPostal>(
+                codigosPostalesBdd.GroupBy(x => new { x.CodigoPostal1, x })
+                        .Select(g => g.First())
+                        .ToDictionary(x => x.CodigoPostal1, x => x)
+            );
+
+            var coloniasExcel = codigosPostalesExcel.Select(x => new ColoniaDto
             {
                 Nombre = x.d_asenta,
                 Clave = new string(x.d_asenta.Take(3).ToArray()) + new string(x.c_estado.Take(1).ToArray()),
@@ -97,7 +104,18 @@ namespace TrackrAPI.Services.Catalogo
                 {
                     int idMunicipio;
                     municipiosBddDict.TryGetValue($"{coloniaExcel.NombreMunicipio.ToUpper()}_{coloniaExcel.ClaveEstado}_{coloniaExcel.ClaveMunicipio}", out var municipioDto);
-                   
+
+                    int idCodigoPostal;
+                    codigoPostalDict.TryGetValue(coloniaExcel.CodigoPostal, out var codigoPostalDto);
+
+                    if(codigoPostalDto == null)
+                    {
+                        Console.WriteLine($"No se encontró el código postal {coloniaExcel.CodigoPostal}");
+                        idCodigoPostal = codigoPostalDict.FirstOrDefault().Value.IdCodigoPostal;
+                    }else
+                    {
+                        idCodigoPostal = codigoPostalDto.IdCodigoPostal;
+                    }
 
                     if(municipioDto == null)
                     {
@@ -107,10 +125,12 @@ namespace TrackrAPI.Services.Catalogo
                     {
                         idMunicipio = municipioDto.IdMunicipio;
                     }
+                    
 
                     coloniaBdd.Clave = coloniaExcel.Clave;
                     coloniaBdd.CodigoPostal = coloniaExcel.CodigoPostal;
                     coloniaBdd.IdMunicipio = idMunicipio;
+                    coloniaBdd.IdCodigoPostal = idCodigoPostal;
                     coloniasAEditar.Add(coloniaBdd);
                 }
             }
@@ -119,6 +139,17 @@ namespace TrackrAPI.Services.Catalogo
                     int idMunicipio;
                     municipiosBddDict.TryGetValue($"{coloniaExcel.NombreMunicipio.ToUpper()}_{coloniaExcel.ClaveEstado}_{coloniaExcel.ClaveMunicipio}", out var municipioDto);
                    
+                   int idCodigoPostal;
+                    codigoPostalDict.TryGetValue(coloniaExcel.CodigoPostal, out var codigoPostalDto);
+
+                    if(codigoPostalDto == null)
+                    {
+                        Console.WriteLine($"No se encontró el código postal {coloniaExcel.CodigoPostal}");
+                        idCodigoPostal = codigoPostalDict.FirstOrDefault().Value.IdCodigoPostal;
+                    }else
+                    {
+                        idCodigoPostal = codigoPostalDto.IdCodigoPostal;
+                    }
 
                     if(municipioDto == null)
                     {
@@ -134,7 +165,8 @@ namespace TrackrAPI.Services.Catalogo
                         Nombre = coloniaExcel.Nombre,
                         Clave = coloniaExcel.Clave,
                         CodigoPostal = coloniaExcel.CodigoPostal,
-                        IdMunicipio = idMunicipio
+                        IdMunicipio = idMunicipio,
+                        IdCodigoPostal = idCodigoPostal
                     };
 
                     coloniasAAgregar.Add(coloniaAAgregar);

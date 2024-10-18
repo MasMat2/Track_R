@@ -83,6 +83,10 @@ namespace TrackrAPI.Services.Catalogo
             codigoPostalRepository.Eliminar(codigoPostal);
         }
 
+        public IEnumerable<CodigoPostal> ConsultarTodos()
+        {
+            return codigoPostalRepository.ConsultarTodos();
+        }
 
         // Existing methods...
 
@@ -224,6 +228,11 @@ namespace TrackrAPI.Services.Catalogo
             var municipiosExcel = _municipioService.SincronizarPlantillaExcel();
             var codigoPostalExcel = ConsultarCodigoPostalExcel();
 
+            var codigosPostalesUnicos = codigoPostalExcel
+                .GroupBy(c => c.d_codigo)
+                .Select(g => g.First())
+                .ToList();
+
             var codigoPostalBdd = codigoPostalRepository.ConsultarTodos();
 
             var codigoPostalAAgregar = new List<CodigoPostal>();
@@ -238,7 +247,7 @@ namespace TrackrAPI.Services.Catalogo
             .ToDictionary(m => $"{m.CVE_ENT}_{m.CVE_MUN}", m => m); // Crea un diccionario con la clave formada por CVE_ENT y CVE_MUN
 
             // Usar Parallel.ForEach para procesar los códigos postales en paralelo
-            Parallel.ForEach(codigoPostalExcel, codigoPostal =>
+            Parallel.ForEach(codigosPostalesUnicos, codigoPostal =>
             {
                 if (municipiosDict.TryGetValue($"{codigoPostal.c_estado}_{codigoPostal.c_mnpio}", out var municipio))
                 {
@@ -260,7 +269,7 @@ namespace TrackrAPI.Services.Catalogo
             });
 
             var finalCodigoPostalList = codigoPostalList.ToList();
-            codigoPostalRepository.Truncate();
+            codigoPostalRepository.EliminarSinDependencias();
             codigoPostalRepository.BulkInsert(finalCodigoPostalList);
         }
 

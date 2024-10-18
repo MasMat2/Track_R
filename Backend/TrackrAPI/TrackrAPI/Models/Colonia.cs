@@ -16,7 +16,9 @@ namespace TrackrAPI.Models
         public string Nombre { get; set; } = null!;
         public string? CodigoPostal { get; set; }
         public int? IdMunicipio { get; set; }
+        public int? IdCodigoPostal { get; set; }
 
+        public virtual CodigoPostal? IdCodigoPostalNavigation { get; set; }
         public virtual Municipio? IdMunicipioNavigation { get; set; }
         public virtual ICollection<Domicilio> Domicilio { get; set; }
         public virtual ICollection<Usuario> Usuario { get; set; }
