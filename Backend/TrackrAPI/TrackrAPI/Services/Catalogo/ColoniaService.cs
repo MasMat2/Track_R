@@ -74,7 +74,7 @@ namespace TrackrAPI.Services.Catalogo
                 var coloniasBddDict = new ConcurrentDictionary<string, Colonia>(
                     coloniasBdd.GroupBy(x => new { x.Nombre, x })
                             .Select(g => g.First())
-                            .ToDictionary(x => $"{x.Nombre}_{x.IdMunicipio}", x => x)
+                            .ToDictionary(x => $"{x.Nombre}_{x.IdCodigoPostalNavigation.IdMunicipio}", x => x)
                 );
 
 
@@ -114,7 +114,6 @@ namespace TrackrAPI.Services.Catalogo
                             }
 
                             coloniaBdd.Clave = coloniaExcel.Clave;
-                            coloniaBdd.CodigoPostal = coloniaExcel.CodigoPostal;
                             coloniaBdd.IdCodigoPostal = idCodigoPostal;
                             coloniasAEditar.Add(coloniaBdd);
                         }
@@ -138,7 +137,6 @@ namespace TrackrAPI.Services.Catalogo
                         {
                             Nombre = coloniaExcel.Nombre,
                             Clave = coloniaExcel.Clave,
-                            CodigoPostal = coloniaExcel.CodigoPostal,
                             IdCodigoPostal = idCodigoPostal
                         };
 
