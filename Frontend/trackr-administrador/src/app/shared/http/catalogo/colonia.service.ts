@@ -28,4 +28,8 @@ export class ColoniaService {
   eliminar(idColonia: number): Observable<void> {
     return this.http.delete<void>(this.dataUrl + `eliminar/${idColonia}`);
   }
+
+  actualizarPlantillaExcel(): Observable<void> {
+    return this.http.get<void>(this.dataUrl + 'actualizarPlantillaExcel');
+  }
 }

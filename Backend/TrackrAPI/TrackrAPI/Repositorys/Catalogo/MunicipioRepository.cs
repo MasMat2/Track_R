@@ -82,7 +82,8 @@ public class MunicipioRepository : Repository<Municipio>, IMunicipioRepository
 
     public IEnumerable<Municipio> ConsultarTodos()
     {
-        return context.Municipio;
+        return context.Municipio
+                        .Include(m => m.IdEstadoNavigation);
     }
 
 

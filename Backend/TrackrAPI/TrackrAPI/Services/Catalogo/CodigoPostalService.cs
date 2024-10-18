@@ -5,6 +5,7 @@ using OfficeOpenXml;
 using System.Collections.Concurrent;
 using TrackrAPI.Helpers;
 using TrackrAPI.Dtos.Archivos;
+using System.Transactions;
 
 namespace TrackrAPI.Services.Catalogo
 {
@@ -225,55 +226,55 @@ namespace TrackrAPI.Services.Catalogo
         }
         public void CargaExcel()
         {
-            var municipiosExcel = _municipioService.SincronizarPlantillaExcel();
-            var codigoPostalExcel = ConsultarCodigoPostalExcel();
-
-            var codigosPostalesUnicos = codigoPostalExcel
-                .GroupBy(c => c.d_codigo)
-                .Select(g => g.First())
-                .ToList();
-
-            var codigoPostalBdd = codigoPostalRepository.ConsultarTodos();
-
-            var codigoPostalAAgregar = new List<CodigoPostal>();
-
-            
-
-            var codigoPostalList = new ConcurrentBag<CodigoPostal>();
-        
-        var municipiosDict = municipiosExcel
-            .GroupBy(m => new { m.CVE_ENT, m.CVE_MUN }) // Agrupa por la combinación de CVE_ENT y CVE_MUN
-            .Select(g => g.First())  // Selecciona el primer elemento de cada grupo
-            .ToDictionary(m => $"{m.CVE_ENT}_{m.CVE_MUN}", m => m); // Crea un diccionario con la clave formada por CVE_ENT y CVE_MUN
-
-            // Usar Parallel.ForEach para procesar los códigos postales en paralelo
-            Parallel.ForEach(codigosPostalesUnicos, codigoPostal =>
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
             {
-                if (municipiosDict.TryGetValue($"{codigoPostal.c_estado}_{codigoPostal.c_mnpio}", out var municipio))
-                {
-                    codigoPostal.idMunicipio = municipio.IdMunicipio;
+                var municipiosExcel = _municipioService.ConsultarTodos();
+                var codigoPostalExcel = ConsultarCodigoPostalExcel();
 
-                    var codigoPostalAAgregar = new CodigoPostal
+                var codigosPostalesUnicos = codigoPostalExcel
+                    .GroupBy(c => c.d_codigo)
+                    .Select(g => g.First())
+                    .ToList();
+
+                var codigoPostalBdd = codigoPostalRepository.ConsultarTodos();
+
+                var codigoPostalAAgregar = new List<CodigoPostal>();
+
+                var codigoPostalList = new ConcurrentBag<CodigoPostal>();
+
+                var municipiosDict = municipiosExcel
+                    .GroupBy(m => new { m.ClaveEstado, m.Clave }) // Agrupa por la combinación de CVE_ENT y CVE_MUN
+                    .Select(g => g.First())  // Selecciona el primer elemento de cada grupo
+                    .ToDictionary(m => $"{m.ClaveEstado}_{m.Clave}", m => m); // Crea un diccionario con la clave formada por CVE_ENT y CVE_MUN
+
+                // Usar Parallel.ForEach para procesar los códigos postales en paralelo
+                Parallel.ForEach(codigosPostalesUnicos, codigoPostal =>
+                {
+                    if (municipiosDict.TryGetValue($"{codigoPostal.c_estado}_{codigoPostal.c_mnpio}", out var municipio))
                     {
-                        CodigoPostal1 = codigoPostal.d_codigo,
-                        Colonia = codigoPostal.d_asenta,
-                        IdMunicipio = (int)codigoPostal.idMunicipio
-                    };
+                        codigoPostal.idMunicipio = municipio.IdMunicipio;
 
-                    codigoPostalList.Add(codigoPostalAAgregar);
-                }
-                else
-                {
-                    Console.WriteLine($"Error: Municipio con CVE_MUN {codigoPostal.c_mnpio} no encontrado para el código postal {codigoPostal.d_codigo}");
-                }
-            });
+                        var codigoPostalAAgregar = new CodigoPostal
+                        {
+                            CodigoPostal1 = codigoPostal.d_codigo,
+                            Colonia = codigoPostal.d_asenta,
+                            IdMunicipio = (int)codigoPostal.idMunicipio
+                        };
 
-            var finalCodigoPostalList = codigoPostalList.ToList();
-            codigoPostalRepository.EliminarSinDependencias();
-            codigoPostalRepository.BulkInsert(finalCodigoPostalList);
+                        codigoPostalList.Add(codigoPostalAAgregar);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error: Municipio con CVE_MUN {codigoPostal.c_mnpio} no encontrado para el código postal {codigoPostal.d_codigo}");
+                    }
+                });
+
+                var finalCodigoPostalList = codigoPostalList.ToList();
+                codigoPostalRepository.EliminarSinDependencias();
+                codigoPostalRepository.BulkInsert(finalCodigoPostalList);
+
+                scope.Complete();
+            }
         }
-
-
-
     }
 }

@@ -203,7 +203,7 @@ namespace TrackrAPI.Services.Catalogo
         }
 
 
-        private static List<EntidadFederativaExcelDto> ConsultarEstadosExcel()
+        public List<EntidadFederativaExcelDto> ConsultarEstadosExcel()
         {
             string path = Path.Combine("Archivos", "Excel", GeneralConstant.NombreExcelEstado);
             var entidadFederativaList = new List<EntidadFederativaExcelDto>();

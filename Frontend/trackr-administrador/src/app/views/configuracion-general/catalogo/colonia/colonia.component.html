@@ -7,6 +7,9 @@
           <button class="btn-agregar">Agregar Colonia</button>
         </div>
 
+
+        <button class="btn-agregar secundario col m-3" (click)="sincronizarPlantilla()">Sincronizar </button>
+
         <app-grid-general
           #gridNecesidad
           [headerName]="HEADER_GRID"
@@ -16,6 +19,7 @@
           [accesoEditar]="accesoEditar"
           [accesoEliminar]="accesoEliminar"
           [cargandoGrid]="cargandoGrid"
+
         >
         </app-grid-general>
       </div>

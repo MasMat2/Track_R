@@ -238,6 +238,21 @@ public class MunicipioService
         return municipioList;
     }
 
+    public List<MunicipioDto> ConsultarTodos()
+    {
+        return _municipioRepository.ConsultarTodos()
+        .Select(m => new MunicipioDto
+        {
+            IdMunicipio = m.IdMunicipio,
+            Nombre = m.Nombre,
+            IdEstado = m.IdEstado,
+            Clave = m.Clave,
+            ClaveEstado = m.IdEstadoNavigation.Clave
+        }).ToList();
+    }
+
+    
+
     public List<MunicipioExcelDto> SincronizarPlantillaExcel()
     {
         var municipiosExcel = ConsultarMunicipioExcel();
@@ -297,4 +312,5 @@ public class MunicipioService
         }
         return municipiosConNombreEstado;
     }
+
 }
