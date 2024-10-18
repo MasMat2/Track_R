@@ -151,7 +151,7 @@ export class UsuarioFormularioComponent implements OnInit {
 
   public columns = [
     { headerName: 'Compañía', field: 'compania', minWidth: 100, },
-    { headerName: 'Locación', field: 'locacion', minWidth: 100 },
+    { headerName: 'Hospital', field: 'locacion', minWidth: 100 },
     { headerName: 'Perfil', field: 'perfil', minWidth: 100, },
   ];
 
@@ -759,7 +759,7 @@ export class UsuarioFormularioComponent implements OnInit {
     }
 
     if (!(this.usuarioLocacion.idLocacion > 0)) {
-      this.modalMensajeService.modalError("La locación es requerida");
+      this.modalMensajeService.modalError("El Hospital es requerido");
       return;
     }
 
