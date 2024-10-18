@@ -8,7 +8,6 @@ namespace TrackrAPI.Models
         public Municipio()
         {
             CodigoPostal = new HashSet<CodigoPostal>();
-            Colonia = new HashSet<Colonia>();
             Compania = new HashSet<Compania>();
             Direccion = new HashSet<Direccion>();
             Domicilio = new HashSet<Domicilio>();
@@ -23,7 +22,6 @@ namespace TrackrAPI.Models
 
         public virtual Estado IdEstadoNavigation { get; set; } = null!;
         public virtual ICollection<CodigoPostal> CodigoPostal { get; set; }
-        public virtual ICollection<Colonia> Colonia { get; set; }
         public virtual ICollection<Compania> Compania { get; set; }
         public virtual ICollection<Direccion> Direccion { get; set; }
         public virtual ICollection<Domicilio> Domicilio { get; set; }
