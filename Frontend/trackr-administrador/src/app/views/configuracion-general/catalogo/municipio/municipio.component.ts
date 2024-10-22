@@ -79,6 +79,7 @@ export class MunicipioComponent extends CrudBase<MunicipioGridDto> implements On
   }
 
   protected sincronizarPlantilla(){
+    this.loadingSpinnerService.openSpinner();
       this.municipioService.sincronizarMunicipiosExcel().subscribe(() => {
         this.consultarGrid().subscribe((data) => {
           this.loadingSpinnerService.closeSpinner();

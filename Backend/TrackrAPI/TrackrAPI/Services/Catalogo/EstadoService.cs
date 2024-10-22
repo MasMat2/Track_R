@@ -253,33 +253,56 @@ namespace TrackrAPI.Services.Catalogo
             var entidadesExcel = ConsultarEstadosExcel();
             var entidadesBdd = estadoRepository.ConsultarTodos().ToList();
 
-            foreach (var entidadExcel in entidadesExcel)
-            {
-                var entidadBdd = entidadesBdd.FirstOrDefault(e => e.Nombre.Equals(entidadExcel.ENTIDAD_FEDERATIVA, StringComparison.OrdinalIgnoreCase));
-                if (entidadBdd == null)
-                {
-                    entidadBdd = new Estado
-                    {
-                        Nombre = entidadExcel.ENTIDAD_FEDERATIVA,
-                        IdPais = 1, // México
-                        Clave = entidadExcel.CATALOG_KEY
-                    };
-                    var estadoAgregado = estadoRepository.Agregar(entidadBdd);
+            var estadosAActualizar = ObtenerEstadosAActualizar(entidadesExcel, entidadesBdd);
 
-                    entidadExcel.IdEstado = estadoAgregado.IdEstado;
-                }
-                else
-                {
-                    entidadBdd.Nombre = entidadExcel.ENTIDAD_FEDERATIVA;
-                    entidadBdd.Clave = entidadExcel.CATALOG_KEY;
-                    estadoRepository.Editar(entidadBdd);                    
-                    
-                }
-
-            }
-
+            ActualizarEstados(estadosAActualizar, entidadesExcel, entidadesBdd);
 
             return entidadesExcel;
         }
+
+            private List<Estado> ObtenerEstadosAActualizar(List<EntidadFederativaExcelDto> entidadesExcel, List<Estado> entidadesBdd)
+            {
+                var estadosAActualizar = new List<Estado>();
+
+                foreach (var entidadExcel in entidadesExcel)
+                {
+                    var entidadBdd = entidadesBdd.FirstOrDefault(e => e.Nombre.Equals(entidadExcel.ENTIDAD_FEDERATIVA, StringComparison.OrdinalIgnoreCase));
+                    if (entidadBdd == null || !entidadBdd.Clave.Equals(entidadExcel.CATALOG_KEY, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var estado = new Estado
+                        {
+                            Nombre = entidadExcel.ENTIDAD_FEDERATIVA,
+                            IdPais = 1, // México
+                            Clave = entidadExcel.CATALOG_KEY
+                        };
+                        estadosAActualizar.Add(estado);
+                    }
+                }
+
+                return estadosAActualizar;
+            }
+
+            private void ActualizarEstados(List<Estado> estadosAActualizar, List<EntidadFederativaExcelDto> entidadesExcel, List<Estado> entidadesBdd)
+            {
+                foreach (var estado in estadosAActualizar)
+                {
+                    var entidadBdd = entidadesBdd.FirstOrDefault(e => e.Nombre.Equals(estado.Nombre, StringComparison.OrdinalIgnoreCase));
+                    if (entidadBdd == null)
+                    {
+                        var estadoAgregado = estadoRepository.Agregar(estado);
+                        var entidadExcel = entidadesExcel.First(e => e.ENTIDAD_FEDERATIVA.Equals(estado.Nombre, StringComparison.OrdinalIgnoreCase));
+                        entidadExcel.IdEstado = estadoAgregado.IdEstado;
+                    }
+                    else
+                    {
+                        entidadBdd.Nombre = estado.Nombre;
+                        entidadBdd.Clave = estado.Clave;
+                        estadoRepository.Editar(entidadBdd);
+                    }
+                }
+            }
+
+
+
     }
 }
