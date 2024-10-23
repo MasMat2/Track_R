@@ -168,7 +168,7 @@ namespace TrackrAPI.Services.Seguridad
                                                 <table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"">
                                                     <tr>
                                                         <td align=""center"">
-                                                            <img src=cid:logoHospital alt=""logo Oncotracker"" style=""width: 300px; display: block; margin: 16px;"">
+                                                            <img src=cid:logohospital alt=""logo Oncotracker"" style=""width: 300px; display: block; margin: 16px;"">
                                                         </td>
                                                     </tr>
                                                 </table>
