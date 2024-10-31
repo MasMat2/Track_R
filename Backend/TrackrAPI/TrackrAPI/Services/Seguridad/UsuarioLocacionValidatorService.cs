@@ -8,7 +8,7 @@ namespace TrackrAPI.Services.Seguridad
     {
         private IUsuarioLocacionRepository usuarioLocacionRepository;
 
-        private readonly string MensajeLocacionRequerida = "La locación es requerida";
+        private readonly string MensajeLocacionRequerida = "El hospital es requerido";
         private readonly string MensajePerfilRequerido = "El perfil es requerido";
         private readonly string MensajeUsuarioRequerido = "El usuario es requerido";
 
@@ -42,7 +42,7 @@ namespace TrackrAPI.Services.Seguridad
 
             if (permisoConsultado != null && permisoConsultado.IdUsuarioLocacion != usuarioLocacion.IdUsuarioLocacion)
             {
-                throw new CdisException("El usuario ya tiene un permiso en esta locación");
+                throw new CdisException("El usuario ya tiene un permiso en este hospital");
             }
         }
 

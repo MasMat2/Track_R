@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { Notificacion } from '@dtos/notificaciones/notificacion-dto';
 import { MeetService } from '@http/chats/meet.service';
 import { FechaService } from '@services/fecha.service';
+import { EncryptionService } from '@services/encryption.service';
 
 @Component({
   selector: 'app-panel-notificaciones',
@@ -49,12 +50,27 @@ export class PanelNotificacionesComponent implements OnInit {
     private sanitizer:DomSanitizer,
     private router:Router,
     private meetService: MeetService,
-    private fechaService: FechaService
+    private fechaService: FechaService,
+    private encryptionService: EncryptionService
   ) { }
 
   ngOnInit() {
     this.pacientes$ = this.usuarioService.consultarPorRol("014");
     this.consultarNotificaciones();
+  }
+
+  private redirigirExpediente(idPaciente: string, idPadecimiento : number): void {
+    const queryParams = this.encryptionService.generateURL({
+      i: idPaciente.toString(),
+      p: idPadecimiento.toString()
+    });
+  
+    this.router.navigate(
+      ['/administrador/gestion-paciente/paciente/expediente-formulario'],
+      {
+        queryParams: queryParams,
+      }
+    );
   }
 
   private consultarNotificaciones(): void {
@@ -69,7 +85,9 @@ export class PanelNotificacionesComponent implements OnInit {
             fecha: this.fechaService.fechaUTCAFechaLocal(notificacion.fechaAlta),
             imagen: (notificacion.imagen !== null || notificacion.imagen !== undefined) ? this.sanitizer.bypassSecurityTrustUrl(notificacion.imagen || '') : undefined,
             visto: notificacion.visto,
-            idChat: notificacion.idChat
+            idChat: notificacion.idChat,
+            idPadecimiento: notificacion.idPadecimiento,
+            idPaciente: notificacion.idPaciente
           } as Notificacion;
         }))
       );
@@ -86,20 +104,22 @@ export class PanelNotificacionesComponent implements OnInit {
   }
 
   protected async marcarComoVista(notificacion: Notificacion) {
-     if (this.clicDeshabilitado) {
-      return;
-    } 
-  
-    this.clicDeshabilitado = true;
+
+    if(notificacion.idPaciente && notificacion.idPadecimiento){
+      this.redirigirExpediente(notificacion.idPaciente , notificacion.idPadecimiento as number);
+    }
+     this.clicDeshabilitado = true;
     try {
-      await this.notificacionHubService.marcarComoVista(notificacion.id);
+      if(! notificacion.visto){
+        await this.notificacionHubService.marcarComoVista(notificacion.id);
+      }
       await this.meetService.redirigirMeet(notificacion);
       this.consultarNotificaciones();
     } catch (error) {
       console.error('Error al marcar como vista:', error);
     } finally {
       this.clicDeshabilitado = false;
-    }
+    } 
   }
 
   protected mostrarModal(notificacion:any){

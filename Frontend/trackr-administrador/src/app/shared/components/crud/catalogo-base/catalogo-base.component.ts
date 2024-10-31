@@ -22,10 +22,14 @@ export class CatalogoBaseComponent implements OnInit {
     @Input() public crudConfig: ICrudConfig;
     @Input() public elementos$: Observable<any[]>;
     @Input() public tieneAccesoAgregar$: Observable<boolean>;
+    @Input() public tieneAccesoDescargarPlantilla = false;
 
     // Eventos
     @Output() public gridClick = new EventEmitter<{accion: string, data: any}>();
     @Output() public agregarClick = new EventEmitter();
+    @Output() public descargarPlantillaClick = new EventEmitter();
+    @Output() public sincronizarPlantillaClick = new EventEmitter();
+    @Output() public subirPlantillaClick = new EventEmitter();
 
     // Variables Grid
     public accesoAgregar: string;
@@ -78,5 +82,17 @@ export class CatalogoBaseComponent implements OnInit {
 
     public onAgregarClick(): void {
         this.agregarClick.emit();
+    }
+
+    public onDescargarPlantillaClick() : void {
+        this.descargarPlantillaClick.emit();
+    }
+
+    public onSincronizarClick() : void {
+        this.sincronizarPlantillaClick.emit();
+    }
+
+    public onSubirPlantillaClick() : void {
+        this.subirPlantillaClick.emit();
     }
 }

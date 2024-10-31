@@ -121,16 +121,13 @@ export class MensajesComponent{
     this.obtenerIdUsuario();
     this.obtenerIdChat();
     this.solicitarPermisos();
-    this.ensureConnection();
   }
 
   ngAfterViewInit() {
     this.scrollContentToBottom();
   }
   
-  private ensureConnection(): void {
-    this.ChatHubServiceService.ensureConnection();
-  }
+
 
   obtenerIdChat() {
     this.router.params.subscribe(params => {
@@ -537,7 +534,7 @@ export class MensajesComponent{
     }
 
     if (mensaje.mensaje.includes('webrtc-' + this.idChat)) {
-      const regex = /webrtc-\d-(\d+)/;
+      const regex = /webrtc-\d+-(\d+)/;
       const match = mensaje.mensaje.match(regex);
       if (match && match.length > 0) {
         const codigo = match[1];

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ArchivoCarga } from '@dtos/archivos/archivo-carga';
 import { Blob } from 'buffer';
 import { catchError, Observable, of } from 'rxjs';
 
@@ -24,4 +25,35 @@ export class ArchivoService {
             responseType: 'blob'
         });
     }
+
+    public descargarPlantillaCargaMasivaEstados(): Observable<any> {
+        return this.http.get(this.dataUrl + 'descargarPlantillaCargaMasivaEstados', {
+            responseType: 'blob'
+        });
+    }
+
+    public subirArchivoCargaMasivaEstados(archivo: ArchivoCarga): Observable<any> {
+        return this.http.post(this.dataUrl + 'subirArchivoCargaMasivaEstados',archivo);
+    }
+
+    public descargarPlantillaCargaMasivaMunicipios(): Observable<any>{
+        return this.http.get(this.dataUrl + 'descargarPlantillaCargaMasivaMunicipios', {
+            responseType: 'blob'
+        });
+    }
+
+    public subirArchivoCargaMasivaMunicipios(archivo: ArchivoCarga): Observable<any> {
+        return this.http.post(this.dataUrl + 'subirArchivoCargaMasivaMunicipios',archivo);
+    }
+
+    public descargarPlantillaCargaMasivaCodigosPostales(): Observable<any> {
+        return this.http.get(this.dataUrl + 'descargarPlantillaCargaMasivaCodigosPostales', {
+            responseType: 'blob'
+        });
+    }
+
+    public subirArchivoCargaMasivaCodigosPostales(archivo: ArchivoCarga): Observable<any> {
+        return this.http.post(this.dataUrl + 'subirArchivoCargaMasivaCodigosPostales',archivo);
+    }
+
 }

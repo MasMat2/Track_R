@@ -72,6 +72,8 @@ public class ExamenReactivoRepository : Repository<ExamenReactivo>, IExamenReact
                 IdReactivo = p.IdReactivo,
                 Pregunta = p.IdReactivoNavigation.Pregunta ?? string.Empty,
                 RespuestaAlumno = p.RespuestaAlumno ?? string.Empty,
+                NecesitaRevision = p.IdReactivoNavigation.NecesitaRevision ?? false,
+                PreguntaAbierta = p.IdReactivoNavigation.PreguntaAbierta ?? false
             })
             
             .ToList();
@@ -84,6 +86,8 @@ public class ExamenReactivoRepository : Repository<ExamenReactivo>, IExamenReact
         var reactivos = context.ExamenReactivo.Where(r => r.IdExamen == idExamen).Include(r => r.IdExamenNavigation).ThenInclude(r => r.IdUsuarioParticipanteNavigation).OrderBy(r => r.IdExamenReactivo);
         var reactivo = reactivos.FirstOrDefault();
 
+        var examen = context.Examen.Where(e => e.IdExamen == idExamen).FirstOrDefault();
+
         var fechaContestado = reactivos.Select(r => r.FechaAlta).LastOrDefault();
         var nombre = reactivo.IdExamenNavigation.IdUsuarioParticipanteNavigation.Nombre + " " + reactivo.IdExamenNavigation.IdUsuarioParticipanteNavigation.ApellidoPaterno + " " + reactivo.IdExamenNavigation.IdUsuarioParticipanteNavigation.ApellidoMaterno;
         var correo = reactivo.IdExamenNavigation.IdUsuarioParticipanteNavigation.CorreoPersonal ?? "";
@@ -93,6 +97,7 @@ public class ExamenReactivoRepository : Repository<ExamenReactivo>, IExamenReact
             FechaContestado = fechaContestado,
             Nombre = nombre,
             Correo = correo,
+            Puntaje = examen.Resultado
         };
     }
 }

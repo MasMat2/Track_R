@@ -55,6 +55,20 @@
               No respondió
             </p>
           </ion-label>
+
+          <div *ngIf="reactivo.necesitaRevision || reactivo.preguntaAbierta">
+            <textarea
+                class="texto-mensaje"
+                name="mensaje"
+                type="text"
+                autocomplete="off"
+                rows="3"
+                [(ngModel)]="reactivo.respuestaAlumno"
+                disabled="true"
+                >
+              </textarea>
+          </div>
+
         </div> 
       </div>
     </div>

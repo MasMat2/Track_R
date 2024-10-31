@@ -172,6 +172,9 @@ export class DashboardPadecimientoComponent implements OnInit {
           return data;
         })
         this.bitacoraMuestras = todasVariables;
+        this.bitacoraMuestras = this.bitacoraMuestras.sort((a, b) => {
+          return new Date(b.fechaHora).getTime() - new Date(a.fechaHora).getTime();
+        });
       }
     );
   }

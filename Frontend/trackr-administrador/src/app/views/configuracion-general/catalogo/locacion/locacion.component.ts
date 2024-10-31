@@ -18,14 +18,14 @@ export class HospitalComponent implements OnInit {
   public accesoEditar = CodigoAcceso.EDITAR_HOSPITAL;
   public accesoEliminar = CodigoAcceso.ELIMINAR_HOSPITAL;
   public HEADER_GRID = 'Locacion';
-  private MENSAJE_EXITO_ELIMINAR = 'La locación ha sido eliminada';
-  private TITULO_MODAL_ELIMINAR = 'Eliminar Locación';
+  private MENSAJE_EXITO_ELIMINAR = 'El hospital ha sido eliminado';
+  private TITULO_MODAL_ELIMINAR = 'Eliminar hospital';
 
   public hospitalList: Hospital[] = [];
 
   public columns = [
-    { headerName: 'Núm. Locación', field: 'idHospital', minWidth: 150, sort: 'asc' },
-    { headerName: 'Locación', field: 'nombre', minWidth: 150 },
+    { headerName: 'Núm. Hospital', field: 'idHospital', minWidth: 150, sort: 'asc' },
+    { headerName: 'Hospital', field: 'nombre', minWidth: 150 },
     { headerName: 'Ciudad', field: 'ciudad', minWidth: 150 },
     { headerName: 'Gerente', field: 'gerente', minWidth: 150 },
     { headerName: 'Es Predeterminada', field: 'esPredeterminada', minWidth: 150 }
@@ -83,7 +83,7 @@ export class HospitalComponent implements OnInit {
   eliminar(hospital: Hospital) {
     this.modalMensajeService
       .modalConfirmacion(
-        '¿Desea eliminar la locación <strong>' + hospital.nombre + '</strong>?',
+        '¿Desea eliminar el hospital <strong>' + hospital.nombre + '</strong>?',
         this.TITULO_MODAL_ELIMINAR,
         GeneralConstant.ICONO_CRUZ
       )

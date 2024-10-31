@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TrackrAPI.Helpers;
 using TrackrAPI.Models;
 
 namespace TrackrAPI.Repositorys
@@ -79,6 +80,19 @@ namespace TrackrAPI.Repositorys
             }
         }
 
+        public void Truncate()
+        {
+            var entityType = context.Model.FindEntityType(typeof(T));
+            var tableName = entityType.GetTableName();
+            var schema = entityType.GetSchema();
+
+            var fullTableName = string.IsNullOrEmpty(schema) ? tableName : $"{schema}.{tableName}";
+
+
+            context.Database.ExecuteSqlRaw($"TRUNCATE TABLE {fullTableName}");
+            
+        }
+
         public void Editar(IEnumerable<T> objetos)
         {
             foreach (T objeto in objetos)
@@ -100,22 +114,31 @@ namespace TrackrAPI.Repositorys
 
         public void Agregar(IEnumerable<T> objetos)
         {
-            foreach (T objeto in objetos)
+            try
             {
-                typeof(T).GetProperties().ToList().ForEach(propertyInfo =>
+                foreach (T objeto in objetos)
                 {
-                    if ((propertyInfo.PropertyType.IsClass && !propertyInfo.PropertyType.FullName.StartsWith("System.")) ||
-                         propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>))
+                    typeof(T).GetProperties().ToList().ForEach(propertyInfo =>
                     {
-                        propertyInfo.SetValue(objeto, null);
-                    }
-                });
+                        if ((propertyInfo.PropertyType.IsClass && !propertyInfo.PropertyType.FullName.StartsWith("System.")) ||
+                             propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>))
+                        {
+                            propertyInfo.SetValue(objeto, null);
+                        }
+                    });
 
-                context.Set<T>().Add(objeto);
-                                  
+                    context.Set<T>().Add(objeto);
+
+                }
+
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                throw new CdisException(ex.Message);
             }
 
-            context.SaveChanges();
         }
 
         public void Dispose()

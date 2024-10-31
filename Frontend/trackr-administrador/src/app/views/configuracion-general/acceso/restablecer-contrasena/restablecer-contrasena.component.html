@@ -24,8 +24,30 @@
                             [required]="true"
                             maxlength="50"
                             />
-                            <div *ngIf="contra.errors?.['required'] && contra.touched" class="error">
+                            <div 
+                                class="error" 
+                                *ngIf="contra.errors?.['required'] && (contra.dirty || contra.touched)">
                                 La nueva contraseña es requerida
+                            </div>
+                            <div 
+                                class="error" 
+                                *ngIf="contrasenaContieneEspacios() && (contra.dirty || contra.touched)">
+                                La contraseña no puede contener espacios
+                            </div>
+                            <div 
+                                class="error" 
+                                *ngIf="!contrasenaMinimoCaracteresValidation() && (contra.dirty)">
+                                Mínimo 8 caracteres
+                            </div>
+                            <div 
+                                class="error" 
+                                *ngIf="!contrasenaMayusculasYMinusculasValidation() && (contra.dirty)">
+                                Letras mayúsculas y minúsculas
+                            </div>
+                            <div 
+                                class="error" 
+                                *ngIf="!contrasenaNumerosYSimbolosValidation() && (contra.dirty)">
+                                Al menos un número y un símbolo
                             </div>
                         </div>
                     </div>
@@ -46,11 +68,11 @@
                             [required]="true"
                             maxlength="50"
                             />
-                            <div *ngIf="confirmarcontra.errors?.['required'] && confirmarcontra.touched" class="error">
-                                debe repetir su nueva contraseña
+                            <div *ngIf="confirmarcontra.errors?.['required'] && (confirmarcontra.dirty || confirmarcontra.touched)" class="error">
+                                Es necesario confirmar la contraseña
                             </div>
-                            <div *ngIf="confirmarcontra.value !== contra.value" class="error">
-                                Las contraseñas deben coincidir
+                            <div *ngIf="!contrasenasCoincidenValidation() && (confirmarcontra.dirty)" class="error">
+                                Las contraseñas no coinciden
                             </div>
                         </div>
                     </div>
@@ -58,7 +80,7 @@
 
             </form>
             <div class="btn-submit">
-                <button type="submit" form="form" class="btn-primario ml-3" [disabled]="btnSubmit || contra.value !== confirmarcontra.value">Guardar</button>
+                <button type="submit" form="form" class="btn-primario ml-3" [disabled]="btnSubmit || !contrasenaValida()">Guardar</button>
             </div>
 
         </div>

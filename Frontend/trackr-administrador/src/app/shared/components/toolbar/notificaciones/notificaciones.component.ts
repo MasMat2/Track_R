@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { PanelNotificacionesComponent } from '@components/inicio/components/panel-notificaciones/panel-notificaciones.component';
 import { NotificacionService } from '@http/notificaciones/notificacion.service';
@@ -11,7 +11,7 @@ import { Observable, map } from 'rxjs';
   templateUrl: './notificaciones.component.html',
   styleUrls: ['./notificaciones.component.scss']
 })
-export class NotificacionesComponent {
+export class NotificacionesComponent implements OnInit{
 
   protected notificaciones$: Observable<{
     id: number,

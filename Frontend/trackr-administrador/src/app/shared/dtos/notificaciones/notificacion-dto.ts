@@ -7,4 +7,6 @@ export interface Notificacion {
   imagen?: string;
   visto: boolean;
   idChat?: number;
+  idPadecimiento?: number;
+  idPaciente?: string;
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NavItem } from '@components/layout-administrador/layout-administrador.component';
@@ -9,7 +9,7 @@ import { AccesoAyudaSeccionado } from '@models/seguridad/acceso-ayuda-seccionado
 import { UsuarioImagenService } from '@services/usuario-imagen.service';
 import { GeneralConstant } from '@utils/general-constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { Observable, Subscription, filter } from 'rxjs';
+import { Observable, Subject, Subscription, filter, lastValueFrom, takeUntil } from 'rxjs';
 import { AyudaModalComponent } from './ayuda-modal/ayuda-modal.component';
 import { PanelNotificacionesComponent } from '@components/inicio/components/panel-notificaciones/panel-notificaciones.component';
 import { Usuario } from '@models/seguridad/usuario';
@@ -17,25 +17,28 @@ import { UsuarioService } from '@http/seguridad/usuario.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomAlertComponent } from '@sharedComponents/custom-alert/custom-alert.component';
 import { CustomAlertData } from '@sharedComponents/interface/custom-alert-data';
+import { NotificacionDoctorHubService } from '@services/notificacion-doctor-hub.service';
 
 @Component({
   selector: 'app-nav-dropdown',
   templateUrl: './sidebar-nav-dropdown.component.html',
   styleUrls: ['./sidebar-nav-dropdown.component.scss']
 })
-export class SidebarNavDropdownComponent implements OnInit {
+export class SidebarNavDropdownComponent implements OnInit, OnDestroy {
 
   @Input() navItems: NavItem[] = [];
 
   @Output() logoutRequest = new EventEmitter<void>();
 
-  protected readonly imagenUsuario = 'assets/img/pruebas/user-image.png';
+  protected readonly imagenUsuario = "assets/img/svg/avatar-placeholder.svg";;
   protected readonly imagenLogotipo = 'assets/img/logo-trackr.png';
   protected urlImagen?: SafeUrl = undefined;
 
   // Sección de Ayudas
   public ayudas: AccesoAyudaSeccionado[] = [];
   public acceso: Acceso;
+  private destroy$ = new Subject<void>();
+
   public subs: Array<Subscription> = [];
   public claveAcceso: string;
   public idSecciones: number[];
@@ -51,26 +54,42 @@ export class SidebarNavDropdownComponent implements OnInit {
     private route: ActivatedRoute,
     private bsModalRef: BsModalRef,
     private usuarioService: UsuarioService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificacionHubService: NotificacionDoctorHubService,
   ) { }
 
-  ngOnInit() {
-    // this.usuarioImagenService.consultarImagen();
+  
+  ngOnDestroy(): void {
+    this.destroy$.next();  // Activa la desuscripción
+    this.destroy$.complete(); // Libera recursos del Subject
+  }
 
+  ngOnInit() {
+    this.usuarioImagenService.consultarImagen();
     this.usuarioImagenService.imagenBase64$
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (imagenBase64) => {
-          const imagen = imagenBase64 === undefined ? this.imagenUsuario : imagenBase64;
+        next: (imagenBase64: string | undefined) => {
+          const imagen = imagenBase64 ? imagenBase64 : this.imagenUsuario;
           this.urlImagen = this.sanitizer.bypassSecurityTrustUrl(imagen);
+        },
+        error: (err) => {
+          console.error('Error loading image', err);
+          this.urlImagen = this.sanitizer.bypassSecurityTrustUrl(this.imagenUsuario);
         }
       });
+
+
 
     this.actualizarAcceso();
 
     this.router.events
-      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
       .subscribe(() => {
-        this.actualizarAcceso()
+        this.actualizarAcceso();
       });
 
       this.usuario$ = this.usuarioService.consultarMiPerfil();
@@ -90,6 +109,7 @@ export class SidebarNavDropdownComponent implements OnInit {
   public logout() {
     this.logoutRequest.emit();
     this.usuarioImagenService.actualizarImagen('');
+    this.notificacionHubService.detenerConexion();
 
   }
 

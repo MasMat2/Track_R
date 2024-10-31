@@ -177,6 +177,24 @@
                   </div>
                 </div>
               </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="label-input required-label">Especialidad</label>
+                  <div>
+                    <ng-select
+                      #especialidad="ngModel"
+                      name="especialidad"
+                      bindLabel="nombre"
+                      bindValue="idEspecialidad"
+                      [items]="especialidadList"
+                      [multiple]="true"
+                      [placeholder]="placeHolderSelect"
+                      [notFoundText]="placeHolderNoOptions"
+                      [(ngModel)]="especialidadSeleccionadas"
+                    ></ng-select>
+                  </div>
+                </div>
+              </div>
 
               <div class="col-md-3">
                 <div class="form-group">
@@ -534,26 +552,6 @@
               </div>
 
               <!-- Localidad -->
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label class="label-input required-label">Localidad</label>
-                  <div>
-                    <ng-select
-                      #localidad="ngModel"
-                      name="localidadName"
-                      class="select-custom"
-                      [items]="localidadList"
-                      bindLabel="nombre"
-                      bindValue="idLocalidad"
-                      [(ngModel)]="usuario.idLocalidad"
-                      [placeholder]="placeHolderSelect"
-                      [notFoundText]="placeHolderNoOptions"
-                      [disabled]="!usuario.idEstado"
-                    ></ng-select>
-                  </div>
-                </div>
-              </div>
-
               <!-- Colonia -->
               <div class="col-md-3">
                 <div class="form-group">
@@ -883,7 +881,7 @@
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <label class="label-input required-label">Locación</label>
+                  <label class="label-input required-label">Hospital</label>
                   <div>
                     <ng-select
                       #hotelLst="ngModel"

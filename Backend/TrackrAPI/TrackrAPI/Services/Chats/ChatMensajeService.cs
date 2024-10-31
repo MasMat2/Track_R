@@ -14,6 +14,7 @@ using TrackrAPI.Dtos.Seguridad;
 using TrackrAPI.Services.Sftp;
 using System.Transactions;
 using TrackrAPI.Repositorys.Notificaciones;
+using TrackrAPI.Repositorys.Seguridad;
 
 namespace TrackrAPI.Services.Chats;
 
@@ -22,12 +23,14 @@ public class ChatMensajeService
     private readonly IChatMensajeRepository _chatMensajeRepository;
     private readonly IHubContext<ChatMensajeHub, IChatMensajeHub> _hubContext;
     private readonly IChatPersonaRepository _chatPersonaRepository;
-    private readonly NotificacionDoctorService _notificacionService;
+    private readonly NotificacionDoctorService _notificacionDoctorService;
+    private readonly NotificacionPacienteService _notificacionPacienteService;
     private readonly IArchivoRepository _archivoRepository;
     private readonly ArchivoService _archivoService;
     private readonly SimpleAES _simpleAES;
     private readonly SftpService _sftpService;
     private readonly ITipoNotificacionRepository _tipoNotificacionRepository;
+    private readonly IUsuarioRepository _usuarioRepository;
 
     public ChatMensajeService(IChatMensajeRepository chatMensajeRepository,
                               IHubContext<ChatMensajeHub, IChatMensajeHub> hubContext,
@@ -37,17 +40,21 @@ public class ChatMensajeService
                               ArchivoService archivoService,
                               SimpleAES simpleAES,
                               SftpService sftpService,
-                              ITipoNotificacionRepository tipoNotificacionRepository)
+                              ITipoNotificacionRepository tipoNotificacionRepository,
+                              NotificacionPacienteService notificacionPacienteService,
+                              IUsuarioRepository usuarioRepository)
     {
         _chatMensajeRepository = chatMensajeRepository;
         _hubContext = hubContext;
         _chatPersonaRepository = chatPersonaRepository;
-        _notificacionService = notificacionService;
+        _notificacionDoctorService = notificacionService;
         _archivoRepository = archivoRepository;
         _archivoService = archivoService;
         _simpleAES = simpleAES;
         _sftpService = sftpService;
         _tipoNotificacionRepository = tipoNotificacionRepository;
+        _notificacionPacienteService = notificacionPacienteService;
+        _usuarioRepository = usuarioRepository;
     }
 
     public IEnumerable<IEnumerable<ChatMensajeDTO>> ObtenerMensajesPorChat(int IdPersona)
@@ -86,25 +93,44 @@ public class ChatMensajeService
         {
 
         int? idArchivo = null;
-        var idsPersonasChat = _chatPersonaRepository.ConsultarPersonasPorChat(mensaje.IdChat)
-                                                    .Where(cP => cP.IdPersona != mensaje.IdPersona)
+
+        var usuarioEmisor = _usuarioRepository.Consultar(mensaje.IdPersona);
+        var idsPacientesChat = _chatPersonaRepository.ConsultarPersonasPorChat(mensaje.IdChat)
+                                                    .Where(cP => cP.IdPersona != usuarioEmisor.IdUsuario && cP.IdPersonaNavigation.IdPerfilNavigation.Clave == GeneralConstant.ClavePerfilPaciente)
+                                                    .Select(x => x.IdPersona)
+                                                    .Distinct()
+                                                    .ToList();
+
+        var idsMedicosChat = _chatPersonaRepository.ConsultarPersonasPorChat(mensaje.IdChat)
+                                                    .Where(cP => cP.IdPersona != usuarioEmisor.IdUsuario && cP.IdPersonaNavigation.IdPerfilNavigation.Clave == GeneralConstant.ClavePerfilMedico)
                                                     .Select(x => x.IdPersona)
                                                     .Distinct()
                                                     .ToList();
 
         int idTipoNotificacion;
+        string claveTipoNotificacion;
 
         if(mensaje.EsVideoChat == true)
         {
-            idTipoNotificacion = _tipoNotificacionRepository.ConsultarPorClave(GeneralConstant.ClaveNotificacionVideo).IdTipoNotificacion;
+            var notificacionVideo = _tipoNotificacionRepository.ConsultarPorClave(GeneralConstant.ClaveNotificacionVideo);
+            idTipoNotificacion = notificacionVideo.IdTipoNotificacion;
+            claveTipoNotificacion = GeneralConstant.ClaveNotificacionVideo;
+
+
         }
         else
         {
-            idTipoNotificacion = _tipoNotificacionRepository.ConsultarPorClave(GeneralConstant.ClaveNotificacionChat).IdTipoNotificacion;
+            var notificacionChat = _tipoNotificacionRepository.ConsultarPorClave(GeneralConstant.ClaveNotificacionChat);
+            idTipoNotificacion = notificacionChat.IdTipoNotificacion;
+            claveTipoNotificacion = GeneralConstant.ClaveNotificacionChat;
         }
-        var notificacion = new NotificacionDoctorCapturaDTO(mensaje.Mensaje, null, idTipoNotificacion, mensaje.IdPersona, mensaje.IdPersona, mensaje.IdChat);
 
-        await _notificacionService.Notificar(notificacion, idsPersonasChat);
+     
+        var notificacionDoctor = new NotificacionDoctorCapturaDTO(mensaje.Mensaje, null, idTipoNotificacion, mensaje.IdPersona, mensaje.IdPersona, mensaje.IdChat, null);
+        var notificacionPaciente = new NotificacionCapturaDTO(usuarioEmisor.ObtenerNombreCompleto(), mensaje.Mensaje, null, idTipoNotificacion, mensaje.IdPersona, mensaje.IdChat, null);
+
+        await _notificacionDoctorService.Notificar(notificacionDoctor, idsMedicosChat);
+        await _notificacionPacienteService.Notificar(notificacionPaciente, idsPacientesChat);
 
         //Subir si existe el archivo
         if (mensaje.ArchivoTipoMime != null)

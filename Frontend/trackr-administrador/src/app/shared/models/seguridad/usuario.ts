@@ -55,6 +55,7 @@ export class Usuario {
   public nombreCompleto: string;
   public nombrePerfil: string;
   public idPais: number;
+  public idsPadecimientos : number[];
 
   public imagenBase64: string;
   public imagenTipoMime: string;
@@ -71,7 +72,8 @@ export class Usuario {
   public idExpediente: number;
 
   public idsRol: any;
-  public idsCompania: any;
+  public idsCompania: number[];
   public nombreCompania: string;
+  public idsEspecialidad: number[];
   constructor() {}
 }

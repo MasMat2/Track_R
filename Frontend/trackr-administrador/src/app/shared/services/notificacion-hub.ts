@@ -131,6 +131,10 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
     this.notificacionesSubject.next(this.notificacionesSubject.value);
   }
 
+  public limpiarNotificaciones(): void {
+    this.notificacionesSubject.next([]);
+  }
+
   private async ensureConnection(): Promise<void> {
     const timeoutms = 10_000;
 

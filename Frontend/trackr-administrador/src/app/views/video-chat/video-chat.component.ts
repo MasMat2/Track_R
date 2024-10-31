@@ -245,6 +245,8 @@ export class VideoChatComponent extends EventTarget implements OnInit, OnDestroy
 
   closeStreams = () => {
 
+    this.router.navigate(['/chat']);
+
     if (this.localStream) {
       this.localStream.getTracks().forEach(track => track.stop());
     }

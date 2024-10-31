@@ -493,6 +493,10 @@
             ]
         }";
 
+        public const string NombreExcelEstado = "ENTIDAD_FEDERATIVA_201602.xlsx";
+        public const string NombreExcelMunicipio = "MUNICIPIOS_202407.xlsx";
+        public const string  NombreExcelCodigoPostal = "CODIGO_POSTAL_20240819.xlsx";
+
 
     }
 }

@@ -98,7 +98,7 @@ export class AgregarTratamientoPage implements OnInit {
   public ngOnInit() {
     this.formTratamiento = this.fb.group({
       farmaco: ['', Validators.required],
-      cantidad: ['1', Validators.required],
+      cantidad: [0, Validators.required],
       unidad: ['', Validators.required],
       indicaciones: ['', Validators.required],
       idPadecimiento: ['', Validators.required],

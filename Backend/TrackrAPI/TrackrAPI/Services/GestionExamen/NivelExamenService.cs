@@ -32,10 +32,16 @@ public class NivelExamenService
         return _nivelExamenRepository.ConsultarTodosParaSelector();
     }
 
+    public IEnumerable<NivelExamenGridDto> ConsultarTodosParaSelector(int idAsignatura)
+    {
+        return _nivelExamenRepository.ConsultarTodosParaSelector(idAsignatura);
+    }
+
     public int Agregar(NivelExamen nivelExamen)
     {
         _nivelExamenValidatorService.ValidarAgregar(nivelExamen);
         _nivelExamenValidatorService.ValidarDuplicado(nivelExamen);
+        nivelExamen.Clave = GenerarClave();
         _nivelExamenRepository.Agregar(nivelExamen);
         return nivelExamen.IdNivelExamen;
     }
@@ -45,6 +51,15 @@ public class NivelExamenService
         _nivelExamenValidatorService.ValidarEditar(nivelExamen);
         _nivelExamenValidatorService.ValidarDuplicado(nivelExamen);
         _nivelExamenRepository.Editar(nivelExamen);
+    }
+
+    private string GenerarClave()
+    {
+        var nivelExamen = _nivelExamenRepository.ConsultarGeneral().OrderByDescending(x => x.IdNivelExamen).FirstOrDefault();
+
+        int idNivelExamen = nivelExamen?.IdNivelExamen ?? 0;
+
+        return (idNivelExamen + 1).ToString();
     }
 
     public void Eliminar(int idNivelExamen)

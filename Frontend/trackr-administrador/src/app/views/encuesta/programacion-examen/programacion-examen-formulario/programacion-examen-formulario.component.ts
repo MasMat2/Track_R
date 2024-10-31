@@ -23,6 +23,9 @@ import { combineLatestWith, mergeMap } from 'rxjs';
 import { EncryptionService } from 'src/app/shared/services/encryption.service';
 import * as Utileria from '@utils/utileria';
 import { FechaService } from '@services/fecha.service';
+import { EntidadEstructuraService } from '@http/gestion-entidad/entidad-estructura.service';
+import { ExpedientePadecimientoSelectorDTO } from '@dtos/seguridad/expediente-padecimiento-selector-dto';
+import { AlertifyService } from '@services/alertify.service';
 
 @Component({
   selector: 'app-programacionExamen-formulario',
@@ -33,12 +36,15 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
 
   protected programacionExamen = new ProgramacionExamen();
   protected submitting = false;
+  protected tipoCuestionario : number;
+  protected idsPadecimientos : number[] = [];
 
   // Selectores
   protected readonly DROPDOWN_PLACEHOLDER = DROPDOWN_PLACEHOLDER;
   protected readonly DROPDOWN_NO_OPTIONS = DROPDOWN_NO_OPTIONS;
 
   public pacienteList: Usuario[] = [];
+  public padecmientoList : ExpedientePadecimientoSelectorDTO[] = [];
   public personalList: Usuario[] = [];
   public tipoExamenList: TipoExamen[] = [];
   public examenList: Examen[] = [];
@@ -117,7 +123,9 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
     private router: Router,
     private tipoExamenService: TipoExamenService,
     private usuarioService: UsuarioService,
-    private fechaService: FechaService
+    private fechaService: FechaService,
+    private entidadEstructuraService : EntidadEstructuraService,
+    private alertifyService : AlertifyService
   ) {}
 
   public ngOnInit(): void {
@@ -125,6 +133,7 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
     this.consultarPacientes();
     this.consultarPersonal();
     this.consultarTipoExamen();
+    this.consultarPadecmientos();
 
     this.programacionExamen.participantes = [];
 
@@ -136,6 +145,29 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
       this.consultarProgramacionExamen(this.idProgramacionExamen!);
     }
   }
+
+
+    private presentAlertError(): Promise<Boolean> {
+      return new Promise((resolve) => {
+        this.alertifyService.presentAlert({
+          header: 'Error al crear cuestionario',
+          subHeader: 'Añada participantes.',
+          Icono: 'info',
+          Color: 'error',
+          twoButtons: false,
+          confirmButtonText: "Cerrar",
+          cancelButtonText: ''
+        }, (result) => {
+          if(result == "confirm"){
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        });
+      });
+    }
+    
+
 
   private consultarProgramacionExamen(idProgramacionExamen: number): void {
     const programacionExamen$ = this.programacionExamenService.consultar(idProgramacionExamen);
@@ -160,6 +192,12 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
           this.programacionExamen = programacionExamen;
         }
       );
+  }
+
+  private consultarPadecmientos(): void {
+    this.entidadEstructuraService.consultarPadecimientosParaSelector().subscribe(data => {
+      this.padecmientoList = data;
+    })
   }
 
   private consultarPacientes(): void {
@@ -202,6 +240,11 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
   protected enviarFormulario(formulario: NgForm): void {
     this.submitting = true;
 
+    if(this.programacionExamen.participantes.length == 0){
+      this.presentAlertError();
+      this.submitting = false;
+      return;
+    }
     if (!formulario.valid) {
       this.formularioService.validarCamposRequeridos(formulario);
       this.submitting = false;
@@ -289,7 +332,16 @@ export class ProgramacionExamenFormularioComponent implements OnInit {
   }
 
   private passToList(): void {
-    const participantes: number[] = this.examenList.map(e => e.idUsuarioParticipante);
+    const idPadecimientos = this.programacionExamen.idsPadecimiento;
+
+    if (this.programacionExamen.idsPadecimiento) {
+      this.programacionExamen.participantes = this.pacienteList
+        .filter((p) =>
+          p.idsPadecimientos.some((idP) => idPadecimientos.includes(idP))
+        )
+        .map((p) => p.idUsuario);
+    }
+
 
     for (const participante of this.programacionExamen.participantes) {
       const examenExistente = this.examenList.findIndex(e => e.idUsuarioParticipante === participante);

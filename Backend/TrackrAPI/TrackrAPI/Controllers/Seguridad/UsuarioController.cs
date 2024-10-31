@@ -103,6 +103,16 @@ namespace TrackrAPI.Controllers.Seguridad
             return usuarioService.ConsultarPorRFC(rfc);
         }
 
+    [HttpGet("consultarImagenPerfil/{idUsuario}")]
+    public async Task<IActionResult> ConsultarImagenPerfil(int idUsuario)
+    {
+        var imagenBytes = await usuarioService.ObtenerBytesImagenUsuario(idUsuario);
+        if (imagenBytes == null)
+        {
+            return NotFound("Imagen no encontrada");
+        }
+        return Ok(imagenBytes);
+    }
         [HttpGet]
         [Route("consultarPorTipoUsuario/{claveTipoUsuario}")]
         public IEnumerable<UsuarioDto> ConsultarPorTipoUsuario(string claveTipoUsuario)
@@ -130,9 +140,9 @@ namespace TrackrAPI.Controllers.Seguridad
 
         [HttpPut]
         [Route("editar")]
-        public void Editar(Usuario usuario)
+        public async Task Editar(UsuarioDto usuario)
         {
-            usuarioService.Editar(usuario);
+            await usuarioService.Editar(usuario);
         }
 
         [HttpDelete]
@@ -297,9 +307,9 @@ namespace TrackrAPI.Controllers.Seguridad
         }
 
         [HttpPut("actualizarInformacionGeneral")]
-        public void ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion)
+        public async Task ActualizarInformacionGeneralTrackr(InformacionGeneralDTO informacion)
         {
-            usuarioService.ActualizarInformacionGeneralTrackr(informacion, Utileria.ObtenerIdUsuarioSesion(this)); 
+            await usuarioService.ActualizarInformacionGeneralTrackr(informacion, Utileria.ObtenerIdUsuarioSesion(this)); 
         }
 
         [HttpPut("actualizarInformacionDomicilio")]

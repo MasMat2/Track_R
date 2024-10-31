@@ -91,6 +91,18 @@
             font-weight: bold;
           }
         }
+
+        .texto-mensaje{
+                border: 1px solid;
+                border-color: var(--primary-100);
+                border-radius: 5px;
+                background-color: var(--primary-50);
+                max-height: 100px !important;
+                padding: 8px;
+                width: 100%;
+                scrollbar-width: none !important;
+                -ms-overflow-style: none !important;
+              }
       }
     }
   }

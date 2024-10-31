@@ -111,6 +111,18 @@
               >
                 <label class="label-input required-label">Respuesta</label>
 
+                <div *ngIf="reactivoList[indice].necesitaRevision">
+                  <textarea
+                    class="form-control"
+                    name="respuesta"
+                    type="text"
+                    autocomplete="off"
+                    rows="3"
+                    [(ngModel)]="reactivoList[indice].respuestaAlumno"
+                    [disabled]="true"
+                  ></textarea>
+                </div>
+
                 <div *ngFor="let reactivo of reactivoList[indice].respuestas" class="field-checkbox">
                   <p-checkbox 
                       [label]="reactivo.respuesta1" 
@@ -166,7 +178,7 @@
               </button>
               <button
                 type="button"
-                class="btn-primario btn-margin-left btn-cargar"
+                class="btn-primario btn-margin-left"
                 (click)="siguiente()"
                 *ngIf="
                   indice + 1 != reactivoList.length ||
@@ -177,7 +189,7 @@
               </button>
               <button
                 type="button"
-                class="btn-primario btn-margin-left btn-cargar"
+                class="btn-primario btn-margin-left "
                 (click)="terminarExamen()"
                 *ngIf="indice + 1 == reactivoList.length && !blockQuestions"
               >

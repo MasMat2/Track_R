@@ -48,14 +48,14 @@ export class HospitalFormularioComponent implements OnInit {
 
   public urlBackend = environment.urlBackend;
 
-  public TITULO_MODAL_ELIMINAR = 'Eliminar Imagen de Locación';
-  public mensajeExitoEliminarImagen = 'El logotipo de la locación ha sido eliminado';
+  public TITULO_MODAL_ELIMINAR = 'Eliminar Imagen del hospital';
+  public mensajeExitoEliminarImagen = 'El logotipo del hospital ha sido eliminado';
 
   public placeHolderSelect = GeneralConstant.PLACEHOLDER_DROPDOWN;
   public placeHolderNoOptions = GeneralConstant.PLACEHOLDER_DROPDOWN_NO_OPTIONS;
   public accion: string;
-  public mensajeEditar = 'La locación ha sido modificada';
-  public mensajeAgregar = 'La locación ha sido agregada';
+  public mensajeEditar = 'El hospital ha sido modificado';
+  public mensajeAgregar = 'El hospital ha sido agregado';
   public btnSubmit = false;
   public hospital = new Hospital();
 
@@ -450,8 +450,8 @@ export class HospitalFormularioComponent implements OnInit {
     this.hospital.colonia = this.campoColonia;
 
     const acciones: { [key: string]: [Function, string] } = {
-      [GeneralConstant.COMPONENT_ACCION_EDITAR]: [this.editar.bind(this), 'La locación ha sido editada'],
-      [GeneralConstant.COMPONENT_ACCION_AGREGAR]: [this.agregar.bind(this), 'La locación ha sido agregada']
+      [GeneralConstant.COMPONENT_ACCION_EDITAR]: [this.editar.bind(this), 'El hospital ha sido editado'],
+      [GeneralConstant.COMPONENT_ACCION_AGREGAR]: [this.agregar.bind(this), 'El hospital ha sido agregado']
     };
 
     const [funcion, mensaje] = acciones[this.accion];

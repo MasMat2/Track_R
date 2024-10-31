@@ -55,5 +55,12 @@ namespace TrackrAPI.Controllers.Catalogo
         {
             coloniaService.Eliminar(idColonia);
         }
+
+        [HttpGet]
+        [Route("actualizarPlantillaExcel")] 
+        public void ActualizarPlantillaExcel()
+        {
+            coloniaService.ActualizarPlantillaExcel();
+        }
     }
 }

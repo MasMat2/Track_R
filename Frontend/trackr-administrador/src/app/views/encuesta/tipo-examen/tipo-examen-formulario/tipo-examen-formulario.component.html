@@ -2,7 +2,7 @@
   <div class="barra-lateral-modal"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <div>Tipo Cuestionario - {{ accion }}</div>
+      <div>Cuestionario - {{ accion }}</div>
       <button class="btn-salir" (click)="cancelar()">
         <lucide-icon name="x" size="10"></lucide-icon>
       </button>
@@ -15,25 +15,9 @@
     >
       <div class="modal-body" id="modal">
         <div class="row justify-content-md-center">
-          <div class="col-md-6">
+          <div class="col">
             <div class="form-group">
-              <label class="label-input required-label">Clave</label>
-              <div>
-                <input
-                  #clave="ngModel"
-                  [(ngModel)]="tipoExamen.clave"
-                  name="clave"
-                  class="form-control"
-                  type="text"
-                  [required]="true"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="label-input required-label">Tipo Cuestionario</label>
+              <label class="label-input required-label">Cuestionario</label>
               <div>
                 <input
                   #nombre="ngModel"
@@ -55,7 +39,7 @@
         </div>
 
         <div class="row justify-content-md-center">
-          <div class="col-md-6">
+          <div class="col">
             <div class="form-group">
               <label class="label-input required-label"
                 >Cantidad de Reactivos</label
@@ -81,7 +65,7 @@
             </div>
           </div>
 
-          <div class="col-md-6">
+          <div class="col">
             <div class="form-group">
               <label class="label-input required-label"
                 >Duración (Minutos)</label

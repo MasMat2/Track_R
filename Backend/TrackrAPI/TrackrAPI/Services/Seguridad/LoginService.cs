@@ -82,12 +82,12 @@ public class LoginService
 
             if (locacionSeleccionada == null)
             {
-                throw new CdisException("No cuenta con permisos para acceder a la locación seleccionada");
+                throw new CdisException("No cuenta con permisos para acceder al hospital seleccionado");
             }
         }
         else
         {
-            throw new LoginSinLocacionException(locaciones, "Debe seleccionar una locación");
+            throw new LoginSinLocacionException(locaciones, "Debe seleccionar un hospital");
         }
 
         return locacionSeleccionada;

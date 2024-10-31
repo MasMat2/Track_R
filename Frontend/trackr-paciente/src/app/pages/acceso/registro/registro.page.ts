@@ -12,6 +12,7 @@ import { UsuarioNuevoTrackrDto } from 'src/app/shared/Dtos/seguridad/usuario-nue
 import { addIcons } from 'ionicons';
 import { BehaviorSubject } from 'rxjs';
 import { TerminosYCondicionesComponent } from '@sharedComponents/terminos-y-condiciones/terminos-y-condiciones.component';
+import { AvisoPrivacidadComponent } from '@sharedComponents/aviso-privacidad/aviso-privacidad.component';
 
 
 @Component({
@@ -53,6 +54,8 @@ export class RegistroPage implements OnInit {
     'eye': 'assets/img/svg/eye.svg',
     'eye-off': 'assets/img/svg/eye-off.svg',
     'calendar': 'assets/img/svg/calendar.svg',
+    'x': 'assets/img/svg/x.svg',
+    'check': 'assets/img/svg/check.svg'
   }) }
 
 
@@ -146,6 +149,14 @@ export class RegistroPage implements OnInit {
 
     modal.present();
   }
+  protected async mostrarAvisoDePrivacidad() {
+
+    const modal = await this.modalController.create({
+      component: AvisoPrivacidadComponent,
+    });
+
+    modal.present();
+  }
 
   protected mostrarContrasena(){
     if(this.mostrarPwd == true){
@@ -169,17 +180,65 @@ export class RegistroPage implements OnInit {
     }
   }
 
-  protected verificarContrasena(): boolean {
+  protected contrasenasCoincidenValidation(): boolean {
     if(this.usuario.contrasena != this.confirmarContrasena){
       return false;
     }
+    else{
+      return true;
+    }
+  }
 
-    return true;
+  protected contrasenaMinimoCaracteresValidation(){
+    const minCaracteres = 8;
+    if(this.usuario.contrasena?.length < minCaracteres){
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
+  protected contrasenaNumerosYSimbolosValidation(){
+    if (!/\d/.test(this.usuario.contrasena) || !/[!@#$%^&*(),.?":{}|<>]/.test(this.usuario.contrasena)) {
+      return false;
+    }
+    else{
+      return true;
+    };
+  }
+
+  protected contrasenaMayusculasYMinusculasValidation(){
+    if (!/[A-Z]/.test(this.usuario.contrasena) || !/[a-z]/.test(this.usuario.contrasena)){
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
+  protected contrasenaContieneEspacios(){
+    if (/\s/.test(this.usuario.contrasena)) {
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 
   protected continuarProceso(input: boolean){
     this.procesoContinuado = input;
     this.procesoContinuado == true ? this.parteProceso = "2" : this.parteProceso = "1";
     this.termsAccepted = this.procesoContinuado;
+  }
+
+  protected contrasenaValida(){
+    return(
+      this.contrasenasCoincidenValidation() &&
+      this.contrasenaNumerosYSimbolosValidation() &&
+      this.contrasenaMayusculasYMinusculasValidation() &&
+      this.contrasenaMinimoCaracteresValidation() &&
+      !this.contrasenaContieneEspacios()
+    )
   }
 }

@@ -5,23 +5,26 @@
         <div class="slot-start">
           <div id="foto-perfil">
             <div class="avatar-container">
-              <img 
+              <div *ngIf="personas">
+
+                <img 
                 class="avatar" 
                 [src]="imagenChat != '' ? (imagenChat | urlImagen : tipoMime) : 'assets/img/svg/avatar-placeholder.svg'" 
                 alt=""
-              />
-                 <div class="badge-img">+{{personas.length-1}}</div>
-              <div class="hover-panel">
-                <!-- Contenido del panel -->
-                <h3>Miembros del chat</h3>
-
-                <div class="personas">  
-                  <p *ngFor="let persona of personas">
-                    <img [src]="persona.imagenBase64" alt="">
-                    <label>
-                      {{ persona.nombre }}
-                    </label>
-                  </p>
+                />
+                <div class="badge-img">+{{personas.length-1}}</div>
+                <div class="hover-panel">
+                  <!-- Contenido del panel -->
+                  <h3>Miembros del chat</h3>
+                  
+                  <div class="personas">  
+                    <p *ngFor="let persona of personas">
+                      <img [src]="persona.imagenBase64" alt="">
+                      <label>
+                        {{ persona.nombre }}
+                      </label>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -32,6 +35,16 @@
         </div>
         <div class="slot-end">
           <div class="botones">
+            <div id="agregar" class="dropdown">
+              <button class="add-button w-6r bg-none border-none " mat-flat-button>
+                <lucide-icon name="video"></lucide-icon>
+              </button>
+              <div class="dropdown-content text-dark">
+                <a (click)="crearLlamadaJitsi()">Jitsi</a>
+                <a (click)="crearLlamadaWebRTC()">Web rtc</a> 
+              </div>
+            </div>
+
             <button 
               id="eliminar-chat" 
               type="button" 

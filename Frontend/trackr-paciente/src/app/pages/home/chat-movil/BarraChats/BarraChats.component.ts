@@ -16,6 +16,7 @@ import { SearchbarComponent } from '@sharedComponents/searchbar/searchbar.compon
 import { ChatMensajeDTO } from 'src/app/shared/Dtos/Chat/chat-mensaje-dto';
 import { ChatMensajeHubService } from 'src/app/services/dashboard/chat-mensaje-hub.service';
 import { FechaService } from '@services/fecha.service';
+import { TabService } from 'src/app/services/dashboard/tab.service';
 
 @Component({
   selector: 'app-barra-chats',
@@ -48,21 +49,29 @@ export class BarraChatsComponent {
     private chatMensajeHubService: ChatMensajeHubService,
     private doctoresService : MisDoctoresService,
     private modalCtrl:ModalController,
-    private fechaService: FechaService
+    private fechaService: FechaService,
+    private tabService : TabService
   ) {
     addIcons({
       'chat-plus': 'assets/img/svg/chat-plus.svg'
     });
+
+    tabService.tabChange$.subscribe((tabId) => {
+      if(tabId == "chat-movil"){
+        this.consultarDoctores();
+      }
+    });
   }
 
   ionViewWillEnter(){
+    this.ensureConnection();
     this.obtenerChats()
     this.consultarDoctores();
-    this.ensureConnection();
   }
 
   private ensureConnection(){
-    this.ChatHubServiceService.ensureConnection();
+    this.ChatHubServiceService.iniciarConexion();
+    this.chatMensajeHubService.iniciarConexion();
   }
   
   //OBTENER SÓLO LOS CHATS

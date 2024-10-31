@@ -12,4 +12,5 @@ export interface ChatMensajeDTO{
     archivoTipoMime ?: string;
     archivoNombre ?: string;
     fechaYaFormateada?: boolean;
+    esVideoChat?: boolean;
 }

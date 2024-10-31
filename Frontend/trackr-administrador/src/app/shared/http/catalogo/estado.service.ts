@@ -42,4 +42,8 @@ export class EstadoService {
   eliminar(idEstado: number): Observable<void> {
     return this.http.delete<void>(this.dataUrl + `${idEstado}`);
   }
+
+  sincronizarEstadosExcel(): Observable<void> {
+    return this.http.post<void>(this.dataUrl + 'actualizarEstadosExcel', null);
+  }
 }

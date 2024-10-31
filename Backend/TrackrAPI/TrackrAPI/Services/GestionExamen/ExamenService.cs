@@ -166,6 +166,11 @@ public class ExamenService
         return examenDto;
     }
 
+    public int ConsultarCantidadReactivos(int idAsignatura, int idNivelExamen)
+    {
+        return _reactivoRepository.ConsultarCantidadReactivos(idAsignatura, idNivelExamen);
+    }
+
     public int Agregar(Examen examen)
     {
         _examenValidatorService.ValidarAgregar(examen);
@@ -249,6 +254,7 @@ public class ExamenService
            fechaString,
            idTipoNotificacion,
            idUsuarioSesion,
+           null,
            null
         );
 

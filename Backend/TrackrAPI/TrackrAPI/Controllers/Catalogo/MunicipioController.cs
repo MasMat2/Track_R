@@ -55,4 +55,11 @@ public class MunicipioController : ControllerBase
     {
         _municipioService.Eliminar(idMunicipio);
     }
+
+    [HttpPost("actualizarEstadosExcel")]
+    public void SincronizarPlantillaExcel()
+    {
+        _municipioService.SincronizarPlantillaExcel();
+    }
+
 }

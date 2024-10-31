@@ -52,7 +52,7 @@ export class Reactivo1Component implements OnInit {
     {
       headerName: 'Clave',
       field: 'clave',
-      minWidth: 80,
+      valueGetter: (params: any) => (params.node.rowIndex + 1 ).toString()
     },
     {
       headerName: 'Asignatura',
@@ -60,7 +60,7 @@ export class Reactivo1Component implements OnInit {
       minWidth: 80,
     },
     {
-      headerName: 'Nivel de Evaluación',
+      headerName: 'Categorización',
       field: 'nivelExamen',
       minWidth: 80,
     },
@@ -80,7 +80,6 @@ export class Reactivo1Component implements OnInit {
       headerName: 'Respuesta Correcta',
       field: 'respuestaCorrecta',
       minWidth: 60,
-      width: 60,
     },
     this.verRespuestasButton
   ];

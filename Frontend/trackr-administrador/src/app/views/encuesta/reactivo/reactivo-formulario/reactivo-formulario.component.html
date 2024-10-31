@@ -91,7 +91,7 @@
 
           <div class="col-md-4">
             <div class="form-group">
-              <label class="label-input required-label">Complejidad Cuestionario</label>
+              <label class="label-input required-label">Categorización</label>
               <div>
                 <ng-select
                   #nivelLst="ngModel"
@@ -109,7 +109,7 @@
                 *ngIf="nivelLst.errors?.['required'] && nivelLst.touched"
                 class="error"
               >
-                La complejidad es requerida
+                La categorización es requerida
               </div>
             </div>
           </div>

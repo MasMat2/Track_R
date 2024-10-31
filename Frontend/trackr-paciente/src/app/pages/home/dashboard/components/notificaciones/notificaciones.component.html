@@ -14,7 +14,21 @@
 </ion-header>
 <ion-content class="primary">
   <div class="contenedor-principal">
-    <div class="lista-notificaciones">
+
+    <ion-toolbar class="segment-toolbar">
+      <ion-segment [(ngModel)]="segmentoSeleccionado"  value="no-vistas" color="morado-custom">
+        <ion-segment-button value="pendientes" (click)="changeSection('pendientes')">
+          <ion-label>No vistas</ion-label>
+        </ion-segment-button>
+          
+        <ion-segment-button value="vistas" (click)="changeSection('vistas')">
+          <ion-label>Vistas</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
+
+
+    <div class="lista-notificaciones" id="pendientes" *ngIf="segmentoSeleccionado === 'pendientes'">
       <div class="lista-vacia" *ngIf="listaNotificacionesVacia() || todasNotificacionesVistas()">
         <ion-text>
           <p>Nada por aquí. <br> No tienes notificaciones pendientes.</p>
@@ -32,7 +46,7 @@
           [button]="true" 
           [detail]="true"
           lines="none"  
-          (click)="marcarComoVista($event,notificacion)">
+          (click)="marcarComoVista(notificacion)">
           <div slot="start" class="marcador-visto" *ngIf="!notificacion.visto"></div>
           <ion-icon
             slot="start"
@@ -65,7 +79,7 @@
           [button]="true" 
           [detail]="true"
           lines="none"    
-          (click)="marcarComoVista($event , notificacion)">
+          (click)="marcarComoVista(notificacion)">
           <div slot="start" class="marcador-visto" *ngIf="!notificacion.visto"></div>
           <ion-icon
             slot="start"
@@ -98,7 +112,112 @@
           [button]="true" 
           [detail]="true"
           lines="none"    
-          (click)="marcarComoVista($event, notificacion)">
+          (click)="marcarComoVista(notificacion)">
+          <div slot="start" class="marcador-visto" *ngIf="!notificacion.visto"></div>
+          <ion-icon
+            slot="start"
+            [name]="iconMappings[notificacion.idTipoNotificacion]?.name">
+          </ion-icon>
+          <ion-label>
+            <h3 class="titulo">{{ notificacion.titulo }}</h3>
+            <p 
+              *ngIf="!notificacion.complementoEsFecha"
+              class="mensaje">
+              {{ notificacion.mensaje }}, {{ notificacion.complementoMensaje}}
+            </p>
+
+            <p 
+              *ngIf="notificacion.complementoEsFecha" 
+              class="mensaje">
+              {{ notificacion.mensaje }} {{ notificacion.complementoMensaje | date: 'd MMMM, y, h:mm a': '': 'es-MX' }}
+            </p>
+            <p class="fecha">{{ notificacion.fecha | date: 'MMMM d, y': '': 'es-MX' }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-item-group>
+    </div>
+    <div class="lista-notificaciones" id="vistas" *ngIf="segmentoSeleccionado === 'vistas'">
+      <div class="lista-vacia" *ngIf="listaNotificacionesVacia()">
+        <ion-text>
+          <p>Nada por aquí. <br> No tienes notificaciones pendientes.</p>
+        </ion-text>
+      </div>
+      <ion-item-group *ngIf="!listaNotificacionesVacia()">
+
+        <!-- NOTIFICACIONES DE HOY -->
+        <ion-item-divider *ngIf="(filtrarNotificacionesVistasHoy(notificaciones$ | async).length > 0)">
+          <ion-label>Hoy</ion-label>
+        </ion-item-divider>
+        <ion-item 
+          *ngFor="let notificacion of filtrarNotificacionesVistasHoy(notificaciones$ | async)" 
+          [ngClass]="{ 'notificacion-vista': notificacion.visto }"
+          [button]="true" 
+          [detail]="true"
+          lines="none"  >
+          <div slot="start" class="marcador-visto" *ngIf="!notificacion.visto"></div>
+          <ion-icon
+            slot="start"
+            [name]="iconMappings[notificacion.idTipoNotificacion]?.name">
+          </ion-icon>
+          <ion-label>
+            <h3 class="titulo">{{ notificacion.titulo }}</h3>
+            <p 
+              *ngIf="!notificacion.complementoEsFecha"
+              class="mensaje">
+              {{ notificacion.mensaje }}, {{ notificacion.complementoMensaje}}
+            </p>
+
+            <p 
+              *ngIf="notificacion.complementoEsFecha" 
+              class="mensaje">
+              {{ notificacion.mensaje }} {{ notificacion.complementoMensaje | date: 'd MMMM, y, h:mm a': '': 'es-MX' }}
+            </p>
+            <p class="fecha">{{ notificacion.fecha | date: 'MMMM d, y': '': 'es-MX' }}</p>
+          </ion-label>
+        </ion-item>
+
+        <!-- NOTIFICACIONES DE ESTA SEMANA (ANTERIORES A HOY) -->
+        <ion-item-divider *ngIf="(filtrarNotificacionesVistasSemana(notificaciones$ | async).length > 0)">
+          <ion-label>Esta semana</ion-label>
+        </ion-item-divider>
+        <ion-item 
+          *ngFor="let notificacion of filtrarNotificacionesVistasSemana(notificaciones$ | async)" 
+          [ngClass]="{ 'notificacion-vista': notificacion.visto }" 
+          [button]="true" 
+          [detail]="true"
+          lines="none">
+          <div slot="start" class="marcador-visto" *ngIf="!notificacion.visto"></div>
+          <ion-icon
+            slot="start"
+            [name]="iconMappings[notificacion.idTipoNotificacion]?.name">
+          </ion-icon>
+          <ion-label>
+            <h3 class="titulo">{{ notificacion.titulo }}</h3>
+            <p 
+              *ngIf="!notificacion.complementoEsFecha"
+              class="mensaje">
+              {{ notificacion.mensaje }}, {{ notificacion.complementoMensaje}}
+            </p>
+
+            <p 
+              *ngIf="notificacion.complementoEsFecha" 
+              class="mensaje">
+              {{ notificacion.mensaje }} {{ notificacion.complementoMensaje | date: 'd MMMM, y, h:mm a': '': 'es-MX' }}
+            </p>
+            <p class="fecha">{{ notificacion.fecha | date: 'MMMM d, y': '': 'es-MX' }}</p>
+          </ion-label>
+        </ion-item>
+
+        <!-- NOTIFICACIONES ANTERIORES A ESTA SEMANA -->
+        <ion-item-divider *ngIf="(filtrarNotificacionesVistasAnterioresSemana(notificaciones$ | async).length > 0)">
+          <ion-label>Anteriores</ion-label>
+        </ion-item-divider>
+        <ion-item 
+          *ngFor="let notificacion of filtrarNotificacionesVistasAnterioresSemana(notificaciones$ | async)" 
+          [ngClass]="{ 'notificacion-vista': notificacion.visto }"
+          [button]="true" 
+          [detail]="true"
+          lines="none">
           <div slot="start" class="marcador-visto" *ngIf="!notificacion.visto"></div>
           <ion-icon
             slot="start"

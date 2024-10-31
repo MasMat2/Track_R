@@ -65,6 +65,7 @@ public class ExpedienteRecomendacionGeneralService
                 null,
                 1,
                 doctor.IdUsuario,
+                null,
                 null
             );
 
@@ -104,6 +105,7 @@ public class ExpedienteRecomendacionGeneralService
                 null,
                 1,
                 doctor.IdUsuario,
+                null,
                 null
             );
 
@@ -146,6 +148,7 @@ public class ExpedienteRecomendacionGeneralService
                 null,
                 1,
                 doctor.IdUsuario,
+                null,
                 null
             );
             var notificacionInsertada = await _notificacionPacienteService.Notificar(notificacion, idUsuario);

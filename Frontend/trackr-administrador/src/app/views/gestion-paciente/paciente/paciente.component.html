@@ -138,7 +138,7 @@
                   <div class="dropdown-content">
                     <a (click)="agregar()">Paciente</a>
                     <img src="assets/img/svg/bar-horizontal.svg">
-                    <a (click)="agregarAsistente()">Asistente</a>
+                    <a (click)="agregarAsistente()"> {{ esAsistente ? 'Médico' : 'Asistente'}}</a>
                   </div>
                   <!-- <button class="btn-terceario" (click)="agregarAsistente()" *ngIf="esAsistente !== null">{{ esAsistente  ? 'Mis doctores' : 'Agregar asistentes'}}</button> -->
               </div>

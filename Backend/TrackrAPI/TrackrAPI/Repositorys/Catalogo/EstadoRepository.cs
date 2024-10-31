@@ -26,6 +26,11 @@ namespace TrackrAPI.Repositorys.Catalogo
                 .Include(e => e.IdPaisNavigation);
         }
 
+        public IEnumerable<Estado> ConsultarTodos()
+        {
+            return context.Estado;
+        }
+
         public IEnumerable<Estado> ConsultarPorPais(int idPais)
         {
             return context.Estado
