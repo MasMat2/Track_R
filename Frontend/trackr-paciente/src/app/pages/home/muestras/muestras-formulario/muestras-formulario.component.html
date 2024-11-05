@@ -66,9 +66,9 @@
                 </ion-item>
               </div>
             </ion-col>
-            <ion-col *ngIf="false" size="3" [hidden]="!variablesExistenEnHealthKit">
+            <ion-col size="3" [hidden]="!variablesExistenEnHealthKit">
               <div class="boton-sicronizar-healthkit" *ngIf="variablesExistenEnHealthKit">
-                <ion-button (click)="syncronizeData()" [disabled]="seccionSeleccionada?.seccionesCampo == null">
+                <ion-button (click)="syncronizeDataOmron()" [disabled]="seccionSeleccionada?.seccionesCampo == null">
                   <ion-icon slot="icon-only" name="swap-vertical-outline"></ion-icon>
                 </ion-button>
               </div>

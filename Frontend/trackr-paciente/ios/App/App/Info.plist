@@ -49,5 +49,14 @@
 	<string>Se necesita la camara usar la funcion las videollamadas.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Se necesita el microfono para usar la funcion de audios.</string>
+	<key>LSApplicationQueriesSchemes</key>
+    <array>
+		<string>Baumanometro</string>
+    </array>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>This app uses Bluetooth to connect to and communicate with Omron devices.</string>
+    
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>This app uses Bluetooth to connect to and communicate with Omron devices.</string>
 </dict>
 </plist>
