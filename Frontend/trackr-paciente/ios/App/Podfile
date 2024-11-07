@@ -13,6 +13,7 @@ def capacitor_pods
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCommunityFileOpener', :path => '../../node_modules/@capacitor-community/file-opener'
   pod 'CapacitorApp', :path => '../../node_modules/@capacitor/app'
+  pod 'CapacitorAppLauncher', :path => '../../node_modules/@capacitor/app-launcher'
   pod 'CapacitorCamera', :path => '../../node_modules/@capacitor/camera'
   pod 'CapacitorFilesystem', :path => '../../node_modules/@capacitor/filesystem'
   pod 'CapacitorHaptics', :path => '../../node_modules/@capacitor/haptics'
@@ -21,7 +22,7 @@ def capacitor_pods
   pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
   pod 'CapawesomeCapacitorFilePicker', :path => '../../node_modules/@capawesome/capacitor-file-picker'
   pod 'CapawesomeCapacitorScreenOrientation', :path => '../../node_modules/@capawesome/capacitor-screen-orientation'
-  pod 'CapacitorHealthDataPlugin', :path => '../../node_modules/capacitor-health-data-plugin'
+  pod 'BaumaPlugin', :path => '../../src/assets/custom_plugins/bauma-plugin'
   pod 'CapacitorVoiceRecorder', :path => '../../node_modules/capacitor-voice-recorder'
 end
 
