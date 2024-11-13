@@ -14,6 +14,7 @@ import { InformacionPerfilDto } from 'src/app/shared/Dtos/perfil/informacion-per
 import { TerminosYCondicionesComponent } from '@sharedComponents/terminos-y-condiciones/terminos-y-condiciones.component';
 import { InfoLibreriasOpenSourceComponent } from '@sharedComponents/info-librerias-opensource/info-librerias-opensource.component';
 import { AvisoPrivacidadComponent } from '@sharedComponents/aviso-privacidad/aviso-privacidad.component';
+import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 
 
 @Component({
@@ -42,6 +43,7 @@ export class InicioPerfilComponent  implements OnInit {
     private alertCtrl: AlertController,
     private modalController: ModalController,
     private usuarioService: UsuarioService,
+    private loadingSpinner: LoadingSpinnerService,
   ) { 
     addIcons({
       'persona':'assets/img/svg/user.svg',
@@ -52,7 +54,7 @@ export class InicioPerfilComponent  implements OnInit {
       'informacion': 'assets/img/svg/info.svg',
       'chevron-down': 'assets/img/svg/chevron-down.svg',
       'chevron-right': 'assets/img/svg/chevron-right.svg',
-
+      'trash-2': 'assets/img/svg/trash-2.svg'
     })
   }
 
@@ -148,6 +150,50 @@ export class InicioPerfilComponent  implements OnInit {
           this.fotoPerfilUrl = `data:${info.imagenBase64?.archivoMime};base64,` + info.imagenBase64?.archivo;
         }
       },
+    });
+  }
+
+  protected async presentarAlertaEliminarCuenta() {
+    const alert = await this.alertCtrl.create({
+      header: '¿Seguro(a) que desea eliminar su cuenta?',
+      subHeader: 'No podrás recuperarla.',
+      cssClass: 'custom-alert color-error icon-info two-buttons',
+      buttons: [
+        {
+          text: 'No, regresar',
+          role: 'cancel',
+        },
+        {
+          text: 'Sí, eliminar',
+          role: 'confirm',
+          handler: ()=> {
+            this.eliminarCuenta();
+          }
+          },
+      ]
+    });
+
+    await alert.present();
+  }
+
+  protected eliminarCuenta(){
+    this.loadingSpinner.presentLoading();
+    this.usuarioService.eliminarCuenta().subscribe({
+      next: () => {},
+      error: () => {
+        this.loadingSpinner.dismissLoading();
+      },
+      complete: () => {
+        this.loadingSpinner.dismissLoading().then(
+          () => {
+            this.cerrarSesion();
+          }
+        ).finally(
+          () => {
+            this.cerrarSesion();
+          }
+        )
+      }
     });
   }
 

@@ -390,5 +390,12 @@ namespace TrackrAPI.Controllers.Seguridad
             var idCompania = usuarioService.Consultar(idUsuario).IdCompania;
             return usuarioService.ConsultarPersonal(idCompania);
         }
+
+        [HttpDelete("eliminarCuenta")]
+        public void BorrarCuenta()
+        {
+            int idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            usuarioService.EliminarCuenta(idUsuario);
+        }
     }
 }

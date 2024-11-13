@@ -83,7 +83,6 @@ namespace TrackrAPI.Repositorys.Seguridad
                 && u.Contrasena == contrasena
                 // TODO: 2023-05-03 -> Agregar el filtro por rol
                 // && (claveRol == null || u.UsuarioRol.Any(ur => ur.IdRolNavigation.Clave == claveRol))
-                && u.Habilitado == true
                 select u;
             return usuarioConsulta.FirstOrDefault();
         }

@@ -1015,6 +1015,26 @@ namespace TrackrAPI.Services.Seguridad
 
 
         }
+
+        public void EliminarCuenta(int idUsuario)
+        {
+            var usuarioExistente = usuarioRepository.Consultar(idUsuario);
+
+            if (usuarioExistente is null)
+            {
+                throw new CdisException("Hubo un error al obtener el usuario.");
+            }
+
+            if (!usuarioExistente.Habilitado)
+            {
+                throw new CdisException("EL usuario ya se encuentra inhabilitado.");
+            }
+
+            usuarioExistente.Habilitado = false;
+
+            usuarioRepository.Editar(usuarioExistente);
+        }
+
         public async Task<string> ObtenerBytesImagenUsuario(int idUsuario){
             
             string filePath;
