@@ -180,7 +180,7 @@ namespace TrackrAPI.Services.Catalogo
         {
             var locacion = new Hospital()
             {
-                Nombre = "Locación " + compania.Nombre,
+                Nombre = "Hospital " + compania.Nombre,
                 Calle = compania.Calle,
                 NumeroExterior = compania.NumeroExterior,
                 NumeroInterior = compania.NumeroInterior,

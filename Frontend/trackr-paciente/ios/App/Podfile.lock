@@ -1,4 +1,6 @@
 PODS:
+  - BaumaPlugin (0.0.1):
+    - Capacitor
   - Capacitor (5.4.1):
     - CapacitorCordova
   - CapacitorApp (5.0.6):
@@ -30,6 +32,7 @@ PODS:
     - Capacitor
 
 DEPENDENCIES:
+  - BaumaPlugin (from `../../src/assets/custom_plugins/bauma-plugin`)
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
   - "CapacitorAppLauncher (from `../../node_modules/@capacitor/app-launcher`)"
@@ -47,6 +50,8 @@ DEPENDENCIES:
   - PerfoodCapacitorHealthkit (from `../../../../../capacitor-healthkit`)
 
 EXTERNAL SOURCES:
+  BaumaPlugin:
+    :path: "../../src/assets/custom_plugins/bauma-plugin"
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorApp:
@@ -79,6 +84,7 @@ EXTERNAL SOURCES:
     :path: "../../../../../capacitor-healthkit"
 
 SPEC CHECKSUMS:
+  BaumaPlugin: 0a932c7607bc6e8d088a300e76735e97ef197204
   Capacitor: 4c0681b47eebeba1f902093d24149cf2f518393e
   CapacitorApp: 024e1b1bea5f883d79f6330d309bc441c88ad04a
   CapacitorAppLauncher: 24ce4be152a84883378d22114ffe6c492056ced2

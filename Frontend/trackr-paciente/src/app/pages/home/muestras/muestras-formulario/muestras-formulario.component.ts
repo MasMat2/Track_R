@@ -21,6 +21,7 @@ import { GeneralConstant } from '@utils/general-constant';
 import { DirectiveModule } from 'src/app/shared/directives/directive.module';
 import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
 import { FechaService } from '@services/fecha.service';
+import { BaumaReaderComponent } from './bauma-reader/bauma-reader.component';
 
 @Component({
   selector: 'app-muestras-formulario',
@@ -170,8 +171,8 @@ export class MuestrasFormularioComponent implements OnInit {
 
   protected onChangeSeccion(){
     this.seccionYaSeleccionada = true;
-    this.variablesExistenEnHealthKit = this.seccionSeleccionada.seccionesCampo.every(seccionCampo => this.variablesHealthKit.includes(seccionCampo.clave));
-  }
+        this.variablesExistenEnHealthKit = this.seccionSeleccionada.seccionesCampo.every(seccionCampo => this.variablesHealthKit.includes(seccionCampo.clave));
+      }
 
   protected valoresInputValidos(){
     for (const seccionCampo of this.seccionSeleccionada.seccionesCampo) {
@@ -187,6 +188,36 @@ export class MuestrasFormularioComponent implements OnInit {
     }
 
     return true;
+  }
+
+  async syncronizeDataOmron() {
+    const modal = await this.modalController.create({
+      component: BaumaReaderComponent,
+    });
+
+    modal.onDidDismiss().then((dataReturned) => {
+      if (dataReturned.data) {
+        const readings = dataReturned.data.readings;
+        this.updateVariablesWithReadings(readings);
+      }
+    });
+
+    return await modal.present();
+  }
+
+  updateVariablesWithReadings(readings: any[]) {
+    const reading = readings[0]; // Assuming you take the first reading
+    if (this.seccionSeleccionada && this.seccionSeleccionada.seccionesCampo) {
+      this.seccionSeleccionada.seccionesCampo.forEach((variable) => {
+        if (variable.clave == "SE-001"){
+          variable.valor = reading.systolic;
+        } else if (variable.clave == "SE-002") {
+          variable.valor = reading.diastolic;
+        // } else if (variable.descripcion.toLowerCase().includes('pulse')) {
+        //   variable.valor = reading.pulseRate;
+        }
+      });
+    }
   }
 
   async syncronizeData(){

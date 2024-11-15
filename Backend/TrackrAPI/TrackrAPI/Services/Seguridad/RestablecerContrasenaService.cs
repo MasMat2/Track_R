@@ -132,7 +132,7 @@ namespace TrackrAPI.Services.Seguridad
                                                 <table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"">
                                                     <tr>
                                                         <td align=""center"">
-                                                            <img src=cid:logoHospital alt=""logo Oncotracker"" style=""width: 300px; display: block; margin: 16px;"">
+                                                            <img src=cid:{logotipoHospital.ContentId} alt=""logo Oncotracker"" style=""width: 300px; display: block; margin: 16px;"">
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -198,6 +198,9 @@ namespace TrackrAPI.Services.Seguridad
                     </body>
                 ";
 
+            AlternateView htmlView = AlternateView.CreateAlternateViewFromString(mensaje, Encoding.UTF8, MediaTypeNames.Text.Html);
+            htmlView.LinkedResources.Add(logotipoHospital);
+
             var correo = new Correo
             {
                 Receptor = usuarioCompleto.CorreoPersonal,
@@ -207,7 +210,7 @@ namespace TrackrAPI.Services.Seguridad
                 //Imagenes = new List<MimePart> { logotipoTrackr }
             };
 
-             _correoHelper.Enviar(correo);
+             _correoHelper.Enviar(correo, htmlView);
         }
         //private async Task<MimePart> DescargarLogo(string imageUrl, string contentId)
         //{

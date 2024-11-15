@@ -41,7 +41,7 @@ export class ConfiguracionSeccionesFormularioComponent implements OnInit {
   public columnsCampos = [
     { headerName: 'Clave', field: 'clave', minWidth: 30 },
     { headerName: 'Descripción', field: 'descripcion', minWidth: 50 },
-    { headerName: 'Dominio', field: 'nombreDominio', minWidth: 40 },
+    { headerName: 'Variable', field: 'nombreDominio', minWidth: 40 },
     { headerName: 'Orden', field: 'orden', minWidth: 20 },
     { headerName: 'Requerido', field: 'requerido', minWidth: 20, valueGetter: (params: any) => this.convertirSiNo(params.data)},
     { headerName: 'Grupo', field: 'grupo', minWidth: 20 },

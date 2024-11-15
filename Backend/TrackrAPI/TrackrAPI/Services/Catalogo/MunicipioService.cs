@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml;
+﻿using System.Transactions;
+using OfficeOpenXml;
 using TrackrAPI.Dtos.Archivos;
 using TrackrAPI.Dtos.Catalogo;
 using TrackrAPI.Helpers;
@@ -12,17 +13,20 @@ public class MunicipioService
     private readonly IMunicipioRepository _municipioRepository;
     private readonly MunicipioValidatorService _municipioValidatorService;
     private readonly EstadoService _estadoService;
+    private readonly IEstadoRepository _estadoRepository;
     private readonly IWebHostEnvironment hostingEnvironment;
 
     public MunicipioService(
         IMunicipioRepository municipioRepository,
         MunicipioValidatorService municipioValidatorService,
         EstadoService estadoService,
-        IWebHostEnvironment hostingEnvironment) {
+        IWebHostEnvironment hostingEnvironment,
+        IEstadoRepository estadoRepository) {
         _municipioRepository = municipioRepository;
         _municipioValidatorService = municipioValidatorService;
         _estadoService = estadoService;
         this.hostingEnvironment = hostingEnvironment;
+        _estadoRepository = estadoRepository;
     }
 
 
@@ -235,48 +239,86 @@ public class MunicipioService
         return municipioList;
     }
 
-    public List<MunicipioExcelDto> SincronizarPlantillaExcel()
+    public List<MunicipioDto> ConsultarTodos()
     {
-        var municipiosExcel = ConsultarMunicipioExcel();
-        var municipiosBdd = _municipioRepository.ConsultarTodos().ToList();
-
-        var estadosExcel = _estadoService.SincronizarPlantillaExcel();
-
-        var municipiosConNombreEstado = new List<MunicipioExcelDto>();
-
-        foreach (var municipio in municipiosExcel)
+        return _municipioRepository.ConsultarTodos()
+        .Select(m => new MunicipioDto
         {
+            IdMunicipio = m.IdMunicipio,
+            Nombre = m.Nombre,
+            IdEstado = m.IdEstado,
+            Clave = m.Clave,
+            ClaveEstado = m.IdEstadoNavigation.Clave
+        }).ToList();
+    }
 
-            var municipioBdd = municipiosBdd.FirstOrDefault(m => m.Nombre.Equals(municipio.NOM_MUN, StringComparison.OrdinalIgnoreCase));
+    private List<MunicipioExcelDto> ObtenerMunicipiosAActualizar(List<MunicipioExcelDto> municipiosExcel, List<Municipio> municipiosBdd)
+    {
+        var municipiosAActualizar = new List<MunicipioExcelDto>();
+
+        foreach (var municipioExcel in municipiosExcel)
+        {
+            var municipioBdd = municipiosBdd.FirstOrDefault(m => m.Nombre.Equals(municipioExcel.NOM_MUN, StringComparison.OrdinalIgnoreCase) &&
+                                                                m.Clave.Equals(municipioExcel.CVE_MUN, StringComparison.OrdinalIgnoreCase));
             if (municipioBdd == null)
             {
-                var estado = estadosExcel.FirstOrDefault(e => e.CATALOG_KEY == municipio.CVE_ENT);
+                municipiosAActualizar.Add(municipioExcel);
+            }
+        }
+
+        return municipiosAActualizar;
+    }
+
+    private void ActualizarMunicipios(List<MunicipioExcelDto> municipiosAActualizar, List<Municipio> municipiosBdd, List<Estado> estadosBdd)
+    {
+        foreach (var municipioExcel in municipiosAActualizar)
+        {
+            var municipioExistente = municipiosBdd.FirstOrDefault(m => m.Nombre.Equals(municipioExcel.NOM_MUN, StringComparison.OrdinalIgnoreCase));
+
+            if (municipioExistente == null)
+            {
+                var estado = estadosBdd.FirstOrDefault(e => e.Clave.Equals(municipioExcel.CVE_ENT, StringComparison.OrdinalIgnoreCase));
                 if (estado != null)
                 {
-                    var municipioAgregado = new Municipio
+                    var nuevoMunicipio = new Municipio
                     {
-                        Nombre = municipio.NOM_MUN.Length > 50 ? municipio.NOM_MUN[..50] : municipio.NOM_MUN, // El limite de la bdd es 50
+                        Nombre = municipioExcel.NOM_MUN.Length > 50 ? municipioExcel.NOM_MUN[..50] : municipioExcel.NOM_MUN, // El limite de la bdd es 50
                         IdEstado = (int)estado.IdEstado,
-                        Clave = municipio.CVE_MUN
+                        Clave = municipioExcel.CVE_MUN
                     };
-                    var municipioAgregadoBdd = _municipioRepository.Agregar(municipioAgregado);
-                    municipio.IdMunicipio = municipioAgregadoBdd.IdMunicipio;
-                    municipio.IdEstado = municipioAgregadoBdd.IdEstado;
-
-                    municipiosConNombreEstado.Add(municipio);
+                    var municipioAgregadoBdd = _municipioRepository.Agregar(nuevoMunicipio);
+                    municipioExcel.IdMunicipio = municipioAgregadoBdd.IdMunicipio;
+                    municipioExcel.IdEstado = municipioAgregadoBdd.IdEstado;
                 }
             }
             else
             {
-                municipio.IdMunicipio = municipioBdd.IdMunicipio;
-                municipio.IdEstado = municipioBdd.IdEstado;
+                municipioExistente.Nombre = municipioExcel.NOM_MUN.Length > 50 ? municipioExcel.NOM_MUN[..50] : municipioExcel.NOM_MUN; // El limite de la bdd es 50
+                municipioExistente.Clave = municipioExcel.CVE_MUN;
+                _municipioRepository.Editar(municipioExistente);
 
-                municipiosConNombreEstado.Add(municipio);
+                municipioExcel.IdMunicipio = municipioExistente.IdMunicipio;
+                municipioExcel.IdEstado = municipioExistente.IdEstado;
             }
-
-
         }
-
-        return municipiosConNombreEstado;
     }
+
+    public List<MunicipioExcelDto> SincronizarPlantillaExcel()
+    {
+        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+        var municipiosExcel = ConsultarMunicipioExcel();
+        var municipiosBdd = _municipioRepository.ConsultarTodos().ToList();
+
+        var estadosExcel = _estadoService.SincronizarPlantillaExcel();
+        var estadosBdd = _estadoRepository.ConsultarTodos().ToList();
+
+        var municipiosAActualizar = ObtenerMunicipiosAActualizar(municipiosExcel, municipiosBdd);
+
+        ActualizarMunicipios(municipiosAActualizar, municipiosBdd, estadosBdd);
+
+        scope.Complete();
+        return municipiosAActualizar;
+    }
+
+
 }

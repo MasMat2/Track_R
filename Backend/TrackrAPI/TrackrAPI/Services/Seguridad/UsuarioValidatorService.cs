@@ -377,11 +377,14 @@ namespace TrackrAPI.Services.Seguridad
             //Usuario 
             Usuario userFromRepo = usuarioRepository.Login(loginRequest.Correo, encryptedPassword, loginRequest.ClaveTipoUsuario);
 
-
-
             if (userFromRepo == null)
             {
                 throw new CdisException("Usuario y/o contraseña incorrectos");
+            }
+
+            if (!userFromRepo.Habilitado)
+            {
+                throw new CdisException("Esta cuenta ha sido eliminada/inhabilitada");
             }
 
             ValidarUsuarioExpediente(userFromRepo.IdUsuario, esMobile);

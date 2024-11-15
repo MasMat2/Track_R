@@ -5,6 +5,7 @@ using OfficeOpenXml;
 using System.Collections.Concurrent;
 using TrackrAPI.Helpers;
 using TrackrAPI.Dtos.Archivos;
+using System.Transactions;
 
 namespace TrackrAPI.Services.Catalogo
 {
@@ -83,6 +84,10 @@ namespace TrackrAPI.Services.Catalogo
             codigoPostalRepository.Eliminar(codigoPostal);
         }
 
+        public IEnumerable<CodigoPostal> ConsultarTodos()
+        {
+            return codigoPostalRepository.ConsultarTodos();
+        }
 
         // Existing methods...
 
@@ -160,7 +165,7 @@ namespace TrackrAPI.Services.Catalogo
             await File.WriteAllBytesAsync(path, fileBytes);
         }
 
-        private List<CodigoPostalExcelDto> ConsultarCodigoPostalExcel()
+        public  List<CodigoPostalExcelDto> ConsultarCodigoPostalExcel()
         {
             string path = Path.Combine("Archivos", "Excel", "CODIGO_POSTAL_20240819.xlsx");
             var codigoPostalList = new List<CodigoPostalExcelDto>();
@@ -219,32 +224,28 @@ namespace TrackrAPI.Services.Catalogo
             }
             return codigoPostalList;
         }
-        public void CargaExcel()
+
+        private List<CodigoPostal> DeterminarCodigosPostalesAProcesar(IEnumerable<CodigoPostalExcelDto> codigoPostalExcel, IEnumerable<CodigoPostal> codigoPostalBdd, Dictionary<string, MunicipioDto> municipiosDict)
         {
-            var municipiosExcel = _municipioService.SincronizarPlantillaExcel();
-            var codigoPostalExcel = ConsultarCodigoPostalExcel();
+            var codigosPostalesAAgregarOAActualizar = new ConcurrentBag<CodigoPostal>();
+            var codigoPostalBddList = codigoPostalBdd.ToList();
 
-            var codigoPostalList = new ConcurrentBag<CodigoPostal>();
-        
-            var municipiosDict = municipiosExcel
-            .GroupBy(m => m.CVE_MUN)
-            .ToDictionary(g => g.Key, g => g.First());
-
-            // Usar Parallel.ForEach para procesar los códigos postales en paralelo
             Parallel.ForEach(codigoPostalExcel, codigoPostal =>
             {
-                if (municipiosDict.TryGetValue(codigoPostal.c_mnpio, out var municipio))
+                if (municipiosDict.TryGetValue($"{codigoPostal.c_estado}_{codigoPostal.c_mnpio}", out var municipio))
                 {
-                    codigoPostal.idMunicipio = municipio.IdMunicipio;
+                    var codigoPostalExistente = codigoPostalBddList.FirstOrDefault(c => c.CodigoPostal1 == codigoPostal.d_codigo && c.IdMunicipio == municipio.IdMunicipio);
 
-                    var codigoPostalAAgregar = new CodigoPostal
+                    if (codigoPostalExistente == null)
                     {
-                        CodigoPostal1 = codigoPostal.d_codigo,
-                        Colonia = codigoPostal.d_asenta,
-                        IdMunicipio = (int)codigoPostal.idMunicipio
-                    };
-
-                    codigoPostalList.Add(codigoPostalAAgregar);
+                        var nuevoCodigoPostal = new CodigoPostal
+                        {
+                            CodigoPostal1 = codigoPostal.d_codigo,
+                            Colonia = codigoPostal.d_asenta,
+                            IdMunicipio = municipio.IdMunicipio
+                        };
+                        codigosPostalesAAgregarOAActualizar.Add(nuevoCodigoPostal);
+                    }
                 }
                 else
                 {
@@ -252,12 +253,40 @@ namespace TrackrAPI.Services.Catalogo
                 }
             });
 
-            var finalCodigoPostalList = codigoPostalList.ToList();
-            codigoPostalRepository.Truncate();
-            codigoPostalRepository.BulkInsert(finalCodigoPostalList);
+            return codigosPostalesAAgregarOAActualizar.ToList();
+        }
+        private void ActualizarCodigosPostales(List<CodigoPostal> codigosPostalesAAgregarOAActualizar)
+        {
+            codigoPostalRepository.EliminarSinDependencias();
+            codigoPostalRepository.BulkInsert(codigosPostalesAAgregarOAActualizar);
         }
 
+        public void CargaExcel()
+        {
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+            {
+                var municipiosExcel = _municipioService.ConsultarTodos();
+                var codigoPostalExcel = ConsultarCodigoPostalExcel();
 
+                var codigosPostalesUnicos = codigoPostalExcel
+                    .GroupBy(c => c.d_codigo)
+                    .Select(g => g.First())
+                    .ToList();
+
+                var codigoPostalBdd = codigoPostalRepository.ConsultarTodos();
+
+                var municipiosDict = municipiosExcel
+                    .GroupBy(m => new { m.ClaveEstado, m.Clave }) // Agrupa por la combinación de CVE_ENT y CVE_MUN
+                    .Select(g => g.First())  // Selecciona el primer elemento de cada grupo
+                    .ToDictionary(m => $"{m.ClaveEstado}_{m.Clave}", m => m); // Crea un diccionario con la clave formada por CVE_ENT y CVE_MUN
+
+                var codigosPostalesAAgregarOAActualizar = DeterminarCodigosPostalesAProcesar(codigosPostalesUnicos, codigoPostalBdd, municipiosDict);
+
+                ActualizarCodigosPostales(codigosPostalesAAgregarOAActualizar);
+
+                scope.Complete();
+            }
+        }
 
     }
 }

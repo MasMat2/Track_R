@@ -23,6 +23,7 @@ def capacitor_pods
   pod 'CapawesomeCapacitorFilePicker', :path => '../../node_modules/@capawesome/capacitor-file-picker'
   pod 'CapawesomeCapacitorScreenOrientation', :path => '../../node_modules/@capawesome/capacitor-screen-orientation'
   pod 'PerfoodCapacitorHealthkit', :path => '../../../../../capacitor-healthkit'
+  pod 'BaumaPlugin', :path => '../../src/assets/custom_plugins/bauma-plugin'
   pod 'CapacitorVoiceRecorder', :path => '../../node_modules/capacitor-voice-recorder'
 end
 

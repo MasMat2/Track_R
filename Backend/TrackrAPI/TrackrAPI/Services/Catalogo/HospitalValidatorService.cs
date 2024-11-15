@@ -30,9 +30,9 @@ namespace TrackrAPI.Services.Catalogo
         private readonly string MensajeCuentaRequerido = "La cuenta es requerida";
         private readonly string MensajeCableRequerido = "La CLABE es requerida";
         private readonly string MensajePredeterminadaRequerido = "El campo predeterminada es requerido";
-        private readonly string MensajeExistencia = "La locación no existe";
+        private readonly string MensajeExistencia = "El hospital no existe";
 
-        private readonly string MensajeDuplicado = "Ya existe una locación con el mismo rfc";
+        private readonly string MensajeDuplicado = "Ya existe un hospital con el mismo rfc";
 
         private static readonly int LongitudNombre = 50;
         private static readonly int LongitudRFC = 13;
@@ -199,7 +199,7 @@ namespace TrackrAPI.Services.Catalogo
             // Se intenta Eliminar / Editar la locacion predeterminada actual
             if ((esEliminar || locacion.Predeterminada == false) && locacion.IdHospital == locacionPredeterminada.IdHospital)
             {
-                throw new CdisException("Es necesario contar con una locación predeterminada en la compañía");
+                throw new CdisException("Es necesario contar con un hospital predeterminado en la compañía");
             }
 
             return null;

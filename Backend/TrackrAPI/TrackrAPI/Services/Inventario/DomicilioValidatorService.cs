@@ -144,7 +144,7 @@ namespace TrackrAPI.Services.Inventario
                 throw new CdisException("El código postal no corresponde al municipio seleccionado");
             }
 
-            if (colonia.CodigoPostal != domicilio.CodigoPostal)
+            if (colonia.IdCodigoPostalNavigation.CodigoPostal1 != domicilio.CodigoPostal)
             {
                 throw new CdisException("La colonia seleccionada no corresponde al código postal ingresado");
             }

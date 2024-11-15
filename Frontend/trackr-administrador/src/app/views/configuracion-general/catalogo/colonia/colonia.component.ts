@@ -7,6 +7,7 @@ import { CodigoAcceso } from '@utils/codigo-acceso';
 import { GeneralConstant } from '@utils/general-constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ColoniaFormularioComponent } from './colonia-formulario/colonia-formulario.component';
+import { LoadingSpinnerService } from '@services/loading-spinner.service';
 
 @Component({
   selector: 'app-colonia',
@@ -35,7 +36,8 @@ export class ColoniaComponent implements OnInit {
     private coloniaService: ColoniaService,
     private mensajeService: MensajeService,
     private modalService: BsModalService,
-    private bsModalRef: BsModalRef) {}
+    private bsModalRef: BsModalRef,
+    private loadingSpinnerService : LoadingSpinnerService) {}
     
 
   ngOnInit() {
@@ -110,6 +112,20 @@ export class ColoniaComponent implements OnInit {
         this.mensajeService.modalExito(this.MENSAJE_EXITO_ELIMINAR);
         this.consultarGrid();
       });
+    });
+  }
+
+  sincronizarPlantilla(){
+    this.loadingSpinnerService.openSpinner();
+    this.coloniaService.actualizarPlantillaExcel().subscribe({
+      next: () => {
+        this.loadingSpinnerService.closeSpinner();
+        this.mensajeService.modalExito('Plantilla actualizada exitosamente');
+      },
+      error: (error) => {
+        this.loadingSpinnerService.closeSpinner();
+        this.mensajeService.modalError('Error al actualizar la plantilla');
+      }
     });
   }
 

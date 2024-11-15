@@ -1,5 +1,6 @@
 ﻿using TrackrAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using TrackrAPI.Dtos.Catalogo;
 
 namespace TrackrAPI.Repositorys.Catalogo;
 
@@ -81,6 +82,21 @@ public class MunicipioRepository : Repository<Municipio>, IMunicipioRepository
 
     public IEnumerable<Municipio> ConsultarTodos()
     {
-        return context.Municipio;
+        return context.Municipio
+                        .Include(m => m.IdEstadoNavigation);
+    }
+
+
+    public IEnumerable<MunicipioDto> ConsultarTodosDto(){
+        return context.Municipio
+            .Include(m => m.IdEstadoNavigation)
+            .Select(m => new MunicipioDto
+            {
+                IdMunicipio = m.IdMunicipio,
+                Nombre = m.Nombre,
+                IdEstado = m.IdEstado,
+                Clave = m.Clave,
+                ClaveEstado = m.IdEstadoNavigation.Clave,
+            });
     }
 }

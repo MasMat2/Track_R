@@ -12,6 +12,8 @@ public interface IMunicipioRepository: IRepository<Municipio>
     IEnumerable<Municipio> Consultar();
     IEnumerable<Municipio> ConsultarParaGrid();
     IEnumerable<Municipio> ConsultarTodos();
+    IEnumerable<MunicipioDto> ConsultarTodosDto();
+
     IEnumerable<Municipio> ConsultarPorEstado(int idPais);
     Municipio? ConsultarDependencias(int idLocalidad);
     public Municipio? ConsultarPorNombre(string nombre);

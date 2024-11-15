@@ -57,4 +57,8 @@ export class UsuarioService {
     return this.http.get<UsuarioDto>(this.url + `consultarMiUsuario`);
   }
 
+  public eliminarCuenta(): Observable<void> {
+    return this.http.delete<void>(this.url + `eliminarCuenta` );
+  }
+
 }

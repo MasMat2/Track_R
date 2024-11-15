@@ -10,6 +10,7 @@ namespace TrackrAPI.Repositorys.Catalogo
         public CodigoPostalDto ConsultarDto(int idCodigoPostal);
         public IEnumerable<CodigoPostalGridDto> ConsultarTodosParaGrid();
         public IEnumerable<CodigoPostal> ConsultarTodos();
+        public void EliminarSinDependencias();
         public IEnumerable<CodigoPostalDto> ConsultarPorCodigoPostal(string codigoPostal);
         public IEnumerable<CodigoPostalDto> ConsultarPorMunicipio(int idMunicipio);
         public IEnumerable<CodigoPostalDto> ConsultarPorPaisBusqueda(string codigoPostal, int idPais);

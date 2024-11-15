@@ -9,6 +9,7 @@ namespace TrackrAPI.Repositorys.Catalogo
         public Colonia Consultar(int idColonia);
         public IEnumerable<Colonia> ConsultarPorCodigoParaSelector(string codigoPostal);
         public IEnumerable<ColoniaGridDto> ConsultarParaGrid();
+        public IEnumerable<Colonia> Consultar();
         public Colonia ConsultarPorCodigoPostal(string codigoPostal);
     }
 }

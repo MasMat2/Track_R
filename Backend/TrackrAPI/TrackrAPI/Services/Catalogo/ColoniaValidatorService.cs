@@ -46,8 +46,6 @@ namespace TrackrAPI.Services.Catalogo
         public void ValidarRequerido(Colonia colonia)
         {
             Validator.ValidarRequerido(colonia.Clave, MensajeClaveRequerida);
-            Validator.ValidarRequerido(colonia.CodigoPostal, MensajeCodigoPostalRequerido);
-            Validator.ValidarRequerido(colonia.CodigoPostal, MensajeNombreRequerido);
         }
 
         public void ValidarExistencia(int idColonia)
@@ -62,12 +60,12 @@ namespace TrackrAPI.Services.Catalogo
 
         public void ValidarDuplicado(Colonia colonia)
         {
-            Colonia duplicadoCodigoPostal = coloniaRepository.ConsultarPorCodigoPostal(colonia.CodigoPostal);
+      /*       Colonia duplicadoCodigoPostal = coloniaRepository.ConsultarPorCodigoPostal(colonia.Nombre);
 
             if (duplicadoCodigoPostal != null && colonia.IdColonia != duplicadoCodigoPostal.IdColonia)
             {
                 throw new CdisException(MensajeDuplicadoCodigoPostal);
-            }
+            } */
         }
     }
 }
