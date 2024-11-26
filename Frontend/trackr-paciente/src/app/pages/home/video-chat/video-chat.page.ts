@@ -22,7 +22,7 @@ export class VideoChatPage extends EventTarget implements OnInit{
   protected pc: RTCPeerConnection;
   protected localStream: MediaStream;
   protected remoteStream: MediaStream;
-  private destroy$: Subject<void>;
+  private destroy$ = new Subject<void>();;
 
   protected servers = {
     iceServers: [
@@ -53,7 +53,7 @@ export class VideoChatPage extends EventTarget implements OnInit{
     iceCandidatePoolSize: 10,
   };
 
-  protected callerId: string;
+  protected callId: string;
   protected buttonState = true;
   protected hangupButtonState = true;
   protected is_caller = false;
@@ -72,41 +72,24 @@ export class VideoChatPage extends EventTarget implements OnInit{
   
   async ngOnInit(): Promise<void> {
     
-    this.destroy$ = new Subject<void>();
-
-    await this.signalingHubService.iniciarConexion();
-
-    await this.webcamButtonClick();
-
-    this.signalingObservers();
-    
-    this.rtcObservers();
-
-    this.route.paramMap.pipe(takeUntil(this.destroy$))
-    .subscribe(params => {
-      this.callerId = params.get('id')!;
-
-      if(!this.callerId){
-        this.is_caller = true;
-        this.signalingHubService.crearLlamada();
-
-      }else{
-        this.is_caller = false;
-        this.signalingHubService.crearLlamada(this.callerId);
-      }
-    });
   }
 
-  private signalingObservers() {
+  private observers() {
     this.signalingHubService.message$.pipe(takeUntil(this.destroy$))
     .subscribe((json_string: string) => {
+      
+      
       if(json_string.length <= 0) return;
 
       var message = JSON.parse(json_string);
+
+      console.log('VideoChatPage.signalingObservers - json_string:', message.type);
+
       switch (message.type) {
 
+        // Signaling messages
         case "local-id":
-          this.callerId = message.local_id;
+          // this.callId = message.local_id;
           break;
 
         case "callee-connected":
@@ -122,40 +105,43 @@ export class VideoChatPage extends EventTarget implements OnInit{
         case "remove-remote":
           this.remoteStream = new MediaStream();
           break;
+
+        // RTC messages
+        case "new-ice-candidate":
+          this.pc.addIceCandidate(message.candidate);
+          break;
+
+
+        case "video-answer":
+          if (!this.pc.currentRemoteDescription && message?.answer) {
+            const answerDescription = new RTCSessionDescription(message.answer);
+            this.pc.setRemoteDescription(answerDescription);
+          };
+          break;
       }
     });
   }
 
   // Caller listener
   calleeConnected = async () => {
-    if(this.is_caller){
 
-      this.startRTC();
+    this.startRTC();
 
-      // Get candidates for caller, save to db
-      this.pc.onicecandidate = (event) => {
-        event.candidate && this.signalingHubService.sendMessage({
-          type: "new-ice-candidate",
-          candidate: event.candidate
-        });
-      };
+    // Create offer
+    const offerDescription = await this.pc.createOffer();
+    await this.pc.setLocalDescription(offerDescription);
 
-      // Create offer
-      const offerDescription = await this.pc.createOffer();
-      await this.pc.setLocalDescription(offerDescription);
+    const offer = {
+      sdp: offerDescription.sdp,
+      type: offerDescription.type,
+    };
 
-      const offer = {
-        sdp: offerDescription.sdp,
-        type: offerDescription.type,
-      };
+    await this.signalingHubService.sendMessage({
+      type: "video-offer",
+      offer: offer
+    });
 
-      await this.signalingHubService.sendMessage({
-        type: "video-offer",
-        offer: offer
-      });
-
-      this.hangupButtonState = false;
-    }    
+    this.hangupButtonState = false;
   }
 
   // Callee listener
@@ -167,14 +153,6 @@ export class VideoChatPage extends EventTarget implements OnInit{
       const offerDescription = new RTCSessionDescription(offer);
       this.pc.setRemoteDescription(offerDescription);
     };
-    
-    this.pc.onicecandidate = (event) => {
-      event.candidate && this.signalingHubService.sendMessage({
-        type: "new-ice-candidate",
-        candidate: event.candidate
-      });
-    };
-
     const answerDescription = await this.pc.createAnswer();
     await this.pc.setLocalDescription(answerDescription);
 
@@ -206,47 +184,46 @@ export class VideoChatPage extends EventTarget implements OnInit{
       });
     };
 
+    // Get candidates for caller, save to db
+    this.pc.onicecandidate = (event) => {
+      event.candidate && this.signalingHubService.sendMessage({
+        type: "new-ice-candidate",
+        candidate: event.candidate
+      });
+    };
+
   }
 
-
-  private rtcObservers() {
-    this.signalingHubService.message$.pipe(takeUntil(this.destroy$))
-    .subscribe((json_string: string) => {
-      if(json_string.length <= 0) return;
-
-      var message = JSON.parse(json_string);
-      switch (message.type) {
-        case "new-ice-candidate":
-          this.pc.addIceCandidate(message.candidate);
-          break;
-
-
-        case "video-answer":
-          if (!this.pc.currentRemoteDescription && message?.answer) {
-            const answerDescription = new RTCSessionDescription(message.answer);
-            this.pc.setRemoteDescription(answerDescription);
-          };
-          break;
-      }
-    });
-  }
 
 
   // 1. Setup media sources
   webcamButtonClick = async () => {
+    console.log('webcamButtonClick - INICIO');
     this.localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 
     this.buttonState = false;
+
+    
+    this.observers();
+
+    this.route.paramMap.pipe(takeUntil(this.destroy$))
+    .subscribe(params => {
+      this.callId = params.get('id')!;
+
+      if(!this.callId){
+        // this.is_caller = true;
+        // this.signalingHubService.crearLlamada();
+        throw new Error('No se pudo crear la llamada');
+
+      }else{
+        // this.is_caller = false;
+        this.signalingHubService.crearLlamada(this.callId);
+      }
+    });
   };
 
   ionViewWillLeave = async () => {
-    this.closeStreams();
-    // this.destroy$.next();
-    // this.destroy$.complete();
-  }
-
-  closeStreams = () => {
-
+    this.destroy$.next();
     if (this.localStream) {
       this.localStream.getTracks().forEach(track => track.stop());
     }
@@ -254,6 +231,13 @@ export class VideoChatPage extends EventTarget implements OnInit{
     if (this.remoteStream) {
       this.remoteStream.getTracks().forEach(track => track.stop());
     }
+    // this.destroy$.complete();
+    console.log("destroyed");
+  }
+
+  hangUp = () => {
+
+    this.router.navigate(['/home/chat-movil']);
   }
 
   // 2. Create an offer
@@ -268,7 +252,7 @@ export class VideoChatPage extends EventTarget implements OnInit{
   // 3. Answer the call with the unique ID
   answerButtonClick = async () => {
     // this.is_caller = false;
-    // const caller_id = this.callerId;
+    // const caller_id = this.callId;
 
     // console.log("wait");
     // console.log("resolving");

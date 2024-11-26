@@ -50,7 +50,7 @@ export class NotificacionPacienteService {
   }
       
   public async validarMeet(mensaje: NotificacionPacientePopOverDto) {
-    if (this.validandoMeet) {
+    if (!mensaje || this.validandoMeet) {
         return;  
     }
 
@@ -75,19 +75,19 @@ export class NotificacionPacienteService {
       this.validandoMeet = false;
     }
 
-    if (mensaje.mensaje.includes('webrtc-' + mensaje.idChat)) {
-      const regex = /webrtc-\d+-(\d+)/;
-      const match = mensaje.mensaje.match(regex);
-      if (match && match.length > 0) {
-        const codigo = match[1];
-        this.route.navigate(['/home/chat', codigo]);
+    // if (mensaje.mensaje.includes('webrtc-' + mensaje.idChat)) {
+    //   const regex = /webrtc-\d+-(\d+)/;
+    //   const match = mensaje.mensaje.match(regex);
+    //   if (match && match.length > 0) {
+    //     const codigo = match[1];
+    //     // this.route.navigate(['/home/chat', codigo]);
 
-      } else {
-        console.error("Error al validar codigo meet jitsi.");
-      }
+    //   } else {
+    //     console.error("Error al validar codigo meet webRTC.");
+    //   }
 
-      this.validandoMeet = false;
-    }
+    //   this.validandoMeet = false;
+    // }
   }
 
   

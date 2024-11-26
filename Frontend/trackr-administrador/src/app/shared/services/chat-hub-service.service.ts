@@ -31,6 +31,7 @@ export class ChatHubServiceService {
 
   constructor(private ChatPersonaService:ChatPersonaService, private fechaService: FechaService) { 
     this.iniciarConexion();
+    console.log('Iniciando conexion con el Hub de Chat...');
   }
 
   public async iniciarConexion(){
@@ -45,12 +46,12 @@ export class ChatHubServiceService {
     const connectionConfig: IHttpConnectionOptions = {
       accessTokenFactory: () => {
         return token;
-      },
-      transport: HttpTransportType.LongPolling
+      }
+      // transport: HttpTransportType.LongPolling
     };
 
     this.connection = new HubConnectionBuilder()
-      .configureLogging(LogLevel.Debug)
+      // .configureLogging(LogLevel.Debug)
       .withUrl(url, connectionConfig)
       .build();
     

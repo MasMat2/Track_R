@@ -78,15 +78,13 @@ export class ChatComponent implements OnDestroy {
 
   obtenerMensajes(){
     //TODO:no descargar los mensajes hasta entrar al chat
-    this.chatMensajes$ = this.chatMensajeHubService.chatMensaje$;
     
-    this.chatMensajes$.subscribe(res =>{
-      if(this.idChatSeleccionado != undefined){
-        this.obtenerChatSeleccionado(this.idChatSeleccionado);
-      }
-      this.mensajes = res;
-      this.obtenerUltimoMensaje();
-    })
+    const mensajes = this.chatMensajeHubService.obtenerMensajes();
+    if(this.idChatSeleccionado != undefined){
+      this.obtenerChatSeleccionado(this.idChatSeleccionado);
+    }
+    this.mensajes = mensajes;
+    this.obtenerUltimoMensaje();
   }
 
   enviarMensaje(idChat:number): void{
@@ -117,12 +115,18 @@ export class ChatComponent implements OnDestroy {
 
   private obtenerUltimoMensaje(): void {
     const ultimoMensaje = this.mensajes.map(
-      (arr) =>{ return {mensajes: arr[arr.length - 1]?.mensaje || '', chat: arr[0]?.idChat || 0}}
+      (arr) => { 
+        const mensaje = arr[arr.length - 1]?.mensaje || '';
+        const chatId = arr[0]?.idChat || 0;
+        return { mensajes: mensaje, chat: chatId };
+      }
     );
 
     const fechaUltimoMensaje = this.mensajes.map(
       (arr) => {
-        return {fecha: arr[arr.length - 1]?.fecha || this.fechaService.obtenerFechaActualISOString(), chat: arr[0]?.idChat || 0}
+        const fecha = arr[arr.length - 1]?.fecha || this.fechaService.obtenerFechaActualISOString();
+        const chatId = arr[0]?.idChat || 0;
+        return { fecha: fecha, chat: chatId };
       }
     )
     

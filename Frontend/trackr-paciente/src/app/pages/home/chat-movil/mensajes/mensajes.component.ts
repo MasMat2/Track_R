@@ -131,7 +131,7 @@ export class MensajesComponent{
 
   obtenerIdChat() {
     this.router.params.subscribe(params => {
-      this.idChat = Number(params['id'])
+      this.idChat = Number(params['id']);
       this.obtenerMensajes();
       this.obtenerChat();
     })
@@ -489,10 +489,10 @@ export class MensajesComponent{
   crearLlamadaWebRTC() {
     let idUsuario = this.idUsuario;
 
-    const newRoomName = `webrtc-${this.idChat}-${idUsuario}`;
+    const newRoomName = `webrtc-${this.idChat}`;
 
     const telefonoEmoji = "📞";
-    let mensaje = `${telefonoEmoji} Te espero la sala ${newRoomName}`;
+    let mensaje = `${telefonoEmoji} Te espero en la sala ${newRoomName}`;
 
     let msg: ChatMensajeDTO = {
       fecha: this.fechaService.fechaLocalAFechaUTC(new Date()),
@@ -503,9 +503,8 @@ export class MensajesComponent{
       idArchivo: 0,
       esVideoChat: true
     };
-
     this.ChatMensajeHubService.enviarMensaje(msg);
-    this.route.navigate(['/home/chat']);
+    this.route.navigate(['/home/chat', this.idChat]);
   }
 
   contestarLlamada(meetCode: string) {
@@ -533,17 +532,17 @@ export class MensajesComponent{
 
     }
 
-    if (mensaje.mensaje.includes('webrtc-' + this.idChat)) {
-      const regex = /webrtc-\d+-(\d+)/;
-      const match = mensaje.mensaje.match(regex);
-      if (match && match.length > 0) {
-        const codigo = match[1];
-        this.route.navigate(['/home/chat', codigo]);
+    // if (mensaje.mensaje.includes('webrtc-' + this.idChat)) {
+    //   const regex = /webrtc-(\d+)/;
+    //   const match = mensaje.mensaje.match(regex);
+    //   if (match && match.length > 0) {
+    //     const codigo = match[1];
+    //     this.route.navigate(['/home/chat', codigo]);
 
-      } else {
-        console.error("Error al validar codigo meet jitsi.");
-      }
-    }
+    //   } else {
+    //     console.error("Error al validar codigo meet jitsi.");
+    //   }
+    // }
   }
 
   //verificar si se está escribiendo un mensaje (mensaje no vacío)

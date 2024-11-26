@@ -7,6 +7,7 @@ export class SignalingHubBase extends EventTarget{
   protected connectionStatus = new BehaviorSubject<HubConnectionState>(HubConnectionState.Disconnected);
 
   protected connection: HubConnection;
+  private startPromise : Promise<void>;
 
   
   private messaageSource = new BehaviorSubject<string>('');
@@ -17,6 +18,8 @@ export class SignalingHubBase extends EventTarget{
     private authService: AuthService
   ) {
     super();
+    this.iniciarConexion();
+    console.log('Iniciando conexion con el Hub de Signaling...');
   }
 
   public async iniciarConexion() {
@@ -33,13 +36,13 @@ export class SignalingHubBase extends EventTarget{
       const connectionConfig: IHttpConnectionOptions = {
         accessTokenFactory: () => {
           return token;
-        },
-        transport: HttpTransportType.LongPolling,
+        }
+        // transport: HttpTransportType.LongPolling,
         // TODO: 2023-03-23 -> Revisar los tipos de transporte (Web Socket, Long Polling, Server Sent Events)
       };
 
       this.connection = new HubConnectionBuilder()
-        .configureLogging(LogLevel.Debug)
+        // .configureLogging(LogLevel.Debug)
         .withUrl(url, connectionConfig)
         .build();
 
@@ -55,7 +58,7 @@ export class SignalingHubBase extends EventTarget{
 
       this.connectionStatus.next(HubConnectionState.Connecting);
 
-      await this.connection.start();
+      this.startPromise = this.connection.start();
     }
 
   
@@ -64,6 +67,14 @@ export class SignalingHubBase extends EventTarget{
     await this.ensureConnection();
     
     await this.connection.invoke('CrearLlamada', caller_id);
+
+  }
+
+  public async cerrarLlamada(caller_id?: string) {
+    
+    await this.ensureConnection();
+    
+    await this.connection.invoke('CerrarLlamada', caller_id);
 
   }
 
@@ -109,20 +120,13 @@ export class SignalingHubBase extends EventTarget{
       this.connection.state === HubConnectionState.Disconnected ||
       this.connection.state === HubConnectionState.Disconnecting
     ) {
-      throw new Error('No se ha iniciado la conexión con el Hub de Notificaciones');
+      throw new Error('No se ha iniciado la conexión con el Signaling Hub');
     }
     else if (
       this.connection.state === HubConnectionState.Connecting ||
       this.connection.state === HubConnectionState.Reconnecting
     ) {
-      this.connectionStatus
-        .asObservable()
-        .pipe(
-          filter((state) => state === HubConnectionState.Connected),
-          take(1),
-          timeout(timeoutms),
-          catchError(() => { throw new Error('No se pudo establecer la conexión con el Hub de Notificaciones') })
-        );
+      await this.startPromise;
     }
   }
 }
