@@ -1,5 +1,5 @@
-import { HubConnectionState, HubConnection, IHttpConnectionOptions, HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
-import { BehaviorSubject, filter, take, timeout, catchError } from "rxjs";
+import { HubConnectionState, HubConnection, IHttpConnectionOptions, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { BehaviorSubject } from "rxjs";
 import { environment } from "src/environments/environment";
 import { Constants } from "@utils/constants/constants";
 
@@ -11,10 +11,14 @@ export class SignalingHubBase extends EventTarget{
   private messaageSource = new BehaviorSubject<string>('');
   message$ = this.messaageSource.asObservable();
 
+  private startPromise: Promise<void> | null = null;
+
   constructor(
     protected endpoint: string
   ) {
     super();
+    this.iniciarConexion();
+    console.log('Iniciando conexion con el Hub de Signaling...');
   }
 
   public async iniciarConexion() {
@@ -24,35 +28,38 @@ export class SignalingHubBase extends EventTarget{
       return;
     }
 
-      const url = `${environment.urlBackend}${this.endpoint}`;
+    const url = `${environment.urlBackend}${this.endpoint}`;
 
-      const connectionConfig: IHttpConnectionOptions = {
-        accessTokenFactory: () => {
-          return token;
-        },
-        transport: HttpTransportType.LongPolling,
-        // TODO: 2023-03-23 -> Revisar los tipos de transporte (Web Socket, Long Polling, Server Sent Events)
-      };
+    const connectionConfig: IHttpConnectionOptions = {
+      accessTokenFactory: () => {
+        return token;
+      }
+      // transport: HttpTransportType.LongPolling,
+      // TODO: 2023-03-23 -> Revisar los tipos de transporte (Web Socket, Long Polling, Server Sent Events)
+    };
 
-      this.connection = new HubConnectionBuilder()
-        .configureLogging(LogLevel.Debug)
-        .withUrl(url, connectionConfig)
-        .build();
+    this.connection = new HubConnectionBuilder()
+      .configureLogging(LogLevel.Debug)
+      .withUrl(url, connectionConfig)
+      .build();
 
-      this.connection.on(
-        'NewMessage',
-        (obj: any) => this.onNewMessage(obj)
-      );
-      
-      this.connection.on(
-        'LocalId',
-        (local_id: string) => this.onLocalId(local_id)
-      );
+    this.connection.on(
+      'NewMessage',
+      (obj: any) => this.onNewMessage(obj)
+    );
+    
+    this.connection.on(
+      'LocalId',
+      (local_id: string) => this.onLocalId(local_id)
+    );
 
-      this.connectionStatus.next(HubConnectionState.Connecting);
+    this.connectionStatus.next(HubConnectionState.Connecting);
 
-      await this.connection.start();
-    }
+    this.startPromise = this.connection.start().catch(error => {
+      this.startPromise = null; // Reset the promise if the start fails
+      throw error;
+    });
+  }
 
   
   public async crearLlamada(caller_id?: string) {
@@ -105,20 +112,14 @@ export class SignalingHubBase extends EventTarget{
       this.connection.state === HubConnectionState.Disconnected ||
       this.connection.state === HubConnectionState.Disconnecting
     ) {
-      throw new Error('No se ha iniciado la conexión con el Hub de Notificaciones');
+      throw new Error('No se ha iniciado la conexión con el Hub de Signaling');
     }
     else if (
       this.connection.state === HubConnectionState.Connecting ||
       this.connection.state === HubConnectionState.Reconnecting
     ) {
-      this.connectionStatus
-        .asObservable()
-        .pipe(
-          filter((state) => state === HubConnectionState.Connected),
-          take(1),
-          timeout(timeoutms),
-          catchError(() => { throw new Error('No se pudo establecer la conexión con el Hub de Notificaciones') })
-        );
+      
+      await this.startPromise;
     }
   }
 }

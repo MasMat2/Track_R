@@ -69,9 +69,11 @@ export class AppComponent implements OnDestroy, OnInit {
         });
       }),
      
-    ).subscribe(async (notificacion) => {
-      const ultimaNotificacion = notificacion[0];
-       await this.notificacionPacienteService.validarMeet(ultimaNotificacion); 
+    ).subscribe(async (notificaciones) => {
+      if (notificaciones.length >= 0) {
+        const ultimaNotificacion = notificaciones[0];
+        await this.notificacionPacienteService.validarMeet(ultimaNotificacion); 
+      };
     });
   }
   private formatearComplemento(complemento: string, tipoNotificacion: number){

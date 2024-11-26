@@ -22,7 +22,7 @@ export class VideoChatComponent extends EventTarget implements OnInit, OnDestroy
   protected pc: RTCPeerConnection;
   protected localStream: MediaStream;
   protected remoteStream: MediaStream;
-  private destroy$: Subject<void>;
+  private destroy$ = new Subject<void>();
 
   protected servers = {
     iceServers: [
@@ -53,7 +53,7 @@ export class VideoChatComponent extends EventTarget implements OnInit, OnDestroy
     iceCandidatePoolSize: 10,
   };
 
-  protected callerId: string;
+  protected callId: string;
   protected buttonState = true;
   protected hangupButtonState = true;
   protected is_caller = false;
@@ -64,45 +64,43 @@ export class VideoChatComponent extends EventTarget implements OnInit, OnDestroy
     private router: Router
     ) {
     super();
+    console.log("VideoChatComponent constructor");
   }
   
   async ngOnInit(): Promise<void> {
+    console.log("ngOnInit");
 
-    
-    this.destroy$ = new Subject<void>();
+    this.webcamButtonClick();
 
-    await this.signalingHubService.iniciarConexion();
-
-    await this.webcamButtonClick();
-
-    this.signalingObservers();
-    
+    this.observers();
 
     this.route.paramMap.pipe(takeUntil(this.destroy$))
     .subscribe(params => {
-      this.callerId = params.get('id')!;
+      this.callId = params.get('id')!;
 
-      if(!this.callerId){
-        this.is_caller = true;
-        this.signalingHubService.crearLlamada();
+      if(!this.callId){
+        // this.is_caller = true;
+        // this.signalingHubService.crearLlamada();
 
       }else{
-        this.is_caller = false;
-        this.signalingHubService.crearLlamada(this.callerId);
+        // this.is_caller = false;
+        this.signalingHubService.crearLlamada(this.callId);
       }
     });
   }
 
-  private signalingObservers() {
+  private observers() {
     this.signalingHubService.message$.pipe(takeUntil(this.destroy$))
     .subscribe((json_string: string) => {
+      
+      
       if(json_string.length <= 0) return;
 
       var message = JSON.parse(json_string);
       switch (message.type) {
-
+        // Signaling messages
         case "local-id":
-          this.callerId = message.local_id;
+          // this.callId = message.local_id;
           break;
 
         case "callee-connected":
@@ -118,56 +116,52 @@ export class VideoChatComponent extends EventTarget implements OnInit, OnDestroy
         case "remove-remote":
           this.remoteStream = new MediaStream();
           break;
+        
+        // RTC messages
+        case "new-ice-candidate":
+          this.pc.addIceCandidate(message.candidate);
+          break;
+
+        case "video-answer":
+          if (!this.pc.currentRemoteDescription && message?.answer) {
+            const answerDescription = new RTCSessionDescription(message.answer);
+            this.pc.setRemoteDescription(answerDescription);
+          };
+          break;
       }
     });
   }
 
   // Caller listener
   calleeConnected = async () => {
-    if(this.is_caller){
 
-      this.startRTC();
+    this.startRTC();
 
-      // Get candidates for caller, save to db
-      this.pc.onicecandidate = (event) => {
-        event.candidate && this.signalingHubService.sendMessage({
-          type: "new-ice-candidate",
-          candidate: event.candidate
-        });
-      };
+    // Create offer
+    const offerDescription = await this.pc.createOffer();
+    await this.pc.setLocalDescription(offerDescription);
 
-      // Create offer
-      const offerDescription = await this.pc.createOffer();
-      await this.pc.setLocalDescription(offerDescription);
+    const offer = {
+      sdp: offerDescription.sdp,
+      type: offerDescription.type,
+    };
 
-      const offer = {
-        sdp: offerDescription.sdp,
-        type: offerDescription.type,
-      };
+    await this.signalingHubService.sendMessage({
+      type: "video-offer",
+      offer: offer
+    });
 
-      await this.signalingHubService.sendMessage({
-        type: "video-offer",
-        offer: offer
-      });
-
-      this.hangupButtonState = false;
-    }    
+    this.hangupButtonState = false;
   }
 
   // Callee listener
   offerReceived = async (offer: any) => {
+
     this.startRTC();
 
     if (!this.pc.currentRemoteDescription) {
       const offerDescription = new RTCSessionDescription(offer);
       this.pc.setRemoteDescription(offerDescription);
-    };
-    
-    this.pc.onicecandidate = (event) => {
-      event.candidate && this.signalingHubService.sendMessage({
-        type: "new-ice-candidate",
-        candidate: event.candidate
-      });
     };
 
     const answerDescription = await this.pc.createAnswer();
@@ -201,32 +195,16 @@ export class VideoChatComponent extends EventTarget implements OnInit, OnDestroy
       });
     };
 
-    this.rtcObservers();
+    // Get candidates for caller, save to db
+    this.pc.onicecandidate = (event) => {
+      event.candidate && this.signalingHubService.sendMessage({
+        type: "new-ice-candidate",
+        candidate: event.candidate
+      });
+    };
 
   }
 
-
-  private rtcObservers() {
-    this.signalingHubService.message$.pipe(takeUntil(this.destroy$))
-    .subscribe((json_string: string) => {
-      if(json_string.length <= 0) return;
-
-      var message = JSON.parse(json_string);
-      switch (message.type) {
-        case "new-ice-candidate":
-          this.pc.addIceCandidate(message.candidate);
-          break;
-
-
-        case "video-answer":
-          if (!this.pc.currentRemoteDescription && message?.answer) {
-            const answerDescription = new RTCSessionDescription(message.answer);
-            this.pc.setRemoteDescription(answerDescription);
-          };
-          break;
-      }
-    });
-  }
 
 
   // 1. Setup media sources
@@ -238,15 +216,6 @@ export class VideoChatComponent extends EventTarget implements OnInit, OnDestroy
 
   async ngOnDestroy(): Promise<void> {
     this.destroy$.next();
-    this.destroy$.complete();
-    this.signalingHubService.detenerConexion();
-    this.closeStreams();
-  }
-
-  closeStreams = () => {
-
-    this.router.navigate(['/chat']);
-
     if (this.localStream) {
       this.localStream.getTracks().forEach(track => track.stop());
     }
@@ -254,6 +223,12 @@ export class VideoChatComponent extends EventTarget implements OnInit, OnDestroy
     if (this.remoteStream) {
       this.remoteStream.getTracks().forEach(track => track.stop());
     }
+
+  }
+
+  hangUp = () => {
+    console.log("hangUp");
+    this.router.navigate(['/administrador/chat']);
   }
 
   // 2. Create an offer

@@ -4,22 +4,26 @@ using Microsoft.AspNetCore.SignalR;
 using System.Threading;
 using System.Collections.Concurrent;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using TrackrAPI.Repositorys.Chats;
 
 namespace TrackrAPI.Hubs;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class SignalingHub : Hub<ISignalingHub>
 {
+    private readonly IChatPersonaRepository _chatPersonaRepository;
 
     private static readonly ConcurrentDictionary<string, Queue<Message>> _messageQueues = new ConcurrentDictionary<string, Queue<Message>>();
 
-    private static readonly ConcurrentDictionary<string, string> _peer_ids = new ConcurrentDictionary<string, string>();
+    private static readonly ConcurrentDictionary<string, string> _peerIds = new ConcurrentDictionary<string, string>();
     private readonly int _ackTimeoutMilliseconds = 2000;
     private readonly int _maxFailedTries = 5;
 
     CancellationTokenSource _cts = new CancellationTokenSource();
 
-    public SignalingHub(){
+    public SignalingHub(IChatPersonaRepository chatPersonaRepository)
+    {
+        _chatPersonaRepository = chatPersonaRepository;
     }
 
     public override async Task OnConnectedAsync()
@@ -36,49 +40,85 @@ public class SignalingHub : Hub<ISignalingHub>
     //     await base.OnDisconnectedAsync(exception);
     // }
 
-    public async Task CrearLlamada(string? caller_id)
-    {       
-        string local_id = ObtenerIdUsuario();
-        Console.WriteLine($"{local_id}, {caller_id}");
+    private string[] ObtenerUsuariosEnLlamada(string call_id)
+    {
+        return _chatPersonaRepository.ConsultarPersonasPorChat(int.Parse(call_id))
+                                .Select(cp => cp.IdPersona.ToString())
+                                .ToArray();
+    }
+    public string CerrarLlamada(string key, string old_id, string new_id)
+    {
+        string localUserId = ObtenerIdUsuario();
 
-        // Exchange id with peer
-        if(caller_id != null){
-            
-            // Set connectins and clear queues
-            _peer_ids.AddOrUpdate(local_id, caller_id, (key, oldValue) => RemoveRemote(key, oldValue, caller_id));
-            _messageQueues[local_id] = new Queue<Message>();
+        // Si es un nuevo id, y el viejo id aun esta conectado a nostros
+        if (old_id != new_id && _peerIds.TryGetValue(old_id, out string value) && value == localUserId)
+        {
+            // Limpiar el viejo id y las colas de mensajes
+            _peerIds.TryRemove(old_id, out string _);
+            _messageQueues[localUserId] = new Queue<Message>();
+            _messageQueues[old_id] = new Queue<Message>();
+            // Enviar ultimo mensaje para cerrar llamada
+            RemoveRemote(old_id);
+        };
 
-            _peer_ids.AddOrUpdate(caller_id, local_id, (key, oldValue) => RemoveRemote(key, oldValue, local_id));
-            _messageQueues[caller_id] = new Queue<Message>();
-
-            SendMessageToPeer($"{{\"type\": \"callee-connected\"}}");
-        }
-        else{
-            // Send local id to the caller, to share with the callee
-            // Clients.Client(local_id).LocalId(local_id);
-            Clients.Group(local_id).LocalId(local_id);
-        }
+        return new_id;
 
     }
+
+    public async Task CrearLlamada(string? callId)
+    {
+        string localUserId = ObtenerIdUsuario();
+        Console.WriteLine($"CreateCall - localUserId: {localUserId}");
+
+        string[] remoteUserIds = ObtenerUsuariosEnLlamada(callId)
+            .Where(id => id != localUserId)
+            .ToArray();
+        Console.WriteLine($"CreateCall - remoteUserIds: {string.Join(',', remoteUserIds)}");
+
+        if (remoteUserIds.Length == 1)
+        {
+            string remoteUserId = remoteUserIds[0];
+
+
+            _peerIds.AddOrUpdate(localUserId, remoteUserId,
+                (key, oldValue) => CerrarLlamada(key, oldValue, remoteUserId));
+
+            if (IsPeerAlreadyConnected(localUserId, remoteUserId))
+            {
+                Console.WriteLine($"CreateCall - peer already connected");
+                _messageQueues[localUserId] = new Queue<Message>();
+                _messageQueues[remoteUserId] = new Queue<Message>();
+                SendMessageToPeer("{\"type\": \"callee-connected\"}", remoteUserId);
+                return;
+            }
+        }
+
+        Console.WriteLine($"CreateCall - peer not connected");
+        // Send local ID to the caller, to share with the callee
+        Clients.Group(localUserId).LocalId(localUserId);
+    }
+
+    private bool IsPeerAlreadyConnected(string localUserId, string remoteUserId)
+    {
+        return _peerIds.TryGetValue(remoteUserId, out string value) && value == localUserId;
+    }
+
     
 
-
-
-    public string RemoveRemote(string key, string old_id, string new_id)
+    public void RemoveRemote(string old_id)
     {
-        Console.WriteLine(key, old_id, new_id);
-        if (old_id != new_id)
-        {
-            var message = $"{{\"type\": \"remove-remote\"}}";
-            _messageQueues[old_id] = new Queue<Message>();
-            SendMessageToPeer(message, old_id);
-        }
-        return new_id;
+        var message = $"{{\"type\": \"remove-remote\"}}";
+        SendMessageToPeer(message, old_id);
+      
     }
     public async Task SendMessageToPeer(string message, string peerId = "")
     {
         // Console.WriteLine($"Send Message: {message}");
-        peerId = peerId == "" ? _peer_ids.GetOrAdd(ObtenerIdUsuario(), ""): peerId;
+
+        if (peerId == "" && _peerIds.TryGetValue(ObtenerIdUsuario(), out string value))
+        {
+            peerId = value;
+        }
 
         var messageObj = new Message { Id = Guid.NewGuid().ToString(), Content = message };
         _messageQueues[peerId].Enqueue(messageObj);

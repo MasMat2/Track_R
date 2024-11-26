@@ -64,15 +64,10 @@ export class BarraChatsComponent {
   }
 
   ionViewWillEnter(){
-    this.ensureConnection();
     this.obtenerChats()
     this.consultarDoctores();
   }
 
-  private ensureConnection(){
-    this.ChatHubServiceService.iniciarConexion();
-    this.chatMensajeHubService.iniciarConexion();
-  }
   
   //OBTENER SÓLO LOS CHATS
   /* private obtenerChats() {

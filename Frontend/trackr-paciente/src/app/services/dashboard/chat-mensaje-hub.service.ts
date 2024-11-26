@@ -47,6 +47,7 @@ export class ChatMensajeHubService {
     private chatHub:ChatHubServiceService, private fechaService: FechaService
   ) {
     this.iniciarConexion();
+    console.log('Iniciando conexion con el Hub de Chat Mensajes...');
   }
 
   public async iniciarConexion() {
@@ -62,11 +63,11 @@ export class ChatMensajeHubService {
       accessTokenFactory: () => {
         return token;
       },
-      transport: HttpTransportType.LongPolling,
+      // transport: HttpTransportType.WebSockets,
     };
 
     this.connection = new HubConnectionBuilder()
-      .configureLogging(LogLevel.Debug)
+      // .configureLogging(LogLevel.Debug)
       .withUrl(url, connectionConfig)
       .build();
 

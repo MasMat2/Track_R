@@ -11,7 +11,8 @@ public class ChatMensajeRepository : Repository<ChatMensaje>, IChatMensajeReposi
     {
         return context.ChatMensaje
                       .Include(x => x.IdPersonaNavigation)
-                      .Where(x => x.IdChat == IdChat);
+                      .Where(x => x.IdChat == IdChat)
+                      .OrderBy(x => x.Fecha);
     }
 }
 
