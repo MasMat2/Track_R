@@ -16,6 +16,8 @@ public class SignalingHub : Hub<ISignalingHub>
     private static readonly ConcurrentDictionary<string, Queue<Message>> _messageQueues = new ConcurrentDictionary<string, Queue<Message>>();
 
     private static readonly ConcurrentDictionary<string, string> _peerIds = new ConcurrentDictionary<string, string>();
+
+    private static readonly ConcurrentDictionary<string, string> _connectionIds = new ConcurrentDictionary<string, string>();
     private readonly int _ackTimeoutMilliseconds = 2000;
     private readonly int _maxFailedTries = 5;
 
@@ -29,7 +31,10 @@ public class SignalingHub : Hub<ISignalingHub>
     public override async Task OnConnectedAsync()
     {
         string idUsuarioSesion = ObtenerIdUsuario().ToString();
-        await Groups.AddToGroupAsync(Context.ConnectionId, idUsuarioSesion);
+        Console.WriteLine("new connection");
+        //await Groups.AddToGroupAsync(Context.ConnectionId, idUsuarioSesion);
+        //_connectionIds.AddOrUpdate(idUsuarioSesion, Context.ConnectionId,
+        //        (key, oldValue) => Context.ConnectionId);
         await base.OnConnectedAsync();
     }
 
@@ -68,7 +73,15 @@ public class SignalingHub : Hub<ISignalingHub>
     public async Task CrearLlamada(string? callId)
     {
         string localUserId = ObtenerIdUsuario();
+        string value;
+
         Console.WriteLine($"CreateCall - localUserId: {localUserId}");
+        _connectionIds.TryGetValue(localUserId, out value);
+        if(value != null && value != Context.ConnectionId)
+        {
+            await RemoveRemote(localUserId);
+        }
+        _connectionIds[localUserId] = Context.ConnectionId;
 
         string[] remoteUserIds = ObtenerUsuariosEnLlamada(callId)
             .Where(id => id != localUserId)
@@ -83,10 +96,11 @@ public class SignalingHub : Hub<ISignalingHub>
             _peerIds.AddOrUpdate(localUserId, remoteUserId,
                 (key, oldValue) => CerrarLlamada(key, oldValue, remoteUserId));
 
+            _messageQueues[localUserId] = new Queue<Message>();
+
             if (IsPeerAlreadyConnected(localUserId, remoteUserId))
             {
                 Console.WriteLine($"CreateCall - peer already connected");
-                _messageQueues[localUserId] = new Queue<Message>();
                 _messageQueues[remoteUserId] = new Queue<Message>();
                 SendMessageToPeer("{\"type\": \"callee-connected\"}", remoteUserId);
                 return;
@@ -95,7 +109,9 @@ public class SignalingHub : Hub<ISignalingHub>
 
         Console.WriteLine($"CreateCall - peer not connected");
         // Send local ID to the caller, to share with the callee
-        Clients.Group(localUserId).LocalId(localUserId);
+        //Clients.Group(localUserId).LocalId(localUserId);
+        _connectionIds.TryGetValue(localUserId, out value);
+        Clients.Client(value).LocalId(localUserId);
     }
 
     private bool IsPeerAlreadyConnected(string localUserId, string remoteUserId)
@@ -105,10 +121,11 @@ public class SignalingHub : Hub<ISignalingHub>
 
     
 
-    public void RemoveRemote(string old_id)
+    public async Task RemoveRemote(string old_id)
     {
         var message = $"{{\"type\": \"remove-remote\"}}";
-        SendMessageToPeer(message, old_id);
+        _messageQueues[old_id] = new Queue<Message>();
+        await SendMessageToPeer(message, old_id);
       
     }
     public async Task SendMessageToPeer(string message, string peerId = "")
@@ -134,8 +151,11 @@ public class SignalingHub : Hub<ISignalingHub>
         {
             var message = queue.Peek();
             Console.WriteLine($"Sending message: {message.Id}, Count: {queue.Count}, PeerId: {peerId}");
+            Console.WriteLine(message.Content.Substring(0, Math.Min(message.Content.Length, 50)));
             // await Clients.Client(peerId).NewMessage(message);
-            await Clients.Group(peerId).NewMessage(message);
+            //await Clients.Group(peerId).NewMessage(message);
+            _connectionIds.TryGetValue(peerId, out string value);
+            Clients.Client(value).NewMessage(message);
             StartAckTimeoutTimer(peerId, message);
         }
     }
