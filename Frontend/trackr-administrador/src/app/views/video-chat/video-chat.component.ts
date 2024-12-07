@@ -29,8 +29,8 @@ interface Control {
 export class VideoChatComponent extends EventTarget implements OnInit, OnDestroy {
 
   controls: Control[] = [
-    { isActive: false, icon: "mic", inactiveIcon: "mic-off" },
-    { isActive: false, icon: "video", inactiveIcon: "video-off" },
+    { isActive: true, icon: "mic", inactiveIcon: "mic-off" },
+    { isActive: true, icon: "video", inactiveIcon: "video-off" },
     { isActive: false, icon: "phone" },
   ];
 
@@ -116,6 +116,9 @@ export class VideoChatComponent extends EventTarget implements OnInit, OnDestroy
     console.log("ngOnInit");
     await this.iniciarWebCam();
     this.setLocalStream();
+    const callControlIndex = this.controls.findIndex(control => control.icon === "phone");
+    console.log(callControlIndex);
+    this.toggleControl(callControlIndex);
   }
 
   iniciarWebCam = async () => {

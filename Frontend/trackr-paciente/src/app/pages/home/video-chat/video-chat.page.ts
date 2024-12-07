@@ -66,8 +66,8 @@ export class VideoChatPage extends EventTarget implements OnInit{
 
 
   controls: Control[] = [
-    { isActive: false, icon: "mic-outline", inactiveIcon: "mic-off-outline" },
-    { isActive: false, icon: "videocam-outline", inactiveIcon: "videocam-off-outline" },
+    { isActive: true, icon: "mic-outline", inactiveIcon: "mic-off-outline" },
+    { isActive: true, icon: "videocam-outline", inactiveIcon: "videocam-off-outline" },
     { isActive: false, icon: "call-outline" },
   ];
 
@@ -126,6 +126,8 @@ export class VideoChatPage extends EventTarget implements OnInit{
   async ionViewWillEnter(){
     await this.iniciarWebCam();
     this.setLocalStream();
+    const callControlIndex = this.controls.findIndex(control => control.icon === "call-outline");
+    this.toggleControl(callControlIndex);
   }
   
   async ngOnInit(): Promise<void> {
