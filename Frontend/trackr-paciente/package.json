@@ -43,6 +43,7 @@
     "@ng-select/ng-select": "^10.0.4",
     "ag-grid-angular": "^30.0.6",
     "ag-grid-community": "^30.0.6",
+    "bauma-plugin": "file:src/assets/custom_plugins/bauma-plugin",
     "bootstrap": "^5.2.3",
     "capacitor-health-connect-local": "file:../../../capacitor-health-connect-main",
     "capacitor-voice-recorder": "^5.0.0",

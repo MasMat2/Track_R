@@ -162,8 +162,17 @@ ion-accordion.accordion-expanding > [slot="header"] .ion-accordion-toggle-icon {
 
 #cerrar-sesion{
     --color-activated: var(--error-200);
-    border-radius: 0 0 16px 16px;
     ion-icon, ion-label{
         color: var(--error-200);
+    } 
+}
+
+#eliminar-cuenta{
+    --color-activated: var(--neutral-50);
+    --background: var(--error-200);
+    border-radius: 0 0 16px 16px;
+    --detail-icon-color: var(--neutral-50);
+    ion-icon, ion-label{
+        color: var(--neutral-50);
     } 
 }

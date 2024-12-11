@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Selecionar Dispositivo</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Loading State -->
+  <div *ngIf="isLoadingDevices" class="ion-text-center ion-padding">
+    <ion-item>
+      <ion-label>Buscando dispositivos...</ion-label>
+      <ion-spinner slot="end"></ion-spinner>
+    </ion-item>
+  </div>
+
+  <!-- No Devices State -->
+  <ion-list *ngIf="!isLoadingDevices">
+    <ion-item *ngIf="devices.length === 0">
+      <ion-label>No se econtraron dispositivos</ion-label>
+      <ion-button slot="end" (click)="scanForDevices()">
+        <ion-icon name="refresh"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item *ngFor="let device of devices" (click)="selectDevice(device)">
+      <ion-label>
+        <h2>{{ device.model }}</h2>
+        <p>{{ device.identifier }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

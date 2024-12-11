@@ -1,7 +1,11 @@
 PODS:
+  - BaumaPlugin (0.0.1):
+    - Capacitor
   - Capacitor (5.4.1):
     - CapacitorCordova
   - CapacitorApp (5.0.6):
+    - Capacitor
+  - CapacitorAppLauncher (5.0.8):
     - Capacitor
   - CapacitorCamera (5.0.7):
     - Capacitor
@@ -11,8 +15,6 @@ PODS:
   - CapacitorFilesystem (5.1.4):
     - Capacitor
   - CapacitorHaptics (5.0.6):
-    - Capacitor
-  - CapacitorHealthDataPlugin (0.0.1):
     - Capacitor
   - CapacitorKeyboard (5.0.6):
     - Capacitor
@@ -30,14 +32,15 @@ PODS:
     - Capacitor
 
 DEPENDENCIES:
+  - BaumaPlugin (from `../../src/assets/custom_plugins/bauma-plugin`)
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
+  - "CapacitorAppLauncher (from `../../node_modules/@capacitor/app-launcher`)"
   - "CapacitorCamera (from `../../node_modules/@capacitor/camera`)"
   - "CapacitorCommunityFileOpener (from `../../node_modules/@capacitor-community/file-opener`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
-  - CapacitorHealthDataPlugin (from `../../node_modules/capacitor-health-data-plugin`)
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
@@ -47,10 +50,14 @@ DEPENDENCIES:
   - PerfoodCapacitorHealthkit (from `../../../../../../../documents/github/capacitor-healthkit`)
 
 EXTERNAL SOURCES:
+  BaumaPlugin:
+    :path: "../../src/assets/custom_plugins/bauma-plugin"
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorApp:
     :path: "../../node_modules/@capacitor/app"
+  CapacitorAppLauncher:
+    :path: "../../node_modules/@capacitor/app-launcher"
   CapacitorCamera:
     :path: "../../node_modules/@capacitor/camera"
   CapacitorCommunityFileOpener:
@@ -61,8 +68,6 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/filesystem"
   CapacitorHaptics:
     :path: "../../node_modules/@capacitor/haptics"
-  CapacitorHealthDataPlugin:
-    :path: "../../node_modules/capacitor-health-data-plugin"
   CapacitorKeyboard:
     :path: "../../node_modules/@capacitor/keyboard"
   CapacitorPreferences:
@@ -79,14 +84,15 @@ EXTERNAL SOURCES:
     :path: "../../../../../../../documents/github/capacitor-healthkit"
 
 SPEC CHECKSUMS:
+  BaumaPlugin: 0a932c7607bc6e8d088a300e76735e97ef197204
   Capacitor: 4c0681b47eebeba1f902093d24149cf2f518393e
   CapacitorApp: 024e1b1bea5f883d79f6330d309bc441c88ad04a
+  CapacitorAppLauncher: 1483f5241bd56d2720af833d830c1a724ca04e96
   CapacitorCamera: 084b0b228bba7d00587910337b1c89e93b1d32ab
   CapacitorCommunityFileOpener: 8ae87db61961a6166cb929cc16e3cc719ea58da1
   CapacitorCordova: 1222fdd78bfd0d323cc22bf254eed1484fe6c92a
   CapacitorFilesystem: af704badfbc69f6f8623d9ed313e5490e3723dcb
   CapacitorHaptics: 1fffc1217c7e64a472d7845be50fb0c2f7d4204c
-  CapacitorHealthDataPlugin: 90d0738b375294a849fdee5c150dac7d60cb2f81
   CapacitorKeyboard: b978154b024a5f65e044908e37d15b7de58b9d12
   CapacitorPreferences: f03954bcb0ff09c792909e46bff88e3183c16b10
   CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
@@ -95,6 +101,6 @@ SPEC CHECKSUMS:
   CapawesomeCapacitorScreenOrientation: a757a72cd4a113142638c049af61441793721f07
   PerfoodCapacitorHealthkit: 88f6e78b319072c4d0aec439b2fcc14d3f05d311
 
-PODFILE CHECKSUM: ac9fb270d99ab01c71263117b4298181ddfa8e9f
+PODFILE CHECKSUM: 4978350d1ac2a4c876833cab13f6892dd0a936b9
 
 COCOAPODS: 1.15.2

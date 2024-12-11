@@ -79,9 +79,13 @@
               </ion-accordion>
             </ion-accordion-group>
           </ion-item>
-          <ion-item button lines="none" detail="true" detailIcon="chevron-right" (click)="presentarAlertaCerrarSesion()" class="router-item" id="cerrar-sesion">
+          <ion-item button detail="true" detailIcon="chevron-right" (click)="presentarAlertaCerrarSesion()" class="router-item" id="cerrar-sesion">
             <ion-icon slot="start" name="cerrar-sesion"></ion-icon>
             <ion-label>Cerrar sesión</ion-label>
+          </ion-item>
+          <ion-item button lines="none" detail="true" detailIcon="chevron-right" (click)="presentarAlertaEliminarCuenta()" class="router-item" id="eliminar-cuenta">
+            <ion-icon slot="start" name="trash-2"></ion-icon>
+            <ion-label>Eliminar cuenta</ion-label>
           </ion-item>
         </ion-list>
       </div>
