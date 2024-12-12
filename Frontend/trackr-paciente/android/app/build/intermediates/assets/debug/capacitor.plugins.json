@@ -44,6 +44,10 @@
 		"classpath": "io.capawesome.capacitorjs.plugins.screenorientation.ScreenOrientationPlugin"
 	},
 	{
+		"pkg": "bauma-plugin",
+		"classpath": "com.mycompany.plugins.example.BaumaPluginPlugin"
+	},
+	{
 		"pkg": "capacitor-health-connect-local",
 		"classpath": "com.ubiehealth.capacitor.healthconnect.HealthConnectPlugin"
 	},

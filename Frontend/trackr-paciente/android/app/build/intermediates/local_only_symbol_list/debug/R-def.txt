@@ -8,7 +8,6 @@ layout activity_main
 mipmap ic_launcher
 mipmap ic_launcher_foreground
 mipmap ic_launcher_round
-mipmap old_ic_launcher_round
 string app_name
 string custom_url_scheme
 string package_name
