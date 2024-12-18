@@ -1067,5 +1067,25 @@ namespace TrackrAPI.Services.Seguridad
 
         }
 
+        //Actualizar imagen de perfil de usuario en la app
+        public async Task ActualizarImagenPerfilTrackr(ArchivoDTO archivoDto, int idUsuario)
+        {
+            if (string.IsNullOrEmpty(archivoDto.Archivo))
+            {
+                //habilitar la opción de eliminar la foto de perfil
+            }
+            else
+            {
+                var usuarioDto = new UsuarioDto
+                {
+                    ImagenBase64 = archivoDto.Archivo,
+                    ImagenTipoMime = archivoDto.ArchivoMime,
+                    FotoPerfilEditada = true
+                };
+
+                await GuardarImagen(usuarioDto, idUsuario);
+            }
+        }
+
     }
 }

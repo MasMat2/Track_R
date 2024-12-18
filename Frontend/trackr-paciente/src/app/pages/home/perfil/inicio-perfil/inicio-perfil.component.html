@@ -8,7 +8,10 @@
     <div class="card">
       <div class="datos">
         <div class="avatar">
-          <ion-avatar>
+          <ion-avatar (click)="cambiarFotoPerfil()">
+            <div class="editar-foto-button">
+              <ion-icon slot="start" name="editar"></ion-icon>
+            </div>
             <img alt="foto perfil" [src]="fotoPerfilUrl"/>
           </ion-avatar>
         </div>

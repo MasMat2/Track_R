@@ -8,6 +8,7 @@ import { UsuarioDto } from '../../Dtos/perfil/usuario-dto';
 import { InformacionPerfilDto } from '../../Dtos/perfil/informacion-perfil-dto';
 import { ExpedientePadecimientoDto } from '@dtos/seguridad/expediente-padecimiento-dto';
 import { InformacionDomicilioDto } from '../../Dtos/perfil/informacion-domicilio-dto';
+import { ArchivoDto } from '../../Dtos/archivos/archivo-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +60,10 @@ export class UsuarioService {
 
   public eliminarCuenta(): Observable<void> {
     return this.http.delete<void>(this.url + `eliminarCuenta` );
+  }
+
+  public actualizarImagenPerfil(archivo: ArchivoDto){
+    return this.http.put<void>(this.url + 'editarFotoPerfil', archivo );
   }
 
 }
