@@ -616,6 +616,7 @@ export class UsuarioFormularioComponent implements OnInit {
         this.url = this.sanitizer.bypassSecurityTrustUrl(base64Url);
         this.usuario.imagenTipoMime = event.target.files[0].type;
         this.urlName = event.target.files[0].name;
+        this.usuario.fotoPerfilEditada = true;
       };
     }
   }
@@ -625,6 +626,7 @@ export class UsuarioFormularioComponent implements OnInit {
     this.usuario.imagenBase64 = '';
     this.usuario.imagenTipoMime = '';
     this.urlName = '';
+    this.usuario.fotoPerfilEditada = true;
   }
 
   public async agregar(): Promise<boolean> {
