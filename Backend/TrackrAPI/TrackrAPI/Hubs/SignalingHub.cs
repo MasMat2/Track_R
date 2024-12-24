@@ -172,6 +172,7 @@ public class SignalingHub : Hub<ISignalingHub>
             if (message.Id == messageId)
             {
                 queue.Dequeue(); // Remove the message that has been acknowledged
+                await TrySendNextMessage(localId);
             }
         }
     }
