@@ -6,6 +6,15 @@ import { SignalingHubService } from '@services/signaling-hub.service';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { Subscription, takeUntil } from 'rxjs';
 import { Subject } from 'rxjs';
+import { addIcons } from 'ionicons';
+import { logoIonic, micOutline, micOffOutline, videocamOutline, videocamOffOutline, callOutline } from 'ionicons/icons';
+
+
+interface Control {
+  isActive: boolean;
+  icon: string;
+  inactiveIcon?: string;
+}
 
 @Component({
   selector: 'app-video-chat',
@@ -22,7 +31,7 @@ export class VideoChatPage extends EventTarget implements OnInit{
   protected pc: RTCPeerConnection;
   protected localStream: MediaStream;
   protected remoteStream: MediaStream;
-  private destroy$ = new Subject<void>();;
+  private destroy$ = new Subject<void>();
 
   protected servers = {
     iceServers: [
@@ -54,9 +63,49 @@ export class VideoChatPage extends EventTarget implements OnInit{
   };
 
   protected callId: string;
-  protected buttonState = true;
-  protected hangupButtonState = true;
-  protected is_caller = false;
+
+
+  controls: Control[] = [
+    { isActive: true, icon: "mic-outline", inactiveIcon: "mic-off-outline" },
+    { isActive: true, icon: "videocam-outline", inactiveIcon: "videocam-off-outline" },
+    { isActive: false, icon: "call-outline" },
+  ];
+
+  getIconImg(control: Control): string {
+    return control.isActive ? control.icon : control.inactiveIcon || control.icon;
+  }
+
+  async toggleControl(index: number): Promise<void> {
+
+    let control = this.controls[index];
+    control.isActive = !this.controls[index].isActive;
+
+    if(control.icon === "call-outline"){
+      if(control.isActive){
+        await this.crearLlamada();
+      }else{
+        this.closeStreams();
+        await this.iniciarWebCam();
+      }
+    }
+
+
+    this.setLocalStream();
+    
+  }
+
+  setLocalStream() {
+    for(let control of this.controls) {
+      if(control.icon === "mic-outline") {
+        this.localStream.getAudioTracks().forEach(track => track.enabled = control.isActive);
+      }
+      
+      if(control.icon === "videocam-outline") {
+        this.localStream.getVideoTracks().forEach(track => track.enabled = control.isActive);
+      }
+    }
+  }
+
 
   constructor(
     private signalingHubService: SignalingHubService,
@@ -64,10 +113,21 @@ export class VideoChatPage extends EventTarget implements OnInit{
     private router: Router
     ) {
     super();
+
+    addIcons({   
+      "call-outline": "assets/img/svg/phone.svg",
+      "videocam-outline": "assets/img/svg/video.svg", 
+      "videocam-off-outline": "assets/img/svg/video-off.svg",
+      "mic-outline": "assets/img/svg/mic.svg", 
+      "mic-off-outline": "assets/img/svg/mic-off.svg",
+    })
   }
 
   async ionViewWillEnter(){
-    await this.webcamButtonClick();
+    await this.iniciarWebCam();
+    this.setLocalStream();
+    const callControlIndex = this.controls.findIndex(control => control.icon === "call-outline");
+    this.toggleControl(callControlIndex);
   }
   
   async ngOnInit(): Promise<void> {
@@ -103,7 +163,7 @@ export class VideoChatPage extends EventTarget implements OnInit{
           break;
 
         case "remove-remote":
-          this.remoteStream = new MediaStream();
+          this.removeRemote();
           break;
 
         // RTC messages
@@ -120,6 +180,14 @@ export class VideoChatPage extends EventTarget implements OnInit{
           break;
       }
     });
+  }
+
+    
+  removeRemote = async() => {
+    await this.closeStreams();
+    console.log("streams cerrados");
+    await this.iniciarWebCam();
+    this.setLocalStream();
   }
 
   // Caller listener
@@ -141,7 +209,6 @@ export class VideoChatPage extends EventTarget implements OnInit{
       offer: offer
     });
 
-    this.hangupButtonState = false;
   }
 
   // Callee listener
@@ -197,11 +264,13 @@ export class VideoChatPage extends EventTarget implements OnInit{
 
 
   // 1. Setup media sources
-  webcamButtonClick = async () => {
-    console.log('webcamButtonClick - INICIO');
+  iniciarWebCam = async () => {
     this.localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 
-    this.buttonState = false;
+  }
+
+  crearLlamada = async () => {
+    console.log('crearLlamada - INICIO');
 
     
     this.observers();
@@ -223,6 +292,11 @@ export class VideoChatPage extends EventTarget implements OnInit{
   };
 
   ionViewWillLeave = async () => {
+    this.closeStreams();
+    console.log("destroyed");
+  }
+
+  closeStreams = async () => {
     this.destroy$.next();
     if (this.localStream) {
       this.localStream.getTracks().forEach(track => track.stop());
@@ -231,8 +305,12 @@ export class VideoChatPage extends EventTarget implements OnInit{
     if (this.remoteStream) {
       this.remoteStream.getTracks().forEach(track => track.stop());
     }
-    // this.destroy$.complete();
-    console.log("destroyed");
+
+    for (let control of this.controls) { 
+      control.isActive = false; 
+    }
+
+    this.pc.close();
   }
 
   hangUp = () => {

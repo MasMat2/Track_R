@@ -120,7 +120,8 @@ export class SignalingHubBase extends EventTarget{
       this.connection.state === HubConnectionState.Disconnected ||
       this.connection.state === HubConnectionState.Disconnecting
     ) {
-      throw new Error('No se ha iniciado la conexión con el Signaling Hub');
+      this.iniciarConexion();
+      console.log('No se ha iniciado la conexión con el Hub de Signaling, Reconectando...');
     }
     else if (
       this.connection.state === HubConnectionState.Connecting ||

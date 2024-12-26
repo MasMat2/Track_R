@@ -83,7 +83,34 @@ export class ChatMensajeHubService {
 
     this.connectionStatus.next(HubConnectionState.Connecting);
 
+
+    this.connection.onclose(async (error) => {
+      // Attempt a simple retry:
+      await this.retryConnection();
+    });
+
     await this.connection.start();
+    
+  }
+
+  private async retryConnection() {
+    const maxAttempts = 5;
+    let attempts = 0;
+    while (attempts < maxAttempts) {
+      try {
+        await this.connection.start();
+        console.log('Reconnected!');
+        break;
+      } catch (err) {
+        attempts++;
+        console.warn(`Retry attempt ${attempts} failed.`);
+        await this.delay(2000); // Wait a bit before trying again
+      }
+    }
+  }
+  
+  private delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   public async detenerConexion() {

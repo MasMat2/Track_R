@@ -4,12 +4,17 @@ export class CapacitorUtils {
   //public files: PickedFile[] = [];
   imageSrc: string | undefined;
 
-  takePicture = async (): Promise<string> => {
+  takePicture = async (labelHeader?: string): Promise<string> => {
     try {
       const image = await Camera.getPhoto({
         quality: 90,
         allowEditing: true,
         resultType: CameraResultType.DataUrl,
+        promptLabelHeader: labelHeader ?? 'Subir foto',
+        promptLabelCancel: 'Cancelar',
+        promptLabelPhoto: 'Tomar foto',
+        promptLabelPicture: 'Subir desde la galería'
+        
       });
       this.imageSrc = image.dataUrl;
       if (this.imageSrc) {

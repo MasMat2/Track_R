@@ -31,6 +31,7 @@ namespace TrackrAPI.Dtos.Seguridad
         public string Username { get; set; }
         public string ImagenBase64 { get; set; }
         public string ImagenTipoMime { get; set; }
+        public bool FotoPerfilEditada { get; set; } = false;
         public bool Habilitado { get; set; }
         public int? IdTituloAcademico { get; set; }
         public int? IdDepartamento { get; set; }

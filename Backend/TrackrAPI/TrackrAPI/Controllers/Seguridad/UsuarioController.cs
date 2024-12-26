@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using TrackrAPI.Dtos.GestionExpediente;
+using TrackrAPI.Dtos.Archivos;
 
 namespace TrackrAPI.Controllers.Seguridad
 {
@@ -163,6 +164,14 @@ namespace TrackrAPI.Controllers.Seguridad
         public async Task EditarAdministrador(UsuarioDto usuarioDto)
         {
             await usuarioService.EditarAdministrador(usuarioDto);
+        }
+
+        [HttpPut]
+        [Route("editarFotoPerfil")]
+        public async Task EditarImagenPerfilTrackr(ArchivoDTO archivoDto)
+        {
+            var idUsuario = Utileria.ObtenerIdUsuarioSesion(this);
+            await usuarioService.ActualizarImagenPerfilTrackr(archivoDto, idUsuario);
         }
 
         [HttpPut]

@@ -59,6 +59,7 @@ export class Usuario {
 
   public imagenBase64: string;
   public imagenTipoMime: string;
+  public fotoPerfilEditada: boolean = false;
   public nombreTipoUsuario: string;
   public claveTipoUsuario: string;
 
