@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkapp=self.webpackChunkapp||[]).push([[3682],{3682:(_,n,e)=>{e.r(n),e.d(n,{AppLauncherWeb:()=>u});var r=e(5861),t=e(7423);class u extends t.Uw{canOpenUrl(a){return(0,r.Z)(function*(){return{value:!0}})()}openUrl(a){return(0,r.Z)(function*(){return window.open(a.url,"_blank"),{completed:!0}})()}}}}]);
