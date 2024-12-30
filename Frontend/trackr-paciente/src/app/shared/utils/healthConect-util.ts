@@ -224,8 +224,9 @@ export const checkHealthPermissions = async (): Promise<{ grantedPermissions: st
             read: readPermissions,
             write: writePermissions
         }
-        
-        return await HealthConnect.checkHealthPermissions(options);
+        let res = await HealthConnect.checkHealthPermissions(options);
+        console.log('[HealthConnect util] checkHealthPermissions - res', res);
+        return res
 
     } catch (error) {
         console.log('[HealthConnect util] Check Permissions error:', error);
@@ -242,6 +243,16 @@ export const openHealthConnectSetting = async (): Promise<void> => {
 }
 
 export const readRecords = async (options: GetRecordsOptions): Promise<{records: StoredRecord[], pageToken?: string}> => {
+    console.log('[HealthConnect util] readRecords - options', options);
+    // check health permissions and request them if needed
+    let { grantedPermissions, hasAllPermissions } = await checkHealthPermissions();
+    console.log('[HealthConnect util] readRecords - grantedPermissions', grantedPermissions);
+    console.log('[HealthConnect util] readRecords - hasAllPermissions', hasAllPermissions);
+    if (!hasAllPermissions) {
+        console.log('[HealthConnect util] readRecords - Requesting permissions');
+        await requestPermissions();
+    }
+
     try {
         // Construir el objeto options para HealthConnect.readRecords
         const readRecordsOptions = {
@@ -249,8 +260,11 @@ export const readRecords = async (options: GetRecordsOptions): Promise<{records:
             timeRangeFilter: options.timeRangeFilter
         };
 
-        console.log(JSON.stringify(await HealthConnect.readRecords(readRecordsOptions)))
-        return await HealthConnect.readRecords(readRecordsOptions);
+        console.log('[HealthConnect util] readRecords - readRecordsOptions', readRecordsOptions);
+
+        const records = await HealthConnect.readRecords(readRecordsOptions);
+        console.log('[HealthConnect util] readRecords - records', records);
+        return records;
     } catch (error) {
         console.log('[HealthConnect util] Error getting records steps:', error);
         throw error;

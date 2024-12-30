@@ -38,24 +38,27 @@ export class DashboardPage implements OnInit {
     private healthConnectService : HealthConnectService
   ) { }
 
-  public ngOnInit(): void {
+  public async ngOnInit(): Promise<void> {
+
+    console.log('[dashboard] Iniciando dashboard');
+
     this.ChatHubServiceService.iniciarConexion();
-    this.validarDisponibilidad();
+    await this.validarDisponibilidad();
 
     //Valida si cuenta con permisos de HealthConnect, en caso de que no los tenga se hace la peticion. 
     if (this.availability === "Available") {
-      (async () => {
-        if (await this.validarPermisosHealthConnect()) {
-          console.log('La aplicación cuenta con todos los permisos de HealthConnect');
-        } else {
-          console.log('La aplicación no cuenta con todos los permisos de HealthConnect');
-          await this.solicitarPermisos();
-          this.validarDisponibilidad();
-        }
-      })();
+      if (await this.validarPermisosHealthConnect()) {
+        console.log('[dashboard] La aplicación cuenta con todos los permisos de HealthConnect');
+      } else {
+        console.log('[dashboard] La aplicación no cuenta con todos los permisos de HealthConnect');
+        await this.solicitarPermisos();
+        this.validarDisponibilidad();
+      }
     } else {
-      console.log('HealthConnect no está disponible o Android no es 14 o superior, por lo tanto, no se solicitarán permisos.');
+        console.log('[dashboard] HealthConnect no está disponible o Android no es 14 o superior, por lo tanto, no se solicitarán permisos.');
     }
+    
+    this.healthConnectService.notifySetupComplete();
   }
 
   async solicitarPermisos(){
@@ -72,6 +75,7 @@ export class DashboardPage implements OnInit {
   async validarPermisosHealthConnect() : Promise<boolean> {
     const res : PermissionsStatus = await this.healthConnectService.checkHealthPermissions();
     this.hasAllPermissionsHealthConnect = res.hasAllPermissions;
+    console.log('[dashboard] hasAllPermissionsHealthConnect: ' + this.hasAllPermissionsHealthConnect);
     return this.hasAllPermissionsHealthConnect;
   }
 }

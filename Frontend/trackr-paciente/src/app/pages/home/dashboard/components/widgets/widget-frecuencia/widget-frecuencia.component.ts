@@ -34,11 +34,13 @@ export class WidgetFrecuenciaComponent  implements OnInit {
    }
 
   async ngOnInit() {
-    await this.validarDisponibilidad();
+    this.healthConnectService.setupComplete$.subscribe(isComplete => {
     
-    if(this.availability === "Available"){
-      this.readRecordsHeartRate();
-    }
+        if(isComplete == true){
+          this.readRecordsHeartRate();
+        }  
+      }
+    )
   }
 
   async updateDataHeartRate(){
@@ -63,6 +65,7 @@ export class WidgetFrecuenciaComponent  implements OnInit {
 
 
   async readRecordsHeartRate(): Promise<void> {
+    console.log('Iniciando readRecordsHeartRate()');
     const current = new Date();
     const startTime6months = new Date(current);
     startTime6months.setMonth(startTime6months.getMonth() - 6);
@@ -75,12 +78,19 @@ export class WidgetFrecuenciaComponent  implements OnInit {
       }
     }
 
+    console.log('readRecordsHeartRate() - options: ', options);
+
     const res = await this.healthConnectService.readRecords(options)
+
+    console.log('readRecordsHeartRate() - res: ', res);
 
     if (res && res.records && res.records.length > 0) {
       const ultimoRegistro = res.records[res.records.length - 1];
-      
+
+      console.log('readRecordsHeartRate() - ultimoRegistro: ', ultimoRegistro);
+
       this.ritmoCardiaco = ultimoRegistro.samples![0].beatsPerMinute;
+      console.log('readRecordsHeartRate() - this.ritmoCardiaco: ', this.ritmoCardiaco);
     } else {
         console.log("No hay registros de HeartRate.");
     }

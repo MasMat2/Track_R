@@ -251,6 +251,11 @@ export class MuestrasFormularioComponent implements OnInit {
           }
       };
 
+      const isComplete = await this.healthConnectservice.setupComplete$.toPromise();
+      if (!isComplete) {
+        throw new Error('HealthConnect is not setup.');
+      }
+
       const res = await this.healthConnectservice.readRecords(options);
       console.log(JSON.stringify(res));
 

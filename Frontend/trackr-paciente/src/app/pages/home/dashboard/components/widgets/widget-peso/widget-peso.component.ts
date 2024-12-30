@@ -41,11 +41,17 @@ export class WidgetPesoComponent  implements OnInit {
     }
 
   async ngOnInit() {
-    await this.validarDisponibilidad();
+
     
-    if(this.availability === "Available"){
-      this.readRecordsWeight();
-    }
+    this.healthConnectservice.setupComplete$.subscribe(isComplete => {
+    
+        if(isComplete == true){
+          this.readRecordsWeight();
+      
+        }  
+      }
+    )
+
   }
 
   async updateDataWeight(){

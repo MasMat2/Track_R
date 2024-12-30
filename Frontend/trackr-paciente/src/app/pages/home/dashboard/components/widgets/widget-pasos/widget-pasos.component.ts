@@ -43,11 +43,15 @@ export class WidgetPasosComponent  implements OnInit {
      }
 
   async ngOnInit() {
-    await this.validarDisponibilidad();
     
-    if(this.availability === "Available"){
-      this.readRecordsSteps();
-    }
+    this.healthConnectservice.setupComplete$.subscribe(isComplete => {
+    
+        if(isComplete == true){
+          this.readRecordsSteps();
+      
+        }  
+      }
+    )
   }
 
   async updateDataSteps(){
