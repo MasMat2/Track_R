@@ -32,7 +32,9 @@ export class CallJitsiComponent  implements OnInit {
   constructor(
     private router: Router,
     private dataJitsiService: DataJitsiService
-  ) { }
+  ) { 
+    console.log("CallJitsiComponent");
+  }
 
 
 

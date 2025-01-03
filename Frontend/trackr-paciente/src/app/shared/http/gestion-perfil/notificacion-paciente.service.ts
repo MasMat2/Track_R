@@ -25,7 +25,7 @@ export class NotificacionPacienteService {
 
 
     constructor(public http: HttpClient, private route : Router,
-        private dataJitsiService: DataJitsiService,
+        // private dataJitsiService: DataJitsiService,
         private usuarioService: UsuarioService,
         private alertController: AlertController,
         private notificacionHubService : NotificacionPacienteHubService,
@@ -128,10 +128,10 @@ export class NotificacionPacienteService {
 
   
   contestarLlamada(meetCode: string) {
-    this.route.navigate(['/home/video-jitsi/answer-call', meetCode]);
-    setTimeout(() => {
-      this.dataJitsiService.contestarLlamada(meetCode);
-    }, 200);
+    // this.route.navigate(['/home/video-jitsi/answer-call', meetCode]);
+    // setTimeout(() => {
+    //   this.dataJitsiService.contestarLlamada(meetCode);
+    // }, 200);
   }
 
 

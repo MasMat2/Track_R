@@ -59,7 +59,7 @@ export class NotificacionesComponent  implements OnInit
     private cdr : ChangeDetectorRef,
     private examenService : ExamenService,
     private fechaService: FechaService,
-    private dataJitsiService: DataJitsiService,
+    // private dataJitsiService: DataJitsiService,
     private route: Router,
     private usuarioService : UsuarioService,
   ){ addIcons({
@@ -177,12 +177,12 @@ export class NotificacionesComponent  implements OnInit
   }
 
 
-  contestarLlamada(meetCode: string) {
-    this.route.navigate(['/home/video-jitsi/answer-call', meetCode]);
-    setTimeout(() => {
-      this.dataJitsiService.contestarLlamada(meetCode);
-    }, 200);
-  }
+  // contestarLlamada(meetCode: string) {
+  //   this.route.navigate(['/home/video-jitsi/answer-call', meetCode]);
+  //   setTimeout(() => {
+  //     this.dataJitsiService.contestarLlamada(meetCode);
+  //   }, 200);
+  // }
 
 
 

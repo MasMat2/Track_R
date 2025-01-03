@@ -45,41 +45,53 @@ export class ChatMensajeHubService {
     console.log('Iniciando conexion con el Hub de Chat Mensajes...');
   }
 
-  public async iniciarConexion(){
+  public async iniciarConexion() {
+    console.log('[ChatMensajeHub] Iniciando conexión...');
+   
     const token: string | null = localStorage.getItem(Constants.TOKEN_KEY);
-
-    if(!token){
+    console.log('[ChatMensajeHub] Token obtenido:', token ? 'Token válido' : 'Token no disponible');
+   
+    if (!token) {
+      console.log('[ChatMensajeHub] Conexión cancelada - No hay token');
       return;
     }
-
-    const url = `${environment.urlBackend}${this.endpoint}`
-
+   
+    const url = `${environment.urlBackend}${this.endpoint}`;
+    console.log('[ChatMensajeHub] URL de conexión:', url);
+   
     const connectionConfig: IHttpConnectionOptions = {
       accessTokenFactory: () => {
+        console.log('[ChatMensajeHub] Generando token para conexión');
         return token;
       }
-      // transport: HttpTransportType.LongPolling
     };
-
+   
     this.connection = new HubConnectionBuilder()
-      // .configureLogging(LogLevel.Debug)
       .withUrl(url, connectionConfig)
       .build();
-    
-    this.connection.on(
-      'NuevoMensaje',
-      (chatMensaje: ChatMensajeDTO) => this.onNuevoChatMensaje(chatMensaje)
-    );
-
-    this.connection.on(
-      'NuevaConexion',
-      (mensajes: ChatMensajeDTO[][]) => this.onNuevaConexion(mensajes)
-    );
-
+    console.log('[ChatMensajeHub] Conexión construida');
+   
+    this.connection.on('NuevoMensaje', (chatMensaje: ChatMensajeDTO) => {
+      console.log('[ChatMensajeHub] NuevoMensaje recibido:', chatMensaje);
+      this.onNuevoChatMensaje(chatMensaje);
+    });
+   
+    this.connection.on('NuevaConexion', (mensajes: ChatMensajeDTO[][]) => {
+      console.log('[ChatMensajeHub] NuevaConexion recibida:', mensajes);
+      this.onNuevaConexion(mensajes);
+    });
+   
     this.connectionStatus.next(HubConnectionState.Connecting);
-
-    await this.connection.start();
-  }
+    console.log('[ChatMensajeHub] Estado cambiado a: Connecting');
+   
+    try {
+      await this.connection.start();
+      console.log('[ChatMensajeHub] Conexión iniciada exitosamente');
+    } catch (error) {
+      console.error('[ChatMensajeHub] Error al iniciar conexión:', error);
+      throw error;
+    }
+   }
 
   public async detenerConexion() {
     this.connectionStatus.next(HubConnectionState.Disconnecting);
