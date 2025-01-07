@@ -238,11 +238,27 @@ namespace TrackrAPI.Services.Sftp
                 {
                     sftp.Connect();
 
-                    string linuxPath = GetRemotePath(filePath);
+                    //for sftp server
+                    string linuxPath = GetRemotePath(filePath); 
+
+                    //for local backend cache
+                    filePath = NormalizeFilePath(filePath);
+                    string localFilePath = GetLocalPath(filePath);
 
                     if (sftp.Exists(linuxPath))
                     {
                         sftp.DeleteFile(linuxPath);
+                    }
+
+                    if (File.Exists(localFilePath))
+                    {
+                        File.Delete(localFilePath);
+
+                        var cache = sftpCacheRepository.GetSftpCache(filePath);
+                        if(cache is not null)
+                        {
+                            sftpCacheRepository.Eliminar(cache);
+                        }
                     }
 
                     sftp.Disconnect();

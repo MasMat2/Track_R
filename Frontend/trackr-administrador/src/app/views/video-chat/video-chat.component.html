@@ -9,16 +9,20 @@
         </div>
         <div class="col">
           <video id="webcamVideo" autoplay playsinline [muted]="true" controls [srcObject]="localStream"></video>
+
+          <div class="controls-bar">
+            <button *ngFor="let control of controls; let i = index"
+                    [class.inactive]="!control.isActive"
+                    [class.call-button]="control.icon === 'phone'"
+                    class="control-button"
+                    (click)="toggleControl(i)">
+              <lucide-angular [name]="getIconImg(control)"></lucide-angular>
+            </button>
+          </div>
+
         </div>
     </div>
 
-
-    
-      <div class="row mt-5">
-        <div class="col-auto">
-          <button  id="hangupButton" (click)="closeStreams()">Colgar</button>
-        </div>
-      </div>
   </div>
 
 </div>

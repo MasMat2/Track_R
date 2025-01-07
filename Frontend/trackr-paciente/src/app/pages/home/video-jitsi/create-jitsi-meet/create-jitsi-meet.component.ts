@@ -38,7 +38,9 @@ export class CreateJitsiMeetComponent implements OnInit, AfterViewInit {
 
   constructor(private dataJitsiService: DataJitsiService,
     private orientationService: ScreenOrientationService,
-    private router: Router,) {}
+    private router: Router,) {
+      console.log("CreateJitsiMeetComponent");
+    }
 
   ngOnInit() {
     // Inicialización del componente

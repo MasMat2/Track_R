@@ -19,52 +19,62 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
     protected endpoint: string,
     private authService : AuthService 
   ) {
+    this.iniciarConexion();
+    console.log('Iniciando conexion con el Hub de Notificaciones...');
   }
 
   public async iniciarConexion() {
-    const token : string | null = await this.authService.obtenerToken();
-    
+    console.log('[NotificacionHub] Iniciando conexión...');
    
-
+    const token: string | null = await this.authService.obtenerToken();
+    console.log('[NotificacionHub] Token obtenido:', token ? 'Token válido' : 'Token no disponible');
+   
     if (!token) {
+      console.log('[NotificacionHub] Conexión cancelada - No hay token');
       return;
     }
-
-    const url = `${environment.urlBackend}${this.endpoint}`;
    
-
+    const url = `${environment.urlBackend}${this.endpoint}`;
+    console.log('[NotificacionHub] URL de conexión:', url);
+   
     const connectionConfig: IHttpConnectionOptions = {
       accessTokenFactory: () => {
+        console.log('[NotificacionHub] Generando token para conexión');
         return token;
       },
-      transport: HttpTransportType.LongPolling,
-      // TODO: 2023-03-23 -> Revisar los tipos de transporte (Web Socket, Long Polling, Server Sent Events)
     };
-
+   
     this.connection = new HubConnectionBuilder()
-      .configureLogging(LogLevel.Debug)
       .withUrl(url, connectionConfig)
       .build();
-
-    this.connection.on(
-      'NuevaNotificacion',
-      (notificacion: T) => this.onNuevaNotificacion(notificacion)
-    );
-
-    this.connection.on(
-      'NuevaConexion',
-      (notificaciones: T[]) => this.onNuevaConexion(notificaciones)
-    );
-    
-    this.connection.on(
-      'NotificarComoVistas',
-      (ids: number[]) => this.onNotificarComoVistas(ids)
-    );
-
+    console.log('[NotificacionHub] Conexión construida');
+   
+    this.connection.on('NuevaNotificacion', (notificacion: T) => {
+      console.log('[NotificacionHub] Nueva notificación recibida:', notificacion);
+      this.onNuevaNotificacion(notificacion);
+    });
+   
+    this.connection.on('NuevaConexion', (notificaciones: T[]) => {
+      console.log('[NotificacionHub] Nueva conexión recibida:', notificaciones);
+      this.onNuevaConexion(notificaciones);
+    });
+   
+    this.connection.on('NotificarComoVistas', (ids: number[]) => {
+      console.log('[NotificacionHub] Notificaciones marcadas como vistas:', ids);
+      this.onNotificarComoVistas(ids);
+    });
+   
     this.connectionStatus.next(HubConnectionState.Connecting);
-
-    await this.connection.start();
-  }
+    console.log('[NotificacionHub] Estado cambiado a: Connecting');
+   
+    try {
+      await this.connection.start();
+      console.log('[NotificacionHub] Conexión iniciada exitosamente');
+    } catch (error) {
+      console.error('[NotificacionHub] Error al iniciar conexión:', error);
+      throw error;
+    }
+   }
 
   public async detenerConexion() {
     this.connectionStatus.next(HubConnectionState.Disconnecting);
@@ -151,7 +161,8 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
       this.connection.state === HubConnectionState.Disconnected ||
       this.connection.state === HubConnectionState.Disconnecting
     ) {
-      throw new Error('No se ha iniciado la conexión con el Hub de Notificaciones');
+      this.iniciarConexion();
+      console.log('No se ha iniciado la conexión con el Hub de Notificaciones, Reconectando...');
     }
     else if (
       this.connection.state === HubConnectionState.Connecting ||

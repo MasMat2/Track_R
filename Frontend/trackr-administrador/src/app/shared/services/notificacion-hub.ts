@@ -16,6 +16,7 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
     protected endpoint: string
   ) {
     this.iniciarConexion();
+    console.log('Iniciando conexion con el Hub de Notificaciones...');
   }
 
   public async iniciarConexion() {
@@ -31,7 +32,7 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
       accessTokenFactory: () => {
         return token;
       },
-      transport: HttpTransportType.LongPolling,
+      // transport: HttpTransportType.LongPolling,
       // TODO: 2023-03-23 -> Revisar los tipos de transporte (Web Socket, Long Polling, Server Sent Events)
     };
 
@@ -145,7 +146,8 @@ export class NotificacionHubBase<T extends NotificacionUsuarioBaseDTO> {
       this.connection.state === HubConnectionState.Disconnected ||
       this.connection.state === HubConnectionState.Disconnecting
     ) {
-      throw new Error('No se ha iniciado la conexión con el Hub de Notificaciones');
+      this.iniciarConexion();
+      console.log('No se ha iniciado la conexion con el Hub de Notificaciones , Reconectando...');
     }
     else if (
       this.connection.state === HubConnectionState.Connecting ||

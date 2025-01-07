@@ -958,45 +958,61 @@ namespace TrackrAPI.Services.Seguridad
                                                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
                                                    TransactionScopeAsyncFlowOption.Enabled);
 
-            if (!string.IsNullOrEmpty(usuarioDto.ImagenBase64))
+            if (usuarioDto.FotoPerfilEditada)
             {
-                string nombreArchivo = $"{idUsuario}{MimeTypeMap.GetExtension(usuarioDto.ImagenTipoMime)}";
-                string path = Path.Combine("Archivos", "Usuario", nombreArchivo);
-                usuarioDto.ImagenBase64 = usuarioDto.ImagenBase64.Substring(usuarioDto.ImagenBase64.LastIndexOf(',') + 1);
-
-                this._sftpService.UploadBytesFile(path, usuarioDto.ImagenBase64);
-
-                // Logica para agregar las fotos de perfil en la tabla archivo
-                var fotoPerfil = new Archivo
+                if (!string.IsNullOrEmpty(usuarioDto.ImagenBase64))
                 {
-                    Nombre = nombreArchivo,
-                    ArchivoNombre = nombreArchivo,
-                    ArchivoTipoMime = usuarioDto.ImagenTipoMime,
-                    ArchivoUrl = path,
-                    EsFotoPerfil = true,
-                    FechaRealizacion = DateTime.Now,
-                    IdUsuario = idUsuario
-                };
+                    var imagenPerfil = await _archivoRepository.ObtenerImagenUsuarioAsync(idUsuario);
 
-                _archivoRepository.Agregar(fotoPerfil);
-            }
-            else
-            {
-                var imagenPerfil = await _archivoRepository.ObtenerImagenUsuarioAsync(idUsuario);
-
-                if (imagenPerfil != null)
-                {
-                    var path = imagenPerfil.ArchivoUrl;
-                    if (!string.IsNullOrEmpty(path))
+                    if (imagenPerfil != null)
                     {
-                        _sftpService.DeleteFile(path);
+                        var path1 = imagenPerfil.ArchivoUrl;
+                        if (!string.IsNullOrEmpty(path1))
+                        {
+                            _sftpService.DeleteFile(path1);
+                        }
+                        _archivoRepository.Eliminar(imagenPerfil);
                     }
-                    _archivoRepository.Eliminar(imagenPerfil);
+
+                    string nombreArchivo = $"{idUsuario}{MimeTypeMap.GetExtension(usuarioDto.ImagenTipoMime)}";
+                    string path = Path.Combine("Archivos", "Usuario", nombreArchivo);
+                    usuarioDto.ImagenBase64 = usuarioDto.ImagenBase64.Substring(usuarioDto.ImagenBase64.LastIndexOf(',') + 1);
+
+                    this._sftpService.UploadBytesFile(path, usuarioDto.ImagenBase64);
+
+                    // Logica para agregar las fotos de perfil en la tabla archivo
+                    var fotoPerfil = new Archivo
+                    {
+                        Nombre = nombreArchivo,
+                        ArchivoNombre = nombreArchivo,
+                        ArchivoTipoMime = usuarioDto.ImagenTipoMime,
+                        ArchivoUrl = path,
+                        EsFotoPerfil = true,
+                        FechaRealizacion = DateTime.Now,
+                        IdUsuario = idUsuario
+                    };
+
+                    _archivoRepository.Agregar(fotoPerfil);
+                }
+                else
+                {
+                    var imagenPerfil = await _archivoRepository.ObtenerImagenUsuarioAsync(idUsuario);
+
+                    if (imagenPerfil != null)
+                    {
+                        var path = imagenPerfil.ArchivoUrl;
+                        if (!string.IsNullOrEmpty(path))
+                        {
+                            _sftpService.DeleteFile(path);
+                        }
+                        _archivoRepository.Eliminar(imagenPerfil);
+                    }
                 }
             }
 
             scope.Complete();
         }
+
         public string ObtenerImagenUsuario(int idUsuario, string? imagenTipoMime=null){
             
             string filePath;
@@ -1049,6 +1065,26 @@ namespace TrackrAPI.Services.Seguridad
             return imagenPerfil;
 
 
+        }
+
+        //Actualizar imagen de perfil de usuario en la app
+        public async Task ActualizarImagenPerfilTrackr(ArchivoDTO archivoDto, int idUsuario)
+        {
+            if (string.IsNullOrEmpty(archivoDto.Archivo))
+            {
+                //habilitar la opción de eliminar la foto de perfil
+            }
+            else
+            {
+                var usuarioDto = new UsuarioDto
+                {
+                    ImagenBase64 = archivoDto.Archivo,
+                    ImagenTipoMime = archivoDto.ArchivoMime,
+                    FotoPerfilEditada = true
+                };
+
+                await GuardarImagen(usuarioDto, idUsuario);
+            }
         }
 
     }

@@ -39,7 +39,9 @@ export class VideoJitsiPage implements OnInit {
   constructor(private dataJitsiService: DataJitsiService,
     private ChatMensajeHubService:ChatMensajeHubService,
     private ChatHubServiceService:ChatHubServiceService,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute) {
+      console.log("VideoJitsiPage");
+     }
 
   ngOnInit() { 
     // this.ChatHubServiceService.iniciarConexion();

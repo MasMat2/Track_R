@@ -31,6 +31,7 @@ export class ChatHubServiceService {
 
   constructor(private ChatPersonaService:ChatPersonaService, private fechaService: FechaService) { 
     this.iniciarConexion();
+    console.log('Iniciando conexion con el Hub de Chat...');
   }
 
   public async iniciarConexion(){
@@ -45,12 +46,12 @@ export class ChatHubServiceService {
     const connectionConfig: IHttpConnectionOptions = {
       accessTokenFactory: () => {
         return token;
-      },
-      transport: HttpTransportType.LongPolling
+      }
+      // transport: HttpTransportType.LongPolling
     };
 
     this.connection = new HubConnectionBuilder()
-      .configureLogging(LogLevel.Debug)
+      // .configureLogging(LogLevel.Debug)
       .withUrl(url, connectionConfig)
       .build();
     
@@ -141,7 +142,8 @@ export class ChatHubServiceService {
       this.connection.state === HubConnectionState.Disconnected ||
       this.connection.state === HubConnectionState.Disconnecting
     ) {
-      throw new Error ('No se ha iniciado la conexion con el Hub de Notificaciones');
+      this.iniciarConexion();
+      console.log('No se ha iniciado la conexión con el Hub de Notificaciones, Reconectando...');
     }
     else if(
       this.connection.state === HubConnectionState.Connecting ||

@@ -147,7 +147,7 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
   crearLlamadaWebRTC() {
     let idUsuario = this.idUsuario;
 
-    const newRoomName = `webrtc-${this.idChat}-${idUsuario}`;
+    const newRoomName = `webrtc-${this.idChat}`;
 
     const telefonoEmoji = "📞";
     let mensaje = `${telefonoEmoji} Te espero la sala ${newRoomName}`;
@@ -163,7 +163,7 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
     };
 
     this.ChatMensajeHubService.enviarMensaje(msg);
-    this.router.navigate(['/administrador/webrtc', newRoomName]);
+    this.router.navigate(['/administrador/webrtc', this.idChat]);
   }
 
   crearLlamadaJitsi() {
@@ -364,7 +364,7 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
       return true;
     }
   
-    regex = /webrtc-\d+-(\d+)/;
+    regex = /webrtc-(\d+)/;
     if (mensaje.mensaje.includes('webrtc-' + this.idChat) && mensaje.mensaje.match(regex)) {
       return true;
     }
@@ -389,7 +389,7 @@ export class MensajesComponent implements OnInit, OnChanges ,AfterViewInit, Afte
     }
 
     if (mensaje.mensaje.includes('webrtc-' + this.idChat)) {
-      const regex = /webrtc-\d+-(\d+)/;
+      const regex = /webrtc-(\d+)/;
       const match = mensaje.mensaje.match(regex);
       if (match && match.length > 0) {
         const codigo = match[1];

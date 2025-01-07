@@ -15,6 +15,8 @@ import { TerminosYCondicionesComponent } from '@sharedComponents/terminos-y-cond
 import { InfoLibreriasOpenSourceComponent } from '@sharedComponents/info-librerias-opensource/info-librerias-opensource.component';
 import { AvisoPrivacidadComponent } from '@sharedComponents/aviso-privacidad/aviso-privacidad.component';
 import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinner.service';
+import { CapacitorUtils } from '@utils/capacitor-utils';
+import { ArchivoDto } from 'src/app/shared/Dtos/archivos/archivo-dto';
 
 
 @Component({
@@ -27,13 +29,17 @@ import { LoadingSpinnerService } from 'src/app/services/dashboard/loading-spinne
     RouterModule,
     FormsModule,
     CommonModule
-  ]
+  ],
+  providers: [CapacitorUtils]
 })
 export class InicioPerfilComponent  implements OnInit {
 
   protected informacionPerfil$: Observable<InformacionPerfilDto>;
   protected infoPerfil: InformacionPerfilDto;
   protected fotoPerfilUrl: string = "assets/img/svg/avatar-placeholder.svg";
+
+  protected archivoFotoPerfil: ArchivoDto = new ArchivoDto();
+  protected fotoPerfilEditada: boolean = false;
 
   protected pacientes: UsuarioExpedienteGridDTO[];
 
@@ -44,6 +50,7 @@ export class InicioPerfilComponent  implements OnInit {
     private modalController: ModalController,
     private usuarioService: UsuarioService,
     private loadingSpinner: LoadingSpinnerService,
+    private capacitorUtils: CapacitorUtils,
   ) { 
     addIcons({
       'persona':'assets/img/svg/user.svg',
@@ -54,7 +61,8 @@ export class InicioPerfilComponent  implements OnInit {
       'informacion': 'assets/img/svg/info.svg',
       'chevron-down': 'assets/img/svg/chevron-down.svg',
       'chevron-right': 'assets/img/svg/chevron-right.svg',
-      'trash-2': 'assets/img/svg/trash-2.svg'
+      'trash-2': 'assets/img/svg/trash-2.svg',
+      'editar': 'assets/img/svg/pen-line.svg'
     })
   }
 
@@ -176,7 +184,7 @@ export class InicioPerfilComponent  implements OnInit {
     await alert.present();
   }
 
-  protected eliminarCuenta(){
+  private eliminarCuenta(){
     this.loadingSpinner.presentLoading();
     this.usuarioService.eliminarCuenta().subscribe({
       next: () => {},
@@ -195,6 +203,60 @@ export class InicioPerfilComponent  implements OnInit {
         )
       }
     });
+  }
+
+  protected async cambiarFotoPerfil(){
+    await this.capacitorUtils.takePicture('Subir foto de perfil').then(
+      (image_src) => {
+        const [, data] = image_src.split(',');
+        const mimeType = image_src.split(':')[1].split(';')[0];
+    
+        this.archivoFotoPerfil.archivo = data;
+        this.archivoFotoPerfil.archivoMime = mimeType;
+        this.fotoPerfilEditada = true;
+
+        this.subirFotoPerfil();
+      }
+    ).catch(
+      () => {}
+    );
+
+    
+  }
+
+  private subirFotoPerfil(){
+    this.loadingSpinner.presentLoading();
+    this.usuarioService.actualizarImagenPerfil(this.archivoFotoPerfil).subscribe({
+      next: () => {},
+      error: () => {
+        this.loadingSpinner.dismissLoading();
+      },
+      complete: () => {
+        this.loadingSpinner.dismissLoading().then(
+          () => {
+            this.presentAlertSuccess('Foto de perfil actualizada', 'La foto de perfil se actualizó correctamente')
+          },
+        )
+        .finally(
+          () => {
+            if(this.archivoFotoPerfil.archivo != null){
+              this.fotoPerfilUrl = `data:${this.archivoFotoPerfil.archivoMime};base64,` + this.archivoFotoPerfil.archivo;
+            }
+          }
+        );
+      }
+    })
+  }
+
+  private async presentAlertSuccess(header: string, subheader: string) {
+    const alert = await this.alertCtrl.create({
+      header: header,
+      subHeader: subheader,
+      buttons: ['Ok'],
+      cssClass: 'custom-alert color-primary icon-check'
+    });
+
+    await alert.present();
   }
 
 }

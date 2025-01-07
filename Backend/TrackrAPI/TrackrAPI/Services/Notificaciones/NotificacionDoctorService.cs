@@ -141,6 +141,16 @@ public class NotificacionDoctorService
         var idUsuario = notificacionDoctor.IdUsuario.ToString();
         var usuarioCliente = _hubContext.Clients.User(idUsuario);
 
-        await usuarioCliente.NuevaNotificacion(notificacionDoctor);
+        try
+        {
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10)); // 10-second timeout
+            await usuarioCliente.NuevaNotificacion(notificacionDoctor).WaitAsync(cts.Token);
+            //await usuarioCliente.NuevaNotificacion(notificacionDoctor);
+        }
+        catch (Exception ex)
+        {
+            // Handle other exceptions
+            Console.WriteLine($"Error sending notification to user {idUsuario}: {ex.Message}");
+        }
     }
 }

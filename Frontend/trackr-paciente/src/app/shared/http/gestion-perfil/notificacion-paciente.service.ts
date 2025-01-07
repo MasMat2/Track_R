@@ -25,7 +25,7 @@ export class NotificacionPacienteService {
 
 
     constructor(public http: HttpClient, private route : Router,
-        private dataJitsiService: DataJitsiService,
+        // private dataJitsiService: DataJitsiService,
         private usuarioService: UsuarioService,
         private alertController: AlertController,
         private notificacionHubService : NotificacionPacienteHubService,
@@ -50,7 +50,7 @@ export class NotificacionPacienteService {
   }
       
   public async validarMeet(mensaje: NotificacionPacientePopOverDto) {
-    if (this.validandoMeet) {
+    if (!mensaje || this.validandoMeet) {
         return;  
     }
 
@@ -75,19 +75,19 @@ export class NotificacionPacienteService {
       this.validandoMeet = false;
     }
 
-    if (mensaje.mensaje.includes('webrtc-' + mensaje.idChat)) {
-      const regex = /webrtc-\d+-(\d+)/;
-      const match = mensaje.mensaje.match(regex);
-      if (match && match.length > 0) {
-        const codigo = match[1];
-        this.route.navigate(['/home/chat', codigo]);
+    // if (mensaje.mensaje.includes('webrtc-' + mensaje.idChat)) {
+    //   const regex = /webrtc-\d+-(\d+)/;
+    //   const match = mensaje.mensaje.match(regex);
+    //   if (match && match.length > 0) {
+    //     const codigo = match[1];
+    //     // this.route.navigate(['/home/chat', codigo]);
 
-      } else {
-        console.error("Error al validar codigo meet jitsi.");
-      }
+    //   } else {
+    //     console.error("Error al validar codigo meet webRTC.");
+    //   }
 
-      this.validandoMeet = false;
-    }
+    //   this.validandoMeet = false;
+    // }
   }
 
   
@@ -128,10 +128,10 @@ export class NotificacionPacienteService {
 
   
   contestarLlamada(meetCode: string) {
-    this.route.navigate(['/home/video-jitsi/answer-call', meetCode]);
-    setTimeout(() => {
-      this.dataJitsiService.contestarLlamada(meetCode);
-    }, 200);
+    // this.route.navigate(['/home/video-jitsi/answer-call', meetCode]);
+    // setTimeout(() => {
+    //   this.dataJitsiService.contestarLlamada(meetCode);
+    // }, 200);
   }
 
 

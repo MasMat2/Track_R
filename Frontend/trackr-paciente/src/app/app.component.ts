@@ -47,7 +47,7 @@ export class AppComponent implements OnDestroy, OnInit {
 
   private async consultarNotificaciones() { 
     //Iniciar conexión con el hub de forma global
-    await this.notificacionHubService.iniciarConexion();
+    // await this.notificacionHubService.iniciarConexion();
     this.notificacionHubService.notificaciones$.pipe(
       map((notificaciones) => {
         return notificaciones.map((notificacion) => {
@@ -69,9 +69,11 @@ export class AppComponent implements OnDestroy, OnInit {
         });
       }),
      
-    ).subscribe(async (notificacion) => {
-      const ultimaNotificacion = notificacion[0];
-       await this.notificacionPacienteService.validarMeet(ultimaNotificacion); 
+    ).subscribe(async (notificaciones) => {
+      if (notificaciones.length >= 0) {
+        const ultimaNotificacion = notificaciones[0];
+        await this.notificacionPacienteService.validarMeet(ultimaNotificacion); 
+      };
     });
   }
   private formatearComplemento(complemento: string, tipoNotificacion: number){

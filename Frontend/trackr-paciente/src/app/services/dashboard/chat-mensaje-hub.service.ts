@@ -41,48 +41,97 @@ export class ChatMensajeHubService {
   private readonly endpoint = 'hub/chatMensaje';
 
   private connection: HubConnection;
-
+  
+  private attempts = 0;
+  private isRetrying = false;
+  
   constructor(
     private authService: AuthService,
     private chatHub:ChatHubServiceService, private fechaService: FechaService
   ) {
     this.iniciarConexion();
+    console.log('Iniciando conexion con el Hub de Chat Mensajes...');
   }
 
   public async iniciarConexion() {
+    console.log('[ChatMensajeHub] Iniciando conexión...');
+    
     const token = await this.authService.obtenerToken();
-
+    console.log('[ChatMensajeHub] Token obtenido:', token ? 'Token válido' : 'Token no disponible');
+    
     if (!token) {
+      console.log('[ChatMensajeHub] Conexión cancelada - No hay token');
       return;
     }
-
+  
     const url = `${environment.urlBackend}${this.endpoint}`;
-
+    console.log('[ChatMensajeHub] URL de conexión:', url);
+  
     const connectionConfig: IHttpConnectionOptions = {
       accessTokenFactory: () => {
+        console.log('[ChatMensajeHub] Generando token para conexión');
         return token;
       },
-      transport: HttpTransportType.LongPolling,
     };
-
+  
     this.connection = new HubConnectionBuilder()
       .configureLogging(LogLevel.Debug)
       .withUrl(url, connectionConfig)
       .build();
-
-    this.connection.on('NuevoMensaje', (chatMensaje: ChatMensajeDTO) => 
-      this.onNuevoChatMensaje(chatMensaje)
-    );
-
-    this.connection.on('NuevaConexion', (mensajes: ChatMensajeDTO[][]) =>
-      this.onNuevaConexion(mensajes)
-    );
-
-    this.connection.on('AbandonarChat', (idChat: number) => this.onAbandonarChat(idChat));
-
+    console.log('[ChatMensajeHub] Conexión construida');
+  
+    this.connection.on('NuevoMensaje', (chatMensaje: ChatMensajeDTO) => {
+      console.log('[ChatMensajeHub] NuevoMensaje recibido:', chatMensaje);
+      this.onNuevoChatMensaje(chatMensaje);
+    });
+  
+    this.connection.on('NuevaConexion', (mensajes: ChatMensajeDTO[][]) => {
+      console.log('[ChatMensajeHub] NuevaConexion recibida:', mensajes);
+      this.onNuevaConexion(mensajes);
+    });
+  
+    this.connection.on('AbandonarChat', (idChat: number) => {
+      console.log('[ChatMensajeHub] AbandonarChat recibido:', idChat);
+      this.onAbandonarChat(idChat);
+    });
+  
     this.connectionStatus.next(HubConnectionState.Connecting);
+    console.log('[ChatMensajeHub] Estado cambiado a: Connecting');
+  
+    this.connection.onclose(async (error) => {
+      console.log('[ChatMensajeHub] Conexión cerrada. Error:', error);
+      await this.retryConnection();
+    });
+  
+    try {
+      await this.connection.start();
+      console.log('[ChatMensajeHub] Conexión iniciada exitosamente');
+    } catch (error) {
+      console.error('[ChatMensajeHub] Error al iniciar conexión:', error);
+      throw error;
+    }
+  }
 
-    await this.connection.start();
+  private async retryConnection() {
+    const maxAttempts = 5;
+    if (this.isRetrying) return;
+    
+    this.isRetrying = true;
+    while (this.attempts < maxAttempts) {
+      try {
+        await this.connection.start();
+        console.log('Reconnected!');
+        break;
+      } catch (err) {
+        this.attempts++;
+        console.warn(`Retry attempt ${this.attempts} failed.`);
+        await this.delay(2000); // Wait a bit before trying again
+      }
+    }
+  }
+  
+  private delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   public async detenerConexion() {
@@ -178,5 +227,12 @@ export class ChatMensajeHubService {
     await this.ensureConnection();
 
     await this.connection.invoke('AbandonarChat',idChat);
+  }
+
+  
+  public async obtenerMensajesDesdeServidor(){
+    await this.ensureConnection();
+
+    await this.connection.invoke('ObtenerMensajesDesdeServidor');
   }
 }

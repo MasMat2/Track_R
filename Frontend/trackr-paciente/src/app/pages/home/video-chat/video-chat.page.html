@@ -10,6 +10,14 @@
   </ion-row>
 
   <ion-row id="botones">
-    <button id="hangupButton" (click)="closeStreams()">Colgar</button>
+    <div class="controls-bar">
+      <button *ngFor="let control of controls; let i = index"
+              [class.inactive]="!control.isActive"
+              [class.call-button]="control.icon === 'call-outline'"
+              class="control-button"
+              (click)="toggleControl(i)">
+        <ion-icon [name]="getIconImg(control)"></ion-icon>
+      </button>
+    </div>
   </ion-row>
 </ion-content>
