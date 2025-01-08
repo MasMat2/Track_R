@@ -256,6 +256,13 @@ export class MuestrasFormularioComponent implements OnInit {
         throw new Error('HealthConnect is not setup.');
       }
 
+      let permCheck = await this.healthConnectservice.checkHealthPermissions({
+        readPerms: ['BloodPressure']
+      });
+      if (!permCheck.hasAllPermissions) {
+        throw new Error('BloodPressure read permission not granted.');
+      }
+      
       const res = await this.healthConnectservice.readRecords(options);
       console.log(JSON.stringify(res));
 

@@ -1,5 +1,5 @@
 export type HealthConnectAvailabilityStatus = 'Available' | 'NotInstalled' | 'NotSupported' | 'Installed' | 'Unavailable';
-export type RecordType = 'Height' | 'Weight' | 'Steps' | 'BloodGlucose' | 'HeartRate' | 'SleepSession' | 'BloodPressure';
+export type RecordType = 'Height' | 'Weight' | 'Steps' | 'BloodGlucose' | 'HeartRate' | 'HeartRateSeries' | 'SleepSession' | 'BloodPressure';
 type RecordBase = {
     metadata: RecordMetadata;
 };

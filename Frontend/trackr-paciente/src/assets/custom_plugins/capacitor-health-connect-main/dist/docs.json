@@ -1052,6 +1052,10 @@
           "complexTypes": []
         },
         {
+          "text": "'HeartRateSeries'",
+          "complexTypes": []
+        },
+        {
           "text": "'SleepSession'",
           "complexTypes": []
         },

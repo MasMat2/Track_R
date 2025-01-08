@@ -33,16 +33,19 @@ export class WidgetFrecuenciaComponent  implements OnInit {
     })
    }
 
-  async ngOnInit() {
-    this.healthConnectService.setupComplete$.subscribe(isComplete => {
-    
-        if(isComplete == true){
+   async ngOnInit() {
+    this.healthConnectService.setupComplete$.subscribe(async isComplete => {
+      if (isComplete) {
+        const res = await this.healthConnectService.checkHealthPermissions({
+          readPerms: ['HeartRateSeries']
+        });
+        if (res.hasAllPermissions) {
           this.readRecordsHeartRate();
-        }  
+        }
       }
-    )
+    });
   }
-
+  
   async updateDataHeartRate(){
     if(this.availability === "Available"){
       this.readRecordsHeartRate();

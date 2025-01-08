@@ -47,16 +47,18 @@ export class WidgetSuenoComponent  implements OnInit {
 
 
   async ngOnInit() {
-
-    this.healthConnectservice.setupComplete$.subscribe(isComplete => {
-    
-      if(isComplete == true){
-        this.readRecordsSleepSession();
-    
-      }  
-    }
-  )
+    this.healthConnectservice.setupComplete$.subscribe(async isComplete => {
+      if (isComplete) {
+        const res = await this.healthConnectservice.checkHealthPermissions({
+          readPerms: ['SleepSession']
+        });
+        if (res.hasAllPermissions) {
+          this.readRecordsSleepSession();
+        }
+      }
+    });
   }
+  
 
   async updateDataSleepSession() {
     if(this.availability === "Available"){

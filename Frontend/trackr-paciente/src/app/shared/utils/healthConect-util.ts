@@ -218,11 +218,11 @@ export const checkAvailability = async (): Promise<{ availability: HealthConnect
     }
 }
 
-export const checkHealthPermissions = async (): Promise<{ grantedPermissions: string[]; hasAllPermissions: boolean; }> => {
+export const checkHealthPermissions = async ({readPerms = readPermissions, writePerms = writePermissions }: { readPerms?: RecordType[], writePerms?: RecordType[]} = {}): Promise<{ grantedPermissions: string[]; hasAllPermissions: boolean; }> => {
     try {
         const options = {
-            read: readPermissions,
-            write: writePermissions
+            read: readPerms,
+            write: writePerms
         }
         let res = await HealthConnect.checkHealthPermissions(options);
         console.log('[HealthConnect util] checkHealthPermissions - res', res);

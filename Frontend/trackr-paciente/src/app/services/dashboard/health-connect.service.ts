@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { checkAvailability, checkHealthPermissions, getSteps, openHealthConnectSetting, requestPermissions, writeSteps, writeWeight, readRecords, writeHeartRate, writeSleepSession, writeBloodPressure } from '../../../app/shared/utils/healthConect-util';
-import { StoredRecord, GetRecordsOptions, Record, PermissionsStatus, HealthConnectAvailabilityStatus } from '../../pages/home/dashboard/interfaces/healthconnect-interfaces';
+import { StoredRecord, GetRecordsOptions, Record, PermissionsStatus, HealthConnectAvailabilityStatus, RecordType } from '../../pages/home/dashboard/interfaces/healthconnect-interfaces';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -60,8 +60,10 @@ export class HealthConnectService {
     }
   }
 
-  async checkHealthPermissions(): Promise<{ grantedPermissions: string[]; hasAllPermissions: boolean; }> {
-    return await checkHealthPermissions();
+  async checkHealthPermissions(
+    options: { readPerms?: RecordType[]; writePerms?: RecordType[] } = {}
+  ): Promise<{ grantedPermissions: string[]; hasAllPermissions: boolean; }> {
+    return await checkHealthPermissions(options);
   }
 
   async openHealthConnectSetting(): Promise<void>{
