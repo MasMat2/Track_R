@@ -7,6 +7,7 @@ import { ScreenOrientationService } from '@services/screen-orientation.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AudioInterface, ParticipantInterface } from '../interfaces/jitsi-interface';
 import { Meta } from '@angular/platform-browser';
+import { compareDesc } from 'date-fns';
 
 
 declare var JitsiMeetExternalAPI: any;
@@ -39,7 +40,7 @@ export class AnswerMeetComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
+    console.log("AnswerMeetComponent");
   }
 
 

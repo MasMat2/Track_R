@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class NotificacionPacienteHubService extends NotificacionHubBase<NotificacionPacienteDTO> {
    constructor(authService : AuthService) {
+    console.log('Constructor NotificacionPacienteHubService...');
     super('hub/notificacion-paciente' , authService); 
   }  
 }

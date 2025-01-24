@@ -42,6 +42,8 @@ export class BarraChatsComponent {
   protected misDoctores: UsuarioDoctoresDto[];
   protected chatsFiltradosPorBusqueda: ChatDTO[];
   protected filtrando: boolean = false;
+  private fallbackTimeoutId: any;
+
 
   constructor(
     private router: Router,
@@ -63,8 +65,21 @@ export class BarraChatsComponent {
     });
   }
 
-  ionViewWillEnter(){
-    this.obtenerChats()
+  ngOnInit(){
+    this.obtenerChats();
+
+    // Fallback after 5 seconds:
+    this.fallbackTimeoutId = setTimeout(async () => {
+      if (!this.mensajes || this.mensajes.length === 0) {
+        console.warn('[BarraChats] Fallback triggered');
+        try {
+          await this.chatMensajeHubService.obtenerMensajesDesdeServidor();
+        } catch (err) {
+          console.error('[BarraChats] Fallback fetch failed:', err);
+        }
+      }
+    }, 5000);
+    
     this.consultarDoctores();
   }
 
@@ -90,13 +105,18 @@ export class BarraChatsComponent {
 
   //OBTENER LOS CHATS Y EL ULTIMO MENSAJE
   private obtenerChats() {
+    console.log('[BarraChats] Iniciando obtención de chats');
+    
     this.chats$ = this.ChatHubServiceService.chat$;
     this.chatMensajes$ = this.chatMensajeHubService.chatMensaje$;
-  
+    console.log('[BarraChats] Observables inicializados');
+   
     this.chats$.pipe(
       map((chats) => {
+        console.log('[BarraChats] Procesando chats:', chats);
         return chats.map(chat => {
           if (chat.imagenBase64 != null) {
+            console.log('[BarraChats] Procesando imagen para chat');
             let base64String = "data:" + chat.tipoMime + ';base64,' + chat.imagenBase64;
             chat.urlImagen = base64String;
           }
@@ -104,14 +124,22 @@ export class BarraChatsComponent {
         });
       }),
       switchMap((chats) => {
+        console.log('[BarraChats] Chats procesados:', chats);
         this.chats = chats;
         return this.chatMensajes$;
       })
     ).subscribe((mensajes) => {
+      console.log('[BarraChats] Mensajes recibidos:', mensajes);
       this.mensajes = mensajes;
+      
+      if (mensajes && mensajes.length > 0 && this.fallbackTimeoutId) {
+        clearTimeout(this.fallbackTimeoutId);
+      }
+
       this.obtenerUltimoMensaje();
+      console.log('[BarraChats] Último mensaje actualizado');
     });
-  }
+   }
 
   private consultarDoctores() {
     this.doctoresService.consultarExpedienteConImagenes().pipe(
@@ -163,22 +191,32 @@ export class BarraChatsComponent {
   }
 
   private obtenerUltimoMensaje(): void {
-    const ultimoMensaje = this.mensajes.map(
-      (arr) =>{ return {mensajes: arr[arr.length - 1]?.mensaje || '', chat: arr[0]?.idChat || 0}}
-    );
-
-    const fechaUltimoMensaje = this.mensajes.map(
-      (arr) => {
-        return {fecha: arr[arr.length - 1]?.fecha || this.fechaService.obtenerFechaActualISOString(), chat: arr[0]?.idChat || 0}
+    console.log('[BarraChats] Iniciando obtención de últimos mensajes');
+   
+    const ultimoMensaje = this.mensajes.map(arr => {
+      console.log('[BarraChats] Procesando último mensaje para chat:', arr[0]?.idChat);
+      return {
+        mensajes: arr[arr.length - 1]?.mensaje || '',
+        chat: arr[0]?.idChat || 0
       }
-    )
+    });
+   
+    const fechaUltimoMensaje = this.mensajes.map(arr => {
+      console.log('[BarraChats] Procesando fecha último mensaje para chat:', arr[0]?.idChat);
+      return {
+        fecha: arr[arr.length - 1]?.fecha || this.fechaService.obtenerFechaActualISOString(),
+        chat: arr[0]?.idChat || 0
+      }
+    });
+   
+    this.chats.map(chat => {
+      console.log('[BarraChats] Actualizando chat:', chat.idChat);
+      chat.ultimoMensaje = ultimoMensaje.filter(y => y.chat == chat.idChat)[0]?.mensajes || '';
+      chat.fechaUltimoMensaje = fechaUltimoMensaje.filter(y => y.chat == chat.idChat)[0]?.fecha || 
+        this.fechaService.obtenerFechaActualISOString();
+      return chat;
+    });
     
-    this.chats.map(
-      chat => {
-        chat.ultimoMensaje = ultimoMensaje.filter(y => y.chat == chat.idChat)[0]?.mensajes || '';
-        chat.fechaUltimoMensaje = fechaUltimoMensaje.filter(y => y.chat == chat.idChat)[0]?.fecha || this.fechaService.obtenerFechaActualISOString();
-        return chat;
-      }
-    )
-  }
+    console.log('[BarraChats] Finalizada actualización de últimos mensajes');
+   }
 }

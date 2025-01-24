@@ -52,42 +52,57 @@ export class ChatHubServiceService {
   }
 
   public async iniciarConexion() {
+    console.log('[ChatHubService] Iniciando conexión...');
+   
     const token = await this.authService.obtenerToken();
+    console.log('[ChatHubService] Token obtenido:', token ? 'Token válido' : 'Token no disponible');
+   
     if (!token) {
+      console.log('[ChatHubService] Conexión cancelada - No hay token');
       return;
     }
-
+   
     const url = `${environment.urlBackend}${this.endpoint}`;
-
+    console.log('[ChatHubService] URL de conexión:', url);
+   
     const connectionConfig: IHttpConnectionOptions = {
       accessTokenFactory: () => {
+        console.log('[ChatHubService] Generando token para conexión');
         return token;
       },
-      // transport: HttpTransportType.LongPolling,
     };
-
+   
     this.connection = new HubConnectionBuilder()
-      // .configureLogging(LogLevel.Debug)
       .withUrl(url, connectionConfig)
       .build();
-
-    this.connection.on('NuevoChat', (chat: ChatDTO, idPersonas: number[]) =>
-      this.onNuevoChat(chat, idPersonas)
-    );
-
-    this.connection.on('NuevaConexion', (chats: ChatDTO[]) =>
-      this.onNuevaConexion(chats)
-    );
-
-    this.connection.on(
-      'CargarChats',
-      (chats: ChatDTO[]) => this.onCargarChats(chats)
-    )
-
+    console.log('[ChatHubService] Conexión construida');
+   
+    this.connection.on('NuevoChat', (chat: ChatDTO, idPersonas: number[]) => {
+      console.log('[ChatHubService] NuevoChat recibido:', { chat, idPersonas });
+      this.onNuevoChat(chat, idPersonas);
+    });
+   
+    this.connection.on('NuevaConexion', (chats: ChatDTO[]) => {
+      console.log('[ChatHubService] NuevaConexion recibida:', chats);
+      this.onNuevaConexion(chats);
+    });
+   
+    this.connection.on('CargarChats', (chats: ChatDTO[]) => {
+      console.log('[ChatHubService] CargarChats recibido:', chats);
+      this.onCargarChats(chats);
+    });
+   
     this.connectionStatus.next(HubConnectionState.Connecting);
-
-    await this.connection.start();
-  }
+    console.log('[ChatHubService] Estado cambiado a: Connecting');
+   
+    try {
+      await this.connection.start();
+      console.log('[ChatHubService] Conexión iniciada exitosamente');
+    } catch (error) {
+      console.error('[ChatHubService] Error al iniciar conexión:', error);
+      throw error;
+    }
+   }
 
   public async detenerConexion() {
     this.connectionStatus.next(HubConnectionState.Disconnecting);
