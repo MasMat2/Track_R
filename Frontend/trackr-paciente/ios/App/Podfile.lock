@@ -47,7 +47,7 @@ DEPENDENCIES:
   - CapacitorVoiceRecorder (from `../../node_modules/capacitor-voice-recorder`)
   - "CapawesomeCapacitorFilePicker (from `../../node_modules/@capawesome/capacitor-file-picker`)"
   - "CapawesomeCapacitorScreenOrientation (from `../../node_modules/@capawesome/capacitor-screen-orientation`)"
-  - PerfoodCapacitorHealthkit (from `../../../../../capacitor-healthkit`)
+  - PerfoodCapacitorHealthkit (from `../../src/assets/custom_plugins/capacitor-healthkit`)
 
 EXTERNAL SOURCES:
   BaumaPlugin:
@@ -81,7 +81,7 @@ EXTERNAL SOURCES:
   CapawesomeCapacitorScreenOrientation:
     :path: "../../node_modules/@capawesome/capacitor-screen-orientation"
   PerfoodCapacitorHealthkit:
-    :path: "../../../../../capacitor-healthkit"
+    :path: "../../src/assets/custom_plugins/capacitor-healthkit"
 
 SPEC CHECKSUMS:
   BaumaPlugin: 0a932c7607bc6e8d088a300e76735e97ef197204
@@ -101,6 +101,6 @@ SPEC CHECKSUMS:
   CapawesomeCapacitorScreenOrientation: a757a72cd4a113142638c049af61441793721f07
   PerfoodCapacitorHealthkit: 88f6e78b319072c4d0aec439b2fcc14d3f05d311
 
-PODFILE CHECKSUM: c9c6f63c81fc6345f0bd4bc2d327407c3a69a98b
+PODFILE CHECKSUM: eb0c23b27d30a3daad33d056d5a7cb2bd04e7b2f
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

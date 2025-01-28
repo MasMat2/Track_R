@@ -22,10 +22,18 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>Baumanometro</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<string>YES</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>This app uses Bluetooth to connect to and communicate with Omron devices.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>This app uses Bluetooth to connect to and communicate with Omron devices.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Se necesita la camara usar la funcion las videollamadas.</string>
 	<key>NSDocumentsFolderUsageDescription</key>
@@ -35,7 +43,7 @@
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Es necesario para trabajar con los datos de salud</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Habiilita el uso del microfono para grabar una nota de voz</string>
+	<string>Se necesita el microfono para usar la funcion de audios.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Esta aplicación necesita guardar imágenes en tu biblioteca de fotos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -65,18 +73,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>Se necesita la camara usar la funcion las videollamadas.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Se necesita el microfono para usar la funcion de audios.</string>
-	<key>LSApplicationQueriesSchemes</key>
-    <array>
-		<string>Baumanometro</string>
-    </array>
-    <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>This app uses Bluetooth to connect to and communicate with Omron devices.</string>
-    
-    <key>NSBluetoothPeripheralUsageDescription</key>
-    <string>This app uses Bluetooth to connect to and communicate with Omron devices.</string>
 </dict>
 </plist>
