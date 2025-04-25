@@ -1,6 +1,4 @@
-import type { BaumaPluginPlugin, OmronCustomPlugin } from './definitions';
-declare const BaumaPlugin: BaumaPluginPlugin;
+import type { OmronCustomPlugin } from './definitions';
 declare const OmronCustom: OmronCustomPlugin;
 export * from './definitions';
-export { BaumaPlugin };
 export { OmronCustom };

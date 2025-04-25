@@ -1,14 +1,4 @@
 import { WebPlugin } from '@capacitor/core';
-export class BaumaPluginWeb extends WebPlugin {
-    async echo(options) {
-        console.log('ECHO', options);
-        return options;
-    }
-    async readBauma(options) {
-        console.log('READBAUMA', options);
-        return options;
-    }
-}
 export class OmronCustomWeb extends WebPlugin {
     /**
      * Simulates scanning for devices by returning a list of dummy devices.

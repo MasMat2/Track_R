@@ -1,15 +1,3 @@
-export interface BaumaPluginPlugin {
-    echo(options: {
-        value: string;
-    }): Promise<{
-        value: string;
-    }>;
-    readBauma(options: {
-        value: string;
-    }): Promise<{
-        value: string;
-    }>;
-}
 export interface OmronCustomPlugin {
     /**
      * Scans for available devices and returns a list of devices with their names and identifiers.

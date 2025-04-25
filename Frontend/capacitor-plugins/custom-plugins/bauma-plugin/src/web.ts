@@ -1,21 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { BaumaPluginPlugin } from './definitions';
-
-export class BaumaPluginWeb extends WebPlugin implements BaumaPluginPlugin {
-  async echo(options: { value: string }): Promise<{ value: string }> {
-    console.log('ECHO', options);
-    return options;
-  }
-  async readBauma(options: { value: string }): Promise<{ value: string }> {
-    console.log('READBAUMA', options);
-    return options;
-  }
-}
-
-
 import type { OmronCustomPlugin } from './definitions';
-
 
 export class OmronCustomWeb extends WebPlugin implements OmronCustomPlugin {
   /**

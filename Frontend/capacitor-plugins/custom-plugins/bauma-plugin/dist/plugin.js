@@ -1,23 +1,10 @@
-var capacitorBaumaPlugin = (function (exports, core) {
+var capacitorOmronCustom = (function (exports, core) {
     'use strict';
 
-    const BaumaPlugin = core.registerPlugin('BaumaPlugin', {
-        web: () => Promise.resolve().then(function () { return web; }).then((m) => new m.BaumaPluginWeb()),
-    });
     const OmronCustom = core.registerPlugin('OmronCustom', {
         web: () => Promise.resolve().then(function () { return web; }).then((m) => new m.OmronCustomWeb()),
     });
 
-    class BaumaPluginWeb extends core.WebPlugin {
-        async echo(options) {
-            console.log('ECHO', options);
-            return options;
-        }
-        async readBauma(options) {
-            console.log('READBAUMA', options);
-            return options;
-        }
-    }
     class OmronCustomWeb extends core.WebPlugin {
         /**
          * Simulates scanning for devices by returning a list of dummy devices.
@@ -63,11 +50,9 @@ var capacitorBaumaPlugin = (function (exports, core) {
 
     var web = /*#__PURE__*/Object.freeze({
         __proto__: null,
-        BaumaPluginWeb: BaumaPluginWeb,
         OmronCustomWeb: OmronCustomWeb
     });
 
-    exports.BaumaPlugin = BaumaPlugin;
     exports.OmronCustom = OmronCustom;
 
     return exports;

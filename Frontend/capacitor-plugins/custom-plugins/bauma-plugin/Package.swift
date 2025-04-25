@@ -3,26 +3,26 @@ import PackageDescription
 
 let package = Package(
     name: "BaumaPlugin",
-    platforms: [.iOS(.v13)],
+    platforms: [.iOS(.v14)],
     products: [
         .library(
             name: "BaumaPlugin",
-            targets: ["BaumaPluginPlugin"])
+            targets: ["OmronCustomPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", branch: "main")
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "7.0.0")
     ],
     targets: [
         .target(
-            name: "BaumaPluginPlugin",
+            name: "OmronCustomPlugin",
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm")
             ],
-            path: "ios/Sources/BaumaPluginPlugin"),
+            path: "ios/Sources/OmronCustomPlugin"),
         .testTarget(
-            name: "BaumaPluginPluginTests",
-            dependencies: ["BaumaPluginPlugin"],
-            path: "ios/Tests/BaumaPluginPluginTests")
+            name: "OmronCustomPluginTests",
+            dependencies: ["OmronCustomPlugin"],
+            path: "ios/Tests/OmronCustomPluginTests")
     ]
 )

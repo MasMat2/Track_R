@@ -45,7 +45,7 @@
 	},
 	{
 		"pkg": "bauma-plugin",
-		"classpath": "com.mycompany.plugins.example.BaumaPluginPlugin"
+		"classpath": "com.mycompany.plugins.example.OmronCustomPlugin"
 	},
 	{
 		"pkg": "capacitor-health-connect-local",
